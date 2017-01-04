@@ -162,9 +162,6 @@
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>Télécharger les entretiens invalides</value>
   </data>
-  <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>Télécharger l'archive modèle</value>
-  </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Durée estimée</value>
   </data>

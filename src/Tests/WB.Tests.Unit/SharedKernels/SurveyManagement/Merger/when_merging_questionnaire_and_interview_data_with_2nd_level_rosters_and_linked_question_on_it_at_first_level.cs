@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.FixedRoster(rosterId: firstLevelRosterId, obsoleteFixedTitles: new[] {"roster1", "roster2"},
+                Create.Entity.FixedRoster(rosterId: firstLevelRosterId, variable:"r1", obsoleteFixedTitles: new[] {"roster1", "roster2"},
                     children: new IComposite[]
                     {
-                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, obsoleteFixedTitles: new[] {"t1", "t2"},
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, variable:"r2", obsoleteFixedTitles: new[] {"t1", "t2"},
                             children: new IComposite[]
                             {
                                 new NumericQuestion()

@@ -26,14 +26,16 @@
                                        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        local:MvxBind="ColorByInterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
-                local:MvxBind="Text CurrentStage.Name.PlainText" />
+                local:MvxBind="Text CurrentStage.Stage.Name.PlainText" />
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-      android:animateLayoutChanges="true"
+      android:animateLayoutChanges="false"
       android:id="@+id/interviewCurrentStepFrame"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
+      android:descendantFocusability="beforeDescendants"
+      android:focusableInTouchMode="true"
       local:MvxBind="CurrentScreen CurrentStage;"
       />
     

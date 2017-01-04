@@ -26,6 +26,16 @@ namespace WB.Tests.Unit
         }
     }
 
+    // Geniuos way to override singleton.
+    public class MxvMainThreadStub : MvxSingleton<IMvxMainThreadDispatcher>, IMvxMainThreadDispatcher
+    {
+        public bool RequestMainThreadAction(Action action)
+        {
+            action();
+            return true;
+        }
+    }
+
     internal class Stub
     {
         public static TestInMemoryWriter<TEntity> ReadSideRepository<TEntity>() where TEntity : class, IReadSideRepositoryEntity
@@ -44,14 +54,25 @@ namespace WB.Tests.Unit
             return dispatcherMock.Object;
         }
 
+        private static readonly Lazy<MxvMainThreadStub> mainThreadStub = new Lazy<MxvMainThreadStub>(() => new MxvMainThreadStub());
+
+        public static IMvxMainThreadDispatcher InitMvxMainThreadDispatcher()
+        {
+            // The only way to provide own dispatcher realization, as it's not registered in mvvccross own IoC
+            return mainThreadStub.Value;
+        }
+
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {
+            var liteEventRegistry = Create.Service.LiteEventRegistry();
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
             var sideBarSectionViewModel = new SideBarSectionViewModel(
                 Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of < ISideBarSectionViewModelsFactory>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IMvxMessenger>(),
-                Create.ViewModel.DynamicTextViewModel());
+                liteEventRegistry,
+                Create.ViewModel.DynamicTextViewModel(liteEventRegistry),
+                Create.Entity.AnswerNotifier(liteEventRegistry));
             sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;

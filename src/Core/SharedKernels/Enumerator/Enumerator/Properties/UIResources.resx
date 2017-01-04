@@ -267,7 +267,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to enter text</value>
   </data>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting.</value>
+    <value>GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS's timeout setting</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
@@ -442,5 +442,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
     <value>Interviewer comment</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use device location.</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don't see permissions popup than go to Settings and allow application to use camera.</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don't see permissions popup than go to Settings and allow application to use storage.</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>Application has not enough permissions to execute requested action</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
   </data>
 </root>

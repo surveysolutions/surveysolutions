@@ -1,0 +1,400 @@
+.table-striped {
+    tbody tr{
+        background-color: #f8f9f9;
+    }
+    &> tbody > tr:nth-of-type(odd){
+        background-color: #edeff0;
+    }
+    
+    &>thead, &>tbody, &>tfoot{
+        &>tr{
+            &>th, &>td{
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+.table-bordered{
+    border: none;
+    & > thead, 
+    & > tbody, 
+    & > tfoot{
+        & > tr{
+            & > td, & > th{
+                border-right: none;
+                border-left: 1px solid $gray-highlighting;
+                &:first-child{
+                    border-left: none;
+                }
+            }
+        }
+    }
+}
+.table-ordered{
+    thead tr th{
+        padding-right: 0;
+        position: relative;
+        cursor: pointer;
+        &.sorting_disabled:after{
+            display: none;
+        }
+        &:after{
+            display: inline-block;
+            content: "";
+            position: relative;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid $gray_form;
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+        }
+        &.sorting_asc{
+            color: $blue;
+            &:after{
+                border-top-color: $blue;
+            }
+        }
+        &.sorting_desc{
+            color: $blue;
+            &:after{
+                border-top: none;
+                border-bottom: 10px solid $blue;
+            }
+        }
+        &.column-questionnaire-title{
+            padding-left: 50px;
+            @include transition(all, 0.2s);
+        }
+    }
+    thead th.padding-left-slide:first-child{
+        padding-left: ($width-search-input +65px);
+    }
+}
+.table{
+    thead tr th{
+        &.sorting{
+            padding-right: 0;
+            position: relative;
+            cursor: pointer;
+            &:after{
+                display: inline-block;
+                content: "";
+                position: relative;
+                right: -8px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid $gray_form;
+                border-right: 6px solid transparent;
+                border-left: 6px solid transparent;
+            }
+            &.sorting-up{
+                color: $blue;
+                &:after{
+                    border-top-color: $blue;
+                }
+            }
+            &.sorting-down{
+                color: $blue;
+                &:after{
+                    border-top: none;
+                    border-bottom: 10px solid $blue;
+                }
+            }
+        }
+    }
+}
+.table-hover{
+    tbody{
+        tr{
+            &:hover, &:focus{
+                background-color: $blue-super-light;
+                color: #000;
+                a{
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+.table{
+    color: $gray-text;
+    width: 100% !important;
+    tr{
+        @include transition(all, 0.1s);
+        height: 35px;
+        td{
+            word-break: break-all;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        th{
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+    }
+    thead{
+        @extend %uppercase-font;
+        color: $gray_light;
+        tr th{
+            font-weight: normal;  
+        }
+    }
+    tbody{
+        border-bottom: 2px solid #ddd;
+        tr{
+            border-bottom: 1px solid #ddd;
+            td{
+                height: 35px;
+                span{
+                    color: $gray_light;
+                }
+                .pull-right .glyphicon-remove, .caret{
+                    color: #fff;
+                }
+                a{
+                    @include transition(all, 0.3s);
+                    text-overflow: ellipsis;
+                    color: $gray_text;
+                    &:hover, &:focus{
+                        color: $blue !important;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}
+#DataTables_Table_0_wrapper{
+    position: relative;
+    #DataTables_Table_0_filter{
+        @include absolute(5px, null, null, 0);
+        z-index: 2;
+        label{
+            font-size: 0;
+            color: transparent;
+            margin-bottom: 0;
+            min-height: 30px; 
+            &:after{
+                @include absolute(5px, null, null, 10px);
+                display: block;
+                content: "";
+                @include square(20px);
+                background: url('../img/search.png') no-repeat;
+                background-position: 0 0;
+                background-size: 80px 20px;
+                @include image-2x("../img/search2k.png", 80px, 20px);
+                cursor: pointer;
+            }
+            &:hover{
+                &:after{
+                    background-position: -20px 0;
+                }
+            }
+            &.active{
+                &:after{background-position: -40px 0;}
+                &:hover{
+                    &:after{
+                       background-position: -60px 0; 
+                    } 
+                }
+                input{
+                    border: 1px solid $gray_form;
+                    @extend %visibility-visible;
+                    width: $width-search-input;
+                    background-color: #f7fbff;
+                    padding: 5px 10px;
+
+                }
+            }
+            input{
+                @include transition(all, 0.2s);
+                @extend %visibility-hidden;
+                width: 0;
+                margin-left: 40px;
+                font-size: 13px;
+                line-height: 15px;
+                color: $gray_text;
+                border-radius: 5px;
+                outline: none;
+                padding: 5px 0;
+            }
+        }
+    }
+}
+.dataTables_wrapper {
+    .dataTables_info{
+        clear: both;
+        float: right;
+        padding-top: 0.755em;
+        font-size: 13px;
+        line-height: 15px;
+        padding-left: 20px;
+        text-align: right;
+    }
+    .dataTables_paginate{
+        float: left;
+        position: relative;
+        padding: 40px 0 0 10px;
+        overflow: hidden;
+        @extend %uppercase-font;
+        font-size: 14px;
+        line-height: 16px;
+        &>span{
+            display: block;
+            @include absolute(10px, null, null, 8px);
+        }
+        .paginate_button{
+            padding: 6px 12px;
+            cursor: pointer;
+            &:hover{
+            }
+            &.disabled, &.disabled:hover, &.disabled:active{
+                color: $gray_light;
+                text-decoration: none;
+                cursor: not-allowed;
+            }
+            &.current, &.current:hover{
+                color: $gray_light !important;
+            }
+        }
+        &>.paginate_button{
+            float: left;
+            color: $green;
+            padding: 5px 12px;
+        }
+    }
+}
+.dataTables_processing{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    background: rgba(0,0,0, 0.1);
+    div{
+        background-color: white;
+        padding: 30px 40px;
+        display: inline-block;
+        font: 24px/26px "RobotoLight";
+        margin-top: 10px;
+        box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
+    }
+}
+@media (max-width: 1450px){
+    .table-ordered{
+        thead{
+            tr th{
+                &:after{
+                    right: -4px;
+                    border-top: 8px solid $gray_form;
+                }
+                &.sorting_desc:after{
+                    border-bottom: 8px solid $blue;
+                } 
+            }
+        }
+    }
+    .table{
+        thead tr th{
+            font-size: 10px;
+            line-height: 12px;
+            &.sorting{
+                &:after{
+                    right: -4px;
+                    border-top: 8px solid $gray_form;
+                }
+                &.sorting-down{
+                    &:after{
+                        border-bottom: 8px solid $blue;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: $screen-md-min){
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input{
+        width: 200px;
+    }
+    .table-ordered thead th.padding-left-slide:first-child{
+        padding-left: 265px;
+    }
+    .dataTables_paginate{
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: $screen-sm-min){
+    .table{
+        tr{
+            td, th{
+                font-size: 10px;
+                line-height: 12px;
+            }
+        }
+    }
+}
+@media (max-width: $screen-xs-min){
+    .dataTables_wrapper {
+        .dataTables_info{
+            float: none;
+            margin-bottom: 15px;
+        }
+        .dataTables_paginate{
+            float: none;
+        }
+    }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+        position: relative;
+        top: 0;
+        left: 0;
+        label{
+            &:after{
+                top: 40px;
+            }
+            &.active {
+                width: 100%;
+                input{
+                    width: 80%;
+                }
+            }
+        }
+    }
+    .table-ordered{
+        thead{
+            th.padding-left-slide:first-child{
+                padding-left: 45px;
+            }
+            tr th{
+                &:after{
+                    border-width: 4px;
+                    border-top: 6px solid $gray_form;
+                }
+                &.sorting_desc:after{
+                    border-bottom: 6px solid $blue;
+                } 
+            }
+        }
+    }
+    .table{
+        tbody tr td:first-child{
+            padding-left: 10px;
+        }
+        thead tr th{
+            font-size: 8px;
+            line-height: 10px;
+            &.sorting{
+                &:after{
+                    border-width: 4px;
+                    border-top: 6px solid $gray_form;
+                }
+                &.sorting-down{
+                    &:after{
+                        border-bottom: 6px solid $blue;
+                    }
+                }
+            }
+        }
+    }
+}

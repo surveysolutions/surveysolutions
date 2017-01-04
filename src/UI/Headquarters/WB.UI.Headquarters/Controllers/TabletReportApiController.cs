@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
@@ -8,9 +6,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     public class TabletReportApiController : BaseApiController
     {

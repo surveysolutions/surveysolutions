@@ -106,12 +106,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             int countOfProcessedEvents = 0;
             int persistCount = 0;
+            this.logger.Info($"Exporting events count of all: {eventCount}");
+
             foreach (var eventSlice in eventSlices)
             {
                 dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
                 IEnumerable<CommittedEvent> events = eventSlice;
-
+                this.logger.Info($"Processing export slice. Sequrce of last event: {eventSlice.Position.SequenceOfLastEvent}, EventSource: ${eventSlice.Position.EventSourceIdOfLastEvent}");
                 this.TransactionManager.ExecuteInQueryTransaction(
                     () =>
                     {

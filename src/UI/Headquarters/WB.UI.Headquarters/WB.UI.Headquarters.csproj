@@ -57,14 +57,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.NLog40, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Common.Logging.NLog40.3.3.0\lib\net40\Common.Logging.NLog40.dll</HintPath>
+    <Reference Include="Common.Logging.NLog40, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Common.Logging.NLog40.3.3.1\lib\net40\Common.Logging.NLog40.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
@@ -81,6 +83,10 @@
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Flurl.Http.1.1.1\lib\monoandroid\Flurl.Http.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
@@ -162,7 +168,7 @@
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.3.4\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Npgsql, Version=3.1.8.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
@@ -192,7 +198,7 @@
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives">
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -201,13 +207,13 @@
       <HintPath>..\..\..\..\packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
@@ -452,20 +458,36 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\*.js" />
-    <Content Include="Dependencies\build\*.css" />
+    <Content Include="Dependencies\build\**\*.*" />
+    <Content Include="Dependencies\css\markup.css">
+      <DependentUpon>markup.scss</DependentUpon>
+    </Content>
+    <Content Include="Dependencies\css\markup.min.css">
+      <DependentUpon>markup.css</DependentUpon>
+    </Content>
+    <Content Include="Dependencies\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Dependencies\fonts\RobotoBold.svg" />
     <Content Include="Dependencies\fonts\RobotoItalic.svg" />
     <Content Include="Dependencies\fonts\RobotoLight.svg" />
+    <Content Include="Dependencies\fonts\RobotoMedium.svg" />
     <Content Include="Dependencies\fonts\RobotoRegular.svg" />
     <Content Include="Dependencies\fonts\TrebuchetMS.svg" />
     <Content Include="Dependencies\fonts\TrebuchetMSBold.svg" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.svg" />
     <Content Include="Dependencies\gulpfile.js" />
+    <Content Include="Dependencies\img\calendar.png" />
+    <Content Include="Dependencies\img\calendar2k.png" />
+    <Content Include="Dependencies\img\chekboxes.png" />
+    <Content Include="Dependencies\img\chekboxes2k.png" />
+    <Content Include="Dependencies\img\data-image.png" />
+    <Content Include="Dependencies\img\data-image2k.png" />
     <Content Include="Dependencies\img\designer-logo.png" />
+    <Content Include="Dependencies\img\flags.png" />
+    <Content Include="Dependencies\img\flags2k.png" />
     <Content Include="Dependencies\img\headquarter_logo-retina.png" />
     <Content Include="Dependencies\img\headquarter_logo.png" />
     <Content Include="Dependencies\img\HQ-login-3_05.png" />
+    <Content Include="Dependencies\img\HQ-login-mobile-get-button-logo.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-114x114.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-120x120.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-144x144.png" />
@@ -478,8 +500,14 @@
     <Content Include="Dependencies\img\logo-retina.png" />
     <Content Include="Dependencies\img\logo.png" />
     <Content Include="Dependencies\img\pretty-checkable-sprites.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite2k.png" />
+    <Content Include="Dependencies\img\radio.png" />
+    <Content Include="Dependencies\img\search.png" />
+    <Content Include="Dependencies\img\search2k.png" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
+    <Content Include="Dependencies\js\ajax.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
@@ -532,16 +560,31 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <EmbeddedResource Include="Resources\Archived.pt.resx" />
+    <EmbeddedResource Include="Resources\DataTables.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx" />
     <EmbeddedResource Include="Resources\Details.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.ru.resx" />
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportQuestionnaire.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
     <EmbeddedResource Include="Resources\Strings.pt.resx" />
@@ -566,35 +609,43 @@
     <Content Include="Dependencies\css\_mixins.scss" />
     <Content Include="Dependencies\css\_two-column-form.scss" />
     <Content Include="Dependencies\css\_variables.scss" />
-    <Content Include="Dependencies\fonts\RobotoBold.eot" />
     <Content Include="Dependencies\fonts\RobotoBold.ttf" />
     <Content Include="Dependencies\fonts\RobotoBold.woff" />
     <Content Include="Dependencies\fonts\RobotoBold.woff2" />
-    <Content Include="Dependencies\fonts\RobotoItalic.eot" />
     <Content Include="Dependencies\fonts\RobotoItalic.ttf" />
     <Content Include="Dependencies\fonts\RobotoItalic.woff" />
     <Content Include="Dependencies\fonts\RobotoItalic.woff2" />
-    <Content Include="Dependencies\fonts\RobotoLight.eot" />
     <Content Include="Dependencies\fonts\RobotoLight.ttf" />
     <Content Include="Dependencies\fonts\RobotoLight.woff" />
     <Content Include="Dependencies\fonts\RobotoLight.woff2" />
-    <Content Include="Dependencies\fonts\RobotoRegular.eot" />
     <Content Include="Dependencies\fonts\RobotoRegular.ttf" />
     <Content Include="Dependencies\fonts\RobotoRegular.woff" />
     <Content Include="Dependencies\fonts\RobotoRegular.woff2" />
-    <Content Include="Dependencies\fonts\TrebuchetMS.eot" />
     <Content Include="Dependencies\fonts\TrebuchetMS.ttf" />
     <Content Include="Dependencies\fonts\TrebuchetMS.woff" />
     <Content Include="Dependencies\fonts\TrebuchetMS.woff2" />
-    <Content Include="Dependencies\fonts\TrebuchetMSBold.eot" />
     <Content Include="Dependencies\fonts\TrebuchetMSBold.ttf" />
     <Content Include="Dependencies\fonts\TrebuchetMSBold.woff" />
     <Content Include="Dependencies\fonts\TrebuchetMSBold.woff2" />
-    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.eot" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.ttf" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff2" />
     <Content Include="Scripts\bloodhound.min.js" />
+    <Content Include="Configuration\vgl.Headquarters.Web.config" />
+    <Content Include="Dependencies\css\_filters.scss" />
+    <Content Include="Dependencies\css\_interview-details.scss" />
+    <Content Include="Dependencies\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Dependencies\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Dependencies\css\_buttons.scss" />
+    <Content Include="Dependencies\css\_forms.scss" />
+    <Content Include="Dependencies\css\_navbar.scss" />
+    <Content Include="Dependencies\css\_progress-bars.scss" />
+    <Content Include="Dependencies\css\_tables.scss" />
+    <Content Include="Dependencies\fonts\RobotoMedium.ttf" />
+    <Content Include="Dependencies\fonts\RobotoMedium.woff" />
+    <Content Include="Dependencies\fonts\RobotoMedium.woff2" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -642,7 +693,6 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\exportdata.js" />
-    <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\export-settings.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -657,7 +707,6 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
-    <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
@@ -780,7 +829,6 @@
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
-    <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\HQ\BatchUpload.cshtml" />
@@ -807,7 +855,6 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
-    <Content Include="Views\DataExport\Index.cshtml" />
     <Content Include="Views\Supervisor\Archived.cshtml" />
     <Content Include="Views\BatchUserUpload\NewUserBatchUpload.cshtml" />
     <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
@@ -818,11 +865,9 @@
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
-    <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
-    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
@@ -892,6 +937,15 @@
     <Content Include="Views\Interview\CommentTemplatePartialView.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Shared\_MainLayout.cshtml" />
+    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\ImportMode.cshtml" />
+    <Content Include="Views\HQ\InterviewImportVerificationErrors.cshtml" />
+    <Content Include="Views\HQ\InterviewImportConfirmation.cshtml" />
+    <Content Include="Views\HQ\ImportInterviews.cshtml" />
+    <Content Include="Views\HQ\InterviewImportProgress.cshtml" />
+    <Content Include="Views\DataExport\Index.cshtml" />
+    <Content Include="Views\HQ\InterviewImportIsInProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -941,6 +995,7 @@
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
+    <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -1286,6 +1341,7 @@
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
     <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
@@ -1372,6 +1428,8 @@
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
+    <Compile Include="Models\Api\DataTableResponseModel.cs" />
+    <Compile Include="Models\Api\DataTableRequestModel.cs" />
     <Compile Include="Models\Api\InterviewApiDetails.cs" />
     <Compile Include="Models\Api\InterviewApiItem.cs" />
     <Compile Include="Models\Api\InterviewApiView.cs" />
@@ -1395,7 +1453,6 @@
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
@@ -1423,6 +1480,7 @@
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
+    <Compile Include="Models\ImportModeModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
@@ -1442,9 +1500,10 @@
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
+    <Compile Include="Models\PreloadedDataConfirmationModel.cs" />
+    <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
@@ -1453,6 +1512,7 @@
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
+    <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
@@ -1475,15 +1535,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Archived.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\DataTables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\EnumNames.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumNames.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ErrorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\FieldsAndValidations.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1504,6 +1564,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
+      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\LoginToDesigner.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Pages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1555,7 +1625,6 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
-    <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
     <Compile Include="Utils\Security\FormsAuthentication.cs" />
     <Compile Include="Utils\Security\IFormsAuthentication.cs" />
     <Compile Include="Utils\Security\QuestionnaireMembershipProvider.cs" />
@@ -1564,6 +1633,7 @@
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
     <Compile Include="Views\Interview\HtmlExtensions.cs" />
+    <Compile Include="Views\Shared\HtmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -1581,7 +1651,6 @@
   <ItemGroup>
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Dependencies\js\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
@@ -1674,6 +1743,7 @@
     <Content Include="App_GlobalResources\DataExport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1695,6 +1765,7 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Reports.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1805,14 +1876,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.zh.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.resx">
       <SubType>Designer</SubType>
@@ -1937,6 +2000,12 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

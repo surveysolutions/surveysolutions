@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         return NavigationIdentity.CreateForCompleteScreen();
                     case ScreenType.Cover:
                         return NavigationIdentity.CreateForCoverScreen();
+                    case ScreenType.PrefieldScreen:
+                        return NavigationIdentity.CreateForPrefieldScreen();
                     default:
                         return NavigationIdentity.CreateForGroup(this.CurrentGroup);
                 }
@@ -78,26 +80,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void NavigateToImpl(NavigationIdentity navigationItem)
         {
-            if (navigationItem.TargetScreen == ScreenType.Group)
+            if (navigationItem.TargetScreen == ScreenType.PrefieldScreen)
             {
-                if (!this.CanNavigateTo(navigationItem)) return;
-
-                while (this.navigationStack.Any(x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
-                {
-                    this.navigationStack.Pop();
-                }
+                viewModelNavigationService.NavigateToPrefilledQuestions(InterviewId);
             }
+            else
+            {
 
-            this.navigationStack.Push(navigationItem);
+                if (navigationItem.TargetScreen == ScreenType.Group)
+                {
+                    if (!this.CanNavigateTo(navigationItem)) return;
 
-            this.ChangeCurrentGroupAndFireEvent(navigationItem);
+                    while (
+                        this.navigationStack.Any(
+                            x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
+                    {
+                        this.navigationStack.Pop();
+                    }
+                }
+
+                this.navigationStack.Push(navigationItem);
+
+                this.ChangeCurrentGroupAndFireEvent(navigationItem);
+            }
         }
 
         private bool CanNavigateTo(NavigationIdentity navigationIdentity)
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover)
+            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover || navigationIdentity.TargetScreen == ScreenType.PrefieldScreen)
                 return true;
 
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);
@@ -140,20 +152,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.BeforeScreenChanged?.Invoke(new BeforeScreenChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
 
+            var previousStage = this.CurrentScreenType;
+            var previousGroup = this.CurrentGroup;
+
             this.CurrentGroup = navigationIdentity.TargetGroup;
             this.CurrentScreenType = navigationIdentity.TargetScreen;
 
-            if (this.ScreenChanged != null)
-            {
-                var screenChangedEventArgs = new ScreenChangedEventArgs
-                {
-                    TargetGroup = navigationIdentity.TargetGroup,
-                    AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
-                    TargetScreen = navigationIdentity.TargetScreen
-                };
-
-                this.ScreenChanged?.Invoke(screenChangedEventArgs);
-            }
+            this.ScreenChanged?.Invoke(new ScreenChangedEventArgs(
+                navigationIdentity.TargetScreen,
+                navigationIdentity.TargetGroup,
+                navigationIdentity.AnchoredElementIdentity,
+                previousStage,
+                previousGroup));
         }
     }
 

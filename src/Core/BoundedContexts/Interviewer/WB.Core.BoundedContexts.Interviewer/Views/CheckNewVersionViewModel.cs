@@ -5,9 +5,6 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -17,6 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
+        private CancellationTokenSource cancellationTokenSource;
 
         private bool isVersionCheckInProgress;
         private bool isNewVersionAvaliable;
@@ -32,6 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
             Version = this.interviewerSettings.GetApplicationVersionName();
+            this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
         }
 
         public bool IsVersionCheckInProgress
@@ -59,21 +58,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.CheckVersion()); }
         }
 
+        public IMvxCommand CancelUpgrade
+        {
+            get { return new MvxCommand(() => this.cancellationTokenSource.Cancel());}
+        }
+
+        private MvxAsyncCommand updateApplicationCommand;
+        private TimeSpan downloadApkTimeout = TimeSpan.FromMinutes(30);
+
         public IMvxCommand UpdateApplicationCommand
         {
-            get { return new MvxCommand(async () => await this.UpdateApplication()); }
+            get
+            {
+                return this.updateApplicationCommand ?? (this.updateApplicationCommand = new MvxAsyncCommand(async () => await this.UpdateApplication()));
+            }
         }
 
         private async Task UpdateApplication()
         {
             this.IsNewVersionAvaliable = false;
             this.IsVersionCheckInProgress = true;
+            this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
             try
             {
-                this.CheckNewVersionResult =
-                        InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
+                this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
 
-                await this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint);
+                await
+                    this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint,
+                        this.cancellationTokenSource.Token,
+                        this.downloadApkTimeout);
 
                 this.CheckNewVersionResult = null;
             }

@@ -61,11 +61,47 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
+        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available.
         /// </summary>
         internal static string BeforeSignInToDesigner {
             get {
                 return ResourceManager.GetString("BeforeSignInToDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices..
+        /// </summary>
+        internal static string CensusImportSubTitle {
+            get {
+                return ResourceManager.GetString("CensusImportSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Census mode import.
+        /// </summary>
+        internal static string CensusImportTitle {
+            get {
+                return ResourceManager.GetString("CensusImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sections.
+        /// </summary>
+        internal static string Chapters {
+            get {
+                return ResourceManager.GetString("Chapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created on.
+        /// </summary>
+        internal static string CreatedAt {
+            get {
+                return ResourceManager.GetString("CreatedAt", resourceCulture);
             }
         }
         
@@ -79,7 +115,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import.
+        ///   Looks up a localized string similar to Sub-sections.
+        /// </summary>
+        internal static string Gropus {
+            get {
+                return ResourceManager.GetString("Gropus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import in Sample mode.
         /// </summary>
         internal static string Import {
             get {
@@ -88,7 +133,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import with census mode.
+        ///   Looks up a localized string similar to Create a new version  (#{0}).
+        /// </summary>
+        internal static string ImportAsNewVersion {
+            get {
+                return ResourceManager.GetString("ImportAsNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import in census mode.
         /// </summary>
         internal static string ImportInCensus {
             get {
@@ -97,11 +151,101 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not connect to designer. Please check that designer is available and try &lt;a href=&apos;{0}&apos;&gt;again&lt;/a&gt;.
+        ///   Looks up a localized string similar to Import Questionnaire:.
+        /// </summary>
+        internal static string ImportModePageTitle {
+            get {
+                return ResourceManager.GetString("ImportModePageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire import mode.
+        /// </summary>
+        internal static string ImportModeTitle {
+            get {
+                return ResourceManager.GetString("ImportModeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last modified on.
+        /// </summary>
+        internal static string LastModifiedAt {
+            get {
+                return ResourceManager.GetString("LastModifiedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to list of my questionnaires.
+        /// </summary>
+        internal static string ListOfMyQuestionnaires {
+            get {
+                return ResourceManager.GetString("ListOfMyQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not connect to Designer. Please check if Designer is available and try &lt;a href=&apos;{0}&apos;&gt;again&lt;/a&gt;.
         /// </summary>
         internal static string LoginToDesignerError {
             get {
                 return ResourceManager.GetString("LoginToDesignerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have already imported this questionnaire.
+        /// </summary>
+        internal static string QuestionnaireExists {
+            get {
+                return ResourceManager.GetString("QuestionnaireExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        internal static string Questions {
+            get {
+                return ResourceManager.GetString("Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of them with conditions.
+        /// </summary>
+        internal static string QuestionsWithConditions {
+            get {
+                return ResourceManager.GetString("QuestionsWithConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices..
+        /// </summary>
+        internal static string RegularImportSubTitle {
+            get {
+                return ResourceManager.GetString("RegularImportSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample mode import.
+        /// </summary>
+        internal static string RegularImportTitle {
+            get {
+                return ResourceManager.GetString("RegularImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rosters.
+        /// </summary>
+        internal static string Rosters {
+            get {
+                return ResourceManager.GetString("Rosters", resourceCulture);
             }
         }
         

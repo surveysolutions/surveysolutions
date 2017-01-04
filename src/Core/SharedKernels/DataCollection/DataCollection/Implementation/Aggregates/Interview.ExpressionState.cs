@@ -217,9 +217,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionState.RemoveRoster(removedRosterIdentity.GroupId, removedRosterIdentity.OuterRosterVector, removedRosterIdentity.RosterInstanceId);
             }
 
-            foreach (var addedRosterIdentity in addedRosters.Select(ToRosterInstance))
+            foreach (var rosterNode in addedRosters)
             {
-                expressionState.AddRoster(addedRosterIdentity.GroupId, addedRosterIdentity.OuterRosterVector, addedRosterIdentity.RosterInstanceId, 0);
+                expressionState.AddRoster(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.Shrink(), rosterNode.Identity.RosterVector.Last(), rosterNode.SortIndex);
             }
         }
 

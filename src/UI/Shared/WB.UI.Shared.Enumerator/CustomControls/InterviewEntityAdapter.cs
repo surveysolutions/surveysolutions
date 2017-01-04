@@ -66,11 +66,5 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             return false;
         }
-
-        public override void ClearAllBindings()
-        {
-
-        }
-
     }
 }

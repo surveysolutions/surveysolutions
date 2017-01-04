@@ -277,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download latest interviewer app.
+        /// </summary>
+        public static string GetLatestApp {
+            get {
+                return ResourceManager.GetString("GetLatestApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire will be lost..
         /// </summary>
         public static string GlobalSettings_DeleteQuestionnareConfirmation {
@@ -471,6 +480,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Index_cshtml_Execute_Do_you_want_to_continue_ {
             get {
                 return ResourceManager.GetString("Index_cshtml_Execute_Do_you_want_to_continue_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installation instruction.
+        /// </summary>
+        public static string InstallationInstruction {
+            get {
+                return ResourceManager.GetString("InstallationInstruction", resourceCulture);
             }
         }
         
@@ -1155,6 +1173,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (ver. {1}).
+        /// </summary>
+        public static string QuestionnaireNameFormat {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameFormat", resourceCulture);
             }
         }
         

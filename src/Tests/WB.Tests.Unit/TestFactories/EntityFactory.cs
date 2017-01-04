@@ -36,13 +36,16 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -837,6 +840,30 @@ namespace WB.Tests.Unit.TestFactories
             return group;
         }
 
+        public Group NumericRoster(
+            Guid? rosterId = null,
+            string title = "Numeric roster",
+            string variable = "_numeric_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            group.RosterTitleQuestionId = rosterTitleQuestionId;
+
+            return group;
+        }
+
         public Group Roster(
             Guid? rosterId = null,
             string title = "Roster X",
@@ -1212,9 +1239,11 @@ namespace WB.Tests.Unit.TestFactories
             params IInterviewTreeNode[] children)
         {
             var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
-            return new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, children, rosterType: rosterType,
+            var roster =  new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, rosterType: rosterType,
                 rosterSizeQuestion: rosterSizeQuestion,
                 childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+            roster.SetChildren(children.ToList());
+            return roster;
         }
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
@@ -1227,8 +1256,10 @@ namespace WB.Tests.Unit.TestFactories
             return subSection;
         }
 
-        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
+        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity = null, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
+            sectionIdentity = sectionIdentity ?? Create.Entity.Identity(Guid.NewGuid());
+
             var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
             var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
@@ -1280,10 +1311,14 @@ namespace WB.Tests.Unit.TestFactories
         }
 
 
-        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections)
+        public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
         {
-            var tree = new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+            var tree = new InterviewTree(
+                interviewId ?? Guid.NewGuid(),
+                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+
             tree.SetSections(sections);
+
             return tree;
         }
 
@@ -1324,6 +1359,18 @@ namespace WB.Tests.Unit.TestFactories
 
         public NavigationIdentity NavigationIdentity(Identity navigateTo)
             => new NavigationIdentity() {TargetScreen = ScreenType.Group, TargetGroup = navigateTo};
+
+        public ScreenChangedEventArgs ScreenChangedEventArgs(ScreenType targetStage = ScreenType.Group, Identity targetGroup = null)
+            => new ScreenChangedEventArgs(targetStage, targetGroup, null, ScreenType.Group, null);
+        
+        public FeaturedQuestionItem FeaturedQuestionItem(Guid? id = null, string title = "title", string caption = "caption") 
+            => new FeaturedQuestionItem(id ?? Guid.NewGuid(), title,  caption);
+
+        public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
+            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
+
+        public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
+            => new AnswerNotifier(liteEventRegistry);
 
         public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
             => new ChangedVariable(changedVariable, newValue);

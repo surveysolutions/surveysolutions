@@ -84,7 +84,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
 
-            FlurlClient restClient = fullUrl
+            IFlurlClient restClient = fullUrl
                 .WithTimeout(this.restServiceSettings.Timeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 

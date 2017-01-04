@@ -30,7 +30,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 expressionProcessorGenerator: expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 engineVersionService: engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
                 serializer: serializer??Mock.Of<ISerializer>(),
-                zipUtils: zipUtils ?? Mock.Of<IStringCompressor>());
+                zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
+                listItemStorage: new TestPlainStorage<QuestionnaireListViewItem>());
         }
     }
 }

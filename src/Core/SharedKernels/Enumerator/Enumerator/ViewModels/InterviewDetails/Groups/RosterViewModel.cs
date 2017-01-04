@@ -24,7 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private string interviewId;
         private NavigationState navigationState;
-        public readonly CovariantObservableCollection<GroupViewModel> RosterInstances;
+        private readonly CovariantObservableCollection<GroupViewModel> rosterInstances;
+        public IObservableCollection<GroupViewModel> RosterInstances => this.rosterInstances;
 
         public Identity Identity { get; private set; }
 
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.RosterInstances = new CovariantObservableCollection<GroupViewModel>();
+            this.rosterInstances = new CovariantObservableCollection<GroupViewModel>();
         }
 
         public void Init(string interviewId, Identity entityId, NavigationState navigationState)
@@ -80,18 +81,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             foreach (var removedRosterInstance in removedRosterInstances)
             {
-                if (this.isDisposed) return;
-
                 var rosterInstanceViewModel = this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
                 rosterInstanceViewModel.DisposeIfDisposable();
-                this.RosterInstances.Remove(rosterInstanceViewModel);
+                this.rosterInstances.Remove(rosterInstanceViewModel);
             }
 
             foreach (var addedRosterInstance in addedRosterInstances)
             {
-                if (this.isDisposed) return;
-
-                this.RosterInstances.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
+                this.rosterInstances.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
                     this.GetGroupViewModel(addedRosterInstance));
             }
         }
@@ -109,16 +106,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return groupViewModel;
         }
 
-        private bool isDisposed;
         public void Dispose()
         {
-            this.isDisposed = true;
+            this.eventRegistry.Unsubscribe(this);
+
             foreach (var rosterInstance in this.RosterInstances)
             {
                 rosterInstance.DisposeIfDisposable();
             }
-
-            this.eventRegistry.Unsubscribe(this);
         }
     }
 }

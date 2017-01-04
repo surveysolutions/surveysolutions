@@ -60,40 +60,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 @event.InterviewData.QuestionnaireVersion);
 
             this.sourceInterview = this.Tree.Clone();
+            this.Tree.ActualizeTree();
 
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
-
-            var maxRosterDepth = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Select(x => x.OuterScopeRosterVector.Length).DefaultIfEmpty(0).Max();
-            var maxQuestionDepth = @event.InterviewData.Answers.Select(x => x.QuestionRosterVector.Length).DefaultIfEmpty(0).Max();
-
-            int maxDepth = Math.Max(maxRosterDepth, maxQuestionDepth);
-
-            for (int i = 0; i <= maxDepth; i++)
+            
+            foreach (var answerDto in @event.InterviewData.Answers.OrderBy(x => x.QuestionRosterVector.Length))
             {
-                var answersByScope = @event.InterviewData.Answers
-                    .Where(x => x.QuestionRosterVector.Length == i);
+                var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
-                foreach (var answerDto in answersByScope)
+                if (answerDto.Answer != null)
                 {
-                    var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
-
-                    if (answerDto.Answer != null)
-                    {
-                        question.SetObjectAnswer(answerDto.Answer);
-                    }
-
-                    if (answerDto.AllComments != null)
-                        question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
+                    question.SetObjectAnswer(answerDto.Answer);
                 }
 
-                foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
-                {
-                    var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
-                    this.AddRosterToTree(rosterIdentity);
-                    this.Tree.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
-                }
+                if (answerDto.AllComments != null)
+                    question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
+
+                this.ActualizeRostersIfQuestionIsRosterSize(answerDto.Id);
             }
+
+            // titles for numeric questions should be recalculated afterward because answers for roster title questions
+            // could be not processed by the time roster instance was created.
+            this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
 
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
                 this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
@@ -127,8 +116,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
-
-
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
             this.properties.InterviewerId = @event.InterviewData.UserId;
@@ -145,13 +132,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public new void Apply(SubstitutionTitlesChanged @event)
         {
             foreach (var @group in @event.Groups)
-                this.Tree.GetGroup(@group).ReplaceSubstitutions();
+                this.Tree.GetGroup(@group)?.ReplaceSubstitutions();
 
             foreach (var @question in @event.Questions)
-                this.Tree.GetQuestion(@question).ReplaceSubstitutions();
+                this.Tree.GetQuestion(@question)?.ReplaceSubstitutions();
 
             foreach (var @staticText in @event.StaticTexts)
-                this.Tree.GetStaticText(@staticText).ReplaceSubstitutions();
+                this.Tree.GetStaticText(@staticText)?.ReplaceSubstitutions();
         }
 
         public new void Apply(InterviewCompleted @event)
@@ -205,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool HasErrors { get; private set; }
 
         public bool IsCompleted { get; private set; }
-
+        public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
         public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsGps;
         public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDateTime;
@@ -319,6 +306,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
+        public bool IsQuestionPrefilled(Identity entityIdentity)
+        {
+            return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
+        }
+
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
             => this.Tree.GetQuestion(questionIdentity).Parents
                 .OfType<InterviewTreeRoster>()
@@ -334,7 +326,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountActiveAnsweredQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
                     && question.IsAnswered()
-                    && !question.IsPrefilled && question.IsInterviewer);
+                    && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                    && question.IsInterviewer);
 
         public int CountActiveQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() && !question.IsPrefilled && question.IsInterviewer);
@@ -344,6 +337,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
 
+        public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
+        {
+            return first == this.Tree.GetAllNodesInEnumeratorOrder()
+                               .Select(node => node.Identity)
+                               .FirstOrDefault(identity => identity == first || identity == second);
+        }
+
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
             => this.Tree.FindStaticTexts()
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
@@ -351,8 +351,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private IEnumerable<Identity> GetEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsValid
-                    && !question.IsPrefilled && question.IsInterviewer)
+                .Where(question => !question.IsDisabled() 
+                                && !question.IsValid
+                                && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                                && question.IsInterviewer)
                 .Select(question => question.Identity);
 
         public int CountEnabledQuestions(Identity group)
@@ -399,7 +401,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent.Identity;
+            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent?.Identity;
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.Tree.GetGroup(groupIdentity).Children
@@ -407,9 +409,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(question => question.Identity);
 
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
-            => this.Tree.FindRosters()
-                .Where(roster => roster.Identity.Id == rosterId && roster.Parent.Identity.Equals(parentIdentity))
-                .OrderBy(roster => roster.SortIndex)
+            => this.Tree.GetGroup(parentIdentity)
+                .Children
+                .Where(roster => roster.Identity.Id == rosterId)
                 .Select(roster => roster.Identity)
                 .ToList();
 
@@ -419,11 +421,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(groupOrRoster => groupOrRoster.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.Tree.GetGroup(group)?.OrderedChildren?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
+            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
-        public bool IsValid(Identity identity)
-            => (this.Tree.GetQuestion(identity)?.IsValid ?? false) ||
-               (this.Tree.GetStaticText(identity)?.IsValid ?? false);
+        public bool IsEntityValid(Identity identity)
+        {
+            var question = this.Tree.GetQuestion(identity);
+            if (question != null)
+            {
+                return !question.IsAnswered() || question.IsValid;
+            }
+            var staticText = this.Tree.GetStaticText(identity);
+            return staticText?.IsValid ?? false;
+        }
 
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId)
         {

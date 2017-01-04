@@ -6,6 +6,19 @@
 @include fontface(ufonts_com_lucidaconsole);
 @include fontface(TrebuchetMS);
 @include fontface(RobotoMedium);
+input[type=number] { 
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0; 
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+}
+input::-ms-clear {
+    display: none;
+}
 a{
 	color: $blue;
 	&:hover, &:focus{
@@ -16,16 +29,14 @@ html {
   position: relative;
   min-height: 100%;
 	body {
-		margin-bottom: 60px;
+		min-width: 400px;
+		margin-bottom: 100px;
 		font-family: Arial, sans-serif;
 		font-size: 16px;
 		line-height: 18px;
 		@include gradient($gray_form, $gray_form, null, null);
 		background-size: 12px 100%;
 		padding-top: 70px;
-		main{
-			padding: 40px 45px 40px 88px;
-		}
 		.footer {
 			position: absolute;
 			bottom: 0;
@@ -33,7 +44,6 @@ html {
 			text-align: left;
 			color: $gray_light;
 			@include font(12px, 16px);
-			padding: 0 45px 0 75px;
 			a{
 				color: $gray_light;
 				text-decoration: underline;
@@ -44,213 +54,37 @@ html {
 		}
 	}
 }
+.container, .container-fluid{
+	padding: 0  ($margin-container/2) 0 ($margin-container);
+}
+main{
+	.container{
+		margin-left: 0;
+		margin-right: 0;
+	}
 
-//navigation
-.navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse{
-	max-height: 360px;
 }
-.navbar{
-	min-height: 60px;
-	.container-fluid{
-		padding: 0 45px;
+@media (max-width: $screen-md-min){
+	html body {
+		padding-top: 60px;
 	}
-	.navbar-brand{
-		.retina.logo{
-			@include size(15px, 41px);
-			background: url(../img/logo.png) no-repeat;
-			background-size: 15px 41px;
-			@include image-2x("../img/logo-retina.png", 15px, 41px);
-		}
-	}
-	.navbar-collapse{
-		li{
-			&.active a{
-				@include transition;
-				font-family: "RobotoBold";
-				span{
-					font-family: "RobotoLight";
-				}
-			}
-			&>a{
-				color: $white;
-				font-family: "RobotoLight";
-				font-size: 18px;
-				line-height: 20px;
-				padding: 24px 25px 25px 13px;
-				text-align: center;
-				@include transition;
-				
-				&:hover, &:focus{
-					font-family: "RobotoBold";
-					span{
-						font-family: "RobotoLight";
-					}
-				}
-				&::after {
-				    display:block;
-				    font-family: "RobotoBold";
-				    content:attr(title);
-				    height:1px;
-				    color:transparent;
-				    overflow:hidden;
-				    visibility:hidden;
-				    margin-bottom:-1px;
-				}
-			}
-			.dropdown-menu li a{
-				border-radius: 5px;
-				padding: 10px;
-				text-align: left;
-				color: $gray_text;
-			}
-		}
-		.navbar-right{
-			li{
-				position: relative;
-				.caret{
-					@include absolute($top: 28px, $right: 0);
-					margin-left: 11px;
-					border-top: 12px solid;
-					border-right: 7px solid transparent;
-					border-left: 7px solid transparent;
-				}
-				&.dropdown a{
-					position: relative;
-				}
-			}
-		}
+	.container, .container-fluid {
+	    padding: 0 ($margin-container-md-screen - 15px) 0 $margin-container-md-screen;
 	}
 }
-.retina{
-	font-size: 0;
-	line-height: 0;
+
+@media (max-width: $screen-sm){
+	main .container{
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
-.container{
+h1{
+	font: 26px/28px "RobotoLight";
 	margin: 0;
-	padding: 0;
-}
-.badge.badge_nav{
-	background-color: #2a81cb;
-	border-radius: 100%;
-	padding: 9px;
-	@include absolute($top: 18px, $left: -35px);
-	font-size: 18px;
-	line-height: 20px;
-}
-.navbar-header {
-	text-align: center;
-	.badge.badge_nav{
-		display: none;
-	}
-}
-
-.active-page{
-	display: none;
-	color: $white;
-	font-family: "RobotoBold";
-	font-size: 18px;
-	line-height: 50px;
-	&:hover, &:focus{
-		color: white;
-	}
-}
-@media (max-width: $screen-md-min) {
-	html body main, html body .footer, .navbar .container-fluid{
-		padding: 0 2% 0 4%;
-	}
-	html body main{
-		padding-bottom: 45px;
-		padding-top: 35px;
-	}
-	.active-page{
-		display: inline-block;
-	}
-	.navbar-nav{
-		margin: 0;
-	}	
-	.navbar-brand{
-		transform: rotate(270deg);
-	}
-	.navbar-toggle{
-		z-index: 5;
-	}
-	.navbar-header{
-		margin: 5px 0;
-	}
-	.navbar.navbar-fixed-top .navbar-collapse{
-		max-height: 100%;
-		top: 0;
-		left: 0;
-		z-index: 2;
-		display: none;
-		position: fixed;
-		@include size(100%, 100%);
-		background: black;
-		margin: 0;
-		padding: 40px 5%;
-		li {
-			&.active a{
-				color: white;
-			}
-			&> a{
-				border-radius: 5px;
-				padding: 15px 10px;
-				text-align: left;
-				color: $gray_light;
-				&:hover, &:focus{
-					color: white;
-				}
-			}
-			.dropdown-menu li a{
-				padding: 15px 10px;
-			}
-		}
-		
-		.navbar-right .badge.badge_nav{
-			top: 0;
-			left: 0;
-			position: relative;
-			margin-right: 10px;
-		}
-		.navbar-right li .caret{
-			top: 0;
-			left: 0;
-			position: relative;
-			margin: 0;
-			margin-right: 10px;
-		}
-	} 
-	.navbar-fixed-top .navbar-nav > .active > a, 
-	.navbar-fixed-top .navbar-nav > .active > a:hover, 
-	.navbar-fixed-top .navbar-nav > .active > a:focus{
-		background-color: #333;
-	}
-	.icon-bar{
-		@include transition;
-	}
-	.navbar-inverse .navbar-toggle{
-		background-color: transparent;
-		border: none;
-	}
-	.top-animate {
-	  @include rotate(225deg);
-	  position: relative;
-	  top: 6px;
-	}
-	.mid-animate { opacity: 0; }
-	.bottom-animate {
-		bottom: 6px;
-		position: relative;
-	    @include rotate(-225deg);
-	}
-	.navbar-header .badge.badge_nav{
-		display: block;
-		float: right;
-		position: relative;
-		top: 0;
-		left: 0;
-		margin: 6px 15px 6px 0;
-	}
+    color: $gray_text;
+    padding: 0 0 30px;
 }
 h2{
 	font: 26px/28px "RobotoLight";
@@ -262,18 +96,9 @@ h3{
 	@include font(19px, 21px, "RobotoBold");
 	margin-top: 0;
 }
-@media (max-width: $screen-sm){
-	html body .container{
-		width: auto;
-		padding-left: 15px;
-		padding-right: 15px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
 h4{
 	font: 22px/24px "RobotoLight";
-	margin-bottom: 22px;
+	margin-bottom: 20px;
 }
 h5{
 	@include font(14px, 16px);
@@ -286,39 +111,6 @@ h5{
  -ms-transition: none !important;
  -o-transition: none !important;
 } 
-.progress{
-	height: 10px;
-	.progress-bar{
-		border-radius: 4px;
-	}
-}
-.back-link{
-    text-transform: uppercase;
-    font: 12.5px/14px "TrebuchetMSBold";
-    letter-spacing: 0.5px;
-    display: inline-block;
-}
-.btn-success, .btn-primary, .btn-danger{
-    font: 12px/14px "TrebuchetMSBold";
-    outline: none;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.btn-success{
-	background-color: $green_btn;
-}
-.btn-primary{
-	background-color: $blue;
-}
-.btn{
-	&:disabled{
-		background: $gray_info repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
-		border-color: transparent;	
-		&:hover, &:focus{
-			border-color: $gray_info;
-		}
-	}
-}
 .breadcrumb{
     background-color: transparent;
     margin: 0;
@@ -340,9 +132,100 @@ h5{
 @media (max-width: $screen-xs-min){
 	.breadcrumb li a, .breadcrumb > li + li:before{
 			padding: 0 2px;
-			font-size: 8px;
-			line-height: 10px;
+			font-size: 10px;
+			line-height: 12px;
 	}	
+}
+.page-header{
+    padding-bottom: 0;
+    margin: 0;
+    border: none;
+    padding-left: 15px;
+    padding-top: 40px;
+    .maintenance-mode{
+        @extend %instructions;
+    }
+}
+.alert{
+	margin-bottom: 20px;
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	p{
+		margin-bottom: 10px;
+		color: $red_error; 
+	}
+	&.alert-danger, .help-block{
+		color: $red_error; 
+	}
+	&.alert-success{
+		color: $green-light;
+	}
+	&.alert-info{
+		color: $blue;
+	}
+	div ul li{
+		margin: 10px 0;
+	}
+}
+body > .ui-pnotify
+{
+    z-index: 100050;
+}
+.ui-pnotify-modal-overlay{
+    background-color: rgba(0,0,0,.2);
+}
+.ui-pnotify{
+	border-radius: 4px;
+	background: #fff;
+	box-shadow: 0 0 30px #323232;
+
+ 	.alert{
+ 		font-family: "RobotoMedium";
+        padding: 15px;
+        margin: 0;
+        &.alert-warning{
+            border-top: 10px solid $blue;
+            color: $blue;
+        }
+        &.alert-success{
+            border-top: 10px solid $green;
+            color: $green;
+        }
+        &.alert-info{
+            border-top: 10px solid $blue;
+            color: $blue;
+        }
+        &.alert-danger{
+            border-top: 10px solid $red;
+            color: $red;
+        }
+	  	.ui-pnotify-title{
+	  		font: 16px/18px "RobotoMedium";
+	  	}
+	  	.ui-pnotify-text{
+	  		font-size: 14px;
+	  		line-height: 16px;
+	  	}
+ 	}
+
+    &.loading-indicator
+    {
+        border-radius: 0;
+        .ui-pnotify-container{
+            border-radius: 0;
+            box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
+        }
+        .ui-pnotify-container.alert{
+            padding: 30px 40px;
+            border-top: none;
+        }
+        .ui-pnotify-title{
+	  		font: 24px/26px "RobotoLight";
+            padding: 0;
+            margin: 0;
+	  	}
+    }
 }
 .error-text{
 	color: $red_error;
@@ -352,4 +235,19 @@ h5{
 }
 .default-text{
 	color: $gray_form;
+}
+
+.info-block{
+    @extend .text-page;
+	margin-bottom: 20px;
+
+    p{
+		margin-bottom: 20px;
+        &:last-of-type{
+            margin-bottom: 0px;
+        }
+        &:only-of-type{
+            margin-bottom: 20px;
+        }
+	}
 }

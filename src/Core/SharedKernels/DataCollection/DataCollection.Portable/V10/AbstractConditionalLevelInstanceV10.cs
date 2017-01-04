@@ -310,8 +310,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             {
                 foreach (var option in options)
                     yield return option;
-            }
 
+                yield break;
+            }
+            
             var filter = OptionFiltersMap[questionId];
             foreach (var option in options)
             {

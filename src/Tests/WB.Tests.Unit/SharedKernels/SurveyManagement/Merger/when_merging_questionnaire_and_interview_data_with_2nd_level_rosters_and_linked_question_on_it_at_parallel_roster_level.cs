@@ -34,11 +34,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.FixedRoster(rosterId: firstLevelRosterId,
+                Create.Entity.FixedRoster(rosterId: firstLevelRosterId, variable: "r1",
                     obsoleteFixedTitles: new[] {"roster1", "roster2"},
                     children: new IComposite[]
                     {
-                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId,
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, variable: "r2",
                             obsoleteFixedTitles: new[] {"t1", "t2"},
                             children: new IComposite[]
                             {
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                 }
                             })
                     }),
-                Create.Entity.FixedRoster(rosterId: parallelLevelRosterId,
+                Create.Entity.FixedRoster(rosterId: parallelLevelRosterId, variable: "r3",
                     obsoleteFixedTitles: new[] {"parallel roster1", "parallel roster1"},
                     children: new IComposite[]
                     {

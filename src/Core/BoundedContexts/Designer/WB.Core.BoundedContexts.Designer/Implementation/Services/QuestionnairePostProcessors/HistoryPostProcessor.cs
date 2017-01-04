@@ -602,6 +602,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 targetTitle,
                 null,
                 null,
+                null,
                 questionnaireDocument,
                 references);
         }
@@ -615,6 +616,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string targetTitle,
             string targetNewTitle,
             int? affecedEntries,
+            DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
             params QuestionnaireChangeReference[] references)
         {
@@ -638,7 +640,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 TargetItemTitle = targetTitle,
                 TargetItemType = targetType,
                 TargetItemNewTitle = targetNewTitle,
-                AffectedEntriesCount = affecedEntries
+                AffectedEntriesCount = affecedEntries,
+                TargetItemDateTime = targetDateTime,
             };
 
             references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
@@ -796,7 +799,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 command.QuestionnaireId,
                 command.SearchFor,
                 command.ReplaceWith, 
-                aggregate.GetLastReplacedEntriesCount() ,
+                aggregate.GetLastReplacedEntriesCount(),
+                null,
                 aggregate.QuestionnaireDocument
                 );
         }
@@ -807,13 +811,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
+            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferanceId.FormatGuid());
+
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,
                 QuestionnaireActionType.Revert,
                 QuestionnaireItemType.Questionnaire,
                 command.QuestionnaireId,
                 aggregate.QuestionnaireDocument.Title,
-                aggregate.QuestionnaireDocument);
+                null,
+                null,
+                itemToRevert.Timestamp,
+                aggregate.QuestionnaireDocument
+                );
         }
     }
 }

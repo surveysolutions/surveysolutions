@@ -5,7 +5,14 @@
         text-align: left;
     }
 }
-
+#import-log-in{
+    .form-group:first-of-type::before{
+        display: block;
+        content: "";
+        width: 100%;
+        height: 1px;
+    }
+}
 img#placeholder {
     max-width: 365px;
     font-size: 0;
@@ -13,30 +20,25 @@ img#placeholder {
     position: relative;
     display: block;
 }
-
 .default-logo {
     display: none;
 }
-
 .no-logo {
     .default-logo {
-        @include size(365px, 329px);
+        @extend %default-logo-size;
         display: block;
         background: #fff url("../img/HQ-login-3_05.png") no-repeat;
-        background-size: 365px 329px;
     }
     & #placeholder
     {
         display: none;
     }
 }
- 
 .navbar{
     .retina-world-bank{
-        @include size(270px, 53px);
+        @extend %retina-world-bank-size;
         font-size: 0;
         background: url("../img/wb-logo.png") no-repeat; 
-        background-size: 100%;
         margin-top: 20px;
         @include image-2x("../img/WBG_Horizontal-Grayscale-high.png", 100%, 100%);
     }
@@ -53,6 +55,7 @@ img#placeholder {
         text-transform: uppercase;
         font-size: 12px;
         line-height: 14px;
+        letter-spacing: 0.5px;
         @include transition;
         &:hover, &:focus{
             background-color: $gray-light;
@@ -60,18 +63,54 @@ img#placeholder {
     }
 }
 .retina.headquarter{
-    @include size(269px, 96px);
+    @extend %retina-headquarter-size;
     background: url("../img/headquarter_logo.png") no-repeat 0 0;
-    background-size: 269px 96px;
     margin-bottom: 25px;
-    @include image-2x("../img/headquarter_logo-retina.png", 269px, 96px);
+    @include image-2x("../img/headquarter_logo-retina.png", 100%, 100%);
+    font-size: 0;
+    line-height: 0;
 }
-@media (max-width: $screen-sm-min){
-    .left-column{
-        #log-in{
-            text-align: center;
+.interviewer-app{
+    margin: 45px 0 -30px;
+    display: none;
+    border-top: 3px solid $gray-super-light;
+    padding-top: 30px;
+    text-align: center;
+    a{
+        display: block;
+        margin: 0 auto;
+        color: $gray_light;
+        @include font(12px, 16px);
+        text-decoration: underline;
+        &:hover{
+            text-decoration: none;
+        }        
+    }
+    .get-interviewer-app{
+        width: 248px;
+        background: #000  url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+        background-size: 55px;
+        margin-bottom: 25px;
+        @extend %uppercase-font;
+        letter-spacing: 1.5px;
+        text-decoration: none;
+        color: rgba(255,255,255, 0.9);
+        background-position: 15px 10px;
+        text-decoration: none;
+        padding: 10px 27px 10px 85px;
+        text-align: left;
+        border-radius: 10px;
+        span{
+            display: block;
+            &.version{
+                text-transform: none;
+                margin-top: 5px;
+                color: rgba(255,255,255, 0.5);
+            }
         }
     }
+}
+@media (max-width: $screen-sm-min){
     img#placeholder, .no-logo .default-logo{
         display: none;
     }
@@ -81,4 +120,12 @@ img#placeholder {
     .navbar .retina-world-bank{
         @include size(135px, 26.5px);
     }
+    .interviewer-app{
+        display: block;
+    }
+    html body {
+        main .two-columns-form .log-in .form-group .form-control{
+            width: 100%;
+        }
+    }    
 }

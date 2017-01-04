@@ -1,74 +1,12 @@
 @import "two-column-form";
-@import "add-interviews";
-.radio{
-    input.wb-radio{
-        display: none;
-        & ~ label .tick {
-            @extend %tick;
-            background-position: -215px 0;
-        } 
-        &:checked ~ label{
-            color:  $gray_text;
-            font-weight: bold;
-            .tick {
-                background-position: -245px 0;
-            }
-        } 
-        &:disabled ~ label .tick {
-            background-position: -215px 0;
-        } 
-        &:checked:disabled ~ label .tick {
-            background-position: -215px 0;
-        } 
-    }
-    label{
-        padding: 0;
-        color: $gray_light;
-        font-weight: normal;
-    }
-}
+@import "add-interviews"; 
 
-main{
-    .page-header{
-        padding-bottom: 0;
-        margin: 0;
-        border: none;
-        .page-title{
-            @extend %instructions;
-        }
-        .maintenance-mode{
-            @extend %instructions;
-            display: none;
-            .message-try-again{
-                color: $red_error; 
-            }
-        }
-    }
-    .two-columns-form{
-       .left-column{
-            text-align: center;
-            p{
-                @include font(17px, 22px);
-                color: $gray_light;
-                margin-bottom: 0;
-                a{
-                    color: $gray_light;
-                    text-decoration: underline;
-                    &:hover{
-                        text-decoration: none;
-                    }
-                }
-            }
-        }
-    }
-}
 .questionnaire-statistics {
     margin-bottom: 30px;
     ul{
         font: 14px/16px "TrebuchetMS";
         list-style: none;
         padding: 0;
-        color: $gray_info;
         overflow: hidden;
         li{
             margin-bottom: 6px;
@@ -87,12 +25,12 @@ main{
         }
     }
 }
-#import-questionnaire-form{
+.import-questionnaire-form{
     .form-group{
         margin-bottom: 0;
     }
     .questionnaire-versioning{
-        margin-bottom: 65px;
+        margin-bottom: 50px;
         margin-top: 15px;
     }
 }
@@ -106,6 +44,147 @@ main{
         flex-direction:column;
     }
 }
-.radio{
-    margin: 0;
+.signed-name{
+    width: 35%;
+    font-size: 13px;
+    line-height: 15px;
+    margin: 30px 15px 0 0; 
+    float: right;
+    text-align: right;
+    span{
+        @extend %uppercase-font;
+        color: $blue;
+    }
+    a{
+        color: $gray_light;
+        text-decoration: underline;
+        &:hover, &:focus{
+            text-decoration: none;
+        }
+    }
 }
+.import-interview{
+    tr{
+        td, th{
+            width: 10%;  
+        }
+        .size{
+            width: 6%;
+        }
+    }
+    thead{
+        th.column-questionnaire-title{
+            width: 44%;
+        }
+    }
+    tbody{
+        font: 13px/15px Georgia, Times, "Times New Roman", serif;
+        font-style: italic;
+        tr{
+            border-bottom: 1px solid #ddd;
+            &:hover, &:focus{
+                td {
+                    &:first-child a{
+                        color: #000;
+                    }
+                    &.shared-with{
+                        color: $gray_text;
+                    }
+                    span{
+                        color: $gray_text;
+                    }
+                }
+                .parameters span{
+                    color: $gray_light;
+                }
+            }
+            td{
+                &.shared-with{
+                    color: $gray_form;
+                    &>span{
+                        color: $gray_text;
+                        span{
+                            color: $gray_light;
+                        }
+                    }
+                }
+                &:first-child{
+                    width: 44%; 
+                    font: 18px/20px "RobotoRegular";
+                }
+            }
+        }
+        .current-user,  .changed-recently{
+            color: $green-light;
+        }
+        .parameters{
+            font-style: normal;
+            font-family: "TrebuchetMSBold";
+            color: $gray-highlight-font;
+            span{
+                @extend %gray-uppercase;
+                text-transform: none; 
+            }
+        }  
+    }
+}
+@media (max-width: $screen-md-min){
+    .parameters{
+        display: none;
+    }
+    .table{
+        tr{
+            @include transition(all, 0.1s);
+            height: 35px;
+            td, th{
+                width: 13%;  
+            }
+        }
+    }
+}
+@media (max-width: $screen-sm-min){
+    .shared-with{
+        display: none;
+    }
+    .signed-name{
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0 3%;
+    }
+    .signed-name{
+        margin-bottom: 20px;
+    }
+    .modified-by, .created-by{
+        display: none;
+    }
+    .import-interview tbody tr td:first-child{
+        font-size: 12px;
+        line-height: 14px;
+        width: 70%;
+    }
+    .import-wrapper  .table{
+        tr{
+            td, th{
+                width: 30%;  
+            }
+        }
+    }
+    .import-questionnaire-form {
+        .questionnaire-versioning, .flex-row{
+            margin-bottom: 0;
+        }
+    }
+}
+@media (max-width: $screen-xs-min){   
+    .import-interview{
+        thead{
+            tr th{
+                &:first-child, &.padding-left-lide:first-child{
+                    padding-left: 45px;
+                }
+            }
+        } 
+    }
+}
+

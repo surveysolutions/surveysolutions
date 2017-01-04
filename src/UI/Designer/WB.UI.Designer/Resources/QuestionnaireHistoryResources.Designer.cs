@@ -367,11 +367,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to reverted.
+        ///   Looks up a localized string similar to Questionnaire &quot;{0}&quot; reverted.
         /// </summary>
         public static string reverted {
             get {
                 return ResourceManager.GetString("reverted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire &quot;{0}&quot; reverted to version from {1}.
+        /// </summary>
+        public static string reverted_to {
+            get {
+                return ResourceManager.GetString("reverted_to", resourceCulture);
             }
         }
         

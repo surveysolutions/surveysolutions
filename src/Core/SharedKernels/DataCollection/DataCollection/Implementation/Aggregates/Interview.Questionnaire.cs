@@ -13,12 +13,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
         public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
-        protected IQuestionnaire GetQuestionnaireOrThrow()
+        protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
+
+        private IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.QuestionnaireIdentity, this.Language);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.QuestionnaireIdentity, language);
 
             if (questionnaire == null)
-                throw new InterviewException($"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
+                throw new InterviewException(
+                    $"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {this.EventSourceId}",
+                    InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }

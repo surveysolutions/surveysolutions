@@ -244,7 +244,16 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting..
+        ///   Looks up a localized string similar to Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use device location..
+        /// </summary>
+        public static string GpsQuestion_MissingPermissions {
+            get {
+                return ResourceManager.GetString("GpsQuestion_MissingPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting.
         /// </summary>
         public static string GpsQuestion_Timeout {
             get {
@@ -838,11 +847,47 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application has not enough permissions to execute requested action.
+        /// </summary>
+        public static string MissingPermission {
+            get {
+                return ResourceManager.GetString("MissingPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use camera..
+        /// </summary>
+        public static string MissingPermissions_Camera {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use storage..
+        /// </summary>
+        public static string MissingPermissions_Storage {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         

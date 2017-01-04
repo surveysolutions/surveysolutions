@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -12,31 +13,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.serviceLocator = serviceLocator;
         }
 
-        public SideBarSectionViewModel BuildSectionItem(SideBarSectionsViewModel root, 
-            SideBarSectionViewModel sectionToAddTo,
-            NavigationIdentity enabledSubgroupIdentity, 
-            NavigationState navigationState, 
-            string interviewId)
+        public ISideBarSectionItem BuildSectionItem(Identity sectionIdentity, NavigationState navigationState, string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
             var groupStateViewModel = this.serviceLocator.GetInstance<GroupStateViewModel>();
-            sideBarItem.Init(interviewId, enabledSubgroupIdentity, root, sectionToAddTo, groupStateViewModel, navigationState);
+            sideBarItem.Init(interviewId, sectionIdentity, groupStateViewModel, navigationState);
             return sideBarItem;
         }
 
-        public SideBarSectionViewModel BuildCompleteScreenSectionItem(NavigationState navigationState, string interviewId)
+        public ISideBarItem BuildCompleteItem(NavigationState navigationState, string interviewId)
         {
-            var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
-            var interviewStateViewModel = this.serviceLocator.GetInstance<InterviewStateViewModel>();
-            sideBarItem.InitCompleteScreenItem(interviewId, interviewStateViewModel, navigationState);
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarCompleteSectionViewModel>();
+            sideBarItem.Init(navigationState, interviewId);
             return sideBarItem;
         }
 
-        public SideBarSectionViewModel BuildCoverScreenSectionItem(NavigationState navigationState, string interviewId)
+        public ISideBarItem BuildCoverItem(NavigationState navigationState)
         {
-            var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
-            var interviewStateViewModel = this.serviceLocator.GetInstance<CoverStateViewModel>();
-            sideBarItem.InitCoverScreenItem(interviewId, interviewStateViewModel, navigationState);
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarCoverSectionViewModel>();
+            sideBarItem.Init(navigationState);
             return sideBarItem;
         }
     }
