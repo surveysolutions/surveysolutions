@@ -1,7 +1,5 @@
-declare var require: any
-
-const  Vue = require("vue")
-const Vuex = require("vuex")
+import * as Vue from "vue"
+import * as Vuex from "vuex"
 
 Vue.use(Vuex)
 

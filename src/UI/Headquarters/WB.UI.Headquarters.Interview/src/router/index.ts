@@ -1,7 +1,7 @@
 declare var require: any
 
-import Vue = require("vue")
-import VueRouter = require("vue-router")
+import * as Vue from "vue"
+import * as VueRouter from "vue-router"
 import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
