@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepository>();
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithExtendedCache>();
 
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
 
