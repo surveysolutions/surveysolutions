@@ -238,16 +238,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         $"Questionnaire ID: {this.QuestionnaireIdentity}.");
             }
             
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
-
-            var targetQuestionnaire = this.GetQuestionnaireOrThrow();
+            var targetQuestionnaire = this.GetQuestionnaireOrThrow(command.Language);
 
             var changedInterviewTree = this.Tree.Clone();
+            changedInterviewTree.SwitchQuestionnaire(targetQuestionnaire);
 
             this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
 
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
             this.ApplyEvents(treeDifference, command.UserId);
         }
 
@@ -258,8 +258,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionInvariants.RequireQuestionExists();
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
@@ -272,8 +273,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionInvariants.RequireQuestionExists();
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
@@ -286,8 +288,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionInvariants.RequireQuestionExists();
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
@@ -631,7 +634,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
-            => sourceInterview.Compare(changedInterview);
+            => sourceInterview.Clone().Compare(changedInterview);
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
         {
@@ -791,24 +794,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void AddRosterToTree(RosterIdentity rosterIdentity)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            var parentGroupId = questionnaire.GetParentGroup(rosterIdentity.GroupId);
-            if (!parentGroupId.HasValue) return;
-
-            var parentGroupIdentity = Identity.Create(parentGroupId.Value, rosterIdentity.OuterRosterVector);
-
-            var rosterManager = this.Tree.GetRosterManager(rosterIdentity.GroupId);
-            InterviewTreeRoster addedRoster = rosterManager.CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
-
-            var parentGroup = this.Tree.GetGroup(parentGroupIdentity);
-            parentGroup.AddChild(addedRoster);
-            parentGroup.UpdateSortIndexesForRosters(rosterIdentity.GroupId, rosterManager);
-            addedRoster.ActualizeChildren(skipRosters: true);
-        }
-
         private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)
         {
             foreach (var node in this.Tree.AllNodes)
@@ -852,6 +837,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     staticText.SetValidationMessages(validationMessages);
                     staticText.ReplaceSubstitutions();
                 }
+            }
+        }
+
+        protected void ActualizeRostersIfQuestionIsRosterSize(Guid questionId)
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow();
+
+            foreach (var rosterId in questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId))
+            {
+                var parentOfRoster = questionnaire.GetParentGroup(rosterId);
+                if (!parentOfRoster.HasValue) continue;
+
+                var parentsOfRosters = this.Tree.FindEntity(parentOfRoster.Value).OfType<InterviewTreeGroup>().ToList();
+
+                foreach (var parentRoster in parentsOfRosters)
+                    parentRoster.ActualizeChildren();
             }
         }
     }

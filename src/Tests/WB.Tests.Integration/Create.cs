@@ -46,6 +46,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -269,7 +270,14 @@ namespace WB.Tests.Integration
             {
                 return new RosterInstancesRemoved(rosterInstances);
             }
+
+            public static LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] changedLinkedOptions)
+            {
+                return new LinkedOptionsChanged(changedLinkedOptions);
+            }
         }
+
+        public static RosterVector RosterVector(params int[] vectors) => new RosterVector(vectors.Select(x => (decimal) x));
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
         {
@@ -316,8 +324,8 @@ namespace WB.Tests.Integration
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
-        public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
-            => Create.Group(title: title, children: children);
+        public static Group Chapter(string title = "Chapter X", string enablementCondition = null, IEnumerable<IComposite> children = null)
+            => Create.Group(title: title, children: children, enablementCondition: enablementCondition);
 
         public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
@@ -335,7 +343,8 @@ namespace WB.Tests.Integration
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, 
             Guid? linkedToRosterId=null, 
             bool yesNo = false,
-            string optionsFilter = null)
+            string optionsFilter = null,
+            string linkedFilter = null)
         {
             var multyOptionsQuestion = new MultyOptionsQuestion
             {
@@ -346,6 +355,7 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 LinkedToRosterId = linkedToRosterId,
                 YesNoView = yesNo,
+                LinkedFilterExpression = linkedFilter,
                 Properties = {OptionsFilterExpression = optionsFilter}
             };
             return multyOptionsQuestion;
@@ -573,6 +583,29 @@ namespace WB.Tests.Integration
             return interview;
         }
 
+        public static StatefulInterview PreloadedInterview(
+            PreloadedDataDto preloadedData,
+            Guid? questionnaireId = null,
+            IQuestionnaireStorage questionnaireRepository = null, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
+          
+            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+                interviewId: Guid.NewGuid(),
+                userId: Guid.NewGuid(),
+                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: 1,
+                preloadedDataDto: preloadedData,
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid()));
+
+            return interview;
+        }
+
         public static ISubstitionTextFactory SubstitionTextFactory()
         {
             return new SubstitionTextFactory(Create.SubstitutionService(), Create.VariableToUIStringService());
@@ -583,6 +616,23 @@ namespace WB.Tests.Integration
             return new VariableToUIStringService();
         }
 
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            => new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
+
+        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity();
+
+            var questionnaireRepository = QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+
+            return StatefulInterview(
+                questionnaireIdentity: questionnaireIdentity,
+                questionnaireRepository: questionnaireRepository);
+        }
+        
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
+            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
+
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
@@ -590,7 +640,8 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                expressionProcessorStatePrototypeProvider ??
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.SubstitionTextFactory());
 
             interview.CreateInterview(
@@ -903,6 +954,9 @@ namespace WB.Tests.Integration
                 interviewRepository: interviewRepository,
                 substitutionService: Create.SubstitutionService());
 
+        public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
+            =>new AnswerNotifier(registry ?? Create.LiteEventRegistry());
+
         public static ISubstitutionService SubstitutionService()
             => new SubstitutionService();
 
@@ -952,5 +1006,16 @@ namespace WB.Tests.Integration
 
         public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
+
+        public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
+        {
+            return new PreloadedDataDto(levels);
+        }
+
+        public static PreloadedLevelDto PreloadedLevelDto(RosterVector rosterVector, Dictionary<Guid, AbstractAnswer> answers)
+        {
+            return new PreloadedLevelDto(rosterVector, answers);
+        }
+
     }
 }

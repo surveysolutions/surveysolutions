@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         bool IsCompleted { get; }
         bool CreatedOnClient { get; }
 
+        InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
 
         InterviewTreeGpsQuestion GetGpsQuestion(Identity identity);
@@ -62,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool HasGroup(Identity group);
 
-        bool IsValid(Identity identity);
+        bool IsEntityValid(Identity identity);
 
         IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
 
@@ -108,6 +109,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
+        bool IsFirstEntityBeforeSecond(Identity first, Identity second);
+
         List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
 
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
@@ -123,6 +126,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
+
+        bool IsQuestionPrefilled(Identity entityIdentity);
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
     }

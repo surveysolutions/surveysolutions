@@ -6,18 +6,37 @@ using MvvmCross.Core.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class FrameLayoutCurrentScreenBinding : BaseBinding<FrameLayout, MvxViewModel>
+    public class FrameLayoutCurrentScreenBinding : BaseBinding<FrameLayout, InterviewStageViewModel>
     {
         public FrameLayoutCurrentScreenBinding(FrameLayout frameLayout)
             : base(frameLayout) {}
 
-        protected override void SetValueToView(FrameLayout frameLayout, MvxViewModel frameViewModel)
+        protected override void SetValueToView(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
         {
-            if (frameViewModel == null)
+            var userInterfaceStateService = Mvx.Resolve<IUserInterfaceStateService>();
+
+            userInterfaceStateService.NotifyRefreshStarted();
+            try
+            {
+                SetValueToViewImpl(frameLayout, stageViewModel);
+            }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+            }
+        }
+
+        private static void SetValueToViewImpl(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
+        {
+            if (stageViewModel == null)
                 return;
+
+            var frameViewModel = stageViewModel.Stage;
 
             var viewModelType = frameViewModel.GetType();
             var mvxViewFinder = Mvx.Resolve<IMvxViewsContainer>();
@@ -29,11 +48,44 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             mvxFragment.ViewModel = frameViewModel;
 
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = (FragmentActivity)topActivity.Activity;
-            var trans = activity.SupportFragmentManager.BeginTransaction();
-            trans.Replace(frameLayout.Id, mvxFragment);
-            trans.Commit();
+            var transaction = activity.SupportFragmentManager.BeginTransaction();
+
+            SetCustomAnimations(transaction, stageViewModel.Direction);
+            transaction.Replace(frameLayout.Id, mvxFragment);
+            transaction.Commit();
+
+            activity.SupportFragmentManager.ExecutePendingTransactions();
+        }
+
+        private static FragmentTransaction SetCustomAnimations(FragmentTransaction transaction, NavigationDirection direction)
+        {
+            switch (direction)
+            {
+                case NavigationDirection.Previous:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.slide_from_left,
+                        Resource.Animation.abc_fade_out);
+
+                case NavigationDirection.Next:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.slide_from_right,
+                        Resource.Animation.abc_fade_out);
+
+                case NavigationDirection.Inside:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.zoom_in_from_center,
+                        Resource.Animation.abc_fade_out);
+
+                case NavigationDirection.Outside:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.zoom_out_to_center,
+                        Resource.Animation.abc_fade_out);
+
+                default:
+                    return transaction;
+            }
         }
     }
 }

@@ -1,13 +1,15 @@
-using System;
 using System.Collections.Generic;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -22,9 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-            answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
+            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>());
 
-
+            Stub.InitMvxMainThreadDispatcher();
+     
             var interview = Mock.Of<IStatefulInterview>(_
                => _.QuestionnaireIdentity == questionnaireId
                   && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
@@ -47,16 +50,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
-                answering: answeringViewModelMock.Object,
+                answering: answerViewModel,
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
+            viewModel.DefaultText = string.Empty;
+
             var navigationState = Create.Other.NavigationState();
+            
             viewModel.Init(interviewId, questionIdentity, navigationState);
+            
         };
 
-        Because of = () =>
+        Because of = () => {
             viewModel.FilterText = answerValue;
+            Thread.Sleep(1000);
+        };
 
         It should_update_suggestions_list = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
@@ -71,9 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         static FilteredSingleOptionQuestionViewModel viewModel;
 
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
-
-        private static Mock<AnsweringViewModel> answeringViewModelMock;
-
+        
         private static string answerValue = "a";
     }
 }

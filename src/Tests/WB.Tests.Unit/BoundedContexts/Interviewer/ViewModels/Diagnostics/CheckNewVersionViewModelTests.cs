@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Test.Core;
 using Moq;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -39,11 +40,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
          ()
         {
             var exceptionMessage = "message";
-            var tabletDiagnosticServiceMock=new Mock<ITabletDiagnosticService>();
+            var tabletDiagnosticServiceMock= Substitute.For<ITabletDiagnosticService>();
 
-            tabletDiagnosticServiceMock.Setup(x => x.UpdateTheApp(Moq.It.IsAny<string>())).Throws(new Exception(exceptionMessage));
+            tabletDiagnosticServiceMock.UpdateTheApp(null, CancellationToken.None, TimeSpan.MinValue).ThrowsForAnyArgs(new Exception(exceptionMessage));
 
-            var checkNewVersionViewModel = CreateCheckNewVersionViewModel(tabletDiagnosticService: tabletDiagnosticServiceMock.Object);
+            var checkNewVersionViewModel = CreateCheckNewVersionViewModel(tabletDiagnosticService: tabletDiagnosticServiceMock);
 
             checkNewVersionViewModel.UpdateApplicationCommand.Execute();
 

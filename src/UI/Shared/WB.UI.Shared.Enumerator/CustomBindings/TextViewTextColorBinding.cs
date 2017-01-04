@@ -1,4 +1,5 @@
 ﻿using Android.Graphics;
+using Android.Support.V4.Content;
 using Android.Widget;
 using MvvmCross.Binding;
 
@@ -13,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (!colorId.HasValue)
                 return;
 
-            Color color = control.Resources.GetColor(colorId.Value);
+            var color = new Color(ContextCompat.GetColor(control.Context, colorId.Value));
             control.SetTextColor(color);
         }
 

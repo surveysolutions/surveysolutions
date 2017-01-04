@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
@@ -14,7 +13,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewTemplateSelector : IMvxTemplateSelector
     {
-        private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>();
         private const int UnknownViewType = -1;
 
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
@@ -27,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
-            {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
+            {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
@@ -60,9 +58,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public int GetItemViewType(object forItemObject)
         {
-            object source = forItemObject;
-
-            var typeOfViewModel = source.GetType();
+            var typeOfViewModel = forItemObject.GetType();
 
             if (typeOfViewModel.IsGenericType)
             {
@@ -79,9 +75,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 typeof(StaticTextViewModel)
             };
 
-            if (disabledViewModelTypes.Contains(source.GetType()))
+            if (disabledViewModelTypes.Contains(typeOfViewModel))
             {
-                var enablementModel = this.GetEnablementViewModel(source) ?? (EnablementViewModel)((dynamic)source).Enablement;
+                var enablementModel = this.GetEnablementViewModel(forItemObject);
 
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
@@ -98,9 +94,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
             }
 
-            if (source is GroupNavigationViewModel)
+            var groupNavigationViewModel = forItemObject as GroupNavigationViewModel;
+            if (groupNavigationViewModel != null)
             {
-                var groupViewModel = source as GroupNavigationViewModel;
+                var groupViewModel = groupNavigationViewModel;
                 if (groupViewModel.NavigationGroupType == NavigationGroupType.ToParentGroup)
                 {
                     return Resource.Layout.interview_group_to_parent_navigation;
@@ -116,19 +113,24 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;
         }
 
-        private EnablementViewModel GetEnablementViewModel(dynamic item)
+        private EnablementViewModel GetEnablementViewModel(object item)
         {
-            Type type = item.GetType();
-            if (!hasEnablementViewModel.ContainsKey(type))
+            var questionHeaderViewModel = item as QuestionHeaderViewModel;
+            if (questionHeaderViewModel != null)
             {
-                var doesTypeHasQuestionState = type.GetProperties().Any(ptp => ptp.Name == "QuestionState");
-                hasEnablementViewModel[type] = doesTypeHasQuestionState;
+                return questionHeaderViewModel.Enablement;
             }
 
-            if (hasEnablementViewModel[type])
+            var groupViewModel = item as GroupViewModel;
+            if (groupViewModel != null)
             {
-                var enablementModel = item.QuestionState.Enablement;
-                return (EnablementViewModel)enablementModel;
+                return groupViewModel.Enablement;
+            }
+
+            var staticTextViewModel = item as StaticTextViewModel;
+            if (staticTextViewModel != null)
+            {
+                return staticTextViewModel.QuestionState.Enablement;
             }
 
             return null;

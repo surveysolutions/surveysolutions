@@ -1,0 +1,67 @@
+/* Progress bar */
+.progress{
+	height: 10px;
+	background-color: #dbdbdb;
+	.progress-bar:only-child, .progress-bar:last-of-type{
+		@include border-right-radius(4px);
+	}
+}
+.progress .progress-bar-info{
+	background-color: $gray_light;
+}
+.cancelable-progress{
+	position: relative;
+	overflow: hidden;
+	.progress{
+		width: 65%;
+		float: left;
+		background-color: $gray_form;
+		margin: 0;
+		margin-right: 30px;	
+	}
+	.btn-link{
+		float: left;
+		padding: 0;
+		line-height: 11px;
+		width: auto !important;
+		position: relative;
+	}
+	$margin-bottom: 7px;
+	.wrapper-progress{
+		float: left;
+		width: 70%;
+		& > span{
+			display: block;
+			
+			margin-bottom: $margin-bottom;
+			@extend %uppercase-font;
+			color: $gray_light;
+			&.error-text{
+				color: $red_error;
+			}
+			&.success-text{
+				color: $green_btn;
+			}
+			&.default-text{
+				color: $gray_form;
+			}
+		}
+		.progress{
+			float: none;
+			width: 100%;
+			margin-right: 10px;
+		}
+		& + .btn-link{
+			top: $margin-bottom;
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.cancelable-progress{
+		.progress{
+			width: 80%;
+			margin-bottom: 15px;
+			margin-right: 15px;
+		}
+	}
+}

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+﻿using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -70,6 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
+            this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
@@ -94,13 +91,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var question =  this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
             question.AsMultiFixedOption?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
             question.AsMultiLinkedToList?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
-
+            this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValues);
         }
 
         public virtual void Apply(YesNoQuestionAnswered @event)
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions));
+            this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions).ToYesNoAnswersOnly());
         }
 
@@ -116,6 +114,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(TextListQuestionAnswered @event)
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
+            this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.RosterVector, @event.Answers);
         }
 
@@ -284,8 +283,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.UpdateTitlesAndTexts(questionnaire);
             this.Tree.SwitchQuestionnaire(questionnaire);
+            this.UpdateTitlesAndTexts(questionnaire);
         }
 
         public virtual void Apply(FlagRemovedFromAnswer @event) { }
@@ -302,44 +301,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.Tree.GetQuestion(question)?.ReplaceSubstitutions();
         }
 
-        public virtual void Apply(GroupPropagated @event)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            Guid? parentGroupId = questionnaire.GetParentGroup(@event.GroupId);
-            if (!parentGroupId.HasValue) return;
-
-            var parentGroupIdentity = Identity.Create(parentGroupId.Value, @event.OuterScopeRosterVector);
-
-            for (int i = 0; i < @event.Count; i++)
-            {
-                var rosterIdentity = new RosterIdentity(@event.GroupId, @event.OuterScopeRosterVector, i).ToIdentity();
-
-                var addedRoster = this.Tree.GetRosterManager(@event.GroupId)
-                        .CreateRoster(parentGroupIdentity, rosterIdentity, i);
-
-                this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
-            }
-
-            //expressionProcessorStatePrototype could also be changed but it's an old code.
-        }
-
         public virtual void Apply(RosterInstancesTitleChanged @event)
         {
             foreach (var changedRosterTitle in @event.ChangedInstances)
-                this.Tree.GetRoster(changedRosterTitle.RosterInstance.GetIdentity()).SetRosterTitle(changedRosterTitle.Title);
+                this.Tree.GetRoster(changedRosterTitle.RosterInstance.GetIdentity())?.SetRosterTitle(changedRosterTitle.Title);
         }
 
+        private bool isFixedRostersInitialized = false;
         public virtual void Apply(RosterInstancesAdded @event)
         {
-            foreach (var instance in @event.Instances.OrderBy(x => x.OuterRosterVector.Length))
+            // compatibility with previous versions < 5.16
+            // for fixed rosters only
+            if (!this.isFixedRostersInitialized)
             {
-                var rosterIdentity = new RosterIdentity(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+                this.Tree.ActualizeTree();
+                this.isFixedRostersInitialized = true;
+            }
 
-                // this skip is made for backward compatibility with interviewer version 5.14 and lower
-                if (this.Tree.HasRoster(rosterIdentity.ToIdentity())) continue;
-
-                this.AddRosterToTree(rosterIdentity);
-                this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+            foreach (var instance in @event.Instances)
+            {
+                this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector,
+                    instance.RosterInstanceId, instance.SortIndex);
             }
         }
 
@@ -347,7 +329,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var instance in @event.Instances)
             {
-                this.Tree.RemoveNode(instance.GetIdentity());
                 this.ExpressionProcessorStatePrototype.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
             }
         }
@@ -409,6 +390,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 // can be removed from removed roster. No need for this event anymore
                 this.Tree.GetQuestion(identity)?.RemoveAnswer();
+                this.ActualizeRostersIfQuestionIsRosterSize(identity.Id);
                 this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(identity.Id, identity.RosterVector));
             }
         }
@@ -416,6 +398,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswerRemoved @event)
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
+            this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
+
             this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
         }
     }

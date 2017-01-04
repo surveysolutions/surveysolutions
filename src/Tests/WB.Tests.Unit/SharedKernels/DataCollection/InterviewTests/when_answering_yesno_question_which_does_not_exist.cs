@@ -31,11 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_throw_InterviewException = () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_exception_with_message_containing__question____not_____found__ = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("question", "not", "found");
+        It should_throw_exception_with_message_containing__question____missing__ = () =>
+            exception.Message.ToLower().ToSeparateWords().ShouldContain("question", "missing");
 
         It should_throw_exception_with_message_containing_question_id_from_command = () =>
-            exception.Message.ShouldContain(command.QuestionId.ToString());
+            exception.Message.ShouldContain(command.QuestionId.FormatGuid());
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;

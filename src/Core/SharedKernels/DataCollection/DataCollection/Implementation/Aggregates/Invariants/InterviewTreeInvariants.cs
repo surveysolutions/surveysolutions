@@ -12,14 +12,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 {
     internal class InterviewTreeInvariants
     {
-        private IQuestionOptionsRepository questionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
+        private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 
         public InterviewTreeInvariants(InterviewTree interviewTree)
         {
             this.InterviewTree = interviewTree;
         }
 
-        public InterviewTree InterviewTree { get; }
+        private InterviewTree InterviewTree { get; }
 
         public void RequireRosterVectorQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
         {
@@ -83,15 +83,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
-            QuestionnaireIdentity questionnaireId, Translation translation) 
+        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer, QuestionnaireIdentity questionnaireId, Translation translation) 
         {
             var question = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
 
             if (!question.IsCascading)
                 return;
 
-            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+            var answerOption = this.QuestionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
                 cascadingQuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)

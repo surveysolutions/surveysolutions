@@ -134,7 +134,15 @@
         if (dataReference == null) return "Please wait...";
         if (_.isUndefined(dataReference.LastUpdateDate) || dataReference.LastUpdateDate() === null)
             return "No exported data";
-        return "Last updated: " + self.formatDate(dataReference.LastUpdateDate());
+        return self.formatDate(dataReference.LastUpdateDate());
+    }
+
+    self.fileSize = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return "Please wait...";
+        if (_.isUndefined(dataReference.FileSize) || dataReference.FileSize() === null)
+            return "No exported data";
+        return dataReference.FileSize();
     }
 
     self.showDownloadButton = function (type, format) {
@@ -149,6 +157,39 @@
         if (_.isUndefined(dataReference.CanRefreshBeRequested))
             return true;
         return dataReference.CanRefreshBeRequested();
+    }
+
+    self.hasAnyDataToBePrepared = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+        if (_.isUndefined(dataReference.HasAnyDataToBePrepared))
+            return true;
+        return dataReference.HasAnyDataToBePrepared();
+    }
+    
+    self.requestStopExportProcess = function (type, format) {
+
+        var confirmMessageHtml = self.getBindedHtmlTemplate("#confirm-stop-export");
+
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return;
+        if (_.isUndefined(dataReference.CanRefreshBeRequested))
+            return;
+        
+        bootbox.dialog({
+            message: confirmMessageHtml,
+            buttons: {
+                cancel: {
+                    label: "No"
+                },
+                success: {
+                    label: "Yes",
+                    callback: function () {
+                        self.sendWebRequest(self.DeleteDataExportProcessUrl + "/" + dataReference.DataExportProcessId());
+                    }
+                }
+            }
+        });
     }
 
     self.getDataReference = function (type, format) {
@@ -173,6 +214,14 @@
     self.exportFormatProgress = function (progress) {
         return progress === 0 ? "Enqueued" : progress + "%";
     }
+
+    self.getProgressInPercents = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
+            return false;
+        return dataReference.ProgressInPercents();
+    }
+
 
     self.updateDataExportInfo(true);
 };

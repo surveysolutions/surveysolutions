@@ -1,20 +1,12 @@
 @import "filters";
-main.export{
-	padding-left: 45px;
-	padding-top: 10px;
-	color: $gray_text;
-}
 .export-types{
-	padding: 40px 30px;
+	padding: 50px 30px 0;
 	position: relative;
-	margin-left: 335px;
+	margin-left: $filter-width - $margin-container + 15px + 12px;
 	max-width: 900px;
 	@include transition(margin, 0.3s);
 	background-color: #fff;
 
-	h2{
-		margin-bottom: 45px;
-	}
 	.data{
 		width: 100%;
 		margin-bottom: 30px;
@@ -33,7 +25,11 @@ main.export{
 				}
 			}
 		}
+		&.metadata .table-data-header{
+			height: 32px;
+		}
 		.table-data-header{
+			min-height: 32px;
 			padding-left: 18px;
 			@extend %gray-uppercase;
 			overflow: hidden;
@@ -42,7 +38,7 @@ main.export{
 
 			div{
 				float: right;
-				padding: 5px 20px 13px;
+				padding: 5px 10px 13px;
 			}
 		}
 		.table-data{
@@ -104,13 +100,20 @@ main.export{
 			}
 			.btn{
 				margin: 5px;
-				padding: 8px 0;
-				width: 86px;
+				width: 100px;
+				padding-left: 0;
+				padding-right: 0;
 			}
 			.not-generated{
 				@extend %uppercase-font;
 				color: $gray_light;
 				padding: 0 20px; 
+			}
+			.no-data-available{
+				@extend %uppercase-font;
+				color: $gray_light;
+				display: none;
+				padding: 0 10px;
 			}
 		}
 		.size, .last-generated, .min-view{
@@ -127,67 +130,33 @@ main.export{
 		}
 	}
 }
-.progress-information{
-	max-width: 300px;
-	position: relative;
-	@extend %uppercase-font;
-	&>span{
-		display: block;
-		margin-bottom: 6px;
-		color: $green-btn;
-	}
-	.progress{
-		margin-bottom: 0;
-		max-width: 300px;
-		background-color: $green-progress;	
-	}
+.cancel{
+	$cross-height: 24px;
+	@include cancel($cross-height);
 }
-.export-types .data .table-data .btn.cancel{
-	outline: none;
-	background-color: transparent;
-	@include square(25px);
-	@include absolute(null, -45px, -6px, null);
-	padding: 0;
-	margin: 0;
-	&:before, &:after{
-		display: block;
-		content: "";
-		@include size(100%, 2px);
-		background-color: $gray_light;
-		@include rotate(45deg);
-		position: relative;
-	}
-	&:after{
-		@include rotate(-45deg);
-		left: -1px;
-    	top: -2px;
-	}
-}
-.progress-information.queued{
-	&>span{
-		color: $gray_light;
-	}
-	.progress{
-		background-color: $gray-super-light;
-		.progress-bar{
-			background-color: $gray_light;
-		}
-	}
-}
-.export-types.fulsscreen{
+.fullscreen .export-types{
 	margin-left: 0;
-	padding-left: 45px;
+	padding-left: 12px;
+}
+.footer{
+	@include transition(padding, 0.3s);
+	&.footer-adaptive{
+		padding-left: $filter-width - $margin-container + 12px +30px;
+	}
 }
 @media (max-width: $screen-md-min){
-	html body main.export{
-		padding-right: 2%;
-		padding-left: 4%;
-	}
   	.export-types{
-  		margin-left: 265px;
+  		padding: 50px 20px 0 30px;
+  		margin-left:  $filter-small-width - $margin-container-md-screen + 15px + 12px;
   		.size, .last-generated{
   			display: none;
   		}
+  		.data .table-data-header{
+  			min-height: auto;
+  		}
+  		.data.metadata .table-data-header{
+			height: auto;
+		}
 	  	.data .table-data {
 	  		.min-view{
 	  			display: table-cell;
@@ -207,13 +176,19 @@ main.export{
 		  	.not-generated{
 		  		padding: 0 10px;
 		  	}
+			.progress-information{
+				width: 80%;
+			}
 	  	}
 	  	.data p{
 	  		margin-bottom: 15px;
 	  	}
+	  	.data.metadata .container-data {
+			padding-top: 0;
+		}
   	}
-  	.export-types.fulsscreen{
-  		padding-left: 0;
+  	.fullscreen .export-types{
+  		padding: 55px 20px 0;
   		width: 100%;
   		.size, .last-generated{
   			display: table-cell;
@@ -240,16 +215,22 @@ main.export{
 		  	.not-generated{
 		  		padding: 0 10px;
 		  	}
+		  	
 	  	}
 	  	.data p{
 	  		margin-bottom: 15px;
 	  	}
   	}
+  	.footer{
+		&.footer-adaptive{
+			padding-left: $filter-small-width - $margin-container-md-screen + 12px +30px;
+		}
+	}
 }
 @media (max-width: $screen-sm-min){
 	.export-types{
 		margin-left: 0;
-		padding: 50px 5px 20px;
+		padding: 55px 15px 0;
 		h2{
 			margin-bottom: 25px;
 			@include font(24px, 26px);
@@ -265,6 +246,11 @@ main.export{
 			.progress-information{
 				width: 60%;
 			}
+		}
+	}
+	.footer{
+		&.footer-adaptive{
+			padding-left: 0;
 		}
 	}
 }
@@ -293,15 +279,12 @@ main.export{
 			  			padding: 50px 0 0;
 			  			
 			  			&:before{
-			  				left: 41%;
+			  				left: 43%;
 			  				top: 0;
 			  			}
 						&.stata:before{
 							left: 45%;
 						}
-			  		}
-			  		.progress-information{
-			  			display: inline-block;
 			  		}
 				}
 			}

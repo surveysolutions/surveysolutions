@@ -20,5 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual int? AffectedEntriesCount { get; set; }
         public virtual ISet<QuestionnaireChangeReference> References { get; set; } = new HashSet<QuestionnaireChangeReference>();
         public virtual string ResultingQuestionnaireDocument { get; set; }
+        public virtual DateTime? TargetItemDateTime { get; set; }
     }
 }

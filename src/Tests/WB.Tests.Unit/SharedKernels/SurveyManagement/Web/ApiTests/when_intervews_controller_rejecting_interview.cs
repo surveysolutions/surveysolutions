@@ -10,6 +10,7 @@ using It = Machine.Specifications.It;
 using System.Collections.Generic;
 using System.Net;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;

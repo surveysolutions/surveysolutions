@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -49,10 +50,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ReplaceSubstitutions()
         {
-            if (!HasSubstitutions)
-            {
+            if (!this.HasSubstitutions)
                 return;
-            }
 
             var textWithReplacedSubstitutions = this.originalText;
             foreach (var substitution in this.substitutionVariables.ByRosters)
@@ -78,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
                 var question = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeQuestion;
-                string answerString = question?.GetAnswerAsString();
+                string answerString = question?.GetAnswerAsString(CultureInfo.CurrentCulture);
                 answerString = string.IsNullOrEmpty(answerString)
                     ? this.substitutionService.DefaultSubstitutionText
                     : answerString;

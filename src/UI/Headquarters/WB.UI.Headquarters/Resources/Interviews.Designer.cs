@@ -147,6 +147,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. Resposible supervisor is missing.
+        /// </summary>
+        public static string ImportInterviews_FailedToImportInterview_NoSupervisor {
+            get {
+                return ResourceManager.GetString("ImportInterviews_FailedToImportInterview_NoSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
+        /// </summary>
+        public static string ImportInterviews_GenericError {
+            get {
+                return ResourceManager.GetString("ImportInterviews_GenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datafile is incorrect.
+        /// </summary>
+        public static string ImportInterviews_IncorrectDatafile {
+            get {
+                return ResourceManager.GetString("ImportInterviews_IncorrectDatafile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
         ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
         /// </summary>

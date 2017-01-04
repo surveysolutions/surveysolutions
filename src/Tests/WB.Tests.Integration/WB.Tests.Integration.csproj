@@ -108,23 +108,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.4.3.0\lib\net45\MvvmCross.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.4.0\lib\net45\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.4.3.0\lib\net45\MvvmCross.Platform.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.4.0\lib\net45\MvvmCross.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Platform.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.4.3.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.4.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.4.3.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.4.4.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.4.3.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.4.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -164,8 +164,8 @@
       <HintPath>..\..\..\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
@@ -219,12 +219,12 @@
       <HintPath>..\..\..\packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -355,6 +355,10 @@
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_models_with_variable_usage_in_nested_roster.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_with_condition_with_rowindex.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_having_condition_with_rowindex.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_index_of_failed_validation_condition_changes.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_using_IsAnswered_with_yes_no_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
@@ -426,10 +430,12 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_enables_linked_to_roster_question_with_options_filter .cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_applying_linked_options_changed_event.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_two_fixed_rosters_and_question_linked_on_second.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them_with_expression_state_by_questionnaire_version.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_question_that_affects_filter_of_linked_multioption_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_option_that_question_is_linked_to_in_condition_is_removed.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
@@ -583,14 +589,15 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
+  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

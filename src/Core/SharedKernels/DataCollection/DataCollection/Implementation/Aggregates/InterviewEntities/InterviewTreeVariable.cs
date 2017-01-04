@@ -20,9 +20,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return (IInterviewTreeNode)this.MemberwiseClone();
         }
-
-        public override void ReplaceSubstitutions()
-        {
-        }
     }
 }

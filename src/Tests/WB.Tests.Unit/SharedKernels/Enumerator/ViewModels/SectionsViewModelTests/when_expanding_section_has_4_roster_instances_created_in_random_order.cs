@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
         Because of = () =>
         {
-            navigationState.ScreenChanged += Raise.Event<GroupChanged>(new ScreenChangedEventArgs { TargetScreen = ScreenType.Group,TargetGroup = Create.Entity.Identity(chapterId) });
+            navigationState.ScreenChanged += Raise.Event<GroupChanged>(Create.Entity.ScreenChangedEventArgs(targetStage: ScreenType.Group, targetGroup: Create.Entity.Identity(chapterId)));
         };
 
         It should_add_sections_children_in_questionnaire_order = () =>

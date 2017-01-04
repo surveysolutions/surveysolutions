@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
+    <value>Before log in, please make sure that the 'Designer' website is available</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Could not connect to designer. Please check that designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
+    <value>Could not connect to Designer. Please check if Designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
     <value>Please sign in to designer</value>
@@ -133,9 +133,57 @@
     <value>Designer Questionnaires</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Import in Sample mode</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
-    <value>Import with census mode</value>
+    <value>Import in census mode</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Questionnaire import mode</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Import Questionnaire:</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>list of my questionnaires</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Created on</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Sub-sections</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Last modified on</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} of them with conditions</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Rosters</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>You have already imported this questionnaire</value>
+  </data>
+  <data name="CensusImportSubTitle" xml:space="preserve">
+    <value>This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices.</value>
+  </data>
+  <data name="CensusImportTitle" xml:space="preserve">
+    <value>Census mode import</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Create a new version  (#{0})</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Sample mode import</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices.</value>
   </data>
 </root>

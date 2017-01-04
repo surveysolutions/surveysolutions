@@ -42,6 +42,16 @@ namespace WB.UI.Headquarters
                 "~/Content/controlpanel.css"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/batch-upload-start-interview-creation").Include(
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/knockout/ko.extenders.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js",
+                "~/Dependencies/js/ajax.js"
+               ));
+
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",
@@ -58,6 +68,13 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/surveymanagmentheader.js",
                 "~/Scripts/bootbox.min.js"
                 ));
+            bundles.Add(new ScriptBundle("~/js/main-no-libs").Include(
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js",
+                "~/Scripts/viewmodels/surveymanagmentheader.js"
+            ));
+
             bundles.Add(new ScriptBundle("~/validate").Include(
                 "~/Scripts/jquery.validate.js",
                 "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"
@@ -203,6 +220,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/exportdata").Include(
+                "~/Scripts/bootbox.min.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
                 "~/Scripts/pages/exportdata.js"
                 ));
@@ -236,10 +254,6 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
                 "~/Scripts/pages/export-settings.js"
-                ));
-
-            bundles.Add(new ScriptBundle("~/js/designerquestionnaires").Include(
-                "~/Scripts/viewmodels/pages/designerquestionnaires.js"
                 ));
         }
     }

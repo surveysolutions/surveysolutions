@@ -935,7 +935,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (string.IsNullOrWhiteSpace(table.FileName))
+            if (string.IsNullOrWhiteSpace(table.FileName) || string.IsNullOrEmpty(table.TableName))
                 return false;
             return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
         }
@@ -1532,7 +1532,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             foreach (var question in questionsWithOptionsFilter)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire).ToArray());
+                {
+                    var identifiers = this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire);
+
+                    identifiers = ReplaceOwnVariableWithSelf(question, identifiers);
+
+                    dependencies.Add(question.StataExportCaption, identifiers.ToArray());
+                }
             }
 
             foreach (var variable in variables)
@@ -1553,6 +1559,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
+        }
+
+        private static IEnumerable<string> ReplaceOwnVariableWithSelf(IQuestion question, IEnumerable<string> identifiers)
+        {
+            var questionVariable = question.GetVariable();
+            return identifiers.Select(id => id == questionVariable ? "self" : id);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
@@ -1862,9 +1874,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var isVariable = entityToSubstitute is IVariable;
             var isQuestion = entityToSubstitute is IQuestion;
-            var isNotVariableNorQuestions = !(isVariable || isQuestion);
+            var isRoster = (entityToSubstitute as IGroup)?.IsRoster ?? false;
+            var isNotVariableOrQuestionOrRoster = !(isVariable || isQuestion || isRoster);
             var isQuestionOfNotSupportedType = isQuestion && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
-            if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
+            if (isNotVariableOrQuestionOrRoster || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
                     VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,

@@ -39,12 +39,15 @@ lib/Release
 lib/Debug
 App_Data/LocalStorage/*
 
+node_modules/
+.vs/
+
 scaffolding.config
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/
-src/UI/Designer/WB.UI.Designer/questionnaire/node_modules/
 src/UI/Designer/WB.UI.Designer/App_Data/ReadSide/Esent
 
 Thumbs.db
+
 src/Core/Infrastructure/WB.Core.Infrastructure.Android/Resources/Resource.Designer.cs
 src/Core/Infrastructure/WB.Core.Infrastructure.Files.Android/Resources/Resource.Designer.cs
 src/UI/Tester/WB.UI.Tester/Resources/Resource.designer.cs
@@ -54,10 +57,20 @@ src/UI/Shared/WB.UI.Shared.Android/Resources/Resource.Designer.cs
 src/UI/Interviewer/WB.UI.Interviewer/Resources/Resource.Designer.cs
 src/Infrastructure/Shared/Enumerator/WB.Infrastructure.Shared.Enumerator/Resources/Resource.Designer.cs
 
-/src/.vs
-
 src/UI/Designer/WB.UI.Designer/App_Data/Temp/EsentCache/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/node_modules/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/vendor/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/build/markup-*.min.css
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/build/libs-*.min.js
+
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/markup-*.min.css
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.js
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.css
+
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/*
+
+# It is not possible to re-include a file if a parent directory of that file is excluded
+!src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/*
+!src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/*
+!src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/stylesheets/
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/stylesheets/*
+
+!src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss

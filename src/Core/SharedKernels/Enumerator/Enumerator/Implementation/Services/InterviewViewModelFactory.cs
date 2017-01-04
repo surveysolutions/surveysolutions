@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.MultiOptionQuestionModel, Load<MultiOptionQuestionViewModel> },
                 { InterviewEntityType.LinkedMultiOptionQuestionModel, Load<MultiOptionLinkedToRosterQuestionQuestionViewModel> },
                 { InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel> },
-                { InterviewEntityType.MultimediaQuestionModel, Load<MultimedaQuestionViewModel> },
+                { InterviewEntityType.MultimediaQuestionModel, Load<MultimediaQuestionViewModel> },
                 { InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel> },
                 { InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel> },
                 { InterviewEntityType.GroupModel, Load<GroupViewModel> },

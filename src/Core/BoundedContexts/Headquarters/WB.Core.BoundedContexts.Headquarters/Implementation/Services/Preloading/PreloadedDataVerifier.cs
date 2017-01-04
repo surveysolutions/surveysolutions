@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -24,12 +25,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private class UserToVerify
         {
             public bool IsLocked { get; set; }
-            public bool IsSupervisorOrInterviewer { get; set; }
+            public bool IsSupervisorOrInterviewer => IsInterviewer || IsSupervisor; 
+            public bool IsSupervisor { get; set; }
+            public bool IsInterviewer { get; set; }
 
-            public UserToVerify(bool isLocked, bool isSupervisorOrInterviewer)
+            public UserToVerify(bool isLocked, bool isSupervisor, bool isInterviewer)
             {
                 this.IsLocked = isLocked;
-                this.IsSupervisorOrInterviewer = isSupervisorOrInterviewer;
+                this.IsInterviewer = isInterviewer;
+                this.IsSupervisor = isSupervisor;
             }
         }
 
@@ -63,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return status;
             }
 
-            var preloadedDataService = this.CreatePreloadedDataService(questionnaireId, version);
+            IPreloadedDataService preloadedDataService = this.CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
                 status.Errors = new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
@@ -72,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var errors = new List<PreloadedDataVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
+            //var datas = new[] { new PreloadedDataByFile(data.Id, data.FileName, data.Header, data.Content) };
 
             errors.AddRange(
                 this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
@@ -94,11 +99,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
-
+            status.InterviewsCount = datas.FirstOrDefault()?.Content.Length ?? 0;
+            if (!status.Errors.Any())
+            {
+                CountResposiblesInDataFile(datas, preloadedDataService, status);
+            }
             var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.ResponsibleColumnName);
             status.WasResponsibleProvided = responsibleNameIndex >= 0;
 
             return status;
+        }
+
+        private void CountResposiblesInDataFile(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, VerificationStatus status)
+        {
+            var responsibleCache = new Dictionary<string, UserToVerify>();
+            foreach (var levelData in allLevels)
+            {
+                var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
+
+                if (responsibleNameIndex < 0)
+                    continue;
+
+                foreach (var row in levelData.Content)
+                {
+                    var name = row[responsibleNameIndex];
+
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    var userState = this.GetResponsible(responsibleCache, name);
+                }
+            }
+            foreach (var userState in responsibleCache.Values)
+            {
+                if (userState.IsInterviewer)
+                    status.EnumeratorsCount++;
+                if (userState.IsSupervisor)
+                    status.SupervisorsCount++;
+            }
         }
 
         private bool ShouldVerificationBeContinued(List<PreloadedDataVerificationError> errors)
@@ -133,6 +173,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             status.Errors = errorsMessagess.ToArray();
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
+
+            status.InterviewsCount = topLevel?.Content?.Length ?? 0;
+            if (!status.Errors.Any() && topLevel!=null)
+            {
+                CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status);
+            }
 
             var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
             status.WasResponsibleProvided = responsibleNameIndex >= 0;
@@ -861,7 +907,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 responsiblesCache[userNameLowerCase] = userNotExistOrArchived ? null : new UserToVerify
                 (
                     user.IsLockedByHQ || user.IsLockedBySupervisor,
-                    user.IsSupervisor() || user.Roles.Any(role => role == UserRoles.Operator)
+                    user.IsSupervisor(), 
+                    user.Roles.Any(role => role == UserRoles.Operator)
                 );
             }
 

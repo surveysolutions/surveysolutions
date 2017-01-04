@@ -1,14 +1,17 @@
 using Flurl.Http;
-using Geolocator.Plugin;
-using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using NinjectAdapter;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -37,8 +40,11 @@ namespace WB.Infrastructure.Shared.Enumerator
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
+            this.Bind<IPictureChooser>().To<PictureChooser>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
+            this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
+            this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
 
             FlurlHttp.Configure(c => {
                 c.HttpClientFactory = new ModernHttpClientFactory();

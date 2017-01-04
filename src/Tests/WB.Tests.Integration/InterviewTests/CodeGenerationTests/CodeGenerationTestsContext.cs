@@ -427,7 +427,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, version?? 9, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, version?? 16, out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 

@@ -254,6 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 case 16:
                 case 17:
                 case 18:
+                case 19:
                     return new CodeGenerationSettings(
                         additionInterfaces: new[] { "IInterviewExpressionStateV10" },
                         namespaces: new[]

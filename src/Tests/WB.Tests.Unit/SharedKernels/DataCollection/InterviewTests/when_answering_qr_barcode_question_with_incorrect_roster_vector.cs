@@ -1,5 +1,6 @@
 using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -19,6 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
                 (_
                     => _.HasQuestion(questionId) == true
+                    && _.GetQuestionType(questionId) == QuestionType.QRBarcode
                 );
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);

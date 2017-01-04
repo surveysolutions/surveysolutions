@@ -794,15 +794,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0225");
 
         [Test]
-        public void multi_option_with_options_1_2_4_5()
+        public void multi_option_with_options_1_2_4_max_int()
             => Create
-                .MultipleOptionsQuestion(answers: new decimal[] { 1, 2, 4, 5 })
+                .MultipleOptionsQuestion(answers: new decimal[] { 1, 2, 4, int.MaxValue })
                 .ExpectWarning("WB0228");
 
         [Test]
-        public void single_option_with_options_1_2_4_5()
+        public void single_option_with_options_1_2_4_max_int()
             => Create
-                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 4, 5 })
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 4, int.MaxValue })
                 .ExpectWarning("WB0228");
 
         [Test]
