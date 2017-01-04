@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 		internal partial class <#=Model.ClassName#>
 		{  
-	  <# foreach(var variable in Model.AdditionalVariables) {  #>
+	  <# foreach(var variable in Model.GeneratedVariables) {  #>
 			<#=variable.Visibility #> <#=variable.IsStatic ? "static" : "" #> <#=variable.IsReadonly ? "readonly" : "" #> <#=variable.Type #> <#=variable.Name #> <#= variable.Initialization #>;
 	  <# } #>
 	  		

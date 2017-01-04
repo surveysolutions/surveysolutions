@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string VariableName { set; get; }
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
-        public List<VariableModel> AdditionalVariables { get; set; } = new List<VariableModel>();
+        public List<GeneratedVariable> GeneratedVariables { get; set; } = new List<GeneratedVariable>();
     }
 
     public class OptionsFilterConditionDescriptionModel : ConditionDescriptionModel

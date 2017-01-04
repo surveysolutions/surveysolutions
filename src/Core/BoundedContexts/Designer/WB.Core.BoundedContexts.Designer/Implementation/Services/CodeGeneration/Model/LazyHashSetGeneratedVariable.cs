@@ -4,12 +4,12 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class LazyHashSetVariableModel : VariableModel
+    public class LazyHashSetGeneratedVariable : GeneratedVariable
     {
-        public LazyHashSetVariableModel(string name, string type, string[] values, bool isStatic = true, bool isReadonly = true)
+        public LazyHashSetGeneratedVariable(string name, string type, string[] values, bool isStatic = true, bool isReadonly = true)
         {
             this.IsReadonly = isReadonly;
-            this.Name = $"_{name}Options";
+            this.Name = $"{CodeGenerator.PrivateFieldsPrefix}{name}Options";
             this.Type = $"Lazy<HashSet<{type}>>";
             this.IsStatic = isStatic;
             this.Visibility = "private";
