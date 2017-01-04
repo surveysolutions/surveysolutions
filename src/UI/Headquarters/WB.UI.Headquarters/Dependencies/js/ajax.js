@@ -26,6 +26,28 @@
         new PNotify({ title: title, text: message });
     };
 
+    self.confirm = function (title, message, confirmCallback, cancelCallback) {
+        (new PNotify({
+            title: title,
+            text: message,
+            hide: false,
+            addclass: "stack-modal",
+            confirm: {
+                confirm: true
+            },
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            history: {
+                history: false
+            },
+            stack: stack_modal
+        })).get()
+            .on('pnotify.confirm', confirmCallback)
+            .on('pnotify.cancel', cancelCallback);
+    };
+
     var openPnotifyIfExists = function (pnotify) {
         if (!_.isNull(loadingIndicator)) {
             pnotify.open();

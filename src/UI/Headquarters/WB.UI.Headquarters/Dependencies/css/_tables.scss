@@ -33,7 +33,7 @@
         & > tr{
             & > td, & > th{
                 border-right: none;
-                border-left: 1px solid $gray-highlighting;
+                border-left: 1px solid #f8f9f9;
                 &:first-child{
                     border-left: none;
                 }
@@ -178,7 +178,7 @@
         color: $gray_light;
         tr th{
             font-weight: normal;  
-            vertical-align: middle;
+            vertical-align: top;
         }
     }
     tbody{
@@ -186,6 +186,10 @@
         tr{
             border-bottom: 1px solid #ddd;
             td{
+                &.date{
+                    font-family: "TrebuchetMS";
+                }
+                padding: 15px;
                 vertical-align: middle;
                 height: 35px;
                 span{
@@ -489,7 +493,7 @@
         }
     }
 }
-@media screen and (max-width: 880px) {
+/* @media screen and (max-width: 880px) {
     table {width:100%;}
     thead {display: none;}
     tr:nth-of-type(2n) {background-color: inherit;}
@@ -500,4 +504,4 @@
         display: block;
         text-align:center;  
     }
-}
+} */

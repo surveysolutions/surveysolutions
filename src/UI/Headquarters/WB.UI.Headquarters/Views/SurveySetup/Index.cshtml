@@ -12,7 +12,7 @@
     <script type="text/javascript">
         'use strict';
 
-        var QuestionnairesListModel = function(ajax) {
+        var QuestionnairesListModel = function(ajax, notifier) {
             var self = this;
 
             self.table = null;
@@ -21,6 +21,7 @@
             var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
             var $batchUploadUrl = '@Url.Action("BatchUpload", "SurveySetup")';
             var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
+            var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
 
             var requestHeaders = {};
             requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
@@ -33,6 +34,15 @@
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
+
+            var sendDeleteQuestionnaireCommand = function(item) {
+                ajax.sendRequest($deleteQuestionnaireUrl, "post", { questionnaireId: item.questionnaireId, version: item.version }, false,
+                    // onSuccess
+                    function () {
+                        setTimeout(function () { self.table.ajax.reload(); }, 100);
+                    });
+            }
+
             var addNewInterview = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
                 window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
@@ -51,11 +61,62 @@
 
             var deleteQuestionnaire = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
-                //window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + version;
+
+                notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
+                    // confirm
+                    function() {
+                        sendDeleteQuestionnaireCommand(selectedRow);
+                    },
+                    // cancel
+                    function() {});
+            };
+
+            var buildMenuItem = function(selectedRow) {
+                var items = {}
+
+                items["addNew"] = {
+                    name: "@Dashboard.NewInterview",
+                    callback: addNewInterview,
+                    disabled: selectedRow.disabled || selectedRow.allowCensusMode
+                };
+                items["batchUpload"] = {
+                    name: "@Dashboard.BatchUpload",
+                    callback: interviewsBatchUpload,
+                    disabled: selectedRow.disabled || selectedRow.allowCensusMode
+                };
+                @if (User.IsInRole("Administrator"))
+                {
+                    <text>
+                items["sep1"] = "---------";
+                items["clone"] =
+                {
+                    name: "@Dashboard.CloneQuestionnaire",
+                    callback: cloneQuestionnaire,
+                    disabled: selectedRow.disabled
+                };
+                items["delete"] =
+                {
+                    name: "@Dashboard.DeleteQuestionnaire",
+                    callback: deleteQuestionnaire,
+                    disabled: selectedRow.disabled
+                };
+                </text>
+                }
+                return items;
+            }
+
+            self.contextMenuOptions = {
+                selector: "table#questionnaires .with-context-menu",
+                autoHide: true,
+                build: function($trigger, e) {
+                    var selectedRow = selectRowAndGetData($trigger);
+                    var items = buildMenuItem(selectedRow);
+                    return { items: items };
+                }
             };
 
             var onTableInitComplete = function() {
-                $('.dataTables_filter label').on('click', function (e) {
+                $('.dataTables_filter label').on('click', function(e) {
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
@@ -66,109 +127,72 @@
                     $(".column-questionnaire-title").toggleClass("padding-left-slide");
                 });
 
-                $.contextMenu({
-                    selector: "table#questionnaires .with-context-menu",
-                    autoHide: true,
-                    build: function($trigger, e) {
-                        var selectedRow = selectRowAndGetData($trigger);
+                $.contextMenu(self.contextMenuOptions);
+            };
 
-                        var items = {}
-
-                        items["addNew"] = {
-                            name: "Add interview assignment",
-                            callback: addNewInterview,
-                            disabled: selectedRow.disabled || selectedRow.isDeleted || selectedRow.allowCensusMode
-                        };
-                        items["batchUpload"] = {
-                            name: "Batch upload interviews",
-                            callback: interviewsBatchUpload,
-                            disabled: selectedRow.disabled || selectedRow.isDeleted || selectedRow.allowCensusMode
-                        };
-                        items["sep1"] = "---------";
-                        items["clone"] =
+            self.table = $('table#questionnaires')
+                .on('init.dt', onTableInitComplete)
+                .on('error.dt', function(e, settings, techNote, message) {
+                    //location.reload();
+                })
+                .DataTable({
+                    processing: true,
+                    language:
+                    {
+                        "url": window.input.settings.config.dataTableTranslationsUrl,
+                        searchPlaceholder: "Search"
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: questionnaireListUrl,
+                        type: "POST",
+                        headers: requestHeaders
+                    },
+                    "createdRow": function(row, data, dataIndex) {
+                        $(row).addClass('with-context-menu');
+                    },
+                    columns: [
                         {
-                            name: "Clone questionnaire",
-                            callback: cloneQuestionnaire,
-                            disabled: selectedRow.disabled || selectedRow.isDeleted
-                        };
-                        @if (User.IsInRole("Administrator"))
+                            data: "title",
+                            name: "Title", // case-sensitive!
+                            render: function(data, type, row) {
+                                return (row.allowCensusMode === true ? "<span class='census-icon'>C</span>" : "") + data;
+                            }
+                        },
                         {
-                            <text>items["delete"] =
-                            {
-                                    name: "Delete questionnaire",
-                                    callback: deleteQuestionnaire,
-                                    disabled: selectedRow.disabled || selectedRow.isDeleted
-                            };</text>
+                            data: "version",
+                            name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "importDate",
+                            name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "creationDate",
+                            name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "lastEntryDate",
+                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
                         }
-                    return { items: items
-                };
-            }
+                    ],
+                    select: {
+                        style: 'single'
+                    },
+                    searchHighlight: true,
+                    rowId: 'id',
+                    pagingType: "full_numbers",
+                    lengthChange: false, // do not show page size selector
+                    pageLength: 50, // page size
+                    "order": [[1, 'desc']]
+                });
 
-
-        });
+            return self;
         };
 
-        self.table = $('table#questionnaires')
-            .on('init.dt', onTableInitComplete)
-            .on('error.dt', function(e, settings, techNote, message) {
-                //location.reload();
-            })
-            .DataTable({
-                processing: true,
-                language:
-                {
-                    "url": window.input.settings.config.dataTableTranslationsUrl
-                },
-                serverSide: true,
-                ajax: {
-                    url: questionnaireListUrl,
-                    type: "POST",
-                    headers: requestHeaders
-                },
-                "createdRow": function(row, data, dataIndex) {
-                    $(row).addClass('with-context-menu');
-                },
-                columns: [
-                    {
-                        data: "title",
-                        name: "Title", // case-sensitive!
-                        //render: function (data, type, row) {
-                        //    return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
-                        //}
-                    },
-                    {
-                        data: "version",
-                        name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                    },
-                    {
-                        data: "importDate",
-                        name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                    },
-                    {
-                        data: "creationDate",
-                        name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                    },
-                    {
-                        data: "lastEntryDate",
-                        name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                    }
-                ],
-                select: {
-                    style: 'single'
-                },
-                searchHighlight: true,
-                rowId: 'id',
-                pagingType: "full_numbers",
-                lengthChange: false, // do not show page size selector
-                pageLength: 50, // page size
-                "order": [[1, 'desc']]
-            });
-
-        return self;
-    };
-
         $(function() {
-            var model = new QuestionnairesListModel(new Ajax(new Notifier()));
+            var notifier = new Notifier();
+            var model = new QuestionnairesListModel(new Ajax(notifier), notifier);
         });
     </script>
 }
@@ -177,7 +201,7 @@
         <div class="row">
             <div class="page-header clearfix">
                 <div>
-                    <h1>@Dashboard.Questionnaires</h1>
+                    <h1>@MainMenu.Questionnaires</h1>
                     @if (!(User.Identity.IsObserver()))
                     {
                         <a class="btn btn-success" href="@Url.Action("Import", "Template")">
@@ -188,8 +212,7 @@
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
                 <p>
-                    Upload a file with prefilled data to create new interviews.
-                    Specify usernames for supervisors or enumerators to make batch interview assignments.
+                    Select a questionnaire from the list to create interview assignments.
                 </p>
             </div>
         </div>
@@ -197,7 +220,7 @@
             <table id="questionnaires" class="table table-striped table-bordered table-ordered">
                 <thead>
                     <tr>
-                        <th>@Dashboard.Title</th>
+                        <th>@Dashboard.Questionnaire</th>
                         <th>@Dashboard.Version</th>
                         <th>@Dashboard.ImportDate</th>
                         <th>@Dashboard.CreationDate</th>

@@ -177,4 +177,10 @@
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>Delete questionnaire</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
 </root>
