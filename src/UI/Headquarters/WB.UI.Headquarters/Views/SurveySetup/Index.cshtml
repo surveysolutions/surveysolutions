@@ -135,14 +135,14 @@
             self.table = $('table#questionnaires')
                 .on('init.dt', onTableInitComplete)
                 .on('error.dt', function(e, settings, techNote, message) {
-                    //location.reload();
+                    location.reload();
                 })
                 .DataTable({
                     processing: true,
                     language:
                     {
                         "url": window.input.settings.config.dataTableTranslationsUrl,
-                        searchPlaceholder: "Search"
+                        searchPlaceholder: "@Pages.Search"
                     },
                     serverSide: true,
                     ajax: {
@@ -186,7 +186,8 @@
                     pagingType: "full_numbers",
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
-                    "order": [[1, 'desc']]
+                    "order": [[1, 'desc']],
+                    dom: "ftp"
                 });
 
             return self;
@@ -206,9 +207,7 @@
                     <h1>@MainMenu.Questionnaires</h1>
                     @if (!(User.Identity.IsObserver()))
                     {
-                        <a class="btn btn-success" href="@Url.Action("Import", "Template")">
-                            <i class="glyphicon glyphicon-import"></i> @Dashboard.ImportTemplate
-                        </a>
+                        <a class="btn btn-success" href="@Url.Action("Import", "Template")">@Dashboard.ImportTemplate</a>
                     }
                 </div>
             </div>
