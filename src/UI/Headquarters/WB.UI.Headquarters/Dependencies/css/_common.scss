@@ -157,6 +157,9 @@ h5{
 			float: left;
 		}	
 	}
+	p{
+		font-family: "RobotoRegular";
+	}
 }
 .row{
 	.page-header{
@@ -285,13 +288,13 @@ table{
 	}
 }
 .census-icon{
-	content: "C";
+	text-transform: capitalize;
 	display: inline-block;
-    padding: 4px 6px 2px 5px;
+    padding: 3px 5px 3px 4px;
     border-radius: 100%;
     background-color: $blue;
     color: #fff !important;
-    font: 16px/16px Arial, sans-serif;
+    font: 13px/13px Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
 }

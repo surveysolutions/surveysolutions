@@ -161,8 +161,9 @@
                         {
                             data: "title",
                             name: "Title", // case-sensitive!
+                            "class": "title",
                             render: function(data, type, row) {
-                                return (row.allowCensusMode === true ? "<span class='census-icon'>C</span>" : "") + data;
+                                return (row.allowCensusMode === true ? "<span class='census-icon'>c</span>" : "") + data;
                             }
                         },
                         {
@@ -171,15 +172,18 @@
                         },
                         {
                             data: "importDate",
-                            name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "ImportDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
                         },
                         {
                             data: "creationDate",
-                            name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "CreationDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
                         },
                         {
                             data: "lastEntryDate",
                             name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                            "class": "date"
                         }
                     ],
                     select: {
@@ -222,7 +226,7 @@
             </div>
         </div>
         <div id="list">
-            <table id="questionnaires" class="table table-striped table-bordered table-ordered">
+            <table id="questionnaires" class="table table-striped table-bordered table-hover table-ordered">
                 <thead>
                     <tr>
                         <th>@Dashboard.Questionnaire</th>
