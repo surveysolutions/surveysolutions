@@ -29,10 +29,16 @@ module.exports = {
       'components': path.resolve(__dirname, '../src/components')
     }
   },
-    resolveLoader: {
+  resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
+    preLoaders: [
+      {
+          test: /\.ts$/,
+          loader: 'tslint-loader'
+      }
+    ],
     loaders: [
       {
         test: /\.vue$/,
@@ -63,18 +69,33 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style-loader", "css-loader", "sass-loader"]
+      },
+            {
+        test: /\.sass$/,
+        loaders: ["style-loader", "css-loader", "sass-loader"]
       }
     ]
   },
-  eslint: {
-    formatter: require('eslint-friendly-formatter')
+  tslint: {
+        configuration: {
+            rules: {
+                quotemark: [true, 'double']
+            }
+        },
+  },
+  sassLoader: {
+    sourceMap: true
   },
   vue: {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
     esModule: true,
     postcss: [
       require('autoprefixer')({
-        browsers: ['last 2 versions']
+        browsers: ['last 3 versions']
       })
     ]
   },

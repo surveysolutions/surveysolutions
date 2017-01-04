@@ -1,8 +1,8 @@
 declare var require: any
 
-import { signalrPath } from './../config'
+import { signalrPath } from "./../config"
 
-require('jquery')
+require("jquery")
 
 var $script = require("scriptjs");
 $script(signalrPath, function() {
