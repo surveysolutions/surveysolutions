@@ -22,6 +22,8 @@
     android:id="@+id/questionnaireEntitiesList"
     hasFixedSize="false"
     android:scrollbars="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
     local:MvxBind="ItemsSource PrefilledQuestions" />
 

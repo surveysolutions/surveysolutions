@@ -25,6 +25,7 @@ function GetPathToJarsigner() {
 	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'){
 		return 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'
 	}
+
 	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe') {
 		return 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe'
 	}
@@ -36,6 +37,10 @@ function GetPathToJarsigner() {
 }
 
 function GetPathToZipalign() {
+	if (Test-Path 'C:\Android\android-sdk\build-tools\25.0.2\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\25.0.2\zipalign.exe'
+	}
+
 	if (Test-Path 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe') {
 		return 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe'
 	}

@@ -6,8 +6,10 @@ using Android.Text;
 using Android.Widget;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -15,18 +17,21 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
-        private static TaskCompletionSource<object> userInteractionsAwaiter = null;
+        private static TaskCompletionSource<object> userInteractionsAwaiter;
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
         public Task<bool> ConfirmAsync(
             string message,
             string title = "",
-            string okButton = "OK",
-            string cancelButton = "Cancel", 
+            string okButton = null,
+            string cancelButton = null, 
             bool isHtml = true)
         {
             var tcs = new TaskCompletionSource<bool>();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
+
             this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton, isHtml);
             return tcs.Task;
         }
@@ -34,20 +39,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public Task<string> ConfirmWithTextInputAsync(
            string message,
            string title = "",
-           string okButton = "OK",
-           string cancelButton = "Cancel",
+           string okButton = null,
+           string cancelButton = null,
            bool isTextInputPassword=false)
         {
             var tcs = new TaskCompletionSource<string>();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
+
             this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? String.Empty),
                 () => tcs.TrySetResult(null), title,
                 okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
         }
 
-        public Task AlertAsync(string message, string title = "", string okButton = "OK")
+        public Task AlertAsync(string message, string title = "", string okButton = null)
         {
             var tcs = new TaskCompletionSource<object>();
+            okButton = okButton ?? UIResources.Ok;
             this.Alert(message, () => tcs.TrySetResult(null), title, okButton);
             return tcs.Task;
         }
@@ -79,14 +88,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             string message,
             Action<bool> answer,
             string title = null,
-            string okButton = "OK",
-            string cancelButton = "Cancel",
+            string okButton = null,
+            string cancelButton = null,
             bool isHtml = true)
         {
             this.ConfirmImpl(message, answer, title, okButton, cancelButton, isHtml);
         }
 
-        private void Alert(string message, Action done = null, string title = "", string okButton = "OK")
+        private void Alert(string message, Action done = null, string title = "", string okButton = null)
         {
             this.AlertImpl(message, done, title, okButton);
         }
@@ -94,6 +103,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton, bool isHtml)
         {
             var userInteractionId = Guid.NewGuid();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
 
             try
             {
@@ -108,9 +119,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(isHtml ? Html.FromHtml(message) : new SpannedString(message))
-                            .SetTitle(isHtml ? Html.FromHtml(title) : new SpannedString(title))
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
+                            .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
                             .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(false)); })
                             .SetCancelable(false)
@@ -148,13 +159,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
-                        new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(Html.FromHtml(message))
-                            .SetTitle(Html.FromHtml(title)).SetView(inflatedView)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
                                 delegate
                                 {
-                                    HandleDialogClose(userInteractionId, () => { if (okCallback != null) okCallback(editText.Text); });
+                                    HandleDialogClose(userInteractionId, () =>
+                                    {
+                                        okCallback?.Invoke(editText.Text);
+                                    });
 
                                     this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
                                 })
@@ -162,7 +176,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                 delegate
                                 {
                                     HandleDialogClose(userInteractionId,
-                                        () => { if (cancelCallBack != null) cancelCallBack(); });
+                                        () =>
+                                        {
+                                            cancelCallBack?.Invoke();
+                                        });
                                     this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
                                 })
                             .SetCancelable(false)
@@ -194,10 +211,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(Html.FromHtml(message))
-                            .SetTitle(Html.FromHtml(title))
-                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(); }); })
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned())
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
+                            {
+                                callback?.Invoke();
+                            }); })
                             .SetCancelable(false)
                             .Show();
                     },

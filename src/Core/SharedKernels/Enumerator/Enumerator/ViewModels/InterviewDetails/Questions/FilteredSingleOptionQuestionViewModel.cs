@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -9,10 +10,12 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -62,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         private Identity questionIdentity;
-        private Guid interviewId;
+        private Guid interviewGuid;
         protected IStatefulInterview interview;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -88,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionState = questionStateViewModel;
             this.Answering = answering;
+            answering.Delay = TimeSpan.FromMilliseconds(500);
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
@@ -105,9 +109,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
             interview = this.interviewRepository.Get(interviewId);
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
 
+            this.questionIdentity = entityIdentity;
+            this.interviewGuid = interview.Id;
             this.UpdateOptionsState();
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -123,13 +127,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
                 var answerOption = ToViewModel(this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, selectedValue));
+
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
-                this.UpdateAutoCompleteList();
+                UpdateAutoCompleteList(this.FilterText ?? DefaultText ?? string.Empty);
             }
         }
 
@@ -143,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             return optionViewModel;
         }
-        
+
         public IMvxCommand ValueChangeCommand => new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
@@ -152,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(this.interviewGuid,
                         this.principal.CurrentUserIdentity.UserId,
                         this.questionIdentity,
                         DateTime.UtcNow));
@@ -182,6 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private FilteredComboboxItemViewModel selectedObject;
+
         public FilteredComboboxItemViewModel SelectedObject
         {
             get { return this.selectedObject; }
@@ -195,34 +201,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string DefaultText { get; set; }
 
         private string filterText;
+
         public string FilterText
         {
             get { return this.filterText; }
             set
             {
+                if (this.filterText == value)
+                    return;
+
                 this.filterText = value;
-
-                this.UpdateAutoCompleteList();
-
+                this.UpdateAutoCompleteList(value);
                 this.RaisePropertyChanged();
             }
         }
 
-        private void UpdateAutoCompleteList()
+        private CancellationTokenSource suggestionsCancellation = null;
+        
+        private void UpdateAutoCompleteList(string filter)
         {
-            var list = this.GetSuggestionsList(this.filterText).ToList();
+            this.suggestionsCancellation?.Cancel();
+            this.suggestionsCancellation = new CancellationTokenSource();
 
-            if (list.Any())
+            Answering.ExecuteActionAsync(token => Task.Run(() =>
             {
-                this.AutoCompleteSuggestions = list;
-            }
-            else
-            {
-                this.SetSuggestionsEmpty();
-            }
+                token.ThrowIfCancellationRequested();
+
+                var list = this.GetSuggestionsList(filter).ToList();
+
+                token.ThrowIfCancellationRequested();
+
+                if (filter != this.filterText) return;
+
+                this.InvokeOnMainThread(() =>
+                {
+                    if (list.Any())
+                    {
+                        this.AutoCompleteSuggestions = list;
+                    }
+                    else
+                    {
+                        this.SetSuggestionsEmpty();
+                    }
+                });
+            }, token), suggestionsCancellation.Token).ConfigureAwait(false);
         }
 
         private string resetTextInEditor;
+
         public string ResetTextInEditor
         {
             get { return this.resetTextInEditor; }
@@ -241,8 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
             var options = this.filteredOptionsViewModel.GetOptions(searchFor)
-                .Select(this.ToViewModel)
-                .ToList();
+               .Select(this.ToViewModel).ToList();
 
             foreach (var model in options)
             {
@@ -310,7 +335,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerValue = answerCategoricalOption.Value;
 
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                this.interviewGuid,
                 this.principal.CurrentUserIdentity.UserId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,

@@ -8,18 +8,71 @@ $grid-gutter-width:         30px;
 $container-tablet:             (768px + $grid-gutter-width);
 $container-desktop:            (960px + $grid-gutter-width);
 $container-large-desktop:      (960px + $grid-gutter-width);
+$input-height-base: 40px;
+$padding-base-vertical: 10px;
+$padding-base-horizontal: 9px;
+
+/* Colors */
 $blue: #2a81cb;
+$light-blue: #5fd3c6;
+$blue-super-light: #eff4f8;
+
 $gray_form: #dbdfe2;
 $gray_text: #3f3f3f;
 $gray_light: #a6a8a9;
-$gray_info: #3c4143;
-$gray-super-light: #efefef;
+$gray-super-light: #ececec;
 $gray-highlighting: #f3f3f3;
+$gray-highlight-font: #6b6b6b;
+
 $white: #fff;
+
 $green_btn: #2fc507;
 $green: #3ca21a;
+$green-light: #22c015;
+$green-progress: #cbe1cc;
+
 $red_error: #e74924;
 $red: #ed2c39;
-$green-progress: #cbe1cc;
+$red-super-light: #f6d6d0;
+
 $pink: #ed45aa;
-$light-blue: #5fd3c6;
+
+/* Changed default value */
+
+$state-success-text:             $green;
+$state-info-text:                $blue;
+$state-warning-text:             #8a6d3b;
+$state-danger-text:              $red_error;
+$btn-success-bg:				 $green_btn;
+$btn-danger-bg:            	 	 $red;
+$btn-primary-bg:				 $blue;
+$btn-success-border:			 $green_btn;
+$btn-danger-border:        	 	 $red;
+$btn-primary-border:			 $blue;
+$progress-bar-success-bg:		 $green_btn;
+$progress-bar-info-bg:			 $blue;
+$progress-bar-danger-bg:		 $red;
+$label-primary-bg:				 $blue;
+$label-success-bg:				 $green_btn;
+$label-danger-bg:				 $red;
+
+$margin-container: 90px;
+$margin-container-md-screen: 35px;
+
+$width-search-input: 300px;
+
+/* Indent for filters */
+
+$width-question-editor: 445px;
+$width-foldback-button: 50px;
+$filter-width: 360px;
+$filter-small-width: 270px;
+
+$content-width: 570px;
+$content-width-small: 330px;
+
+$questionnaire-min-width: 555px;
+
+
+
+

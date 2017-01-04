@@ -26,7 +26,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
-            var byRosters = new List<SubstitutionVariable>();
+            var byRosters = variableNames.Where(questionnaire.HasRoster).Select(variable => new SubstitutionVariable
+            {
+                Name = variable,
+                Id = questionnaire.GetGroupIdByVariableName(variable)
+            }).ToList();
             if (this.substitutionService.ContainsRosterTitle(text))
             {
                 byRosters.Add(new SubstitutionVariable

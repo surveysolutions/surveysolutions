@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetScreen != ScreenType.Group)
+            if (eventArgs.TargetStage != ScreenType.Group)
             {
                 this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
             }
@@ -90,8 +91,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.navigationState.ScreenChanged -= this.OnScreenChanged;
-            this.Items?.ForEach(x => x.Dispose());
+            if (this.navigationState != null)
+            {
+                this.navigationState.ScreenChanged -= this.OnScreenChanged;
+            }
+            this.Items?.Where(x => x != null).ForEach(x => x.Dispose());
         }
     }
 }

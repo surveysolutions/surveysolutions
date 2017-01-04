@@ -13,6 +13,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
+using System.Threading;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
@@ -20,6 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
     {
         Establish context = () =>
         {
+            Stub.InitMvxMainThreadDispatcher();
+
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
@@ -34,23 +39,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
-            answeringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
+            var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>());
 
             var filteredOptionsViewModel = Setup.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,
-                answering: answeringViewModelMock.Object,
+                answering: answerViewModel,
                 principal: principal,
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel);
+            viewModel.DefaultText = string.Empty;
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
+        Because of = () => {
             viewModel.FilterText = answerValue;
+            Thread.Sleep(1000);
+        };
 
         It should_set_value = () =>
             viewModel.FilterText.ShouldEqual(answerValue);
@@ -61,7 +69,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
-        private static Mock<AnsweringViewModel> answeringViewModelMock;
         private static string interviewId = "interviewId";
         private static readonly Guid userId = Guid.NewGuid();
 

@@ -1,6 +1,6 @@
 ﻿using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+namespace WB.UI.Headquarters.Models
 {
     /// <summary>
     /// Define aasigment model

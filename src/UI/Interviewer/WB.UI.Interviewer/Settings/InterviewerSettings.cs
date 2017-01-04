@@ -206,6 +206,6 @@ namespace WB.UI.Interviewer.Settings
         }
 
         private string GetDataBaseSize() => FileSizeUtils.SizeSuffix(
-            this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToLocalDirectory()));
+            this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
     }
 }

@@ -5,11 +5,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
-        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, string questionnaireTitle, PreloadedDataVerificationError[] errors, 
-            bool wasSupervsorProvided,
-            string id, PreloadedContentType preloadedContentType)
+        public PreloadedDataVerificationErrorsView(
+            Guid questionnaireId, 
+            long version, 
+            string questionnaireTitle,
+            PreloadedDataVerificationError[] errors,
+            bool wasSupervsorProvided, 
+            string id, 
+            PreloadedContentType preloadedContentType, 
+            string fileName = null)
         {
             this.PreloadedContentType = preloadedContentType;
+            this.FileName = fileName;
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
@@ -27,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
         public PreloadedDataVerificationError[] Errors { get; private set; }
 
         public PreloadedContentType PreloadedContentType { get; private set; }
+        public string FileName { get; set; }
 
         public bool WasSupervsorProvided { get; set; }
         public string QuestionnaireTitle { get; set; }

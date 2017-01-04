@@ -1,0 +1,142 @@
+﻿@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/batch-upload-start-interview-creation")
+    <script type="text/javascript">
+        var InterviewCreationProgressModel = function(ajax) {
+            var $importInterviewsStatusUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
+
+            var self = this;
+
+            self.questionnaireId = '@Model.QuestionnaireId';
+            self.questionnaireVersion = @Model.Version;
+            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
+            self.questionnaireTitle = '@Model.QuestionnaireTitle';
+
+            self.status = {
+                createdInterviewsCount: ko.observable(@Model.Status.CreatedInterviewsCount),
+                totalInterviewsCount: ko.observable(@Model.Status.TotalInterviewsCount),
+                interviewsWithError: ko.observable(@Model.Status.State.Errors.Count),
+                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
+                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
+                isInProgress: ko.observable(true),
+                hasErrors: ko.observable(false)
+            };
+            self.isStatusLoaded = ko.observable(false);
+
+            var countOfRequestsToStopImport = 0;
+
+            var shouldStopRequestUpdates = function(data) {
+                if (_.isNull(data.interviewImportProcessId))
+                    countOfRequestsToStopImport++;
+                else if (data.totalInterviewsCount === 0)
+                    countOfRequestsToStopImport++;
+                else if (data.isInProgress === false)
+                    countOfRequestsToStopImport++;
+                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
+                    countOfRequestsToStopImport++;
+                else {
+                    countOfRequestsToStopImport = 0;
+                }
+
+                // this will prevent requests being sent if tab was left open
+                // and if takes some time to start preloading
+                return countOfRequestsToStopImport >= 10;
+            }
+
+            self.updateStatusByInterviewsImport = function() {
+                ajax.sendRequest($importInterviewsStatusUrl, 'get', {}, true,
+                    function(data) {
+                        self.status.isInProgress(data.isInProgress);
+                        self.status.createdInterviewsCount(data.createdInterviewsCount);
+                        self.status.totalInterviewsCount(data.totalInterviewsCount);
+                        self.status.interviewsWithError(data.interviewsWithError);
+
+                        self.status.elapsedTime(data.elapsedTime);
+                        self.status.estimatedTime(data.estimatedTime);
+                        self.status.hasErrors(data.hasErrors);
+                        self.isStatusLoaded(true);
+
+                        if (shouldStopRequestUpdates(data) === false) {
+                            _.delay(self.updateStatusByInterviewsImport, 3000);
+                        }
+                    });
+            };
+            self.updateStatusByInterviewsImport();
+        };
+
+        $(function() {
+            var model = new InterviewCreationProgressModel(new Ajax(new Notifier()));
+            ko.applyBindings(model);
+        });
+    </script>
+}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                </ol>
+                <h1>@BatchUpload.CreatingMultipleInterviews</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <h3>
+                    @string.Format(BatchUpload.ImportInterviewsFor, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block">
+                <div class="import-progress">
+                    <p data-bind="if: status.isInProgress">
+                        @BatchUpload.Importing
+                        (@Html.Raw(string.Format(BatchUpload.ImportProgressFormat, "<span data-bind='text: status.createdInterviewsCount'></span>", "<span data-bind='text: status.totalInterviewsCount'></span>")))
+                    </p>
+                    <p data-bind="ifnot: status.isInProgress">@BatchUpload.ImportInterviews_Done</p>
+                    <p class="success-text" data-bind="if: status.createdInterviewsCount() > 0">
+                        <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) == 1 -->
+                        @BatchUpload.SingleInterviewCreated
+                        <!-- /ko -->
+                        <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewsCreated, "<span data-bind='text: (status.createdInterviewsCount() - status.interviewsWithError())'></span>"))
+                        <!-- /ko -->
+                    </p>
+                    <p class="default-text" data-bind="ifnot: status.hasErrors">@BatchUpload.ImportInterviews_NoneFailed</p>
+                    <p class="error-text" data-bind="if: status.hasErrors">
+                        <!-- ko if: status.interviewsWithError() == 1 -->
+                        @BatchUpload.SingleInterviewFailedToBeCreated
+                        <!-- /ko -->
+                        <!-- ko if: status.interviewsWithError() > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewFailedToBeCreated, "<span data-bind='text: status.interviewsWithError'></span>"))
+                        <!-- /ko -->
+                    </p>
+                </div>
+                <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">
+                    @BatchUpload.DownloadInvalidInterviews
+                </a>
+                <div class="cancelable-progress" data-bind="if: status.isInProgress()">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons" data-bind="ifnot: status.isInProgress">
+                    <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ", new { templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Interviews</a>
+                    <a class="btn btn-primary" href="@Url.Action("Index", "HQ")">@MainMenu.Questionnaires</a>
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -7,6 +7,7 @@ using System.Web.Http.Filters;
 using System.Web.Http.Routing;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -128,7 +129,21 @@ namespace WB.UI.Headquarters.Code
                         var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
                         logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(context, packageId), packageId);
                         break;
-
+                    case SynchronizationLogType.GetTranslations:
+                        var questionnaireId = context.GetActionArgumentOrDefault<string>("id", null);
+                        if (questionnaireId != null)
+                        {
+                            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+                            var questionnaireInfo = this.questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title,
+                                questionnaireInfo.Version);
+                        }
+                        else
+                        {
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(UnknownStringArgumentValue,
+                                UnknownStringArgumentValue);
+                        }
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }

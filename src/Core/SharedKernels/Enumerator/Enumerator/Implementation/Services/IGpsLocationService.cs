@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public interface IGpsLocationService
     {
-        Task<GpsLocation> GetLocation(CancellationToken cancellationToken, double desiredAccuracy);
+        Task<GpsLocation> GetLocation(int timeoutSec, double desiredAccuracy);
     }
 }

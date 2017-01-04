@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             rosterLevel.SetInterviewProperties(this.InterviewProperties);
 
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-            this.SetSiblings(rosterIdentityKey, rosterStringKey);
+            this.SetSiblings(rosterIdentityKey, rosterStringKey, sortIndex);
         }
 
         public new void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,

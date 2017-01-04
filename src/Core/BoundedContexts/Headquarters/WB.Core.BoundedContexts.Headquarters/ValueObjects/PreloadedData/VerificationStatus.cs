@@ -12,5 +12,11 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
         public IEnumerable<PreloadedDataVerificationError> Errors { set; get; }
 
         public bool WasResponsibleProvided { set; get; }
+
+        public int InterviewsCount { get; set; }
+
+        public int EnumeratorsCount { get; set; }
+
+        public int SupervisorsCount { get; set; }
     }
 }

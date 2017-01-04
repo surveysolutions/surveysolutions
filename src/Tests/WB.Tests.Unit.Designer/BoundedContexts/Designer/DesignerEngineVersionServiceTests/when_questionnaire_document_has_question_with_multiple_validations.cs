@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         Because of = () =>
             version = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
-        It should_return_12_version = () =>
-            version.ShouldEqual(12);
+        It should_return_16_version = () =>
+            version.ShouldEqual(16);
 
         private static int version;
         private static IDesignerEngineVersionService designerEngineVersionService;

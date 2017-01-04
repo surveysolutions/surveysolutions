@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
         Because of = () => statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));
 
-        It should_remember_validity_status = () => statefulInterview.IsValid(staticTextIdentity).ShouldBeFalse();
+        It should_remember_validity_status = () => statefulInterview.IsEntityValid(staticTextIdentity).ShouldBeFalse();
 
         It should_return_failed_validation_index = () => statefulInterview.GetFailedValidationMessages(staticTextIdentity).ShouldNotBeEmpty();
 

@@ -195,4 +195,7 @@
   <data name="PostPackage" xml:space="preserve">
     <value>Upload interview: &lt;b&gt;&lt;a href="{0}" target="_blank"&gt;{1}&lt;/a&gt; &lt;/b&gt;</value>
   </data>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>Download translations for questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
 </root>

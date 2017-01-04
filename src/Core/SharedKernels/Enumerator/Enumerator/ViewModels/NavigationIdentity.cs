@@ -7,7 +7,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         Group = 100,
         Complete = 1000,
-        Cover = 5000
+        Cover = 5000,
+        PrefieldScreen = 11000
     }
 
     public class NavigationIdentity : EventArgs
@@ -19,6 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public Identity AnchoredElementIdentity { get; set; }
 
         public NavigationIdentity() { }
+
+        public static NavigationIdentity CreateForPrefieldScreen()
+        {
+            return new NavigationIdentity(ScreenType.PrefieldScreen, targetGroup: null);
+        }
 
         public static NavigationIdentity CreateForCompleteScreen()
         {

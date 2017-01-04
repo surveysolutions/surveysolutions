@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -24,7 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             AnsweringViewModel answering,
             IPrincipal principal = null,
             IStatefulInterviewRepository interviewRepository = null,
-            FilteredOptionsViewModel filteredOptionsViewModel = null)
+            FilteredOptionsViewModel filteredOptionsViewModel = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            string defaultText = "")
         {
             return new FilteredSingleOptionQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
@@ -34,9 +37,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
-                );
+                )
+            {
+                DefaultText = defaultText
+            };
         }
-
+        
         protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>
         {
             Create.Entity.CategoricalQuestionOption(1, "title abc 1"),

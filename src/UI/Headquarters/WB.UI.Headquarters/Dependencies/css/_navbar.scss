@@ -1,0 +1,317 @@
+//navigation
+.navbar{
+	.container, .container-fluid{
+		padding: 0 ($margin-container/2) 0 ($margin-container/2);
+	}
+	min-width: 400px;
+	min-height: 60px;
+	margin-bottom: 0;
+	.navbar-header .navbar-brand{
+		position: relative;
+		margin-left: 0;
+		@extend %font-header;
+		&:hover, &:focus{
+			font-family: "RobotoBold";
+		}
+		.brand-name{
+			padding: 8px 10px 8px 30px;
+			&::after {
+			   	display:block;
+			    font-family: "RobotoBold";
+			    content:attr(title);
+			    height:1px;
+			    color:transparent;
+			    overflow:hidden;
+			    visibility:hidden;
+			    margin-bottom:-1px;
+			}
+		}
+		&:before{
+			display: block;
+			content: "";
+			@include absolute(15px, null, null, 0);
+			@include size(15px, 41px);
+			background: url(../img/logo.png) no-repeat;
+			background-size: 15px 41px;
+			@include image-2x("../img/logo-retina.png", 15px, 41px);
+		}
+	}
+	.navbar-collapse{
+		li{
+			position: relative;
+			
+			&.active>a{
+				@include transition;
+				font-family: "RobotoBold";
+				span{
+					font-family: "RobotoLight";
+				}
+				& > .caret{
+					border-top-color: $white;
+				}
+			}
+			&>a{
+				@extend %font-header;
+				padding: 24px 9px;
+				text-align: center;
+				@include transition();
+				&.notifications{
+					padding-left: 45px;
+				}
+				&:hover, &:focus{
+					font-family: "RobotoBold";
+					span{
+						font-family: "RobotoLight";
+					}
+					& > .caret{
+						border-top-color: $white;
+					}
+				}
+				.caret{
+					@include absolute(31px, 10px);
+					margin-left: 0;
+					border-top: 8px solid rgba(255, 255, 255, 0.7);
+					border-right: 5px solid transparent;
+					border-left: 5px solid transparent;
+				}
+				&::after {
+				    display:block;
+				    font-family: "RobotoBold";
+				    content:attr(title);
+				    height:1px;
+				    color:transparent;
+				    overflow:hidden;
+				    visibility:hidden;
+				    margin-bottom:-1px;
+				    padding: 0 5px;
+				}
+			}
+			&.dropdown > a{
+				padding-right: 20px;
+			}
+			.dropdown-menu{ 
+				margin-top: 1px;
+				li{ 
+					&.active {
+						a{
+							color: $white;
+							font-family: "RobotoLight";
+							border-radius: 0;
+							&:hover, &:focus{
+								background-color: $blue;
+							}
+						}
+					}
+					a{
+						padding: 10px;
+						text-align: left;
+						color: $gray_text;
+						@include transition(all, 0.2s);
+						&:hover, &:focus{
+							background-color: $gray-super-light;
+							font-family: "RobotoLight";
+						}
+					}
+				}
+			}
+			&.glow-animate{
+				&>a:after{
+					display: none;
+				}
+			}
+		}
+	}
+}
+.navbar-default{
+	.navbar-collapse ul li a, .navbar-header .navbar-brand{
+		color: $gray_text;
+	}
+	.navbar-collapse li { 
+		&:hover a .caret, &:focus a .caret{
+			border-top-color: $gray_text;
+		}
+		a .caret{
+			border-top-color: $gray_light;
+		}
+	}
+}
+.badge.badge_nav{
+	background-color: #2a81cb;
+	border-radius: 100%;
+	padding: 9px;
+	@include absolute($top: 15px, $left: 5px);
+	font-size: 18px;
+	line-height: 20px;
+}
+.navbar-header {
+	text-align: center;
+	.badge.badge_nav{
+		display: none;
+	}
+	.number-of-synchronized-interviews{
+		display: none;
+	}
+}
+.active-page{
+	display: none;
+	color: $white;
+	font-family: "RobotoBold";
+	font-size: 18px;
+	line-height: 50px;
+	&:hover, &:focus{
+		color: white;
+	}
+}
+@media (max-width: $screen-md-min) {	
+	.navbar{
+		.container, .container-fluid {
+			width: 100%;
+		    padding: 0 ($margin-container-md-screen - 15px) 0 $margin-container-md-screen;
+		}
+		.navbar-header{
+			margin: 0;
+			padding-top: 5px;
+			.active-page{
+				display: inline-block;
+				white-space: nowrap;
+			    max-width: 55%;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			}
+			.navbar-brand{
+				padding: 15px 0 15px 30px;
+				&:before{
+					top: 5px;
+				}
+				&.rotate-brand{
+					min-height: 41px;
+					min-width: 15px;
+					padding: 0;
+					transform: rotate(270deg);
+					.brand-name{
+						display: none;
+						&:after{
+							display: none;
+						}
+					}
+				}
+			}
+			.badge.badge_nav{
+				display: block;
+				float: right;
+				position: relative;
+				top: 0;
+				left: 0;
+				margin: 5px 15px 5px 10px;
+			}
+			.number-of-synchronized-interviews{
+				display: block;
+				float: right;
+				padding: 15px 10px;
+				color: $white;
+				&:hover, &:focus{
+					text-decoration: none;
+					color: white;
+				}
+			}
+		}
+		.navbar-toggle{
+			z-index: 25;
+			margin-right: 0;
+		}
+		&.navbar-fixed-top {
+			.navbar-collapse{
+				max-height: 100%;
+				top: 0;
+				left: 0;
+				z-index: 10;
+				display: none;
+				position: fixed;
+				@include size(100%, 100%);
+				background: black;
+				margin: 0;
+				padding: 40px 5%;
+				li {
+					&.active a{
+						color: white;
+						&:hover, &:focus{
+							background-color: rgba(255, 255, 255, 0.4);
+						}
+					}
+					&> a{
+						border-radius: 5px;
+						padding: 15px 10px;
+						text-align: left;
+						color: $gray_light;
+						&:hover, &:focus{
+							color: white;
+						}
+					}
+					a .caret{
+						top: 0;
+						left: 0;
+						position: relative;
+						margin: 0;
+						margin-left: 10px;
+					}
+					.dropdown-menu li {
+						a{
+							padding: 15px 10px;
+							&:hover, &:focus{
+								font-family: "RobotoBold";
+							}
+						}
+						&.active {
+							a{
+								border-radius: 5px;
+								background-color: rgba(42, 129, 203, 0.5);
+								&:hover, &:focus{
+									font-family: "RobotoBold";
+									background-color: rgba(42, 129, 203, 1);
+								}
+							}
+						}
+					}
+				}
+			}
+			.navbar-right .badge.badge_nav{
+				top: 0;
+				left: 0;
+				position: relative;
+				margin-right: 10px;
+			}
+			.navbar-nav > .active > a, 
+			.navbar-nav > .active > a:hover, 
+			.navbar-nav > .active > a:focus{
+				background-color: #333;
+			}
+		} 
+	}
+	.icon-bar{
+		@include transition;
+	}
+	.navbar-inverse .navbar-toggle{
+		background-color: transparent;
+		border: none;
+	}
+	.top-animate {
+	  @include rotate(225deg);
+	  position: relative;
+	  top: 6px;
+	}
+	.mid-animate { opacity: 0; }
+	.bottom-animate {
+		bottom: 6px;
+		position: relative;
+	    @include rotate(-225deg);
+	}
+}
+@media (max-width: $screen-xs-min) {
+	.navbar{
+		.navbar-header{
+			.active-page{
+			    max-width: 35%;
+			}
+		}
+	}
+}

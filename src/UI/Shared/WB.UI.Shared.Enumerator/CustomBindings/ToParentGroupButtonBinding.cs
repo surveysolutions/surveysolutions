@@ -25,7 +25,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             control.SetBackgroundResource(groupBackgroundResourceId);
 
             int textColorId = GetTextColorId(status);
-            control.SetTextColor(control.Resources.GetColor(textColorId));
+            var color = new Color(ContextCompat.GetColor(control.Context, textColorId));
+            control.SetTextColor(color);
 
             var drawable = GetArrawDrawable(status);
             drawable.SetBounds(0, 0, drawable.IntrinsicWidth, drawable.IntrinsicHeight);

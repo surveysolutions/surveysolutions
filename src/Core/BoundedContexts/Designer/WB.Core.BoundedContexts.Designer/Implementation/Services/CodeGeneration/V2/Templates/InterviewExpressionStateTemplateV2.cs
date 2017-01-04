@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+    #line 1 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class InterviewExpressionStateTemplateV2 : InterviewExpressionStateTemplateV2Base
     {
@@ -33,56 +33,56 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Syste" +
                     "m.Text.RegularExpressions;\r\n\r\n ");
             
-            #line 13 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 13 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var namespaceToInclude in QuestionnaireStructure.Namespaces){
             
             #line default
             #line hidden
             this.Write("\tusing ");
             
-            #line 14 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 14 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(namespaceToInclude));
             
             #line default
             #line hidden
             this.Write(";\r\n ");
             
-            #line 15 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 15 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 }
             
             #line default
             #line hidden
             this.Write("\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n    public class ");
             
-            #line 19 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 19 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
             
             #line default
             #line hidden
             this.Write(" : AbstractInterviewExpressionStateV2\r\n    ");
             
-            #line 20 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 20 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             
             #line default
             #line hidden
             this.Write("\t , ");
             
-            #line 21 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 21 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionInterface));
             
             #line default
             #line hidden
             this.Write("\r\n\t");
             
-            #line 22 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 22 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 }
             
             #line default
             #line hidden
             this.Write("\r\n\t{\r\n\t    public ");
             
-            #line 25 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 25 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
             
             #line default
@@ -92,7 +92,7 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
                     "questionnaireLevelScope, Util.EmptyRosterVector);\r\n            var questionnaire" +
                     "Level = new ");
             
-            #line 29 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 29 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.QuestionnaireLevelModel.TypeName));
             
             #line default
@@ -104,7 +104,7 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
 
 		public ");
             
-            #line 34 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 34 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
             
             #line default
@@ -129,28 +129,28 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
                     "rInstance(rosterId, rosterVector, rosterIdentityKey);\r\n\t\t\trosterLevel.SetIntervi" +
                     "ewProperties(this.InterviewProperties);\r\n\r\n            this.InterviewScopes.Add(" +
                     "rosterStringKey, rosterLevel);\r\n            this.SetSiblings(rosterIdentityKey, " +
-                    "rosterStringKey);\r\n        }\r\n\t\t \r\n\t\t public void UpdateRosterTitle(Guid rosterI" +
-                    "d, decimal[] outerRosterVector, decimal rosterInstanceId,\r\n            string ro" +
-                    "sterTitle)\r\n         {\r\n        }\r\n\t\t \r\n\r\n        public override void RemoveRos" +
-                    "ter(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)\r\n     " +
-                    "   {\r\n            if (!IdOf.parentScopeMap.ContainsKey(rosterId))\r\n            {" +
-                    "\r\n                return;\r\n            }\r\n\r\n            decimal[] rosterVector =" +
-                    " Util.GetRosterVector(outerRosterVector, rosterInstanceId);\r\n            var ros" +
-                    "terIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);" +
-                    "\r\n            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);\r" +
-                    "\n\r\n            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.Sta" +
-                    "rtsWith(rosterStringKey)).ToArray();\r\n\r\n            foreach (var rosterKey in de" +
-                    "pendentRosters)\r\n            {\r\n                this.InterviewScopes.Remove(rost" +
-                    "erKey);\r\n                foreach (var siblings in this.SiblingRosters.Values)\r\n " +
-                    "               {\r\n                    siblings.Remove(rosterKey);\r\n             " +
-                    "   }\r\n            }\r\n        }\r\n\r\n\t\tpublic void SetInterviewProperties(IIntervie" +
-                    "wProperties properties)\r\n        {\r\n            this.InterviewProperties = prope" +
-                    "rties;\r\n            foreach (var item in this.InterviewScopes.Values)\r\n         " +
-                    "   {\r\n                item.SetInterviewProperties(properties);\r\n            }\r\n " +
-                    "       }\r\n\r\n        public override IInterviewExpressionState Clone()\r\n\t\t{\r\n\t\t\tr" +
-                    "eturn new ");
+                    "rosterStringKey, sortIndex);\r\n        }\r\n\t\t \r\n\t\t public void UpdateRosterTitle(G" +
+                    "uid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,\r\n          " +
+                    "  string rosterTitle)\r\n         {\r\n        }\r\n\t\t \r\n\r\n        public override voi" +
+                    "d RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanc" +
+                    "eId)\r\n        {\r\n            if (!IdOf.parentScopeMap.ContainsKey(rosterId))\r\n  " +
+                    "          {\r\n                return;\r\n            }\r\n\r\n            decimal[] ros" +
+                    "terVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);\r\n        " +
+                    "    var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], ros" +
+                    "terVector);\r\n            var rosterStringKey = Util.GetRosterStringKey(rosterIde" +
+                    "ntityKey);\r\n\r\n            var dependentRosters = this.InterviewScopes.Keys.Where" +
+                    "(x => x.StartsWith(rosterStringKey)).ToArray();\r\n\r\n            foreach (var rost" +
+                    "erKey in dependentRosters)\r\n            {\r\n                this.InterviewScopes." +
+                    "Remove(rosterKey);\r\n                foreach (var siblings in this.SiblingRosters" +
+                    ".Values)\r\n                {\r\n                    siblings.Remove(rosterKey);\r\n  " +
+                    "              }\r\n            }\r\n        }\r\n\r\n\t\tpublic void SetInterviewPropertie" +
+                    "s(IInterviewProperties properties)\r\n        {\r\n            this.InterviewPropert" +
+                    "ies = properties;\r\n            foreach (var item in this.InterviewScopes.Values)" +
+                    "\r\n            {\r\n                item.SetInterviewProperties(properties);\r\n     " +
+                    "       }\r\n        }\r\n\r\n        public override IInterviewExpressionState Clone()" +
+                    "\r\n\t\t{\r\n\t\t\treturn new ");
             
-            #line 107 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 107 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
             
             #line default
@@ -158,35 +158,35 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             this.Write("(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);\r\n\t\t}\r\n    " +
                     "    \r\n\t\t");
             
-            #line 110 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 110 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             
             #line default
             #line hidden
             this.Write("\t    ");
             
-            #line 111 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 111 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionInterface));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 111 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 111 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionInterface));
             
             #line default
             #line hidden
             this.Write(".Clone()\r\n        {\r\n            return Clone () as ");
             
-            #line 113 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 113 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(additionInterface));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n\t\t");
             
-            #line 115 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 115 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 }
             
             #line default
@@ -195,7 +195,7 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
                     "          return IdOf.parentScopeMap;\r\n        }\r\n\r\n\t}\r\n        //generate Quest" +
                     "ionnaireLevel\r\n        ");
             
-            #line 124 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 124 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
     
             QuestionnaireLevelTemplateV2 questionnairetemplate = CreateQuestionnaireLevelTemplate();
             this.Write(questionnairetemplate.TransformText());                           
@@ -205,7 +205,7 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             #line hidden
             this.Write("\r\n        //generating rosters\r\n        ");
             
-            #line 130 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 130 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var rosterGroup in QuestionnaireStructure.RostersGroupedByScope) 
            {
                 RosterScopeTemplateV2 template = CreateRosterScopeTemplate(rosterGroup.Value);
@@ -218,14 +218,14 @@ foreach (var rosterGroup in QuestionnaireStructure.RostersGroupedByScope)
             this.Write("\r\n        public static class IdOf\r\n        {\r\n            public static readonly" +
                     " Guid @__questionnaire = Guid.Parse(\"");
             
-            #line 139 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 139 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.Id));
             
             #line default
             #line hidden
             this.Write("\"); \r\n            //questions\r\n            ");
             
-            #line 141 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 141 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var q in QuestionnaireStructure.AllQuestions) 
             {
             
@@ -233,28 +233,28 @@ foreach (var q in QuestionnaireStructure.AllQuestions)
             #line hidden
             this.Write("            public static readonly Guid ");
             
-            #line 143 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.IdName));
             
             #line default
             #line hidden
             this.Write(" = Guid.Parse(\"");
             
-            #line 143 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 143 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
             
             #line default
             #line hidden
             this.Write("\");\r\n            ");
             
-            #line 144 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 144 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("            //groups\r\n            ");
             
-            #line 146 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 146 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var g in QuestionnaireStructure.AllGroups) 
             {
             
@@ -262,28 +262,28 @@ foreach (var g in QuestionnaireStructure.AllGroups)
             #line hidden
             this.Write("            public static readonly Guid ");
             
-            #line 148 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 148 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.IdName));
             
             #line default
             #line hidden
             this.Write(" = Guid.Parse(\"");
             
-            #line 148 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 148 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.Id));
             
             #line default
             #line hidden
             this.Write("\");\r\n            ");
             
-            #line 149 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 149 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("            //rosters\r\n            ");
             
-            #line 151 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 151 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var r in QuestionnaireStructure.AllRosters) 
             {
             
@@ -291,35 +291,35 @@ foreach (var r in QuestionnaireStructure.AllRosters)
             #line hidden
             this.Write("            public static readonly Guid ");
             
-            #line 153 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.IdName));
             
             #line default
             #line hidden
             this.Write(" = Guid.Parse(\"");
             
-            #line 153 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 153 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.Id));
             
             #line default
             #line hidden
             this.Write("\");\r\n            ");
             
-            #line 154 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 154 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("            \r\n            public static readonly Guid[] ");
             
-            #line 156 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 156 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.QuestionnaireLevelModel.RosterScopeName));
             
             #line default
             #line hidden
             this.Write(" = new[] {@__questionnaire};\r\n\r\n            ");
             
-            #line 158 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 158 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var r in QuestionnaireStructure.AllRosters)
             {
             
@@ -327,21 +327,21 @@ foreach (var r in QuestionnaireStructure.AllRosters)
             #line hidden
             this.Write("            public static readonly Guid[] ");
             
-            #line 160 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 160 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.RosterScopeName));
             
             #line default
             #line hidden
             this.Write(" = new[] {");
             
-            #line 160 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 160 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray())));
             
             #line default
             #line hidden
             this.Write("};\r\n            ");
             
-            #line 161 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 161 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
@@ -350,7 +350,7 @@ foreach (var r in QuestionnaireStructure.AllRosters)
                     "dencies = new Dictionary<Guid, Guid[]>()\r\n            {            \r\n           " +
                     "     ");
             
-            #line 165 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 165 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var dependency in QuestionnaireStructure.ConditionalDependencies)
                 {
             
@@ -358,14 +358,14 @@ foreach (var dependency in QuestionnaireStructure.ConditionalDependencies)
             #line hidden
             this.Write("                {Guid.Parse(\"");
             
-            #line 167 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 167 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Key));
             
             #line default
             #line hidden
             this.Write("\"), new Guid[]{\r\n                ");
             
-            #line 168 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 168 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var dependencyValue in dependency.Value)
                 {
             
@@ -373,21 +373,21 @@ foreach (var dependencyValue in dependency.Value)
             #line hidden
             this.Write("                    Guid.Parse(\"");
             
-            #line 170 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 170 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dependencyValue));
             
             #line default
             #line hidden
             this.Write("\"),\r\n                ");
             
-            #line 171 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 171 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("                }},\r\n                ");
             
-            #line 173 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 173 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
@@ -395,7 +395,7 @@ foreach (var dependencyValue in dependency.Value)
             this.Write("            };\r\n\r\n            public static Dictionary<Guid, Guid[]> structuralDe" +
                     "pendencies = new Dictionary<Guid, Guid[]>()\r\n            {\r\n                ");
             
-            #line 178 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 178 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var dependency in QuestionnaireStructure.StructuralDependencies) 
                 {
             
@@ -403,14 +403,14 @@ foreach (var dependency in QuestionnaireStructure.StructuralDependencies)
             #line hidden
             this.Write("                { Guid.Parse(\"");
             
-            #line 180 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 180 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Key));
             
             #line default
             #line hidden
             this.Write("\"), new Guid[]{\r\n                ");
             
-            #line 181 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 181 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var d in dependency.Value)
                 {
             
@@ -418,21 +418,21 @@ foreach (var d in dependency.Value)
             #line hidden
             this.Write("                    Guid.Parse(\"");
             
-            #line 183 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 183 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(d));
             
             #line default
             #line hidden
             this.Write("\"),\r\n                ");
             
-            #line 184 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 184 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("                }},\r\n                ");
             
-            #line 186 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 186 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
@@ -441,7 +441,7 @@ foreach (var d in dependency.Value)
                     "ap = new Dictionary<Guid, Guid[]>\r\n            {\r\n                //questions\r\n " +
                     "               ");
             
-            #line 192 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 192 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var q in QuestionnaireStructure.AllQuestions) 
                 {
             
@@ -449,28 +449,28 @@ foreach (var q in QuestionnaireStructure.AllQuestions)
             #line hidden
             this.Write("                {");
             
-            #line 194 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 194 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.IdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 194 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 194 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.RosterScopeName));
             
             #line default
             #line hidden
             this.Write("},\r\n                ");
             
-            #line 195 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 195 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("                //groups\r\n                ");
             
-            #line 197 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 197 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var g in QuestionnaireStructure.AllGroups) 
                 {
             
@@ -478,28 +478,28 @@ foreach (var g in QuestionnaireStructure.AllGroups)
             #line hidden
             this.Write("                {");
             
-            #line 199 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 199 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.IdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 199 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 199 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.RosterScopeName));
             
             #line default
             #line hidden
             this.Write("},\r\n                ");
             
-            #line 200 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 200 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default
             #line hidden
             this.Write("                //rosters\r\n                ");
             
-            #line 202 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 202 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
 foreach (var r in QuestionnaireStructure.AllRosters)
                 {
             
@@ -507,21 +507,21 @@ foreach (var r in QuestionnaireStructure.AllRosters)
             #line hidden
             this.Write("                {");
             
-            #line 204 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 204 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.IdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 204 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 204 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.RosterScopeName));
             
             #line default
             #line hidden
             this.Write("},\r\n                ");
             
-            #line 205 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
+            #line 205 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
  }
             
             #line default

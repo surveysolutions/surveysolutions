@@ -39,11 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             invalidEntitiesInInterview = interview.GetInvalidEntitiesInInterview();
 
         It shouldreturn_1_entities_with_error = () =>
-          invalidEntitiesInInterview.Count().ShouldEqual(1);
+          invalidEntitiesInInterview.Count().ShouldEqual(2);
 
         It should_contain_only_invalid_enabled_element = () =>
             invalidEntitiesInInterview.ShouldContainOnly(
-                Create.Entity.Identity(staticText1Id));
+                Create.Entity.Identity(staticText1Id), Create.Entity.Identity(prefieldQuestionId));
 
         private static StatefulInterview interview;
         private static readonly Guid staticText1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

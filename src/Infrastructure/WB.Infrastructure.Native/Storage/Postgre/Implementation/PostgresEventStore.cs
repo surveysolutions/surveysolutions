@@ -139,7 +139,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 command.CommandText = $"select reltuples::bigint from pg_class where relname='{this.tableName}'";
                 var scalar = command.ExecuteScalar();
 
-                return scalar == null ? 0 : Convert.ToInt32(scalar);
+                var result = scalar == null ? 0 : Convert.ToInt32(scalar);
+                if (result == 0)
+                {
+                    var countCommand = connection.CreateCommand();
+                    countCommand.CommandText = $"select count(id) from {tableNameWithSchema}";
+                    var exactCountScalar = countCommand.ExecuteScalar();
+                    result = exactCountScalar == null ? 0 : Convert.ToInt32(exactCountScalar);
+                }
+                return result;
             }
         }
 

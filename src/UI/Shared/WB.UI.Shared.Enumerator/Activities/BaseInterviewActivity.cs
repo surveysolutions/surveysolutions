@@ -1,11 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
+using Plugin.CurrentActivity;
+using Plugin.Permissions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -33,8 +36,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 this.RemoveFocusFromEditText();
                 this.HideKeyboard(drawerLayout.WindowToken);
-                var viewModel = this.ViewModel;
-                viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
         }
 
@@ -68,6 +69,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.Finish();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            this.ViewModel?.Dispose();
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -75,8 +83,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             if (IsFinishing)
             {
                 this.Dispose();
-
-                ViewModel.Dispose();
             }
         }
 

@@ -195,4 +195,7 @@
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Обновление интервью: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, пакет: {1}, индекс сортировки: {2}&lt;/li&gt;</value>
   </data>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>Загрузка переводов для опросника &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
 </root>

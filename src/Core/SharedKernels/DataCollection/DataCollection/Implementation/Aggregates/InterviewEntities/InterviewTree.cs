@@ -122,8 +122,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
-                    IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff))
+                    IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
+                    IsFailedValidationIndexChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
+        }
+
+        private bool IsFailedValidationIndexChanged(InterviewTreeQuestionDiff diff)
+        {
+            return diff != null && diff.IsFailedValidationIndexChanged;
         }
 
         private bool IsTitleChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
@@ -383,17 +389,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             nodesCache[node.Identity] = node;
         }
 
-        public IEnumerable<IInterviewTreeNode> GetEntitiesWithSubstitution()
-        {
-            return new IInterviewTreeNode[0] {};
-        }
-
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            for (int i = questionIdentity.RosterVector.Length; i >= 0; i--)
+            for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
             {
-                var entityIdentity = new Identity(entityId, questionIdentity.RosterVector.Take(i).ToArray());
-                var entity = this.GetNodeByIdentity(entityIdentity);
+                var shorterRosterVector = questionIdentity.RosterVector.Shrink(shorterRosterVectorLength);
+
+                var entity = this.GetNodeByIdentity(new Identity(entityId, shorterRosterVector));
                 if (entity != null)
                     return entity;
             }
@@ -405,14 +407,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             foreach (var interviewTreeNode in this.nodesCache.Values)
             {
-                interviewTreeNode.ReplaceSubstitutions();
+                (interviewTreeNode as ISubstitutable)?.ReplaceSubstitutions();
             }
         }
 
         public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
         {
-            return questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+            return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
+
+        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder()
+            => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
     }
 
     public interface IInterviewTreeNode
@@ -428,7 +433,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void Enable();
 
         IInterviewTreeNode Clone();
+    }
 
+    public interface ISubstitutable
+    {
         void ReplaceSubstitutions();
     }
 
@@ -485,8 +493,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Enable() => this.isDisabled = false;
 
         public abstract IInterviewTreeNode Clone();
-
-        public abstract void ReplaceSubstitutions();
     }
 
     public enum QuestionnaireReferenceType

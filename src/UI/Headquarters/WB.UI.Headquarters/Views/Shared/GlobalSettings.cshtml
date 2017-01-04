@@ -35,6 +35,7 @@
                 },
                 config: {
                     syncQueueEnabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true": "false"),
+                    dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 }
             }
         };

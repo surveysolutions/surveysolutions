@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;

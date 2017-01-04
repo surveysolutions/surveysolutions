@@ -38,12 +38,15 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="App_GlobalResources.xesor9ik">
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\headquarters\3cdb5966\_shadow\d2d7cce\8568\App_GlobalResources.xesor9ik.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
@@ -115,6 +118,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -287,6 +291,7 @@
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\RostrerStructureService.cs" />
@@ -335,6 +340,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ErrorMessages.Designer.cs">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -372,7 +382,9 @@
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IFileNameService.cs" />
+    <Compile Include="Services\IGlobalInfoProvider.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
+    <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
     <Compile Include="Services\IRostrerStructureService.cs" />
@@ -387,6 +399,7 @@
     <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Services\QuestionnaireAssemblyAlreadyExistsException.cs" />
     <Compile Include="Services\QuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Services\QuestionnaireImportResult.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
@@ -611,8 +624,6 @@
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Views\TemplateLight.cs" />
     <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
-    <Compile Include="Views\Template\DesignerQuestionnairesView.cs" />
-    <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
@@ -678,7 +689,17 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.ru.resx" />
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
@@ -720,6 +741,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
