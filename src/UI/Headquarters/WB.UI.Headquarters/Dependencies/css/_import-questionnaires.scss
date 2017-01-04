@@ -137,6 +137,30 @@
             cursor: not-allowed;
         }
     }
+    .dataTables_wrapper{
+        .dataTables_paginate{
+            padding-left: 10px;
+             &>span{
+                left: 8px;
+             }
+        }
+    }
+    #DataTables_Table_0_wrapper{
+    position: relative;
+        #DataTables_Table_0_filter{
+            @include absolute(-10px, auto, null, 0);
+
+            label{
+                &:after{
+                    @include absolute(15px, auto, null, 10px);
+                }
+                input{
+                    margin-right: 0;
+                    margin-left: 40px;
+                }
+            }
+        }
+    }
 }
 @media (max-width: $screen-md-min){
     .parameters{
@@ -153,6 +177,17 @@
     }
 }
 @media (max-width: $screen-sm-min){
+    .import-wrapper{
+        #DataTables_Table_0_wrapper{
+            #DataTables_Table_0_filter{
+                position: relative;
+                top: -5px;
+                label:after{
+                    top: 10px;
+                }
+            }
+        }
+    }
     .shared-with{
         display: none;
     }
