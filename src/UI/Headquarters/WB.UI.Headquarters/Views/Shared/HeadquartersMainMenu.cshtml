@@ -29,7 +29,7 @@
             @Html.MainMenuItem("UserBatchUploads", "BatchUserUpload", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
         </ul>
     </li>
-    @Html.MainMenuItem("Index", "HQ", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+    @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
     @if (!User.Identity.IsObserver())
     {
         @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
