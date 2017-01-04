@@ -181,6 +181,6 @@
     <value>Опросник</value>
   </data>
   <data name="SurveySetupIntroMessage" xml:space="preserve">
-    <value>Выберите опросник из списка для создания интервью</value>
+    <value>Кликните по опроснику из списка для создания интервью</value>
   </data>
 </root>

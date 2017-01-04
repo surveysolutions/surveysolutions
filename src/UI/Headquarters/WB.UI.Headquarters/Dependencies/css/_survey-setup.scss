@@ -1,0 +1,21 @@
+#questionnaires .title { 
+	width: 40%;
+}
+.context-menu-list{
+	padding: 5px;
+	border-radius: 0;
+	box-shadow: 0 1px 2px rgba(0,0,0,.5), 6px 6px 0 rgba(0, 0, 0, 0.1);
+	.context-menu-item{
+		padding: 10px;
+		&.context-menu-hover{
+			background-color: #eff4f8;
+			color: $gray_text;
+		}
+	}
+	.context-menu-separator{
+		border-width: 2px;
+		border-color: #ccc;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+}
