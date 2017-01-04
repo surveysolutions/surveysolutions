@@ -32,6 +32,7 @@
     & > tfoot{
         & > tr{
             & > td, & > th{
+                border-bottom: none;
                 border-right: none;
                 border-left: 1px solid #f8f9f9;
                 &:first-child{
@@ -181,11 +182,11 @@
             vertical-align: top;
         }
     }
-    tbody{
-        border-bottom: 2px solid #ddd;
+    tbody{      
         tr{
-            border-bottom: 1px solid #ddd;
             td{
+                border-bottom: none;
+                border-top: none;
                 &.date{
                     font-family: "TrebuchetMS";
                 }
@@ -291,6 +292,7 @@
     }
 }
 .dataTables_wrapper {
+    overflow-y: auto;
     .dataTables_info{
         clear: both;
         float: right;
