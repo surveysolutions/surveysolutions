@@ -533,6 +533,7 @@
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="Dependencies\js\ajax.js" />
+    <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

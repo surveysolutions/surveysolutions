@@ -46,6 +46,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
                 "~/Dependencies/js/ajax.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
                 "~/Dependencies/js/searchHighlight.js"
                 ));
 
