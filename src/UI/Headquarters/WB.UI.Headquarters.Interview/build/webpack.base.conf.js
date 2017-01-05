@@ -80,13 +80,6 @@ module.exports = {
       }
     ]
   },
-  tslint: {
-        configuration: {
-            rules: {
-                quotemark: [true, 'double']
-            }
-        },
-  },
   sassLoader: {
     sourceMap: true
   },
