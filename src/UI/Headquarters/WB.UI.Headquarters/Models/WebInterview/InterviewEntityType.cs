@@ -15,6 +15,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Text,
         TextList,
         QRBarcode,
-        Multimedia
+        Multimedia,
+        TextQuestion
     }
 }
