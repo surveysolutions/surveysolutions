@@ -6,6 +6,7 @@ Vue.use(Vuex)
 import router from "./router"
 import store from "./store"
 import "./services"
+import "./components/questions"
 
 import App from "./App"
 

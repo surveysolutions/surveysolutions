@@ -4,7 +4,7 @@
         <button @click="getPrefilledQuestions($route.params.id)">Get questions</button>
         <ul>
             <li v-for="question in prefilledQuestions">
-                {{question.title}}
+                <component v-bind:is="question.type"></component>
             </li>
         </ul>
     </div>

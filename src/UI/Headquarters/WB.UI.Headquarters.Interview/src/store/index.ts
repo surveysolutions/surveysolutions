@@ -16,16 +16,16 @@ const store: any = new Vuex.Store({
         getPrefilledQuestions({commit}, interviewId) {
             setTimeout(() => {
                 commit("SET_PREFILLED_QUSTIONS", [{
-                    id: "id1", title: "title 1"
+                   type: "Numeric"
                 },
                 {
-                    id: "id2", title: "title 2"
+                   type: "TextQuestion"
                 },
                 {
-                    id: "id3", title: "title 3"
+                    type:  "DateTime"
                 },
                 {
-                    id: "id4", title: "title 4"
+                    type:  "SingleOption"
                 }]);
             }, 100)
         },
