@@ -60,6 +60,24 @@ namespace WB.Tests.Unit.TestFactories
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());
 
+
+        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null, bool shouldBeInitialized = true)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+
+            var statefulInterview = new StatefulInterview(
+                Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory());
+
+            if (shouldBeInitialized)
+            {
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
+            }
+
+            return statefulInterview;
+        }
+
         public StatefulInterview StatefulInterview(
             Guid? questionnaireId = null,
             long? questionnaireVersion = null,
@@ -80,22 +98,6 @@ namespace WB.Tests.Unit.TestFactories
                 statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
             }
 
-            return statefulInterview;
-        }
-
-        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null, bool shouldBeInitialized = true)
-        {
-            questionnaireId = questionnaireId ?? Guid.NewGuid();
-
-            var statefulInterview = new StatefulInterview(
-                Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                Create.Service.SubstitionTextFactory());
-
-            if (shouldBeInitialized)
-            {
-                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
-            }
             return statefulInterview;
         }
     }

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
               CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
                   interviewSummaryStorage: summaries);
 
-            interview = Create.AggregateRoot.Interview();
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: Mock.Of<IQuestionnaireStorage>());
         };
 
         Because of = () =>
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
         It should_throw_exception_that_contains_such_words = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString(), "reached");
 
-        private static Interview interview;
+        private static StatefulInterview interview;
 
         private static InterviewException exception;
         private static int maxNumberOfInterviews = 1;
