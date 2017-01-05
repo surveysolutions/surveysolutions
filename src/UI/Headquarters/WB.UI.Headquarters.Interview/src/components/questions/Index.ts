@@ -8,4 +8,3 @@ vue.component("DateTime", DateTime)
 vue.component("Numeric", Numeric)
 vue.component("TextQuestion", TextQuestion)
 vue.component("SingleOption", SingleOption)
-

@@ -14,6 +14,12 @@ const store: any = new Vuex.Store({
     },
     actions: {
         getPrefilledQuestions({commit}, interviewId) {
+            // hub.instance.server.startInterview(interviewId).done(() => {
+            //     hub.instance.server.getPrefilledQuestions().done(data => {
+            //         console.log(data)
+            //     });
+            // })
+
             setTimeout(() => {
                 commit("SET_PREFILLED_QUSTIONS", [{
                    type: "Numeric"
@@ -26,7 +32,7 @@ const store: any = new Vuex.Store({
                 },
                 {
                     type:  "SingleOption"
-                }]);
+                }])
             }, 100)
         },
         InterviewMount({commit}, {id}) {
