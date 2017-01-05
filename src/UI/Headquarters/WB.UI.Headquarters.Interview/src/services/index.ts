@@ -30,7 +30,7 @@ export class HubChangedEvent {
 new Promise<any>((res, rej) => {
     $script(signalrPath, () => {
         jQuery.signalR.interview.logging = true;
-        jQuery.signalR.hub.start()
+        jQuery.signalR.hub.start({ transport: 'longPolling' })
             .done(() => {
                 res(jQuery.signalR.interview);
             })

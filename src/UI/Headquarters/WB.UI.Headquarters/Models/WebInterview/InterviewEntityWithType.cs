@@ -4,7 +4,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 {
     public class InterviewEntityWithType
     {
-        public InterviewEntityType EntityType { get; set; }
-        public Identity Identity { get; set; }
+        public string EntityType { get; set; }
+        public string Identity { get; set; }
     }
 }

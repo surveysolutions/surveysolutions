@@ -3,6 +3,6 @@
 </template>
 <script lang="ts">
     export default {
-        name: 'Numeric'
+        name: 'Integer'
     }
 </script>
