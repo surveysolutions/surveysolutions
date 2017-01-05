@@ -376,8 +376,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 () => questionnaireHistoryItem.Sequence.ShouldEqual(0),
                 () => questionnaireHistoryItem.TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire),
                 () => questionnaireHistoryItem.TargetItemId.ShouldEqual(questionnaireId),
-                () => questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle),
-                () => questionnaireHistoryItem.ResultingQuestionnaireDocument.ShouldNotBeNull());
+                () => questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle));
         }
 
         [Test]
