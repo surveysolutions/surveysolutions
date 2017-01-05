@@ -1,14 +1,13 @@
 <template>
     <div>
-        <h1>Prefilled questions</h1>
-        <input id="interviewId" type="text" v-model="interviewId" />
-
-        <button @click="getPrefilledQuestions($route.params.id)">Get questions</button>
-        <ul>
-            <li v-for="question in prefilledQuestions">
-                <component v-bind:is="question.EntityType"></component>
-            </li>
-        </ul>
+        <form>
+            <div class="form-group">
+                <label for="interviewId">Interview id</label>
+                <input type="text" id="interviewId" class="form-control" v-model="interviewId">
+            </div>
+            <button type="button" @click="getPrefilledQuestions(interviewId)" class="btn btn-default">Get questions</button>
+        </form>
+        <component v-for="question in prefilledQuestions" v-bind:is="question.EntityType"></component>
     </div>
 </template>
 
@@ -19,7 +18,7 @@
         name: 'prefilled-view',
         computed: mapGetters(["prefilledQuestions"]),
         methods: mapActions(["getPrefilledQuestions"]),
-          data: () => {
+        data: () => {
             return {
                 interviewId: "66990b89-1891-4117-b4ff-65da7d933d00"
             }
