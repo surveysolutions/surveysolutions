@@ -57,6 +57,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -114,6 +118,10 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Ninject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.SignalR.Ninject.1.0.0\lib\net40\Microsoft.AspNet.SignalR.Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -1032,6 +1040,7 @@
     <Compile Include="API\UsersController.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
+    <Compile Include="API\WebInterview\WebInterview.EventHandlers.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1568,6 +1577,10 @@
     <Compile Include="Models\User\UserWebView.cs" />
     <Compile Include="Models\User\UserWebViewFactory.cs" />
     <Compile Include="Models\User\UserWebViewInputModel.cs" />
+    <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
+    <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
+    <Compile Include="Models\WebInterview\InterviewTextQuestion.cs" />
+    <Compile Include="Models\WebInterview\WebInterviewAutoMapProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <AutoGen>True</AutoGen>
