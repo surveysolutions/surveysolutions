@@ -1,8 +1,8 @@
 import * as jQuery from "jquery"
 import { signalrPath } from "./../config"
 (window as any).$ = (window as any).jQuery = jQuery
-import "ms-signalr-client"
 import * as $script from "scriptjs"
+import "signalr"
 import store from "../store"
 
 export const hub = {
@@ -16,6 +16,7 @@ export class SignalrHubChange {
     public newState: number
 }
 
+// tslint:disable-next-line:max-classes-per-file
 export class HubChangedEvent {
     public state: SignalrHubChange
     public title: string
@@ -38,7 +39,8 @@ new Promise<any>((res, rej) => {
                 rej(e)
             })
     })
-}).then(h => {
+})
+.then(h => {
     hub.instance = jQuery.signalR.interview
 
     store.dispatch("HubStateChanged", {
@@ -55,6 +57,5 @@ new Promise<any>((res, rej) => {
                 store.dispatch("HubStateChanged", new HubChangedEvent (change as SignalrHubChange, "Disconnected"))
                 break;
         }
-
     })
 })
