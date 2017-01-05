@@ -59,6 +59,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
+        InterviewTreeQuestion GetQuestion(Identity identity);
+
         bool HasGroup(Identity group);
 
         bool IsEntityValid(Identity identity);

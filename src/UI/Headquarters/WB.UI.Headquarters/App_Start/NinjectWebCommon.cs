@@ -7,7 +7,10 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using AutoMapper;
 using Main.DenormalizerStorage;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Ninject;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -50,6 +53,7 @@ using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
+using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
@@ -236,6 +240,14 @@ namespace WB.UI.Headquarters
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
             kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>().To<RestoreDeletedQuestionnaireProjectionsService>();
+
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new WebInterviewAutoMapProfile());
+            });
+            kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
+
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
 
             return kernel;
         }
