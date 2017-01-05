@@ -241,7 +241,8 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click on a questionnaire from the list to create interview assignments..
+        ///   Looks up a localized string similar to 1. Click Import Template  button to load a questionnaire from Designer&lt;br /&gt;
+        ///2. Click on a questionnaire from the list to create interview assignments..
         /// </summary>
         internal static string SurveySetupIntroMessage {
             get {

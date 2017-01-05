@@ -184,6 +184,7 @@
     <value>Questionnaire</value>
   </data>
   <data name="SurveySetupIntroMessage" xml:space="preserve">
-    <value>Click on a questionnaire from the list to create interview assignments.</value>
+    <value>1. Click Import Template  button to load a questionnaire from Designer&lt;br /&gt;
+2. Click on a questionnaire from the list to create interview assignments.</value>
   </data>
 </root>
