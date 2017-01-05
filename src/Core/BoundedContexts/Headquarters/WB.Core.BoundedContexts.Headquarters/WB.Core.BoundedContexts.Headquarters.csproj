@@ -245,6 +245,7 @@
     <Compile Include="Events\Sync\NewDeviceRegistered.cs" />
     <Compile Include="Events\Sync\TabletRegistered.cs" />
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />

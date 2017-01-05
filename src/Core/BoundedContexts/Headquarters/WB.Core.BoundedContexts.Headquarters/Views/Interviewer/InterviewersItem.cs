@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
             this.UserId = id;
             this.UserName = name;
             this.Email = email;
-            this.CreationDate = creationDate.ToShortDateString();
+            this.CreationDate = creationDate.ToLocalTime().FormatDateWithTime();
             this.IsLockedBySupervisor = isLockedBySupervisor;
             this.IsLockedByHQ = isLockedByHQ;
             this.DeviceId = deviceId;
