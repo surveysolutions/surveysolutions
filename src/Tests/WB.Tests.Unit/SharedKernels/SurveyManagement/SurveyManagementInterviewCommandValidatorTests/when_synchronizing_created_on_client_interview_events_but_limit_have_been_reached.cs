@@ -1,19 +1,10 @@
-﻿using System;
-using System.Linq;
-using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
+﻿using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterviewCommandValidatorTests
@@ -30,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
               CreateSurveyManagementInterviewCommandValidator(limit: maxNumberOfInterviews,
                   interviewSummaryStorage: summaries);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: Mock.Of<IQuestionnaireStorage>());
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: Mock.Of<IQuestionnaireStorage>(), shouldBeInitialized: false);
         };
 
         Because of = () =>
