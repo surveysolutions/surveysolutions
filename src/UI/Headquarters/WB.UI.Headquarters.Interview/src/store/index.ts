@@ -1,8 +1,13 @@
 import * as Vuex from "vuex"
+import {hub, HubChangedEvent } from "../services"
 
 const store: any = new Vuex.Store({
     state: {
         prefilledQuestions: [],
+        hub: {
+            connected: false,
+            display : ""
+        },
         interview: {
             id: null
         }
@@ -26,6 +31,9 @@ const store: any = new Vuex.Store({
         },
         InterviewMount({commit}, {id}) {
             commit("SET_INTERVIEW", id)
+        },
+        HubStateChanged({commit}, hubInfo: HubChangedEvent) {
+            commit("HUB_STATE_CHANGED", hubInfo)
         }
     },
     getters: {
@@ -38,7 +46,11 @@ const store: any = new Vuex.Store({
             state.interview.id = id;
         },
         SET_PREFILLED_QUSTIONS(state, questions) {
-            state.prefilledQuestions = questions;
+            state.prefilledQuestions = questions
+        },
+        HUB_STATE_CHANGED(state, hub: HubChangedEvent) {
+            state.hub.connected = hub.state.newState === 1
+            state.hub.display = hub.title
         }
     }
 })

@@ -11,6 +11,21 @@ export const hub = {
 
 export const stateConversion = { 0: "connecting", 1: "connected", 2: "reconnecting", 4: "disconnected" };
 
+export class SignalrHubChange {
+    public oldState: number
+    public newState: number
+}
+
+export class HubChangedEvent {
+    public state: SignalrHubChange
+    public title: string
+
+    constructor(state: SignalrHubChange, title: string) {
+        this.state = state
+        this.title = title
+    }
+}
+
 new Promise<any>((res, rej) => {
     $script(signalrPath, () => {
         jQuery.signalR.interview.logging = true;
@@ -34,16 +49,10 @@ new Promise<any>((res, rej) => {
     jQuery.signalR.hub.stateChanged(change => {
         switch (change.newState) {
             case jQuery.signalR.connectionState.connected:
-                store.dispatch("HubStateChanged", {
-                    state: change,
-                    title: "Connected"
-                })
+                store.dispatch("HubStateChanged", new HubChangedEvent (change as SignalrHubChange, "Connected"))
                 break;
             default:
-                store.dispatch("HubStateChanged", {
-                    state: change,
-                    title: "Disconnected"
-                })
+                store.dispatch("HubStateChanged", new HubChangedEvent (change as SignalrHubChange, "Disconnected"))
                 break;
         }
 
