@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,22 +25,38 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IUserViewFactory usersRepository;
+        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMapper autoMapper;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
-        private string interviewId;
-        private IStatefulInterview CurrentInterview => this.statefulInterviewRepository.Get(this.interviewId);
+        private readonly Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
+        private string interviewId => this.connectionIdToInterviewId[this.Context.ConnectionId];
+
+        private IStatefulInterview currentInterview
+            => this.statefulInterviewRepository.Get(this.interviewId);
+
+        private IQuestionnaire currentQuestionnaire
+            => this.questionnaireRepository.GetQuestionnaire(this.currentInterview.QuestionnaireIdentity,
+                this.currentInterview.Language);
 
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandDeserializer commandDeserializer,
             ICommandService commandService,
             ILogger logger,
-            IUserViewFactory usersRepository)
+            IUserViewFactory usersRepository,
+            ILiteEventRegistry eventRegistry,
+            IMapper autoMapper,
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandDeserializer = commandDeserializer;
             this.commandService = commandService;
             this.logger = logger;
             this.usersRepository = usersRepository;
+            this.eventRegistry = eventRegistry;
+            this.autoMapper = autoMapper;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public void CreateInterview(string questionnaireId, string interviewerName)
@@ -52,19 +71,22 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             this.commandService.Execute(createInterviewOnClientCommand);
 
-            this.interviewId = createInterviewOnClientCommand.Id.FormatGuid();
-            this.Clients.Caller.startInterview(this.interviewId);
+            this.StartInterview(createInterviewOnClientCommand.Id.FormatGuid());
         }
 
         public void StartInterview(string interviewId)
         {
-            this.interviewId = interviewId;
+            this.connectionIdToInterviewId.Add(this.Context.ConnectionId, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId);
+            this.Groups.Add(this.Context.ConnectionId, interviewId);
+            this.Clients.Group(interviewId).startInterview(interviewId);
         }
 
 
         public override Task OnDisconnected(bool stopCalled)
         {
             // statefull interview can be removed from cache here
+            this.eventRegistry.Unsubscribe(this);
 
             return base.OnDisconnected(stopCalled);
         }
