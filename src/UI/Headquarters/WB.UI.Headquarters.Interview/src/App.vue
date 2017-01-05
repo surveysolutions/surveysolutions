@@ -3,8 +3,7 @@
         <h1>Hello</h1>
         <ul>
             <li>
-                <router-link to='/prefilled/1234'>Preffiled</router-link>
-            </li>
+                <router-link to='/prefilled/580eba69f1844f1892147342f568bb0f$1'>Preffiled</router-link>
             </li>
             <li>
                 <router-link to='/start/start'>Start</router-link>
@@ -20,6 +19,3 @@
         // $hq-style-path: "../../WB.UI.Headquarters/Dependencies/css/_mixins.scss"
     }
 </script>
-<style lang='scss'>
-    @import "style.scss"
-</style>

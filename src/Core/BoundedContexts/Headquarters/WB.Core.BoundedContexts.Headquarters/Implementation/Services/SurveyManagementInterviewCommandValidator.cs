@@ -11,9 +11,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    internal class SurveyManagementInterviewCommandValidator : ICommandValidator<Interview, SynchronizeInterviewEventsCommand>,
-        ICommandValidator<Interview, CreateInterviewWithPreloadedData>,
-        ICommandValidator<Interview, CreateInterviewCommand>
+    internal class SurveyManagementInterviewCommandValidator : ICommandValidator<StatefulInterview, SynchronizeInterviewEventsCommand>,
+        ICommandValidator<StatefulInterview, CreateInterviewWithPreloadedData>,
+        ICommandValidator<StatefulInterview, CreateInterviewCommand>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
-        public void Validate(Interview aggregate, SynchronizeInterviewEventsCommand command)
+        public void Validate(StatefulInterview aggregate, SynchronizeInterviewEventsCommand command)
         {
             if (command.CreatedOnClient)
             {
@@ -86,12 +86,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     InterviewDomainExceptionType.InterviewLimitReached);
         }
 
-        public void Validate(Interview aggregate, CreateInterviewWithPreloadedData command)
+        public void Validate(StatefulInterview aggregate, CreateInterviewWithPreloadedData command)
         {
             this.ThrowIfInterviewCountLimitReached();
         }
 
-        public void Validate(Interview aggregate, CreateInterviewCommand command)
+        public void Validate(StatefulInterview aggregate, CreateInterviewCommand command)
         {
             this.ThrowIfInterviewCountLimitReached();
         }
