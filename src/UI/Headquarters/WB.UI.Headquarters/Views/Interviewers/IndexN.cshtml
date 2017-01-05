@@ -9,6 +9,8 @@
     ViewBag.Title = Pages.Interviewers_Title;
 }
 
+@{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
+
 @section scripts
 {
     @Scripts.Render("~/js/common")
@@ -75,7 +77,11 @@
                     },
                     columns: [
                         {
-                            
+                            "orderable": false,
+                            render: function (data, type, row) {
+                                return "<input class=\"checkbox-filter\" id=\"cbx_"+ row.userId +"\" type=\"checkbox\"> <label for=\"with-commeqnts\"><span class=\"tick\"></span></label> ";
+                            },
+                            "class":"checkbox-cell"
                         },
 
                         {
@@ -96,11 +102,13 @@
                             "class": "changed-recently"
                         },
                         {
+                            "orderable": false,
                             data: "supervisorName",
                             name: "SupervisorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             "class": "changed-recently"
                         },
                         {
+                            "orderable": false,
                             data: "deviceId",
                             name: "DeviceId",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             render: function (data, type, row) {
@@ -121,8 +129,6 @@
 </script>
    
 }
-
-@{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
 
 <main class="hold-transition">
     <div class="container-fluid">
