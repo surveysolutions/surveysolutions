@@ -6,9 +6,12 @@
         "experimentalDecorators": true,
         "lib": ["es5", "es2015.promise", "dom"]
     },
-    
+
     "include": [
         "node_modules/vue/types/*.d.ts",
-        "node_modules/vuex/types/*.d.ts"
+        "node_modules/vuex/types/*.d.ts",
+        "node_modules/vue-router/types/*.d.ts",
+        "src/**/*",
+        "src/**/*.vue"
     ]
 }
