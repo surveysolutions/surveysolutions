@@ -113,6 +113,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string SupervisorName { get; set; }
             public virtual string Email { get; set; }
             public virtual string DeviceId { get; set; }
+            public virtual bool IsLocked { get; set; }
         }
 
 
@@ -154,11 +155,32 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Observer")]
         public DataTableResponse<InterviewerListItem> AllHeadquarters([FromBody] DataTableRequest request)
         {
+            return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
+        }
+
+        [HttpPost]
+        [CamelCase]
+        [Authorize(Roles = "Administrator")]
+        public DataTableResponse<InterviewerListItem> AllObservers([FromBody] DataTableRequest request)
+        {
+            return this.GetUsersInRoleForDataTable(request, UserRoles.Observer);
+        }
+
+        [HttpPost]
+        [CamelCase]
+        [Authorize(Roles = "Administrator")]
+        public DataTableResponse<InterviewerListItem> AllApiUsers([FromBody] DataTableRequest request)
+        {
+            return this.GetUsersInRoleForDataTable(request, UserRoles.ApiUser);
+        }
+
+        private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request, UserRoles userRoles)
+        {
             var input = new UserListViewInputModel
             {
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
-                Role = UserRoles.Headquarter,
+                Role = userRoles,
                 Orders = request.GetSortOrderRequestItems(),
                 SearchBy = request.Search.Value,
             };
@@ -176,38 +198,9 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = x.UserName,
                     CreationDate = x.CreationDate,
                     Email = x.Email,
+                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor
                 })
             };
-
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public UserListView Observers(UsersListViewModel data)
-        {
-            return this.GetUsers(data, UserRoles.Observer);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        public UserListView ApiUsers(UsersListViewModel data)
-        {
-            return this.GetUsers(data, UserRoles.ApiUser);
-        }
-
-        private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
-        {
-            var input = new UserListViewInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Role = role,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = archived
-            };
-
-            return this.usersFactory.Load(input);
         }
 
         [HttpPost]

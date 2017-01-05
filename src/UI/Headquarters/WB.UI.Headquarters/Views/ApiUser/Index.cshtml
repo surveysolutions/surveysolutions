@@ -1,72 +1,118 @@
 ﻿@using System.Web.Optimization
 @{
-    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Users.APIUsers;
 }
 
 @section scripts
 {
-    @Scripts.Render("~/js/users")
+    @Scripts.Render("~/js/common")
     <script type="text/javascript">
-    
-    var $editUrl = '@Url.Action("Edit", "ApiUser", new { area = string.Empty })';
+        'use strict';
+
+        var ApiUsersModel = function (ajax, notifier) {
+            var self = this;
+
+            self.table = null;
+
+            var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllApiUsers" })';
+
+            var requestHeaders = {};
+            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+            $.fn.dataTable.ext.errMode = 'none';
+
+            var onTableInitComplete = function () {
+                $('.dataTables_filter label').on('click', function (e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else {
+                        $(this).addClass("active");
+                    }
+                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
+                });
+            };
+
+            self.table = $('table#api-users')
+                .on('init.dt', onTableInitComplete)
+                .on('error.dt', function (e, settings, techNote, message) {
+                    //location.reload();
+                })
+                .DataTable({
+                    processing: true,
+                    language:
+                    {
+                        "url": window.input.settings.config.dataTableTranslationsUrl,
+                        searchPlaceholder: "@Pages.Search"
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: headquartersListUrl,
+                        type: "POST",
+                        headers: requestHeaders
+                    },
+                    "createdRow": function (row, data, dataIndex) {
+                        $(row).addClass('with-context-menu');
+                    },
+                    columns: [
+                        {
+                            data: "userName",
+                            name: "UserName", // case-sensitive!
+                            render: function (data, type, row) {
+                                return "<a href='@Url.Action("Edit", "ApiUser")/"+ row.userId +"'>" + data + "</a>";
+                            }
+                        },
+                        {
+                            data: "creationDate",
+                            name: "CreationDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
+                        },
+                        {
+                            data: "isLocked",
+                            name: "IsLockedByHQ", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
+                        }
+                    ],
+                    searchHighlight: true,
+                    rowId: 'userId',
+                    pagingType: "full_numbers",
+                    lengthChange: false, // do not show page size selector
+                    pageLength: 50, // page size
+                    "order": [[1, 'desc']],
+                    dom: "ftp"
+                });
+
+            return self;
+        };
+
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ApiUsers" })');
-        ko.applyBindings(model);
-        model.load();
-    });
+            var notifier = new Notifier();
+            var model = new ApiUsersModel(new Ajax(notifier), notifier);
+        });
     </script>
 }
-
-@section header
-{
-    <div class="page-header">
-        <h2 class="sinle-line-header">@Users.APIUsers</h2>
-    </div>
-}
-
-@section gridnavigation
-{
-    <div class="btn-group">
-        <div class="form-inline">
-            <a class="btn btn-default" href="@Url.Action("Create", "ApiUser", new { area = string.Empty })">
-                <i class="glyphicon glyphicon-user"></i> @Users.AddAPIUser
-            </a>
-
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="@Common.Search" data-bind="value: SearchBy, enterKey: filter">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: filter">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="page-header clearfix">
+                <div>
+                    <h1>@Users.APIUsers</h1>
+                    <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new { area = string.Empty })">@Users.AddAPIUser</a>
                 </div>
             </div>
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+            </div>
         </div>
+        <table id="api-users" class="table table-striped table-bordered table-condensed table-hover table-ordered">
+            <thead>
+                <tr>
+                    <th>@Users.UserName</th>
+                    <th>@Users.CreationDate</th>
+                    <th>@Users.Locked</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-
-
-}
-
-@section grid
-{
-
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th data-bind='sortby : "UserName"'>@Users.UserName</th>
-                <th data-bind='sortby : "CreationDate"'>@Users.CreationDate</th>
-                <th >@Users.Locked</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:Items -->
-            <tr>
-                <td data-bind="">
-                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
-                </td>
-                <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: IsLockedByHQ"></td>
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
-}
+</main>
