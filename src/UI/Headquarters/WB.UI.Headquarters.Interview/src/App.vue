@@ -6,19 +6,23 @@
                     <router-link tag="li" to="/" role="presentation" activeClass="active">
                         <a>Start</a>
                     </router-link>
-                    <router-link tag="li" to="/prefilled/66990b89-1891-4117-b4ff-65da7d933d00" role="presentation" activeClass="active">
+                    <router-link tag="li" to="/prefilled/580eba69f1844f1892147342f568bb0f$1" role="presentation" activeClass="active">
                         <a>Preffiled</a>
                     </router-link>
                 </ul>
             </nav>
-            <h3 class="text-muted">Web interview</h3>
         </div>
-        <div>
-            <router-view></router-view>
+        <div class="details-interview hold-transition">
+            <div class="container-fluid">
+                <div class="row">
+                    <section class="questionnaire">
+                        <div class="unit-section">
+                            <router-view></router-view>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
-        <footer class="footer">
-            <p>&copy; 2017 World Bank, Inc.</p>
-        </footer>
     </div>
 </template>
 <script lang='ts'>
