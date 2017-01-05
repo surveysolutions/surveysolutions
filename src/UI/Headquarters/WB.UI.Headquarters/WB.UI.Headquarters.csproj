@@ -1705,7 +1705,6 @@
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
-    <Folder Include="WebInterviewApp\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
