@@ -183,8 +183,10 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
-  <data name="SurveySetupIntroMessage" xml:space="preserve">
-    <value>1. Click Import Template  button to load a questionnaire from Designer&lt;br /&gt;
-2. Click on a questionnaire from the list to create interview assignments.</value>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>1. Click Import Template  button to load a questionnaire from Designer</value>
+  </data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>2. Click on a questionnaire from the list to create interview assignments.</value>
   </data>
 </root>
