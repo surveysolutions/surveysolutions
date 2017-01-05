@@ -8,12 +8,14 @@ Vue.use(VueRouter)
 
 import Interview from "../components/Interview"
 import Prefilled from "../components/Prefilled"
+import Start from "../components/Start"
 
 export default new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
+        { path: "/", component: Start },
         { path: "/start/:id", component: Interview },
-        { path: "/prefilled/:id", component: Prefilled }
+        { name: "prefilled", path: "/prefilled/:id", component: Prefilled }
     ]
 })
