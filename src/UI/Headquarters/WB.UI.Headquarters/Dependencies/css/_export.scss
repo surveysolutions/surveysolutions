@@ -73,9 +73,9 @@
 					@include absolute(19%, null, null, 0);
 					@include size(63px, 41px);
 					content: "";
-					background: url("../img/data-image.png") no-repeat;
+					background: url("#{$assetsPath}/img/data-image.png") no-repeat;
 					background-size: 63px 234px;
-					@include image-2x("../img/data-image2k.png", 63px, 234px);
+					@include image-2x("#{$assetsPath}/img/data-image2k.png", 63px, 234px);
     				background-position: 0px -200px;
 				}
 				&.separated-data:before{
