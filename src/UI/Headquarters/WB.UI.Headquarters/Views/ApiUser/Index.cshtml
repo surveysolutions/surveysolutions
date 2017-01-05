@@ -31,14 +31,13 @@
                     } else {
                         $(this).addClass("active");
                     }
-                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
                 });
             };
 
             self.table = $('table#api-users')
                 .on('init.dt', onTableInitComplete)
                 .on('error.dt', function (e, settings, techNote, message) {
-                    //location.reload();
+                    location.reload();
                 })
                 .DataTable({
                     processing: true,

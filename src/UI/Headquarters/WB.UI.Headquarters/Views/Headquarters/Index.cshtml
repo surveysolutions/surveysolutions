@@ -10,7 +10,7 @@
     <script type="text/javascript">
         'use strict';
 
-        var HeadquartersModel = function(ajax, notifier) {
+        var HeadquartersModel = function (ajax, notifier) {
             var self = this;
 
             self.table = null;
@@ -23,47 +23,45 @@
 
             $.fn.dataTable.ext.errMode = 'none';
 
-            var selectRowAndGetData = function(selectedItem) {
+            var selectRowAndGetData = function (selectedItem) {
                 var rowIndex = selectedItem.parent().children().index(selectedItem);
                 self.table.row(rowIndex).select();
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
-
-            var impersonateAsUser = function (key, opt) {
-                var selectedRow = selectRowAndGetData(opt.$trigger);
-                window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
-            };
-
-            var buildMenuItem = function(selectedRow) {
-                var items = {}
-
-                @if (User.IsInRole("Observer"))
-                {
+            @if (User.IsInRole("Observer"))
+            {
                 <text>
-                items["impersonate"] =
-                {
-                    name: "@Users.ImpersonateAsUser",
-                    callback: impersonateAsUser
+                var impersonateAsUser = function (key, opt) {
+                    var selectedRow = selectRowAndGetData(opt.$trigger);
+                    window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
                 };
-                </text>
+
+                var buildMenuItem = function(selectedRow) {
+                    var items = {}
+
+                    items["impersonate"] =
+                        {
+                            name: "@Users.ImpersonateAsUser",
+                        callback: impersonateAsUser
+                    };
+                    return items;
                 }
-                return items;
+
+                self.contextMenuOptions = {
+                    selector: "table#headquarters .with-context-menu",
+                    autoHide: false,
+                    build: function ($trigger, e) {
+                        var selectedRow = selectRowAndGetData($trigger);
+                        var items = buildMenuItem(selectedRow);
+                        return { items: items };
+                    },
+                    trigger: 'left'
+                };
+            </text>
             }
-
-            self.contextMenuOptions = {
-                selector: "table#headquarters .with-context-menu",
-                autoHide: false,
-                build: function($trigger, e) {
-                    var selectedRow = selectRowAndGetData($trigger);
-                    var items = buildMenuItem(selectedRow);
-                    return { items: items };
-                },
-                trigger: 'left'
-            };
-
-            var onTableInitComplete = function() {
-                $('.dataTables_filter label').on('click', function(e) {
+            var onTableInitComplete = function () {
+                $('.dataTables_filter label').on('click', function (e) {
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
@@ -71,10 +69,13 @@
                     } else {
                         $(this).addClass("active");
                     }
-                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
                 });
-
-                $.contextMenu(self.contextMenuOptions);
+                @if (User.IsInRole("Observer"))
+                {
+                    <text>
+                    $.contextMenu(self.contextMenuOptions);
+                    </text>
+                }
             };
 
             self.table = $('table#headquarters')
@@ -95,13 +96,16 @@
                         type: "POST",
                         headers: requestHeaders
                     },
-                    "createdRow": function(row, data, dataIndex) {
+                    "createdRow": function (row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
                     },
                     columns: [
                         {
                             data: "userName",
-                            name: "UserName" // case-sensitive!
+                            name: "UserName", // case-sensitive!
+                            render: function (data, type, row) {
+                                return "<a href='@Url.Action("Edit", "Headquarters")/"+ row.userId +"'>" + data + "</a>";
+                            }
                         },
                         {
                             data: "creationDate",
@@ -129,7 +133,7 @@
             return self;
         };
 
-        $(function() {
+        $(function () {
             var notifier = new Notifier();
             var model = new HeadquartersModel(new Ajax(notifier), notifier);
         });

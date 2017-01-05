@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = string.Format(Users.EditFormat, Model.UserName);
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
@@ -13,33 +13,36 @@
         $('#umbrella').hide();
     </script>
 }
-@Html.Partial("_alerts")
 
-<div class="page-header">
-    <h2>
-        @Users.Edit : &nbsp;
-        <small>
-            @Model.UserName
-        </small>
-    </h2>
-</div>
+<main>
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1>@Users.Edit:&nbsp;@Model.UserName</h1>
+        </div>
 
-<div class="row">
-    <div class="col-md-6">
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <fieldset class="form-horizontal">
-                @{
-            this.Html.RenderPartial("ApiUserEditForm");
-                }
-                <div class="form-group">
-                    <div class="col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                        @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-                    </div>
-                </div>
-            </fieldset>
-        }
+        @Html.Partial("_alerts")
+
+        <div class="row">
+            <div class="col-md-6">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <fieldset class="form-horizontal">
+                        @{
+                            this.Html.RenderPartial("ApiUserEditForm");
+                        }
+                        <div class="form-group">
+                            <div class="col-sm-offset-2">
+                                <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
+                                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
+                            </div>
+                        </div>
+                    </fieldset>
+                            }
+            </div>
+        </div>
     </div>
-</div>
+</main>
+
+
+
