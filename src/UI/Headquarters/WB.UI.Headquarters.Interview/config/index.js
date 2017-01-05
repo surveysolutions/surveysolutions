@@ -17,6 +17,7 @@ module.exports = {
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
     productionGzip: false,
+    assetsRelativePath: "../../Dependencies/",
     productionGzipExtensions: ['js', 'css']
   },
   dev: {
@@ -26,6 +27,7 @@ module.exports = {
     assetsRoot: path.resolve(projectPath, 'InterviewApp'),
     assetsSubDirectory: '',
     assetsPublicPath: '~/InterviewApp/',
+    assetsRelativePath: "/Headquarters/Dependencies/",
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

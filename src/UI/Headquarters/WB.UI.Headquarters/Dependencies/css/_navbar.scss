@@ -31,9 +31,9 @@
 			content: "";
 			@include absolute(15px, null, null, 0);
 			@include size(15px, 41px);
-			background: url(../img/logo.png) no-repeat;
+			background: url(#{$assetsPath}/img/logo.png) no-repeat;
 			background-size: 15px 41px;
-			@include image-2x("../img/logo-retina.png", 15px, 41px);
+			@include image-2x("#{$assetsPath}/img/logo-retina.png", 15px, 41px);
 		}
 	}
 	.navbar-collapse{

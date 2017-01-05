@@ -3,10 +3,10 @@ import * as Vuex from "vuex"
 
 Vue.use(Vuex)
 
-import router from "./router"
-import store from "./store"
-import "./services"
 import "./components/questions"
+import router from "./router"
+import "./services"
+import store from "./store"
 
 import App from "./App"
 
