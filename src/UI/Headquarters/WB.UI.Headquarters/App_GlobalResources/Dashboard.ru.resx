@@ -180,7 +180,10 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник</value>
   </data>
-  <data name="SurveySetupIntroMessage" xml:space="preserve">
-    <value>Кликните по опроснику из списка для создания интервью</value>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>2. Кликните по опроснику из списка для создания интервью</value>
+  </data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
   </data>
 </root>

@@ -1,94 +1,168 @@
-﻿@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
+﻿@using Main.Core.Entities.SubEntities
 @{
-    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
 }
 
 @section scripts
 {
-    @Scripts.Render("~/js/users")
+    @Scripts.Render("~/js/common")
     <script type="text/javascript">
-    
-    var $editUrl = '@Url.Action("Edit", "Headquarters", new { area = string.Empty })';
-    var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+        'use strict';
 
-        $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Headquarters" })');
-        ko.applyBindings(model);
-        model.load();
-    });
+        var HeadquartersModel = function(ajax, notifier) {
+            var self = this;
+
+            self.table = null;
+
+            var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllHeadquarters" })';
+
+            var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+
+
+            var requestHeaders = {};
+            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+            $.fn.dataTable.ext.errMode = 'none';
+
+            var selectRowAndGetData = function(selectedItem) {
+                var rowIndex = selectedItem.parent().children().index(selectedItem);
+                self.table.row(rowIndex).select();
+                var selectedRows = self.table.rows({ selected: true }).data()[0];
+                return selectedRows;
+            }
+
+            var impersonateAsUser = function (key, opt) {
+                var selectedRow = selectRowAndGetData(opt.$trigger);
+                window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
+            };
+
+            var buildMenuItem = function(selectedRow) {
+                var items = {}
+
+                @if (User.IsInRole("Administrator"))
+                {
+                <text>
+                items["impersonate"] =
+                {
+                    name: "@Users.ImpersonateAsUser",
+                    callback: impersonateAsUser
+                };
+                </text>
+                }
+                return items;
+            }
+
+            self.contextMenuOptions = {
+                selector: "table#headquarters .with-context-menu",
+                autoHide: false,
+                build: function($trigger, e) {
+                    var selectedRow = selectRowAndGetData($trigger);
+                    var items = buildMenuItem(selectedRow);
+                    return { items: items };
+                },
+                trigger: 'left'
+            };
+
+            var onTableInitComplete = function() {
+                $('.dataTables_filter label').on('click', function(e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else {
+                        $(this).addClass("active");
+                    }
+                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
+                });
+
+                $.contextMenu(self.contextMenuOptions);
+            };
+
+            self.table = $('table#headquarters')
+                .on('init.dt', onTableInitComplete)
+                .on('error.dt', function (e, settings, techNote, message) {
+                    console.log(e);
+                    console.log(message);
+                    //location.reload();
+                })
+                .DataTable({
+                    processing: true,
+                    language:
+                    {
+                        "url": window.input.settings.config.dataTableTranslationsUrl,
+                        searchPlaceholder: "@Pages.Search"
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: headquartersListUrl,
+                        type: "POST",
+                        headers: requestHeaders
+                    },
+                    "createdRow": function(row, data, dataIndex) {
+                        $(row).addClass('with-context-menu');
+                    },
+                    columns: [
+                        {
+                            data: "userName",
+                            name: "UserName" // case-sensitive!
+                        },
+                        {
+                            data: "creationDate",
+                            name: "CreationDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
+                        },
+                        {
+                            data: "email",
+                            name: "Email", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date"
+                        }
+                    ],
+                    select: {
+                        style: 'single'
+                    },
+                    searchHighlight: true,
+                    rowId: 'userId',
+                    pagingType: "full_numbers",
+                    lengthChange: false, // do not show page size selector
+                    pageLength: 50, // page size
+                    "order": [[1, 'desc']],
+                    dom: "ftp"
+                });
+
+            return self;
+        };
+
+        $(function() {
+            var notifier = new Notifier();
+            var model = new HeadquartersModel(new Ajax(notifier), notifier);
+        });
     </script>
 }
+<main>
+    <div class="container-fluid">
 
-@section header
-{
-    <div class="page-header">
-        <h2 class="sinle-line-header">@Users.Headquarters</h2>
-    </div>
-}
-
-@section gridnavigation
-{
-    <div class="btn-group">
-        <div class="form-inline">
-            @if (User.IsInRole(UserRoles.Administrator.ToString()))
-            {
-                <a class="btn btn-default" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">
-                    <i class="glyphicon glyphicon-user"></i> @Users.AddHeadquarters
-                </a>
-            }
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="@Common.Search" data-bind="value: SearchBy, enterKey: filter">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: filter">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-}
-
-@section grid
-{
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th data-bind='sortby : "UserName"'>@Users.UserName</th>
-                <th data-bind='sortby : "CreationDate"' title="@Users.HeadquarterAccountCreationDate">@Users.CreationDate</th>
-                <th data-bind='sortby : "Email"'>@Users.HeadquartersEmail</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:Items -->
-            <tr>
-                <td>
+        <div class="row">
+            <div class="page-header clearfix">
+                <div>
+                    <h1>@Users.Headquarters</h1>
                     @if (User.IsInRole(UserRoles.Administrator.ToString()))
                     {
-                        <a data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                            <span data-bind="text: UserName"></span>
-                        </a>
+                        <a class="btn btn-success" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">@Users.AddHeadquarters</a>
                     }
-                    else
-                    {
-                        <span data-bind="text: UserName"></span>
-                    }
-                </td>
-                <td data-bind="text: CreationDate"></td>
-                <td>
-                    <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
-                </td>
-
-                <td class="headquarters-list-actions-column">
-                    <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="@Users.ImpersonateAsUser">
-                        <i class="glyphicon glyphicon-eye-open"></i>
-                    </a>
-                </td>
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
-}
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+            </div>
+        </div>
+        <table id="headquarters" class="table table-striped table-ordered table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>@Users.UserName</th>
+                    <th>@Users.CreationDate</th>
+                    <th>@Users.HeadquartersEmail</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</main>

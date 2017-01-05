@@ -150,10 +150,35 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [CamelCase]
         [Authorize(Roles = "Administrator, Observer")]
-        public UserListView Headquarters(UsersListViewModel data)
+        public DataTableResponse<InterviewerListItem> AllHeadquarters([FromBody] DataTableRequest request)
         {
-            return this.GetUsers(data, UserRoles.Headquarter);
+            var input = new UserListViewInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Role = UserRoles.Headquarter,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+            };
+
+            var headquarters = this.usersFactory.Load(input);
+
+            return new DataTableResponse<InterviewerListItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = headquarters.TotalCount,
+                RecordsFiltered = headquarters.TotalCount,
+                Data = headquarters.Items.ToList().Select(x => new InterviewerListItem
+                {
+                    UserId = x.UserId,
+                    UserName = x.UserName,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                })
+            };
+
         }
 
         [HttpPost]

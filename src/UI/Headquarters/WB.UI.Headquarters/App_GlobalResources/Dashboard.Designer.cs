@@ -241,12 +241,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1. Click Import Template  button to load a questionnaire from Designer&lt;br /&gt;
-        ///2. Click on a questionnaire from the list to create interview assignments..
+        ///   Looks up a localized string similar to 1. Click Import Template  button to load a questionnaire from Designer.
         /// </summary>
-        internal static string SurveySetupIntroMessage {
+        internal static string SurveySetupIntroMessage1 {
             get {
-                return ResourceManager.GetString("SurveySetupIntroMessage", resourceCulture);
+                return ResourceManager.GetString("SurveySetupIntroMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Click on a questionnaire from the list to create interview assignments..
+        /// </summary>
+        internal static string SurveySetupIntroMessage2 {
+            get {
+                return ResourceManager.GetString("SurveySetupIntroMessage2", resourceCulture);
             }
         }
         
