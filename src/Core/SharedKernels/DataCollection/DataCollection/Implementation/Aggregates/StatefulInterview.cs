@@ -201,6 +201,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsYesNo;
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedToList;
+        public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
+
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
 
         #region Command handlers
