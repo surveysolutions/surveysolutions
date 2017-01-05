@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -9,6 +10,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -58,6 +61,61 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.interviewersFactory.Load(input);
         }
+
+        [HttpPost]
+        [CamelCase]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequest request)
+        {
+            // Headquarter and Admin can view interviewers by any supervisor
+            // Supervisor can view only their interviewers
+            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+
+            var input = new InterviewersInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                ViewerId = viewerId,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+
+                SupervisorName = string.Empty,
+                Archived = false,
+                ConnectedToDevice = null
+            };
+
+            var interviewers = this.interviewersFactory.Load(input);
+
+            return new DataTableResponse<InterviewerListItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = interviewers.TotalCount,
+                RecordsFiltered = interviewers.TotalCount,
+                Data = interviewers.Items.ToList().Select(x => new InterviewerListItem
+                {
+                    UserId = x.UserId,
+                    UserName = x.UserName,
+                    CreationDate =  x.CreationDate,
+
+                    SupervisorName = x.SupervisorName,
+                    Email = x.Email,
+                    DeviceId = x.DeviceId
+                })
+            };
+
+        }
+
+        public class InterviewerListItem
+        {
+            public virtual Guid UserId { get; set; }
+            public virtual string UserName { get; set; }
+            public virtual string CreationDate { get; set; }
+            public virtual string SupervisorName { get; set; }
+            public virtual string Email { get; set; }
+            public virtual string DeviceId { get; set; }
+        }
+
+
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
