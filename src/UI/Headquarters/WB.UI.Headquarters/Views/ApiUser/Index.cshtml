@@ -40,13 +40,11 @@
                     location.reload();
                 })
                 .DataTable({
-                    processing: true,
                     language:
                     {
                         "url": window.input.settings.config.dataTableTranslationsUrl,
                         searchPlaceholder: "@Pages.Search"
                     },
-                    serverSide: true,
                     ajax: {
                         url: headquartersListUrl,
                         type: "POST",
@@ -80,7 +78,9 @@
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
                     "order": [[1, 'desc']],
-                    dom: "ftp"
+                    dom: "frtp",
+                    processing: true,
+                    serverSide: true
                 });
 
             return self;
