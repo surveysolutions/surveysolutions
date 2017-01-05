@@ -1,18 +1,16 @@
 <template>
-    <div class="container">
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <router-link tag="li" to="/" role="presentation" activeClass="active">
-                        <a>Start</a>
-                    </router-link>
-                    <router-link tag="li" to="/prefilled/580eba69f1844f1892147342f568bb0f$1" role="presentation" activeClass="active">
-                        <a>Preffiled</a>
-                    </router-link>
-                </ul>
-            </nav>
-        </div>
-        <div class="details-interview hold-transition">
+    <div>
+        <nav>
+            <ul class="nav nav-pills">
+                <router-link tag="li" to="/" role="presentation">
+                    <a>Start</a>
+                </router-link>
+                <router-link tag="li" to="/prefilled/580eba69f1844f1892147342f568bb0f$1" role="presentation">
+                    <a>Preffiled</a>
+                </router-link>
+            </ul>
+        </nav>
+        <main class="details-interview">
             <div class="container-fluid">
                 <div class="row">
                     <section class="questionnaire">
@@ -22,7 +20,7 @@
                     </section>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 <script lang='ts'>
