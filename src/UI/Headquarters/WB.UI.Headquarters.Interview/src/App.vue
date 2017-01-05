@@ -2,7 +2,7 @@
     <div>
         <h1>Hello</h1>
         <ul>
-            <li>
+            <li><span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
                 <router-link to='/'>Start</router-link>
             </li>
             <li>
@@ -15,6 +15,8 @@
 <script lang='ts'>
     export default {
         name: 'app'
-        // $hq-style-path: "../../WB.UI.Headquarters/Dependencies/css/_mixins.scss"
     }
 </script>
+<style lang='scss'>
+  @import "assets/styles"
+</style>

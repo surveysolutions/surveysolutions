@@ -16,11 +16,11 @@ input.checkbox-filter{
 	    @extend %tick;
 	    @include absolute(0, null, null, 0);
 	    height: 20px;
-	    background: transparent url("../img/chekboxes.png") no-repeat;
+	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
 	    background-size: 68px 350px;
 	    background-position: 0 0;
 	    margin-right: 10px;
-		@include image-2x("../img/chekboxes2k.png", 68px, 350px);
+		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
   	}
   	& ~ label:hover .tick,
   	& ~ label:focus .tick{
@@ -97,8 +97,8 @@ input.checkbox-filter{
 					.calendar{
 						@include size(21px, 20px); 
 						display: inline-block;
-						background: url("../img/calendar.png") no-repeat;
-						@include image-2x("../img/calendar2k.png", 21px, 20px);
+						background: url("#{$assetsPath}/img/calendar.png") no-repeat;
+						@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
 					}
 				}
 			}
