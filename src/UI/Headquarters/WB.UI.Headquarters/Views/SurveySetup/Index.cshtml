@@ -220,22 +220,34 @@
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
-                <p>
-                    @Html.Raw(Dashboard.SurveySetupIntroMessage)
-                </p>
+                <ol  class="list-unstyled">
+                    <li>@Dashboard.SurveySetupIntroMessage1</li>
+                    <li>@Dashboard.SurveySetupIntroMessage2</li>
+                </ol>
             </div>
         </div>
         <div id="list">
             <table id="questionnaires" class="table table-striped table-bordered table-hover table-ordered">
                 <thead>
-                    <tr>
-                        <th>@Dashboard.Questionnaire</th>
-                        <th>@Dashboard.Version</th>
-                        <th>@Dashboard.ImportDate</th>
-                        <th>@Dashboard.CreationDate</th>
-                        <th>@Dashboard.LastEntryDate</th>
-                    </tr>
+                <tr>
+                    <th>@Dashboard.Questionnaire</th>
+                    <th>@Dashboard.Version</th>
+                    <th>@Dashboard.ImportDate</th>
+                    <th>@Dashboard.CreationDate</th>
+                    <th>@Dashboard.LastEntryDate</th>
+                </tr>
                 </thead>
+
+                <tfoot>
+                <tr>
+                    <th>@Dashboard.Questionnaire</th>
+                    <th>@Dashboard.Version</th>
+                    <th>@Dashboard.ImportDate</th>
+                    <th>@Dashboard.CreationDate</th>
+                    <th>@Dashboard.LastEntryDate</th>
+                </tr>
+                </tfoot>
+                <tbody></tbody>
             </table>
         </div>
     </div>
