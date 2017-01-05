@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,8 +30,21 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
-        private readonly Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
-        private string interviewId => this.connectionIdToInterviewId[this.Context.ConnectionId];
+        private readonly static Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
+
+        public WebInterview() : this(
+            ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(),
+            ServiceLocator.Current.GetInstance<ICommandDeserializer>() ,
+            ServiceLocator.Current.GetInstance<ICommandService>(),
+            ServiceLocator.Current.GetInstance<ILogger>(),
+            ServiceLocator.Current.GetInstance<IUserViewFactory>(),
+            ServiceLocator.Current.GetInstance<ILiteEventRegistry>(),
+            ServiceLocator.Current.GetInstance<IMapper>(),
+            ServiceLocator.Current.GetInstance<IQuestionnaireStorage>())
+        {
+        }
+
+        private string  interviewId => connectionIdToInterviewId[this.Context.ConnectionId];
 
         private IStatefulInterview currentInterview
             => this.statefulInterviewRepository.Get(this.interviewId);
@@ -76,7 +90,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public void StartInterview(string interviewId)
         {
-            this.connectionIdToInterviewId.Add(this.Context.ConnectionId, interviewId);
+            connectionIdToInterviewId[this.Context.ConnectionId] = interviewId;
             this.eventRegistry.Subscribe(this, interviewId);
             this.Groups.Add(this.Context.ConnectionId, interviewId);
             this.Clients.Group(interviewId).startInterview(interviewId);

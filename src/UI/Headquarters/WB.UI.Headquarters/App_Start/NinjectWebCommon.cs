@@ -34,6 +34,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
@@ -208,7 +209,7 @@ namespace WB.UI.Headquarters
                     synchronizationSettings,
                     interviewCountLimit));
 
-
+            kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
