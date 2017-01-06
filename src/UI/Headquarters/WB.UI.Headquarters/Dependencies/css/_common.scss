@@ -34,7 +34,9 @@ html {
 		font-family: Arial, sans-serif;
 		font-size: 16px;
 		line-height: 18px;
-		@include gradient($gray_form, $gray_form, null, null);
+		@include gradient-horizontal($gray_form, $gray_form);
+		background-repeat: repeat-y;
+/* 		@include gradient($gray_form, $gray_form, null, null); */
 		background-size: 12px 100%;
 		padding-top: 70px;
 		.footer {
@@ -297,4 +299,24 @@ table{
     font: 13px/13px Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
+}
+.main-information{
+	margin-left: $filter-width - $margin-container + 12px +15px;
+	padding: 0 0 0 30px;
+	@include transition(margin, 0.3s);
+	.page-header div{
+		padding-right: 365px; 
+	}
+}
+@media (max-width: $screen-sm-min){
+	.main-information{
+		padding-right: 15px;
+		padding-left: 0;
+	}
+}
+@media (max-width: $screen-xs-min){
+	.main-information{
+		padding-right: 0px;
+		padding-top: 10px;
+	}
 }

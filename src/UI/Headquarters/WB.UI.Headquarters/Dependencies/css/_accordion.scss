@@ -27,6 +27,12 @@
 						display: none;
 					}
 				}
+				.btn-plus{
+					@include absolute(7px, null, null, -9px);
+					&:before, &:after{
+						background-color: $blue;
+					}
+				}
 				a{
 					display: block;
 					font: 16px/18px "RobotoMedium";
@@ -34,37 +40,34 @@
 					color: $blue;
 					padding: 15px 20px 15px 25px;
 					position: relative;
-
 					&:hover, &:focus{
 						text-decoration: none;
 					}
-					&:before, &:after{
-						@include absolute(23px, null, null, 0);
-						content: "";
-						width: 12px;
-						height: 2px;
-						display: block;
-						background-color: $blue;
+				}
+				&.has-error {
+					.btn-plus{
+						&:before, &:after{
+							background-color: $red;
+						}
 					}
-					&:after{
-						@include rotate(0);
-						@include transition(all, 0.3s);
-					}
-					&.collapsed:after{
-						@include rotate(270deg);
-						@include transition(all, 0.3s);
+					a{
+						color: $red;
+						&:before, &:after{
+							background-color: $red;
+						}
 					}
 				}
-				&.has-error a{
-					color: $red;
-					&:before, &:after{
-						background-color: $red;
+				&.complete {
+					.btn-plus{
+						&:before, &:after{
+							background-color: $green;
+						}
 					}
-				}
-				&.complete a{
-					color: $green;
-					&:before, &:after{
-						background-color: $green;
+					a{
+						color: $green;
+						&:before, &:after{
+							background-color: $green;
+						}
 					}
 				}
 			} 
