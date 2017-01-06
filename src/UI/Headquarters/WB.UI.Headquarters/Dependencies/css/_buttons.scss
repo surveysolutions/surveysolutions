@@ -82,8 +82,8 @@
 .button-flag{
 	display: inline-block;
     @include size(19px, 22px); 
-    @include image-2x("../img/flags2k.png", 75px, 22px);
-    background: transparent url("../img/flags.png") no-repeat;
+    @include image-2x("#{$assetsPath}/img/flags2k.png", 75px, 22px);
+    background: transparent url("#{$assetsPath}/img/flags.png") no-repeat;
     background-size: 75px 22px;
     background-position: -38px 0;  
 	border: none;

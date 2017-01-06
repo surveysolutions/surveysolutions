@@ -200,7 +200,7 @@
 %tick{
     display: inline-block;
     @include size(25px, 30px);
-    background: transparent url("../img/pretty-checkable-sprites.png") no-repeat;
+    background: transparent url("#{$assetsPath}/img/pretty-checkable-sprites.png") no-repeat;
     vertical-align: middle;
 }
 %uppercase-font{
@@ -240,12 +240,12 @@
     & ~ label .tick {
         display: inline-block;
         @include square(18px);
-        background: transparent url("../img/questionnaire-sprite.png") no-repeat;
+        background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
         background-size: 629px 18px;
         background-position: 4px 0px;
         margin-right: 10px;
-        @include image-2x("../img/questionnaire-sprite2k.png", 629px, 18px);
+        @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 629px, 18px);
     }
 }
 %visibility-visible{
