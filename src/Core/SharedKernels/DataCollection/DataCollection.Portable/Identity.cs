@@ -39,6 +39,14 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static Identity Create(Guid id, RosterVector rosterVector) => new Identity(id, rosterVector);
 
+        public static Identity Parse(string value)
+        {
+            var id = Guid.Parse(value.Substring(0, 32));
+            var rosterVector = RosterVector.Parse(value.Substring(32));
+
+            return Create(id, rosterVector);
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

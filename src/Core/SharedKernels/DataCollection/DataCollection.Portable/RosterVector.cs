@@ -120,5 +120,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static bool operator !=(RosterVector a, RosterVector b)
             => !(a == b);
+
+        public static RosterVector Parse(string value)
+        {
+            value = value.Trim('<', '>');
+
+            return new RosterVector(value.Split('-').Where(val => !string.IsNullOrEmpty(val)).Select(decimal.Parse));
+        }
     }
 }
