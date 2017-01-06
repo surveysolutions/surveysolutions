@@ -113,15 +113,7 @@
 	}
 }
 .btn-clear{
-	&:hover, &:active:focus, &:focus, &:active{
-		outline: none;
-	}
-	span{
-		@include cancel(18px);
-	}
-	@include absolute(0, 0);
-	@include transition(all, 0.2s);
-	@extend %visibility-hidden;
+	@include clear();
 }
 .btn-action-questionnaire{
 	background-color: $white;
@@ -137,5 +129,23 @@
 		background-color: $gray-super-light;
 		border-color: darken($gray_light, 10%);
 		color: darken($gray_light, 20%);
+	}
+}
+.btn-plus{
+	@include cancel(14px);
+	@extend %delete-outline;
+	opacity: 1;
+		&:before, &:after{
+			@include transition(all, 0.2s);
+	        @include rotate(0deg);
+	        top: 0;
+	    }
+	    &:after{
+	        top: -2px;
+	    }
+	&.collapsed{
+	    &:after{
+	        @include rotate(90deg);
+	    }
 	}
 }

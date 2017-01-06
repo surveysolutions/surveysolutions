@@ -1,16 +1,10 @@
 .main-information{
-	margin-left: $filter-width - $margin-container + 12px +15px;
-	padding: 0 15px;
-	@include transition(margin, 0.3s);
 	table{
 		thead{
 			.column-questionnaire-title{
 				width: 25% !important;
 			}
 		}
-	}
-	.page-header{
-		padding-right: 365px; 
 	}
     .panel-table{
 		left: $filter-width + 12px;
