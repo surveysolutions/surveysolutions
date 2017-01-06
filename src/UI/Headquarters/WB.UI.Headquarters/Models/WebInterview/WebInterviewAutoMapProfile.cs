@@ -7,9 +7,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public WebInterviewAutoMapProfile()
         {
+             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
+              .ForMember(x => x.QuestionIdentity, opts => opts.MapFrom(x => x.Identity))
+              .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text));
+
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
-                .ForMember(x => x.QuestionIdentity, opts => opts.MapFrom(x => x.Identity))
-                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text));
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
+            this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
         }
     }
 }
