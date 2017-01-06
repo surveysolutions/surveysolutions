@@ -1,7 +1,7 @@
 <template>
     <div v-if="instructions">
         <div class="information-block instruction" v-if="!instructions.hide || shown">
-            <h6>Instruction {{entityId}}</h6>
+            <h6>Instruction</h6>
             <p>{{instructions.text}}</p>
         </div>
         <div v-else>
