@@ -1,8 +1,8 @@
 <template>
-    <div class="question">
+    <div class="question" v-if="$me">
         <div class="question-editor text-question">
-            <wb-title :entityId="entity.identity" />
-            <wb-instructions :entityId="entity.identity" />
+            <wb-title  />
+            <wb-instructions />
             <div class="question-unit">
                 <div class="options-group">
                     <div class="form-group">
@@ -19,10 +19,13 @@
     </div>
 </template>
 <script lang="ts">
+    import { entityDetails } from "components/mixins"
+
     export default {
         name: 'TextQuestion',
+        mixins: [entityDetails],
         props: ['entity'],
-        mounted() {
+        beforeMount() {
             this.fetch()
         },
         methods: {

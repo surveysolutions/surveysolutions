@@ -1,16 +1,11 @@
 <template>
-    <h5>{{title}}</h5>
+    <h5>{{$me.title}}</h5>
 </template>
 <script lang="ts">
+    import { entityPartial } from "components/mixins"
+
     export default {
-        name: "wb-title",
-        props: ['entityId'],
-        computed: {
-            title() {
-                const entity = this.$store.state.entityDetails[this.entityId]
-                if (entity != null) return entity.title;
-                return "";
-            }
-        }
+        mixins: [entityPartial],
+        name: "wb-title"
     }
 </script>
