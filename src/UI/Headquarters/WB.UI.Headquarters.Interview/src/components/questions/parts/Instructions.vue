@@ -1,8 +1,8 @@
 <template>
-    <div v-if="instructions && instructions.text">
-        <div class="information-block instruction" v-if="!instructions.hide || shown">
+    <div>
+        <div class="information-block instruction" v-if="!$me.hideInstructions && shown">
             <h6>Instruction</h6>
-            <p>{{instructions.text}}</p>
+            <p>{{$me.instructions}}</p>
         </div>
         <div v-else>
             <button type="button" class="btn btn-link" @click="show">Show instruction</button>
@@ -11,30 +11,18 @@
 </template>
 <script lang="ts">
     import { mapGetters } from "vuex"
+    import { entityPartial } from "components/mixins"
 
     export default {
         name: "wb-instructions",
-        props: ['entityId'],
-        computed: {
-            instructions() {
-                let entity = this.$store.state.entityDetails[this.entityId]
-                if (entity != null) {
-                    return {
-                        text: entity.instructions,
-                        hide: entity.hideInstructions
-                    }
-                }
-
-                return null
-            }
-        },
+        mixins: [entityPartial],
         data: () => {
             return {
                 shown: false,
             }
         },
         methods: {
-            show: function() {
+            show: function () {
                 this.shown = true
             }
         }
