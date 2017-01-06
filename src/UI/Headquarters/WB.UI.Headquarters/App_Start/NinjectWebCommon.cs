@@ -256,6 +256,7 @@ namespace WB.UI.Headquarters
                     AssembliesToInclude =
                     {
                         typeof(WebInterview).Assembly,
+                        typeof(CategoricalOption).Assembly
                     }
                 }
             }));
