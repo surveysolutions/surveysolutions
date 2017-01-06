@@ -66,6 +66,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
             QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
@@ -80,6 +81,7 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
         {
             if (!this.ModelState.IsValid)
