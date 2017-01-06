@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -29,21 +30,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IPlainTransactionManager plainTransactionManager;
 
-        private readonly static Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
-
-        public WebInterview() : this(
-            ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>(),
-            ServiceLocator.Current.GetInstance<ICommandDeserializer>() ,
-            ServiceLocator.Current.GetInstance<ICommandService>(),
-            ServiceLocator.Current.GetInstance<ILogger>(),
-            ServiceLocator.Current.GetInstance<IUserViewFactory>(),
-            ServiceLocator.Current.GetInstance<ILiteEventRegistry>(),
-            ServiceLocator.Current.GetInstance<IMapper>(),
-            ServiceLocator.Current.GetInstance<IQuestionnaireStorage>())
-        {
-        }
-
+        private static readonly Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
+        
         private string  interviewId => connectionIdToInterviewId[this.Context.ConnectionId];
 
         private IStatefulInterview currentInterview
@@ -61,7 +51,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IUserViewFactory usersRepository,
             ILiteEventRegistry eventRegistry,
             IMapper autoMapper,
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository,
+            IPlainTransactionManager plainTransactionManager)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandDeserializer = commandDeserializer;
@@ -71,6 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.eventRegistry = eventRegistry;
             this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
+            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void CreateInterview(string questionnaireId, string interviewerName)
@@ -99,6 +91,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public override Task OnDisconnected(bool stopCalled)
         {
+            connectionIdToInterviewId.Remove(this.Context.ConnectionId);
             // statefull interview can be removed from cache here
             this.eventRegistry.Unsubscribe(this);
 
