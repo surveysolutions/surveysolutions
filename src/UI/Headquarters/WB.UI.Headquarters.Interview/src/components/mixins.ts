@@ -12,7 +12,6 @@ export const entityPartial = {
                 + " or has passed 'entity' property"
             }
 
-            console.log("entityPartial", this.$parent.$options.name, this.$options.name, this.$parent.entity.identity)
             return this.$store.state.entityDetails[this.$parent.entity.identity]
         }
     }
@@ -21,7 +20,6 @@ export const entityPartial = {
 export const entityDetails = {
     computed: {
         $me () {
-            console.log("entityDetails", this.$parent.$options.name, this.$options.name, this.entity.identity)
             // if entity defined in props - use props
             if (this.entity != null) {
                 return this.$store.state.entityDetails[this.entity.identity]
