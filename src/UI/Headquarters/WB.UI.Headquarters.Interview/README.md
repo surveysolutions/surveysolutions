@@ -61,3 +61,13 @@ Will build minified versions of js/css scripts.
 - `app.css` - all css code
 
 Images and fonts served from 'old' `Dependencies` folder
+
+### Designer mode
+
+```
+npm run design
+```
+
+Designer can run web ui using local development server against superhq or any other dev server.
+
+Url to server should be provided in `build/config/index.js` file at `designer/proxyTable/signalr` json property
