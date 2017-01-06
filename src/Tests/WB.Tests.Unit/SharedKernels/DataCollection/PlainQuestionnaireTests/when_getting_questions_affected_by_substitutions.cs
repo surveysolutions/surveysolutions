@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
+    [TestOf(typeof(PlainQuestionnaire))]
     internal class when_getting_questions_affected_by_substitutions
     {
-        Establish context = () =>
+        [Test]
+        public void should_find_roster_title_substitutions()
         {
+            // arrange 
             var rosterSizeId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Create.Entity.QuestionnaireDocument(
                 children: new List<IComposite>
                 {
@@ -26,19 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         })
                 });
 
-            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
-        };  
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
 
-        Because of = () => 
-            affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
+            // Act
+            var affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
 
-        It should_find_roster_title_substitutions = () => 
-            affectedQuestions.ShouldContain(substitutionTargetQuestionId);
-
-        private static PlainQuestionnaire plainQuestionnaire;
-        private static Guid substitutionTargetQuestionId;
-        private static Guid rosterTitleid;
-        private static IEnumerable<Guid> affectedQuestions;
+            // Assert
+            Assert.That(affectedQuestions, Does.Contain(substitutionTargetQuestionId));
+        }
     }
 }
 
