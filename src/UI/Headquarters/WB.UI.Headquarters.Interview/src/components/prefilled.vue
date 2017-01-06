@@ -12,7 +12,7 @@
         <hr/>
         <br/><br/><br/>
 
-        <component v-for="question in prefilledQuestions" v-bind:is="question.EntityType" v-bind:entity="question"></component>
+        <component v-for="question in prefilledQuestions" v-bind:is="question.entityType" v-bind:entity="question"></component>
     </div>
 </template>
 
