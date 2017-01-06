@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -29,8 +32,19 @@ namespace WB.UI.Headquarters.API.WebInterview
             });
         }
 
-        public InterviewTextQuestion GetTextQuestion(Identity questionIdentity)
-            => this.autoMapper.Map<InterviewTextQuestion>(this.currentInterview.GetTextQuestion(questionIdentity));
+        public InterviewTextQuestion GetTextQuestion(string questionIdentity)
+        {
+            return plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                var id = Identity.Create(Guid.Parse(questionIdentity.Replace(">", "").Replace("<", "")), RosterVector.Empty);
+
+                InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
+                InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
+                result.Instructions = currentQuestionnaire.GetQuestionInstruction(id.Id);
+                result.HideInstructions = currentQuestionnaire.GetHideInstructions(id.Id);
+                return result;
+            });
+        }
 
         private InterviewEntityType GetEntityType(Guid entityId)
         {

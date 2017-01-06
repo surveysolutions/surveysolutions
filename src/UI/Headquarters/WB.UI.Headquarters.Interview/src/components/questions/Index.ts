@@ -1,11 +1,11 @@
 import * as vue from "vue"
 
+import CategoricalSingle from "./CategoricalSingle"
 import DateTime from "./DateTime"
 import Integer from "./Integer"
-import SingleOption from "./SingleOption"
 import TextQuestion from "./TextQuestion"
 
 vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
 vue.component("TextQuestion", TextQuestion)
-vue.component("SingleOption", SingleOption)
+vue.component("CategoricalSingle", CategoricalSingle)

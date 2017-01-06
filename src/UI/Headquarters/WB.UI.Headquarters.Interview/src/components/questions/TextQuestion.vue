@@ -2,8 +2,10 @@
     <div class="question">
         <div class="question-editor text-question">
             <h5>
+
                 Text question basic template <small>{{entity.Identity}}</small>
             </h5>
+            <wb-instructions :entityId="entity.Identity"/>
             <div class="question-unit">
                 <div class="options-group">
                     <div class="form-group">
@@ -22,6 +24,14 @@
 <script lang="ts">
     export default {
         name: 'TextQuestion',
-        props: ['entity']
+        props: ['entity'],
+        mounted() {
+            this.fetch()
+        },
+        methods: {
+            fetch() {
+                this.$store.dispatch('fetchEntity', this.entity)
+            }
+        }
     }
 </script>
