@@ -33,7 +33,7 @@ namespace Ncqrs.Tests
             var currentClockTime = clock.UtcNow();
             var currentDateTimeTime = DateTime.UtcNow;
 
-            currentClockTime.Should().Be(currentDateTimeTime);
+            currentClockTime.Should().BeCloseTo(currentDateTimeTime);
         }
     }
 }
