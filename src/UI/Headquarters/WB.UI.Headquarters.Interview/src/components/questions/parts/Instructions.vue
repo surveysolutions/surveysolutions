@@ -1,5 +1,5 @@
 <template>
-    <div v-if="instructions">
+    <div v-if="instructions && instructions.text">
         <div class="information-block instruction" v-if="!instructions.hide || shown">
             <h6>Instruction</h6>
             <p>{{instructions.text}}</p>
