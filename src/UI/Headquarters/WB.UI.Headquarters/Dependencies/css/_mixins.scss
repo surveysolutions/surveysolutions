@@ -135,6 +135,17 @@
         }
     }
 }
+@mixin clear($width: 18px){
+    &:hover, &:active:focus, &:focus, &:active{
+        outline: none;
+    }
+    span{
+        @include cancel($width);
+    }
+    @include absolute(0, 0);
+    @include transition(all, 0.2s);
+    @extend %visibility-hidden;
+}
 @mixin question_title_colors($default, $with_error, $filled){
     .unit-title{
         background-color: lighten($blue, $default);
@@ -298,12 +309,6 @@
         .foldback-button{
             top: 65px;
         }
-/*         &.hidden-filters{
-            left: - $filter-small-width - 12px;
-            .foldback-button{
-                right: - $width-foldback-button;
-            }
-        } */
     }
 }
 @mixin visible-foldback-button(){
@@ -325,4 +330,10 @@
 @mixin width-questionnaire($margin-left){
     margin-left: $margin-left;
     width: calc(100% - #{$margin-left});
+}
+%delete-outline{
+    &:hover, &:focus, &:active, &.active:focus{
+        outline: none !important;
+        box-shadow: none;
+    }
 }

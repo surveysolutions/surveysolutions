@@ -78,8 +78,8 @@
             }
         }
         &.column-questionnaire-title{
-            padding-left: 50px;
-            @include transition(all, 0.2s);
+/*             padding-left: 50px;
+            @include transition(all, 0.2s); */
         }
     }
     thead th.padding-left-slide:first-child{
@@ -166,7 +166,7 @@
             }
         }
         @include transition(all, 0.1s);
-        height: 35px;
+        /* height: 35px; */
         td{
             word-break: break-all;
             word-wrap: break-word;
@@ -175,6 +175,10 @@
         th{
             overflow-wrap: break-word;
             word-wrap: break-word;
+            &.with-search{
+                padding-left: 40px;
+                min-width: 150px;
+            }
         }
     }
     thead{
@@ -203,10 +207,13 @@
                     color: #fff;
                 }
                 a{
-                    @include transition(all, 0.3s);
+                    @include transition(all, 0.2s);
                     text-overflow: ellipsis;
                     color: $gray_text;
-                    &:hover, &:focus{
+                    
+                }
+                &:hover, &:focus{
+                    a{
                         color: $blue !important;
                         text-decoration: none;
                     }
@@ -410,27 +417,44 @@
         tr {
             border-bottom: 2px solid #ddd !important;
         }
-        tbody td {
+        tbody tr td {
+            overflow: hidden;
+            height: auto;
+            font-size: 12px;
+            line-height: 14px;
             display: block;  
             position: relative;
             text-align:left;
             border-bottom: 1px solid #ddd !important;
-            padding-left: 50% !important;
-        }
-        tbody td:before { 
-            content: attr(data-th); 
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            text-align:left;
-            float: left;  
-            width: 50%;
-            text-transform: uppercase;
-            font-family: "TrebuchetMSBold";
-            letter-spacing: 0.5px;
-            border-right: 1px solid #f8f9f9;
+            white-space: normal !important;
+            a{
+                float: left;
+                width: 50%;
+            }
+            &:before { 
+                content: attr(data-th); 
+                display: block;
+                height: 100%;
+                text-align:left;
+                padding-right: 10px;
+                text-transform: uppercase;
+                font-family: "TrebuchetMSBold";
+                letter-spacing: 0.5px;
+                float: left;
+                clear: both;
+                width: 50%;
+            }
+            &.without-break{
+                text-overflow: initial;
+                &:before{
+                    float: left;
+                    background-image: none !important;
+                    content: attr(data-th); 
+                    position: relative;
+                    height: 100%;
+                    width: 50%;
+                }
+            }
         }
     }
     .table{

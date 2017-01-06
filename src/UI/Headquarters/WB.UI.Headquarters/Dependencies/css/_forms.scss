@@ -316,3 +316,77 @@ input.double-checkbox-white{
 		} 
    }
 } 
+.search{
+	min-width: 30px;
+	display: block;
+	@include absolute(-5px, null, null, 0);
+ 	background-color: #fff;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	margin-left: 10px;
+	.btn-search{
+		@include absolute(0, null, null, 0);
+		border: none;
+		height: 35px;
+		outline: none;
+		display: inline-block;
+		padding: 10px;
+	    background: url('#{$assetsPath}/img/search.png') no-repeat;
+	    background-position: 0 8px;
+	    background-size: 80px 20px;
+	    @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
+	    cursor: pointer;
+	    @extend %delete-outline;
+	    &:hover{
+	    	background-position: -40px 8px;
+	    }
+	}
+	.btn-clear{
+		@include clear(22px);
+		right: -35px;
+		padding: 6px;
+		@extend %delete-outline;
+		transition: none;
+	}
+	.form-control{
+		height: 35px;
+		width: 0;
+		display: inline-block;
+		padding-right: 0;
+		padding-left: 0;
+		border: none;
+		@extend %delete-outline;
+	}
+}	
+.active-search{
+	color: transparent;
+	&:after{
+		border-color: transparent !important;
+	}
+	.search{
+ 		z-index: 4;
+ 		border-color: $gray_form;
+ 		width: calc(100% - 36px - 10px);
+ 		max-width: 315px;
+		.form-control{
+			width: calc(100% - 36px);
+			padding-left: 10px;
+			padding-right: 10px;
+			font-family: "RobotoRegular";
+		}
+		.btn-search{
+			left: auto;
+			right: 0;
+			margin: 0 10px;
+			background-position: -40px 10px;
+			&:hover{
+				background-position: -60px 10px;
+			}
+		}
+		.btn-clear{
+			@extend %visibility-visible;
+		}
+	}
+}
+ 	 
+
