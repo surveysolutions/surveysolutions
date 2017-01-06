@@ -248,8 +248,6 @@ namespace WB.UI.Headquarters
             });
             kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
 
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
-
             return kernel;
         }
 

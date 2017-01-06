@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Models.WebInterview;
@@ -13,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public InterviewEntityWithType[] GetPrefilledQuestions()
         {
-            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            
             return plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 return plainTransactionManager.ExecuteInQueryTransaction(() =>
