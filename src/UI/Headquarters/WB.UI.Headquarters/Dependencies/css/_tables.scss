@@ -259,10 +259,10 @@
                 display: block;
                 content: "";
                 @include square(20px);
-                background: url('../img/search.png') no-repeat;
+                background: url('#{$assetsPath}/img/search.png') no-repeat;
                 background-position: 0 0;
                 background-size: 80px 20px;
-                @include image-2x("../img/search2k.png", 80px, 20px);
+                @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
                 cursor: pointer;
             }
             &:hover{
