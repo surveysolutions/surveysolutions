@@ -4,6 +4,7 @@
   "description": "A Vue.js project",
   "author": "Survery Solutions",
   "private": true,
+  "types": "./src/types/main.d.ts",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",

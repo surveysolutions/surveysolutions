@@ -76,7 +76,7 @@ console.info("Waiting for dev server")
 
 devMiddleware.waitUntilValid(function () {
   spinner.stop();
-  console.log('> Listening at ' + uri + '\n')
+  console.log('> Ready to serve at http://localhost/headquarters/webinterview \n')
 })
 
 module.exports = app.listen(port, function (err) {
