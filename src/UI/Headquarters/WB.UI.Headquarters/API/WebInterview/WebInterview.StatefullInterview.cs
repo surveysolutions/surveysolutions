@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             return plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var id = parseIdentity(questionIdentity);
+                var id = Identity.Parse(questionIdentity);
 
                 InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
                 InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var id = parseIdentity(questionIdentity);
+                var id = Identity.Parse(questionIdentity);
 
                 InterviewTreeQuestion question = this.currentInterview.GetQuestion(id);
                 InterviewSingleOptionQuestion result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
