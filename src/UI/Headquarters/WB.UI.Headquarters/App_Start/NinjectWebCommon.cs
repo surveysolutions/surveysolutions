@@ -15,6 +15,7 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
@@ -48,6 +49,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
@@ -247,6 +249,16 @@ namespace WB.UI.Headquarters
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
             });
             kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
+            kernel.Bind<JsonSerializer>().ToConstant(JsonSerializer.Create(new JsonSerializerSettings
+            {
+                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver
+                {
+                    AssembliesToInclude =
+                    {
+                        typeof(WebInterview).Assembly,
+                    }
+                }
+            }));
 
             return kernel;
         }
