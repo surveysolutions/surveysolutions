@@ -5,12 +5,12 @@
                 <router-link tag="li" to="/" role="presentation">
                     <a>Start</a>
                 </router-link>
-                <router-link tag="li" to="/prefilled/580eba69f1844f1892147342f568bb0f$1" role="presentation">
+                <router-link tag="li" to="/prefilled" role="presentation">
                     <a>Preffiled</a>
                 </router-link>
             </ul>
         </nav>
-        <main class="details-interview">
+        <main class="web-interview hold-transition">
             <div class="container-fluid">
                 <div class="row">
                     <section class="questionnaire">

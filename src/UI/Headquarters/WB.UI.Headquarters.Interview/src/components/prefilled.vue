@@ -7,6 +7,11 @@
             </div>
             <button type="button" @click="getPrefilledQuestions(interviewId)" class="btn btn-default">Get questions</button>
         </form>
+
+        <br/><br/><br/>
+        <hr/>
+        <br/><br/><br/>
+
         <component v-for="question in prefilledQuestions" v-bind:is="question.EntityType" v-bind:entity="question"></component>
     </div>
 </template>
@@ -20,7 +25,7 @@
         methods: mapActions(["getPrefilledQuestions"]),
         data: () => {
             return {
-                interviewId: "66990b89-1891-4117-b4ff-65da7d933d00"
+                interviewId: "a82cb5a5-1519-40a6-9f40-733dbb749487"
             }
         },
     }

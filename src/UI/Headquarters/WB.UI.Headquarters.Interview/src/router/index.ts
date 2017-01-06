@@ -16,6 +16,6 @@ export default new VueRouter({
     routes: [
         { path: "/", component: Start },
         { path: "/start/:id", component: Interview },
-        { name: "prefilled", path: "/prefilled/:id", component: Prefilled }
+        { name: "prefilled", path: "/prefilled", component: Prefilled }
     ]
 })
