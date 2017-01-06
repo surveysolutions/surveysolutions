@@ -1,5 +1,5 @@
 import * as jQuery from "jquery"
-import { signalrPath } from "./../config"
+import { signalrPath, signalrUrlOverride } from "./../config"
 (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
@@ -30,7 +30,10 @@ export class HubChangedEvent {
 new Promise<any>((res, rej) => {
     $script(signalrPath, () => {
         jQuery.signalR.interview.logging = true;
-        jQuery.signalR.hub.start({ transport: "longPolling" })
+        if (signalrUrlOverride) {
+            jQuery.connection.hub.url = signalrUrlOverride
+        }
+        jQuery.signalR.hub.start({ transport: ["webSockets", "longPolling"] })
             .done(() => {
                 res(jQuery.signalR.interview);
             })

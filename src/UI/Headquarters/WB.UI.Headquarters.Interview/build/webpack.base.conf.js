@@ -9,7 +9,8 @@ var env = process.env.NODE_ENV
 var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
-var currentConfig = process.env.NODE_ENV === 'production' ? config.build : config.dev
+
+var currentConfig = config.current();
 
 module.exports = {
     entry: {
@@ -17,7 +18,7 @@ module.exports = {
     },
     output: {
         path: config.build.assetsRoot,
-        publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
+        publicPath: currentConfig.assetsPublicPath, // process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
         filename: '[name].js'
     },
     resolve: {
