@@ -20,8 +20,8 @@
                 let entity = this.$store.state.entityDetails[this.entityId]
                 if (entity != null) {
                     return {
-                        text: entity.Instructions,
-                        hide: entity.HideInstructions
+                        text: entity.instructions,
+                        hide: entity.hideInstructions
                     }
                 }
 

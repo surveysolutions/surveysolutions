@@ -36,15 +36,44 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             return plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var id = Identity.Create(Guid.Parse(questionIdentity.Replace(">", "").Replace("<", "")), RosterVector.Empty);
+                var id = parseIdentity(questionIdentity);
 
                 InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
                 InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
-                result.Instructions = currentQuestionnaire.GetQuestionInstruction(id.Id);
-                result.HideInstructions = currentQuestionnaire.GetHideInstructions(id.Id);
+                this.PutInstructions(result, id);
                 return result;
             });
         }
+
+        public InterviewSingleOptionQuestion GetSingleOptionQuestion(string questionIdentity)
+        {
+            return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                var id = parseIdentity(questionIdentity);
+
+                InterviewTreeQuestion question = this.currentInterview.GetQuestion(id);
+                InterviewSingleOptionQuestion result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+
+                var options = this.currentInterview.GetTopFilteredOptionsForQuestion(id, null, null, 200);
+                result.Options = options;
+
+                this.PutInstructions(result, id);
+                return result;
+            });
+        }
+
+        private void PutInstructions(GenericQuestion result, Identity id)
+        {
+            result.Instructions = this.currentQuestionnaire.GetQuestionInstruction(id.Id);
+            result.HideInstructions = this.currentQuestionnaire.GetHideInstructions(id.Id);
+        }
+
+        private static Identity parseIdentity(string questionIdentity)
+        {
+            var id = Identity.Create(Guid.Parse(questionIdentity.Replace(">", "").Replace("<", "")), RosterVector.Empty);
+            return id;
+        }
+
 
         private InterviewEntityType GetEntityType(Guid entityId)
         {
