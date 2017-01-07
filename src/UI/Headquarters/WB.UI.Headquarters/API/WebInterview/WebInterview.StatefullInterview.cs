@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -14,7 +12,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public InterviewEntityWithType[] GetPrefilledQuestions()
         {
-            
             return plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 return plainTransactionManager.ExecuteInQueryTransaction(() =>
@@ -73,7 +70,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             var id = Identity.Create(Guid.Parse(questionIdentity.Replace(">", "").Replace("<", "")), RosterVector.Empty);
             return id;
         }
-
 
         private InterviewEntityType GetEntityType(Guid entityId)
         {

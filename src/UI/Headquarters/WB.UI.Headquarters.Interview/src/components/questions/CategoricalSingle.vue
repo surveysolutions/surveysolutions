@@ -26,15 +26,11 @@
 
     export default {
         name: 'CategoricalSingle',
-        mixins: [entityDetails],
-        props: ['entity'],
-        mounted() {
-            this.fetch()
+        data: () => {
+          return {
+            fetchAction: 'fetchSingleOptionQuestion'
+          }
         },
-        methods: {
-            fetch() {
-                this.$store.dispatch('fetchSingleOptionQuestion', this.entity)
-            }
-        }
+        mixins: [entityDetails]
     }
 </script>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,17 +32,16 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IPlainTransactionManager plainTransactionManager;
-
-        private static readonly Dictionary<string, string> connectionIdToInterviewId = new Dictionary<string, string>();
         
-        private string  interviewId => connectionIdToInterviewId[this.Context.ConnectionId];
+        private string CallerInterviewId
+        {
+            get { return this.Clients.Caller.interviewId; }
+            set { this.Clients.Caller.interviewId = value; }
+        }
+        
+        private IStatefulInterview currentInterview => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
-        private IStatefulInterview currentInterview
-            => this.statefulInterviewRepository.Get(this.interviewId);
-
-        private IQuestionnaire currentQuestionnaire
-            => this.questionnaireRepository.GetQuestionnaire(this.currentInterview.QuestionnaireIdentity,
-                this.currentInterview.Language);
+        private IQuestionnaire currentQuestionnaire => this.questionnaireRepository.GetQuestionnaire(this.currentInterview.QuestionnaireIdentity, this.currentInterview.Language);
 
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository, 
@@ -76,13 +76,12 @@ namespace WB.UI.Headquarters.API.WebInterview
                 interviewer.Supervisor.Id);
 
             this.commandService.Execute(createInterviewOnClientCommand);
-
             this.StartInterview(createInterviewOnClientCommand.Id.FormatGuid());
         }
 
         public void StartInterview(string interviewId)
         {
-            connectionIdToInterviewId[this.Context.ConnectionId] = interviewId;
+            this.CallerInterviewId = interviewId;
             this.eventRegistry.Subscribe(this, interviewId);
             this.Groups.Add(this.Context.ConnectionId, interviewId);
             this.Clients.Group(interviewId).startInterview(interviewId);
@@ -91,10 +90,8 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            connectionIdToInterviewId.Remove(this.Context.ConnectionId);
             // statefull interview can be removed from cache here
             this.eventRegistry.Unsubscribe(this);
-
             return base.OnDisconnected(stopCalled);
         }
     }
