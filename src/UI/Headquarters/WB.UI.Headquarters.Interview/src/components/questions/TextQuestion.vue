@@ -1,7 +1,7 @@
 <template>
     <div class="question" v-if="$me">
         <div class="question-editor text-question">
-            <wb-title  />
+            <wb-title />
             <wb-instructions />
             <div class="question-unit">
                 <div class="options-group">
@@ -24,13 +24,9 @@
     export default {
         name: 'TextQuestion',
         mixins: [entityDetails],
-        props: ['entity'],
-        beforeMount() {
-            this.fetch()
-        },
-        methods: {
-            fetch() {
-                this.$store.dispatch('fetchTextQuestion', this.entity)
+        data: () => {
+            return {
+                fetchAction: 'fetchTextQuestion'
             }
         }
     }

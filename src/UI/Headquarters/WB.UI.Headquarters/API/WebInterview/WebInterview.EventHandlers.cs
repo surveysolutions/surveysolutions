@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .ToArray();
 
             if (updatedEntities.Any())
-                this.Clients.Group(this.interviewId).updateTitlesWithSubstitutions(updatedEntities);
+                this.Clients.Group(this.CallerInterviewId).updateTitlesWithSubstitutions(updatedEntities);
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .ToArray();
 
             if (updatedRosterTitles.Any())
-                this.Clients.Group(this.interviewId).updateRosterTitles(updatedRosterTitles);
+                this.Clients.Group(this.CallerInterviewId).updateRosterTitles(updatedRosterTitles);
         }
     }
 }
