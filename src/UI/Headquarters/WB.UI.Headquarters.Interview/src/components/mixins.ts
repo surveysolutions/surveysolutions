@@ -1,6 +1,6 @@
 export const entityPartial = {
     computed: {
-        $me () {
+        $me() {
             // if entity defined in props - use props
             if (this.entity != null) {
                 return this.$store.state.entityDetails[this.entity.identity]
@@ -19,11 +19,20 @@ export const entityPartial = {
 
 export const entityDetails = {
     computed: {
-        $me () {
+        $me() {
             // if entity defined in props - use props
             if (this.entity != null) {
                 return this.$store.state.entityDetails[this.entity.identity]
             }
+        }
+    },
+    props: ["entity"],
+    beforeMount() {
+        this.fetch()
+    },
+    methods: {
+        fetch() {
+            this.$store.dispatch(this.fetchAction, this.entity)
         }
     }
 }

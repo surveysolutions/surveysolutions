@@ -64,6 +64,8 @@ Images and fonts served from 'old' `Dependencies` folder
 
 ### Designer mode
 
+Can be used to apply changes on web interview app without need of bringing app entire Headquarters app.
+
 ```
 npm run design
 ```
