@@ -32,7 +32,9 @@ export const entityDetails = {
     },
     methods: {
         fetch() {
-            this.$store.dispatch(this.fetchAction, this.entity)
+            if (this.fetchAction) {
+                this.$store.dispatch(this.fetchAction, this.entity)
+            }
         }
     }
 }

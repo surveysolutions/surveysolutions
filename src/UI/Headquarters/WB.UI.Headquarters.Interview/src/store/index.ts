@@ -1,42 +1,31 @@
 import * as Vue from "vue"
 import * as Vuex from "vuex"
-import { hub, HubChangedEvent } from "../services"
+import { apiCaller } from "../api"
 
 const store: any = new Vuex.Store({
     state: {
         prefilledQuestions: [],
         entityDetails: {},
-        hub: {
-            connected: false,
-            display: ""
-        },
         interview: {
             id: null
         }
     },
     actions: {
-        fetchTextQuestion({commit}, entity) {
-            hub.instance.server.getTextQuestion(entity.identity).done(entityDetails => {
-                commit("SET_TEXTQUESTION_DETAILS", entityDetails);
-            })
+        async fetchTextQuestion({commit}, entity) {
+            const entityDetails = await apiCaller(api => api.getTextQuestion(entity.identity))
+            commit("SET_TEXTQUESTION_DETAILS", entityDetails);
         },
-        fetchSingleOptionQuestion({commit}, entity) {
-            hub.instance.server.getSingleOptionQuestion(entity.identity).done(entityDetails => {
-                commit("SET_SINGLEOPTION_DETAILS", entityDetails);
-            })
+        async fetchSingleOptionQuestion({ commit }, entity) {
+            const entityDetails = await apiCaller(api => api.getSingleOptionQuestion(entity.identity))
+            commit("SET_SINGLEOPTION_DETAILS", entityDetails);
         },
-        getPrefilledQuestions({commit}, interviewId) {
-            hub.instance.server.startInterview(interviewId).done(() => {
-                hub.instance.server.getPrefilledQuestions().done(data => {
-                    commit("SET_PREFILLED_QUSTIONS", data)
-                });
-            })
+        async getPrefilledQuestions({ commit }, interviewId) {
+            await apiCaller(api => api.startInterview(interviewId))
+            const data = await apiCaller(api => api.getPrefilledQuestions())
+            commit("SET_PREFILLED_QUESTIONS", data)
         },
-        InterviewMount({commit}, {id}) {
+        InterviewMount({ commit }, { id }) {
             commit("SET_INTERVIEW", id)
-        },
-        HubStateChanged({commit}, hubInfo: HubChangedEvent) {
-            commit("HUB_STATE_CHANGED", hubInfo)
         }
     },
     getters: {
@@ -48,12 +37,8 @@ const store: any = new Vuex.Store({
         SET_INTERVIEW(state, id) {
             state.interview.id = id;
         },
-        SET_PREFILLED_QUSTIONS(state, questions) {
+        SET_PREFILLED_QUESTIONS(state, questions) {
             state.prefilledQuestions = questions
-        },
-        HUB_STATE_CHANGED(state, hub: HubChangedEvent) {
-            state.hub.connected = hub.state.newState === 1
-            state.hub.display = hub.title
         },
         SET_TEXTQUESTION_DETAILS(state, entity) {
             Vue.set(state.entityDetails, entity.questionIdentity, entity)
