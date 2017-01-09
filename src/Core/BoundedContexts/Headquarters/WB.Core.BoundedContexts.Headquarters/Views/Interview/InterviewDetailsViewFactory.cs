@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
@@ -31,10 +29,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IAttachmentContentService attachmentContentService;
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IPlainStorageAccessor<UserDocument> userStore,
@@ -42,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IQuestionnaireStorage questionnaireStorage,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService,
@@ -54,11 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.questionnaireStorage = questionnaireStorage;
-            this.eventSourcedRepository = eventSourcedRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.attachmentContentService = attachmentContentService;
             this.translationStorage = translationStorage;
             this.questionnaireTranslator = questionnaireTranslator;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId,
@@ -170,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private void FilterCategoricalQuestionOptions(Guid interviewId, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
         {
-            var interviewAggregate = (Interview) this.eventSourcedRepository.GetLatest(typeof(Interview), interviewId);
+            var interviewAggregate = (Interview) this.statefulInterviewRepository.Get(interviewId.ToString());
 
             var linkedQuestions = questionViews.Where(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue).ToList();
             this.UpdateOptionsForLinkedQuestions(interviewAggregate, questionnaire, linkedQuestions);
