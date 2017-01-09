@@ -89,8 +89,7 @@ namespace WB.Tests.Unit.TestFactories
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ??
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
             if (shouldBeInitialized)

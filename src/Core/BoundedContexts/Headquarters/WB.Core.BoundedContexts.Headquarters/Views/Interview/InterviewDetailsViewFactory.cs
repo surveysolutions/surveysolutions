@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -41,7 +42,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IInterviewPackagesService incomingSyncPackagesQueue,
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IEventSourcedAggregateRootRepository eventSourcedRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService,
             ITranslationStorage translationStorage,
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private void FilterCategoricalQuestionOptions(Guid interviewId, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
         {
-            var interviewAggregate = (Interview) this.statefulInterviewRepository.Get(interviewId.ToString());
+            var interviewAggregate = (StatefulInterview) this.statefulInterviewRepository.Get(interviewId.ToString());
 
             var linkedQuestions = questionViews.Where(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue).ToList();
             this.UpdateOptionsForLinkedQuestions(interviewAggregate, questionnaire, linkedQuestions);

@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.TestFactories
             IChangeStatusFactory changeStatusFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IEventSourcedAggregateRootRepository eventSourcedRepository = null,
+            IStatefulInterviewRepository statefulInterviewRepository = null,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore = null,
             IAttachmentContentService attachmentContentService = null)
             => new InterviewDetailsViewFactory(interviewStore ?? new TestInMemoryWriter<InterviewData>(),
@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.TestFactories
                 changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                eventSourcedRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 Mock.Of<ITranslationStorage>(),

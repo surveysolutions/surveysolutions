@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
 {
     internal class when_getting_interview_details_and_questionnaire_has_filtered_categorical_question : InterviewDetailsViewFactoryTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var singleOptionQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var multioptionQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -68,9 +69,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
             };
 
             var expressionState = new Mock<ILatestInterviewExpressionState>();
+            expressionState.Setup(x => x.Clone()).Returns(expressionState.Object);
+            expressionState.Setup(x => x.GetStructuralChanges()).Returns(new StructuralChanges());
             expressionState
                 .Setup(x => x.FilterOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<IEnumerable<CategoricalOption>>()))
                 .Returns((Identity identity, IEnumerable<CategoricalOption> options) => options.Where(x => x.Value != 1));
+            
 
             viewfactory = Setup.InterviewDetailsViewFactory(
                 interviewId, interviewDetailsView, questionnaire, expressionState.Object);
