@@ -5,8 +5,8 @@ Vue.use(Vuex)
 
 import "./components/questions"
 import "./components/questions/parts"
+
 import router from "./router"
-import "./services"
 import store from "./store"
 
 import App from "./App"
