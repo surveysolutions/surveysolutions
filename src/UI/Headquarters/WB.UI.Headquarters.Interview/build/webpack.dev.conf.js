@@ -37,6 +37,9 @@ module.exports = merge(baseWebpackConfig, {
       inject: true
     }),
     new FriendlyErrors(),
-    new WriteFiles({log: false})
+    new WriteFiles({
+        log: false,
+        test: /(\.cshtml)|(app.js)$/ // we don't need anything other that index.cshtml and app.js for dev env to work
+    })
   ]
 })
