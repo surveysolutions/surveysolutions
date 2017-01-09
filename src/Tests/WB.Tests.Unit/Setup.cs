@@ -247,12 +247,13 @@ namespace WB.Tests.Unit
 
         public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
             Guid interviewId, InterviewDetailsView interviewDetailsView,
-            QuestionnaireDocument questionnaireDocument, ILatestInterviewExpressionState interviewExpressionState)
+            QuestionnaireDocument questionnaireDocument, 
+            ILatestInterviewExpressionState interviewExpressionState)
         {
             var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
 
-            var interview = Create.AggregateRoot.Interview(
-                expressionProcessorStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
+            var interview = Create.AggregateRoot.StatefulInterview(
+                interviewExpressionStatePrototypeProvider: Stub<IInterviewExpressionStatePrototypeProvider>.Returning(interviewExpressionState),
                 questionnaireRepository: questionnaireRepository);
 
             var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
@@ -260,7 +261,7 @@ namespace WB.Tests.Unit
             return Create.Service.InterviewDetailsViewFactory(
                 questionnaireStorage: questionnaireRepository,
                 interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
-                eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
+                statefulInterviewRepository: Stub<IStatefulInterviewRepository>.Returning<IStatefulInterview>(interview),
                 merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
         }
 
