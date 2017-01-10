@@ -10,7 +10,7 @@
 }
 
 @{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
-@{ bool isAmin = User.IsInRole(UserRoles.Administrator.ToString()); }
+@{ bool isAdmin = User.IsInRole(UserRoles.Administrator.ToString()); }
 
 
 @section scripts
@@ -39,98 +39,93 @@
     <script type="text/javascript">
         'use strict';
 
-        Supervisor.VM.InterviewersNew = function (listViewUrl, commandExecutionUrl, interviewersPageUrl, supervisorsUrl, notifier) {
+        @if (TempData.ContainsKey(Alerts.SUCCESS))
+        {
+            <text> setTimeout(function() { $('.alert-success').hide(); }, 5000);</text>
+        }
+
+        Supervisor.VM.InterviewersNew = function(listViewUrl,
+            commandExecutionUrl,
+            interviewersPageUrl,
+            supervisorsUrl,
+            notifier) {
             Supervisor.VM.InterviewersNew.superclass.constructor.apply(this, [commandExecutionUrl]);
 
-                var archiveUserCommad = "ArchiveUserCommad";
-                var unArchiveUserCommad = "UnarchiveUserCommand";
-                var self = this;
+            var archiveUserCommad = "ArchiveUserCommad";
+            var unArchiveUserCommad = "UnarchiveUserCommand";
+            var self = this;
 
-                self.SupervisorUrl = supervisorsUrl;
-                self.IsSupervisorsLoading = ko.observable(false);
-                self.Supervisors = function(query, sync, pageSize) {
-                    self.IsSupervisorsLoading(true);
-                    self.SendRequest(self.SupervisorUrl,
-                        { query: query, pageSize: pageSize, showLocked: true },
-                        function(response) {
-                            sync(response.Users, response.TotalCountByQuery);
-                        },
-                        true,
-                        true,
-                        function() {
-                            self.IsSupervisorsLoading(false);
-                        });
-                }
-                self.SelectedSupervisor = ko.observable();
+            self.SupervisorUrl = supervisorsUrl;
+            self.IsSupervisorsLoading = ko.observable(false);
+            self.Supervisors = function(query, sync, pageSize) {
+                self.IsSupervisorsLoading(true);
+                self.SendRequest(self.SupervisorUrl,
+                    { query: query, pageSize: pageSize, showLocked: true },
+                    function(response) {
+                        sync(response.Users, response.TotalCountByQuery);
+                    },
+                    true,
+                    true,
+                    function() {
+                        self.IsSupervisorsLoading(false);
+                    });
+            }
+            self.SelectedSupervisor = ko.observable();
 
-                self.Archived = ko.observable(false);
-                self.ConnectedToDevice = ko.observable('');
+            self.Archived = ko.observable(false);
+            self.ConnectedToDevice = ko.observable('');
 
-                self.SelectedItems = ko.observableArray([]);
+            self.SelectedItems = ko.observableArray([]);
 
-                self.unarchiveInterviewers = function () {
-                    notifier.confirm('Confirmation Needed', "@Archived.UnarchiveInterviewerWarning /r/n @Pages.Interviewers_ArchiveInterviewersConfirm",
-                        // confirm
-                        function () {
-                            var commands = ko.utils.arrayMap(self.SelectedItems(),
-                                function (rawItem) {
-                                    return ko.toJSON({ userId: rawItem });
-                                });
 
-                            var command = {
-                                type: unArchiveUserCommad,
-                                commands: commands
-                            };
-                            self.SendCommands(command,
-                                function () {
-                                    setTimeout(function() {
-                                        self.updater();
-                                    }, 200);
-                                });
-                        },
-                        // cancel
-                        function () { });
+            self.getConfirmAndSendCommand = function(confirmMessage, commandName) {
+                notifier.confirm("@Pages.ConfirmationNeededTitle", confirmMessage,
+                    // confirm
+                    function() {
+                        var commands = ko.utils.arrayMap(self.SelectedItems(),
+                            function(rawItem) {
+                                return ko.toJSON({ userId: rawItem });
+                            });
 
-                };
+                        var command = {
+                            type: commandName,
+                            commands: commands
+                        };
+                        self.SendCommands(command,
+                            function() {
+                                setTimeout(function() {
+                                    self.updater();
+                                },
+                                    200);
+                            });
+                    },
+                    // cancel
+                    function() {});
+            }
 
-                self.archiveInterviewers = function () {
-                    notifier.confirm('Confirmation Needed', "@Pages.Interviewers_ArchiveInterviewersConfirmMessage",
-                        // confirm
-                        function () {
-                            var commands = ko.utils.arrayMap(self.SelectedItems(),
-                                function (rawItem) {
-                                    return ko.toJSON({ userId: rawItem });
-                                });
 
-                            var command = {
-                                type: archiveUserCommad,
-                                commands: commands
-                            };
-                            self.SendCommands(command,
-                                function () {
-                                    setTimeout(function() {
-                                        self.updater();
-                                    }, 200);
-                                });
-                        },
-                        // cancel
-                        function () { });
-                }
-
-                self.updater = function() {};
-
-                self.load = function(updater) {
-                    self.updater = updater;
-
-                    self.SelectedSupervisor.subscribe(updater);
-                    self.Archived.subscribe(updater);
-                    self.ConnectedToDevice.subscribe(updater);
-                };
-
-                self.IsNothingSelected = ko.computed(function() {
-                    return $(self.SelectedItems()).length === 0;
-                });
+            self.unarchiveInterviewers = function() {
+                self.getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning /r/n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
             };
+
+            self.archiveInterviewers = function() {
+                self.getConfirmAndSendCommand("@Pages.Interviewers_ArchiveInterviewersConfirmMessage", archiveUserCommad);
+            }
+
+            self.updater = function() {};
+
+            self.load = function(updater) {
+                self.updater = updater;
+
+                self.SelectedSupervisor.subscribe(updater);
+                self.Archived.subscribe(updater);
+                self.ConnectedToDevice.subscribe(updater);
+            };
+
+            self.IsNothingSelected = ko.computed(function() {
+                return $(self.SelectedItems()).length === 0;
+            });
+        };
 
         Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewersNew, Supervisor.VM.BasePage);
 
@@ -165,11 +160,8 @@
                         function(e) {
                             if (e.target !== this)
                                 return;
-                            if ($(this).hasClass("active")) {
-                                $(this).removeClass("active");
-                            } else {
-                                $(this).addClass("active");
-                            }
+                            $(this).toggleClass("active");
+
                             $(".column-questionnaire-title").toggleClass("padding-left-slide");
                         });
             };
@@ -207,19 +199,18 @@
                     columns: [
                         {
                             "orderable": false,
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 return "<input class=\"checkbox-filter\" id=\"cbx_" +
-                                       row.userId +
-                                       "\" value=\"" +
-                                       row.userId +
-                                       "\" type=\"checkbox\"> <label for=\"cbx_" +
-                                       row.userId +
-                                       "\"><span class=\"tick\"></span></label> ";
+                                    row.userId +
+                                    "\" value=\"" +
+                                    row.userId +
+                                    "\" type=\"checkbox\"> <label for=\"cbx_" +
+                                    row.userId +
+                                    "\"><span class=\"tick\"></span></label> ";
                             },
                             "class": "checkbox-cell",
-                            "visible" : "@isAmin"
+                            "visible": @(isAdmin ? "true" : "false")
                         },
-
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
@@ -229,24 +220,24 @@
                         },
                         {
                             data: "creationDate",
-                            name: "CreationDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                            name: "CreationDate", // case-sensitive! 
                             "class": "changed-recently"
                         },
                         {
                             data: "email",
-                            name: "Email",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "Email",// case-sensitive!
                             "class": "changed-recently"
                         },
                         {
                             "orderable": false,
                             data: "supervisorName",
-                            name: "SupervisorName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "SupervisorName",// case-sensitive! 
                             "class": "changed-recently"
                         },
                         {
                             "orderable": false,
                             data: "deviceId",
-                            name: "DeviceId", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "DeviceId",// case-sensitive! 
                             render: function(data, type, row) {
                                 return (row.deviceId === null ? "No" : "Yes");
                             },
@@ -323,7 +314,7 @@
                 </div>
 
                 <div class="filters-container">
-                    <h4>Filters:</h4> 
+                    <h4>@Pages.FilterTitle:</h4> 
                     @if (isVisibleSupervisorColumn)
                     {
                         <div class="block-filter">
@@ -358,6 +349,7 @@
             </aside>
             
             <div class="main-information">
+                @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <div>
                         <h1>@Pages.Interviewers_Header</h1>
@@ -369,28 +361,28 @@
                         }
                     </div>
                 </div>
-                    <table id="interviewers" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
-                        <thead>
-                        <tr>
-                            <th class="sorting_disabled checkbox-cell">
-                                <input class="double-checkbox" id="check-all" type="checkbox">
-                                <label for="check-all">
-                                    <span class="tick"></span>
-                                </label>
-                            </th>
-                            <th>@Pages.Interviewers_UserNameTitle</th>
-                            <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
-                            <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
-                            @if (isVisibleSupervisorColumn)
-                            {
-                                <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
-                            }
-                            <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
-                        </tr>
-                        </thead>
-                    </table>
-                
-                @if (isAmin)
+                <table id="interviewers" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
+                    <thead>
+                    <tr>
+                        <th class="sorting_disabled checkbox-cell">
+                            <input class="double-checkbox" id="check-all" type="checkbox">
+                            <label for="check-all">
+                                <span class="tick"></span>
+                            </label>
+                        </th>
+                        <th>@Pages.Interviewers_UserNameTitle</th>
+                        <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
+                        <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
+                        @if (isVisibleSupervisorColumn)
+                        {
+                            <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
+                        }
+                        <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                    </tr>
+                    </thead>
+                </table>
+
+                @if (isAdmin)
                 {
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
                         <div class="panel-body">
@@ -398,8 +390,8 @@
                             <label for="q1az">
                                 <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' interview(s) selected'"></span> 
                             </label>
-                                <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
-                                <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
+                            <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
+                            <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
                         </div>
                     </div>
                 }

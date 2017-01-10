@@ -948,7 +948,6 @@
     <Content Include="Views\Interview\Troubleshooting.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
-    <Content Include="Views\Interviewers\IndexOld.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
