@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string QuestionnaireTitle { get; set; }
         public long QuestionnaireVersion { get; set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public string WebInterviewLink { get; set; }
         public Guid? ResponsibleId { get; set; }
     }
 }

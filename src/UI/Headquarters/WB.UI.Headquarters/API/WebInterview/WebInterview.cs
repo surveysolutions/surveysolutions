@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         
         private string CallerInterviewId
         {
@@ -52,7 +54,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             ILiteEventRegistry eventRegistry,
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
-            IPlainTransactionManager plainTransactionManager)
+            IPlainTransactionManager plainTransactionManager, 
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandDeserializer = commandDeserializer;
@@ -63,6 +66,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
             this.plainTransactionManager = plainTransactionManager;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+        }
+
+        public object QuestionnaireDetails(string questionnaireId)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            return new
+            {
+                questionnaireBrowseItem.Title
+            };
         }
 
         public void CreateInterview(string questionnaireId, string interviewerName)
@@ -86,8 +100,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.Groups.Add(this.Context.ConnectionId, interviewId);
             this.Clients.Group(interviewId).startInterview(interviewId);
         }
-
-
+        
         public override Task OnDisconnected(bool stopCalled)
         {
             // statefull interview can be removed from cache here
