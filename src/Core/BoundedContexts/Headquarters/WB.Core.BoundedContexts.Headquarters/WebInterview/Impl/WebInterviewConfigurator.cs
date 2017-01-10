@@ -15,19 +15,19 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             this.configs = configs;
         }
 
-        public void Start(QuestionnaireIdentity questionnaire, Guid responsible)
+        public void Start(QuestionnaireIdentity questionnaireId, Guid responsible)
         {
-            var webInterviewConfig = this.configs.GetById(questionnaire.ToString());
+            var webInterviewConfig = this.configs.GetById(questionnaireId.ToString());
             if (webInterviewConfig == null)
             {
                 webInterviewConfig = new WebInterviewConfig();
-                webInterviewConfig.QuestionnaireId = questionnaire;
+                webInterviewConfig.QuestionnaireId = questionnaireId;
             }
 
             webInterviewConfig.Started = true;
             webInterviewConfig.ResponsibleId = responsible;
 
-            this.configs.Store(webInterviewConfig, questionnaire.QuestionnaireId.ToString());
+            this.configs.Store(webInterviewConfig, questionnaireId.ToString());
         }
     }
 }

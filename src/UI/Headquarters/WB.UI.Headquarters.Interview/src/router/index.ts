@@ -14,7 +14,7 @@ export default new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
-        { path: "/", component: Start },
+        { path: "/:id", component: Start },
         { path: "/start/:id", component: Interview },
         { name: "prefilled", path: "/prefilled", component: Prefilled }
     ]

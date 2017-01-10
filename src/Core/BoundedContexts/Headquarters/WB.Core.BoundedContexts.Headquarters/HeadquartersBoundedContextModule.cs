@@ -381,6 +381,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
 
             this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
+            this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
         }
     }
 }

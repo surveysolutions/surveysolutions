@@ -8,6 +8,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IPlainTransactionManager plainTransactionManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private IWebInterviewConfigProvider webInterviewConfigProvider;
         
         private string CallerInterviewId
         {
@@ -55,7 +57,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
             IPlainTransactionManager plainTransactionManager, 
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IWebInterviewConfigProvider webInterviewConfigProvider)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandDeserializer = commandDeserializer;
@@ -67,6 +70,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.questionnaireRepository = questionnaireRepository;
             this.plainTransactionManager = plainTransactionManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
         public object QuestionnaireDetails(string questionnaireId)
@@ -79,11 +83,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
         }
 
-        public void CreateInterview(string questionnaireId, string interviewerName)
+        public void CreateInterview(string questionnaireId)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
 
-            var interviewer = this.usersRepository.Load(new UserViewInputModel(UserName: interviewerName, UserEmail: null));
+            var webInterviewConfig = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            if (!webInterviewConfig.Started)
+            {
+                throw new InvalidOperationException("Web interview is not started for this questionnaire");
+            }
+            var responsibleId = webInterviewConfig.ResponsibleId;
+            var interviewer = this.usersRepository.Load(new UserViewInputModel(publicKey: responsibleId));
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(Guid.NewGuid(),
                 interviewer.PublicKey, questionnaireIdentity, DateTime.UtcNow,
