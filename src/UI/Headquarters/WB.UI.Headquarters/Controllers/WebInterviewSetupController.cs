@@ -85,7 +85,8 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
-            model.QuestionnaireIdentity = QuestionnaireIdentity.Parse(id);
+
+            model.WebInterviewLink = Url.Action("Index", "WebInterview", null, Request.Url.Scheme) + "/" + QuestionnaireIdentity.Parse(id);
 
             return this.View(model);
         }
