@@ -98,10 +98,12 @@
                     </text>
                     }
                 }
-                items["webSetup"] = {
-                    name: "@Dashboard.WebInterviewSetup",
-                    callback: webInterviewSetup
-                };
+                if (!selectedRow.disabled && selectedRow.allowCensusMode) {
+                    items["webSetup"] = {
+                        name: "@Dashboard.WebInterviewSetup",
+                        callback: webInterviewSetup
+                    };
+                }
                 @if (User.IsInRole("Administrator"))
                 {
                 <text>
