@@ -15,7 +15,7 @@ export default new VueRouter({
     mode: "history",
     routes: [
         { path: "/:id", component: Start },
-        { path: "/start/:id", component: Interview },
-        { name: "prefilled", path: "/prefilled", component: Prefilled }
+        // { path: "/start/:id", component: Interview },
+        { name: "prefilled", path: "/prefilled/:id", component: Prefilled }
     ]
 })
