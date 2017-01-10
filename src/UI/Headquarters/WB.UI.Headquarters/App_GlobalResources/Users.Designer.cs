@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date when the account was created.
+        /// </summary>
+        internal static string AccountCreationDateTooltip {
+            get {
+                return ResourceManager.GetString("AccountCreationDateTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add API User.
         /// </summary>
         internal static string AddAPIUser {
@@ -327,15 +336,6 @@ namespace Resources {
         internal static string Observer {
             get {
                 return ResourceManager.GetString("Observer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date when the observer account was created.
-        /// </summary>
-        internal static string ObserverAccountCreationDateTooltip {
-            get {
-                return ResourceManager.GetString("ObserverAccountCreationDateTooltip", resourceCulture);
             }
         }
         

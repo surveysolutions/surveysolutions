@@ -590,6 +590,7 @@
     <EmbeddedResource Include="Resources\DataTables.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
