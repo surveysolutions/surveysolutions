@@ -622,6 +622,12 @@
     <Content Include="..\WB.UI.Headquarters.Interview\_IndexTemplate.cshtml">
       <Link>Views\WebInterview\_IndexTemplate.cshtml</Link>
     </Content>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewSetup.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.ru.resx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -987,6 +993,8 @@
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\SurveySetup\IndexOld.cshtml" />
     <Content Include="Views\Interviewers\Index.cshtml" />
+    <Content Include="Views\WebInterviewSetup\Start.cshtml" />
+    <Content Include="Views\WebInterviewSetup\Started.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1449,6 +1457,7 @@
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
+    <Compile Include="Controllers\WebInterviewSetupController.cs" />
     <Compile Include="FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\HttpStatusException.cs" />
@@ -1584,6 +1593,7 @@
     <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
     <Compile Include="Models\WebInterview\InterviewTextQuestion.cs" />
+    <Compile Include="Models\WebInterview\SetupModel.cs" />
     <Compile Include="Models\WebInterview\WebInterviewAutoMapProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
@@ -1660,6 +1670,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\WebInterviewSetup.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IInterviewImportService.cs" />

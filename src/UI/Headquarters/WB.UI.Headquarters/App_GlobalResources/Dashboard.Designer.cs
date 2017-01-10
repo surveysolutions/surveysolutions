@@ -275,5 +275,14 @@ namespace Resources {
                 return ResourceManager.GetString("Version", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web interview setup.
+        /// </summary>
+        internal static string WebInterviewSetup {
+            get {
+                return ResourceManager.GetString("WebInterviewSetup", resourceCulture);
+            }
+        }
     }
 }

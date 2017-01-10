@@ -52,5 +52,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.GlobalInfo.GetCurrentUser().Id);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            return this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query, onlyActive: true);
+        }
     }
 }

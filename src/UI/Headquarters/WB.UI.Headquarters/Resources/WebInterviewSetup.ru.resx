@@ -117,79 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllData" xml:space="preserve">
-    <value>All data</value>
+  <data name="BackToQuestionnaires" xml:space="preserve">
+    <value>Назад к опросникам</value>
   </data>
-  <data name="AllDataSpss" xml:space="preserve">
-    <value>All data Spss</value>
+  <data name="Done" xml:space="preserve">
+    <value>Завершено</value>
   </data>
-  <data name="AllDataStata" xml:space="preserve">
-    <value>All data Stata</value>
+  <data name="SelectInterviwer" xml:space="preserve">
+    <value>Выберите интервьюера</value>
   </data>
-  <data name="ApprovedData" xml:space="preserve">
-    <value>Approved data</value>
+  <data name="Start" xml:space="preserve">
+    <value>Начать</value>
   </data>
-  <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>Approved data Spss</value>
+  <data name="Started_Title" xml:space="preserve">
+    <value>Web интервью начато</value>
   </data>
-  <data name="ApprovedDataStata" xml:space="preserve">
-    <value>Approved data Stata</value>
+  <data name="StartInfo" xml:space="preserve">
+    <value>Начать web интервью для {0}</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Batch upload</value>
+  <data name="WebInterviewSetup_Description" xml:space="preserve">
+    <value>Чтоб начать web интервью выберите интервьюера</value>
   </data>
-  <data name="BinaryData" xml:space="preserve">
-    <value>Binary data</value>
+  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+    <value>Настройка web интервью</value>
   </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
+  <data name="WebInterviewSetup_Title" xml:space="preserve">
+    <value>Настройка web интервью</value>
   </data>
-  <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>Clone questionnaire</value>
+  <data name="WebInterviewStarted" xml:space="preserve">
+    <value>Web интервью для {0} начато</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation Date</value>
+  <data name="WebLinkTitle" xml:space="preserve">
+    <value>Используйте эту ссылку чтоб начать интервью</value>
   </data>
-  <data name="History" xml:space="preserve">
-    <value>History</value>
-  </data>
-  <data name="ImportTemplate" xml:space="preserve">
-    <value>Import template</value>
-  </data>
-  <data name="LastEntryDate" xml:space="preserve">
-    <value>Last Entry Date</value>
-  </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>New interview</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="ImportDate" xml:space="preserve">
-    <value>Import date</value>
-  </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
-  </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>Delete questionnaire</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. Click Import Template  button to load a questionnaire from Designer</value>
-  </data>
-  <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Click on a questionnaire from the list to create interview assignments.</value>
-  </data>
-  <data name="WebInterviewSetup" xml:space="preserve">
-    <value>Web interview setup</value>
+  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+    <value>Папка, которая содержит веб-сайт, имеет долгий путь. Пожалуйста переместите сайт выше.</value>
   </data>
 </root>

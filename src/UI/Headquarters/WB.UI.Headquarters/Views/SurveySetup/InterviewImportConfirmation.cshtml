@@ -8,7 +8,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/js/batch-upload-start-interview-creation")
+    @Scripts.Render("~/js/responsibles-selector")
     <script type="text/javascript">
         var StartInterviewCreationModel = function (ajax) {
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
