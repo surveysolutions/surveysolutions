@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
         }
 
-        public void CreateInterview(string questionnaireId)
+        public string CreateInterview(string questionnaireId)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
 
@@ -95,12 +95,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             var responsibleId = webInterviewConfig.ResponsibleId;
             var interviewer = this.usersRepository.Load(new UserViewInputModel(publicKey: responsibleId));
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(Guid.NewGuid(),
+            var interviewId = Guid.NewGuid();
+            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, questionnaireIdentity, DateTime.UtcNow,
                 interviewer.Supervisor.Id);
 
             this.commandService.Execute(createInterviewOnClientCommand);
             this.StartInterview(createInterviewOnClientCommand.Id.FormatGuid());
+            return interviewId.FormatGuid();
         }
 
         public void StartInterview(string interviewId)

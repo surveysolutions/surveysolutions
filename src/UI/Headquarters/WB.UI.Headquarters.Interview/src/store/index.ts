@@ -1,6 +1,8 @@
 import * as Vue from "vue"
 import * as Vuex from "vuex"
+
 import { apiCaller } from "../api"
+import router from "./../router"
 
 const store: any = new Vuex.Store({
     state: {
@@ -18,7 +20,9 @@ const store: any = new Vuex.Store({
             commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo);
         },
         async startInterview({commit}, questionnaireId: string) {
-            const interviewId = await apiCaller<string>(api => api.createInterview(questionnaireId));
+            const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string;
+            const loc = { name: "prefilled", params: { id: interviewId } };
+            router.push(loc)
         },
         async fetchTextQuestion({commit}, entity) {
             const entityDetails = await apiCaller(api => api.getTextQuestion(entity.identity))
@@ -35,11 +39,6 @@ const store: any = new Vuex.Store({
         },
         InterviewMount({ commit }, { id }) {
             commit("SET_INTERVIEW", id)
-        }
-    },
-    getters: {
-        prefilledQuestions: state => {
-            return state.prefilledQuestions;
         }
     },
     mutations: {
