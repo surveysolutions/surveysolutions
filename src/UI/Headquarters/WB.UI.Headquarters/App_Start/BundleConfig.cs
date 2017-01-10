@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/searchHighlight.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/js/batch-upload-start-interview-creation").Include(
+            bundles.Add(new ScriptBundle("~/js/responsibles-selector").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
                 "~/Scripts/knockout/ko.typeahead.js",

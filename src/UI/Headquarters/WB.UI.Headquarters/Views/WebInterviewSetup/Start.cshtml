@@ -1,0 +1,100 @@
+﻿@model WB.UI.Headquarters.Models.WebInterview.SetupModel
+@{
+    ViewBag.Title = WebInterviewSetup.WebInterviewSetup_Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/responsibles-selector")
+    <script type="text/javascript">
+        var StartWebInterviewModel = function (ajax) {
+            var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AllInterviewers" })';
+
+            var self = this;
+
+            self.isResponsiblesLoading = ko.observable(false);
+            self.responsibles = function (query, sync, pageSize) {
+                self.isResponsiblesLoading(true);
+                ajax.sendRequest($responsiblesUrl, "get", { query: query, pageSize: pageSize }, true,
+                    // onSuccess
+                    function (response) {
+                        sync(response.Users, response.TotalCountByQuery);
+                    },
+                    // onDone
+                    function () {
+                        self.isResponsiblesLoading(false);
+                    });
+            };
+
+            self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
+
+            self.selectedResponsibleId = ko.computed(function () {
+                return _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId;
+            });
+
+            self.isResponsibleSelected = ko.computed(function () {
+                return !_.isUndefined(self.selectedResponsible());
+            });
+        };
+
+        $(function () {
+            var model = new StartWebInterviewModel(new Ajax(new Notifier()));
+            ko.applyBindings(model);
+        });
+    </script>
+}
+
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li>
+                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")
+                    </li>
+                </ol>
+                <h1>@WebInterviewSetup.WebInterviewSetup_PageHeader</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <h3>
+                    @string.Format(WebInterviewSetup.StartInfo, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.QuestionnaireVersion))
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-10 info-block">
+                <p>@WebInterviewSetup.WebInterviewSetup_Description</p>
+            </div>
+        </div>
+        <form action="@Url.Action("Start", "WebInterviewSetup")" method="post">
+            @Html.AntiForgeryToken()
+            
+            <input name="@Html.NameFor(x => x.ResponsibleId)" type="hidden" data-bind="value: selectedResponsibleId">
+
+            <div class="form-group">
+                <label class="control-label">@WebInterviewSetup.SelectInterviwer</label>
+                <div class="input-group">
+                    <input placeholder="@WebInterviewSetup.SelectInterviwer" class="form-control"
+                           data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'"
+                           type="text" />
+                    <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn">
+                        <div class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-success" data-bind="{enable: isResponsibleSelected }">@WebInterviewSetup.Start</button>
+                    <a href="@Url.Action("Index", "SurveySetup")" class="back-link">
+                        @WebInterviewSetup.BackToQuestionnaires
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+

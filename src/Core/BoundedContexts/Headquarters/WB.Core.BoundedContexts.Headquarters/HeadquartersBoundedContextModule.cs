@@ -77,6 +77,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 
 
 namespace WB.Core.BoundedContexts.Headquarters
@@ -377,6 +379,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IRostrerStructureService>().To<RosterStructureService>();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
+
+            this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
         }
     }
 }

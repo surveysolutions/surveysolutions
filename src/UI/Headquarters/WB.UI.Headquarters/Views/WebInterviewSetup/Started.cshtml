@@ -1,0 +1,46 @@
+﻿@using WB.Core.SharedKernels.DataCollection.Implementation.Entities
+@model WB.UI.Headquarters.Models.WebInterview.SetupModel
+
+@{
+    ViewBag.Title = WebInterviewSetup.Started_Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li>
+                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")
+                    </li>
+                </ol>
+                <h1>@WebInterviewSetup.WebInterviewSetup_PageHeader</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <h3>
+                    @string.Format(WebInterviewSetup.WebInterviewStarted, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.QuestionnaireVersion))
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block">
+                <div class="import-progress">
+                    <p>@WebInterviewSetup.Done</p>
+                    <p class="success-text">
+                        @WebInterviewSetup.WebLinkTitle:
+                        <a href="@Url.Action("Index", "WebInterview", new {id = Model.QuestionnaireIdentity.ToString() }, Request.Url.Scheme)">@Url.Action("Index", "WebInterview", new { id = Model.QuestionnaireIdentity.ToString() }, Request.Url.Scheme)</a>
+                    </p>
+                </div>
+                <div>
+                    <a href="@Url.Action("Index", "SurveySetup")" class="btn btn-primary">
+                        @WebInterviewSetup.BackToQuestionnaires
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
