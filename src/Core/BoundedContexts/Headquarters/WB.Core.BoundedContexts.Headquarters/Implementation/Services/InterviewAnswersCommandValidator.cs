@@ -9,19 +9,19 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class InterviewAnswersCommandValidator : 
-        ICommandValidator<Interview, AnswerTextQuestionCommand>,
-        ICommandValidator<Interview, AnswerNumericIntegerQuestionCommand>,
-        ICommandValidator<Interview, AnswerNumericRealQuestionCommand>,
-        ICommandValidator<Interview, AnswerSingleOptionQuestionCommand>,
-        ICommandValidator<Interview, AnswerSingleOptionLinkedQuestionCommand>,
-        ICommandValidator<Interview, AnswerMultipleOptionsQuestionCommand>,
-        ICommandValidator<Interview, AnswerMultipleOptionsLinkedQuestionCommand>,
-        ICommandValidator<Interview, AnswerYesNoQuestion>,
-        ICommandValidator<Interview, AnswerDateTimeQuestionCommand>,
-        ICommandValidator<Interview, AnswerGeoLocationQuestionCommand>,
-        ICommandValidator<Interview, AnswerPictureQuestionCommand>,
-        ICommandValidator<Interview, AnswerQRBarcodeQuestionCommand>,
-        ICommandValidator<Interview, AnswerTextListQuestionCommand>
+        ICommandValidator<StatefulInterview, AnswerTextQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerNumericIntegerQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerNumericRealQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerSingleOptionQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerSingleOptionLinkedQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerMultipleOptionsQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerMultipleOptionsLinkedQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerYesNoQuestion>,
+        ICommandValidator<StatefulInterview, AnswerDateTimeQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerGeoLocationQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerPictureQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerQRBarcodeQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerTextListQuestionCommand>
     {
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
@@ -37,18 +37,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new InterviewException(CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
         }
 
-        public void Validate(Interview aggregate, AnswerTextQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerNumericIntegerQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerNumericRealQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerSingleOptionQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerSingleOptionLinkedQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerMultipleOptionsQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerMultipleOptionsLinkedQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerYesNoQuestion command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerDateTimeQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerGeoLocationQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerPictureQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerQRBarcodeQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
-        public void Validate(Interview aggregate, AnswerTextListQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerTextQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerNumericIntegerQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerNumericRealQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerSingleOptionQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerSingleOptionLinkedQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerMultipleOptionsQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerMultipleOptionsLinkedQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerYesNoQuestion command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerDateTimeQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerGeoLocationQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerPictureQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerQRBarcodeQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerTextListQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
     }
 }

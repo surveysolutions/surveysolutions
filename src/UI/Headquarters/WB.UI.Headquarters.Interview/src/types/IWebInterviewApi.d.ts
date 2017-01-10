@@ -9,4 +9,6 @@ declare interface IWebInterviewApi {
     getSingleOptionQuestion(entity: InterviewEntity): any
     startInterview(entity: string): void
     getPrefilledQuestions(): any
+
+    answerSingleOptionQuestion(answer:number, questionId:string)
 }

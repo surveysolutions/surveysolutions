@@ -9,7 +9,7 @@
 
     export default {
         name: 'prefilled-view',
-        mounted(){
+        mounted() {
             this.getPrefilledQuestions(this.$route.params.id)
         },
         computed: {

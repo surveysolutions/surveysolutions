@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Interview interview = Create.AggregateRoot.Interview(interviewId);
+        private static readonly StatefulInterview interview = Create.AggregateRoot.StatefulInterview(interviewId);
 
         private static readonly Action[] commandValidations =
         {
