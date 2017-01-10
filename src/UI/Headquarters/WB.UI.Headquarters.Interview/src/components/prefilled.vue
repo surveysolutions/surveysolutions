@@ -26,7 +26,6 @@
                 return this.$store.state.prefilledQuestions
             },
             interviewId(){
-                debugger;
                 return this.$route.params.id
             }
         },
