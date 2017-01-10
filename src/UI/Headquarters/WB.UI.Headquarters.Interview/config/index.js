@@ -1,6 +1,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+var argv = require('minimist')(process.argv.slice(2));
+
 var projectPath = path.resolve(__dirname, '../../WB.UI.Headquarters')
 
 const config = {
@@ -47,7 +49,7 @@ const config = {
         assetsSubDirectory: '',
         assetsPublicPath: '',
         proxyTable: {
-            "/signalr": "https://superhq-dev.mysurvey.solutions/signalr"
+            "/signalr": argv.uri == null ? "https://superhq-dev.mysurvey.solutions/signalr" : argv.uri
         },
         cssSourceMap: false,
         template: 'Index.html'
