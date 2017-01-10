@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
@@ -12,63 +11,45 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public InterviewEntityWithType[] GetPrefilledQuestions()
         {
-            return plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                return plainTransactionManager.ExecuteInQueryTransaction(() =>
+            var result = this.currentQuestionnaire
+                .GetPrefilledQuestions()
+                .Select(x => new InterviewEntityWithType
                 {
-                    var result = this.currentQuestionnaire
-                                    .GetPrefilledQuestions()
-                                    .Select(x => new InterviewEntityWithType
-                                    {
-                                        Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                                        EntityType = this.GetEntityType(x).ToString()
-                                    })
-                                    .ToArray();
-                    return result;
-                });
-            });
+                    Identity = Identity.Create(x, RosterVector.Empty).ToString(),
+                    EntityType = this.GetEntityType(x).ToString()
+                })
+                .ToArray();
+            return result;
         }
 
         public InterviewTextQuestion GetTextQuestion(string questionIdentity)
         {
-            return plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                var id = Identity.Parse(questionIdentity);
+            var id = Identity.Parse(questionIdentity);
 
-                InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
-                InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
-                this.PutInstructions(result, id);
-                return result;
-            });
+            InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
+            InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
+            this.PutInstructions(result, id);
+            return result;
         }
 
         public InterviewSingleOptionQuestion GetSingleOptionQuestion(string questionIdentity)
         {
-            return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                var id = Identity.Parse(questionIdentity);
+            var id = Identity.Parse(questionIdentity);
 
-                InterviewTreeQuestion question = this.currentInterview.GetQuestion(id);
-                InterviewSingleOptionQuestion result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+            InterviewTreeQuestion question = this.currentInterview.GetQuestion(id);
+            InterviewSingleOptionQuestion result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
 
-                var options = this.currentInterview.GetTopFilteredOptionsForQuestion(id, null, null, 200);
-                result.Options = options;
+            var options = this.currentInterview.GetTopFilteredOptionsForQuestion(id, null, null, 200);
+            result.Options = options;
 
-                this.PutInstructions(result, id);
-                return result;
-            });
+            this.PutInstructions(result, id);
+            return result;
         }
 
         private void PutInstructions(GenericQuestion result, Identity id)
         {
             result.Instructions = this.currentQuestionnaire.GetQuestionInstruction(id.Id);
             result.HideInstructions = this.currentQuestionnaire.GetHideInstructions(id.Id);
-        }
-
-        private static Identity parseIdentity(string questionIdentity)
-        {
-            var id = Identity.Create(Guid.Parse(questionIdentity.Replace(">", "").Replace("<", "")), RosterVector.Empty);
-            return id;
         }
 
         private InterviewEntityType GetEntityType(Guid entityId)
