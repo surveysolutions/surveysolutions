@@ -942,7 +942,7 @@
     <Content Include="Views\Interview\Troubleshooting.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
-    <Content Include="Views\Interviewers\Index.cshtml" />
+    <Content Include="Views\Interviewers\IndexOld.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
@@ -986,7 +986,7 @@
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\SurveySetup\IndexOld.cshtml" />
-    <Content Include="Views\Interviewers\IndexN.cshtml" />
+    <Content Include="Views\Interviewers\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1476,6 +1476,7 @@
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
+    <Compile Include="Models\Api\DataTableRequestModelWithFilter.cs" />
     <Compile Include="Models\Api\DataTableResponseModel.cs" />
     <Compile Include="Models\Api\DataTableRequestModel.cs" />
     <Compile Include="Models\Api\InterviewApiDetails.cs" />
