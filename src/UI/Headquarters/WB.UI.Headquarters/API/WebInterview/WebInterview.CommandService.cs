@@ -8,12 +8,15 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public partial class WebInterview
     {
+        private Guid commandResponsibleId
+            => this.webInterviewConfigProvider.Get(this.currentInterview.QuestionnaireIdentity).ResponsibleId;
+
         public void ExecuteCommand(string commandType, string command)
         {
             try
             {
                 ICommand concreteCommand = this.commandDeserializer.Deserialize(commandType, command);
-                ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand);
+                ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand, this.commandResponsibleId);
                 this.commandService.Execute(transformedCommand);
             }
             catch (OverflowException e)
