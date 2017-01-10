@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     [TestOf(typeof(PlainQuestionnaire))]
+    [Ignore("KP-8526")]
     internal class when_getting_questions_affected_by_substitutions
     {
         [Test]
