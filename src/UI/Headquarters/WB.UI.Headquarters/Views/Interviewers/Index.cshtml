@@ -79,7 +79,8 @@
 
 
             self.getConfirmAndSendCommand = function(confirmMessage, commandName) {
-                notifier.confirm("@Pages.ConfirmationNeededTitle", confirmMessage,
+                notifier.confirm("@Pages.ConfirmationNeededTitle",
+                    confirmMessage,
                     // confirm
                     function() {
                         var commands = ko.utils.arrayMap(self.SelectedItems(),
@@ -94,8 +95,8 @@
                         self.SendCommands(command,
                             function() {
                                 setTimeout(function() {
-                                    self.updater();
-                                },
+                                        self.updater();
+                                    },
                                     200);
                             });
                     },
@@ -105,11 +106,13 @@
 
 
             self.unarchiveInterviewers = function() {
-                self.getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning /r/n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
+                self
+                    .getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning /r/n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
             };
 
             self.archiveInterviewers = function() {
-                self.getConfirmAndSendCommand("@Pages.Interviewers_ArchiveInterviewersConfirmMessage", archiveUserCommad);
+                self.getConfirmAndSendCommand("@Pages.Interviewers_ArchiveInterviewersConfirmMessage",
+                    archiveUserCommad);
             }
 
             self.updater = function() {};
@@ -225,19 +228,22 @@
                         },
                         {
                             data: "email",
-                            name: "Email",// case-sensitive!
+                            name: "Email", // case-sensitive!
+                            render: function(data, type, row) {
+                                return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
+                            },
                             "class": "changed-recently"
                         },
                         {
                             "orderable": false,
                             data: "supervisorName",
-                            name: "SupervisorName",// case-sensitive! 
+                            name: "SupervisorName", // case-sensitive! 
                             "class": "changed-recently"
                         },
                         {
                             "orderable": false,
                             data: "deviceId",
-                            name: "DeviceId",// case-sensitive! 
+                            name: "DeviceId", // case-sensitive! 
                             render: function(data, type, row) {
                                 return (row.deviceId === null ? "No" : "Yes");
                             },
