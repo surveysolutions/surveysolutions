@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -108,6 +109,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 this.Context.AccountDocumentStorage = accountDocumentStorage;
                 Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountDocumentStorage);
 
+                return this.Fluent;
+            }
+            public FluentSyntax QuestionnireHistotyVersionsService(IQuestionnireHistotyVersionsService histotyVersionsService)
+            {
+                Setup.InstanceToMockedServiceLocator<IQuestionnireHistotyVersionsService>(histotyVersionsService);
                 return this.Fluent;
             }
 
@@ -344,7 +350,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid questionnaireOwner = Guid.Parse("33333333333333333333333333333333");
             string ownerName = "owner";
             string questionnnaireTitle = "name of questionnaire";
-            TestPlainStorage<QuestionnaireChangeRecord> historyStorage;
+            TestPlainStorage<QuestionnaireChangeRecord> historyStorage; 
             HistoryPostProcessor historyPostProcessor;
             QuestionnaireDocument questionnaireDocument;
 
@@ -352,6 +358,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 And.QuestionnaireChangeRecordStorage(out historyStorage).
                 And.EntitySerializer<QuestionnaireDocument>().
                 And.AccountDocumentStorage().
+                And.QuestionnireHistotyVersionsService(Create.QuestionnireHistotyVersionsService()).
                 And.AccountDocument(questionnaireOwner, ownerName).
                 And.QuestionnaireStateTrackerStorage().
                 And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, title: questionnnaireTitle, userId: questionnaireOwner).
@@ -376,7 +383,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 () => questionnaireHistoryItem.Sequence.ShouldEqual(0),
                 () => questionnaireHistoryItem.TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire),
                 () => questionnaireHistoryItem.TargetItemId.ShouldEqual(questionnaireId),
-                () => questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle));
+                () => questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle),
+                () => questionnaireHistoryItem.ResultingQuestionnaireDocument.ShouldNotBeNull());
         }
 
         [Test]
