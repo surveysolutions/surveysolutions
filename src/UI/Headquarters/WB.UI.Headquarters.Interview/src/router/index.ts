@@ -6,7 +6,7 @@ import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
-import Interview from "../components/Interview"
+// import Interview from "../components/Interview"
 import Prefilled from "../components/Prefilled"
 import Start from "../components/Start"
 

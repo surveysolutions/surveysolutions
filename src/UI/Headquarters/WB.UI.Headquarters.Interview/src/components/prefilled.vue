@@ -21,12 +21,15 @@
 
     export default {
         name: 'prefilled-view',
-        computed: mapState({
-            prefilledQuestions: state => [],
-            interviewId(state){
-                return ""// this.$router.params.id;
+        computed: {
+            prefilledQuestions() {
+                return this.$store.state.prefilledQuestions
+            },
+            interviewId(){
+                debugger;
+                return this.$route.params.id
             }
-        }),
+        },
         methods: mapActions(["getPrefilledQuestions"])
     }
 </script>
