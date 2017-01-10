@@ -1,3 +1,4 @@
+import "es6-promise/auto"
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 
