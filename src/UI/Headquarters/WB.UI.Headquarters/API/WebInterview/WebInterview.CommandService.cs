@@ -1,6 +1,8 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Headquarters.Code.CommandTransformation;
 
@@ -40,6 +42,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                     this.Clients.Caller.unhandledException();
                 }
             }
+        }
+
+        public void AnswerSingleOptionQuestion(int answer, string questionId)
+        {
+            Identity identity = Identity.Parse(questionId);
+            var command = new AnswerSingleOptionQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.Now, answer);
+            this.commandService.Execute(command);
         }
     }
 }
