@@ -1039,6 +1039,7 @@
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\WebInterview\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.EventHandlers.cs" />
