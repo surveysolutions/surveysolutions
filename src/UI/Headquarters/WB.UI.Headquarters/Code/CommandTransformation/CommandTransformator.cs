@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
         }
 
-        public ICommand TransformCommnadIfNeeded(ICommand command)
+        public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
             TypeSwitch.Do(
                 command,
@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)
             {
-                interviewCommand.UserId = globalInfo.GetCurrentUser().Id;
+                interviewCommand.UserId = responsibleId ?? globalInfo.GetCurrentUser().Id;
             }
 
             var rejectCommand = command as RejectInterviewCommand;
