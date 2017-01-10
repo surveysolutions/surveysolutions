@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No data available in table.
+        ///   Looks up a localized string similar to No data available in the table.
         /// </summary>
         public static string EmptyTable {
             get {

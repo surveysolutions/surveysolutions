@@ -228,8 +228,8 @@
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
     <value>Number of interviewers in the team</value>
   </data>
-  <data name="ObserverAccountCreationDateTooltip" xml:space="preserve">
-    <value>Date when the observer account was created</value>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>Date when the account was created</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>Observer's email</value>

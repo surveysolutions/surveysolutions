@@ -124,7 +124,7 @@
     <value>: activate to sort column descending</value>
   </data>
   <data name="EmptyTable" xml:space="preserve">
-    <value>No data available in table</value>
+    <value>No data available in the table</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Showing _START_ to _END_ of _TOTAL_ entries</value>
