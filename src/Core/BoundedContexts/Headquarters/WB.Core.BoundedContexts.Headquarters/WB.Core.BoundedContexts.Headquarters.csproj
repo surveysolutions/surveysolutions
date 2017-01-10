@@ -646,6 +646,9 @@
     <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
     <Compile Include="Views\ViewerStatus.cs" />
+    <Compile Include="WebInterview\Impl\WebInterviewConfig.cs" />
+    <Compile Include="WebInterview\IWebInterviewConfigurator.cs" />
+    <Compile Include="WebInterview\Impl\WebInterviewConfigurator.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

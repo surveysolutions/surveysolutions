@@ -21,20 +21,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             this.usersReader = usersReader;
         }
 
-        public UsersView GetAllInterviewers(int pageSize, string searchBy)
+        public UsersView GetAllInterviewers(int pageSize, string searchBy, bool onlyActive = false)
         {
-            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
-                ApplyFilterByUserName(searchBy,
-                    users.Where(user => (user.Roles.Any(role => role == UserRoles.Operator))))
-                    .OrderBy(user => user.UserName));
+            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>(users =>
+            {
+                var userDocuments = users.Where(user => user.Roles.Any(role => role == UserRoles.Operator));
+                if (onlyActive)
+                {
+                    userDocuments = userDocuments.Where(x => !x.IsArchived && !x.IsLockedByHQ && !x.IsLockedBySupervisor);
+                }
 
+                return ApplyFilterByUserName(searchBy, userDocuments)
+                    .OrderBy(user => user.UserName);
+            });
+
+            var result = this.usersReader.Query(users =>
+                queryByUsers(users)
+                    .Take(pageSize)
+                    .ToList()
+                    .Select(user => new UsersViewItem() { UserId = user.PublicKey, UserName = user.UserName }));
             return new UsersView()
             {
-                Users = this.usersReader.Query(users =>
-                    queryByUsers(users)
-                        .Take(pageSize)
-                        .ToList()
-                        .Select(user => new UsersViewItem() { UserId = user.PublicKey, UserName = user.UserName })),
+                Users = result,
 
                 TotalCountByQuery = this.usersReader.Query(users => queryByUsers(users).Count())
             };

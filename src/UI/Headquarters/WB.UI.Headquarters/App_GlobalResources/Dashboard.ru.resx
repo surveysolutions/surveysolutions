@@ -186,4 +186,7 @@
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
     <value>1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
   </data>
+  <data name="WebInterviewSetup" xml:space="preserve">
+    <value>Настройка web интервью</value>
+  </data>
 </root>
