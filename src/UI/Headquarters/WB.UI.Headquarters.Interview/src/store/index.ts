@@ -4,6 +4,7 @@ import { apiCaller } from "../api"
 
 const store: any = new Vuex.Store({
     state: {
+        questionnaire: null,
         prefilledQuestions: [],
         entityDetails: {},
         interview: {
@@ -11,6 +12,14 @@ const store: any = new Vuex.Store({
         }
     },
     actions: {
+        async loadQuestionnaire({commit}, questionnaireId) {
+            const questionnaireInfo =
+                await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
+            commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo);
+        },
+        async startInterview({commit}, questionnaireId: string) {
+            const interviewId = await apiCaller<string>(api => api.createInterview(questionnaireId));
+        },
         async fetchTextQuestion({commit}, entity) {
             const entityDetails = await apiCaller(api => api.getTextQuestion(entity.identity))
             commit("SET_TEXTQUESTION_DETAILS", entityDetails);
@@ -34,6 +43,9 @@ const store: any = new Vuex.Store({
         }
     },
     mutations: {
+        SET_QUESTIONNAIRE_INFO(state, questionnaireInfo: IQuestionnaireInfo) {
+            state.questionnaire = questionnaireInfo;
+        },
         SET_INTERVIEW(state, id) {
             state.interview.id = id;
         },
