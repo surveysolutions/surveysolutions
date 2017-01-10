@@ -31,7 +31,7 @@
                     <p>@WebInterviewSetup.Done</p>
                     <p class="success-text">
                         @WebInterviewSetup.WebLinkTitle:
-                        <a href="@Url.Action("Index", "WebInterview", new {id = Model.QuestionnaireIdentity.ToString() }, Request.Url.Scheme)">@Url.Action("Index", "WebInterview", new { id = Model.QuestionnaireIdentity.ToString() }, Request.Url.Scheme)</a>
+                        <a href="@Model.WebInterviewLink">@Model.WebInterviewLink</a>
                     </p>
                 </div>
                 <div>
