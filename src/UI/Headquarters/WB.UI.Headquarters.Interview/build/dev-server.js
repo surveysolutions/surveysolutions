@@ -16,6 +16,10 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
     ? require('./webpack.prod.conf')
     : require('./webpack.dev.conf')
 
+console.info("Cleaning up content of", config.dev.assetsRoot, "folder")
+rm('-rf', path.join(config.dev.assetsRoot, '**/*'))
+
+
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 
