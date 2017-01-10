@@ -17,7 +17,12 @@ const wrap = (jqueryPromise) => {
 }
 
 const scriptIncludedPromise = new Promise(resolve =>
-    $script(signalrPath, () => resolve())
+    $script(signalrPath, () => {
+        jQuery.connection.hub.error((error) => {
+            console.log("SignalR error: " + error)
+        });
+        resolve()
+    })
 )
 
 async function hubStarter() {
