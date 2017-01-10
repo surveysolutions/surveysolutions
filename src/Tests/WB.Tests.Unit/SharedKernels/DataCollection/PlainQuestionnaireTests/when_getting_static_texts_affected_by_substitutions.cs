@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
-    internal class when_getting_static_texts_affected_by_substitutions
+    internal class when_getting_static_texts_affected_by_substitutions : PlainQuestionnaireTestsContext
     {
         Establish context = () =>
         {
