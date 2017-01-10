@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequest request)
+        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter request)
         {
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
@@ -79,9 +79,9 @@ namespace WB.UI.Headquarters.Controllers
                 Orders = request.GetSortOrderRequestItems(),
                 SearchBy = request.Search.Value,
 
-                SupervisorName = string.Empty,
-                Archived = false,
-                ConnectedToDevice = null
+                SupervisorName = request.SupervisorName,
+                Archived = request.Archived,
+                ConnectedToDevice = request.ConnectedToDevice
             };
 
             var interviewers = this.interviewersFactory.Load(input);

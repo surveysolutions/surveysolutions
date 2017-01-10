@@ -76,7 +76,7 @@
 
     self.GetFilterMethod = function () {
 
-        var supervisorName = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserName
+        var supervisorName = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserName;
 
         self.Url.query['supervisor'] = supervisorName || "";
         self.Url.query['archived'] = self.Archived() || "";
