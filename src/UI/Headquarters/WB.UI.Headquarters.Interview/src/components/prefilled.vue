@@ -3,7 +3,7 @@
         <form>
             <div class="form-group">
                 <label for="interviewId">Interview id</label>
-                <input type="text" id="interviewId" class="form-control" v-model="interviewId">
+                <input type="text" id="interviewId" class="form-control" :value="interviewId">
             </div>
             <button type="button" @click="getPrefilledQuestions(interviewId)" class="btn btn-default">Get questions</button>
         </form>
@@ -17,16 +17,16 @@
 </template>
 
 <script lang="ts">
-    import { mapGetters, mapActions } from "vuex"
+    import { mapGetters, mapActions, mapState } from "vuex"
 
     export default {
         name: 'prefilled-view',
-        computed: mapGetters(["prefilledQuestions"]),
-        methods: mapActions(["getPrefilledQuestions"]),
-        data: () => {
-            return {
-                interviewId: "a82cb5a5-1519-40a6-9f40-733dbb749487"
+        computed: mapState({
+            prefilledQuestions: state => state.prefilledQuestions,
+            interviewId(state){
+                return this.$router.params.id;
             }
-        },
+        }),
+        methods: mapActions(["getPrefilledQuestions"])
     }
 </script>
