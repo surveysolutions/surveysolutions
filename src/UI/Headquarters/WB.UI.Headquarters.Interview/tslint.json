@@ -18,6 +18,7 @@
     "semicolon": [
       false
     ],
+    "forin": false,
     "object-literal-sort-keys": false
   },
   "jsRules": {
@@ -30,6 +31,7 @@
     "semicolon": [
       false
     ],
+    "forin": false,
     "quotemark": [
         "single"
     ],

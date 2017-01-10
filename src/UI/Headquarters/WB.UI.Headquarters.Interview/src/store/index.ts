@@ -2,9 +2,10 @@ import * as Vue from "vue"
 import * as Vuex from "vuex"
 
 import { apiCaller } from "../api"
+import { safeStore } from "../errors"
 import router from "./../router"
 
-const store: any = new Vuex.Store({
+const store: any = new Vuex.Store(safeStore({
     state: {
         questionnaire: null,
         prefilledQuestions: [],
@@ -58,6 +59,6 @@ const store: any = new Vuex.Store({
             Vue.set(state.entityDetails, entity.questionIdentity, entity)
         }
     }
-})
+}))
 
 export default store
