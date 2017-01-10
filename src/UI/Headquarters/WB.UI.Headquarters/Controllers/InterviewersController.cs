@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers
         {
         }
 
-        public ActionResult Index(InterviewersFilter filter)
+        public ActionResult IndexOld(InterviewersFilter filter)
         {
             this.ViewBag.ActivePage = MenuItem.Interviewers;
 
@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(pageModel);
         }
 
-        public ActionResult IndexN(InterviewersFilter filter)
+        public ActionResult Index(InterviewersFilter filter)
         {
             this.ViewBag.ActivePage = MenuItem.Interviewers;
 
