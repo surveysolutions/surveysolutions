@@ -72,4 +72,10 @@ npm run design
 
 Designer can run web ui using local development server against superhq or any other dev server.
 
+By default https://superhq-dev.mysurvey.solutions/ server will be used to handle API requests. To change it additional arg required:
+
+```
+npm run design -- --uri https://superhq-rc.mysurvey.solutions/
+```
+
 Url to server should be provided in `build/config/index.js` file at `designer/proxyTable/signalr` json property

@@ -9,18 +9,16 @@ import store from "../store"
 
 // wraps jQuery promises into awaitable ES 2016 Promise
 const wrap = (jqueryPromise) => {
-    return new Promise((res, rej) => {
+    return new Promise((res, rej) =>
         jqueryPromise
             .done(data => res(data))
             .fail(error => rej(error))
-    })
+    )
 }
 
-const scriptIncludedPromise = new Promise(resolve => {
-    $script(signalrPath, () => {
-        resolve();
-    })
-})
+const scriptIncludedPromise = new Promise(resolve =>
+    $script(signalrPath, () => resolve())
+)
 
 async function hubStarter() {
     if (signalrUrlOverride) {
@@ -34,12 +32,7 @@ let connected = false;
 
 async function getInstance() {
     await scriptIncludedPromise;
-
-    if (!connected) {
-        await hubStarter()
-        connected = true
-    }
-
+    await hubStarter()
     return jQuery.signalR.interview
 }
 
@@ -53,7 +46,6 @@ interface IServerHubCallback<T> {
 
 // tslint:disable-next-line:max-line-length
 // TODO: Handle connection lifetime - https://www.asp.net/signalr/overview/guide-to-the-api/hubs-api-guide-javascript-client#connectionlifetime
-
 export async function apiCaller<T>(action: IServerHubCallback<T>) {
     // action return jQuery promise
     // wrap will wrap jq promise into awaitable promise
