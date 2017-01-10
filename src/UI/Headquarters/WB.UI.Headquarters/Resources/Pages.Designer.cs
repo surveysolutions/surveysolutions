@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirmation Needed.
+        /// </summary>
+        public static string ConfirmationNeededTitle {
+            get {
+                return ResourceManager.GetString("ConfirmationNeededTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -264,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ErrorIndex_Title {
             get {
                 return ResourceManager.GetString("ErrorIndex_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string FilterTitle {
+            get {
+                return ResourceManager.GetString("FilterTitle", resourceCulture);
             }
         }
         

@@ -595,4 +595,10 @@
   <data name="InstallationInstruction" xml:space="preserve">
     <value>Installation instruction</value>
   </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmation Needed</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filters</value>
+  </data>
 </root>

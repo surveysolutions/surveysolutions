@@ -18,15 +18,7 @@ namespace WB.UI.Headquarters.Controllers
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
         }
-
-        public ActionResult IndexOld(InterviewersFilter filter)
-        {
-            this.ViewBag.ActivePage = MenuItem.Interviewers;
-
-            InterviewersModel pageModel = new InterviewersModel();
-            return this.View(pageModel);
-        }
-
+       
         public ActionResult Index(InterviewersFilter filter)
         {
             this.ViewBag.ActivePage = MenuItem.Interviewers;
