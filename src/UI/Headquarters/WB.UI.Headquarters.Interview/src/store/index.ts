@@ -11,6 +11,7 @@ const store: any = new Vuex.Store(safeStore({
     state: {
         questionnaire: null,
         prefilledQuestions: [],
+        firstSectionId: null,
         entityDetails: {},
         interview: {
             id: null

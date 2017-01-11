@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void Identity_with_empty_roster_vector_should_be_parsed()
         {
             string sId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-            string sRosterVector = "<>";
+            string sRosterVector = "";
             string identityToParse = $"{sId}{sRosterVector}";
 
             Identity parsedIdentity = Identity.Parse(identityToParse);
@@ -50,10 +50,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         [Test]
+        public void should_parse_single_coordinate_vector()
+        {
+            string sId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+            string sRosterVector = "(1)";
+            string identityToParse = $"{sId}{sRosterVector}";
+
+            Identity parsedIdentity = Identity.Parse(identityToParse);
+
+            Assert.That(parsedIdentity.Id, Is.EqualTo(Guid.Parse(sId)));
+            Assert.That(parsedIdentity.RosterVector, Is.EqualTo(new RosterVector(new[] { 1m })));
+        }
+
+        [Test]
         public void Identity_with_roster_vector_should_be_parsed()
         {
             string sId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-            string sRosterVector = "<1-5-6-1-0>";
+            string sRosterVector = "(1-5-6-1-0)";
             string identityToParse = $"{sId}{sRosterVector}";
 
             Identity parsedIdentity = Identity.Parse(identityToParse);

@@ -1593,6 +1593,7 @@
     <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
     <Compile Include="Models\WebInterview\InterviewTextQuestion.cs" />
+    <Compile Include="Models\WebInterview\PrefilledPageData.cs" />
     <Compile Include="Models\WebInterview\SetupModel.cs" />
     <Compile Include="Models\WebInterview\WebInterviewAutoMapProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
