@@ -56,6 +56,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             if (this.currentQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
             if(this.currentQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
+            if (this.currentQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
+
             switch (this.currentQuestionnaire.GetQuestionType(entityId))
             {
                 case QuestionType.DateTime:
@@ -75,7 +77,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Text:
                     return InterviewEntityType.TextQuestion;
                 default:
-                    return InterviewEntityType.StaticText;
+                    throw new Exception(@"Not supported question type");
             }
         }
     }
