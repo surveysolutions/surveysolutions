@@ -232,7 +232,7 @@
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewValidationHandlerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewLifecycleEventHandler.cs" />
     <Compile Include="EventHandler\LinkedOptionsDenormalizer.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
@@ -405,7 +405,7 @@
     <Compile Include="Services\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Services\QuestionnaireImportResult.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
-    <Compile Include="Services\WebInterview\IWebInterviewExchangeService.cs" />
+    <Compile Include="Services\WebInterview\IWebInterviewNotificationService.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoaderSettings.cs" />

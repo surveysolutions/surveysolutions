@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<InterviewValidationHandlerFunctional>();
+            this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             this.Kernel.RegisterDenormalizer<InterviewStatusTimeSpanDenormalizer>();
