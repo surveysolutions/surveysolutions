@@ -1,13 +1,13 @@
 <template>
     <div class="question" v-if="$me">
-        <div class="question-editor single-select-question" :class="{answered: answer != null}">
+        <div class="question-editor single-select-question" :class="{answered: $me.isAnswered}">
             <wb-title />
             <wb-instructions />
             <div class="question-unit">
                 <div class="options-group">
                     <div class="radio" v-for="option in $me.options">
                         <div class="field">
-                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :value="option.value" v-model="answer" @change="submitAnswer">
+                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" name="$me.id" :value="option.value" v-model="answer">
                             <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                             </label>
@@ -26,16 +26,18 @@
 
     export default {
         name: 'CategoricalSingle',
-        data: () => {
-            return {
-                answer: null
+        computed: {
+            answer: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    this.$store.dispatch("answerSingleOptionQuestion", { answer: value, questionId: this.$me.id })
+                }
             }
         },
         mixins: [entityDetails],
         methods: {
-            submitAnswer() {
-                this.$store.dispatch("answerSingleOptionQuestion", { answer: this.answer, questionId: this.$me.id })
-            },
             removeAnswer() {
                 this.$store.dispatch("removeAnswer", this.$me.id)
             }
