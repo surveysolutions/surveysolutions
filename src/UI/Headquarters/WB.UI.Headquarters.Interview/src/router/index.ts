@@ -6,18 +6,26 @@ import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
-// import Interview from "../components/Interview"
+import { getInstance as hubProxy } from "../api"
 import Prefilled from "../components/Prefilled"
 import Section from "../components/Section"
 import Start from "../components/Start"
 
-export default new VueRouter({
+const router = new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
-        { path: "/:id", component: Start },
-        // { path: "/start/:id", component: Interview },
-        { name: "prefilled", path: "/Prefilled/:id", component: Prefilled },
-        { name: "section", path: "/Section/:id", component: Section }
+        { name: "root", path: "/:questionnaireId", component: Start },
+        { name: "prefilled", path: "/:interviewId/Cover", component: Prefilled },
+        { name: "section", path: "/:interviewId/Section/:sectionId", component: Section }
     ]
 })
+
+router.afterEach((to, from) => {
+    hubProxy().then((proxy) => {
+        // tslint:disable-next-line:no-string-literal
+        proxy.state.interviewId = to.params["interviewId"]
+    })
+})
+
+export default router

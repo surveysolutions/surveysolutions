@@ -28,11 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         
-        private string CallerInterviewId
-        {
-            get { return this.Clients.Caller.interviewId; }
-            set { this.Clients.Caller.interviewId = value; }
-        }
+        private string CallerInterviewId => this.Clients.Caller.interviewId;
 
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
@@ -88,18 +84,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 interviewer.Supervisor.Id);
 
             this.commandService.Execute(createInterviewOnClientCommand);
-            this.StartInterview(createInterviewOnClientCommand.Id.FormatGuid());
             return interviewId.FormatGuid();
         }
 
-        public void StartInterview(string interviewId)
-        {
-            this.CallerInterviewId = interviewId;
-            this.eventRegistry.Subscribe(this, interviewId);
-            this.Groups.Add(this.Context.ConnectionId, interviewId);
-            this.Clients.Group(interviewId).startInterview(interviewId);
-        }
-        
         public override Task OnDisconnected(bool stopCalled)
         {
             // statefull interview can be removed from cache here

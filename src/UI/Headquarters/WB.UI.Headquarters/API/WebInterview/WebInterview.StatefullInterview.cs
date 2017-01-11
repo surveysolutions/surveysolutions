@@ -26,6 +26,26 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
+        public SectionData GetSection(string sectionId)
+        {
+            if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
+            Identity secitonIdentity = Identity.Parse(sectionId);
+            var statefulInterview = this.GetCallerInterview();
+            var ids = statefulInterview.GetUnderlyingInterviewerEntities(secitonIdentity);
+
+            var entities = ids.Select(x => new InterviewEntityWithType
+               {
+                   Identity = x.ToString(),
+                   EntityType = this.GetEntityType(x.Id).ToString()
+               })
+               .ToArray();
+            return new SectionData
+            {
+                Entities =  entities,
+                Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
+            };
+        }
+
         public InterviewEntity GetEntityDetails(string id)
         {
             var identity = Identity.Parse(id);
