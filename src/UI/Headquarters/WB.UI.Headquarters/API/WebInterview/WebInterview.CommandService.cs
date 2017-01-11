@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -23,7 +24,14 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void AnswerSingleOptionQuestion(int answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);
-            var command = new AnswerSingleOptionQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.Now, answer);
+            var command = new AnswerSingleOptionQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+            this.commandService.Execute(command);
+        }
+
+        public void RemoveAnswer(string questionId)
+        {
+            Identity identity = Identity.Parse(questionId);
+            var command = new RemoveAnswerCommand(currentInterview.Id, commandResponsibleId, identity, DateTime.UtcNow);
             this.commandService.Execute(command);
         }
     }

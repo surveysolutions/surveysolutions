@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public WebInterviewAutoMapProfile()
         {
              this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
-              .ForMember(x => x.QuestionIdentity, opts => opts.MapFrom(x => x.Identity))
+              .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
               .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text));
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
