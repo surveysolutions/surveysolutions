@@ -33,12 +33,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             get { return this.Clients.Caller.interviewId; }
             set { this.Clients.Caller.interviewId = value; }
         }
-        
-        private IStatefulInterview currentInterview => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
-        private IQuestionnaire currentQuestionnaire
-            => this.questionnaireRepository.GetQuestionnaire(this.currentInterview.QuestionnaireIdentity,
-                this.currentInterview.Language);
+        private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
+
+        private IQuestionnaire GetCallerQuestionnaire()
+            => this.questionnaireRepository.GetQuestionnaire(this.GetCallerInterview().QuestionnaireIdentity,
+                this.GetCallerInterview().Language);
 
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository, 
