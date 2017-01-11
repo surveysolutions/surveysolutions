@@ -22,6 +22,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.commandService.Execute(new AnswerSingleOptionQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
+        public void AnswerIntegerQuestion(string questionIdenty, int answer)
+        {
+            Identity identity = Identity.Parse(questionIdenty);
+            var command = new AnswerNumericIntegerQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+            this.commandService.Execute(command);
+        }
+        public void AnswerRealQuestion(string questionIdenty, double answer)
+        {
+            Identity identity = Identity.Parse(questionIdenty);
+            var command = new AnswerNumericRealQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+        }
 
         public void RemoveAnswer(string questionId)
         {
