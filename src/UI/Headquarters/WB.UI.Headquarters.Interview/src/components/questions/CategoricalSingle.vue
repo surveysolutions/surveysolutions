@@ -7,15 +7,11 @@
                 <div class="options-group">
                     <div class="radio" v-for="option in $me.options">
                         <div class="field">
-                            <input class="wb-radio" type="radio"
-                                   :id="entity.identity + option.value"
-                                   :value="option.value"
-                                   v-model="answer"
-                                   @change="submitAnswer">
-                            <label :for="entity.identity + option.value">
+                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :value="option.value" v-model="answer" @change="submitAnswer">
+                            <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                             </label>
-                            <button type="submit" class="btn btn-link btn-clear" @click="answer = null">
+                            <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                                 <span></span>
                             </button>
                         </div>
@@ -32,14 +28,16 @@
         name: 'CategoricalSingle',
         data: () => {
             return {
-                fetchAction: 'fetchSingleOptionQuestion',
                 answer: null
             }
         },
         mixins: [entityDetails],
         methods: {
             submitAnswer() {
-                this.$store.dispatch("answerSingleOptionQuestion", {answer: this.answer, questionId: this.$me.questionIdentity})
+                this.$store.dispatch("answerSingleOptionQuestion", { answer: this.answer, questionId: this.$me.id })
+            },
+            removeAnswer() {
+                this.$store.dispatch("removeAnswer", this.$me.id)
             }
         }
     }

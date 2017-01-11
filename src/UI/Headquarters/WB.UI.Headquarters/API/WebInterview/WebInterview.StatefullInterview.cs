@@ -22,28 +22,32 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
-        public InterviewTextQuestion GetTextQuestion(string questionIdentity)
+        public InterviewEntity GetEntityDetails(string id)
         {
-            var id = Identity.Parse(questionIdentity);
+            var identity = Identity.Parse(id);
 
-            InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(id);
-            InterviewTextQuestion result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
-            this.PutInstructions(result, id);
-            return result;
-        }
+            InterviewTreeQuestion question = this.currentInterview.GetQuestion(identity);
+            if (question != null)
+            {
+                GenericQuestion result = new StubEntity {Id = id};
 
-        public InterviewSingleOptionQuestion GetSingleOptionQuestion(string questionIdentity)
-        {
-            var id = Identity.Parse(questionIdentity);
+                if (question.IsSingleFixedOption)
+                {
+                    result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+                    var options = this.currentInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                    ((InterviewSingleOptionQuestion) result).Options = options;
+                }
+                else if (question.IsText)
+                {
+                    InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(identity);
+                    result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
+                }
 
-            InterviewTreeQuestion question = this.currentInterview.GetQuestion(id);
-            InterviewSingleOptionQuestion result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+                this.PutInstructions(result, identity);
+                return result;
+            }
 
-            var options = this.currentInterview.GetTopFilteredOptionsForQuestion(id, null, null, 200);
-            result.Options = options;
-
-            this.PutInstructions(result, id);
-            return result;
+            return null;
         }
 
         private void PutInstructions(GenericQuestion result, Identity id)

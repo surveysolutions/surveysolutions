@@ -11,10 +11,7 @@ export default {
     SET_PREFILLED_QUESTIONS(state, questions) {
         state.prefilledQuestions = questions
     },
-    SET_TEXTQUESTION_DETAILS(state, entity) {
-        Vue.set(state.entityDetails, entity.questionIdentity, entity)
-    },
-    SET_SINGLEOPTION_DETAILS(state, entity) {
-        Vue.set(state.entityDetails, entity.questionIdentity, entity)
+    SET_ENTITY_DETAILS(state, entity) {
+        Vue.set(state.entityDetails, entity.id, entity)
     }
 }

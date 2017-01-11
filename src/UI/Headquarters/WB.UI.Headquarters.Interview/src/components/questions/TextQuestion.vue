@@ -26,13 +26,12 @@
         mixins: [entityDetails],
         data: () => {
             return {
-                fetchAction: 'fetchTextQuestion',
                 text: ''
             }
         },
         methods: {
             answerTextQuestion: function () {
-                this.$store.dispatch('answerTextQuestion', { identity: this.entity.identity, text: this.text})
+                this.$store.dispatch('answerTextQuestion', { identity: this.entity.id, text: this.text})
             }
         }
     }

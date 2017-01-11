@@ -1,15 +1,17 @@
 declare interface IQuestionnaireInfo {
-    title:string;
+    title: string;
 }
 
 declare interface IWebInterviewApi {
-    questionnaireDetails(questionnaireId: string):IQuestionnaireInfo
-    createInterview(questionnaireId: string):string
-    getTextQuestion(entity: InterviewEntity): any
-    getSingleOptionQuestion(entity: InterviewEntity): any
+    questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
+    createInterview(questionnaireId: string): string
     startInterview(entity: string): void
     getPrefilledQuestions(): any
 
-    answerSingleOptionQuestion(answer:number, questionId:string)
+    getEntityDetails(id: string): any
+
+    answerSingleOptionQuestion(answer: number, questionId: string)
     answerTextQuestion(questionIdentity: string, text: string): void
+
+    removeAnswer(questionId: string): void
 }
