@@ -272,6 +272,7 @@ namespace WB.UI.Headquarters
         {
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
             GlobalHost.DependencyResolver.Resolve<IHubPipeline>().AddModule(new PlainSignalRTransactionManager());
+            GlobalHost.DependencyResolver.Resolve<IHubPipeline>().AddModule(new SignalrErrorHandler());
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
