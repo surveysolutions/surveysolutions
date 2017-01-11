@@ -1,7 +1,7 @@
 <template>
     <div>
         <component v-for="question in prefilledQuestions" v-bind:is="question.entityType" v-bind:entity="question"></component>
-        <router-link :to="{name:'section', params: { sectionId: firstSectionId, interviewId: $route.params.interviewId}}" class="btn btn-primary">Start</router-link>
+        <router-link v-if="firstSectionId" :to="{name:'section', params: { sectionId: firstSectionId, interviewId: $route.params.interviewId}}" class="btn btn-primary">Start</router-link>
 
     </div>
 </template>
