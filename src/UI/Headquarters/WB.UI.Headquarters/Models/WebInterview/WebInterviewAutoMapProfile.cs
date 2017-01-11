@@ -7,10 +7,15 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public WebInterviewAutoMapProfile()
         {
-             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
-              .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-              .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
-              .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()));
+            this.CreateMap<InterviewTreeQuestion, Validity>()
+                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
+                //.ForMember(x => x.Messages, opts => opts.MapFrom(x => x.ValidationMessages));//FailedValidations
+
+            this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
+                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                 .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()));
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>();

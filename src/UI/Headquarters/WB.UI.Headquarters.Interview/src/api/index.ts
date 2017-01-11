@@ -2,7 +2,7 @@
 
 import * as jQuery from "jquery"
 import { signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
-(window as any).$ = (window as any).jQuery = jQuery
+const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
 import store from "../store"
@@ -18,19 +18,32 @@ const wrap = (jqueryPromise) => {
 
 const scriptIncludedPromise = new Promise(resolve =>
     $script(signalrPath, () => {
-        jQuery.connection.hub.error((error) => {
-            console.log("SignalR error: " + error)
+        // All client-side subscriptions should be registered in this method
+
+        // $.connection.hub.logging = true;
+        $.connection.hub.error((error) => {
+            // console.log("SignalR error: " + error)
         });
+
+        const interviewProxy = $.connection.interview
+
+        interviewProxy.client.refreshEntities = (questions) => {
+            for (let questionId in questions) {
+                store.dispatch("fetchEntity", questions[questionId])
+            }
+        }
+
         resolve()
     })
 )
 
 async function hubStarter() {
     if (signalrUrlOverride) {
-        jQuery.connection.hub.url = signalrUrlOverride
+        $.connection.hub.url = signalrUrlOverride
     }
 
-    await wrap(jQuery.signalR.hub.start({ transport: supportedTransports }))
+    await wrap($.signalR.hub.start({ transport: supportedTransports }))
+
 }
 
 let connected = false;

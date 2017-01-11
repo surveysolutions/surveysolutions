@@ -31,7 +31,7 @@
         },
         methods: {
             answerTextQuestion: function () {
-                this.$store.dispatch('answerTextQuestion', { identity: this.entity.id, text: this.text})
+                this.$store.dispatch('answerTextQuestion', { identity: this.id, text: this.text})
             }
         }
     }

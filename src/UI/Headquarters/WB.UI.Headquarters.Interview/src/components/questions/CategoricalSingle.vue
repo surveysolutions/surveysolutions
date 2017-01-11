@@ -1,25 +1,21 @@
 <template>
-    <div class="question" v-if="$me">
-        <div class="question-editor single-select-question" :class="{answered: $me.isAnswered}">
-            <wb-title />
-            <wb-instructions />
-            <div class="question-unit">
-                <div class="options-group">
-                    <div class="radio" v-for="option in $me.options">
-                        <div class="field">
-                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" name="$me.id" :value="option.value" v-model="answer">
-                            <label :for="$me.id + '_' + option.value">
+    <GenericQuestion :question="$me" questionType="single-select-question">
+        <div class="question-unit" v-if="$me">
+            <div class="options-group">
+                <div class="radio" v-for="option in $me.options">
+                    <div class="field">
+                        <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
+                        <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
-                            </label>
-                            <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
-                                <span></span>
-                            </button>
-                        </div>
+                        </label>
+                        <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
+                            <span></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </GenericQuestion>
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"

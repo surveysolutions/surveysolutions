@@ -1,38 +1,40 @@
 export const entityPartial = {
     computed: {
         $me() {
-            // if entity defined in props - use props
-            if (this.entity != null) {
-                return this.$store.state.entityDetails[this.entity.identity]
+            const id = this.id || this.$parent.id;
+
+            if (id == null) {
+                console.error("Cannot identify entity id")
             }
 
-            if (this.$parent.entity == null) {
-                throw "Component " + this.$options.name
-                + " can be rendered only in scope of component having entity with identity property"
-                + " or has passed 'entity' property"
+            return this.$store.state.entityDetails[id] || {
+                isAnswered: true,
+                validity: {
+                    isValid: true
+                },
+                isLoading: true
             }
-
-            return this.$store.state.entityDetails[this.$parent.entity.identity]
         }
-    }
+    },
+    props: ["id"]
 }
 
 export const entityDetails = {
     computed: {
         $me() {
             // if entity defined in props - use props
-            if (this.entity != null) {
-                return this.$store.state.entityDetails[this.entity.identity]
+            if (this.id != null) {
+                return this.$store.state.entityDetails[this.id]
             }
         }
     },
-    props: ["entity"],
+    props: ["id"],
     beforeMount() {
         this.fetch()
     },
     methods: {
         fetch() {
-            this.$store.dispatch("fetchEntity", this.entity)
+            this.$store.dispatch("fetchEntity", this.id)
         }
     }
 }
