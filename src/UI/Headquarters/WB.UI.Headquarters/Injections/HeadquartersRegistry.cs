@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Injections
             
             this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
-            this.Kernel.Bind<IWebInterviewExchangeService>().To<WebInterviewExchangeService>();
+            this.Kernel.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
         }
 

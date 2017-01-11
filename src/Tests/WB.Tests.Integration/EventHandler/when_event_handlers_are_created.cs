@@ -5,11 +5,13 @@ using System.Reflection;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -28,7 +30,6 @@ namespace WB.Tests.Integration.EventHandler
     {
         Establish context = () =>
         {
-
             var type = typeof(IEventHandler);
             var types = new List<Type>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -110,7 +111,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof (IRostrerStructureService),
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
-            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage)
+            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage), typeof(IWebInterviewNotificationService)
             
         };
 
