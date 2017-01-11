@@ -627,6 +627,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : optionTitle;
         }
 
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId)
+        {
+            var interviewTreeGroup = this.Tree.GetGroup(sectionId);
+            var questionnaire = this.GetQuestionnaireOrThrow();
+            var result = interviewTreeGroup.Children
+                     .Except(x => questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id));
+
+            return result.Select(x => x.Identity);
+        }
+
         protected bool HasInvalidAnswers()
             => this.Tree.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());
 

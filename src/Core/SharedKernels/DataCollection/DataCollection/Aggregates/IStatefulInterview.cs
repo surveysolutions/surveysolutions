@@ -130,5 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionPrefilled(Identity entityIdentity);
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
+        
+        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
     }
 }
