@@ -9,6 +9,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
+        public int? Answer { get; set; }
     }
 
     public class CategoricalQuestion: GenericQuestion
@@ -20,6 +21,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
+        public bool IsAnswered { get; set; }
     }
 
     public abstract class InterviewEntity
