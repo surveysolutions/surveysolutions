@@ -25,13 +25,14 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void AnswerIntegerQuestion(string questionIdenty, int answer)
         {
             Identity identity = Identity.Parse(questionIdenty);
-            var command = new AnswerNumericIntegerQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+            var command = new AnswerNumericIntegerQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
             this.commandService.Execute(command);
         }
         public void AnswerRealQuestion(string questionIdenty, double answer)
         {
             Identity identity = Identity.Parse(questionIdenty);
-            var command = new AnswerNumericRealQuestionCommand(currentInterview.Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+            var command = new AnswerNumericRealQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer);
+            this.commandService.Execute(command);
         }
 
         public void RemoveAnswer(string questionId)
