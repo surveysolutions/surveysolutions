@@ -42,8 +42,8 @@ async function hubStarter() {
         $.connection.hub.url = signalrUrlOverride
     }
 
-    await wrap($.signalR.hub.start({ transport: supportedTransports }))
-
+    // { transport: supportedTransports }
+    await wrap($.signalR.hub.start())
 }
 
 let connected = false;
