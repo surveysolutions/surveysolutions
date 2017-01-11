@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
-    [TestOf(typeof(PlainQuestionnaire))]
-    [Ignore("KP-8526")]
     internal class when_getting_questions_affected_by_substitutions
     {
-        [Test]
-        public void should_find_roster_title_substitutions()
+        Establish context = () =>
         {
-            // arrange 
             var rosterSizeId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Create.Entity.QuestionnaireDocument(
                 children: new List<IComposite>
                 {
@@ -30,14 +26,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         })
                 });
 
-            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+        };  
 
-            // Act
-            var affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
+        Because of = () => 
+            affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
 
-            // Assert
-            Assert.That(affectedQuestions, Does.Contain(substitutionTargetQuestionId));
-        }
+        It should_find_roster_title_substitutions = () => 
+            affectedQuestions.ShouldContain(substitutionTargetQuestionId);
+
+        private static PlainQuestionnaire plainQuestionnaire;
+        private static Guid substitutionTargetQuestionId;
+        private static Guid rosterTitleid;
+        private static IEnumerable<Guid> affectedQuestions;
     }
 }
 
