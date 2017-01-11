@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .Select(identity => new
                 {
                     identity,
-                    title = this.currentInterview.GetTitleText(identity)
+                    title = this.GetCallerInterview().GetTitleText(identity)
                 })
                 .ToArray();
 

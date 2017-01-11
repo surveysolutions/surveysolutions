@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public InterviewEntityWithType[] GetPrefilledQuestions()
         {
-            var result = this.currentQuestionnaire
+            var result = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
@@ -25,8 +25,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         public InterviewEntity GetEntityDetails(string id)
         {
             var identity = Identity.Parse(id);
+            var callerInterview = this.GetCallerInterview();
 
-            InterviewTreeQuestion question = this.currentInterview.GetQuestion(identity);
+            InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             if (question != null)
             {
                 GenericQuestion result = new StubEntity {Id = id};
@@ -34,12 +35,12 @@ namespace WB.UI.Headquarters.API.WebInterview
                 if (question.IsSingleFixedOption)
                 {
                     result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
-                    var options = this.currentInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                    var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                     ((InterviewSingleOptionQuestion) result).Options = options;
                 }
                 else if (question.IsText)
                 {
-                    InterviewTreeQuestion textQuestion = this.currentInterview.GetQuestion(identity);
+                    InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
                     result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
                 }
 
@@ -52,17 +53,21 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private void PutInstructions(GenericQuestion result, Identity id)
         {
-            result.Instructions = this.currentQuestionnaire.GetQuestionInstruction(id.Id);
-            result.HideInstructions = this.currentQuestionnaire.GetHideInstructions(id.Id);
+            var callerQuestionnaire = this.GetCallerQuestionnaire();
+
+            result.Instructions = callerQuestionnaire.GetQuestionInstruction(id.Id);
+            result.HideInstructions = callerQuestionnaire.GetHideInstructions(id.Id);
         }
 
         private InterviewEntityType GetEntityType(Guid entityId)
         {
-            if (this.currentQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
-            if(this.currentQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
-            if (this.currentQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
+            var callerQuestionnaire = this.GetCallerQuestionnaire();
 
-            switch (this.currentQuestionnaire.GetQuestionType(entityId))
+            if (callerQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
+            if(callerQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
+            if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
+
+            switch (callerQuestionnaire.GetQuestionType(entityId))
             {
                 case QuestionType.DateTime:
                     return InterviewEntityType.DateTime;
@@ -75,7 +80,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.SingleOption:
                     return InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:
-                    return this.currentQuestionnaire.IsQuestionInteger(entityId)
+                    return callerQuestionnaire.IsQuestionInteger(entityId)
                         ? InterviewEntityType.Integer
                         : InterviewEntityType.Double;
                 case QuestionType.Text:
