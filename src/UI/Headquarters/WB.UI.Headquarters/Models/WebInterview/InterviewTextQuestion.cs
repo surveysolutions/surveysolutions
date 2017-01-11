@@ -16,12 +16,22 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public List<CategoricalOption> Options { get; set; }
     }
 
-    public abstract class GenericQuestion
+    public abstract class GenericQuestion : InterviewEntity
     {
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
-        public string QuestionIdentity { get; set; }
+    }
+
+    public abstract class InterviewEntity
+    {
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 
+    /// <summary>
+    /// Used during dev, should be deleted when all types of questions are implemented
+    /// </summary>
+    public class StubEntity : GenericQuestion
+    {
+    }
 }

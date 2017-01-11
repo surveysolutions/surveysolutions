@@ -12,13 +12,9 @@ export default {
         const loc = { name: "prefilled", params: { id: interviewId } };
         router.push(loc)
     },
-    async fetchTextQuestion({commit}, entity) {
-        const entityDetails = await apiCaller(api => api.getTextQuestion(entity.identity))
-        commit("SET_TEXTQUESTION_DETAILS", entityDetails);
-    },
-    async fetchSingleOptionQuestion({ commit }, entity) {
-        const entityDetails = await apiCaller(api => api.getSingleOptionQuestion(entity.identity))
-        commit("SET_SINGLEOPTION_DETAILS", entityDetails);
+    async fetchEntity({ commit }, entity) {
+        const entityDetails = await apiCaller(api => api.getEntityDetails(entity.identity))
+        commit("SET_ENTITY_DETAILS", entityDetails);
     },
     async getPrefilledQuestions({ commit }, interviewId) {
         await apiCaller(api => api.startInterview(interviewId))
@@ -30,6 +26,9 @@ export default {
     },
     async answerTextQuestion({ commit }, entity) {
         await apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
+    },
+    async removeAnswer({commit}, questionId: string) {
+        await apiCaller(api => api.removeAnswer(questionId))
     },
     InterviewMount({ commit }, { id }) {
         commit("SET_INTERVIEW", id)
