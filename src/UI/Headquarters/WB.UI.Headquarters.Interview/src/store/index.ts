@@ -41,6 +41,9 @@ const store: any = new Vuex.Store(safeStore({
         async answerSingleOptionQuestion({commit}, answerInfo) {
             await apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
         },
+        async answerTextQuestion({ commit }, entity) {
+            await apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
+        },
         InterviewMount({ commit }, { id }) {
             commit("SET_INTERVIEW", id)
         }
