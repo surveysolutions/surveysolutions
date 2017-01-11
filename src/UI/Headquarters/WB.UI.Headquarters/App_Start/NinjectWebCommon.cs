@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.Routing;
 using AutoMapper;
 using Main.DenormalizerStorage;
 using Microsoft.AspNet.SignalR;
@@ -68,6 +69,7 @@ using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
+using Microsoft.AspNet.SignalR.Hubs;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -261,7 +263,15 @@ namespace WB.UI.Headquarters
                 }
             }));
 
+            RegisterSignalR(kernel);
+
             return kernel;
+        }
+
+        private static void RegisterSignalR(IKernel kernel)
+        {
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
+            GlobalHost.DependencyResolver.Resolve<IHubPipeline>().AddModule(new PlainSignalRTransactionManager());
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
