@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public PrefilledPageData GetPrefilledPageData()
         {
-            var result = this.GetCallerQuestionnaire()
+            var questions = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .ToArray();
             var result = new PrefilledPageData();
             result.Questions = questions;
-            result.FirstSectionId = Identity.Create(this.currentQuestionnaire.GetAllSections().First(), RosterVector.Empty).ToString();
+            result.FirstSectionId = Identity.Create(this.GetCallerQuestionnaire().GetAllSections().First(), RosterVector.Empty).ToString();
 
             return result;
         }
