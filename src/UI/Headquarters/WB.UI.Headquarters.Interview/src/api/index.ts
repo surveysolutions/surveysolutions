@@ -35,7 +35,7 @@ async function hubStarter() {
 
 let connected = false;
 
-async function getInstance() {
+export async function getInstance() {
     await scriptIncludedPromise;
     await hubStarter()
     return jQuery.signalR.interview

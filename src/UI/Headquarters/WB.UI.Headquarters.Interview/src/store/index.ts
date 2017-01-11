@@ -13,6 +13,7 @@ const store: any = new Vuex.Store(safeStore({
         prefilledQuestions: [],
         firstSectionId: null,
         entityDetails: {},
+        section: {},
         interview: {
             id: null
         }

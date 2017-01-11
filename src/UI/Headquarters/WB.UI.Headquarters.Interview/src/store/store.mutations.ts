@@ -14,5 +14,8 @@ export default {
     },
     SET_ENTITY_DETAILS(state, entity) {
         Vue.set(state.entityDetails, entity.id, entity)
+    },
+    SET_SECTION(state, section) {
+        state.section = section
     }
 }

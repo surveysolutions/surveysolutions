@@ -14,18 +14,10 @@
         },
         methods: {
             loadQuestionnaire() {
-                this.$store.dispatch('loadQuestionnaire', this.$route.params.id)
+                this.$store.dispatch('loadQuestionnaire', this.$route.params.questionnaireId)
             },
             startInterview() {
-                this.$store.dispatch('startInterview', this.$route.params.id)
-            },
-            openInterview() {
-                if (this.interviewId) {
-                    this.$router.push({
-                        name: "prefilled",
-                        params: { id: this.interviewId }
-                    });
-                }
+                this.$store.dispatch('startInterview', this.$route.params.questionnaireId)
             }
         }
     }

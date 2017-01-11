@@ -15,8 +15,9 @@ declare interface IPrefilledPageData {
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
     createInterview(questionnaireId: string): string
-    startInterview(entity: string): void
+
     getPrefilledPageData(): IPrefilledPageData
+    getSection(sectionId: string): any
 
     getEntityDetails(id: string): any
 

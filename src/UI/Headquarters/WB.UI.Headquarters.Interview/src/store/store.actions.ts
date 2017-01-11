@@ -9,7 +9,7 @@ export default {
     },
     async startInterview({commit}, questionnaireId: string) {
         const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string;
-        const loc = { name: "prefilled", params: { id: interviewId } };
+        const loc = { name: "prefilled", params: { interviewId } };
         router.push(loc)
     },
     async fetchEntity({ commit }, entity) {
@@ -17,9 +17,12 @@ export default {
         commit("SET_ENTITY_DETAILS", entityDetails);
     },
     async getPrefilledQuestions({ commit }, interviewId) {
-        await apiCaller(api => api.startInterview(interviewId))
         const data = await apiCaller(api => api.getPrefilledPageData())
         commit("SET_PREFILLED_QUESTIONS", data)
+    },
+    async loadSection({commit}, sectionId) {
+        const section = await apiCaller(api => api.getSection(sectionId))
+        commit("SET_SECTION", section)
     },
     async answerSingleOptionQuestion({commit}, answerInfo) {
         await apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
