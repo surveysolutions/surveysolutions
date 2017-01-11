@@ -12,8 +12,8 @@ export default {
         const loc = { name: "prefilled", params: { interviewId } };
         router.push(loc)
     },
-    async fetchEntity({ commit }, entity) {
-        const entityDetails = await apiCaller(api => api.getEntityDetails(entity.identity))
+    async fetchEntity({ commit }, entityId) {
+        const entityDetails = await apiCaller(api => api.getEntityDetails(entityId))
         commit("SET_ENTITY_DETAILS", entityDetails);
     },
     async getPrefilledQuestions({ commit }, interviewId) {

@@ -55,10 +55,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (question != null)
             {
                 GenericQuestion result = new StubEntity {Id = id};
-
+                
                 if (question.IsSingleFixedOption)
                 {
                     result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+                    result.Validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
+
                     var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                     ((InterviewSingleOptionQuestion) result).Options = options;
                 }

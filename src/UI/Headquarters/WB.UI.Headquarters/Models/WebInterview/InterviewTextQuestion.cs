@@ -22,6 +22,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+    }
+
+    public class Validity
+    {
+        public bool IsValid { get; set; }
+        public string[] Messages { get; set; }
     }
 
     public abstract class InterviewEntity

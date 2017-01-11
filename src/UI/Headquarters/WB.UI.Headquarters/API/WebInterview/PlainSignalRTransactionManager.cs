@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             this.transactionManager.RollbackTransaction();
             this.readTransactionManager.RollbackQueryTransaction();
-            base.OnIncomingError(exceptionContext, invokerContext); 
+            base.OnIncomingError(exceptionContext, invokerContext);
         }
     }
 }
