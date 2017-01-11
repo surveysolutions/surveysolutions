@@ -11,4 +11,5 @@ declare interface IWebInterviewApi {
     getPrefilledQuestions(): any
 
     answerSingleOptionQuestion(answer:number, questionId:string)
+    answerTextQuestion(questionIdentity: string, text: string): void
 }

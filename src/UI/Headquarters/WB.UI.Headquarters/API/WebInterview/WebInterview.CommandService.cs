@@ -13,35 +13,11 @@ namespace WB.UI.Headquarters.API.WebInterview
         private Guid commandResponsibleId
             => this.webInterviewConfigProvider.Get(this.currentInterview.QuestionnaireIdentity).ResponsibleId;
 
-        public void ExecuteCommand(string commandType, string command)
+        public void AnswerTextQuestion(string questionIdenty, string text)
         {
-            try
-            {
-                ICommand concreteCommand = this.commandDeserializer.Deserialize(commandType, command);
-                ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand, this.commandResponsibleId);
-                this.commandService.Execute(transformedCommand);
-            }
-            catch (OverflowException e)
-            {
-                this.logger.Error(e.Message, e);
-                this.Clients.Caller.unhandledException();
-            }
-            catch (Exception e)
-            {
-                var interviewException = e.GetSelfOrInnerAs<InterviewException>();
-                if (interviewException != null)
-                    this.Clients.Caller.interviewException(interviewException);
-
-                var userException = e.GetSelfOrInnerAs<UserException>();
-                if (userException != null)
-                    this.Clients.Caller.userException(userException);
-
-                if (interviewException == null && userException == null)
-                {
-                    this.logger.Error(e.Message, e);
-                    this.Clients.Caller.unhandledException();
-                }
-            }
+            var identity = Identity.Parse(questionIdenty);
+            this.commandService.Execute(new AnswerTextQuestionCommand(this.currentInterview.Id,
+                this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
         }
 
         public void AnswerSingleOptionQuestion(int answer, string questionId)
