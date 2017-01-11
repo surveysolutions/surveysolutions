@@ -3,7 +3,8 @@ import "toastr/build/toastr.css"
 import * as Vue from "vue"
 
 Vue.config.errorHandler = (error, vm) => {
-    toastr.error(error.message)
+    console.error(error, vm)
+    toastr.error(error)
 }
 
 function wrap(name, method) {
@@ -41,7 +42,6 @@ function handleErrors(object) {
 
     return object
 }
-
 
 export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations", "getters"]) {
 

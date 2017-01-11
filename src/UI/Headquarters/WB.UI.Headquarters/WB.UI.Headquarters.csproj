@@ -1053,6 +1053,8 @@
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.EventHandlers.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
+    <Compile Include="API\WebInterview\WebInterviewExchangeService.cs" />
+    <Compile Include="API\WebInterview\WebInterviewStateManager.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

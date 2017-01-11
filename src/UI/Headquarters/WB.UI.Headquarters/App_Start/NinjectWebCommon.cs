@@ -271,8 +271,11 @@ namespace WB.UI.Headquarters
         private static void RegisterSignalR(IKernel kernel)
         {
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
-            GlobalHost.DependencyResolver.Resolve<IHubPipeline>().AddModule(new PlainSignalRTransactionManager());
-            GlobalHost.DependencyResolver.Resolve<IHubPipeline>().AddModule(new SignalrErrorHandler());
+            var pipiline = GlobalHost.DependencyResolver.Resolve<IHubPipeline>();
+            
+            pipiline.AddModule(new SignalrErrorHandler());
+            pipiline.AddModule(new PlainSignalRTransactionManager());
+            pipiline.AddModule(new WebInterviewStateManager());
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
