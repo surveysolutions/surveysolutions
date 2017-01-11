@@ -182,7 +182,8 @@
                         },
                         {
                             data: "version",
-                            name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            name: "Version", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "parameters"
                         },
                         {
                             data: "importDate",
@@ -242,7 +243,7 @@
             </div>
         </div>
         <div id="list">
-            <table id="questionnaires" class="table table-striped table-bordered table-hover table-ordered">
+            <table id="questionnaires" class="table table-striped table-bordered table-hover table-ordered import-interview">
                 <thead>
                 <tr>
                     <th>@Dashboard.Questionnaire</th>
