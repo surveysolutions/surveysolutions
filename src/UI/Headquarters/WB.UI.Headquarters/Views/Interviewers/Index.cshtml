@@ -107,7 +107,7 @@
 
             self.unarchiveInterviewers = function() {
                 self
-                    .getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning /r/n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
+                    .getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
             };
 
             self.archiveInterviewers = function() {
@@ -274,7 +274,26 @@
                         var rows = table.rows({ 'search': 'applied' }).nodes();
                         // Check/uncheck checkboxes for all rows in the table
 
-                        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                        var checkboxes = $('input[type="checkbox"]', rows);
+
+                        var newState = this.checked;
+
+                        _.forEach(checkboxes,
+                            function(checkbox) {
+                                if (newState) {
+                                    if (!checkbox.checked) {
+                                        model.SelectedItems.push(checkbox.value);
+                                    }
+                                } else {
+                                    if (checkbox.checked) {
+                                        var indexOfInterviewer = model.SelectedItems.indexOf(checkbox.value);
+                                        model.SelectedItems.splice(indexOfInterviewer, 1);
+                                    }
+                                }
+                         });
+
+                        checkboxes.prop('checked', newState);
+
                     });
 
             // Handle click on checkbox to set state of "Select all" control
