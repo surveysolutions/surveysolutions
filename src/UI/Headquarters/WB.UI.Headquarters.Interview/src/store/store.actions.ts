@@ -18,7 +18,7 @@ export default {
     },
     async getPrefilledQuestions({ commit }, interviewId) {
         await apiCaller(api => api.startInterview(interviewId))
-        const data = await apiCaller(api => api.getPrefilledQuestions())
+        const data = await apiCaller(api => api.getPrefilledPageData())
         commit("SET_PREFILLED_QUESTIONS", data)
     },
     async answerSingleOptionQuestion({commit}, answerInfo) {

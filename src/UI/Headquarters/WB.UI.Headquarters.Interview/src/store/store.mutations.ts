@@ -8,8 +8,9 @@ export default {
     SET_INTERVIEW(state, id) {
         state.interview.id = id;
     },
-    SET_PREFILLED_QUESTIONS(state, questions) {
-        state.prefilledQuestions = questions
+    SET_PREFILLED_QUESTIONS(state, prefilledPageData: IPrefilledPageData) {
+        state.prefilledQuestions = prefilledPageData.questions
+        state.firstSectionId = prefilledPageData.firstSectionId
     },
     SET_ENTITY_DETAILS(state, entity) {
         Vue.set(state.entityDetails, entity.id, entity)

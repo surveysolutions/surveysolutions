@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         }
 
+        [ValidateInput(false)]
         public ActionResult Index()
         {
             return this.View();

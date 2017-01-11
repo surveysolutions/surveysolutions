@@ -1,6 +1,8 @@
 <template>
     <div>
         <component v-for="question in prefilledQuestions" v-bind:is="question.entityType" v-bind:entity="question"></component>
+        <router-link :to="{name:'section', params: { id: firstSectionId }}" class="btn btn-primary">Start</router-link>
+
     </div>
 </template>
 
@@ -15,6 +17,9 @@
         computed: {
             prefilledQuestions() {
                 return this.$store.state.prefilledQuestions
+            },
+            firstSectionId() {
+                return this.$store.state.firstSectionId
             }
         },
         methods: mapActions(["getPrefilledQuestions"])
