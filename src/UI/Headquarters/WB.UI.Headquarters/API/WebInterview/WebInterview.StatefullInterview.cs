@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public partial class WebInterview
     {
-        public InterviewEntityWithType[] GetPrefilledQuestions()
+        public PrefilledPageData GetPrefilledPageData()
         {
             var result = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
@@ -19,6 +19,10 @@ namespace WB.UI.Headquarters.API.WebInterview
                     EntityType = this.GetEntityType(x).ToString()
                 })
                 .ToArray();
+            var result = new PrefilledPageData();
+            result.Questions = questions;
+            result.FirstSectionId = Identity.Create(this.currentQuestionnaire.GetAllSections().First(), RosterVector.Empty).ToString();
+
             return result;
         }
 

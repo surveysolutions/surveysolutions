@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public IReadOnlyCollection<decimal> Coordinates => this.coordinates;
 
-        public override string ToString() => $"<{string.Join("-", this.Coordinates)}>";
+        public override string ToString() => this.Coordinates.Count > 0 ? $"({string.Join("-", this.Coordinates)})" : string.Empty;
 
         public RosterVector Shrink(int targetLength)
         {
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static RosterVector Parse(string value)
         {
-            value = value.Trim('<', '>');
+            value = value.Trim('(', ')');
 
             return new RosterVector(value.Split('-').Where(val => !string.IsNullOrEmpty(val)).Select(decimal.Parse));
         }

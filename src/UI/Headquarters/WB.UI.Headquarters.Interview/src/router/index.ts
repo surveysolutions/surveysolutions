@@ -8,6 +8,7 @@ Vue.use(VueRouter)
 
 // import Interview from "../components/Interview"
 import Prefilled from "../components/Prefilled"
+import Section from "../components/Section"
 import Start from "../components/Start"
 
 export default new VueRouter({
@@ -16,6 +17,7 @@ export default new VueRouter({
     routes: [
         { path: "/:id", component: Start },
         // { path: "/start/:id", component: Interview },
-        { name: "prefilled", path: "/prefilled/:id", component: Prefilled }
+        { name: "prefilled", path: "/Prefilled/:id", component: Prefilled },
+        { name: "section", path: "/Section/:id", component: Section }
     ]
 })
