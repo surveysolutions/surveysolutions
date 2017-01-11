@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
     export default {
-        name: 'GenericQuestion',
+        name: 'wb-question',
         props: ["question", 'questionType']
     }
 </script>

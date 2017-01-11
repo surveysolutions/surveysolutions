@@ -1,5 +1,5 @@
 <template>
-    <GenericQuestion :question="$me" questionType="single-select-question">
+    <wb-question :question="$me" questionType="single-select-question">
         <div class="question-unit" v-if="$me">
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options">
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-    </GenericQuestion>
+    </wb-question>
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"

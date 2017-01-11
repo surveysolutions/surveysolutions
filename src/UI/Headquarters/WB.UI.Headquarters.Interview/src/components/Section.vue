@@ -1,6 +1,6 @@
 <template>
     <div v-if="section">
-        <component v-for="entity in section.entities" v-bind:is="entity.entityType" v-bind:entity="entity"></component>
+        <component v-for="entity in section.entities" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
         <!--<h1>
             You are browsing section component
         </h1>-->
