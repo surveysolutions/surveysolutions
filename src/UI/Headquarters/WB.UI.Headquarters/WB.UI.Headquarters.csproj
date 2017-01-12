@@ -1595,7 +1595,7 @@
     <Compile Include="Models\User\UserWebViewInputModel.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
-    <Compile Include="Models\WebInterview\InterviewTextQuestion.cs" />
+    <Compile Include="Models\WebInterview\WebInterivewDtos.cs" />
     <Compile Include="Models\WebInterview\PrefilledPageData.cs" />
     <Compile Include="Models\WebInterview\SetupModel.cs" />
     <Compile Include="Models\WebInterview\WebInterviewAutoMapProfile.cs" />

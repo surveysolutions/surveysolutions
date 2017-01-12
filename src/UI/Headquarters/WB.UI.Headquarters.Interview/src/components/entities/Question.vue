@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="question">
+    <div class="question" v-if="question" :class="[{'hidden-question': question.isDisabled}]">
         <div class="question-editor" :class="[{ answered: question.isAnswered, 'has-error': !question.validity.isValid}, questionType]">
             <wb-title :id="question.id" />
             <wb-instructions :id="question.id" />

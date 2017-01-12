@@ -8,8 +8,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     internal class InterviewLifecycleEventHandler :
         BaseDenormalizer,
         IEventHandler<AnswersDeclaredInvalid>,
-        IEventHandler<AnswersDeclaredValid>
+        IEventHandler<AnswersDeclaredValid>,
+        IEventHandler<QuestionsDisabled>,
+        IEventHandler<QuestionsEnabled>
     {
+        public override object[] Writers => new object[0];
+
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
 
         public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService)
@@ -27,6 +31,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Questions);
         }
 
-        public override object[] Writers => new object[0];
+        public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
+
+        public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
     }
 }
