@@ -4,11 +4,8 @@ import * as Vuex from "vuex"
 
 Vue.use(Vuex)
 
-import "./components/questions"
-import "./components/questions/parts"
-
-import "./components/staticText"
-import "./components/staticText/parts"
+import "./components/entities"
+import "./components/entities/parts"
 
 import "./errors.ts"
 import router from "./router"

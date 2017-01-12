@@ -22,7 +22,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
-        public Validity Validity { get; set; } = new Validity();
     }
 
     public class Validity
@@ -35,13 +34,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string Id { get; set; }
         public string Title { get; set; }
+
+        public Validity Validity { get; set; } = new Validity();
     }
 
 
     public class InterviewStaticText : InterviewEntity
     {
         public string AttachmentName { get; set; }
-        public Validity Validity { get; set; } = new Validity();
     }
 
     /// <summary>
