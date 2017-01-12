@@ -1,22 +1,18 @@
 <template>
-    <div class="question" v-if="$me">
-        <div class="question-editor numeric-question" :class="{answered: $me.isAnswered}">
-            <wb-title />
-            <wb-instructions />
-            <div class="question-unit">
-                <div class="options-group">
-                    <div class="form-group">
-                        <div class="field answered">
-                            <input type="number" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" v-on:focusout="answerIntegerQuestion">
-                            <button type="submit" class="btn btn-link btn-clear" v-show="{visible: $me.isAnswered}" @click="removeAnswer">
-                                <span></span>
-                            </button>
-                        </div>
+    <wb-question :question="$me" questionCssClassName="numeric-question">
+        <div class="question-unit">
+            <div class="options-group">
+                <div class="form-group">
+                    <div class="field answered">
+                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" v-on:focusout="answerIntegerQuestion">
+                        <button type="submit" class="btn btn-link btn-clear" v-show="{visible: $me.isAnswered}" @click="removeAnswer">
+                            <span></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </wb-question>
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
@@ -88,7 +84,7 @@
                         }
                     }
                 }
-                this.$store.dispatch('answerIntegerQuestion', { identity: this.entity.id, answer: this.answer })
+                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
             },
             removeAnswer: function() {
 
