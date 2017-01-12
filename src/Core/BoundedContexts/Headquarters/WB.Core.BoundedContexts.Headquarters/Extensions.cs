@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -7,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         public static string FormatDateWithTime(this DateTime dateTime)
         {
             string format = "MMM d, yyy HH:mm";
-            return dateTime.ToString(format);
+            return dateTime.ToString(format, CultureInfo.CurrentUICulture);
         }
     }
 }
