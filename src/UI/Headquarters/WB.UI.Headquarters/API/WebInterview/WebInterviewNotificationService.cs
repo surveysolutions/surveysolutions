@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private static readonly Lazy<IHubContext> _instance = new Lazy<IHubContext>(
             () => GlobalHost.ConnectionManager.GetHubContext<WebInterview>());
 
-        public void RefreshEntities(Guid interviewId, Identity[] questions)
+        public void RefreshEntities(Guid interviewId, params Identity[] questions)
         {
             var questionToRefresh = questions.Select(q => q.ToString()).ToArray();
             _instance.Value.Clients.Group(interviewId.FormatGuid()).refreshEntities(questionToRefresh);
