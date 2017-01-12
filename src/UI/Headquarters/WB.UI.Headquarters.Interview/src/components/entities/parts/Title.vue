@@ -6,6 +6,6 @@
 
     export default {
         mixins: [entityPartial],
-        name: "wb-text"
+        name: "wb-title"
     }
 </script>

@@ -1,8 +1,9 @@
 <template>
     <div class="question static-text" v-if="$me">
         <div class="question-editor">
-            <wb-text />
-            <wb-attachment />            
+            <wb-title />
+            <wb-attachment />        
+            <wb-validation />    
         </div>
     </div>
 </template>
