@@ -24,7 +24,7 @@ declare interface IWebInterviewApi {
     answerSingleOptionQuestion(answer: number, questionId: string)
     answerTextQuestion(questionIdentity: string, text: string): void
     answerIntegerQuestion(questionIdentity: string, answer: number): void
-    answerRealQuestion(questionIdentity: string, answer: number): void
+    answerDoubleQuestion(questionIdentity: string, answer: number): void
 
     removeAnswer(questionId: string): void
 }
