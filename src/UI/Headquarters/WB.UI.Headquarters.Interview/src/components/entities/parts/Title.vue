@@ -1,5 +1,5 @@
 <template>
-    <h5>{{$me.title}}</h5>
+    <h5 v-html="$me.title"></h5>
 </template>
 <script lang="ts">
     import { entityPartial } from "components/mixins"
