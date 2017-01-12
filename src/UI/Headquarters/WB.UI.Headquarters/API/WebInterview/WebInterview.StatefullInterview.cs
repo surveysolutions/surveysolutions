@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Text:
                     return InterviewEntityType.TextQuestion;
                 default:
-                    throw new Exception(@"Not supported question type");
+                    return InterviewEntityType.Unsupported;
             }
         }
     }
