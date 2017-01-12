@@ -1,6 +1,6 @@
 <template>
-    <wb-question :question="$me" questionType="single-select-question">
-        <div class="question-unit" v-if="$me">
+    <wb-question :question="$me" questionCssClassName="single-select-question">
+        <div class="question-unit">
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options">
                     <div class="field">
