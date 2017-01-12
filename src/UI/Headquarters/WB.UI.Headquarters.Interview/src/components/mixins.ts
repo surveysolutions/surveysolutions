@@ -8,7 +8,7 @@ export const entityPartial = {
             }
 
             return this.$store.state.entityDetails[id] || {
-                isAnswered: true,
+                isAnswered: false,
                 validity: {
                     isValid: true
                 },
@@ -22,9 +22,18 @@ export const entityPartial = {
 export const entityDetails = {
     computed: {
         $me() {
-            // if entity defined in props - use props
+            let result = null
+
             if (this.id != null) {
-                return this.$store.state.entityDetails[this.id]
+                result = this.$store.state.entityDetails[this.id]
+            }
+
+            return result || {
+                isAnswered: false,
+                validity: {
+                    isValid: true
+                },
+                isLoading: true
             }
         }
     },
