@@ -4,10 +4,9 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter text" v-model="text" v-on:focusout="answerTextQuestion">
-                        <button type="submit" class="btn btn-link btn-clear">
-                            <span></span>
-                        </button>
+                        <input type="text" class="field-to-fill" :placeholder="$me.mask || 'Tap to enter text'" :value="$me.answer" v-on:focusout="answerTextQuestion"
+                            v-mask="$me.mask">
+                        <wb-remove-answer />
                     </div>
                 </div>
             </div>
@@ -16,18 +15,29 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
+    import * as $ from "jquery"
 
     export default {
         name: 'TextQuestion',
         mixins: [entityDetails],
-        data: () => {
-            return {
-                text: ''
+        methods: {
+            answerTextQuestion(evnt) {
+                this.$store.dispatch('answerTextQuestion', { identity: this.id, text: $(evnt.target).val() })
             }
         },
-        methods: {
-            answerTextQuestion: function () {
-                this.$store.dispatch('answerTextQuestion', { identity: this.id, text: this.text })
+        directives: {
+            mask: {
+                update: (el, binding) => {
+                    if (binding.value) {
+                        $(el).mask(binding.value, {
+                            translation: {
+                                "~": { pattern: /[a-zA-Z]/ },
+                                "#": { pattern: /\d/ },
+                                "*": { pattern: /[a-zA-Z0-9]/ }
+                            }
+                        })
+                    }
+                }
             }
         }
     }

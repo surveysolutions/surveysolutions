@@ -5,6 +5,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
 {
     public class InterviewTextQuestion : GenericQuestion
     {
+        public string Mask { get; set; }
+        public string Answer { get; set; }
     }
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion

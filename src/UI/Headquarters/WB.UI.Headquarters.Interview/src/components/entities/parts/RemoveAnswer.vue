@@ -1,0 +1,18 @@
+<template>
+    <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
+        <span></span>
+    </button>
+</template>
+<script lang="ts">
+    import { entityPartial } from "components/mixins"
+
+    export default {
+        mixins: [entityPartial],
+        name: "wb-remove-answer",
+        methods: {
+            removeAnswer() {
+                this.$store.dispatch("removeAnswer", this.$me.id)
+            }
+        }
+    }
+</script>

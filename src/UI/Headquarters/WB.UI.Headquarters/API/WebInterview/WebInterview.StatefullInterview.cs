@@ -69,6 +69,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
                     result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
+                    var textQuestionMask = this.GetCallerQuestionnaire().GetTextQuestionMask(identity.Id);
+                    if (!string.IsNullOrEmpty(textQuestionMask))
+                    {
+                        ((InterviewTextQuestion)result).Mask = textQuestionMask;
+                    }
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
