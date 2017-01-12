@@ -33,7 +33,13 @@ try {
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
 		Exit 
 	}}
-	BuildNodeApp $ProjectWebInterview 'build'
+		 
+	if(-not (BuildWebInterviewApp $ProjectWebInterview)){
+	 	Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildNodeApp']"
+	 	Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
+	 	Exit 		
+	}
+	
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration

@@ -39,8 +39,8 @@ function CleanBinAndObjFolders() {
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
 
-function BuildNodeApp($targetLocation, $command){
-    $action = 'Building node app'
+function BuildWebInterviewApp($targetLocation){
+    $action = 'Building WebInterview app'
     Write-Host "##teamcity[blockOpened name='$action']"
     Write-Host "##teamcity[progressStart '$action']"
 
@@ -49,15 +49,15 @@ function BuildNodeApp($targetLocation, $command){
 
     try{
         Write-Host $installCommand
-        #install node js dependencies
-        &npm install | Write-Host
+
+        &npm install --silent --progress false | Write-Host
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
             Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
             return $wasBuildSuccessfull
         }
         
-        &npm run $command
+        &npm run build -- --noprogress
 
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
@@ -82,7 +82,7 @@ function BuildStaticContent($targetLocation, $forceInstall){
     Write-Host "Running npm install"
 
 	#install node js dependencies
-    &npm install | Write-Host
+    &npm install --silent --progress false | Write-Host
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
