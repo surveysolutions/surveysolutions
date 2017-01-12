@@ -3,7 +3,7 @@ var path = require('path')
 
 var argv = require('minimist')(process.argv.slice(2));
 
-var projectPath = path.resolve(__dirname, '../../WB.UI.Headquarters')
+var projectPath = path.resolve(__dirname, '../../../WB.UI.Headquarters')
 
 const config = {
     build: {
