@@ -37,9 +37,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <section class="questionnaire">
-                        <div class="unit-section">
-                            <router-view></router-view>
-                        </div>
+                        <router-view></router-view>                        
                     </section>
                 </div>
             </div>
