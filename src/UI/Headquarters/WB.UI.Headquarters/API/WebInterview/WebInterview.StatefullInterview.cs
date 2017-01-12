@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
 using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -74,6 +75,30 @@ namespace WB.UI.Headquarters.API.WebInterview
                     {
                         ((InterviewTextQuestion)result).Mask = textQuestionMask;
                     }
+                }
+                else if (question.IsInteger)
+                {
+                    InterviewTreeQuestion integerQuestion = callerInterview.GetQuestion(identity);
+                    var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(integerQuestion);
+                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+
+                    var isRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                    interviewIntegerQuestion.IsRosterSize = isRosterSize;
+
+                    if (isRosterSize)
+                    {
+                        var isRosterSizeOfLongRoster = callerQuestionnaire.IsQuestionIsRosterSizeForLongRoster(identity.Id);
+                        interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+                    }
+
+                    result = interviewIntegerQuestion;
+                }
+                else if (question.IsDouble)
+                {
+                    InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
+                    var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(textQuestion);
+                    interviewDoubleQuestion.CountOfDecimalPlaces = this.GetCallerQuestionnaire().GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
+                    result = interviewDoubleQuestion;
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
