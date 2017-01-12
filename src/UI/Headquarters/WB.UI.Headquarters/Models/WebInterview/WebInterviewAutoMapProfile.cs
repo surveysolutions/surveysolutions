@@ -15,7 +15,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
                  .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
                  .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
                  .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
-                 .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()));
+                 .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()))
+                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
