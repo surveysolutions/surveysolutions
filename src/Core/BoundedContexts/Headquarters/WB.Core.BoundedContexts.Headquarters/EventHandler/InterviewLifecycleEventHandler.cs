@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class InterviewLifecycleEventHandler :
-        IEventHandler,
+        BaseDenormalizer,
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>
     {
@@ -27,8 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Questions);
         }
 
-        public string Name { get; } = nameof(InterviewEventHandlerFunctional);
-        public object[] Readers { get; } = new object[0];
-        public object[] Writers { get; } = new object[0];
+        public override object[] Writers => new object[0];
     }
 }
