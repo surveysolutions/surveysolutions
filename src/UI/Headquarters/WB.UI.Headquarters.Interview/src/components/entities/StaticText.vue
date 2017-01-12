@@ -1,9 +1,9 @@
 <template>
-    <div class="question static-text" v-if="$me">
+    <div class="question static-text" v-if="$me" :class="[{'hidden-question': $me.isDisabled}]">
         <div class="question-editor">
             <wb-title />
-            <wb-attachment />        
-            <wb-validation />    
+            <wb-attachment />
+            <wb-validation />
         </div>
     </div>
 </template>

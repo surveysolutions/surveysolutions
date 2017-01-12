@@ -9,7 +9,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         {
             this.CreateMap<InterviewTreeQuestion, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
-                //.ForMember(x => x.Messages, opts => opts.MapFrom(x => x.ValidationMessages));//FailedValidations
 
             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
                  .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
@@ -26,7 +25,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeStaticText, InterviewEntity>()
                  .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text));
+                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeStaticText, InterviewStaticText>()
                 .IncludeBase<InterviewTreeStaticText, InterviewEntity>();

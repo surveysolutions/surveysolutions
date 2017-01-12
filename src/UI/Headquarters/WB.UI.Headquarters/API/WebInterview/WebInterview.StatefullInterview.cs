@@ -72,6 +72,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                 }
 
                 this.PutInstructions(result, identity);
+                this.PutHideIfDisabled(result, identity);
+
                 return result;
             }
             InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
@@ -79,10 +81,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 InterviewStaticText result = new InterviewStaticText() { Id = id };
                 result = this.autoMapper.Map<InterviewStaticText>(staticText);
+                this.PutHideIfDisabled(result, identity);
                 return result;
             }
 
             return null;
+        }
+
+        private void PutHideIfDisabled(InterviewEntity result, Identity identity)
+        {
+            result.HideIfDisabled = this.GetCallerQuestionnaire().ShouldBeHiddenIfDisabled(identity.Id);
         }
 
         private void PutInstructions(GenericQuestion result, Identity id)

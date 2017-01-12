@@ -10,7 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<QuestionsDisabled>,
-        IEventHandler<QuestionsEnabled>
+        IEventHandler<QuestionsEnabled>,
+        IEventHandler<StaticTextsDisabled>,
+        IEventHandler<StaticTextsEnabled>
     {
         public override object[] Writers => new object[0];
 
@@ -39,6 +41,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsDisabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsEnabled> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts); 
         }
     }
 }
