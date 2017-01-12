@@ -17,5 +17,11 @@ export default {
     },
     SET_SECTION(state, section) {
         state.section = section
+    },
+    SET_ANSWER_NOT_SAVED(state, {id, message}) {
+        const validity = state.entityDetails[id].validity
+        Vue.set(validity, "errorMessage", true)
+        validity.messages = [message]
+        validity.isValid = false
     }
 }
