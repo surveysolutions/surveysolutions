@@ -115,6 +115,9 @@
                         {
                             data: "email",
                             name: "Email", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            render: function (data, type, row) {
+                                return data ? "<a href='mailto:" + data + "'>" + data + "</a>" : "";
+                            },
                             "class": "date"
                         }
                     ],
@@ -159,7 +162,7 @@
             <thead>
                 <tr>
                     <th>@Users.UserName</th>
-                    <th>@Users.CreationDate</th>
+                    <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
                     <th>@Users.HeadquartersEmail</th>
                 </tr>
             </thead>
