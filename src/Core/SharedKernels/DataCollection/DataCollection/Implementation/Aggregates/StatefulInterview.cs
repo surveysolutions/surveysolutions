@@ -202,6 +202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedToList;
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
+        public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
 
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
 

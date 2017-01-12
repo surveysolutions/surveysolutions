@@ -37,6 +37,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Title { get; set; }
     }
 
+
+    public class InterviewStaticText : InterviewEntity
+    {
+        public string AttachmentName { get; set; }
+        public Validity Validity { get; set; } = new Validity();
+    }
+
     /// <summary>
     /// Used during dev, should be deleted when all types of questions are implemented
     /// </summary>

@@ -22,6 +22,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
+
+            this.CreateMap<InterviewTreeStaticText, InterviewEntity>()
+                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text));
+
+            this.CreateMap<InterviewTreeStaticText, InterviewStaticText>()
+                .IncludeBase<InterviewTreeStaticText, InterviewEntity>();
         }
     }
 }
