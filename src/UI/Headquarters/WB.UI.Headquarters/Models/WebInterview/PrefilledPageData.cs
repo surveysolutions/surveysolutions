@@ -8,8 +8,17 @@
 
     public class SectionData
     {
+        public SimpleGroupStatus Status { get; set; }
+
         public string Title { get; set; }
 
         public InterviewEntityWithType[] Entities { get; set; }
+    }
+
+    public enum SimpleGroupStatus
+    {
+        Completed = 1,
+        Invalid = -1,
+        Other = 0,
     }
 }

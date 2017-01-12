@@ -42,11 +42,32 @@ namespace WB.UI.Headquarters.API.WebInterview
                    EntityType = this.GetEntityType(x.Id).ToString()
                })
                .ToArray();
+
             return new SectionData
             {
+                Status = CalculateSimpleStatus(secitonIdentity, statefulInterview),
                 Entities =  entities,
                 Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
             };
+        }
+
+        private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
+        {
+            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(group))
+                return SimpleGroupStatus.Invalid;
+
+            if (interview.HasUnansweredQuestions(group))
+                return SimpleGroupStatus.Other;
+
+            bool isSomeSubgroupNotCompleted = interview
+                .GetEnabledSubgroups(group)
+                .Select(subgroup => CalculateSimpleStatus(subgroup, interview))
+                .Any(status => status != SimpleGroupStatus.Completed);
+
+            if (isSomeSubgroupNotCompleted)
+                return SimpleGroupStatus.Other;
+
+            return SimpleGroupStatus.Completed;
         }
 
         public InterviewEntity GetEntityDetails(string id)
