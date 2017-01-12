@@ -18,7 +18,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
                  .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
-                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsText.GetAnswer()));
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
