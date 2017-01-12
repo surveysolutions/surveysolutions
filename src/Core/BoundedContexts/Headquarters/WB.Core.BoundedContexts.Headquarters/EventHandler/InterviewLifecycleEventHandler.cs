@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<StaticTextsDisabled>,
         IEventHandler<StaticTextsEnabled>,
         IEventHandler<TextQuestionAnswered>,
+        IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
         public override object[] Writers => new object[0];
@@ -64,6 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
     }
 }
