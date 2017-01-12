@@ -112,6 +112,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 InterviewStaticText result = new InterviewStaticText() { Id = id };
                 result = this.autoMapper.Map<InterviewStaticText>(staticText);
+
+                var callerQuestionnaire = this.GetCallerQuestionnaire();
+                var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
+                if (attachment != null)
+                {
+                    result.AttachmentContent = attachment.ContentId;
+                }
+
                 this.PutHideIfDisabled(result, identity);
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
 
