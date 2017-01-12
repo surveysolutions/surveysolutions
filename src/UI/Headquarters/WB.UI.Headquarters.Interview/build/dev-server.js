@@ -67,10 +67,9 @@ app.use(devMiddleware)
 // compilation error display
 app.use(hotMiddleware)
 
-// serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
-
+// // serve pure static assets
+// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+// app.use(staticPath, express.static('./static'))
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
