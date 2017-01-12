@@ -118,6 +118,10 @@
     <Reference Include="Mvc.Mailer">
       <HintPath>..\..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
+    <Reference Include="NConfig, Version=1.1.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NConfig.1.1.20\lib\Net40\NConfig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -858,10 +862,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\exp\NConfig\NConfig\NConfig.csproj">
-      <Project>{0de97382-565b-4083-ae6e-c3ea3b1ab83d}</Project>
-      <Name>NConfig</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
