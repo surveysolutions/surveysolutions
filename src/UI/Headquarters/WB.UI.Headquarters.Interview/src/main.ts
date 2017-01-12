@@ -7,6 +7,9 @@ Vue.use(Vuex)
 import "./components/questions"
 import "./components/questions/parts"
 
+import "./components/staticText"
+import "./components/staticText/parts"
+
 import "./errors.ts"
 import router from "./router"
 import store from "./store"
