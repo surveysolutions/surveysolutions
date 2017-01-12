@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
+using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -71,6 +72,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                 }
 
                 this.PutInstructions(result, identity);
+                return result;
+            }
+            InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
+            if (staticText != null)
+            {
+                InterviewStaticText result = new InterviewStaticText() { Id = id };
+                result = this.autoMapper.Map<InterviewStaticText>(staticText);
                 return result;
             }
 

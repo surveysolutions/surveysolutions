@@ -61,6 +61,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeQuestion GetQuestion(Identity identity);
 
+        InterviewTreeStaticText GetStaticText(Identity identity);
+
         bool HasGroup(Identity group);
 
         bool IsEntityValid(Identity identity);
