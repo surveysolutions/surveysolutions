@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
 using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
@@ -60,7 +61,6 @@ namespace WB.UI.Headquarters.API.WebInterview
                 if (question.IsSingleFixedOption)
                 {
                     result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
-                    result.Validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
 
                     var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                     ((InterviewSingleOptionQuestion) result).Options = options;
@@ -71,6 +71,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
                 }
 
+                this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
                 this.PutHideIfDisabled(result, identity);
 
@@ -82,17 +83,24 @@ namespace WB.UI.Headquarters.API.WebInterview
                 InterviewStaticText result = new InterviewStaticText() { Id = id };
                 result = this.autoMapper.Map<InterviewStaticText>(staticText);
                 this.PutHideIfDisabled(result, identity);
+                this.PutValidationMessages(result.Validity, callerInterview, identity);
+
                 return result;
             }
 
             return null;
         }
 
+        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
+        {
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
+        }
+
         private void PutHideIfDisabled(InterviewEntity result, Identity identity)
         {
             result.HideIfDisabled = this.GetCallerQuestionnaire().ShouldBeHiddenIfDisabled(identity.Id);
         }
-
+        
         private void PutInstructions(GenericQuestion result, Identity id)
         {
             var callerQuestionnaire = this.GetCallerQuestionnaire();
