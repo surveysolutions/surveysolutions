@@ -4,10 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" v-on:focusout="answerDoubleQuestion">
-                        <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
-                            <span></span>
-                        </button>
+                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" maxlength="16" v-model="answer" v-on:focusout="answerDoubleQuestion">
+                        <wb-remove-answer />
                     </div>
                 </div>
             </div>
