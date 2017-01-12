@@ -23,6 +23,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
+            this.CreateMap<InterviewTreeQuestion, InterviewIntegerQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsInteger.GetAnswer().Value));
+            this.CreateMap<InterviewTreeQuestion, InterviewDoubleQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDouble.GetAnswer().Value));
 
             this.CreateMap<InterviewTreeStaticText, InterviewEntity>()
                  .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))

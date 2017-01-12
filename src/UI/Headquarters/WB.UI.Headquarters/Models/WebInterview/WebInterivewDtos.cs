@@ -9,6 +9,19 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Answer { get; set; }
     }
 
+    public class InterviewIntegerQuestion : GenericQuestion
+    {
+        public int? Answer { get; set; }
+        public bool IsRosterSize { get; set; }
+        public int? AnswerMaxValue { get; set; }
+    }
+
+    public class InterviewDoubleQuestion : GenericQuestion
+    {
+        public double? Answer { get; set; }
+        public int? CountOfDecimalPlaces { get; set; }
+    }
+
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
         public int? Answer { get; set; }

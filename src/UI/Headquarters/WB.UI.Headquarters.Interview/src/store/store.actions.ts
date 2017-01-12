@@ -33,8 +33,8 @@ export default {
     async answerIntegerQuestion({ commit }, entity) {
         await apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
     },
-    async answerRealQuestion({ commit }, entity) {
-        await apiCaller(api => api.answerRealQuestion(entity.identity, entity.answer))
+    async answerDoubleQuestion({ commit }, entity) {
+        await apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
     },
     async removeAnswer({commit}, questionId: string) {
         await apiCaller(api => api.removeAnswer(questionId))
