@@ -1,4 +1,5 @@
 import "es6-promise/auto"
+import "jquery-mask-plugin"
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 

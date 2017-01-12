@@ -8,9 +8,7 @@
                         <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                         </label>
-                        <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
-                            <span></span>
-                        </button>
+                        <wb-remove-answer />
                     </div>
                 </div>
             </div>
@@ -32,11 +30,6 @@
                 }
             }
         },
-        mixins: [entityDetails],
-        methods: {
-            removeAnswer() {
-                this.$store.dispatch("removeAnswer", this.$me.id)
-            }
-        }
+        mixins: [entityDetails]
     }
 </script>
