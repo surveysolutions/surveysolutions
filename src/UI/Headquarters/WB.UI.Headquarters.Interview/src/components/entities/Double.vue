@@ -22,7 +22,7 @@
     import { entityDetails } from "components/mixins"
 
     export default {
-        name: 'DoubleQuestion',
+        name: 'Double',
         computed: {
             answer: {
                 get() {
