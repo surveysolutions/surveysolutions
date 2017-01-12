@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -275,8 +276,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
-            var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ? 
-                Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
+            var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ?
+                new StringBuilder(model.Title).Replace(hint, $"<b>{hint}</b>").ToString() :
                 model.Title;
 
             return new CascadingComboboxItemViewModel
