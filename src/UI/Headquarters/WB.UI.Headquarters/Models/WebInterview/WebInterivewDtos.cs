@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewStaticText : InterviewEntity
     {
-        public string AttachmentName { get; set; }
+        public string AttachmentContent { get; set; }
         public Validity Validity { get; set; } = new Validity();
     }
 

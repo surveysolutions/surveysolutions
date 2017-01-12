@@ -30,13 +30,17 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDouble.GetAnswer().Value));
 
+            this.CreateMap<InterviewTreeStaticText, Validity>()
+                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
+
             this.CreateMap<InterviewTreeStaticText, InterviewEntity>()
-                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
-                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeStaticText, InterviewStaticText>()
-                .IncludeBase<InterviewTreeStaticText, InterviewEntity>();
+                .IncludeBase<InterviewTreeStaticText, InterviewEntity>()
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
         }
     }
 }
