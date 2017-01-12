@@ -1,6 +1,7 @@
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -12,7 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<QuestionsDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<StaticTextsDisabled>,
-        IEventHandler<StaticTextsEnabled>
+        IEventHandler<StaticTextsEnabled>,
+        IEventHandler<TextQuestionAnswered>,
+        IEventHandler<AnswersRemoved>
     {
         public override object[] Writers => new object[0];
 
@@ -51,6 +54,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<StaticTextsEnabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts); 
+        }
+
+        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector)); 
+        }
+
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
         }
     }
 }
