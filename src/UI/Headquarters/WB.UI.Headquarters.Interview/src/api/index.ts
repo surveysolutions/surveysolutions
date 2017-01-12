@@ -33,6 +33,10 @@ const scriptIncludedPromise = new Promise(resolve =>
             }
         }
 
+        interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
+            store.dispatch("setAnswerAsNotSaved", {id, message})
+        }
+
         resolve()
     })
 )

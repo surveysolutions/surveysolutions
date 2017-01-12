@@ -39,6 +39,9 @@ export default {
     async removeAnswer({commit}, questionId: string) {
         await apiCaller(api => api.removeAnswer(questionId))
     },
+    setAnswerAsNotSaved({commit}, entity){
+        commit("SET_ANSWER_NOT_SAVED", entity)
+    },
     InterviewMount({ commit }, { id }) {
         commit("SET_INTERVIEW", id)
     }
