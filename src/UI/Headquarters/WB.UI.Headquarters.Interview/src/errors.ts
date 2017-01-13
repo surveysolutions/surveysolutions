@@ -1,6 +1,7 @@
 import * as toastr from "toastr"
 import "toastr/build/toastr.css"
 import * as Vue from "vue"
+import { verboseMode } from "./config"
 
 Vue.config.errorHandler = (error, vm) => {
     console.error(error, vm)
@@ -12,10 +13,14 @@ function toastErr(err, message) {
     console.error(message, err)
 }
 
-function wrap(name, method) {
+function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function () {
         try {
+            if (verboseMode) {
+                console.info("call", section, name, arguments, JSON.parse(JSON.stringify(arguments[1])))
+            }
+
             const result = method.apply(this, arguments);
 
             // handle async exceptions
@@ -33,14 +38,14 @@ function wrap(name, method) {
     }
 }
 
-function handleErrors(object) {
+function handleErrors(object, section) {
     let name
     let method
 
     for (name in object) {
         if (typeof object[name] === "function") {
             method = object[name]
-            object[name] = wrap(name, method)
+            object[name] = wrap(name, method, section)
         }
     }
 
@@ -52,7 +57,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations", "g
     for (let field in fieldToSafe) {
         let item = fieldToSafe[field]
         if (storeConfig[item]) {
-            storeConfig[item] = handleErrors(storeConfig[item])
+            storeConfig[item] = handleErrors(storeConfig[item], item)
         }
     }
 

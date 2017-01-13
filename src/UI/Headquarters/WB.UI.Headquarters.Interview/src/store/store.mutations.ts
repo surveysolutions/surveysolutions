@@ -5,9 +5,6 @@ export default {
     SET_QUESTIONNAIRE_INFO(state, questionnaireInfo: IQuestionnaireInfo) {
         state.questionnaire = questionnaireInfo;
     },
-    SET_INTERVIEW(state, id) {
-        state.interview.id = id;
-    },
     SET_PREFILLED_QUESTIONS(state, prefilledPageData: IPrefilledPageData) {
         state.prefilledQuestions = prefilledPageData.questions
         state.firstSectionId = prefilledPageData.firstSectionId
