@@ -59,7 +59,6 @@ namespace WB.Tests.Integration.InterviewTests
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         }
 
-
         protected static StatefulInterview SetupPreloadedInterview(
             PreloadedDataDto preloadedData,
             QuestionnaireDocument questionnaireDocument,

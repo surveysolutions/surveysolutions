@@ -78,9 +78,11 @@ namespace WB.Core.SharedKernels.DataCollection.V4
                 targetLevel?.EnableQuestion(identity.Id);
             }
         }
-        
-        
-        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey, int? sortIndex = null)
+
+        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey)
+            => this.SetSiblings(rosterKey, rosterStringKey, null);
+
+        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey, int? sortIndex)
         {
             var siblingsKey = Util.GetSiblingsKey(rosterKey);
 
