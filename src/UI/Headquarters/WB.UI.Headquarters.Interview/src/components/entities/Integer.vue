@@ -37,20 +37,21 @@
         },
         mixins: [entityDetails],
         methods: {
-            answerIntegerQuestion: function () {
+            markAsError: function(message) {
+                var id = this.id;
+                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
+            },
+            answerIntegerQuestion: function (evnt) {
 
-                markAsError('test');
-                if (this.$me.answer == undefined)
+                if (this.$me.answer == undefined ||  $(evnt.target).val().length == 0)
                 {
-                    //alert('MarkAnswerAsNotSavedWithMessage');
-                    //this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                    this.markAsError('Empty value cannot be saved');
                     return;
                 }
 
-                if (this.$me.answer > 2147483647 || this.$me.answer < -2147483648)
+                if (this.$me.answer > 2147483647 || this.$me.answer < -2147483648 || this.$me.answer % 1 !== 0)
                 {
-                    //alert('MarkAnswerAsNotSavedWithMessage');
-                    //this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                    this.markAsError('Entered value can not be parsed as integer value');
                     return;
                 }
 
@@ -58,24 +59,21 @@
                 {
                     if (this.$me.answer < 0)
                     {
-                        //alert('Interview_Question_Integer_NegativeRosterSizeAnswer');
-                        //var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.$me.answer);
-                        //this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                        this.markAsError('Answer ' + this.$me.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
                         return;
                     }
 
                     if (this.$me.answer > this.$me.answerMaxValue)
                     {
-                        //alert('Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue');
-                        //var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, this.$me.answer, this.$me.answerMaxValue);
-                        //this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                        this.markAsError('Answer ' + this.$me.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
                         return;
                     }
 
                     if (this.$me.previousAnswer != undefined && this.$me.answer < this.$me.previousAnswer)
                     {
                         var amountOfRostersToRemove = this.previousAnswer - this.Answer;
-                        //alert('Interview_Questions_RemoveRowFromRosterMessage');
+                        var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+                        this.markAsError(confirmMessage);
                         //var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                         //if (!(await this.userInteractionService.ConfirmAsync(message)))
                         {
@@ -96,28 +94,17 @@
                 if (this.$me.isRosterSize)
                 {
                     var amountOfRostersToRemove = this.$me.previousAnswer;
-                    //alert('Interview_Questions_RemoveRowFromRosterMessage');
+                    var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+                    this.markAsError(confirmMessage);
                     //var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    /*if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    /*if (!(await this.userInteractionService.ConfirmAsync(message)))*/
                     {
                         this.Answer = this.previousAnswer;
                         return;
-                    }*/
+                    }
                 }
 
                 this.$store.dispatch("removeAnswer", this.id)
-            },
-            markAsError: function(message) {
-                this.$store.dispatch("setAnswerAsNotSaved", {this.id, message})
-            }
-        },
-        directives: {
-            mask: {
-                bind: (el, binding) => {
-                    console.log('enter')
-                    $(el).mask('0#', { byPassKeys: [188, 190] });
-                    console.log('init')
-                }
             }
         }
     }
