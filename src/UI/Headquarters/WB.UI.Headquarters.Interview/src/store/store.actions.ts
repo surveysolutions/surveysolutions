@@ -43,8 +43,5 @@ export default {
     },
     setAnswerAsNotSaved({commit}, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
-    },
-    InterviewMount({ commit }, { id }) {
-        commit("SET_INTERVIEW", id)
     }
 }
