@@ -465,7 +465,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         bool IsDisabled();
         bool IsDisabledByOwnCondition();
-
         void Disable();
         void Enable();
 
