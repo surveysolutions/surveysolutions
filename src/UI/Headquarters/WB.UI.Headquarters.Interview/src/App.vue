@@ -17,14 +17,6 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar">
-                    <ul class="nav navbar-nav">
-                        <router-link tag="li" to="/" role="presentation">
-                            <a>Start</a>
-                        </router-link>
-                        <router-link tag="li" to="/prefilled" role="presentation">
-                            <a>Preffiled</a>
-                        </router-link>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#" title="Help">Help</a></li>
                     </ul>
@@ -37,7 +29,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <section class="questionnaire">
-                        <router-view></router-view>                        
+                        <router-view></router-view>
                     </section>
                 </div>
             </div>
