@@ -1,3 +1,10 @@
+
+// tslint:disable-next-line:ordered-imports
+import * as jQuery from "jquery"
+const $ = (window as any).$ = (window as any).jQuery = jQuery
+import "bootstrap-sass/assets/javascripts/bootstrap/modal"
+
+
 import "es6-promise/auto"
 import "jquery-mask-plugin"
 import * as Vue from "vue"
