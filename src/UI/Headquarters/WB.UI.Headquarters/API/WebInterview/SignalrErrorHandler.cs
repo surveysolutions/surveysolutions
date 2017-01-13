@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 ["connectionId"] = invokerContext.Hub.Context.ConnectionId
             };
 
-            (invokerContext.Hub as WebInterview)?.FillExceptionData(data);
+            (invokerContext.Hub as IErrorDetailsProvider)?.FillExceptionData(data);
             
             var message = $"SignalR: {exceptionContext.Error.Message}. {delimiter}{string.Join(delimiter, data.Select(kv => $"{kv.Key}: {kv.Value}"))}{delimiter}";
 

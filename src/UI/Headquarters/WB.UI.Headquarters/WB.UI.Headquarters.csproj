@@ -1047,6 +1047,7 @@
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
     <Compile Include="API\WebInterview\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\SignalrErrorHandler.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
