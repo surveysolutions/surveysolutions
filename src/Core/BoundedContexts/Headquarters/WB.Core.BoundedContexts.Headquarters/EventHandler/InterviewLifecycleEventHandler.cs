@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
         public override object[] Writers => new object[0];
@@ -73,7 +75,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
 
-        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)        
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+        
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
