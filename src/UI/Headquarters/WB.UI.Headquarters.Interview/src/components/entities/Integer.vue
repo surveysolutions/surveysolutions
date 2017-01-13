@@ -101,23 +101,20 @@
                     this.answer = null;
                     return;
                 }
-                if (this.$me.isRosterSize)
+                if (!this.$me.isRosterSize)
                 {
-                    var amountOfRostersToRemove = this.$me.previousAnswer;
-                    var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
-                    //this.markAsError(confirmMessage);
-                    //var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-
-                    bootbox.confirm(confirmMessage, function (result) {
-                        if (result) {
-                            this.answer = this.$me.previousAnswer;
-                            return;
-                        }
-                    } );
-
+                    this.$store.dispatch("removeAnswer", this.id)
                 }
 
-                this.$store.dispatch("removeAnswer", this.id)
+                var amountOfRostersToRemove = this.$me.previousAnswer;
+                var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+                bootbox.confirm(confirmMessage, function (result) {
+                    if (result) {
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
+                    } else {
+                        this.answer = this.$me.previousAnswer;
+                    }
+                } );
             }
         }
     }
