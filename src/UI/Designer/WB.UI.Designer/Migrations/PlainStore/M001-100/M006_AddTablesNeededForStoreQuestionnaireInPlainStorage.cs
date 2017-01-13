@@ -76,6 +76,14 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     .FromTable("sharedpersons").ForeignColumn("questionnaireid")
                     .ToTable("questionnairelistviewitems").PrimaryColumn("id");
             }
+
+            if (!Schema.Table("questionnairesharedpersons").Exists())
+            {
+                Create.Table("questionnairesharedpersons")
+                    .WithColumn("id").AsString(255).NotNullable()
+                    .PrimaryKey("questionnairesharedpersons_pkey")
+                    .WithColumn("value").AsCustom("json").NotNullable();
+            }
         }
 
         public override void Down()
@@ -84,6 +92,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
             DropTableIfExists("questionnairelistviewitems");
             DropTableIfExists("questionnairechangereferences");
             DropTableIfExists("questionnairechangerecords");
+            DropTableIfExists("questionnairesharedpersons");
         }
 
         private void DropTableIfExists(string tableName)
