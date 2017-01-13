@@ -42,13 +42,13 @@
             },
             answerDoubleQuestion: function (evnt) {
 
-                if (this.$me.answer == undefined)
+                if (this.answer == undefined)
                 {
                     this.markAsError('Empty value cannot be saved');
                     return;
                 }
 
-                if (this.$me.answer > 9999999999999999 || this.$me.answer < -9999999999999999)
+                if (this.answer > 9999999999999999 || this.answer < -9999999999999999)
                 {
                     this.markAsError('Entered value can not be parsed as decimal value');
                     return;
