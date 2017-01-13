@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" :placeholder="$me.mask || 'Tap to enter text'" :value="$me.answer" v-on:focusout="answerTextQuestion"
+                        <input type="text" class="field-to-fill" :placeholder="$me.mask || 'Tap to enter text'" :value="$me.answer" @blur="answerTextQuestion"
                             v-mask="$me.mask">
                         <wb-remove-answer />
                     </div>
