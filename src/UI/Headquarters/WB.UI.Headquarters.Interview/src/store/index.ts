@@ -7,7 +7,7 @@ import router from "./../router"
 import actions from "./store.actions"
 import mutations from "./store.mutations"
 
-const store: any = new Vuex.Store(safeStore({
+const store = new Vuex.Store(safeStore({
     state: {
         questionnaire: null,
         prefilledQuestions: [],

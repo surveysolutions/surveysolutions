@@ -3,8 +3,7 @@ import router from "./../router"
 
 export default {
     async loadQuestionnaire({commit}, questionnaireId) {
-        const questionnaireInfo =
-            await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
+        const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo);
     },
     async startInterview({commit}, questionnaireId: string) {
@@ -24,23 +23,24 @@ export default {
         const section = await apiCaller(api => api.getSection(sectionId))
         commit("SET_SECTION", section)
     },
-    async answerSingleOptionQuestion({commit}, answerInfo) {
-        await apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
+    answerSingleOptionQuestion({ }, answerInfo) {
+        apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    async answerTextQuestion({ commit }, entity) {
-        await apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
+    answerTextQuestion({ }, entity) {
+        apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
     },
-    async answerMutliOptionQuestion({ commit }, answerInfo) {
-        await apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
+    answerMutliOptionQuestion({ commit }, answerInfo) {
+        apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    async answerIntegerQuestion({ commit }, entity) {
-        await apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
+    answerIntegerQuestion({ }, entity) {
+        apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
+
     },
-    async answerDoubleQuestion({ commit }, entity) {
-        await apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
+    answerDoubleQuestion({ }, entity) {
+        apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
     },
-    async removeAnswer({commit}, questionId: string) {
-        await apiCaller(api => api.removeAnswer(questionId))
+    removeAnswer({ }, questionId: string) {
+        apiCaller(api => api.removeAnswer(questionId))
     },
     setAnswerAsNotSaved({commit}, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
