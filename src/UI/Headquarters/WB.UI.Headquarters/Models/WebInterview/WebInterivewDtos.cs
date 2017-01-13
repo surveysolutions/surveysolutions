@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewMutliOptionQuestion : CategoricalQuestion
     {
+        public int? MaxSelectedAnswersCount { get; set; }
         public bool Ordered { get; set; }
         public int[] Answer { get; set; }
     }

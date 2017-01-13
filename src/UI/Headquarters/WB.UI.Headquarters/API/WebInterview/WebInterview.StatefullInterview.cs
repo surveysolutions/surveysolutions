@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var typedResult = (InterviewMutliOptionQuestion)result;
                     typedResult.Options = options;
                     typedResult.Ordered = this.GetCallerQuestionnaire().ShouldQuestionRecordAnswersOrder(identity.Id);
+                    typedResult.MaxSelectedAnswersCount = this.GetCallerQuestionnaire().GetMaxSelectedAnswerOptions(identity.Id);
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
