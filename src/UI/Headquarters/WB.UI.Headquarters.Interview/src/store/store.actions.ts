@@ -30,6 +30,9 @@ export default {
     async answerTextQuestion({ commit }, entity) {
         await apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
     },
+    async answerMutliOptionQuestion({ commit }, answerInfo) {
+        await apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
+    },
     async answerIntegerQuestion({ commit }, entity) {
         await apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
     },

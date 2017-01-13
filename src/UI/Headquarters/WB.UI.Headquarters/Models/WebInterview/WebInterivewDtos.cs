@@ -27,6 +27,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public int? Answer { get; set; }
     }
 
+    public class InterviewMutliOptionQuestion : CategoricalQuestion
+    {
+        public bool Ordered { get; set; }
+        public int[] Answer { get; set; }
+    }
+
     public class CategoricalQuestion: GenericQuestion
     {
         public List<CategoricalOption> Options { get; set; }

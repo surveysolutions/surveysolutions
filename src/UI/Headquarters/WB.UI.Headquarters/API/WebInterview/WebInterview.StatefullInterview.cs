@@ -121,6 +121,15 @@ namespace WB.UI.Headquarters.API.WebInterview
                     interviewDoubleQuestion.CountOfDecimalPlaces = this.GetCallerQuestionnaire().GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                     result = interviewDoubleQuestion;
                 }
+                else if (question.IsMultiFixedOption)
+                {
+                    result = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
+
+                    var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                    var typedResult = (InterviewMutliOptionQuestion)result;
+                    typedResult.Options = options;
+                    typedResult.Ordered = this.GetCallerQuestionnaire().ShouldQuestionRecordAnswersOrder(identity.Id);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
