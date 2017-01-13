@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (model == null) throw new ArgumentNullException(nameof(model));
 
             var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ?
-                new StringBuilder(model.Title).Replace(hint, $"<b>{hint}</b>").ToString() :
+                Regex.Replace(model.Title, Regex.Escape(hint), "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
                 model.Title;
 
             return new CascadingComboboxItemViewModel
