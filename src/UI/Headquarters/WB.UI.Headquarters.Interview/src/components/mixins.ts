@@ -7,7 +7,7 @@ export const entityPartial = {
                 console.error("Cannot identify entity id")
             }
 
-            return this.$store.state.entityDetails[id] || {
+            return this.$store.state.details.entities[id] || {
                 isAnswered: false,
                 validity: {
                     isValid: true
@@ -25,7 +25,7 @@ export const entityDetails = {
             let result = null
 
             if (this.id != null) {
-                result = this.$store.state.entityDetails[this.id]
+                result = this.$store.state.details.entities[this.id]
             }
 
             return result || {
@@ -41,9 +41,17 @@ export const entityDetails = {
     beforeMount() {
         this.fetch()
     },
+    watch: {
+        $route (from, to) {
+            this.fetch()
+        }
+    },
     methods: {
         fetch() {
-            this.$store.dispatch("fetchEntity", this.id)
+            this.$store.dispatch("fetchEntity", {
+                id: this.id,
+                source: "client"
+            })
         }
     }
 }

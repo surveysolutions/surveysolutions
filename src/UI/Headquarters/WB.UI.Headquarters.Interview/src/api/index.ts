@@ -29,7 +29,10 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
 
         interviewProxy.client.refreshEntities = (questions) => {
             for (let questionId in questions) {
-                store.dispatch("fetchEntity", questions[questionId])
+                store.dispatch("fetchEntity", {
+                    id: questions[questionId],
+                    source: "server"
+                })
             }
         }
 

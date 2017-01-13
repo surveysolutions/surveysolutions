@@ -3,20 +3,25 @@ import * as Vuex from "vuex"
 
 export default {
     SET_QUESTIONNAIRE_INFO(state, questionnaireInfo: IQuestionnaireInfo) {
-        state.questionnaire = questionnaireInfo;
+        Vue.set(state.interview, "questionnaire", questionnaireInfo)
     },
     SET_PREFILLED_QUESTIONS(state, prefilledPageData: IPrefilledPageData) {
-        state.prefilledQuestions = prefilledPageData.questions
-        state.firstSectionId = prefilledPageData.firstSectionId
+        Vue.set(state.interview, "prefilledQuestions",  prefilledPageData.questions)
     },
     SET_ENTITY_DETAILS(state, entity) {
-        Vue.set(state.entityDetails, entity.id, entity)
+        Vue.set(state.details.entities, entity.id, entity)
     },
     SET_SECTION(state, section) {
-        state.section = section
+        Vue.set(state.details.sections, section.id, section)
+    },
+    SET_CURRENT_SECTION(state, { id }) {
+        Vue.set(state.interview, "currentSection", id)
+    },
+    SET_INTERVIEW_SECTIONS(state, { sections }) {
+        Vue.set(state.interview, "sections", sections)
     },
     SET_ANSWER_NOT_SAVED(state, {id, message}) {
-        const validity = state.entityDetails[id].validity
+        const validity = state.details.entities[id].validity
         Vue.set(validity, "errorMessage", true)
         validity.messages = [message]
         validity.isValid = false

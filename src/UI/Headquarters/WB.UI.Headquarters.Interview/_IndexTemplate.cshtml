@@ -11,7 +11,9 @@
     <script>
         global:INTERVIEW_APP_CONFIG = {
             "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
-            "signalrPath": '@Url.Content("~/signalr/hubs")'
+            "signalrPath": '@Url.Content("~/signalr/hubs")',
+            "prefilledSectionId": '@WB.UI.Headquarters.API.WebInterview.WebInterview.PrefilledSectionStub.Id',
+            "verboseLogging": <%= htmlWebpackPlugin.options.verboseLogging %>
         }
     </script>
     <div id="app"></div>
