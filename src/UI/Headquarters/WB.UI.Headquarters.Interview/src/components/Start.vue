@@ -1,7 +1,7 @@
 <template>
-    <div v-if="$store.state.questionnaire">
+    <div v-if="$store.state.interview.questionnaire">
         <h1>
-            You are about to start interview for questionnaire: '{{$store.state.questionnaire.title}}'
+            You are about to start interview for questionnaire: '{{ $store.state.interview.questionnaire.title }}'
         </h1>
         <button type="submit" class="btn btn-success" @click="startInterview">Start</button>
     </div>

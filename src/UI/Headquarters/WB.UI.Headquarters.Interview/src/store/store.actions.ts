@@ -1,26 +1,32 @@
 import { apiCaller } from "../api"
+import { prefilledSectionId } from "./../config"
 import router from "./../router"
 
 export default {
-    async loadQuestionnaire({commit}, questionnaireId) {
+    async loadQuestionnaire({ commit }, questionnaireId) {
         const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo);
     },
-    async startInterview({commit}, questionnaireId: string) {
+    async startInterview({ commit }, questionnaireId: string) {
         const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string;
         const loc = { name: "prefilled", params: { interviewId } };
         router.push(loc)
     },
-    async fetchEntity({ commit }, entityId) {
-        const entityDetails = await apiCaller(api => api.getEntityDetails(entityId))
+    async fetchEntity({ commit }, { id }) {
+        const entityDetails = await apiCaller(api => api.getEntityDetails(id))
         commit("SET_ENTITY_DETAILS", entityDetails);
     },
+    async getInterviewSections({ commit }, interviewId) {
+        const data = await apiCaller(api => api.getInterviewSections())
+        commit("SET_INTERVIEW_SECTIONS", data)
+    },
     async getPrefilledQuestions({ commit }, interviewId) {
-        const data = await apiCaller(api => api.getPrefilledPageData())
+        const data = await apiCaller(api => api.getInterviewSections())
         commit("SET_PREFILLED_QUESTIONS", data)
     },
-    async loadSection({commit}, sectionId) {
-        const section = await apiCaller(api => api.getSection(sectionId))
+    async loadSection({ commit }, sectionId) {
+        const section = await apiCaller(api => api.getSectionDetails(sectionId))
+        commit("SET_CURRENT_SECTION", section)
         commit("SET_SECTION", section)
     },
     answerSingleOptionQuestion({ }, answerInfo) {

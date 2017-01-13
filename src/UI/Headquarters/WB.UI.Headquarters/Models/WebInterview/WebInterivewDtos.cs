@@ -57,11 +57,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string Id { get; set; }
         public string Title { get; set; }
-
         public bool IsDisabled { get; set; }
         public bool HideIfDisabled { get; set; }
     }
-
 
     public class InterviewStaticText : InterviewEntity
     {
