@@ -1,3 +1,4 @@
+using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.EventBus;
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<SubstitutionTitlesChanged>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<AnswersRemoved>
@@ -88,6 +90,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
+
+        public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Groups);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
         }
     }
 }
