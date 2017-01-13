@@ -5,7 +5,9 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="number" class="field-to-fill" placeholder="Tap to enter number" maxlength="10" v-model="answer" v-on:focusout="answerIntegerQuestion" >
-                        <wb-remove-answer />
+                            <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
+                            <span></span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -80,6 +82,7 @@
                 if (!isNeedRemoveRosters)
                 {
                     this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer });
+                    return;
                 }
 
                 var amountOfRostersToRemove = this.$me.previousAnswer - this.answer;
@@ -103,7 +106,8 @@
                 }
                 if (!this.$me.isRosterSize)
                 {
-                    this.$store.dispatch("removeAnswer", this.id)
+                    this.$store.dispatch("removeAnswer", this.id);
+                    return;
                 }
 
                 var amountOfRostersToRemove = this.$me.previousAnswer;
