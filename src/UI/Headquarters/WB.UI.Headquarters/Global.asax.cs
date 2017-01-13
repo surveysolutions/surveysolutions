@@ -159,7 +159,6 @@ namespace WB.UI.Headquarters
             {
                 
             }
-            
         }
 
         private static void SetupNConfig()
@@ -178,8 +177,7 @@ namespace WB.UI.Headquarters
 
         void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
         {
-            HttpContext.Current.SetSessionStateBehavior(
-                SessionStateBehavior.Required);
+            HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
         }
 
         void ErrorLog_Filtering(object sender, ExceptionFilterEventArgs e)
@@ -200,7 +198,5 @@ namespace WB.UI.Headquarters
                 application.Context.Response.Headers.Remove("Server");
             }
         }
-
-        
     }
 }

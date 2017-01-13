@@ -7,6 +7,11 @@ Vue.config.errorHandler = (error, vm) => {
     toastr.error(error)
 }
 
+function toastErr(err, message) {
+    toastr.error(message)
+    console.error(message, err)
+}
+
 function wrap(name, method) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function () {
@@ -16,8 +21,7 @@ function wrap(name, method) {
             // handle async exceptions
             if (result && result.catch) {
                 result.catch(err => {
-                    toastr.error(err.message)
-                    console.error(name, err)
+                    toastErr(err, name + ": " + err.message)
                 })
             }
 
@@ -53,7 +57,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations", "g
     }
 
     storeConfig.actions.UNHANDLED_ERROR = (ctx, error: Error) => {
-       // toastr.error(error.message)
+        toastErr(error, error.message)
     }
 
     return storeConfig
