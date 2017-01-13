@@ -9,20 +9,20 @@ import store from "../store"
 
 // wraps jQuery promises into awaitable ES 2016 Promise
 const wrap = (jqueryPromise) => {
-    return new Promise((res, rej) =>
+    return new Promise<any>((res, rej) =>
         jqueryPromise
             .done(data => res(data))
             .fail(error => rej(error))
     )
 }
 
-const scriptIncludedPromise = new Promise(resolve =>
+const scriptIncludedPromise = new Promise<any>(resolve =>
     $script(signalrPath, () => {
         // All client-side subscriptions should be registered in this method
 
         // $.connection.hub.logging = true;
         $.connection.hub.error((error) => {
-            // console.log("SignalR error: " + error)
+            // console.error("SignalR error: " + error)
         });
 
         const interviewProxy = $.connection.interview
@@ -34,7 +34,7 @@ const scriptIncludedPromise = new Promise(resolve =>
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
-            store.dispatch("setAnswerAsNotSaved", {id, message})
+            store.dispatch("setAnswerAsNotSaved", { id, message })
         }
 
         resolve()
@@ -72,5 +72,10 @@ export async function apiCaller<T>(action: IServerHubCallback<T>) {
     // action return jQuery promise
     // wrap will wrap jq promise into awaitable promise
     const hub = await getInterviewHub()
-    return await wrap(action(hub))
+
+    try {
+        return await wrap(action(hub))
+    } catch (err) {
+        store.dispatch("UNHANDLED_ERROR", err)
+    }
 }

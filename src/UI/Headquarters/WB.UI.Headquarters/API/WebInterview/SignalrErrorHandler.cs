@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Elmah;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
@@ -19,15 +21,24 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .Select((p, index) => $"{p.Name}={invokerContext.Args[index]}")
                 .ToList();
 
-            if (invokerContext.Hub is WebInterview)
-                actionParameters.Insert(0, $"interviewId={invokerContext.Hub.Clients.Caller.interviewId}");
+            var data = new Dictionary<string, string>
+            {
+                ["HubName"] = hubName,
+                ["actionName"] = actionName,
+                ["actionParams"] = string.Join(", ", actionParameters),
+                ["connectionId"] = invokerContext.Hub.Context.ConnectionId
+            };
 
-            var errorMessage = $"SignalR: {hubName}.{actionName}({string.Join(@", ", actionParameters)})";
+            (invokerContext.Hub as WebInterview)?.FillExceptionData(data);
+            
+            var message = $"SignalR: {exceptionContext.Error.Message}. {delimiter}{string.Join(delimiter, data.Select(kv => $"{kv.Key}: {kv.Value}"))}{delimiter}";
 
-            this.logger.Error(errorMessage, exceptionContext.Error);
-            ErrorSignal.FromCurrentContext().Raise(new Exception(errorMessage, exceptionContext.Error));
+            this.logger.Error(message, exceptionContext.Error);
+
+            ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception(message, exceptionContext.Error)));
 
             base.OnIncomingError(exceptionContext, invokerContext);
         }
+        const string delimiter = "\r\n";
     }
 }

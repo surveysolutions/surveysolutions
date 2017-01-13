@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
@@ -92,6 +93,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             // statefull interview can be removed from cache here
             this.eventRegistry.Unsubscribe(this);
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void FillExceptionData(Dictionary<string, string> data)
+        {
+            var interviewId = CallerInterviewId;
+            if (interviewId != null) data["caller.interviewId"] = interviewId;
+            
         }
     }
 }

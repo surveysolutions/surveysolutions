@@ -138,6 +138,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 return result;
             }
+
             InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
             if (staticText != null)
             {
