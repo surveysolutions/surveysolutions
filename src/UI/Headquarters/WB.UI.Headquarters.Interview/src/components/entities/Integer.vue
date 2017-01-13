@@ -15,6 +15,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
+    import * as bootbox from "bootbox"
 
     export default {
         name: 'Integer',
@@ -43,46 +44,55 @@
             },
             answerIntegerQuestion: function (evnt) {
 
-                if (this.$me.answer == undefined ||  $(evnt.target).val().length == 0)
+                if (this.answer == undefined)
                 {
                     this.markAsError('Empty value cannot be saved');
                     return;
                 }
 
-                if (this.$me.answer > 2147483647 || this.$me.answer < -2147483648 || this.$me.answer % 1 !== 0)
+                if (this.answer > 2147483647 || this.answer < -2147483648 || this.answer % 1 !== 0)
                 {
                     this.markAsError('Entered value can not be parsed as integer value');
                     return;
                 }
 
-                if (this.$me.isRosterSize < 0)
+                if (!this.$me.isRosterSize)
                 {
-                    if (this.$me.answer < 0)
-                    {
-                        this.markAsError('Answer ' + this.$me.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
-                        return;
-                    }
-
-                    if (this.$me.answer > this.$me.answerMaxValue)
-                    {
-                        this.markAsError('Answer ' + this.$me.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
-                        return;
-                    }
-
-                    if (this.$me.previousAnswer != undefined && this.$me.answer < this.$me.previousAnswer)
-                    {
-                        var amountOfRostersToRemove = this.previousAnswer - this.Answer;
-                        var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
-                        this.markAsError(confirmMessage);
-                        //var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                        //if (!(await this.userInteractionService.ConfirmAsync(message)))
-                        {
-                            this.Answer = this.previousAnswer;
-                            return;
-                        }
-                    }
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer });
+                    return;
                 }
-                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
+
+
+                if (this.answer < 0)
+                {
+                    this.markAsError('Answer ' + this.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
+                    return;
+                }
+
+                if (this.answer > this.$me.answerMaxValue)
+                {
+                    this.markAsError('Answer ' + this.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
+                    return;
+                }
+
+                var isNeedRemoveRosters = this.$me.previousAnswer != undefined && this.answer < this.$me.previousAnswer;
+
+                if (!isNeedRemoveRosters)
+                {
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer });
+                }
+
+                var amountOfRostersToRemove = this.$me.previousAnswer - this.answer;
+                var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+
+                bootbox.confirm(confirmMessage, function (result) {
+                    if (result) {
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
+                    } else {
+                        this.answer = this.$me.previousAnswer;
+                        return;
+                    }
+                } );
             },
             removeAnswer: function() {
 
@@ -95,13 +105,16 @@
                 {
                     var amountOfRostersToRemove = this.$me.previousAnswer;
                     var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
-                    this.markAsError(confirmMessage);
+                    //this.markAsError(confirmMessage);
                     //var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    /*if (!(await this.userInteractionService.ConfirmAsync(message)))*/
-                    {
-                        this.Answer = this.previousAnswer;
-                        return;
-                    }
+
+                    bootbox.confirm(confirmMessage, function (result) {
+                        if (result) {
+                            this.answer = this.$me.previousAnswer;
+                            return;
+                        }
+                    } );
+
                 }
 
                 this.$store.dispatch("removeAnswer", this.id)
