@@ -2592,7 +2592,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.substitutionService.GetAllSubstitutionVariableNames(text).Length > 0  && prefilled)
             {
                 throw new QuestionnaireException(DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question text contains substitution references. It's illegal");
+                    "It is not allowed to use substitutins in Prefilled question title");
             }    
 
             this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(text, variableName, questionId, parentGroup);
