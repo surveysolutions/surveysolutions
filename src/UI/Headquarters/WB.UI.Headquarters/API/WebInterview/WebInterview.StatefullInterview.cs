@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Flurl.Http.Testing;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -15,7 +16,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public partial class WebInterview
     {
-        public PrefilledPageData GetPrefilledPageData()
+        public SectionData GetPrefilledQuestions()
         {
             var questions = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
@@ -25,32 +26,69 @@ namespace WB.UI.Headquarters.API.WebInterview
                     EntityType = this.GetEntityType(x).ToString()
                 })
                 .ToArray();
-            var result = new PrefilledPageData();
-            result.Questions = questions;
-            result.FirstSectionId = Identity.Create(this.GetCallerQuestionnaire().GetAllSections().First(), RosterVector.Empty).ToString();
 
-            return result;
+            return new SectionData
+            {
+                Id = PrefilledSectionStub.Id,
+                Type = PrefilledSectionStub.Type,
+                Status = PrefilledSectionStub.Status,
+                Entities = questions
+            };
         }
 
-        public SectionData GetSection(string sectionId)
+        public static readonly SectionData PrefilledSectionStub = new SectionData
+        {
+            Type = "Prefilled",
+            Status = SimpleGroupStatus.Other,
+            Id = "C001D00D-5ECC-BEEF-CA4E-B00B1E54A111"
+        };
+
+        public InterviewDetails GetInterviewSections()
+        {
+            var statefulInterview = this.GetCallerInterview();
+
+            var sections = this.GetCallerQuestionnaire().GetAllSections().Select(s => new SectionData
+            {
+               Id = s.FormatGuid(),
+               Type = "Section",
+               Status = CalculateSimpleStatus(Identity.Create(s, RosterVector.Empty), statefulInterview),
+               Title = statefulInterview.GetGroup(Identity.Create(s, RosterVector.Empty)).Title.Text
+            });
+
+            sections = new[] {PrefilledSectionStub}.Union(sections);
+
+            return new InterviewDetails
+            {
+                Sections = sections.ToArray()
+            };
+        }
+
+        public SectionData GetSectionDetails(string sectionId)
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
+
+            if (sectionId == PrefilledSectionStub.Id)
+            {
+                return this.GetPrefilledQuestions();
+            }
+
             Identity secitonIdentity = Identity.Parse(sectionId);
             var statefulInterview = this.GetCallerInterview();
             var ids = statefulInterview.GetUnderlyingInterviewerEntities(secitonIdentity);
 
             var entities = ids.Select(x => new InterviewEntityWithType
-               {
-                   Identity = x.ToString(),
-                   EntityType = this.GetEntityType(x.Id).ToString()
-               })
-               .ToArray();
+            {
+                Identity = x.ToString(),
+                EntityType = this.GetEntityType(x.Id).ToString()
+            }).ToArray();
 
             return new SectionData
             {
                 Breadcrumbs = GetBreadcrumbs(secitonIdentity, statefulInterview),
+                Id = sectionId,
+                Type = "Section",
                 Status = CalculateSimpleStatus(secitonIdentity, statefulInterview),
-                Entities =  entities,
+                Entities = entities,
                 Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
             };
         }
@@ -113,14 +151,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             if (question != null)
             {
-                GenericQuestion result = new StubEntity {Id = id};
-                
+                GenericQuestion result = new StubEntity { Id = id };
+
                 if (question.IsSingleFixedOption)
                 {
                     result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
 
                     var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                    ((InterviewSingleOptionQuestion) result).Options = options;
+                    ((InterviewSingleOptionQuestion)result).Options = options;
                 }
                 else if (question.IsText)
                 {
@@ -205,7 +243,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             result.HideIfDisabled = this.GetCallerQuestionnaire().ShouldBeHiddenIfDisabled(identity.Id);
         }
-        
+
         private void PutInstructions(GenericQuestion result, Identity id)
         {
             var callerQuestionnaire = this.GetCallerQuestionnaire();
@@ -219,7 +257,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var callerQuestionnaire = this.GetCallerQuestionnaire();
 
             if (callerQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
-            if(callerQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
+            if (callerQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
 
             switch (callerQuestionnaire.GetQuestionType(entityId))

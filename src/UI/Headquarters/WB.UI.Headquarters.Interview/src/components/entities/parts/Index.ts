@@ -1,5 +1,6 @@
 import * as vue from "vue"
 
+import ActionButtons from "./ActionButtons"
 import Attachment from "./Attachment"
 import Instructions from "./Instructions"
 import RemoveAnswer from "./RemoveAnswer"
@@ -11,3 +12,4 @@ vue.component("wb-title", Title)
 vue.component("wb-validation", Validation)
 vue.component("wb-remove-answer", RemoveAnswer)
 vue.component("wb-attachment", Attachment)
+vue.component("wb-actionButtons", ActionButtons)

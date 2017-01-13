@@ -34,7 +34,8 @@ module.exports = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: currentConfig.index,
       template: currentConfig.template,
-      inject: true
+      inject: true,
+      verboseLogging: true
     }),
     new FriendlyErrors(),
     new WriteFiles({

@@ -46,6 +46,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: config.build.index,
       template: '_IndexTemplate.cshtml',
       inject: true,
+      verboseLogging: false,
       minify: false,
       // {
       //   removeComments: true,

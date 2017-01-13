@@ -18,7 +18,9 @@ function wrap(name, method, section) {
     return function () {
         try {
             if (verboseMode) {
-                console.info("call", section, name, arguments, JSON.parse(JSON.stringify(arguments[1])))
+                let stack = null // new Error().stack;
+                let argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
+                console.info("call", section, name, argument, stack)
             }
 
             const result = method.apply(this, arguments);
