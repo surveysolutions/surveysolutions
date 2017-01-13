@@ -20,20 +20,41 @@
         computed: {
             answer: {
                 get() {
-                    return this.$me.answer
+                    return this.$me.answer;
                 },
                 set(value) {
-                    this.$me.answer = value
+                    if (value != undefined && value != '') {
+                        this.$me.answer = value;
+                        this.$me.isAnswered = true;
+                    }
+                    else {
+                        this.$me.answer = undefined;
+                        this.$me.isAnswered = false;
+                    }
                 }
             }
         },
         mixins: [entityDetails],
         methods: {
-            answerDoubleQuestion: function () {
-                this.$store.dispatch('answerDoubleQuestion', { identity: this.entity.id, answer: this.answer})
+            markAsError: function(message) {
+                var id = this.id;
+                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
-            removeAnswer: function() {
-                this.$store.dispatch("removeAnswer", this.$me.id)
+            answerDoubleQuestion: function (evnt) {
+
+                if (this.$me.answer == undefined)
+                {
+                    this.markAsError('Empty value cannot be saved');
+                    return;
+                }
+
+                if (this.$me.answer > 9999999999999999 || this.$me.answer < -9999999999999999)
+                {
+                    this.markAsError('Entered value can not be parsed as decimal value');
+                    return;
+                }
+
+                this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: this.answer })
             }
         }
     }
