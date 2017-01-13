@@ -34,7 +34,6 @@ export default {
     },
     answerIntegerQuestion({ }, entity) {
         apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
-
     },
     answerDoubleQuestion({ }, entity) {
         apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
