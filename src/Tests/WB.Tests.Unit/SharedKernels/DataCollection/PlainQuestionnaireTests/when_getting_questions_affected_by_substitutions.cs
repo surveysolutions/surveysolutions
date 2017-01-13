@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
@@ -27,6 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 });
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            plainQuestionnaire.SubstitutionService = new SubstitutionService();
         };  
 
         Because of = () => 

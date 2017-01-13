@@ -24,9 +24,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     internal class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService => 
-            this.substitutionService ?? 
-            (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+        public ISubstitutionService SubstitutionService
+        {
+            get
+            {
+                return this.substitutionService ??
+                    (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+            }
+            set { this.substitutionService = value; }
+        }
 
         private ISubstitutionService substitutionService;
 
