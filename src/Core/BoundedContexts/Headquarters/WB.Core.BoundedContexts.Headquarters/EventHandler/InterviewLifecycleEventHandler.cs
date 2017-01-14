@@ -21,7 +21,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<SubstitutionTitlesChanged>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<AnswersRemoved>
+        IEventHandler<AnswersRemoved>,
+        IEventHandler<StaticTextsDeclaredInvalid>,
+        IEventHandler<StaticTextsDeclaredValid>
     {
         public override object[] Writers => new object[0];
 
@@ -97,6 +99,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Groups);
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> @event)
+        {
+            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.GetFailedValidationConditionsDictionary().Keys.ToArray());
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsDeclaredValid> @event)
+        {
+            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.StaticTexts);
         }
     }
 }

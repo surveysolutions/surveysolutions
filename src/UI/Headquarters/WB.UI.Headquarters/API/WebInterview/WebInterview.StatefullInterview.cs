@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Flurl.Http.Testing;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -45,10 +48,42 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             return new SectionData
             {
+                Breadcrumbs = GetBreadcrumbs(secitonIdentity, statefulInterview),
                 Status = CalculateSimpleStatus(secitonIdentity, statefulInterview),
                 Entities =  entities,
                 Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
             };
+        }
+
+        private Breadcrumb[] GetBreadcrumbs(Identity group, IStatefulInterview statefulInterview)
+        {
+            var callerQuestionnaire = this.GetCallerQuestionnaire();
+            ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(group.Id);
+
+            var breadCrumbs = new List<Breadcrumb>();
+            int metRosters = 0;
+
+            foreach (Guid parentId in parentIds)
+            {
+                if (callerQuestionnaire.IsRosterGroup(parentId))
+                {
+                    metRosters++;
+                    var itemRosterVector = group.RosterVector.Shrink(metRosters);
+                    var itemIdentity = new Identity(parentId, itemRosterVector);
+                    var breadCrumb = new Breadcrumb {Title = statefulInterview.GetGroup(itemIdentity).Title.Text };
+
+                    breadCrumbs.Add(breadCrumb);
+                }
+                else
+                {
+                    var itemIdentity = new Identity(parentId, group.RosterVector.Shrink(metRosters));
+                    var breadCrumb = new Breadcrumb { Title = statefulInterview.GetGroup(itemIdentity).Title.Text };
+
+                    breadCrumbs.Add(breadCrumb);
+                }
+            }
+
+            return breadCrumbs.ToArray();
         }
 
         private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
