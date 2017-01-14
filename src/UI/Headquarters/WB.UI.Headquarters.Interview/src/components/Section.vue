@@ -3,7 +3,7 @@
         <div class="unit-section" :class="[{'complete-section': section.status == 1, 'section-with-error': section.status == -1}]">
             <div class="unit-title" >
                 <ol class="breadcrumb">
-                    <li><a href="">Breadcrumbs</a></li>
+                    <li v-for="breadcrumb in section.breadcrumbs"><a href="">{{breadcrumb.title}}</a></li>
                 </ol>
                 <h3>{{section.title}}</h3>
             </div>

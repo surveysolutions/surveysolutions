@@ -10,9 +10,16 @@
     {
         public SimpleGroupStatus Status { get; set; }
 
+        public Breadcrumb[] Breadcrumbs { set; get; }
+
         public string Title { get; set; }
 
         public InterviewEntityWithType[] Entities { get; set; }
+    }
+
+    public class Breadcrumb
+    {
+        public string Title { set; get; }
     }
 
     public enum SimpleGroupStatus
