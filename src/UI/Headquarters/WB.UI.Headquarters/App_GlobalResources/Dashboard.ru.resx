@@ -145,7 +145,7 @@
     <value>Census</value>
   </data>
   <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>Дублировать опросник</value>
+    <value>Клонировать опросник </value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Создан</value>

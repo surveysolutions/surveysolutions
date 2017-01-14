@@ -135,9 +135,6 @@
   <data name="InfoFiltered" xml:space="preserve">
     <value>(отфильтровано из _MAX_ записей)</value>
   </data>
-  <data name="InfoPostFix" xml:space="preserve">
-    <value />
-  </data>
   <data name="InfoThousands" xml:space="preserve">
     <value>,</value>
   </data>

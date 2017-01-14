@@ -613,6 +613,7 @@
       <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.ru.resx" />
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
     <EmbeddedResource Include="Resources\Strings.pt.resx" />
