@@ -331,7 +331,7 @@
     <value>Перейти к запущенному процессу импорта интервью</value>
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
-    <value>Создать множество интервью используя файл</value>
+    <value>Создать множество интервью  используя файл</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
     <value>Загрузить архив с заполненым tab файлом и собранными данными.
@@ -385,5 +385,11 @@
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Необходимо выбрать супервизора</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Проверка загружаемого файла не выполнена </value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Интервью не созданы </value>
   </data>
 </root>
