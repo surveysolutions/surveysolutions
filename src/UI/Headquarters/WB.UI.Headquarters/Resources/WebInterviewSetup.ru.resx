@@ -150,7 +150,4 @@
   <data name="WebLinkTitle" xml:space="preserve">
     <value>Используйте эту ссылку чтоб начать интервью</value>
   </data>
-  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
-    <value>Папка, которая содержит веб-сайт, имеет долгий путь. Пожалуйста переместите сайт выше.</value>
-  </data>
 </root>

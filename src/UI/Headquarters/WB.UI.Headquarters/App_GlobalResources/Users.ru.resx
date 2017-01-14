@@ -190,13 +190,13 @@
     <value>Не связан с планшетом</value>
   </data>
   <data name="Observer" xml:space="preserve">
-    <value>Обозреватель</value>
+    <value>Наблюдатель </value>
   </data>
   <data name="ObserverDisclaimerFormat" xml:space="preserve">
     <value>Этот контент видит &lt;b&gt;{0}&lt;/b&gt;.</value>
   </data>
   <data name="Observers" xml:space="preserve">
-    <value>Обозреватели</value>
+    <value>Наблюдатели </value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Супервизор</value>
@@ -212,5 +212,8 @@
   </data>
   <data name="AddObserver" xml:space="preserve">
     <value>Добавить обозревателя</value>
+  </data>
+  <data name="ObserversEmail" xml:space="preserve">
+    <value>Электронная почта наблюдателя </value>
   </data>
 </root>

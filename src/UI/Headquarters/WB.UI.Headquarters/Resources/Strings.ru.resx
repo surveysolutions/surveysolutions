@@ -172,7 +172,7 @@
     <value>Супервизор назначен</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Выполнение этого действия обозревателём запрещено</value>
+    <value>Выполнение этого действия наблюдателем запрещено</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Управление учетной записью</value>
