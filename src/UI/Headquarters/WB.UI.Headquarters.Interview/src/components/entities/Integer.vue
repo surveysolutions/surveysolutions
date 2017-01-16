@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" min="-2147483648" max="2147483647" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion" v-onlyNumbers="true">
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion" v-onlyNumbers="true">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
                         </button>
@@ -21,22 +21,17 @@
 
     export default {
         name: 'Integer',
-        created: function () {
-            this.$me.previousAnswer = this.$me.answer;
-        },
         computed: {
             answer: {
-                get() {
+                get : function() {
                     return this.$me.answer;
                 },
-                set(value) {
+                set : function(value) {
                     if (value != undefined && value != '') {
                         this.$me.answer = value;
-                        this.$me.isAnswered = true;
                     }
                     else {
                         this.$me.answer = null;
-                        this.$me.isAnswered = false;
                     }
                 }
             }
@@ -49,13 +44,18 @@
             },
             answerIntegerQuestion: function (evnt) {
 
-                if (this.answer == null)
+                var answerString = $(evnt.target).autoNumeric('get');
+                var answer = answerString != undefined && answerString != ''
+                                ? parseInt(answerString)
+                                : null;
+
+                if (answer == null)
                 {
                     this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved');
                     return;
                 }
 
-                if (this.answer > 2147483647 || this.answer < -2147483648 || this.answer % 1 !== 0)
+                if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0)
                 {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value');
                     return;
@@ -63,37 +63,37 @@
 
                 if (!this.$me.isRosterSize)
                 {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer });
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
                     return;
                 }
 
 
-                if (this.answer < 0)
+                if (answer < 0)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Answer ' + this.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
+                    this.markAnswerAsNotSavedWithMessage('Answer ' + answer + ' is incorrect because question is used as size of roster and specified answer is negative');
                     return;
                 }
 
-                if (this.answer > this.$me.answerMaxValue)
+                if (answer > this.$me.answerMaxValue)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Answer ' + this.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
+                    this.markAnswerAsNotSavedWithMessage('Answer ' + answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
                     return;
                 }
 
-                var isNeedRemoveRosters = this.$me.previousAnswer != undefined && this.answer < this.$me.previousAnswer;
+                var isNeedRemoveRosters = this.$me.previousAnswer != undefined && answer < this.$me.previousAnswer;
 
                 if (!isNeedRemoveRosters)
                 {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer });
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
                     return;
                 }
 
-                var amountOfRostersToRemove = this.$me.previousAnswer - this.answer;
+                var amountOfRostersToRemove = this.$me.previousAnswer - answer;
                 var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
 
                 bootbox.confirm(confirmMessage, function (result) {
                     if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                     } else {
                         this.answer = this.$me.previousAnswer;
                         return;
@@ -133,7 +133,11 @@
                             mDec: 0,
                             vMin: -2147483648,
                             vMax: 2147483647
-                        });
+                        });/*.on('change', (function(_this) {
+                            return function() {
+                                return _this.set($(_this.el).autoNumeric('get'));
+                            };
+                        }));*/
                      }
                 }
             }

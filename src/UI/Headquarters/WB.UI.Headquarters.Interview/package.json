@@ -14,7 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
-    "autonumeric": "^1.9.41",
+    "autonumeric": "^1.9.46",
     "bootbox": "^4.4.0",
     "file-loader": "^0.9.0",
     "jquery": "^3.1.1",
