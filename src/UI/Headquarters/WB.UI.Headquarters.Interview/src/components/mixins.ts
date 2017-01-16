@@ -42,7 +42,7 @@ export const entityDetails = {
         this.fetch()
     },
     watch: {
-        $route (from, to) {
+        id() {
             this.fetch()
         }
     },
