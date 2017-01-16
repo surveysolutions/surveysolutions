@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" maxlength="16" v-model="answer" @blur="answerDoubleQuestion" v-onlyNumbersAndPoint="true">
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerDoubleQuestion" v-onlyNumbersAndPoint="true">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -26,11 +26,9 @@
                 set(value) {
                     if (value != undefined && value != '') {
                         this.$me.answer = value;
-                        this.$me.isAnswered = true;
                     }
                     else {
                         this.$me.answer = null;
-                        this.$me.isAnswered = false;
                     }
                 }
             }
@@ -43,19 +41,24 @@
             },
             answerDoubleQuestion: function (evnt) {
 
-                if (this.answer == null)
+                var answerString = $(evnt.target).autoNumeric('get');
+                var answer = answerString != undefined && answerString != ''
+                                ? parseFloat(answerString)
+                                : null;
+
+                if (answer == null)
                 {
                     this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved');
                     return;
                 }
 
-                if (this.answer > 9999999999999999 || this.answer < -9999999999999999)
+                if (answer > 9999999999999999 || answer < -9999999999999999)
                 {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value');
                     return;
                 }
 
-                this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: this.answer })
+                this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
             }
         },
         directives: {
@@ -64,7 +67,7 @@
                      if (binding.value == true) {
                         $(el).autoNumeric('init', {
                             aSep: '', //this.$me.useFormatting ? ',' : '',
-                            mDec: 20,
+                            mDec: 15,
                             vMin: -9999999999999999,
                             vMax: 9999999999999999
                         });
