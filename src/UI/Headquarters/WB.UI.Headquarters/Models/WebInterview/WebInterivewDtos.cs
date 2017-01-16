@@ -14,12 +14,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public int? Answer { get; set; }
         public bool IsRosterSize { get; set; }
         public int? AnswerMaxValue { get; set; }
+        public bool UseFormatting { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
     {
         public double? Answer { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
+        public bool UseFormatting { get; set; }
     }
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
