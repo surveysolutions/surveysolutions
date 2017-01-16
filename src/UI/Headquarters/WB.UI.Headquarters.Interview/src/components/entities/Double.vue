@@ -4,8 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerDoubleQuestion"
-                            v-autoNumeric="{aSep: this.$me.useFormatting ? ',' : '', mDec: this.$me.countOfDecimalPlaces || 15 }">
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="$me.answer" @blur="answerDoubleQuestion"
+                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '', mDec: $me.countOfDecimalPlaces || 15 }">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -19,21 +19,6 @@
 
     export default {
         name: 'Double',
-        computed: {
-            answer: {
-                get() {
-                    return this.$me.answer;
-                },
-                set(value) {
-                    if (value != undefined && value != '') {
-                        this.$me.answer = value;
-                    }
-                    else {
-                        this.$me.answer = null;
-                    }
-                }
-            }
-        },
         mixins: [entityDetails],
         methods: {
             markAnswerAsNotSavedWithMessage: function(message) {
