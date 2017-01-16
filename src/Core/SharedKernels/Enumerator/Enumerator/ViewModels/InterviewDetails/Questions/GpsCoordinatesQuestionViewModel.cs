@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Plugin.Geolocator.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -158,12 +159,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userInterfaceStateService.NotifyRefreshStarted();
             try
             {
-                var mvxGeoLocation = 
-                    await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec, this.settings.GpsDesiredAccuracy)
-                                              .ConfigureAwait(false);
+                var mvxGeoLocation =
+                    await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
+                            this.settings.GpsDesiredAccuracy)
+                        .ConfigureAwait(false);
 
                 this.userInterfaceStateService.NotifyRefreshFinished();
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation).ConfigureAwait(false);
+            }
+            catch (GeolocationException e)
+            {
+                switch (e.Error)
+                {
+                    case GeolocationError.PositionUnavailable:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                        break;
+                    case GeolocationError.Unauthorized:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
+                        break;
+                }
             }
             catch (MissingPermissionsException)
             {
