@@ -898,7 +898,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 return;
             }
 
-            var lazyhashVariable = new LazyHashSetGeneratedVariable(parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
+            var lazyhashVariable = new LazyHashSetGeneratedVariable(childQuestion.PublicKey.FormatGuid() + parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
+
             questionModel.GeneratedVariables.Add(lazyhashVariable);
 
             var condition = $"!({parentQuestion.StataExportCaption} != null && {lazyhashVariable.Name}.Value.Contains((int){parentQuestion.StataExportCaption}))";
