@@ -108,7 +108,6 @@
 
                 if (!this.$me.isAnswered)
                 {
-                    this.answer = null;
                     return;
                 }
                 if (!this.$me.isRosterSize)
