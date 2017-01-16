@@ -20,6 +20,9 @@ import Question from "./Question"
 import StaticText from "./StaticText"
 import TextQuestion from "./TextQuestion"
 
+
+import Group from "./Group"
+
 vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
 vue.component("Double", Double)
@@ -28,3 +31,4 @@ vue.component("CategoricalSingle", CategoricalSingle)
 vue.component("CategoricalMulti", CategoricalMulti)
 vue.component("wb-question", Question)
 vue.component("StaticText", StaticText)
+vue.component("Group", Group)

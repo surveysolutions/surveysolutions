@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.Models.WebInterview
@@ -44,6 +45,109 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeStaticText, InterviewStaticText>()
                 .IncludeBase<InterviewTreeStaticText, InterviewEntity>()
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+
+            this.CreateMap<InterviewTreeGroup, InterviewEntity>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
+
+            this.CreateMap<InterviewTreeRoster, InterviewEntity>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
+
+            this.CreateMap<InterviewTreeGroup, InterviewGroupOrRosterInstance>()
+                .IncludeBase<InterviewTreeGroup, InterviewEntity>()
+                .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
+                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x)));
+
+            this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
+                .IncludeBase<InterviewTreeRoster, InterviewEntity>()
+                .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
+                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x)))
+                .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
+        }
+
+        private static GroupStatus GetGroupStatus(InterviewTreeGroup group)
+        {
+            if (group.CountEnabledInvalidQuestionsAndStaticTexts() > 0)
+                return GroupStatus.Invalid;
+            
+            if (group.HasUnansweredQuestions() || HasSubgroupsWithUnansweredQuestions(@group))
+                return group.CountEnabledAnsweredQuestions() > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
+
+            return GroupStatus.Completed;
+        }
+
+        private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup @group)
+            => @group.Children
+                .OfType<InterviewTreeGroup>()
+                .Where(subGroup => !subGroup.IsDisabled())
+                .Select(GetGroupStatus)
+                .Any(status => status != GroupStatus.Completed);
+
+        private static string GetGroupStatistics(InterviewTreeGroup group)
+        {
+            var groupStatus = GetGroupStatus(group);
+            
+            switch (groupStatus)
+            {
+                case GroupStatus.NotStarted:
+                    return Resources.WebInterview.Interview_Group_Status_NotStarted;
+
+                case GroupStatus.Started:
+                    return string.Format(Resources.WebInterview.Interview_Group_Status_StartedIncompleteFormat, GetInformationByQuestionsAndAnswers(group));
+
+                case GroupStatus.Completed:
+                    return string.Format(Resources.WebInterview.Interview_Group_Status_CompletedFormat, GetInformationByQuestionsAndAnswers(group));
+
+                case GroupStatus.Invalid:
+                {
+                    return @group.CountEnabledQuestions() != @group.CountEnabledAnsweredQuestions()
+                        ? string.Format(Resources.WebInterview.Interview_Group_Status_StartedIncompleteFormat,
+                            $@"{GetInformationByQuestionsAndAnswers(@group)}, {GetInformationByInvalidAnswers(@group)}")
+                        : string.Format(Resources.WebInterview.Interview_Group_Status_CompletedFormat,
+                            $@"{GetInformationByQuestionsAndAnswers(@group)}, {GetInformationByInvalidAnswers(@group)}");
+                }
+
+                default:
+                    return GetInformationByQuestionsAndAnswers(group);
+            }
+        }
+
+        private static string GetInformationByQuestionsAndAnswers(InterviewTreeGroup group)
+        {
+            var subGroupsText = GetInformationBySubgroups(group);
+            var enabledAnsweredQuestionsCount = @group.CountEnabledAnsweredQuestions();
+
+            return $@"{(enabledAnsweredQuestionsCount == 1 ? 
+                Resources.WebInterview.Interview_Group_AnsweredQuestions_One : 
+                string.Format(Resources.WebInterview.Interview_Group_AnsweredQuestions_Many, enabledAnsweredQuestionsCount))}, {subGroupsText}";
+        }
+
+        private static string GetInformationByInvalidAnswers(InterviewTreeGroup group)
+        {
+            var countEnabledInvalidQuestionsAndStaticTexts = @group.CountEnabledInvalidQuestionsAndStaticTexts();
+
+            return countEnabledInvalidQuestionsAndStaticTexts == 1
+                ? Resources.WebInterview.Interview_Group_InvalidAnswers_One
+                : string.Format(Resources.WebInterview.Interview_Group_InvalidAnswers_ManyFormat, countEnabledInvalidQuestionsAndStaticTexts);
+        }
+
+        private static string GetInformationBySubgroups(InterviewTreeGroup group)
+        {
+            var subGroupsCount = @group.Children.OfType<InterviewTreeGroup>().Count();
+            switch (subGroupsCount)
+            {
+                case 0:
+                    return Resources.WebInterview.Interview_Group_Subgroups_Zero;
+
+                case 1:
+                    return Resources.WebInterview.Interview_Group_Subgroups_One;
+
+                default:
+                    return string.Format(Resources.WebInterview.Interview_Group_Subgroups_ManyFormat, subGroupsCount);
+            }
         }
     }
 }

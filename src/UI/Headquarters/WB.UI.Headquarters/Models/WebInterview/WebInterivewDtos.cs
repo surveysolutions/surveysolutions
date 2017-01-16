@@ -69,6 +69,21 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public Validity Validity { get; set; } = new Validity();
     }
 
+    public class InterviewGroupOrRosterInstance : InterviewEntity
+    {
+        public string RosterTitle { get; set; }
+        public GroupStatus Status { get; set; }
+        public string Statistics { get; set; }
+    }
+
+    public enum GroupStatus
+    {
+        NotStarted,
+        Started,
+        Completed,
+        Invalid
+    }
+
     /// <summary>
     /// Used during dev, should be deleted when all types of questions are implemented
     /// </summary>
