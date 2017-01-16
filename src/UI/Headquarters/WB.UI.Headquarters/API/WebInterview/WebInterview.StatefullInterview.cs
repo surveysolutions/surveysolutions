@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var callerQuestionnaire = this.GetCallerQuestionnaire();
 
-            if (callerQuestionnaire.HasVariable(entityId)) return InterviewEntityType.Unsupported;
+            if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
             if (callerQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
             if (callerQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
