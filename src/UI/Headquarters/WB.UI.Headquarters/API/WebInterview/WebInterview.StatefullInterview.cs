@@ -29,14 +29,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             return new SectionData
             {
-                Id = PrefilledSectionStub.Id,
-                Type = PrefilledSectionStub.Type,
-                Status = PrefilledSectionStub.Status,
+                Info = PrefilledSectionStub,
+                Breadcrumbs = null,
                 Entities = questions
             };
         }
 
-        public static readonly SectionData PrefilledSectionStub = new SectionData
+        public static readonly SectionInfo PrefilledSectionStub = new SectionInfo
         {
             Type = "Prefilled",
             Status = SimpleGroupStatus.Other,
@@ -47,13 +46,14 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var statefulInterview = this.GetCallerInterview();
 
-            var sections = this.GetCallerQuestionnaire().GetAllSections().Select(s => new SectionData
-            {
-               Id = s.FormatGuid(),
-               Type = "Section",
-               Status = CalculateSimpleStatus(Identity.Create(s, RosterVector.Empty), statefulInterview),
-               Title = statefulInterview.GetGroup(Identity.Create(s, RosterVector.Empty)).Title.Text
-            });
+            var sections = this.GetCallerQuestionnaire().GetAllSections().Select(s =>
+                new SectionInfo
+                {
+                    Id = s.FormatGuid(),
+                    Type = "Section",
+                    Status = CalculateSimpleStatus(Identity.Create(s, RosterVector.Empty), statefulInterview),
+                    Title = statefulInterview.GetGroup(Identity.Create(s, RosterVector.Empty)).Title.Text
+                });
 
             sections = new[] {PrefilledSectionStub}.Union(sections);
 
@@ -84,12 +84,15 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             return new SectionData
             {
+                Info = new SectionInfo
+                {
+                    Id = sectionId,
+                    Type = "Section",
+                    Status = CalculateSimpleStatus(secitonIdentity, statefulInterview),
+                    Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
+                },
                 Breadcrumbs = GetBreadcrumbs(secitonIdentity, statefulInterview),
-                Id = sectionId,
-                Type = "Section",
-                Status = CalculateSimpleStatus(secitonIdentity, statefulInterview),
-                Entities = entities,
-                Title = statefulInterview.GetGroup(secitonIdentity).Title.Text
+                Entities = entities
             };
         }
 

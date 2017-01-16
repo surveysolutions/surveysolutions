@@ -34,6 +34,9 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
                     source: "server"
                 })
             }
+
+            // HACK: Need to find a better solution, maybe push section status calculations on client-side
+            store.dispatch("getInterviewSections")
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {

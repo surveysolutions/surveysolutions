@@ -2,22 +2,22 @@
 {
     public class InterviewDetails
     {
-        public SectionData[] Sections { get; set; }
+        public SectionInfo[] Sections { get; set; }
     }
-
-    public class SectionData
+    
+    public class SectionInfo
     {
         public string Id { get; set; }
         public string Type { get; set; }
         public SimpleGroupStatus Status { get; set; }
-
-        public Breadcrumb[] Breadcrumbs { set; get; }
-
         public string Title { get; set; }
+    }
 
+    public class SectionData
+    {
+        public SectionInfo Info { get; set; }
+        public Breadcrumb[] Breadcrumbs { set; get; }
         public InterviewEntityWithType[] Entities { get; set; }
-
-
     }
 
     public class Breadcrumb

@@ -1,6 +1,6 @@
 <template>
-    <div class="question" v-if="!question.isLoading && !(question.isDisabled && question.hideIfDisabled)" :class="[{'hidden-question': question.isDisabled}]">
-        <div class="question-editor" :class="[{ answered: question.isAnswered, 'has-error': !question.validity.isValid}, questionCssClassName]">
+    <div class="question" v-if="isEnabled" :class="questionClass">
+        <div class="question-editor" :class="questionEditorClass">
             <wb-title />
             <wb-instructions />
             <slot />
@@ -13,8 +13,20 @@
         name: 'wb-question',
         props: ["question", 'questionCssClassName'],
         computed: {
-            id: function () {
+            id() {
                 return this.question.id
+            },
+            isEnabled() {
+                return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
+            },
+            questionClass() {
+                return [{ 'hidden-question': this.question.isDisabled }]
+            },
+            questionEditorClass() {
+                return [{
+                    answered: this.question.isAnswered,
+                    'has-error': !this.question.validity.isValid
+                }, this.questionCssClassName]
             }
         }
     }
