@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -9,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -23,7 +21,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
         private readonly IUserViewFactory usersRepository;
-        private readonly ILiteEventRegistry eventRegistry;
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -41,7 +38,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
             IUserViewFactory usersRepository,
-            ILiteEventRegistry eventRegistry,
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
@@ -50,7 +46,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
             this.usersRepository = usersRepository;
-            this.eventRegistry = eventRegistry;
             this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -86,13 +81,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();
-        }
-
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            // statefull interview can be removed from cache here
-            this.eventRegistry.Unsubscribe(this);
-            return base.OnDisconnected(stopCalled);
         }
 
         public void FillExceptionData(Dictionary<string, string> data)

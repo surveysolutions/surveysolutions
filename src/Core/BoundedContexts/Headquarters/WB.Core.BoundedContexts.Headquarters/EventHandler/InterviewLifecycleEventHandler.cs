@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -23,7 +24,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
-        IEventHandler<StaticTextsDeclaredValid>
+        IEventHandler<StaticTextsDeclaredValid>,
+        IEventHandler<RosterInstancesAdded>,
+        IEventHandler<RosterInstancesRemoved>,
+        IEventHandler<RosterInstancesTitleChanged>,
+        IEventHandler<GroupsEnabled>,
+        IEventHandler<GroupsDisabled>
     {
         public override object[] Writers => new object[0];
 
@@ -110,5 +116,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.StaticTexts);
         }
+
+        public void Handle(IPublishedEvent<RosterInstancesAdded> @event)
+            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
+                @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+
+        public void Handle(IPublishedEvent<RosterInstancesRemoved> @event)
+            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
+                @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+
+        public void Handle(IPublishedEvent<RosterInstancesTitleChanged> @event)
+            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
+                @event.Payload.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToArray());
+
+        public void Handle(IPublishedEvent<GroupsEnabled> @event)
+            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
+
+        public void Handle(IPublishedEvent<GroupsDisabled> @event)
+            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
     }
 }
