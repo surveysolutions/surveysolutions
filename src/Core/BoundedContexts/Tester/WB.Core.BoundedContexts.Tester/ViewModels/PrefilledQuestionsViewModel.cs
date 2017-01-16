@@ -32,8 +32,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() =>
+        {
+            this.viewModelNavigationService.NavigateToDashboard();
+            this.Dispose();
+        });
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+        public IMvxCommand SignOutCommand => new MvxCommand(() =>
+        {
+            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            this.Dispose();
+        });
     }
 }

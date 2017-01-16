@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -24,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
-        private ICompositeCollectionInflationService compositeCollectionInflationService;
+        private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
 
         protected BasePrefilledQuestionsViewModel(
@@ -96,7 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.PrefilledQuestions = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
             
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
-            startButton.Init(interviewId, null, null);
+            startButton.InterviewStarted += (sender, args) => this.Dispose();
+            startButton.Init(interviewId);
             this.PrefilledQuestions.Add(startButton);
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();

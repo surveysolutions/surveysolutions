@@ -46,7 +46,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
-        protected override void DisposeViewModel() => this.androidCurrentTopActivity.Activity.Finish();
+        protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
     }

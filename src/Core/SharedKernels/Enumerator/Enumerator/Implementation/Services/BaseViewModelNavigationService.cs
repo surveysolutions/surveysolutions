@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
         public abstract void NavigateToLogin();
-        protected abstract void DisposeViewModel();
+        protected abstract void FinishActivity();
 
         protected abstract void NavigateToSettingsImpl();
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 this.principal.SignOut();
                 this.NavigateToLogin();
-                this.DisposeViewModel();
+                this.FinishActivity();
             }
         }
 
