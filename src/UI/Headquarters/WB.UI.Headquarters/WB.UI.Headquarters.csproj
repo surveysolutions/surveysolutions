@@ -624,12 +624,19 @@
     <Content Include="..\WB.UI.Headquarters.Interview\_IndexTemplate.cshtml">
       <Link>Views\WebInterview\_IndexTemplate.cshtml</Link>
     </Content>
+    <EmbeddedResource Include="Resources\WebInterview.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterviewSetup.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ru.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1053,7 +1060,6 @@
     <Compile Include="API\WebInterview\SignalrErrorHandler.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
-    <Compile Include="API\WebInterview\WebInterview.EventHandlers.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
     <Compile Include="API\WebInterview\WebInterviewNotificationService.cs" />
     <Compile Include="API\WebInterview\WebInterviewStateManager.cs" />
@@ -1677,6 +1683,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\WebInterview.Designer.cs">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\WebInterviewSetup.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1751,6 +1762,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
+      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
+      <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>

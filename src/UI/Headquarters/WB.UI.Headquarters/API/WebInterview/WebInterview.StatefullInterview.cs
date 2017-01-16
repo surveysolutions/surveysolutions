@@ -237,6 +237,28 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return result;
             }
 
+            InterviewTreeGroup @group = callerInterview.GetGroup(identity);
+            if (@group != null)
+            {
+                var result = new InterviewGroupOrRosterInstance {Id = id};
+                result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@group);
+
+                this.PutHideIfDisabled(result, identity);
+
+                return result;
+            }
+
+            InterviewTreeRoster @roster = callerInterview.GetRoster(identity);
+            if (@roster != null)
+            {
+                var result = new InterviewGroupOrRosterInstance { Id = id };
+                result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@roster);
+
+                this.PutHideIfDisabled(result, identity);
+
+                return result;
+            }
+
             return null;
         }
 
@@ -263,8 +285,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             var callerQuestionnaire = this.GetCallerQuestionnaire();
 
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
-            if (callerQuestionnaire.HasGroup(entityId)) return InterviewEntityType.Group;
-            if (callerQuestionnaire.IsRosterGroup(entityId)) return InterviewEntityType.RosterInstance;
+            if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
+                return InterviewEntityType.Group;
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
 
             switch (callerQuestionnaire.GetQuestionType(entityId))
