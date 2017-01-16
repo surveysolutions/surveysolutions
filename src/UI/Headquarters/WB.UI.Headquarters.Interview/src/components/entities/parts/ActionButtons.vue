@@ -1,17 +1,8 @@
 <template>
     <div class="question">
         <div class="text-center">
-            <router-link v-if="firstSectionId" :to="{name:'section', params: { sectionId: firstSectionId,
-                interviewId: $route.params.interviewId}}" class="btn btn-primary">Start</router-link>
-
-            <router-link v-if="nextSection && !firstSectionId" :to="{name:'section', params: { sectionId: nextSection.id,
-                interviewId: $route.params.interviewId}}" class="btn btn-primary">{{nextSection.title}}</router-link>
-
-            <router-link v-if="parentSection" :to="{name:'section', params: { sectionId: parentSection.id,
-                interviewId: $route.params.interviewId}}" class="btn btn-primary">{{parentSection.title}}</router-link>
-
-            <router-link v-if="completeInterview" :to="{name:'section', params: { sectionId: currentSection.id,
-                interviewId: $route.params.interviewId}}" class="btn btn-primary">Complete Interview</router-link>
+            <router-link v-if="navigation" :to="to" class="btn" :class="css">
+                <span v-if="icon" class="glyphicon glyphicon-share-alt rotate-270"></span> {{ navigation.title}}</router-link>
         </div>
     </div>
 </template>
@@ -24,38 +15,46 @@
         mixins: [entityPartial],
         name: "wb-actionButtons",
         computed: {
-            sections() {
-                return this.$store.state.interview.sections
+            navigation() {
+                return this.$store.state.details.section.navigationState
             },
-            isPrefilled() {
-                return this.$store.state.interview.currentSection == prefilledSectionId
+            icon() {
+                if (this.$route.query.questionId) {
+                    return true
+                } else {
+                    return null
+                }
             },
-            currentSection() {
-                return this.sections[this.currentSectionIndex]
+            css() {
+                return [{
+                    'btn-success': this.navigation.status == 1,
+                    'btn-danger': this.navigation.status == -1,
+                    'btn-default': this.$route.query.questionId,
+                    'btn-primary': !this.$route.query.questionId
+                }]
             },
-            currentSectionIndex() {
-                const currentSectionIndex = _.chain(this.sections).map('id').indexOf(this.$store.state.interview.currentSection).value()
-                return currentSectionIndex
-            },
-            firstSectionId() {
-                if (this.sections && this.isPrefilled) {
-                    const section = this.sections[1]
-                    return (section || {}).id
+            to() {
+                let hash = ""
+
+                if (this.$route.query.questionId) {
+                    hash = "#" + this.$route.query.questionId
                 }
 
-                return null
-            },
-            nextSection() {
-                return this.sections[this.currentSectionIndex + 1]
-            },
-            parentSection() {
-                return this.sections[this.parentSectionId]
-            },
-            completeInterview() {
-                return this.sections.length == this.currentSectionIndex + 1
+                return {
+                    name: 'section',
+                    params: {
+                        sectionId: this.navigation.navigateToSection,
+                        interviewId: this.$route.params.interviewId
+                    },
+                    hash
+                }
             }
-
         }
-        , props: ["parentSectionId"]
     }
 </script>
+
+<style>
+.rotate-270{
+    transform: rotate(270deg);
+}
+</style>

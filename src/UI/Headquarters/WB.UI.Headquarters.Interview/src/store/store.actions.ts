@@ -16,11 +16,11 @@ export default {
         const entityDetails = await apiCaller(api => api.getEntityDetails(id))
         commit("SET_ENTITY_DETAILS", entityDetails);
     },
-    async getInterviewSections({ commit }) {
-        const data = await apiCaller(api => api.getInterviewSections())
-        commit("SET_INTERVIEW_SECTIONS", data.sections)
-    },
     async loadSection({ commit }, sectionId) {
+        if (sectionId == null) {
+            // tslint:disable-next-line:no-string-literal
+            sectionId = router.currentRoute.params["sectionId"] || "prefilled"
+        }
         const section = await apiCaller(api => api.getSectionDetails(sectionId))
         commit("SET_SECTION_DATA", section)
     },

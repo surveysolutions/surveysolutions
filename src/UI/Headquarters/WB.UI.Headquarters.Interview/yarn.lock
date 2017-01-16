@@ -214,6 +214,12 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+autonumeric@^1.9.46:
+  version "1.9.46"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-1.9.46.tgz#b7b058a717049af45abe0bf6eed0e81038d2a617"
+  dependencies:
+    jquery ">=1.7"
+
 autoprefixer@^6.3.1, autoprefixer@^6.4.0:
   version "6.6.1"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.6.1.tgz#11a4077abb4b313253ec2f6e1adb91ad84253519"
@@ -2335,7 +2341,7 @@ jquery-mask-plugin@^1.14.8:
   version "1.14.8"
   resolved "https://registry.yarnpkg.com/jquery-mask-plugin/-/jquery-mask-plugin-1.14.8.tgz#caf3beb398f53876a17ad3cd68492473bb36298b"
 
-jquery@>=1.6.4, jquery@^3.1.1:
+jquery@>=1.6.4, jquery@>=1.7, jquery@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.1.1.tgz#347c1c21c7e004115e0a4da32cece041fad3c8a3"
 
