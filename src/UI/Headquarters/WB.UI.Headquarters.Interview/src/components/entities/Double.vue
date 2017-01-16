@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerDoubleQuestion"
-                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '', mDec: this.$me.countOfDecimalPlaces || 15 }">
+                            v-autoNumeric="{aSep: this.$me.useFormatting ? ',' : '', mDec: this.$me.countOfDecimalPlaces || 15 }">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -70,8 +70,8 @@
                 update: (el, binding) => {
                     if (binding.value) {
                         var defaults = {
-                            aSep: '', //this.$me.useFormatting ? ',' : '',
-                            mDec: 15, //this.$me.countOfDecimalPlaces || 15,
+                            aSep: '',
+                            mDec: 15,
                             vMin: -9999999999999999,
                             vMax: 9999999999999999,
                             aPad: false
