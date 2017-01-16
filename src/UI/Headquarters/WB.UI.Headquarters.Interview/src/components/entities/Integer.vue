@@ -4,7 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion" v-onlyNumbers="true">
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion"
+                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '' }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
                         </button>
@@ -93,7 +94,8 @@
 
                 bootbox.confirm(confirmMessage, function (result) {
                     if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
+                        return;
                     } else {
                         this.answer = this.$me.previousAnswer;
                         return;
@@ -125,20 +127,25 @@
             }
         },
         directives: {
-            onlyNumbers: {
+            autoNumeric: {
                 bind: (el, binding) => {
-                     if (binding.value == true) {
-                        $(el).autoNumeric('init', {
+                    $(el).autoNumeric('init');
+                },
+                update: (el, binding) => {
+                    if (binding.value) {
+                        var defaults = {
                             aSep: '', //this.$me.useFormatting ? ',' : '',
                             mDec: 0,
                             vMin: -2147483648,
-                            vMax: 2147483647
-                        });/*.on('change', (function(_this) {
-                            return function() {
-                                return _this.set($(_this.el).autoNumeric('get'));
-                            };
-                        }));*/
-                     }
+                            vMax: 2147483647,
+                            aPad: false
+                        };
+                        var settings = $.extend( {}, defaults, binding.value );
+                        $(el).autoNumeric('update', settings);
+                    }
+                },
+                unbind: (el) => {
+                    $(el).autoNumeric('destroy');
                 }
             }
         }
