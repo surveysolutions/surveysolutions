@@ -17,7 +17,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void RefreshEntities(Guid interviewId, params Identity[] entities)
         {
             var questionToRefresh = entities.Select(q => q.ToString()).ToArray();
-            _instance.Value.Clients.Group(interviewId.FormatGuid()).refreshEntities(questionToRefresh);
+            if (questionToRefresh.Length > 0)
+            {
+                _instance.Value.Clients.Group(interviewId.FormatGuid()).refreshEntities(questionToRefresh);
+            }
         }
     }
 }
