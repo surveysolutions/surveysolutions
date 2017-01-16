@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion"
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="$me.answer" @blur="answerIntegerQuestion"
                             v-autoNumeric="{aSep: this.$me.useFormatting ? ',' : '' }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
@@ -22,21 +22,6 @@
 
     export default {
         name: 'Integer',
-        computed: {
-            answer: {
-                get : function() {
-                    return this.$me.answer;
-                },
-                set : function(value) {
-                    if (value != undefined && value != '') {
-                        this.$me.answer = value;
-                    }
-                    else {
-                        this.$me.answer = null;
-                    }
-                }
-            }
-        },
         mixins: [entityDetails],
         methods: {
             markAnswerAsNotSavedWithMessage: function(message) {
