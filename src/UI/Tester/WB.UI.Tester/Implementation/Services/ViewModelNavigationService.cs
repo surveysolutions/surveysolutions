@@ -5,6 +5,7 @@ using MvvmCross.Platform.Droid.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -44,7 +45,7 @@ namespace WB.UI.Tester.Implementation.Services
             });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
-        protected override void DisposeViewModel() => this.androidCurrentTopActivity.Activity.Finish();
+        protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
     }
