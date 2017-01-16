@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         private readonly ICommandService commandService;
         readonly IViewModelNavigationService viewModelNavigationService;
+        public event EventHandler InterviewStarted;
 
         public StartInterviewViewModel(ICommandService commandService, IViewModelNavigationService viewModelNavigationService)
         {
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected string interviewId;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId)
         {
             this.interviewId = interviewId;
         }
@@ -39,6 +40,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             await this.commandService.WaitPendingCommandsAsync();
 
             this.viewModelNavigationService.NavigateToInterview(interviewId, navigationIdentity: null);
+            this.OnInterviewStarted();
+        }
+
+        protected virtual void OnInterviewStarted()
+        {
+            this.InterviewStarted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
