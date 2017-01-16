@@ -20,10 +20,6 @@ export default {
         const data = await apiCaller(api => api.getInterviewSections())
         commit("SET_INTERVIEW_SECTIONS", data)
     },
-    async getPrefilledQuestions({ commit }, interviewId) {
-        const data = await apiCaller(api => api.getInterviewSections())
-        commit("SET_PREFILLED_QUESTIONS", data)
-    },
     async loadSection({ commit }, sectionId) {
         const section = await apiCaller(api => api.getSectionDetails(sectionId))
         commit("SET_CURRENT_SECTION", section)
