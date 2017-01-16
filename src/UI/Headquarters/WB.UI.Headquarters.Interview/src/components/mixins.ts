@@ -37,7 +37,7 @@ export const entityDetails = {
             }
         },
         hash() {
-            return "." + this.id
+            return "loc_" + this.id
         }
     },
     props: ["id"],

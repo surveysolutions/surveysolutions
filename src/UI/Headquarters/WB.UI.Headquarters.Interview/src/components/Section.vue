@@ -6,13 +6,13 @@
             </ol>
             <h3>{{info.title}}</h3>
         </div>
-        <component v-for="entity in section.entities" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
+        <component v-for="entity in entities" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
         <wb-actionButtons />
     </div>
 </template>
 
 <script lang="ts">
-    import { prefilledSectionId } from "src/config"
+    import * as Vue from 'vue'
 
     export default {
         name: 'section-view',
@@ -27,6 +27,9 @@
         computed: {
             section() {
                 return this.$store.state.details.section
+            },
+            entities() {
+                return this.section.entities
             },
             info() {
                 return this.section.info
@@ -48,7 +51,7 @@
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("loadSection", this.$route.params.sectionId)
+                this.$store.dispatch("reloadSection")
             }
         }
     }

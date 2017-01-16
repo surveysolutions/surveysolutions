@@ -1,15 +1,13 @@
 <template>
     <div class="question">
         <div class="text-center">
-            <router-link v-if="navigation" :to="to" class="btn" :class="css">
-                <span v-if="icon" class="glyphicon glyphicon-share-alt rotate-270"></span> {{ navigation.title}}</router-link>
+            <a class="btn" :class="css" v-if="navigation" @click="navigate"><span v-if="icon" class="glyphicon glyphicon-share-alt rotate-270"></span> {{ navigation.title}}</a>
         </div>
     </div>
 </template>
 <script lang="ts">
     import { entityPartial } from "components/mixins"
     import * as _ from "lodash"
-    import { prefilledSectionId } from "src/config"
 
     export default {
         mixins: [entityPartial],
@@ -19,7 +17,7 @@
                 return this.$store.state.details.section.navigationState
             },
             icon() {
-                if (this.$route.query.questionId) {
+                if (this.navigation.isParentButton) {
                     return true
                 } else {
                     return null
@@ -29,30 +27,30 @@
                 return [{
                     'btn-success': this.navigation.status == 1,
                     'btn-danger': this.navigation.status == -1,
-                    'btn-default': this.$route.query.questionId,
-                    'btn-primary': !this.$route.query.questionId
+                    'btn-default': this.navigation.isParentButton,
+                    'btn-primary': !this.navigation.isParentButton
                 }]
             },
             to() {
-                let hash = ""
-
-                if (this.$route.query.questionId) {
-                    hash = "#" + this.$route.query.questionId
-                }
-
                 return {
                     name: 'section',
                     params: {
                         sectionId: this.navigation.navigateToSection,
                         interviewId: this.$route.params.interviewId
-                    },
-                    hash
+                    }
                 }
+            }
+        },
+        methods: {
+            navigate() {
+                if (this.navigation.isParentButton) {
+                    this.$store.dispatch("fetch/sectionRequireScroll", "#loc_" + this.$store.state.details.section.info.id)
+                }
+                this.$router.push(this.to)
             }
         }
     }
 </script>
-
 <style>
 .rotate-270{
     transform: rotate(270deg);

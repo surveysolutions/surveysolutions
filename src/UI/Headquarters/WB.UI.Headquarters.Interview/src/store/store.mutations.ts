@@ -10,6 +10,8 @@ export default {
     },
     SET_SECTION_DATA(state, sectionData: ISectionData) {
         Vue.set(state.details, "section", sectionData)
+    },
+    CLEAR_ENTITIES(state) {
         Vue.set(state.details, "entities", {})
     },
     SET_ANSWER_NOT_SAVED(state, {id, message}) {
