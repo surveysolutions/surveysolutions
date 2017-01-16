@@ -4,7 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerDoubleQuestion" v-onlyNumbersAndPoint="true">
+                        <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerDoubleQuestion"
+                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '', mDec: this.$me.countOfDecimalPlaces || 15 }">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -62,16 +63,25 @@
             }
         },
         directives: {
-            onlyNumbersAndPoint: {
+            autoNumeric: {
                 bind: (el, binding) => {
-                     if (binding.value == true) {
-                        $(el).autoNumeric('init', {
+                    $(el).autoNumeric('init');
+                },
+                update: (el, binding) => {
+                    if (binding.value) {
+                        var defaults = {
                             aSep: '', //this.$me.useFormatting ? ',' : '',
-                            mDec: 15,
+                            mDec: 15, //this.$me.countOfDecimalPlaces || 15,
                             vMin: -9999999999999999,
-                            vMax: 9999999999999999
-                        });
-                     }
+                            vMax: 9999999999999999,
+                            aPad: false
+                        };
+                        var settings = $.extend( {}, defaults, binding.value );
+                        $(el).autoNumeric('update', settings);
+                    }
+                },
+                unbind: (el) => {
+                    $(el).autoNumeric('destroy');
                 }
             }
         }
