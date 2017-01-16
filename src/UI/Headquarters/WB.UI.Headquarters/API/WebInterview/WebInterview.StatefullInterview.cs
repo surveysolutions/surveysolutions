@@ -93,7 +93,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     Status = CalculateSimpleStatus(parent, statefulInterview),
                     Title = parentGroup.Title.Text,
-                    NavigateToSection = parent.ToString()
+                    NavigateToSection = parent.ToString(),
+                    IsParentButton = true
                 };
             }
 

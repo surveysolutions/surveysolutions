@@ -28,8 +28,6 @@
                     name: 'section', params: {
                         sectionId: this.id,
                         interviewId: this.$route.params.interviewId
-                    }, query: {
-                        questionId: "." + this.id
                     }
                 }
             },

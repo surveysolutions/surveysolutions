@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
+    <div class="question" v-if="isEnabled" :class="questionClass">
         <div class="question-editor" :class="questionEditorClass">
             <wb-title />
             <wb-instructions />
@@ -13,9 +13,6 @@
         name: 'wb-question',
         props: ["question", 'questionCssClassName'],
         computed: {
-            hash() {
-                return "." + this.id
-            },
             id() {
                 return this.question.id
             },

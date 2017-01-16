@@ -1,6 +1,7 @@
+import * as Vue from "vue"
 import { apiCaller } from "../api"
-import { prefilledSectionId } from "./../config"
 import router from "./../router"
+import { fetchAware } from "./store.fetch"
 
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
@@ -12,16 +13,23 @@ export default {
         const loc = { name: "prefilled", params: { interviewId } };
         router.push(loc)
     },
-    async fetchEntity({ commit }, { id }) {
-        const entityDetails = await apiCaller(api => api.getEntityDetails(id))
-        commit("SET_ENTITY_DETAILS", entityDetails);
+    fetchEntity(ctx, { id }) {
+        fetchAware(ctx, id, async () => {
+            const entityDetails = await apiCaller(api => api.getEntityDetails(id))
+            ctx.commit("SET_ENTITY_DETAILS", entityDetails);
+        })
     },
-    async loadSection({ commit }, sectionId) {
-        if (sectionId == null) {
-            // tslint:disable-next-line:no-string-literal
-            sectionId = router.currentRoute.params["sectionId"] || "prefilled"
-        }
-        const section = await apiCaller(api => api.getSectionDetails(sectionId))
+    async loadSection({ commit }) {
+        // tslint:disable-next-line:no-string-literal
+        const id = router.currentRoute.params["sectionId"] || "prefilled"
+        const section = await apiCaller(api => api.getSectionDetails(id))
+        commit("SET_SECTION_DATA", section)
+    },
+    async reloadSection({ commit }) {
+        // tslint:disable-next-line:no-string-literal
+        const id = router.currentRoute.params["sectionId"] || "prefilled"
+        const section = await apiCaller(api => api.getSectionDetails(id))
+        commit("CLEAR_ENTITIES")
         commit("SET_SECTION_DATA", section)
     },
     answerSingleOptionQuestion({ }, answerInfo) {
