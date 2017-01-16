@@ -176,6 +176,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(integerQuestion);
                     var callerQuestionnaire = this.GetCallerQuestionnaire();
 
+                    interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
                     var isRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                     interviewIntegerQuestion.IsRosterSize = isRosterSize;
 
@@ -191,7 +192,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
                     var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(textQuestion);
-                    interviewDoubleQuestion.CountOfDecimalPlaces = this.GetCallerQuestionnaire().GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
+                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
+                    interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
                     result = interviewDoubleQuestion;
                 }
                 else if (question.IsMultiFixedOption)

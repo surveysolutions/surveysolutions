@@ -4,8 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" maxlength="10" v-model="answer" v-on:focusout="answerIntegerQuestion" >
-                            <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
+                        <input type="text" class="field-to-fill" min="-2147483648" max="2147483647" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion" v-onlyNumbers="true">
+                        <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
                         </button>
                     </div>
@@ -21,6 +21,9 @@
 
     export default {
         name: 'Integer',
+        created: function () {
+            this.$me.previousAnswer = this.$me.answer;
+        },
         computed: {
             answer: {
                 get() {
@@ -32,7 +35,7 @@
                         this.$me.isAnswered = true;
                     }
                     else {
-                        this.$me.answer = undefined;
+                        this.$me.answer = null;
                         this.$me.isAnswered = false;
                     }
                 }
@@ -40,21 +43,21 @@
         },
         mixins: [entityDetails],
         methods: {
-            markAsError: function(message) {
+            markAnswerAsNotSavedWithMessage: function(message) {
                 var id = this.id;
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
             answerIntegerQuestion: function (evnt) {
 
-                if (this.answer == undefined)
+                if (this.answer == null)
                 {
-                    this.markAsError('Empty value cannot be saved');
+                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved');
                     return;
                 }
 
                 if (this.answer > 2147483647 || this.answer < -2147483648 || this.answer % 1 !== 0)
                 {
-                    this.markAsError('Entered value can not be parsed as integer value');
+                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value');
                     return;
                 }
 
@@ -67,13 +70,13 @@
 
                 if (this.answer < 0)
                 {
-                    this.markAsError('Answer ' + this.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
+                    this.markAnswerAsNotSavedWithMessage('Answer ' + this.answer + ' is incorrect because question is used as size of roster and specified answer is negative');
                     return;
                 }
 
                 if (this.answer > this.$me.answerMaxValue)
                 {
-                    this.markAsError('Answer ' + this.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
+                    this.markAnswerAsNotSavedWithMessage('Answer ' + this.answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
                     return;
                 }
 
@@ -118,7 +121,21 @@
                     } else {
                         this.answer = this.$me.previousAnswer;
                     }
-                } );
+                });
+            }
+        },
+        directives: {
+            onlyNumbers: {
+                bind: (el, binding) => {
+                     if (binding.value == true) {
+                        $(el).autoNumeric('init', {
+                            aSep: '', //this.$me.useFormatting ? ',' : '',
+                            mDec: 0,
+                            vMin: -2147483648,
+                            vMax: 2147483647
+                        });
+                     }
+                }
             }
         }
     }
