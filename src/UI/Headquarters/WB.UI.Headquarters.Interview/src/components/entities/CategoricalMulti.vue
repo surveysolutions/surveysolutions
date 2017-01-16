@@ -8,7 +8,7 @@
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
-                    <div class="badge" v-if="$me.ordered">{{$me.answer.indexOf(option.value) + 1}}</div>
+                    <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
             </div>
         </div>
@@ -31,8 +31,13 @@
             },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            },
-
+            }
+        },
+        methods: {
+            getAnswerOrder(answerValue){
+                var answerIndex = this.$me.answer.indexOf(answerValue)
+                return  answerIndex > -1 ? answerIndex + 1 : ""
+            }
         },
         directives: {
             disabledWhenUnchecked: {
