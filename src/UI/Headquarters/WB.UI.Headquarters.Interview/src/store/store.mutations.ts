@@ -9,23 +9,8 @@ export default {
         Vue.set(state.details.entities, entity.id, entity)
     },
     SET_SECTION_DATA(state, sectionData: ISectionData) {
-        Vue.set(state.interview, "currentSection", sectionData.info.id)
-        Vue.set(state.details.sections, sectionData.info.id, sectionData)
-    },
-    SET_INTERVIEW_SECTIONS(state, sections: ISectionInfo[]) {
-        Vue.set(state.interview, "sections", sections)
-
-        sections.forEach(sectionInfo => {
-            const details = state.details.sections[sectionInfo.id]
-
-            if (details) {
-                Vue.set(details, "info", sectionInfo)
-            } else {
-                Vue.set(state.details.sections, sectionInfo.id, {
-                    info: sectionInfo
-                })
-            }
-        })
+        Vue.set(state.details, "section", sectionData)
+        Vue.set(state.details, "entities", {})
     },
     SET_ANSWER_NOT_SAVED(state, {id, message}) {
         const validity = state.details.entities[id].validity

@@ -18,6 +18,14 @@
         public SectionInfo Info { get; set; }
         public Breadcrumb[] Breadcrumbs { set; get; }
         public InterviewEntityWithType[] Entities { get; set; }
+        public ButtonState NavigationState { get; set; }
+    }
+
+    public class ButtonState
+    {
+        public string Title { get; set; }
+        public SimpleGroupStatus Status { get; set; }
+        public string NavigateToSection { get; set; }
     }
 
     public class Breadcrumb

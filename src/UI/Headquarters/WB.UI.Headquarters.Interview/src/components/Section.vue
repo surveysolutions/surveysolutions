@@ -17,9 +17,6 @@
     export default {
         name: 'section-view',
         beforeMount() {
-            if (this.$store.state.interview.sections.length == 0) {
-                this.$store.dispatch("getInterviewSections")
-            }
             this.loadSection()
         },
         watch: {
@@ -29,28 +26,29 @@
         },
         computed: {
             section() {
-                const state = this.$store.state
-                const section = state.details.sections[state.interview.currentSection]
-                return section
+                return this.$store.state.details.section
             },
             info() {
                 return this.section.info
             },
             sectionClass() {
-                return [
-                    {
-                        'complete-section': this.info.status == 1,
-                        'section-with-error': this.info.status == -1,
-                    }
-                ]
+                if (this.info) {
+                    return [
+                        {
+                            'complete-section': this.info.status == 1,
+                            'section-with-error': this.info.status == -1,
+                        }
+                    ]
+                }
+                return []
             },
             showBreadcrumbs() {
-                return this.info.type == 'Section'
+                return this.info != null
             }
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("loadSection", this.$route.params.sectionId || prefilledSectionId)
+                this.$store.dispatch("loadSection", this.$route.params.sectionId)
             }
         }
     }

@@ -10,12 +10,10 @@ import mutations from "./store.mutations"
 const store = new Vuex.Store(safeStore({
     state: {
         details: {
-            sections: {},
+            section: {},
             entities: {}
         },
         interview: {
-            currentSection: "",
-            sections: [],
             questionnaire: null
         }
     },
