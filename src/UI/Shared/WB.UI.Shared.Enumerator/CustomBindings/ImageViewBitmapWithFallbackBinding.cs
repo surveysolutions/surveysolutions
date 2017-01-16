@@ -9,11 +9,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
     {
+        private static Bitmap nullImageBitmap = null;
+
         public ImageViewBitmapWithFallbackBinding(ImageView androidControl) : base(androidControl)
         {
         }
-
-        
 
         protected override void SetValueToView(ImageView control, byte[] value)
         {
@@ -28,16 +28,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
 
                 var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize};
-                var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
-
-                if (bitmap != null)
+                using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
                 {
-                    SetupPaddingForImageView(control, displayMetrics, boundsOptions);
-                    control.SetImageBitmap(bitmap);
-                }
-                else
-                {
-                    LoadDefaultImage(control);
+                    if (bitmap != null)
+                    {
+                        SetupPaddingForImageView(control, displayMetrics, boundsOptions);
+                        control.SetImageBitmap(bitmap);
+                    }
+                    else
+                    {
+                        LoadDefaultImage(control);
+                    }
                 }
             }
             else
@@ -48,10 +49,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private static void LoadDefaultImage(ImageView control)
         {
-            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-            var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
-            var noImageOptions = new BitmapFactory.Options();
-            var nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
+            if (nullImageBitmap == null)
+            {
+                var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
+                var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
+                var noImageOptions = new BitmapFactory.Options();
+                nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
+            }
 
             control.SetImageBitmap(nullImageBitmap);
         }
@@ -118,6 +122,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             return inSampleSize;
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
         }
     }
 }
