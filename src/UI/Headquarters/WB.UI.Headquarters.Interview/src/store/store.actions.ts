@@ -16,14 +16,13 @@ export default {
         const entityDetails = await apiCaller(api => api.getEntityDetails(id))
         commit("SET_ENTITY_DETAILS", entityDetails);
     },
-    async getInterviewSections({ commit }, interviewId) {
+    async getInterviewSections({ commit }) {
         const data = await apiCaller(api => api.getInterviewSections())
-        commit("SET_INTERVIEW_SECTIONS", data)
+        commit("SET_INTERVIEW_SECTIONS", data.sections)
     },
     async loadSection({ commit }, sectionId) {
         const section = await apiCaller(api => api.getSectionDetails(sectionId))
-        commit("SET_CURRENT_SECTION", section)
-        commit("SET_SECTION", section)
+        commit("SET_SECTION_DATA", section)
     },
     answerSingleOptionQuestion({ }, answerInfo) {
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))

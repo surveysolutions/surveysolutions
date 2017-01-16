@@ -12,25 +12,39 @@ declare interface IPrefilledPageData {
     questions: IInterviewEntityWithType[]
 }
 
-declare interface ISectionData {
-    id:string
-    type:string
-    status: string
-    entities: any[]
+declare interface IInterviewDetails {
+    sections: ISectionInfo[]
 }
 
-declare interface IInterviewDetails {
-    sections: ISectionData[]
+declare interface ISectionData {
+    entities: IInterviewEntity[]
+    info: ISectionInfo
+    breadcrumps: ISectionBreadcrumps
+}
+
+declare interface ISectionInfo {
+    id: string
+    type: string
+    status: string
+}
+
+declare interface IInterviewEntity {
+    id: string
+    title: string
+    isDisabled: boolean
+    hideIfDisabled: boolean
+}
+
+declare interface ISectionBreadcrumps {
+    title: string
 }
 
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
     createInterview(questionnaireId: string): string
 
-    getPrefilledQuestions(): ISectionData
     getInterviewSections(): IInterviewDetails
     getSectionDetails(sectionId: string): ISectionData
-
     getEntityDetails(id: string): any
 
     answerSingleOptionQuestion(answer: number, questionId: string)

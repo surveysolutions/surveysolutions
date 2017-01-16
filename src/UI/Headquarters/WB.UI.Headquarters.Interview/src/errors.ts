@@ -18,9 +18,10 @@ function wrap(name, method, section) {
     return function () {
         try {
             if (verboseMode) {
-                let stack = null // new Error().stack;
                 let argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
-                console.info("call", section, name, argument, stack)
+
+                // tslint:disable-next-line:no-console
+                console.info("call", section, name, argument) // , new Error().stack)
             }
 
             const result = method.apply(this, arguments);
