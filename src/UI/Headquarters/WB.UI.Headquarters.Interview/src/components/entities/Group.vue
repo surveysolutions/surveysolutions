@@ -1,5 +1,8 @@
 <template>
-    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]">
+    <div class="question"
+            v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)"
+            :id="hash"
+            :class="[{'hidden-question': $me.isDisabled}]">
         <div class="question-editor">
             <div class="question-unit">
                 <div class="options-group">
@@ -25,6 +28,8 @@
                     name: 'section', params: {
                         sectionId: this.id,
                         interviewId: this.$route.params.interviewId
+                    }, query: {
+                        questionId: "." + this.id
                     }
                 }
             },

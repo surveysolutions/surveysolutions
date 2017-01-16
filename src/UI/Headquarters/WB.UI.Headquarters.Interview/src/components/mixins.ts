@@ -35,6 +35,9 @@ export const entityDetails = {
                 },
                 isLoading: true
             }
+        },
+        hash() {
+            return "." + this.id
         }
     },
     props: ["id"],
