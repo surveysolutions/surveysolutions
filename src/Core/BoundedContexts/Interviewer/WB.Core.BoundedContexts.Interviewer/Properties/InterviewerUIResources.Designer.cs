@@ -1253,9 +1253,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials (&apos;{0}&apos;). 
-        ///Your account may have a different password; be locked or deleted.
-        ///Please re-enter your password. If the problem persists, contact your Supervisor..
+        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials (&apos;{0}&apos;). Your account may have a different password; be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {
             get {
