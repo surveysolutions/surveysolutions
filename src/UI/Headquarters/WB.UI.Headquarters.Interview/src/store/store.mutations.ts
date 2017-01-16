@@ -5,9 +5,6 @@ export default {
     SET_QUESTIONNAIRE_INFO(state, questionnaireInfo: IQuestionnaireInfo) {
         Vue.set(state.interview, "questionnaire", questionnaireInfo)
     },
-    SET_PREFILLED_QUESTIONS(state, prefilledPageData: IPrefilledPageData) {
-        Vue.set(state.interview, "prefilledQuestions",  prefilledPageData.questions)
-    },
     SET_ENTITY_DETAILS(state, entity) {
         Vue.set(state.details.entities, entity.id, entity)
     },
