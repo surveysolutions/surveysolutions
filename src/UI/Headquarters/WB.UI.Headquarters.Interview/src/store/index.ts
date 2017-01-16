@@ -1,17 +1,22 @@
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 
-import { apiCaller } from "../api"
 import { safeStore } from "../errors"
-import router from "./../router"
 import actions from "./store.actions"
+import fetch from "./store.fetch"
 import mutations from "./store.mutations"
 
 const store = new Vuex.Store(safeStore({
+    modules: {
+        fetch: safeStore(fetch)
+    },
     state: {
         details: {
             section: {},
             entities: {}
+        },
+        fetch: {
+            progress: {}
         },
         interview: {
             questionnaire: null

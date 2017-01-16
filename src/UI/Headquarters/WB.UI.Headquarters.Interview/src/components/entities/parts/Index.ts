@@ -1,5 +1,4 @@
 import * as vue from "vue"
-
 import ActionButtons from "./ActionButtons"
 import Attachment from "./Attachment"
 import Instructions from "./Instructions"

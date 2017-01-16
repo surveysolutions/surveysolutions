@@ -15,13 +15,11 @@ import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
 import DateTime from "./DateTime"
 import Double from "./Double"
+import Group from "./Group"
 import Integer from "./Integer"
 import Question from "./Question"
 import StaticText from "./StaticText"
 import TextQuestion from "./TextQuestion"
-
-
-import Group from "./Group"
 
 vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
