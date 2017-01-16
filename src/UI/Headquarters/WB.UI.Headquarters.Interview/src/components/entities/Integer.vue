@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="answer" @blur="answerIntegerQuestion"
-                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '' }">
+                            v-autoNumeric="{aSep: this.$me.useFormatting ? ',' : '' }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
                         </button>
@@ -81,7 +81,8 @@
                     return;
                 }
 
-                var isNeedRemoveRosters = this.$me.previousAnswer != undefined && answer < this.$me.previousAnswer;
+                var previousAnswer = this.$me.answer;
+                var isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer;
 
                 if (!isNeedRemoveRosters)
                 {
@@ -89,15 +90,16 @@
                     return;
                 }
 
-                var amountOfRostersToRemove = this.$me.previousAnswer - answer;
+                var amountOfRostersToRemove = previousAnswer - answer;
                 var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+                var oThis = this;
 
                 bootbox.confirm(confirmMessage, function (result) {
                     if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
+                        oThis.$store.dispatch('answerIntegerQuestion', { identity: oThis.id, answer: answer });
                         return;
                     } else {
-                        this.answer = this.$me.previousAnswer;
+                        oThis.fetch();
                         return;
                     }
                 } );
@@ -115,13 +117,14 @@
                     return;
                 }
 
-                var amountOfRostersToRemove = this.$me.previousAnswer;
+                var amountOfRostersToRemove = this.$me.answer;
                 var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
+                var oThis = this;
                 bootbox.confirm(confirmMessage, function (result) {
                     if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: this.answer })
+                        oThis.$store.dispatch('removeAnswer', oThis.id)
                     } else {
-                        this.answer = this.$me.previousAnswer;
+                        oThis.fetch();
                     }
                 });
             }
@@ -134,7 +137,7 @@
                 update: (el, binding) => {
                     if (binding.value) {
                         var defaults = {
-                            aSep: '', //this.$me.useFormatting ? ',' : '',
+                            aSep: '',
                             mDec: 0,
                             vMin: -2147483648,
                             vMax: 2147483647,
