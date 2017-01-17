@@ -16,9 +16,8 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
     ? require('./webpack.prod.conf')
     : require('./webpack.dev.conf')
 
-console.info("Cleaning up content of", config.dev.assetsRoot, "folder")
+console.log("Cleaning up content of", config.dev.assetsRoot, "folder")
 rm('-rf', path.join(config.dev.assetsRoot, '**/*'))
-
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -34,7 +33,6 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
     log: () => { }
 })
-
 
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {
@@ -79,17 +77,17 @@ app.use(function (req, res, next) {
 
 var uri = 'http://localhost:' + port
 
-console.info("Waiting for dev server")
+console.log("Waiting for dev server")
 
 devMiddleware.waitUntilValid(function () {
-    spinner.stop();
-
     if (process.env.DEV_MODE === 'design') {
         console.log('> Using ' + config.designer.proxyTable['/signalr'] + ' API uri.')
-        console.log('> Ready to serve at http://localhost:8080 \n')
+        spinner.text = 'Ready to serve at http://localhost:8080 \n'
     } else {
-        console.log('> Ready to serve at http://localhost/headquarters/webinterview \n')
+        spinner.text = 'Ready to serve at http://localhost/headquarters/webinterview \n'
     }
+
+    spinner.succeed();
 })
 
 module.exports = app.listen(port, function (err) {
