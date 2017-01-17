@@ -4,4 +4,4 @@ export const virtualPath: string = INTERVIEW_APP_CONFIG.virtualPath
 export const signalrPath: string = INTERVIEW_APP_CONFIG.signalrPath
 export const signalrUrlOverride: string = INTERVIEW_APP_CONFIG.signalrUrlOverride
 export const supportedTransports: string[] = ["webSockets", "longPolling"]
-export const verboseMode = true
+export const verboseMode = INTERVIEW_APP_CONFIG.verboseLogging
