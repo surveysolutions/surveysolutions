@@ -26,6 +26,8 @@
                     const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
                     return `(${resultMask})`
                 }
+
+                return ""
             }
         },
         methods: {
