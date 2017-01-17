@@ -39,11 +39,6 @@
     <script type="text/javascript">
         'use strict';
 
-        @if (TempData.ContainsKey(Alerts.SUCCESS))
-        {
-            <text> setTimeout(function() { $('.alert-success').hide(); }, 5000);</text>
-        }
-
         Supervisor.VM.InterviewersNew = function(listViewUrl,
             commandExecutionUrl,
             interviewersPageUrl,
