@@ -58,7 +58,7 @@ declare interface IWebInterviewApi {
     getSectionEntities(sectionId: string): IInterviewEntity[]
     getEntityDetails(id: string): any
     getNavigationButtonState(): IInterviewEntity
-    getBreadcrumbs(sectionId: string): IBreadcrumpInfo
+    getBreadcrumbs(): IBreadcrumpInfo
 
     answerSingleOptionQuestion(answer: number, questionId: string)
     answerMutliOptionQuestion(answer: number, questionId: string)

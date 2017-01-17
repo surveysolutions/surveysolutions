@@ -1,28 +1,31 @@
 <template>
-    <div class="unit-section" :class="sectionClass">
-        <Breadcrumbs />
-        <component v-for="entity in entities" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
-    </div>
+        <div class="unit-title" v-if="showBreadcrumbs">
+            <ol class="breadcrumb">
+                <li v-for="breadcrumb in entities"><a href="">{{breadcrumb.title}}</a></li>
+            </ol>
+            <h3>{{info.title}}</h3>
+        </div>
 </template>
 
 <script lang="ts">
     import * as Vue from 'vue'
-    import Breadcrumbs from "./Breadcrumbs"
 
     export default {
-        name: 'section-view',
+        name: 'breadcrumps-view',
         beforeMount() {
-            this.loadSection()
+            this.fetchBreadcrumbs()
         },
         watch: {
             $route(from, to) {
-                this.loadSection()
+                this.fetchBreadcrumbs()
             }
         },
-        components: {Breadcrumbs},
         computed: {
+            showBreadcrumbs() {
+                return this.entities.length > 0
+            },
             entities() {
-                return this.$store.state.entities
+                return this.$store.state.breadcrumbs.breadcrumbs
             },
             // info() {
             //     return this.section.info
@@ -43,8 +46,8 @@
             // }
         },
         methods: {
-            loadSection() {
-                this.$store.dispatch("fetchSection")
+            fetchBreadcrumbs() {
+                this.$store.dispatch("fetchBreadcrumbs")
             }
         }
     }

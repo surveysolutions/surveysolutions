@@ -119,9 +119,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
 
-        public BreadcrumbInfo GetBreadcrumbs(string sectionId)
+        public BreadcrumbInfo GetBreadcrumbs()
         {
-            if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
+            var sectionId = CallerSectionid;
+
+            if (sectionId == null) return new BreadcrumbInfo();
 
             Identity group = Identity.Parse(sectionId);
 
