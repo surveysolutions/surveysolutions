@@ -341,10 +341,10 @@
     <value>Предзаполенные и собранные данные (архив)</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>Если супервизор не указан в загружаемом файле, вы должны будите указать одного для всех интервью на последнем шаге импорта.</value>
+    <value>Если имена пользователей не указаны в загружаемом файле, вы должны будете позже указать одного супервизора для всех интервью.</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>Вы можите создать одно интервью с помощбю ввода всех обязательных данных используя {0}</value>
+    <value>Вы можете создать одно интервью при помощи ввода всех необходимых данных используя {0}.</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
     <value>Загрузите tab форматированные данные со всеми необходимыми предзаполненными данными и ответственными людьми (опционально)</value>
@@ -353,8 +353,7 @@
     <value>Только предзаполненные данные (один файл)</value>
   </data>
   <data name="UploadDescription" xml:space="preserve">
-    <value>Создание множества интервью с помощью загрузки файла с обязательными предзаполненными данными.
-Вы можите выборочно добавить ответственных для интервью (супервизоров и интервьюверов) по их именам.</value>
+    <value>Создание множества интервью с помощью загрузки файла с обязательными предзаполненными данными. Вы можете выборочно добавить ответственных для интервью (супервизоров и интервьюверов) по их именам.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Загрузить .tab файл</value>
@@ -372,24 +371,30 @@
     <value>ручной режим</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>Список полей который обязательны дл создания интервью вы можите закрузить используя</value>
+    <value>Список полей, которые обязательны для создания интервью. Загрузить шаблон в формате tab для опросника.</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
     <value>tab. шаблон для опросника</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
-    <value>Спрятать список обязательных данных</value>
+    <value>Спрятать список обязательных предзаполненных данных.</value>
   </data>
   <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Обязательные поля для заполнения для опросника</value>
+    <value>Обязательные предзаполненные данные.</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Необходимо выбрать супервизора</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
-    <value>Проверка загружаемого файла не выполнена </value>
+    <value>Проверка загружаемого файла не удалась</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Интервью не созданы </value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Вернуться на страницу импорта опросника</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>Обнаружено {0} ошибок</value>
   </data>
 </root>
