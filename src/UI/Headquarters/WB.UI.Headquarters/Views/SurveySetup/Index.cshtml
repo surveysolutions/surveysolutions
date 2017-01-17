@@ -1,4 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.UI.Headquarters.Code
 @using WB.UI.Headquarters.Resources
 
 @{
@@ -12,7 +13,7 @@
     <script type="text/javascript">
         'use strict';
 
-        var QuestionnairesListModel = function(ajax, notifier) {
+        var QuestionnairesListModel = function (ajax, notifier) {
             var self = this;
 
             self.table = null;
@@ -29,57 +30,57 @@
 
             $.fn.dataTable.ext.errMode = 'none';
 
-            var selectRowAndGetData = function(selectedItem) {
+            var selectRowAndGetData = function (selectedItem) {
                 var rowIndex = selectedItem.parent().children().index(selectedItem);
                 self.table.row(rowIndex).select();
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
 
-            var sendDeleteQuestionnaireCommand = function(item) {
+            var sendDeleteQuestionnaireCommand = function (item) {
                 ajax.sendRequest($deleteQuestionnaireUrl, "post", { questionnaireId: item.questionnaireId, version: item.version }, false,
                     // onSuccess
-                    function() {
-                        setTimeout(function() { self.table.ajax.reload(); }, 100);
+                    function () {
+                        setTimeout(function () { self.table.ajax.reload(); }, 100);
                     });
             }
 
-            var addNewInterview = function(key, opt) {
+            var addNewInterview = function (key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
                 window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
                 console.log(selectedRow);
             };
 
-            var webInterviewSetup = function(key, opt) {
+            var webInterviewSetup = function (key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
                 var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
                 window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
                 console.log(selectedRow);
             };
 
-            var interviewsBatchUpload = function(key, opt) {
+            var interviewsBatchUpload = function (key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
                 window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
             };
 
-            var cloneQuestionnaire = function(key, opt) {
+            var cloneQuestionnaire = function (key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
                 window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
             };
 
-            var deleteQuestionnaire = function(key, opt) {
+            var deleteQuestionnaire = function (key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
 
                 notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
                     // confirm
-                    function() {
+                    function () {
                         sendDeleteQuestionnaireCommand(selectedRow);
                     },
                     // cancel
-                    function() {});
+                    function () { });
             };
 
-            var buildMenuItem = function(selectedRow) {
+            var buildMenuItem = function (selectedRow) {
                 var items = {}
 
                 if (!(selectedRow.disabled || selectedRow.allowCensusMode)) {
@@ -98,12 +99,20 @@
                     </text>
                     }
                 }
-                if (!selectedRow.disabled && selectedRow.allowCensusMode) {
-                    items["webSetup"] = {
-                        name: "@Dashboard.WebInterviewSetup",
-                        callback: webInterviewSetup
-                    };
+                var addWebInterview = function () {
+                    if (!selectedRow.disabled && selectedRow.allowCensusMode) {
+                        items["webSetup"] = {
+                            name: "@Dashboard.WebInterviewSetup",
+                            callback: webInterviewSetup
+                        }
+                    }
+                };
+                @if (LegacyOptions.WebInterviewEnabled)
+                {
+                    <text>addWebInterview();</text>
                 }
+
+
                 @if (User.IsInRole("Administrator"))
                 {
                 <text>
@@ -127,7 +136,7 @@
             self.contextMenuOptions = {
                 selector: "table#questionnaires .with-context-menu",
                 autoHide: false,
-                build: function($trigger, e) {
+                build: function ($trigger, e) {
                     var selectedRow = selectRowAndGetData($trigger);
                     var items = buildMenuItem(selectedRow);
                     return { items: items };
@@ -135,8 +144,8 @@
                 trigger: 'left'
             };
 
-            var onTableInitComplete = function() {
-                $('.dataTables_filter label').on('click', function(e) {
+            var onTableInitComplete = function () {
+                $('.dataTables_filter label').on('click', function (e) {
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
@@ -152,7 +161,7 @@
 
             self.table = $('table#questionnaires')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt', function(e, settings, techNote, message) {
+                .on('error.dt', function (e, settings, techNote, message) {
                     location.reload();
                 })
                 .DataTable({
@@ -168,7 +177,7 @@
                         type: "POST",
                         headers: requestHeaders
                     },
-                    "createdRow": function(row, data, dataIndex) {
+                    "createdRow": function (row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
                     },
                     columns: [
@@ -176,7 +185,7 @@
                             data: "title",
                             name: "Title", // case-sensitive!
                             "class": "title",
-                            render: function(data, type, row) {
+                            render: function (data, type, row) {
                                 return (row.allowCensusMode === true ? "<span class='census-icon'>c</span>" : "") + data;
                             }
                         },
@@ -217,7 +226,7 @@
             return self;
         };
 
-        $(function() {
+        $(function () {
             var notifier = new Notifier();
             var model = new QuestionnairesListModel(new Ajax(notifier), notifier);
         });

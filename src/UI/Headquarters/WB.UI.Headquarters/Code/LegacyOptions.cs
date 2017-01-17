@@ -19,6 +19,17 @@ namespace WB.UI.Headquarters.Code
             }
         }
 
+        public static bool WebInterviewEnabled
+        {
+            get
+            {
+                string setting = WebConfigurationManager.AppSettings["WebInterviewEnabled"];
+                bool parsedSetting;
+                bool.TryParse(setting, out parsedSetting);
+                return parsedSetting;
+            }
+        }
+
         public static string SynchronizationIncomingCapiPackagesWithErrorsDirectory
         {
             get
