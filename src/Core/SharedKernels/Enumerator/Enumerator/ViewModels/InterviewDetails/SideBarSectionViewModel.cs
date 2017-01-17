@@ -7,9 +7,7 @@ using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -30,9 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public DynamicTextViewModel Title { get; }
 
         private string interviewId;
-        private RosterInstance sectionIdentityAsRosterInstance;
         private Guid[] rostersInGroup;
-        private bool isRoster;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -61,11 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.SectionIdentity = sectionIdentity;
 
-            this.isRoster = interview.GetRoster(this.SectionIdentity) != null;
-            if (this.isRoster)
-                this.sectionIdentityAsRosterInstance = RosterInstance.CreateFromIdentity(this.SectionIdentity);
-
-            this.rostersInGroup = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language)
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            this.rostersInGroup = questionnaire
                     .GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
@@ -74,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.ParentIdentity = interviewTreeGroup?.Parent?.Identity;
 
-            this.ParentsIdentities = interviewTreeGroup?.Parents?.Select(section => section?.Identity)?.ToArray() ??
+            this.ParentsIdentities = interviewTreeGroup?.Parents?.Select(section => section?.Identity).ToArray() ??
                 Enumerable.Empty<Identity>().ToArray();
 
             this.NodeDepth = this.ParentsIdentities.Length;
@@ -198,9 +191,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsEnabled @event)
         {
-            if (!this.Expanded) return;
+            if (!this.HasChildren && @event.Groups.Any(g => this.rostersInGroup.Contains(g.Id)))
+                this.UpdateHasChildren();
 
-            this.UpdateSubGroups(@event.Groups);
+            if (this.Expanded)
+            {
+                this.UpdateSubGroups(@event.Groups);
+            }
         }
 
         public void Handle(GroupsDisabled @event)
