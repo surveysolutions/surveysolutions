@@ -7,6 +7,7 @@ Vue.use(VueRouter)
 import { getInstance as hubProxy } from "../api"
 import Section from "../components/Section"
 import Start from "../components/Start"
+import store from "../store"
 
 const router = new VueRouter({
     base: virtualPath + "/",
@@ -15,7 +16,15 @@ const router = new VueRouter({
         { name: "root", path: "/:questionnaireId", component: Start },
         { name: "prefilled", path: "/:interviewId/Cover", component: Section },
         { name: "section", path: "/:interviewId/Section/:sectionId", component: Section }
-    ]
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            // handling history back event, setting scroll requirement for `from` sectionId
+            store.dispatch("fetch/sectionRequireScroll", { id: (from.params as any).sectionId })
+        } else if (!(store.state as any).fetch.scroll) {
+            store.dispatch("fetch/sectionRequireScroll", { top: 0 })
+        }
+    }
 })
 
 router.afterEach((to, from) => {
