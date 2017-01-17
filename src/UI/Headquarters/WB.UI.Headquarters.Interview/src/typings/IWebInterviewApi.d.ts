@@ -39,13 +39,26 @@ declare interface ISectionBreadcrumps {
     title: string
 }
 
+declare interface IBreadcrumpInfo {
+    status: string
+    breadcrumbs: ISectionBreadcrumps[]
+}
+
+declare enum GroupStatus {
+    Completed = 1,
+    Invalid = -1,
+    Other = 0,
+}
+
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
     createInterview(questionnaireId: string): string
 
-    getInterviewSections(): IInterviewDetails
-    getSectionDetails(sectionId: string): ISectionData
+    getPrefilledEntities(): IInterviewEntity[]
+    getSectionEntities(sectionId: string): IInterviewEntity[]
     getEntityDetails(id: string): any
+    getNavigationButtonState(): IInterviewEntity
+    getBreadcrumbs(sectionId: string): IBreadcrumpInfo
 
     answerSingleOptionQuestion(answer: number, questionId: string)
     answerMutliOptionQuestion(answer: number, questionId: string)

@@ -11,10 +11,9 @@ const store = new Vuex.Store(safeStore({
         fetch: safeStore(fetch)
     },
     state: {
-        details: {
-            section: {},
-            entities: {}
-        },
+        entities: [], /* IInterviewEntity[] */
+        entityDetails: { /* string: object */ },
+        breadcrumps: {},
         fetch: {
             progress: {}
         },

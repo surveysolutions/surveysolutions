@@ -32,11 +32,14 @@ const fetch = {
         }
     },
     mutations: {
-        SET_FETCH_RUN(state, id) {
-            Vue.set(state.progress, id, true)
+        SET_FETCH_RUN(state, {id, entityType}) {
+            if (!state.progress[entityType]) {
+                state.progress[entityType] = {}
+            }
+            state.progress[entityType][id] = 1
         },
-        SET_FETCH_DONE(state, id) {
-            Vue.delete(state.progress, id)
+        SET_FETCH_DONE(state, {id, entityType}) {
+            delete state.progress[entityType][id];
         },
         SET_SCROLL_TARGET(state, scroll) {
             state.scroll = scroll
@@ -48,16 +51,16 @@ export function getLocationHash(questionid): string {
     return "loc_" + questionid
 }
 
-export async function fetchAware(ctx, id, callbackPromise) {
-    ctx.commit("fetch/SET_FETCH_RUN", id)
+export async function fetchAware(ctx, entityType: string, id: string, callbackPromise) {
+    ctx.commit("fetch/SET_FETCH_RUN", { entityType, id })
     try {
         await callbackPromise()
     } finally {
-        ctx.commit("fetch/SET_FETCH_DONE", id)
+        ctx.commit("fetch/SET_FETCH_DONE", {entityType, id})
     }
 
     // fetchAware called outside of module, so full path required to fetch.progress
-    if (Object.keys(ctx.state.fetch.progress).length === 0) {
+    if (Object.keys(ctx.state.fetch.progress[entityType]).length === 0) {
         ctx.dispatch("fetch/sectionLoaded")
     }
 }

@@ -21,12 +21,22 @@
         public ButtonState NavigationState { get; set; }
     }
 
-    public class ButtonState
+    public class ButtonState : InterviewEntity
     {
-        public string Title { get; set; }
         public SimpleGroupStatus Status { get; set; }
-        public string NavigateToSection { get; set; }
-        public bool IsParentButton { get; set; }
+        public string Target { get; set; }
+        public ButtonType Type { get; set; }
+    }
+
+    public enum ButtonType
+    {
+        Start = 0, Next, Parent, Complete
+    }
+
+    public class BreadcrumbInfo
+    {
+        public Breadcrumb[] Breadcrumbs { get; set; }
+        public string Status { get; set; }
     }
 
     public class Breadcrumb
