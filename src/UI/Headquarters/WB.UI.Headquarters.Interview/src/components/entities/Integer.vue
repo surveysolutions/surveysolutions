@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="$me.answer" @blur="answerIntegerQuestion"
-                            v-autoNumeric="{aSep: this.$me.useFormatting ? ',' : '' }">
+                            v-numericFormatting="{aSep: formattingChar, mDec: 0, vMin: -2147483648, vMax: 2147483647, aPad: false }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
                         </button>
@@ -23,15 +23,20 @@
     export default {
         name: 'Integer',
         mixins: [entityDetails],
+        computed: {
+            formattingChar() {
+                return this.$me.useFormatting ? ',' : ''
+            }
+        },
         methods: {
-            markAnswerAsNotSavedWithMessage: function(message) {
-                var id = this.id;
+            markAnswerAsNotSavedWithMessage(message) {
+                const id = this.id;
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
-            answerIntegerQuestion: function (evnt) {
+            answerIntegerQuestion(evnt) {
 
-                var answerString = $(evnt.target).autoNumeric('get');
-                var answer = answerString != undefined && answerString != ''
+                const answerString = $(evnt.target).autoNumeric('get');
+                const answer = answerString != undefined && answerString != ''
                                 ? parseInt(answerString)
                                 : null;
 
@@ -56,18 +61,18 @@
 
                 if (answer < 0)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Answer ' + answer + ' is incorrect because question is used as size of roster and specified answer is negative');
+                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`);
                     return;
                 }
 
                 if (answer > this.$me.answerMaxValue)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Answer ' + answer + ' is incorrect because answer is greater than Roster upper bound ' + this.$me.answerMaxValue + '.');
+                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`);
                     return;
                 }
 
-                var previousAnswer = this.$me.answer;
-                var isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer;
+                const previousAnswer = this.$me.answer;
+                const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer;
 
                 if (!isNeedRemoveRosters)
                 {
@@ -75,22 +80,20 @@
                     return;
                 }
 
-                var amountOfRostersToRemove = previousAnswer - answer;
-                var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
-                var oThis = this;
+                const amountOfRostersToRemove = previousAnswer - answer;
+                const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`;
 
-
-                modal.methods.confirm(confirmMessage,  function (result) {
+                modal.methods.confirm(confirmMessage,  result => {
                     if (result) {
-                        oThis.$store.dispatch('answerIntegerQuestion', { identity: oThis.id, answer: answer });
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
                         return;
                     } else {
-                        oThis.fetch();
+                        this.fetch();
                         return;
                     }
                 } );
             },
-            removeAnswer: function() {
+            removeAnswer() {
 
                 if (!this.$me.isAnswered)
                 {
@@ -103,38 +106,15 @@
                 }
 
                 var amountOfRostersToRemove = this.$me.answer;
-                var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
-                var oThis = this;
-                modal.methods.confirm(confirmMessage, function (result) {
+                var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`;
+
+                modal.methods.confirm(confirmMessage, result => {
                     if (result) {
-                        oThis.$store.dispatch('removeAnswer', oThis.id)
+                        this.$store.dispatch('removeAnswer', this.id)
                     } else {
-                        oThis.fetch();
+                        this.fetch();
                     }
                 });
-            }
-        },
-        directives: {
-            autoNumeric: {
-                bind: (el, binding) => {
-                    $(el).autoNumeric('init');
-                },
-                update: (el, binding) => {
-                    if (binding.value) {
-                        var defaults = {
-                            aSep: '',
-                            mDec: 0,
-                            vMin: -2147483648,
-                            vMax: 2147483647,
-                            aPad: false
-                        };
-                        var settings = $.extend( {}, defaults, binding.value );
-                        $(el).autoNumeric('update', settings);
-                    }
-                },
-                unbind: (el) => {
-                    $(el).autoNumeric('destroy');
-                }
             }
         }
     }

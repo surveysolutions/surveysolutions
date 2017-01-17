@@ -10,6 +10,7 @@ poly.polyfill()
 
 import "./components/entities"
 import "./components/entities/parts"
+import "./directives"
 
 import "./errors.ts"
 import router from "./router"
