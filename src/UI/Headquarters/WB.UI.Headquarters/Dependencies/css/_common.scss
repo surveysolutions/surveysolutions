@@ -190,6 +190,43 @@ h5{
 		margin: 10px 0;
 	}
 }
+.alerts{
+	margin-top: 20px;
+	.alert{
+		margin: 0;
+		padding: 15px;
+		border-radius: 5px;
+		border: 1px solid $gray_form;
+		background-color: #f8f8f8;
+		.close{
+			color: inherit;
+			&:hover, &:focus, &:active{
+				opacity: 1;
+			}
+		}
+		&.alert-success {
+		  @include alert-variant($alert-success-bg, $alert-success-border, $alert-success-text);
+		  /* @include colorful-cancel($alert-success-text); */
+		}
+		&.alert-info {
+		  @include alert-variant($alert-info-bg, $alert-info-border, $alert-info-text);
+		  /* @include colorful-cancel($alert-info-text); */
+		}
+		&.alert-warning {
+		  @include alert-variant($alert-warning-bg, $alert-warning-border, $alert-warning-text);
+		  /* @include colorful-cancel($alert-warning-text); */
+		}
+		&.alert-danger {
+		  @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
+		  /* @include colorful-cancel($alert-danger-text); */
+		}
+		/* .close{
+			span{
+				@include cancel(20px);
+			}
+		} */
+	}
+}
 body > .ui-pnotify
 {
     z-index: 100050;
