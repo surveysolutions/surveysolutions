@@ -4,8 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" class="field-to-fill" :placeholder="$me.mask || 'Tap to enter text'" :value="$me.answer" @blur="answerTextQuestion"
-                            v-mask="$me.mask">
+                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter answer ' + userFriendlyMask" :value="$me.answer"
+                            @blur="answerTextQuestion" v-mask="$me.mask">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -20,9 +20,21 @@
     export default {
         name: 'TextQuestion',
         mixins: [entityDetails],
+        computed: {
+            userFriendlyMask(){
+                if (this.$me.mask){
+                    const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
+                    return `(${resultMask})`
+                }
+            }
+        },
         methods: {
             answerTextQuestion(evnt) {
-                this.$store.dispatch('answerTextQuestion', { identity: this.id, text: $(evnt.target).val() })
+                let answer:string = $(evnt.target).val()
+                answer = answer ? answer.trim() : null
+                if (answer) {
+                    this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                }
             }
         },
         directives: {
