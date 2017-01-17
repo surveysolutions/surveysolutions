@@ -34,9 +34,9 @@
                         return;
                     }
 
-                    var currentAnswerCount = value.length;
-                    var previousAnswersCount = this.$me.answer.length;
-                    var isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+                    const currentAnswerCount = value.length;
+                    const previousAnswersCount = this.$me.answer.length;
+                    const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
 
                     if (!isNeedRemoveRosters)
                     {
@@ -44,15 +44,14 @@
                         return;
                     }
 
-                    var confirmMessage = 'Are you sure you want to remove related roster?';
-                    var oThis = this;
+                    const confirmMessage = 'Are you sure you want to remove related roster?';
 
-                    modal.methods.confirm(confirmMessage,  function (result) {
+                    modal.methods.confirm(confirmMessage,  result => {
                         if (result) {
-                            oThis.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: oThis.$me.id })
+                            this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
                             return;
                         } else {
-                            oThis.fetch();
+                            this.fetch();
                             return;
                         }
                     } );
