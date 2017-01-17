@@ -19,5 +19,8 @@ export default {
         Vue.set(validity, "errorMessage", true)
         validity.messages = [message]
         validity.isValid = false
+    },
+    SET_BREADCRUMPS(state, crumps) {
+        Vue.set(state, "breadcrumbs", crumps)
     }
 }
