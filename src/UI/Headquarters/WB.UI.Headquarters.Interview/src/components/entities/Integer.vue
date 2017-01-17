@@ -18,7 +18,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
-    import * as bootbox from "bootbox"
+    import modal from "../Modal"
 
     export default {
         name: 'Integer',
@@ -79,7 +79,8 @@
                 var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
                 var oThis = this;
 
-                bootbox.confirm(confirmMessage, function (result) {
+
+                modal.methods.confirm(confirmMessage,  function (result) {
                     if (result) {
                         oThis.$store.dispatch('answerIntegerQuestion', { identity: oThis.id, answer: answer });
                         return;
@@ -104,7 +105,7 @@
                 var amountOfRostersToRemove = this.$me.answer;
                 var confirmMessage = 'Are you sure you want to remove '+ amountOfRostersToRemove + ' row(s) from each related roster?';
                 var oThis = this;
-                bootbox.confirm(confirmMessage, function (result) {
+                modal.methods.confirm(confirmMessage, function (result) {
                     if (result) {
                         oThis.$store.dispatch('removeAnswer', oThis.id)
                     } else {
