@@ -6,7 +6,7 @@
   "private": true,
   "types": "./src/types/main.d.ts",
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "yarn && node build/dev-server.js",
     "build": "node build/build.js",
     "design": "cross-env DEV_MODE=design node build/dev-server.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
@@ -88,7 +88,8 @@
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",
     "webpack-merge": "^2.0.0",
-    "write-file-webpack-plugin": "^3.4.2"
+    "write-file-webpack-plugin": "^3.4.2",
+    "yarn": "^0.19.1"
   },
   "engines": {
     "node": ">= 4.0.0",
