@@ -72,13 +72,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewGroupOrRosterInstance : InterviewEntity
     {
         public string RosterTitle { get; set; }
-        public GroupStatus Status { get; set; }
+        public string Status { get; set; }
         public string Statistics { get; set; }
     }
 
     public enum GroupStatus
     {
-        NotStarted,
+        NotStarted = 1,
         Started,
         Completed,
         Invalid
