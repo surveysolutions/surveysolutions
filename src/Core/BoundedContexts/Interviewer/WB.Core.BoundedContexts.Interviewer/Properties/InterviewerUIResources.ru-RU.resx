@@ -609,4 +609,7 @@
   <data name="FailedToLoadInterview" xml:space="preserve">
     <value>Не удалось открыть интервью</value>
   </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Невозможно проверить сертификат. Проверьте адрес приложения Супервизор и верность текущей даты на устройстве</value>
+  </data>
 </root>

@@ -1487,6 +1487,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time.
+        /// </summary>
+        public static string UnacceptableSSLCertificate {
+            get {
+                return ResourceManager.GetString("UnacceptableSSLCertificate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login or password is incorrect.
         /// </summary>
         public static string Unauthorized {
