@@ -57,7 +57,7 @@ function BuildWebInterviewApp($targetLocation){
             return $wasBuildSuccessfull
         }
         
-        &npm run build -- --noprogress
+        &npm run build
 
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {

@@ -10,22 +10,14 @@ var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
 var argv = require('minimist')(process.argv.slice(2));
 
-let spinner = null
-
-if(!argv.noprogress) {
-    spinner = ora('building for production...')
-    spinner.start()
-} else {
-    console.log("Starting prod build")
-}
+const spinner = ora('building for production...').start()
 
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
 rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
 
 webpack(webpackConfig, function (err, stats) {
-  if(spinner != null) spinner.stop()
-
+  if(spinner != null) spinner.succeed();
   if (err) throw err
 
   process.stdout.write(stats.toString({

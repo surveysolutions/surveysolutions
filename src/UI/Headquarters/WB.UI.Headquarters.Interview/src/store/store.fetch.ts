@@ -20,7 +20,7 @@ const fetch = {
                     if (el != null) {
                         window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
                     } else {
-                        window.scrollTo({top: state.scroll.top})
+                        window.scrollTo({ top: state.scroll.top })
                     }
 
                     commit("SET_SCROLL_TARGET", null)
@@ -44,8 +44,8 @@ const fetch = {
     }
 }
 
-export function getLocationHash(questionid): string{
-    return "loc_" + questionid;
+export function getLocationHash(questionid): string {
+    return "loc_" + questionid
 }
 
 export async function fetchAware(ctx, id, callbackPromise) {
