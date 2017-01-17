@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -21,6 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ValidateInput(false)]
         public ActionResult Index()
         {
+            if (!LegacyOptions.WebInterviewEnabled) return this.HttpNotFound();
+
             return this.View();
         }
 
