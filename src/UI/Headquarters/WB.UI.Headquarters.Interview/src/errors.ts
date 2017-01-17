@@ -21,7 +21,7 @@ function wrap(name, method, section) {
                 let argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 // tslint:disable-next-line:no-console
-                console.info("call", section, name, argument) // , new Error().stack)
+                console.debug("call", section, name, argument) // , new Error().stack)
             }
 
             const result = method.apply(this, arguments);
