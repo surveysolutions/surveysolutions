@@ -16,6 +16,12 @@ export default {
     fetchEntity(ctx, { id }) {
         fetchAware(ctx, id, async () => {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
+
+            if (entityDetails == null) {
+                console.warn("getEntityDetails for", id, "return null")
+                return;
+            }
+
             ctx.commit("SET_ENTITY_DETAILS", entityDetails);
         })
     },
@@ -59,14 +65,14 @@ export default {
         for (const idx in questions) {
             const questionId = questions[idx]
 
-            if (!needSectionUpdate && state.details.entities[questionId]) {
+            if (state.details.entities[questionId]) {
                 needSectionUpdate = true
-            }
 
-            dispatch("fetchEntity", {
-                id: questionId,
-                source: "server"
-            })
+                dispatch("fetchEntity", {
+                    id: questionId,
+                    source: "server"
+                })
+            }
         }
 
         // HACK: Need to find a better solution, maybe push section status calculations on client-side
