@@ -28,15 +28,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
         const interviewProxy = $.connection.interview
 
         interviewProxy.client.refreshEntities = (questions) => {
-            for (let questionId in questions) {
-                store.dispatch("fetchEntity", {
-                    id: questions[questionId],
-                    source: "server"
-                })
-            }
-
-            // HACK: Need to find a better solution, maybe push section status calculations on client-side
-            store.dispatch("loadSection")
+            store.dispatch("refreshEntities", questions)
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
