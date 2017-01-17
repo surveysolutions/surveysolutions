@@ -59,12 +59,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeGroup, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeGroup, InterviewEntity>()
                 .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
-                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x)));
+                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()));
 
             this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeRoster, InterviewEntity>()
                 .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
-                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x)))
+                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
         }
 
