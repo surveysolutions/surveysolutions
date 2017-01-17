@@ -727,6 +727,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.ru.resx" />
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\PreloadingVerificationMessages.ru.resx" />
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\PreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
