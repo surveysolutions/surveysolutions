@@ -382,6 +382,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     exceptionMessage = InterviewerUIResources.NoNetwork;
                     exceptionType = SynchronizationExceptionType.NoNetwork;
                     break;
+                case RestExceptionType.UnacceptableCertificate:
+                    exceptionMessage = InterviewerUIResources.UnacceptableSSLCertificate;
+                    exceptionType = SynchronizationExceptionType.Unexpected;
+                    break;
                 case RestExceptionType.Unexpected:
                     switch (ex.StatusCode)
                     {

@@ -136,6 +136,18 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
                            innerException: ex);   
                 }
+                else
+                {
+                    // https://github.com/tmenier/Flurl/issues/163
+                    var exceptionInnerException = ex.Call?.Exception?.InnerException;
+                    if (exceptionInnerException != null)
+                    {
+                        if (exceptionInnerException.GetType().Name == "SSLHandshakeException")
+                        {
+                            throw new RestException(exceptionInnerException.Message, type: RestExceptionType.UnacceptableCertificate, innerException: ex);
+                        }
+                    }
+                }
 
                 throw new RestException(message: "Unexpected web exception", innerException: ex);
             }
