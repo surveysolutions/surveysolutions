@@ -7,6 +7,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         RequestCanceledByUser,
         NoNetwork,
         HostUnreachable,
-        InvalidUrl
+        InvalidUrl,
+        UnacceptableCertificate
     }
 }
