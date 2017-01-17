@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (this.Coordinates.Count > 0)
             {
-                return $"_{string.Join("-", this.Coordinates.Select(c => c.ToString("###")))}";
+                return $"_{string.Join("-", this.Coordinates.Select(c => (int)c))}";
             }
             else return string.Empty;
         }
