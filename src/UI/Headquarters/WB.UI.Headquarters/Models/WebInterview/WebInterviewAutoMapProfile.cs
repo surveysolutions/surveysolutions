@@ -58,21 +58,25 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeGroup, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeGroup, InterviewEntity>()
-                .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
-                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()));
+                .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
+                .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
+                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
+                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)));
 
             this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeRoster, InterviewEntity>()
-                .ForMember(x => x.Statistics, opts => opts.MapFrom(x => GetGroupStatistics(x)))
+                .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
+                .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
+                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)))
                 .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
         }
 
+        private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)
+            => group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
+
         private static GroupStatus GetGroupStatus(InterviewTreeGroup group)
         {
-            if (group.CountEnabledInvalidQuestionsAndStaticTexts() > 0)
-                return GroupStatus.Invalid;
-            
             if (group.HasUnansweredQuestions() || HasSubgroupsWithUnansweredQuestions(@group))
                 return group.CountEnabledAnsweredQuestions() > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
 
@@ -82,15 +86,15 @@ namespace WB.UI.Headquarters.Models.WebInterview
         private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup @group)
             => @group.Children
                 .OfType<InterviewTreeGroup>()
-                .Where(subGroup => !subGroup.IsDisabled())
-                .Select(GetGroupStatus)
-                .Any(status => status != GroupStatus.Completed);
+                .Where(subGroup=> !subGroup.IsDisabled())
+                .Any(subGroup => GetGroupStatus(subGroup) != GroupStatus.Completed || HasQuestionsWithInvalidAnswers(subGroup));
 
-        private static string GetGroupStatistics(InterviewTreeGroup group)
+        private string GetGroupStatisticsByInvalidAnswers(InterviewTreeGroup group)
+            => HasQuestionsWithInvalidAnswers(@group) ? GetInformationByInvalidAnswers(@group) : null;
+
+        private static string GetGroupStatisticsByAnswersAndSubsections(InterviewTreeGroup group)
         {
-            var groupStatus = GetGroupStatus(group);
-            
-            switch (groupStatus)
+            switch (GetGroupStatus(group))
             {
                 case GroupStatus.NotStarted:
                     return Resources.WebInterview.Interview_Group_Status_NotStarted;
@@ -100,19 +104,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
                 case GroupStatus.Completed:
                     return string.Format(Resources.WebInterview.Interview_Group_Status_CompletedFormat, GetInformationByQuestionsAndAnswers(group));
-
-                case GroupStatus.Invalid:
-                {
-                    return @group.CountEnabledQuestions() != @group.CountEnabledAnsweredQuestions()
-                        ? string.Format(Resources.WebInterview.Interview_Group_Status_StartedIncompleteFormat,
-                            $@"{GetInformationByQuestionsAndAnswers(@group)}, {GetInformationByInvalidAnswers(@group)}")
-                        : string.Format(Resources.WebInterview.Interview_Group_Status_CompletedFormat,
-                            $@"{GetInformationByQuestionsAndAnswers(@group)}, {GetInformationByInvalidAnswers(@group)}");
-                }
-
-                default:
-                    return GetInformationByQuestionsAndAnswers(group);
             }
+
+            return null;
         }
 
         private static string GetInformationByQuestionsAndAnswers(InterviewTreeGroup group)
