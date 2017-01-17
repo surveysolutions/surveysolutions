@@ -1,7 +1,7 @@
 <template>
     <div class="unit-section" :class="sectionClass">
         <Breadcrumbs />
-        <component v-for="entity in entities" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
+        <component v-for="entity in entities" :key="entity.identity" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
     </div>
 </template>
 
@@ -19,25 +19,25 @@
                 this.loadSection()
             }
         },
-        components: {Breadcrumbs},
+        components: { Breadcrumbs },
         computed: {
             entities() {
                 return this.$store.state.entities
             },
-            // info() {
-            //     return this.section.info
-            // },
+            info() {
+                return this.$store.state.breadcrumbs
+            },
             sectionClass() {
                 if (this.info) {
                     return [
                         {
-                            'complete-section': true,// this.info.status == 1,
-                            //'section-with-error': this.info.status == -1,
+                            'complete-section': this.info.status == "Completed",
+                            'section-with-error': this.info.status == "Invalid",
                         }
                     ]
                 }
                 return []
-            },
+            }
             // showBreadcrumbs() {
             //     return this.info != null
             // }

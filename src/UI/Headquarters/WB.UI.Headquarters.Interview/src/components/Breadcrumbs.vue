@@ -1,17 +1,16 @@
 <template>
-        <div class="unit-title" v-if="showBreadcrumbs">
-            <ol class="breadcrumb">
-                <li v-for="breadcrumb in entities"><a href="">{{breadcrumb.title}}</a></li>
-            </ol>
-            <h3>{{info.title}}</h3>
-        </div>
+    <div class="unit-title" v-if="showBreadcrumbs">
+        <ol class="breadcrumb">
+            <li v-for="breadcrumb in entities" :key="breadcrumb.target">
+                 <a href="javascript:void(0)" @click="navigate(breadcrumb)">{{ breadcrumb.title}}</a>
+            </li>
+        </ol>
+        <h3>{{info.title}}</h3>
+    </div>
 </template>
-
 <script lang="ts">
-    import * as Vue from 'vue'
-
     export default {
-        name: 'breadcrumps-view',
+        name: 'breadcrumbs-view',
         beforeMount() {
             this.fetchBreadcrumbs()
         },
@@ -21,31 +20,30 @@
             }
         },
         computed: {
+            info() {
+                return this.$store.state.breadcrumbs
+            },
             showBreadcrumbs() {
-                return this.entities.length > 0
+                return this.$route.params.sectionId != null && this.info.title != null
             },
             entities() {
-                return this.$store.state.breadcrumbs.breadcrumbs
-            },
-            // info() {
-            //     return this.section.info
-            // },
-            sectionClass() {
-                if (this.info) {
-                    return [
-                        {
-                            'complete-section': true,// this.info.status == 1,
-                            //'section-with-error': this.info.status == -1,
-                        }
-                    ]
-                }
-                return []
-            },
-            // showBreadcrumbs() {
-            //     return this.info != null
-            // }
+                if (!this.info) return {}
+                return this.info.breadcrumbs
+            }
         },
         methods: {
+            navigate(breadcrumb) {
+                if (breadcrumb.scrollTo) {
+                    this.$store.dispatch("fetch/sectionRequireScroll", { id: breadcrumb.scrollTo })
+                }
+
+                this.$router.push({
+                    name: "section",
+                    params: {
+                        sectionId: breadcrumb.target
+                    }
+                })
+            },
             fetchBreadcrumbs() {
                 this.$store.dispatch("fetchBreadcrumbs")
             }
