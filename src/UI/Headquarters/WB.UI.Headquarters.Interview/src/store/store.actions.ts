@@ -80,6 +80,10 @@ export default {
         dispatch("fetchSection")
     },
 
+    async fetchBreadcrumbs({commit}) {
+         const crumps = await apiCaller(api => api.getBreadcrumbs())
+         commit("SET_BREADCRUMPS", crumps)
+    },
     cleanUpEntity({commit}, id) {
         commit("CLEAR_ENTITY", id)
     }
