@@ -6,16 +6,16 @@ export default {
         Vue.set(state.interview, "questionnaire", questionnaireInfo)
     },
     SET_ENTITY_DETAILS(state, entity: IInterviewEntity) {
-        Vue.set(state.details.entities, entity.id, entity)
+        Vue.set(state.entityDetails, entity.id, entity)
     },
     SET_SECTION_DATA(state, sectionData: ISectionData) {
-        Vue.set(state.details, "section", sectionData)
+        state.entities = sectionData
     },
-    CLEAR_ENTITIES(state) {
-        Vue.set(state.details, "entities", {})
+    CLEAR_ENTITY(state, id) {
+        Vue.delete(state.entityDetails, id)
     },
     SET_ANSWER_NOT_SAVED(state, {id, message}) {
-        const validity = state.details.entities[id].validity
+        const validity = state.entityDetails[id].validity
         Vue.set(validity, "errorMessage", true)
         validity.messages = [message]
         validity.isValid = false

@@ -32,7 +32,7 @@ router.afterEach((to, from) => {
         // tslint:disable-next-line:no-string-literal
         proxy.state.interviewId = to.params["interviewId"]
         // tslint:disable-next-line:no-string-literal
-        proxy.state.sectiondId = to.params["sectionId"]
+        proxy.state.sectionId = to.params["sectionId"]
     })
 })
 

@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         
         private string CallerInterviewId => this.Clients.Caller.interviewId;
+        private string CallerSectionid => this.Clients.Caller.sectionId;
 
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
