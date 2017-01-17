@@ -74,15 +74,16 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string RosterTitle { get; set; }
         public string Status { get; set; }
-        public string Statistics { get; set; }
+        public string StatisticsByAnswersAndSubsections { get; set; }
+        public string StatisticsByInvalidAnswers { get; set; }
+        public bool HasInvalidAnswers { get; set; }
     }
 
     public enum GroupStatus
     {
         NotStarted = 1,
         Started,
-        Completed,
-        Invalid
+        Completed
     }
 
     /// <summary>
