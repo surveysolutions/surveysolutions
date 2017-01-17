@@ -17,6 +17,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
+    import modal from "../Modal"
 
     export default {
         name: 'CategoricalMulti',
@@ -26,7 +27,35 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+
+                    if (!this.$me.isRosterSize)
+                    {
+                        this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+                        return;
+                    }
+
+                    var currentAnswerCount = value.length;
+                    var previousAnswersCount = this.$me.answer.length;
+                    var isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+
+                    if (!isNeedRemoveRosters)
+                    {
+                        this.$store.dispatch('answerMutliOptionQuestion', { answer: value, questionId: this.$me.id });
+                        return;
+                    }
+
+                    var confirmMessage = 'Are you sure you want to remove related roster?';
+                    var oThis = this;
+
+                    modal.methods.confirm(confirmMessage,  function (result) {
+                        if (result) {
+                            oThis.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: oThis.$me.id })
+                            return;
+                        } else {
+                            oThis.fetch();
+                            return;
+                        }
+                    } );
                 }
             },
             allAnswersGiven() {
