@@ -1,3 +1,5 @@
+import { getLocationHash } from "../store/store.fetch"
+
 export const entityPartial = {
     computed: {
         $me() {
@@ -37,7 +39,7 @@ export const entityDetails = {
             }
         },
         hash() {
-            return "loc_" + this.id
+            return getLocationHash(this.id)
         }
     },
     props: ["id"],

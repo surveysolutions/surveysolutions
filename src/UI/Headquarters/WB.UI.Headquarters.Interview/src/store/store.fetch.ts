@@ -7,25 +7,28 @@ import router from "./../router"
 const fetch = {
     state: {
         progress: {},
-        scrollTo: null
+        scroll: null
     },
     namespaced: true,
     actions: {
         sectionLoaded({state, commit}) {
-            if (state.scrollTo) {
+            if (state.scroll) {
                 Vue.nextTick(() => {
-                    const el = document.querySelector(state.scrollTo);
+                    const query = "#" + getLocationHash(state.scroll.id)
+                    const el = document.querySelector(query) as any;
 
                     if (el != null) {
-                        el.scrollIntoView({ behavior: "smooth" })
+                        window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+                    } else {
+                        window.scrollTo({top: state.scroll.top})
                     }
 
                     commit("SET_SCROLL_TARGET", null)
                 })
             }
         },
-        sectionRequireScroll({commit}, questionId) {
-            commit("SET_SCROLL_TARGET", questionId)
+        sectionRequireScroll({commit}, scroll) {
+            commit("SET_SCROLL_TARGET", scroll)
         }
     },
     mutations: {
@@ -35,10 +38,14 @@ const fetch = {
         SET_FETCH_DONE(state, id) {
             Vue.delete(state.progress, id)
         },
-        SET_SCROLL_TARGET(state, id) {
-            state.scrollTo = id
+        SET_SCROLL_TARGET(state, scroll) {
+            state.scroll = scroll
         }
     }
+}
+
+export function getLocationHash(questionid): string{
+    return "loc_" + questionid;
 }
 
 export async function fetchAware(ctx, id, callbackPromise) {

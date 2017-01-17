@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="isEnabled" :class="questionClass">
+    <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
         <div class="question-editor" :class="questionEditorClass">
             <wb-title />
             <wb-instructions />
@@ -9,12 +9,17 @@
     </div>
 </template>
 <script lang="ts">
+    import { getLocationHash } from "src/store/store.fetch"
+
     export default {
         name: 'wb-question',
         props: ["question", 'questionCssClassName'],
         computed: {
             id() {
                 return this.question.id
+            },
+            hash() {
+                return getLocationHash(this.question.id)
             },
             isEnabled() {
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)

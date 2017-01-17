@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]">
+    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
         <div class="question-editor" :class="[{'answered': !isNotStarted}]">
             <div class="question-unit">
                 <div class="options-group">
@@ -43,8 +43,7 @@
             },
             hasInvalidAnswers() {
                 return this.$me.status == "Invalid";
-            },
-
+            }
         }
     }
 </script>
