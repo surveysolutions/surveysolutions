@@ -117,79 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllData" xml:space="preserve">
-    <value>Все данные</value>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>Колонка не связана с каким-либо вопросом в данном опроснике</value>
   </data>
-  <data name="AllDataSpss" xml:space="preserve">
-    <value>Все данные Spss</value>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>Файл не связан ни с одним из ростеров в данном опроснике</value>
   </data>
-  <data name="AllDataStata" xml:space="preserve">
-    <value>Все данные Stata</value>
-  </data>
-  <data name="ApprovedData" xml:space="preserve">
-    <value>Утвержденные данные</value>
-  </data>
-  <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>Утвержденные данные Spss</value>
-  </data>
-  <data name="ApprovedDataStata" xml:space="preserve">
-    <value>Утвержденные данные Stata</value>
-  </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Загрузка данных</value>
-  </data>
-  <data name="BinaryData" xml:space="preserve">
-    <value>Бинарные данные</value>
-  </data>
-  <data name="Census" xml:space="preserve">
-    <value>Census</value>
-  </data>
-  <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>Клонировать опросник </value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Создан</value>
-  </data>
-  <data name="History" xml:space="preserve">
-    <value>История</value>
-  </data>
-  <data name="ImportTemplate" xml:space="preserve">
-    <value>Импорт опросника</value>
-  </data>
-  <data name="LastEntryDate" xml:space="preserve">
-    <value>Обновлен</value>
-  </data>
-  <data name="NewInterview" xml:space="preserve">
-    <value>Новое интервью</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Опросники</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Название</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Версия</value>
-  </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Действия</value>
-  </data>
-  <data name="ImportDate" xml:space="preserve">
-    <value>Дата загрузки</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Опросник</value>
-  </data>
-  <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Кликните по опроснику из списка для создания интервью</value>
-  </data>
-  <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера</value>
-  </data>
-  <data name="WebInterviewSetup" xml:space="preserve">
-    <value>Настройка web интервью</value>
-  </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>Удалить опросник</value>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Загруженные данные не обнаружены</value>
   </data>
 </root>
