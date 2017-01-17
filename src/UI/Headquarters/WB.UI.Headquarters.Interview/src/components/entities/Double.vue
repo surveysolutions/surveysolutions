@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" class="field-to-fill" placeholder="Tap to enter number" v-model="$me.answer" @blur="answerDoubleQuestion"
-                            v-autoNumeric="{aSep: $me.useFormatting ? ',' : '', mDec: $me.countOfDecimalPlaces || 15 }">
+                            v-numericFormatting="{aSep: formattingChar, mDec: countOfDecimalPlaces, vMin: -9999999999999999, vMax: 9999999999999999, aPad: false }">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -20,15 +20,23 @@
     export default {
         name: 'Double',
         mixins: [entityDetails],
+        computed: {
+            formattingChar() {
+                return this.$me.useFormatting ? ',' : ''
+            },
+            countOfDecimalPlaces() {
+                return this.$me.countOfDecimalPlaces || 15
+            }
+        },
         methods: {
-            markAnswerAsNotSavedWithMessage: function(message) {
-                var id = this.id;
+            markAnswerAsNotSavedWithMessage(message) {
+                const id = this.id;
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
-            answerDoubleQuestion: function (evnt) {
+            answerDoubleQuestion(evnt) {
 
-                var answerString = $(evnt.target).autoNumeric('get');
-                var answer = answerString != undefined && answerString != ''
+                const answerString = $(evnt.target).autoNumeric('get');
+                const answer = answerString != undefined && answerString != ''
                                 ? parseFloat(answerString)
                                 : null;
 
@@ -45,29 +53,6 @@
                 }
 
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
-            }
-        },
-        directives: {
-            autoNumeric: {
-                bind: (el, binding) => {
-                    $(el).autoNumeric('init');
-                },
-                update: (el, binding) => {
-                    if (binding.value) {
-                        var defaults = {
-                            aSep: '',
-                            mDec: 15,
-                            vMin: -9999999999999999,
-                            vMax: 9999999999999999,
-                            aPad: false
-                        };
-                        var settings = $.extend( {}, defaults, binding.value );
-                        $(el).autoNumeric('update', settings);
-                    }
-                },
-                unbind: (el) => {
-                    $(el).autoNumeric('destroy');
-                }
             }
         }
     }
