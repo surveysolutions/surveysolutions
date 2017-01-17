@@ -1,19 +1,20 @@
 <template>
-    <div class="question"
-            v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)"
-            :id="hash"
-            :class="[{'hidden-question': $me.isDisabled}]">
-        <div class="question-editor">
+    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]">
+        <div class="question-editor" :class="[{'answered': !isNotStarted}]">
             <div class="question-unit">
                 <div class="options-group">
                     <div class="form-group">
-                        <div class="field answered">
-                            <router-link :to="navigateTo" class="btn btn-primary btn-block">{{calcTitle}}</router-link>
+                        <div class="field">
+                            <router-link :to="navigateTo" :class="[{'btn-primary': isNotStarted || isStarted}, {'btn-success': isCompleted}, {'btn-danger': hasInvalidAnswers}]"
+                                class="btn btn-block">
+                                {{this.$me.title}} <span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
+                            </router-link>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="question-editor ">{{this.$me.statistics}}</div>
 </template>
 
 <script lang="ts">
@@ -31,17 +32,19 @@
                     }
                 }
             },
-            calcTitle() {
-                //if (this.$me.rosterTitle == null)
-                //{
-                    return this.$me.title
-                //}
-            }
-        },
-        data: () => {
-            return {
-                text: ''
-            }
+            isNotStarted() {
+                return this.$me.status == "NotStarted";
+            },
+            isStarted() {
+                return this.$me.status == "Started";
+            },
+            isCompleted() {
+                return this.$me.status == "Completed";
+            },
+            hasInvalidAnswers() {
+                return this.$me.status == "Invalid";
+            },
+
         }
     }
 </script>
