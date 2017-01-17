@@ -52,5 +52,26 @@ export default {
     },
     setAnswerAsNotSaved({commit}, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
+    },
+    refreshEntities({state, dispatch}, questions) {
+        let needSectionUpdate = false
+
+        for (const idx in questions) {
+            const questionId = questions[idx]
+
+            if (!needSectionUpdate && state.details.entities[questionId]) {
+                needSectionUpdate = true
+            }
+
+            dispatch("fetchEntity", {
+                id: questionId,
+                source: "server"
+            })
+        }
+
+        // HACK: Need to find a better solution, maybe push section status calculations on client-side
+        if (needSectionUpdate) {
+            dispatch("loadSection")
+        }
     }
 }
