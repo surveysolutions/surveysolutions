@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter answer ' + userFriendlyMask" :value="$me.answer"
-                            @blur="answerTextQuestion" v-mask="$me.mask">
+                            @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -21,8 +21,8 @@
         name: 'TextQuestion',
         mixins: [entityDetails],
         computed: {
-            userFriendlyMask(){
-                if (this.$me.mask){
+            userFriendlyMask() {
+                if (this.$me.mask) {
                     const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")
                     return `(${resultMask})`
                 }
@@ -30,10 +30,16 @@
         },
         methods: {
             answerTextQuestion(evnt) {
-                let answer:string = $(evnt.target).val()
-                answer = answer ? answer.trim() : null
-                if (answer) {
-                    this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                const target = $(evnt.target)
+                let answer: string = target.val()
+
+                if (answer && this.$me.answer !== answer) {
+                    if (this.$me.mask && !target.data("maskCompleted")) {
+                        this.$store.dispatch("setAnswerAsNotSaved", { id: this.$me.id, message: "Please, fill in all the required values" })
+                    }
+                    else {
+                        this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                    }
                 }
             }
         },
@@ -41,7 +47,14 @@
             mask: {
                 update: (el, binding) => {
                     if (binding.value) {
-                        $(el).mask(binding.value, {
+                        const input = $(el)
+                        input.mask(binding.value, {
+                            onChange: function(val){
+                                input.data("maskCompleted", false);
+                            },
+                            onComplete: function () {
+                               input.data("maskCompleted", true);
+                            },
                             translation: {
                                 "~": { pattern: /[a-zA-Z]/ },
                                 "#": { pattern: /\d/ },
