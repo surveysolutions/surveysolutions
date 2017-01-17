@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void should_parse_single_coordinate_vector()
         {
             string sId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-            string sRosterVector = "(1)";
+            string sRosterVector = "_1";
             string identityToParse = $"{sId}{sRosterVector}";
 
             Identity parsedIdentity = Identity.Parse(identityToParse);
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void Identity_with_roster_vector_should_be_parsed()
         {
             string sId = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-            string sRosterVector = "(1-5-6-1-0)";
+            string sRosterVector = "_1-5-6-1-0";
             string identityToParse = $"{sId}{sRosterVector}";
 
             Identity parsedIdentity = Identity.Parse(identityToParse);
