@@ -6,8 +6,6 @@ const $ = (window as any).$ = (window as any).jQuery = jQuery
 import "bootstrap-sass/assets/javascripts/bootstrap/modal"
 
 import "jquery-mask-plugin"
-// tslint:disable-next-line:ordered-imports
-import "autoNumeric"
 
 import * as vue from "vue"
 
