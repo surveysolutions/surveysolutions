@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public int? MaxSelectedAnswersCount { get; set; }
         public bool Ordered { get; set; }
         public int[] Answer { get; set; }
+        public bool IsRosterSize { get; set; }
     }
 
     public class CategoricalQuestion: GenericQuestion
