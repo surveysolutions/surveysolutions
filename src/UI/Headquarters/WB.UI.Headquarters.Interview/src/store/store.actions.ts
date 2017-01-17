@@ -18,7 +18,6 @@ export default {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
 
             if (entityDetails == null) {
-                console.warn("getEntityDetails for", id, "return null")
                 return;
             }
 
