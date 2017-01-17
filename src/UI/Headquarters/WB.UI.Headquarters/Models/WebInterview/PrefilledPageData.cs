@@ -29,19 +29,21 @@
     }
 
     public enum ButtonType
-    {
-        Start = 0, Next, Parent, Complete
+    {Start = 0, Next, Parent, Complete
     }
 
     public class BreadcrumbInfo
     {
         public Breadcrumb[] Breadcrumbs { get; set; }
         public string Status { get; set; }
+        public string Title { get; set; }
     }
 
     public class Breadcrumb
     {
         public string Title { set; get; }
+        public string Target { get; set; }
+        public string ScrollTo { get; set; }
     }
 
     public enum SimpleGroupStatus
