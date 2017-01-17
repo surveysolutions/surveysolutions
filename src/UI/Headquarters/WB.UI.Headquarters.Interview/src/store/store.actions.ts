@@ -11,60 +11,62 @@ export default {
     async startInterview({ commit }, questionnaireId: string) {
         const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string;
         const loc = { name: "prefilled", params: { interviewId } };
-        router.push(loc)
+        router.replace(loc)
     },
+
     fetchEntity(ctx, { id }) {
-        fetchAware(ctx, id, async () => {
+        fetchAware(ctx, "entity", id, async () => {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
 
             if (entityDetails == null) {
                 return;
             }
 
+            if (entityDetails.id == null) {
+                entityDetails.id = id
+            }
+
             ctx.commit("SET_ENTITY_DETAILS", entityDetails);
         })
     },
-    async loadSection({ commit }) {
-        // tslint:disable-next-line:no-string-literal
-        const id = router.currentRoute.params["sectionId"] || "prefilled"
-        const section = await apiCaller(api => api.getSectionDetails(id))
-        commit("SET_SECTION_DATA", section)
-    },
-    async reloadSection({ commit }) {
-        // tslint:disable-next-line:no-string-literal
-        const id = router.currentRoute.params["sectionId"] || "prefilled"
-        const section = await apiCaller(api => api.getSectionDetails(id))
-        commit("CLEAR_ENTITIES")
-        commit("SET_SECTION_DATA", section)
-    },
-    answerSingleOptionQuestion({ }, answerInfo) {
+    answerSingleOptionQuestion(ctx, answerInfo) {
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    answerTextQuestion({ }, entity) {
+    answerTextQuestion(ctx, entity) {
         apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
     },
-    answerMutliOptionQuestion({ commit }, answerInfo) {
+    answerMutliOptionQuestion(ctx, answerInfo) {
         apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    answerIntegerQuestion({ }, entity) {
+    answerIntegerQuestion(ctx, entity) {
         apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
     },
-    answerDoubleQuestion({ }, entity) {
+    answerDoubleQuestion(ctx, entity) {
         apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
     },
-    removeAnswer({ }, questionId: string) {
+    removeAnswer(ctx, questionId: string) {
         apiCaller(api => api.removeAnswer(questionId))
     },
     setAnswerAsNotSaved({commit}, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
+
+    async fetchSection({ commit }) {
+        const id = (router.currentRoute.params as any).sectionId
+        const section = id == null
+            ? await apiCaller(api => api.getPrefilledEntities())
+            : await apiCaller(api => api.getSectionEntities(id))
+
+        commit("SET_SECTION_DATA", section)
+    },
+
     refreshEntities({state, dispatch}, questions) {
         let needSectionUpdate = false
 
         for (const idx in questions) {
             const questionId = questions[idx]
 
-            if (state.details.entities[questionId]) {
+            if (state.entityDetails[questionId]) {
                 needSectionUpdate = true
 
                 dispatch("fetchEntity", {
@@ -75,8 +77,10 @@ export default {
         }
 
         // HACK: Need to find a better solution, maybe push section status calculations on client-side
-        if (needSectionUpdate) {
-            dispatch("loadSection")
-        }
+        dispatch("fetchSection")
+    },
+
+    cleanUpEntity({commit}, id) {
+        commit("CLEAR_ENTITY", id)
     }
 }

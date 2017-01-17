@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         QRBarcode,
         Multimedia,
         TextQuestion,
-        Unsupported
+        Unsupported,
+        NavigationButton
     }
 }

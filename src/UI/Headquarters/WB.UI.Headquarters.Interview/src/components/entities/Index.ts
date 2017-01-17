@@ -15,6 +15,7 @@ import DateTime from "./DateTime"
 import Double from "./Double"
 import Group from "./Group"
 import Integer from "./Integer"
+import NavigationButton from "./NavigationButton"
 import Question from "./Question"
 import StaticText from "./StaticText"
 import TextQuestion from "./TextQuestion"
@@ -28,3 +29,17 @@ vue.component("CategoricalMulti", CategoricalMulti)
 vue.component("wb-question", Question)
 vue.component("StaticText", StaticText)
 vue.component("Group", Group)
+vue.component("NavigationButton", NavigationButton)
+
+export const GroupStatus = {
+    Completed: 1,
+    Invalid: -1,
+    Other: 0,
+}
+
+export const ButtonType = {
+    Start: 0,
+    Next: 1,
+    Parent: 2,
+    Complete: 3
+}
