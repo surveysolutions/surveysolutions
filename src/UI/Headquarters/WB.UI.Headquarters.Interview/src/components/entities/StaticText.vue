@@ -1,7 +1,7 @@
 <template>
     <div class="question static-text" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]">
         <div class="question-editor">
-            <div :calss="[{'text-danger': !$me.validity.isValid'}]">
+            <div :class="[{'text-danger': !$me.validity.isValid}]">
                 <wb-title />
             </div>
             <wb-attachment />
