@@ -78,6 +78,7 @@ export default {
 
         // HACK: Need to find a better solution, maybe push section status calculations on client-side
         dispatch("fetchSection")
+        dispatch("fetchBreadcrumbs")
     },
 
     async fetchBreadcrumbs({commit}) {

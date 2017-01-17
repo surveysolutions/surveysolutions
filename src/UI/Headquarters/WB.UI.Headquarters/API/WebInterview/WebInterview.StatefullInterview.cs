@@ -43,6 +43,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
             var statefulInterview = this.GetCallerInterview();
+            
             var ids = statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
 
             var entities = ids
@@ -141,21 +142,45 @@ namespace WB.UI.Headquarters.API.WebInterview
                     metRosters++;
                     var itemRosterVector = group.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
-                    var breadCrumb = new Breadcrumb { Title = statefulInterview.GetGroup(itemIdentity).Title.Text };
+                    var breadCrumb = new Breadcrumb
+                    {
+                        Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
+                        Target = itemIdentity.ToString()
+                    };
+
+                    if (breadCrumbs.Any())
+                    {
+                        breadCrumbs.Last().ScrollTo = breadCrumb.Target;
+                    }
 
                     breadCrumbs.Add(breadCrumb);
                 }
                 else
                 {
                     var itemIdentity = new Identity(parentId, group.RosterVector.Shrink(metRosters));
-                    var breadCrumb = new Breadcrumb { Title = statefulInterview.GetGroup(itemIdentity).Title.Text };
+                    var breadCrumb = new Breadcrumb
+                    {
+                        Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
+                        Target = itemIdentity.ToString()
+                    };
+
+                    if (breadCrumbs.Any())
+                    {
+                        breadCrumbs.Last().ScrollTo = breadCrumb.Target;
+                    }
 
                     breadCrumbs.Add(breadCrumb);
                 }
             }
 
+            if (breadCrumbs.Any())
+            {
+                breadCrumbs.Last().ScrollTo = sectionId;
+            }
+
             return new BreadcrumbInfo
             {
+                Title = statefulInterview.GetGroup(group).Title.Text,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = CalculateSimpleStatus(group, statefulInterview).ToString()
             };

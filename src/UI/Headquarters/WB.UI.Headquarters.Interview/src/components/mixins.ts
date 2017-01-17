@@ -38,7 +38,7 @@ export function detailsMixin(fetchMethod: string, defaults) {
             }
         },
         props: ["id"],
-        beforeMount() {
+        mounted() {
             this.fetch()
         },
         watch: {
