@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" class="field-to-fill" placeholder="Tap to enter number" v-model="$me.answer" @blur="answerDoubleQuestion"
+                        <input type="text" autocomplete="off" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @blur="answerDoubleQuestion"
                             v-numericFormatting="{aSep: formattingChar, mDec: countOfDecimalPlaces, vMin: -9999999999999999, vMax: 9999999999999999, aPad: false }">
                         <wb-remove-answer />
                     </div>
