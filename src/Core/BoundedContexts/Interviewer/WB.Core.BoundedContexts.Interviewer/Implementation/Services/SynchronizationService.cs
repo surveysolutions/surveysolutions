@@ -384,7 +384,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     break;
                 case RestExceptionType.UnacceptableCertificate:
                     exceptionMessage = InterviewerUIResources.UnacceptableSSLCertificate;
-                    exceptionType = SynchronizationExceptionType.Unexpected;
+                    exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
                     break;
                 case RestExceptionType.Unexpected:
                     switch (ex.StatusCode)
