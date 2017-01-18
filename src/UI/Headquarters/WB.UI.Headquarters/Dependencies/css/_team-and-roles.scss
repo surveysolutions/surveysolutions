@@ -13,9 +13,6 @@
 }
 @media (max-width: $screen-md-min){
 	.main-information{
-		.page-header{
-			padding-right: 255px;
-		}
 		margin-left: $filter-small-width - $margin-container-md-screen + 15px + 12px;
 		.panel-table{
 			left: $filter-small-width+ 12px;
@@ -33,9 +30,6 @@
 @media (max-width: $screen-sm-min){
 	.main-information{
 		margin-left: 15px;
-		.page-header{
-			padding-right: 0;
-		}
 		.panel-table{
 			left:  12px;
 		}

@@ -341,14 +341,29 @@ table{
 	margin-left: $filter-width - $margin-container + 12px +15px;
 	padding: 0 0 0 30px;
 	@include transition(margin, 0.3s);
-	.page-header div{
+	.page-header{
 		padding-right: 365px; 
+		div{
+			&:after{
+				display: table;
+				content: "";
+				clear: both;
+			}
+		}
+	} 
+}
+@media (max-width: $screen-md-min){
+	.main-information .page-header {
+		padding-right: 255px;
 	}
 }
 @media (max-width: $screen-sm-min){
 	.main-information{
 		padding-right: 15px;
 		padding-left: 0;
+		.page-header {
+			padding-right: 0;
+		}
 	}
 }
 @media (max-width: $screen-xs-min){

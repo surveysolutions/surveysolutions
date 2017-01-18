@@ -195,8 +195,17 @@
                 border-bottom: none;
                 border-top: none;
                 &.date{
-                    font-family: "TrebuchetMS";
+                    font: 13px/15px "TrebuchetMS";
+                    font-style: italic;
                 }
+                &.parameters{
+                    font-family: "TrebuchetMSBold";
+                    color: $gray-highlight-font;
+                    span{
+                        @extend %gray-uppercase;
+                        text-transform: none; 
+                    }
+                } 
                 padding: 15px;
                 vertical-align: middle;
                 height: 35px;
@@ -212,8 +221,8 @@
                     color: $gray_text;
                     
                 }
-                &:hover, &:focus{
-                    a{
+                &:hover, &:focus, &:active{
+                    a, a:hover, a:focus, a:active{
                         color: $blue !important;
                         text-decoration: none;
                     }
@@ -402,6 +411,15 @@
     .dataTables_paginate{
         margin-bottom: 30px;
     }
+    .table{
+        tr{
+            td, th{
+                &.for-md-screen{
+                    display: none;
+                }
+            }
+        }
+    }
 }
 @media (max-width: $screen-sm-min){
     .table-mobile-devices{
@@ -469,22 +487,18 @@
         }
     }
     .dataTables_wrapper .dataTables_filter {
+        text-align: right;
         position: relative;
         top: -5px;
-        left: 0;
         label{
             &:after{
                 top: 10px;
-                left: 10px;
             }
-            input{
-                margin-left: 40px;
-            }
+
             &.active {
                 width: 100%;
                 input{
                     width: 50%;
-                    margin-right: 0;
                 }
             }
         }

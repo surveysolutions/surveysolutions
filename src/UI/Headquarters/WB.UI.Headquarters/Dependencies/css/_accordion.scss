@@ -20,6 +20,7 @@
 			border: none;
 			padding: 0;
 			h3{
+				position: relative;
 				@include transition(all, 0.3s);
 				&.group a{
 					padding-left: 0;
@@ -28,7 +29,8 @@
 					}
 				}
 				.btn-plus{
-					@include absolute(7px, null, null, -9px);
+					@include absolute(7px, null, null, null);
+					z-index: 1;
 					&:before, &:after{
 						background-color: $blue;
 					}
@@ -47,13 +49,13 @@
 				&.has-error {
 					.btn-plus{
 						&:before, &:after{
-							background-color: $red;
+							background-color: $red_error;
 						}
 					}
 					a{
-						color: $red;
+						color: $red_error;
 						&:before, &:after{
-							background-color: $red;
+							background-color: $red_error;
 						}
 					}
 				}
