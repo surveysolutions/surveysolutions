@@ -98,7 +98,7 @@ label.inactive{
 .content{
 	@extend %aside;
 	border-right: 3px solid $gray-super-light;
-	left: $filter-width + 12px;
+	left: 12px;
 	width: $content-width;
 	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
 	z-index: 4;
@@ -127,13 +127,37 @@ label.inactive{
 }
 .unit-section{
 	position: relative;
-/* 	&:last-of-type{
-		margin-bottom: 50px;
-	} */
 }
 .details-interview{
 	&.questionnaire{
-		@include width-questionnaire(($filter-width + $content-width));
+		@include width-questionnaire($content-width);
+	}
+	.foldback-button{
+		display: block;
+		top: calc(50% - 23px);
+		right: auto;
+		left: 10px;
+		span{
+			background-color: #fff;
+			.middle{
+				display: none;
+			}
+		}
+	}
+}
+.web-interview-for-supervisor{
+	.content{
+		left: $filter-width + 12px;
+	}
+	.details-interview{
+		&.questionnaire{
+			@include width-questionnaire(($filter-width + $content-width));
+		}
+	}
+	.questionnaire{
+		.unit-title{
+			position: relative;
+		}
 	}
 }
 .questionnaire{
@@ -145,7 +169,7 @@ label.inactive{
 			top: 70px !important;
 		}
 		z-index: 1;
-		position: relative;
+		position: fixed;
 		background-color: $blue;
 		padding: 15px 20px 10px 80px;
 		color: $white;
@@ -418,6 +442,10 @@ label.inactive{
 		}
 	}
 }
+.multimedia-question .image-zoom-box{
+	margin: 0;
+	margin-bottom: 10px;
+}
 .static-text{
 	h5{
 		margin: 0;
@@ -572,6 +600,30 @@ label.inactive{
 	max-width: 70%;
 	@extend .image-zoom-box;
 }
+.fullscreen-hidden-content{	
+	.content{
+		left: -$content-width;
+		box-shadow: none;
+	}
+	.questionnaire.details-interview{
+		@include width-questionnaire(12px - 12px);
+	}
+	.details-interview{
+
+		.foldback-button{
+			span{
+				background-color: #fff;
+				@include rotate(0deg);
+				&.middle{
+					top: 7px;
+				}
+				&.arrow:first-of-type{
+					top: 14px;
+				}
+			}
+		}
+	}
+}
 .footer.footer-adaptive-content.footer-adaptive-filters{
 	padding-left: $filter-width + $content-width;
 }
@@ -582,7 +634,7 @@ label.inactive{
 	padding-left: $filter-width;
 } 
 @media only screen and (max-width: 1525px){
-	.web-interview{
+	.web-interview-for-supervisor{
 		@include tight-filters-aside();
 		.filters{
 			padding-top: 115px;
@@ -590,14 +642,22 @@ label.inactive{
 	            top: 75px;
 	        }
 		}
+		.content{
+			left: $filter-small-width +12px;
+		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire($content-width-small + $filter-small-width);
+			}
+		}
 	}
 	.content{
 		width: $content-width-small;
-		left: $filter-small-width +12px;
+		left: 12px;
 	}
 	.details-interview{
 		&.questionnaire{
-			@include width-questionnaire($content-width-small + $filter-small-width);
+			@include width-questionnaire($content-width-small);
 		}
 	}
 	.questionnaire{
@@ -622,7 +682,7 @@ label.inactive{
     .aside-menu{
     	right: 0;
     }
-	.web-interview{ 
+	.web-interview-for-supervisor{ 
 		.filters{
 			padding-top: 105px;
 			left: ((-$filter-small-width)-12px);
@@ -673,6 +733,9 @@ label.inactive{
 				.question{
 					padding-left: 40px;
 				}
+				.action-container{
+					padding-left: 50px;
+				}
 				.unit-title{
 					padding-left: 50px;
 				} 
@@ -702,6 +765,9 @@ label.inactive{
 				.question{
 					padding-left: 40px;
 				}
+				.action-container{
+					padding-left: 50px;
+				}
 				.button-flag{
 					left: -20px;
 				}
@@ -716,7 +782,7 @@ label.inactive{
 		top: 60px;
 	}
 	.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: 0;
+	padding-left: $content-width-small;
 	}
 	.footer.footer-adaptive-content{
 		padding-left: $filter-small-width;
