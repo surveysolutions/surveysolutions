@@ -20,7 +20,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
     $script(signalrPath, () => {
         // All client-side subscriptions should be registered in this method
 
-        // $.connection.hub.logging = true;
+        // $.connection.hub.logging = true
         $.connection.hub.error((error) => {
             // console.error("SignalR error: " + error)
         });
@@ -48,10 +48,10 @@ async function hubStarter() {
     await wrap($.signalR.hub.start())
 }
 
-let connected = false;
+let connected = false
 
 export async function getInstance() {
-    await scriptIncludedPromise;
+    await scriptIncludedPromise
     await hubStarter()
     return jQuery.signalR.interview
 }
@@ -61,7 +61,7 @@ async function getInterviewHub() {
 }
 
 interface IServerHubCallback<T> {
-    (n: IWebInterviewApi): T;
+    (n: IWebInterviewApi): T
 }
 
 // tslint:disable-next-line:max-line-length
