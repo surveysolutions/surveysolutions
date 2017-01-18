@@ -6,11 +6,11 @@ import { fetchAware } from "./store.fetch"
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
         const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
-        commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo);
+        commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
     async startInterview({ commit }, questionnaireId: string) {
-        const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string;
-        const loc = { name: "prefilled", params: { interviewId } };
+        const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string
+        const loc = { name: "prefilled", params: { interviewId } }
         router.replace(loc)
     },
 
@@ -19,14 +19,14 @@ export default {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
 
             if (entityDetails == null) {
-                return;
+                return
             }
 
             if (entityDetails.id == null) {
                 entityDetails.id = id
             }
 
-            ctx.commit("SET_ENTITY_DETAILS", entityDetails);
+            ctx.commit("SET_ENTITY_DETAILS", entityDetails)
         })
     },
     answerSingleOptionQuestion(ctx, answerInfo) {

@@ -15,10 +15,10 @@ const fetch = {
             if (state.scroll) {
                 Vue.nextTick(() => {
                     const query = "#" + getLocationHash(state.scroll.id)
-                    const el = document.querySelector(query) as any;
+                    const el = document.querySelector(query) as any
 
                     if (el != null) {
-                        window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+                        window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
                     } else {
                         window.scrollTo({ top: state.scroll.top })
                     }
@@ -39,7 +39,7 @@ const fetch = {
             state.progress[entityType][id] = 1
         },
         SET_FETCH_DONE(state, {id, entityType}) {
-            delete state.progress[entityType][id];
+            delete state.progress[entityType][id]
         },
         SET_SCROLL_TARGET(state, scroll) {
             state.scroll = scroll
