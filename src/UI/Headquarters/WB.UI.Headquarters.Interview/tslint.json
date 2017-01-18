@@ -16,7 +16,7 @@
     ],
     "arrow-parens": false,
     "semicolon": [
-      false
+      true, "never"
     ],
     "forin": false,
     "object-literal-sort-keys": false
@@ -29,7 +29,7 @@
       false
     ],
     "semicolon": [
-      false
+      true, "never"
     ],
     "forin": false,
     "quotemark": [
