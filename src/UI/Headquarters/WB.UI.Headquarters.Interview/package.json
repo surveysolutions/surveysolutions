@@ -6,7 +6,7 @@
   "private": true,
   "types": "./src/types/main.d.ts",
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "yarn && node build/dev-server.js",
     "build": "node build/build.js",
     "design": "cross-env DEV_MODE=design node build/dev-server.js",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
