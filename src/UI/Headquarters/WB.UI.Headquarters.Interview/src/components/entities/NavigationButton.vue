@@ -1,8 +1,6 @@
 <template>
-    <div class="question" v-if="$me">
-        <div class="text-center">
-            <a class="btn" :class="css" @click="navigate"><span v-if="icon" class="glyphicon glyphicon-share-alt rotate-270"></span> {{ $me.title}}</a>
-        </div>
+    <div class="action-container" v-if="$me">
+        <a class="btn" :class="[{'btn-back': icon}, css]" @click="navigate"> {{ $me.title}}</a>        
     </div>
 </template>
 <script lang="ts">
