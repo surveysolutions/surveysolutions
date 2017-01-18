@@ -73,11 +73,12 @@
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
-
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
+                }).error(function() {
+                    lookupTable.itemId = lookupTable.oldItemId;
                 });
             };
 
