@@ -4,6 +4,7 @@
         "target": "es5",
         "sourceMap": true,
         "experimentalDecorators": true,
+        "moduleResolution": "node",
         "lib": ["es5", "es2015.promise", "dom"]
     },
 
