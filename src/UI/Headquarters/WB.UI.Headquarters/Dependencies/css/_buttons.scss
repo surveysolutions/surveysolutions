@@ -3,9 +3,10 @@
 	text-transform: uppercase;
     letter-spacing: 0.13em;
     outline: none;
-	&:disabled{
-		background: $gray-super-light repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
-		border-color: transparent;	
+	&:disabled, &.disabled{
+		background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		border-color: transparent !important;	
+		color: #fff !important;
 		&:hover, &:focus{
 			border-color: $gray-super-light;
 		}
@@ -100,16 +101,17 @@
 	}
 }
 .reject{
-	border-width: 1px;
-	box-shadow: inset 2px 2px 0 $red, inset -2px -2px 0 $red;
-	border-color: $red;
+	border-width: 3px;
+	border-color: $red_error;
+	padding-top: 8px;
+	padding-bottom: 8px;
 	background-color: transparent;
-	color: $red;
+	color: $red_error;
 	&:focus,
 	&.focus,
 	&:hover {
-	    color: darken($red, 10%);
-	    border-color: darken($red, 10%);
+	    color: darken($red_error, 10%);
+	    border-color: darken($red_error, 10%);
 	}
 }
 .btn-clear{
@@ -123,7 +125,7 @@
 	outline: none;
 	text-transform: none;
 	letter-spacing: 0.5px;
-	font: 14px/18px Arial;
+	font: 14px/18px Arial, sans-serif;
 	font-style: italic;
 	&:hover, &:focus, &:active{
 		background-color: $gray-super-light;
@@ -147,5 +149,32 @@
 	    &:after{
 	        @include rotate(90deg);
 	    }
+	}
+}
+.btn-roster-section{
+	letter-spacing: normal;
+	font: 14px/14px Arial, sans-serif;
+	font-weight: bold;
+	width: 100%;
+	text-transform: none;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+}
+.btn-back{
+	padding-left: 40px;
+	background-color: transparent;
+	border-width: 3px;
+	min-height: 60px;
+	background-size: 22.5px 33.75px;
+	background-position: 10px 10px;
+	&.btn-success{
+		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
+	}
+	&.btn-danger{
+		@include btn-back-questionnaire (#f05a26, "back-to-parrent-1-no-animation-3.png");
+	}
+	&.btn-primary{
+		@include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
 	}
 }

@@ -94,9 +94,14 @@
     }
 }
 @mixin paccordion($cummulativePadding){
-  & > .panel-heading h3 a{
+  & > .panel-heading h3{
+    .btn-plus{
+        left: $cummulativePadding - 10px;
+    }
+    a{
         margin-left: $cummulativePadding;
-  }
+    }
+  } 
 }
 @mixin placeholder {
   ::-webkit-input-placeholder {@content}
@@ -174,6 +179,44 @@
         @content;
     }
 }
+@mixin btn-back-questionnaire($base-color, $arrow) {
+    background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
+    background-size: 22.5px 33.75px;
+    background-position: 10px 10px;
+    color: $base-color;
+    border-color: $base-color;
+    &:active{
+        &:focus{
+            background-color: lighten($base-color, 40%);
+            color: $base-color;
+            border-color: darken($base-color, 10%);
+
+        }
+    }
+    &:hover,
+    &:focus{
+        background-color: lighten($base-color, 40%);
+        color: $base-color;
+        border-color: darken($base-color, 10%);
+    }
+}
+/* @mixin colorful-cancel($color){
+    .close{
+        &:hover, &:focus, &:active{
+            span{
+                &:before, &:after{
+                    background-color: darken($color, 20%);
+                }
+            }
+        }
+        span{
+            opacity: 0.7;
+            &:before, &:after{
+                background-color: $color;  
+            }
+        }
+    }
+} */
 %font-header{
     color: $white;
     font-family: "RobotoLight";

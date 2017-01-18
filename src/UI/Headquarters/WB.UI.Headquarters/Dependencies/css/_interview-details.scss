@@ -1,7 +1,8 @@
 .web-interview{
 	background-color: #f8f8f8;
+	margin-left: 12px;
 	.container, .container-fluid{
-		padding-left: 27px;
+		padding-left: 15px;
 		padding-right: 15px;
 	}
 }
@@ -126,9 +127,9 @@ label.inactive{
 }
 .unit-section{
 	position: relative;
-	&:last-of-type{
+/* 	&:last-of-type{
 		margin-bottom: 50px;
-	}
+	} */
 }
 .details-interview{
 	&.questionnaire{
@@ -188,7 +189,10 @@ label.inactive{
 }
 .information-block{
 	padding: 0 10px;
-	
+	font-size: 12px;
+	line-height: 14px;
+		font-weight: bold;
+
 	color: $gray_light;
 	h6, .comment label{
 		margin-top: 20px;
@@ -199,9 +203,7 @@ label.inactive{
 	}
 	p{
 		width: 90%;
-		font-size: 12px;
-		line-height: 14px;
-		font-weight: bold;
+		
 		font-style: italic;
 		p:last-of-type{
 			margin-bottom: 10px;
@@ -216,6 +218,9 @@ label.inactive{
 	}
 	&.text-danger{
 		color: $red_error;
+	}
+	&.roster-section-info{
+		padding-top: 5px;
 	}
 }
 .comments-block{
@@ -238,6 +243,33 @@ label.inactive{
 		}
 	}
 }
+.action-container{
+	padding: 18px 30px 20px 80px;
+	a{
+		max-width: $width-question-editor - 20px;
+		white-space: normal;
+		text-align: left;
+	}
+}
+.roster-section-block.answered .roster-section-info{
+	color: $green;
+}
+.question-editor.roster-section-block.has-error .question-unit{
+	.options-group{
+		background-color: transparent;
+	}
+	.roster-section-info{
+		color: $blue;
+	}
+} 
+.question-editor.roster-section-block.started .question-unit{
+	.options-group{
+		background-color: transparent;
+	}
+	.roster-section-info{
+		color: $blue;
+	}
+} 
 .question.hidden-question{
 	min-height: 65px;
 	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, transparent 2px, transparent 6px);
@@ -287,7 +319,7 @@ label.inactive{
 	@include question_title_colors(40%, 40%, 50%);
 }
 .question-editor{
-	margin: 0 auto;
+	/* margin: 0 auto; */
 	position: relative;
 	max-width: $width-question-editor;
 	h5{
@@ -356,7 +388,7 @@ label.inactive{
 				padding: 11px 38px 11px 15px;
 				span{
 					position: static;
-					font: 14px/18px Arial;
+					font: 14px/18px Arial, sans-serif;
 					letter-spacing: normal;
 					text-transform: none;
 				}
@@ -613,7 +645,7 @@ label.inactive{
 		        top: 60px !important;
 		    } 
 		}
-		.fullscreen-hidden-content{	
+		&.fullscreen-hidden-content{	
 			.content{
 				left: -$content-width-small;
 				box-shadow: none;
@@ -627,7 +659,7 @@ label.inactive{
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 			}
 		}
-		.fullscreen-hidden-filters{
+		&.fullscreen-hidden-filters{
 			.filters{
 				overflow: auto;
 				left: 0;
@@ -653,7 +685,7 @@ label.inactive{
 				box-shadow: none;
 			}
 		} 
-		.fullscreen-hidden-filters.fullscreen-hidden-content{
+		&.fullscreen-hidden-filters.fullscreen-hidden-content{
 			.content{
 				left: 12px;
 				overflow: auto;
@@ -719,7 +751,7 @@ label.inactive{
 				top: 65px;
 			} 
 		}
-		.fullscreen-hidden-filters{
+		&.fullscreen-hidden-filters{
 			.content, .questionnaire{
 				display: none;
 			}
@@ -728,7 +760,7 @@ label.inactive{
 				width: 100%;
 			}
 		}
-		.fullscreen-hidden-content{
+		&.fullscreen-hidden-content{
 			.filters, .questionnaire{
 				display: none;
 			}
