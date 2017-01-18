@@ -1,24 +1,20 @@
 <template>
     <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
-        <div class="question-editor" :class="[{'answered': !isNotStarted}]">
+        <div class="question-editor roster-section-block" :class="[{'answered': !isNotStarted}]">
             <div class="question-unit">
                 <div class="options-group">
                     <div class="form-group">
-                        <div class="field" :class="[{'complete-section': !hasInvalidAnswers && isCompleted}, {'section-with-error': hasInvalidAnswers}]">
-                            <router-link :to="navigateTo" class="btn btn-block unit-title">
-                                <div class="text-left text-capitalize">
-                                    {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
-                                </div>
+                        <div class="field text-left text-capitalize" >
+                            <router-link :to="navigateTo" class="btn btn-block btn-roster-section" :class="statusClass">                                
+                                    {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>                                
                             </router-link>
                         </div>
                     </div>
                 </div>
-                <h5>
-                    <small>
+                <div class="information-block roster-section-info">                    
                         <span :class="[{'text-primary': isStarted}, {'text-success': isCompleted}]">{{this.$me.statisticsByAnswersAndSubsections}}</span>
-                        <span v-if="hasInvalidAnswers">, &nbsp;<strong class="text-danger">{{this.$me.statisticsByInvalidAnswers}}</strong></span>
-                    </small>
-                </h5>
+                        <span v-if="hasInvalidAnswers">, &nbsp;<strong class="text-danger">{{this.$me.statisticsByInvalidAnswers}}</strong></span>                    
+                </div>
             </div>
         </div>
     </div>
@@ -50,7 +46,13 @@
             },
             hasInvalidAnswers() {
                 return this.$me.hasInvalidAnswers
-            }
+            },
+            statusClass() {
+                return [{
+                    'btn-success': !this.hasInvalidAnswers && this.isCompleted,
+                    'btn-danger': this.hasInvalidAnswers,                    
+                    'btn-primary': !this.hasInvalidAnswers && !this.isCompleted
+            }]}
         }
     }
 </script>
