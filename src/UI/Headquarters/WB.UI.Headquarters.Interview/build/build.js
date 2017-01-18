@@ -17,7 +17,7 @@ rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
 
 webpack(webpackConfig, function (err, stats) {
-  if(spinner != null) spinner.succeed();
+  if(spinner != null) spinner.stop()
   if (err) throw err
 
   process.stdout.write(stats.toString({
