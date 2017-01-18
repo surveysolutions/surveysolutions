@@ -153,7 +153,7 @@
                 </div>
                 @if (this.ViewBag.EnableInterviewHistory)
                 {
-                    <div class="paradata data">
+                    <div class="paradata data" data-bind="visible: selectedStatus().status == null">
                         <h3>@DataExport.ParaData</h3>
                         <p>
                             <span>@DataExport.ParadataDescription</span>
