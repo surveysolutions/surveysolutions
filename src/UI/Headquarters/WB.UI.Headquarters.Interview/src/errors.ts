@@ -24,7 +24,7 @@ function wrap(name, method, section) {
                 console.debug("call", section, name, argument) // , new Error().stack)
             }
 
-            const result = method.apply(this, arguments);
+            const result = method.apply(this, arguments)
 
             // handle async exceptions
             if (result && result.catch) {
@@ -33,7 +33,7 @@ function wrap(name, method, section) {
                 })
             }
 
-            return result;
+            return result
         } catch (err) {
             toastr.error(err.message)
             console.error(name, err)
