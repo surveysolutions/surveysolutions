@@ -36,7 +36,6 @@
                 confirm: true
             },
             buttons: {
-                closer: false,
                 sticker: false
             },
             history: {

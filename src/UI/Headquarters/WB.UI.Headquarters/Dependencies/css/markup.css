@@ -8043,6 +8043,53 @@ body > .ui-pnotify {
       padding: 0;
       margin: 0; }
 
+.ui-pnotify.stack-modal {
+  box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
+  border-radius: 0; }
+  .ui-pnotify.stack-modal .alert {
+    border-top: none !important;
+    padding: 20px; }
+    .ui-pnotify.stack-modal .alert .ui-pnotify-text {
+      color: #3f3f3f; }
+    .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar {
+      margin-top: 20px;
+      text-align: left; }
+      .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn {
+        border-color: transparent;
+        color: #2a81cb;
+        padding: 0;
+        margin-right: 20px; }
+        .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn:last-of-type {
+          margin-right: 0; }
+        .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn:hover, .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn:focus, .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn:active {
+          background-color: transparent;
+          text-decoration: underline; }
+    .ui-pnotify.stack-modal .alert .ui-pnotify-closer span {
+      outline: none;
+      background-color: transparent;
+      width: 16px;
+      height: 16px;
+      position: relative;
+      margin: 0;
+      opacity: 0.5;
+      filter: alpha(opacity=50);
+      display: block;
+      box-sizing: content-box; }
+      .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:before, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:after {
+        display: block;
+        content: "";
+        width: 16px;
+        height: 2px;
+        background-color: #a6a8a9;
+        transform: rotate(45deg);
+        position: relative;
+        top: 7px; }
+      .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:after {
+        transform: rotate(-45deg);
+        top: 5px; }
+      .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:hover:before, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:hover:after, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:focus:before, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:focus:after, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:active:before, .ui-pnotify.stack-modal .alert .ui-pnotify-closer span:active:after {
+        background-color: #595c5d; }
+
 .error-text {
   color: #e74924; }
 
@@ -8089,22 +8136,24 @@ table tr th .census-icon, table tr td .census-icon {
   margin-left: 297px;
   padding: 0 0 0 30px;
   transition: margin 0.3s linear 0s; }
-  .main-information .page-header {
+  .main-information .page-header div {
     padding-right: 365px; }
+    .main-information .page-header div h1 {
+      padding: 0; }
     .main-information .page-header div:after {
       display: table;
       content: "";
       clear: both; }
 
 @media (max-width: 1210px) {
-  .main-information .page-header {
+  .main-information .page-header div {
     padding-right: 255px; } }
 
 @media (max-width: 880px) {
   .main-information {
     padding-right: 15px;
     padding-left: 0; }
-    .main-information .page-header {
+    .main-information .page-header div {
       padding-right: 0; } }
 
 @media (max-width: 481px) {
