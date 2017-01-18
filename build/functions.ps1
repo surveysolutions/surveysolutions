@@ -51,7 +51,7 @@ function BuildWebInterviewApp($targetLocation){
     try{
         Write-Host $installCommand
 
-        &yarn | Write-Host
+        &yarn install | Write-Host
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
             Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
