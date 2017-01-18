@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         ServiceUnavailable,
         InternalServerError,
         UserLinkedToAnotherDevice,
-        NotSupportedServerSyncProtocolVersion
+        NotSupportedServerSyncProtocolVersion,
+        UnacceptableSSLCertificate
     }
 }
