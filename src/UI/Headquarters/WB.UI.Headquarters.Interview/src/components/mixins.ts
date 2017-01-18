@@ -3,7 +3,7 @@ import { getLocationHash } from "../store/store.fetch"
 export const entityPartial = {
     computed: {
         $me() {
-            const id = this.id || this.$parent.id;
+            const id = this.id || this.$parent.id
 
             if (id == null) {
                 console.error("Cannot identify entity id")

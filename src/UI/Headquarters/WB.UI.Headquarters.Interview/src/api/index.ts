@@ -23,7 +23,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
         // $.connection.hub.logging = true
         $.connection.hub.error((error) => {
             // console.error("SignalR error: " + error)
-        });
+        })
 
         const interviewProxy = $.connection.interview
 
