@@ -63,7 +63,6 @@
 .image-zoom-box{
 	overflow: hidden;
 	margin: 10px;
-	margin-left: 0;
 	img{
 		@include img-responsive();
 	}
