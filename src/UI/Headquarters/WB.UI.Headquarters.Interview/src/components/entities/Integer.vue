@@ -30,66 +30,65 @@
         },
         methods: {
             markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id;
+                const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
             answerIntegerQuestion(evnt) {
 
-                const answerString = $(evnt.target).autoNumeric('get');
+                const answerString = $(evnt.target).autoNumeric('get')
                 const answer = answerString != undefined && answerString != ''
                                 ? parseInt(answerString)
-                                : null;
+                                : null
 
                 if (answer == null)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved');
-                    return;
+                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
+                    return
                 }
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value');
-                    return;
+                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value')
+                    return
                 }
 
                 if (!this.$me.isRosterSize)
                 {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
-                    return;
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                    return
                 }
-
 
                 if (answer < 0)
                 {
-                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`);
+                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because question is used as size of roster and specified answer is negative`)
                     return;
                 }
 
                 if (answer > this.$me.answerMaxValue)
                 {
-                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`);
+                    this.markAnswerAsNotSavedWithMessage(`Answer ${answer} is incorrect because answer is greater than Roster upper bound ${this.$me.answerMaxValue}.`)
                     return;
                 }
 
-                const previousAnswer = this.$me.answer;
-                const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer;
+                const previousAnswer = this.$me.answer
+                const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
 
                 if (!isNeedRemoveRosters)
                 {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
-                    return;
+                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                    return
                 }
 
                 const amountOfRostersToRemove = previousAnswer - answer;
-                const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`;
+                const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
                 modal.methods.confirm(confirmMessage,  result => {
                     if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer });
-                        return;
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        return
                     } else {
-                        this.fetch();
-                        return;
+                        this.fetch()
+                        return
                     }
                 } );
             },
@@ -97,22 +96,22 @@
 
                 if (!this.$me.isAnswered)
                 {
-                    return;
+                    return
                 }
                 if (!this.$me.isRosterSize)
                 {
-                    this.$store.dispatch("removeAnswer", this.id);
-                    return;
+                    this.$store.dispatch("removeAnswer", this.id)
+                    return
                 }
 
                 var amountOfRostersToRemove = this.$me.answer;
-                var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`;
+                var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
                 modal.methods.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
                     } else {
-                        this.fetch();
+                        this.fetch()
                     }
                 });
             }

@@ -30,7 +30,7 @@
         },
         methods: {
             markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id;
+                const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
             },
             answerDoubleQuestion(evnt) {
@@ -38,18 +38,18 @@
                 const answerString = $(evnt.target).autoNumeric('get');
                 const answer = answerString != undefined && answerString != ''
                                 ? parseFloat(answerString)
-                                : null;
+                                : null
 
                 if (answer == null)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved');
-                    return;
+                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
+                    return
                 }
 
                 if (answer > 9999999999999999 || answer < -9999999999999999)
                 {
-                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value');
-                    return;
+                    this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value')
+                    return
                 }
 
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
