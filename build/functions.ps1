@@ -35,7 +35,7 @@ function CleanBinAndObjFolders() {
     CleanFolders 'obj'
     CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
     CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
-    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
+    #CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
