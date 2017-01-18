@@ -99,17 +99,16 @@
                     </text>
                     }
                 }
-                var addWebInterview = function () {
-                    if (!selectedRow.disabled && selectedRow.allowCensusMode) {
+                @if (LegacyOptions.WebInterviewEnabled) {
+                    <text>
+                    if (!selectedRow.disabled && selectedRow.allowCensusMode)
+                    {
                         items["webSetup"] = {
                             name: "@Dashboard.WebInterviewSetup",
                             callback: webInterviewSetup
                         }
                     }
-                };
-                @if (LegacyOptions.WebInterviewEnabled)
-                {
-                    <text>addWebInterview();</text>
+                    </text>
                 }
 
 
