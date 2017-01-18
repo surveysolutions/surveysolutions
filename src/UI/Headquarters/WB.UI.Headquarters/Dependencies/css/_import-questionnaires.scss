@@ -126,12 +126,6 @@
         }
         .parameters{
             font-style: normal;
-            font-family: "TrebuchetMSBold";
-            color: $gray-highlight-font;
-            span{
-                @extend %gray-uppercase;
-                text-transform: none; 
-            }
         }  
     }
 }
@@ -170,9 +164,6 @@
     }
 }
 @media (max-width: $screen-md-min){
-    .parameters{
-        display: none;
-    }
     .import-interview{
         tr{
             @include transition(all, 0.1s);
@@ -187,16 +178,19 @@
     .import-wrapper{
         .dataTables_wrapper{
             .dataTables_filter{
+                text-align: left;
+                left: 0;
                 position: relative;
                 top: -5px;
-                label:after{
-                    top: 10px;
+                label{
+                    &.active {
+                        input{
+                            margin-right: 0;
+                        }
+                    }
                 }
             }
         }
-    }
-    .shared-with{
-        display: none;
     }
     .signed-name{
         width: 100%;
@@ -206,9 +200,6 @@
     }
     .signed-name{
         margin-bottom: 20px;
-    }
-    .modified-by, .created-by{
-        display: none;
     }
     .import-interview tbody tr td:first-child{
         font-size: 12px;
