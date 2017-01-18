@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.Tree.GetStaticText(validStaticText).MarkValid();
 
             foreach (var variable in @event.InterviewData.Variables)
-                this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector)).SetValue(variable.Value);
+                this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector))?.SetValue(variable.Value);
 
             foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
                 this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
