@@ -27,7 +27,6 @@
                     return this.$me.answer
                 },
                 set(value) {
-
                     if (!this.$me.isRosterSize)
                     {
                         this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
@@ -51,10 +50,10 @@
                             this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
                             return;
                         } else {
-                            this.fetch();
-                            return;
+                            this.fetch()
+                            return
                         }
-                    } );
+                    })
                 }
             },
             allAnswersGiven() {

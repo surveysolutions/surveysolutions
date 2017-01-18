@@ -4,7 +4,7 @@ import * as Vue from "vue"
 
 Vue.directive("numericFormatting", {
     bind: (el, binding) => {
-        $(el).autoNumeric("init");
+        $(el).autoNumeric("init")
     },
     update: (el, binding) => {
         if (binding.value) {
@@ -14,12 +14,12 @@ Vue.directive("numericFormatting", {
                 // vMin: -2147483648,
                 // vMax: 2147483647,
                 aPad: false
-            };
-            let settings = $.extend( {}, defaults, binding.value );
-            $(el).autoNumeric("update", settings);
+            }
+            let settings = $.extend( {}, defaults, binding.value )
+            $(el).autoNumeric("update", settings)
         }
     },
     unbind: (el) => {
-        $(el).autoNumeric("destroy");
+        $(el).autoNumeric("destroy")
     }
 })
