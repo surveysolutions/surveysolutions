@@ -35,7 +35,7 @@
                 const target = $(evnt.target)
                 let answer: string = target.val()
 
-                if (answer && this.$me.answer !== answer) {
+                if (answer) {
                     if (this.$me.mask && !target.data("maskCompleted")) {
                         this.$store.dispatch("setAnswerAsNotSaved", { id: this.$me.id, message: "Please, fill in all the required values" })
                     }
@@ -51,11 +51,11 @@
                     if (binding.value) {
                         const input = $(el)
                         input.mask(binding.value, {
-                            onChange: function(val){
+                            onChange: function (val) {
                                 input.data("maskCompleted", false);
                             },
                             onComplete: function () {
-                               input.data("maskCompleted", true);
+                                input.data("maskCompleted", true);
                             },
                             translation: {
                                 "~": { pattern: /[a-zA-Z]/ },
