@@ -241,8 +241,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../fonts/glyphicons-halflings-regular.eot");
+  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -6051,7 +6051,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   position: relative; }
   .dataTables_wrapper .dataTables_filter {
     position: absolute;
-    top: -55px;
+    top: -53px;
     right: 0;
     z-index: 2; }
     .dataTables_wrapper .dataTables_filter label {
@@ -7533,8 +7533,7 @@ input.double-checkbox-white {
 
 .image-zoom-box, .image-option {
   overflow: hidden;
-  margin: 10px;
-  margin-left: 0; }
+  margin: 10px; }
   .image-zoom-box img, .image-option img {
     display: block;
     max-width: 100%;
@@ -8052,8 +8051,8 @@ body > .ui-pnotify {
     .ui-pnotify.stack-modal .alert .ui-pnotify-text {
       color: #3f3f3f; }
     .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar {
-      margin-top: 20px;
-      text-align: left; }
+      margin-top: 20px !important;
+      text-align: left !important; }
       .ui-pnotify.stack-modal .alert .ui-pnotify-action-bar .btn {
         border-color: transparent;
         color: #2a81cb;
@@ -9121,7 +9120,7 @@ label.inactive {
 
 .content {
   border-right: 3px solid #ececec;
-  left: 372px;
+  left: 12px;
   width: 570px;
   box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
   z-index: 4; }
@@ -9143,21 +9142,38 @@ label.inactive {
           margin-right: 15px; }
 
 .unit-section {
-  position: relative;
-  /* 	&:last-of-type{
-		margin-bottom: 50px;
-	} */ }
+  position: relative; }
 
 .details-interview.questionnaire {
+  margin-left: 570px;
+  width: calc(100% - 570px); }
+
+.details-interview .foldback-button {
+  display: block;
+  top: calc(50% - 23px);
+  right: auto;
+  left: 10px; }
+  .details-interview .foldback-button span {
+    background-color: #fff; }
+    .details-interview .foldback-button span .middle {
+      display: none; }
+
+.web-interview-for-supervisor .content {
+  left: 372px; }
+
+.web-interview-for-supervisor .details-interview.questionnaire {
   margin-left: 930px;
   width: calc(100% - 930px); }
+
+.web-interview-for-supervisor .questionnaire .unit-title {
+  position: relative; }
 
 .questionnaire {
   background-color: #f8f8f8;
   transition: margin 0.3s linear 0s; }
   .questionnaire .unit-title {
     z-index: 1;
-    position: relative;
+    position: fixed;
     background-color: #2a81cb;
     padding: 15px 20px 10px 80px;
     color: #fff;
@@ -9378,6 +9394,10 @@ label.inactive {
         .question-unit .options-group .field .dropdown-menu li:last-child {
           border: none; }
 
+.multimedia-question .image-zoom-box, .multimedia-question .image-option {
+  margin: 0;
+  margin-bottom: 10px; }
+
 .static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a, .static-text .preset-filters-container .export-queue, .preset-filters-container .static-text .export-queue, .variable .preset-filters-container .export-queue, .preset-filters-container .variable .export-queue {
   margin: 0; }
   .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image, .static-text .preset-filters-container .export-queue .static-text-image, .preset-filters-container .static-text .export-queue .static-text-image, .variable .preset-filters-container .export-queue .static-text-image, .preset-filters-container .variable .export-queue .static-text-image {
@@ -9496,6 +9516,22 @@ label.inactive {
   margin-left: 10px;
   max-width: 70%; }
 
+.fullscreen-hidden-content .content {
+  left: -570px;
+  box-shadow: none; }
+
+.fullscreen-hidden-content .questionnaire.details-interview {
+  margin-left: 0px;
+  width: calc(100% - 0px); }
+
+.fullscreen-hidden-content .details-interview .foldback-button span {
+  background-color: #fff;
+  transform: rotate(0deg); }
+  .fullscreen-hidden-content .details-interview .foldback-button span.middle {
+    top: 7px; }
+  .fullscreen-hidden-content .details-interview .foldback-button span.arrow:first-of-type {
+    top: 14px; }
+
 .footer.footer-adaptive-content.footer-adaptive-filters {
   padding-left: 930px; }
 
@@ -9506,28 +9542,33 @@ label.inactive {
   padding-left: 360px; }
 
 @media only screen and (max-width: 1525px) {
-  .web-interview .filters {
+  .web-interview-for-supervisor .filters {
     padding-top: 105px;
     width: 270px;
     padding-left: 12px; }
-    .web-interview .filters .bootstrap-select.btn-group {
+    .web-interview-for-supervisor .filters .bootstrap-select.btn-group {
       width: 100% !important; }
-    .web-interview .filters .input-group {
+    .web-interview-for-supervisor .filters .input-group {
       width: 100%; }
-    .web-interview .filters .open > .dropdown-menu {
+    .web-interview-for-supervisor .filters .open > .dropdown-menu {
       width: 100%; }
-    .web-interview .filters .foldback-button {
+    .web-interview-for-supervisor .filters .foldback-button {
       top: 65px; }
-  .web-interview .filters {
+  .web-interview-for-supervisor .filters {
     padding-top: 115px; }
-    .web-interview .filters .foldback-button {
+    .web-interview-for-supervisor .filters .foldback-button {
       top: 75px; }
-  .content {
-    width: 330px;
+  .web-interview-for-supervisor .content {
     left: 282px; }
-  .details-interview.questionnaire {
+  .web-interview-for-supervisor .details-interview.questionnaire {
     margin-left: 600px;
     width: calc(100% - 600px); }
+  .content {
+    width: 330px;
+    left: 12px; }
+  .details-interview.questionnaire {
+    margin-left: 330px;
+    width: calc(100% - 330px); }
   .questionnaire .unit-title {
     width: auto; }
   .footer.footer-adaptive-content.footer-adaptive-filters {
@@ -9542,87 +9583,91 @@ label.inactive {
     padding-top: 60px; }
   .aside-menu {
     right: 0; }
-  .web-interview .filters {
+  .web-interview-for-supervisor .filters {
     padding-top: 105px;
     left: -282px;
     box-shadow: none; }
-  .web-interview .content {
+  .web-interview-for-supervisor .content {
     left: 12px; }
-    .web-interview .content .foldback-button {
+    .web-interview-for-supervisor .content .foldback-button {
       top: 65px; }
-  .web-interview .questionnaire.details-interview {
+  .web-interview-for-supervisor .questionnaire.details-interview {
     margin-left: 330px;
     width: calc(100% - 330px); }
-  .web-interview .questionnaire .unit-title {
+  .web-interview-for-supervisor .questionnaire .unit-title {
     padding-left: 50px; }
-  .web-interview .questionnaire .unit-title.is_stuck {
+  .web-interview-for-supervisor .questionnaire .unit-title.is_stuck {
     top: 60px !important; }
-  .web-interview.fullscreen-hidden-content .content {
+  .web-interview-for-supervisor.fullscreen-hidden-content .content {
     left: -330px;
     box-shadow: none; }
-  .web-interview.fullscreen-hidden-content .questionnaire.details-interview {
+  .web-interview-for-supervisor.fullscreen-hidden-content .questionnaire.details-interview {
     margin-left: 270px;
     width: calc(100% - 270px); }
-  .web-interview.fullscreen-hidden-content .filters {
+  .web-interview-for-supervisor.fullscreen-hidden-content .filters {
     left: 0;
     overflow: auto;
     box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-  .web-interview.fullscreen-hidden-filters .filters {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .filters {
     overflow: auto;
     left: 0;
     box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .web-interview.fullscreen-hidden-filters .filters .foldback-button {
+    .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button {
       right: 5px;
       background-color: transparent; }
-      .web-interview.fullscreen-hidden-filters .filters .foldback-button span.arrow {
+      .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow {
         margin: 15px 10px;
         transform: rotate(-45deg); }
-        .web-interview.fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+        .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
           transform: rotate(45deg); }
-      .web-interview.fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+      .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button .glyphicon {
         display: none; }
-  .web-interview.fullscreen-hidden-filters .questionnaire.details-interview {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire.details-interview {
     margin-left: 270px;
     width: calc(100% - 270px); }
-  .web-interview.fullscreen-hidden-filters .questionnaire .question {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .question {
     padding-left: 40px; }
-  .web-interview.fullscreen-hidden-filters .questionnaire .unit-title {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .action-container {
     padding-left: 50px; }
-  .web-interview.fullscreen-hidden-filters .questionnaire .button-flag, .web-interview.fullscreen-hidden-filters .questionnaire .flag:before {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .unit-title {
+    padding-left: 50px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .button-flag, .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .flag:before {
     left: -20px; }
-  .web-interview.fullscreen-hidden-filters .content {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .content {
     left: -330px;
     box-shadow: none; }
-  .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content {
     left: 12px;
     overflow: auto;
     box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+    .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
       right: 5px;
       background-color: transparent; }
-      .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
+      .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
         margin: 15px 10px;
         transform: rotate(-45deg); }
-        .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+        .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
           transform: rotate(45deg); }
-      .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
+      .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
         display: none; }
-    .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
+    .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
       padding-left: 50px; }
-  .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire.details-interview {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire.details-interview {
     margin-left: 330px;
     width: calc(100% - 330px); }
-  .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
     padding-left: 40px; }
-  .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .action-container {
+    padding-left: 50px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
     left: -20px; }
-  .web-interview.fullscreen-hidden-filters.fullscreen-hidden-content .filters {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .filters {
     box-shadow: none;
     left: -282px; }
   .modal-img {
     top: 60px; }
   .footer.footer-adaptive-content.footer-adaptive-filters {
-    padding-left: 0; }
+    padding-left: 330px; }
   .footer.footer-adaptive-content {
     padding-left: 270px; }
   .footer.footer-adaptive-filters {
