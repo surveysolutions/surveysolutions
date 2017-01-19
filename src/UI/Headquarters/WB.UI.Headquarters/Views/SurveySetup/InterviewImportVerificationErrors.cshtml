@@ -1,4 +1,5 @@
-﻿@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
+﻿@using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -51,10 +52,24 @@
                             <p>
                                 @if (!string.IsNullOrEmpty(@reference.Content))
                                 {
-                                    <span>@reference.Type: @reference.Content</span>
+                                    if (reference.Type == PreloadedDataVerificationReferenceType.Column)
+                                        {<span> @BatchUpload.Column: @reference.Content </span>}
+                                    else if (reference.Type == PreloadedDataVerificationReferenceType.Cell)
+                                        {<span> @BatchUpload.Cell: @reference.Content </span>}
+                                    else if (reference.Type == PreloadedDataVerificationReferenceType.Row)
+                                        {<span> @BatchUpload.Row: @reference.Content </span>}
+                                    else if (reference.Type == PreloadedDataVerificationReferenceType.File)
+                                    {
+                                        <span> @BatchUpload.File: @reference.Content </span>
+                                    }
+                                    else
+                                    {
+                                        <span> @reference.Type: @reference.Content </span>
+                                    }
+
                                 }
                                 (@if (reference.PositionX.HasValue){<span>@BatchUpload.Column: @reference.PositionX,</span>}
-                                 @if (reference.PositionY.HasValue){<span>@BatchUpload.Row: @(reference.PositionY + 1)</span>})
+                                @if (reference.PositionY.HasValue){<span>@BatchUpload.Row: @(reference.PositionY + 1)</span>})
                             </p>
                         }
                     </div>
@@ -66,3 +81,4 @@
         </div>
     </div>
 </main>
+ 

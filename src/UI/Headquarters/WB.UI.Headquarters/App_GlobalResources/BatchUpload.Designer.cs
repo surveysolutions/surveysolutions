@@ -197,6 +197,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cell.
+        /// </summary>
+        internal static string Cell {
+            get {
+                return ResourceManager.GetString("Cell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         internal static string Code {
@@ -364,6 +373,15 @@ namespace Resources {
         internal static string EstimatedTime {
             get {
                 return ResourceManager.GetString("EstimatedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        internal static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
             }
         }
         
