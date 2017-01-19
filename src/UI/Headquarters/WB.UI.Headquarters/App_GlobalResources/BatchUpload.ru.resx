@@ -397,4 +397,28 @@
   <data name="MultipleErrorsWereFound" xml:space="preserve">
     <value>Обнаружено {0} ошибок</value>
   </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>создание многих интервью</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Ячейка</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Импортирование из {0} для {1}</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Создание многих интервью загрузкой файла</value>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 ошибка найдена</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 интервью создано</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 интервью не удалось создать</value>
+  </data>
 </root>

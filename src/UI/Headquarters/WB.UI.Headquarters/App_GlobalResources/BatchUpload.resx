@@ -476,4 +476,10 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Supervisor must be selected</value>
   </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Cell</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
 </root>
