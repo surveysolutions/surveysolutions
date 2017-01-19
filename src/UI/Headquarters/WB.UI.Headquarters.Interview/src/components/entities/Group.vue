@@ -1,19 +1,15 @@
 <template>
     <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
-        <div class="question-editor roster-section-block" :class="[{'answered': !isNotStarted}]">
+        <div class="question-editor roster-section-block" :class="[{'has-error': hasInvalidAnswers && !isCompleted}, {'answered': isCompleted}]">
             <div class="question-unit">
                 <div class="options-group">
-                    <div class="form-group">
-                        <div class="field text-left text-capitalize" >
-                            <router-link :to="navigateTo" class="btn btn-block btn-roster-section" :class="statusClass">                                
-                                    {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>                                
-                            </router-link>
-                        </div>
-                    </div>
+                    <router-link :to="navigateTo" class="btn btn-roster-section" :class="statusClass">
+                        {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
+                    </router-link>
                 </div>
-                <div class="information-block roster-section-info">                    
-                        <span :class="[{'text-primary': isStarted}, {'text-success': isCompleted}]">{{this.$me.statisticsByAnswersAndSubsections}}</span>
-                        <span v-if="hasInvalidAnswers">, &nbsp;<strong class="text-danger">{{this.$me.statisticsByInvalidAnswers}}</strong></span>                    
+                <div class="information-block roster-section-info">
+                    {{this.$me.statisticsByAnswersAndSubsections}}<span v-if="hasInvalidAnswers">, </span> 
+                    <span class="error-text" v-if="hasInvalidAnswers">{{this.$me.statisticsByInvalidAnswers}}</span>
                 </div>
             </div>
         </div>
@@ -50,9 +46,10 @@
             statusClass() {
                 return [{
                     'btn-success': !this.hasInvalidAnswers && this.isCompleted,
-                    'btn-danger': this.hasInvalidAnswers,                    
+                    'btn-danger': this.hasInvalidAnswers,
                     'btn-primary': !this.hasInvalidAnswers && !this.isCompleted
-            }]}
+                }]
+            }
         }
     }
 </script>
