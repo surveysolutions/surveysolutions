@@ -103,6 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
 
             var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
+            if (idIndexInParentDataFile < 0)
+                return null;
             var parentIdColumnIndexesOfParentDataFile = this.GetParentIdColumnIndexes(parentDataFile)?? new int[0];
             var row = parentDataFile.Content.FirstOrDefault(record =>
                             record[idIndexInParentDataFile] == parentIdValues.First() &&
