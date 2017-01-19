@@ -964,7 +964,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Load map do show location for GPS questions.
+        ///   Looks up a localized string similar to Load map to show location for GPS questions.
         /// </summary>
         public static string Prefs_ShowLocationOnMapSummary {
             get {
