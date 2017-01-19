@@ -1154,9 +1154,14 @@ namespace WB.Tests.Unit.Designer
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
 
-        public static QuestionnaireListViewItem QuestionnaireListViewItem(bool isPublic = false)
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, 
+            SharedPerson[] sharedPersons = null)
         {
-            return new QuestionnaireListViewItem() { IsPublic = isPublic };
+            return new QuestionnaireListViewItem() {
+                IsPublic = isPublic,
+                PublicId = id ?? Guid.Empty,
+                SharedPersons = new HashSet<SharedPerson>(sharedPersons ?? Enumerable.Empty<SharedPerson>())
+            };
         }
 
         public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();

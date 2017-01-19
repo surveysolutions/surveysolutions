@@ -257,6 +257,51 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem.IsPublic, Is.False);
         }
 
+        [Test]
+        public void When_ImportQuestionnaire_command_for_existed_questionnaire()
+        {
+            // arrange
+            AssemblyContext.SetupServiceLocator();
+            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+
+
+            Guid questionnaireId = Guid.NewGuid();
+            Guid? userId1 = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid? userId2 = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            string userName1 = "first_owner";
+            string userName2 = "second_importer";
+
+            var accountStorage = new TestPlainStorage<User>();
+            accountStorage.Store(new User { UserName = userName1 }, userId1.FormatGuid());
+            accountStorage.Store(new User { UserName = userName2 }, userId2.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
+
+            var listViewPostProcessor = CreateListViewPostProcessor();
+            var listViewItem = Create.QuestionnaireListViewItem(id: questionnaireId, sharedPersons: new[]
+            {
+                new SharedPerson() {UserId = userId1.Value, IsOwner = true, ShareType = ShareType.Edit},
+                new SharedPerson() {UserId = userId2.Value, IsOwner = false, ShareType = ShareType.View},
+            });
+            listViewItemsStorage.Store(listViewItem, questionnaireId.FormatGuid());
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId);
+            questionnaire.CreatedBy = userId2;
+
+            var command = new ImportQuestionnaire(userId2.Value, questionnaire);
+
+            // act
+            listViewPostProcessor.Process(null, command);
+
+            // assert
+            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            Assert.That(questionnaireListViewItem, Is.Not.Null);
+            Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
+            Assert.That(questionnaireListViewItem.CreatorName, Is.EqualTo(userName2));
+            Assert.That(questionnaireListViewItem.SharedPersons.Count(p => p.IsOwner), Is.EqualTo(1));
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).UserId, Is.EqualTo(userId2.Value));
+            Assert.That(questionnaireListViewItem.SharedPersons.Single(p => p.IsOwner).ShareType, Is.EqualTo(ShareType.Edit));
+        }
+
         private static ListViewPostProcessor CreateListViewPostProcessor() => new ListViewPostProcessor();
     }
 }
