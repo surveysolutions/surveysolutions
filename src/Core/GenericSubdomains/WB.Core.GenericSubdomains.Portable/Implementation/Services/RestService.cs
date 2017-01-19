@@ -142,9 +142,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     var exceptionInnerException = ex.Call?.Exception?.InnerException;
                     if (exceptionInnerException != null)
                     {
-                        if (exceptionInnerException.GetType().Name == "SSLHandshakeException")
+                        var exceptionTypeName = exceptionInnerException.GetType().Name;
+                        var releaseException = exceptionTypeName.Contains("IOException") && exceptionInnerException.Message.Contains("Unacceptable certificate");
+                        if (exceptionTypeName.Contains("SSLHandshakeException") || releaseException)
                         {
-                            throw new RestException(exceptionInnerException.Message, type: RestExceptionType.UnacceptableCertificate, innerException: ex);
+                            throw new RestException(exceptionInnerException.Message, type: RestExceptionType.UnacceptableCertificate, innerException: exceptionInnerException);
                         }
                     }
                 }
