@@ -22,7 +22,7 @@
 }
 .foldback-button{
 	display: none;
-	@include size($width-foldback-button, 46px);
+	@include size($width-foldback-button, $height-foldback-button);
 	cursor: pointer;
 	@include absolute(75px, 0, null, null);
 	border-radius: 4px;
@@ -39,21 +39,74 @@
 	span.arrow{
 		display: inline-block;
 		@include size(20px, 2px); 
-		margin: 15px 10px;
 		background-color: rgba(0, 0, 0, 0.5);
-		@include absolute(0, 0);
-		@include rotate(-45deg);
+		@include absolute((($height-foldback-button)/2 + 5px), 10px);
+		@include rotate(45deg);
 		&:first-of-type{
-			@include rotate(45deg);
-			top: 13px;
+			@include rotate(-45deg);
+			top: ($height-foldback-button/3);
 		}
 	}
 	.glyphicon{
 		display: none;
 		color: rgba(0, 0, 0, 0.5);
 		font-size: 18px;
-		top: 14px;
+		top: ($height-foldback-button/3);
 		left: 10px;
+	}
+}
+.humburger-foldback-button{
+	border-radius: 4px;
+	@include absolute(0, null, null, 20px);
+	display: block;
+	@include size(42px, 32px);
+	cursor: pointer;
+	z-index: 3;
+	top: calc(50% - 16px);
+	display: block;
+	@include transition(all, 0.2s);
+	&:before, &:after{
+		content: "";
+		display: block;
+		@include size(22px, 2px); 
+		@include absolute(((32px)/2 + 8px), 10px);
+		@include rotate(45deg);
+		background-color: rgba(255,255,255, 0.8);
+	}
+	span{
+		display: block;
+		@include size(22px, 2px); 
+		background-color: rgba(255,255,255, 0.8);
+		@include absolute(((32px)/2), null, null, 10px);
+		visibility: hidden;
+	}
+	&:after{
+		@include rotate(-45deg);
+		top: 9px;
+	}
+
+	&:hover, &:focus, &:active{
+		span{
+			background-color: rgba(255,255,255, 1);
+		}
+		&:before, &:after{
+			background-color: rgba(255,255,255, 1);
+		}
+	}
+}
+@media only screen and (max-width: 615px){
+	.humburger-foldback-button{
+		left: 0;
+	}
+}
+@media (max-width: $screen-sm-min){
+	.humburger-foldback-button{
+		&:before, &:after{
+			@include rotate(-45deg);
+		}
+		&:after{
+			@include rotate(45deg);
+		}
 	}
 }
 .btn-default.btn-gray{

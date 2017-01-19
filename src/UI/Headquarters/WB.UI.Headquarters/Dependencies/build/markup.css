@@ -6305,21 +6305,70 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     display: inline-block;
     width: 20px;
     height: 2px;
-    margin: 15px 10px;
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
-    top: 0;
-    right: 0;
-    transform: rotate(-45deg); }
+    top: 28px;
+    right: 10px;
+    transform: rotate(45deg); }
     .foldback-button span.arrow:first-of-type {
-      transform: rotate(45deg);
-      top: 13px; }
+      transform: rotate(-45deg);
+      top: 15.33333px; }
   .foldback-button .glyphicon {
     display: none;
     color: rgba(0, 0, 0, 0.5);
     font-size: 18px;
-    top: 14px;
+    top: 15.33333px;
     left: 10px; }
+
+.humburger-foldback-button {
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  display: block;
+  width: 42px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 3;
+  top: calc(50% - 16px);
+  display: block;
+  transition: all 0.2s linear 0s; }
+  .humburger-foldback-button:before, .humburger-foldback-button:after {
+    content: "";
+    display: block;
+    width: 22px;
+    height: 2px;
+    position: absolute;
+    top: 24px;
+    right: 10px;
+    transform: rotate(45deg);
+    background-color: rgba(255, 255, 255, 0.8); }
+  .humburger-foldback-button span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.8);
+    position: absolute;
+    top: 16px;
+    left: 10px;
+    visibility: hidden; }
+  .humburger-foldback-button:after {
+    transform: rotate(-45deg);
+    top: 9px; }
+  .humburger-foldback-button:hover span, .humburger-foldback-button:focus span, .humburger-foldback-button:active span {
+    background-color: white; }
+  .humburger-foldback-button:hover:before, .humburger-foldback-button:hover:after, .humburger-foldback-button:focus:before, .humburger-foldback-button:focus:after, .humburger-foldback-button:active:before, .humburger-foldback-button:active:after {
+    background-color: white; }
+
+@media only screen and (max-width: 615px) {
+  .humburger-foldback-button {
+    left: 0; } }
+
+@media (max-width: 880px) {
+  .humburger-foldback-button:before, .humburger-foldback-button:after {
+    transform: rotate(-45deg); }
+  .humburger-foldback-button:after {
+    transform: rotate(45deg); } }
 
 .btn-default.btn-gray {
   color: #fff;
@@ -6522,7 +6571,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 
 .navbar {
   min-width: 400px;
-  min-height: 60px;
+  min-height: 70px;
   margin-bottom: 0; }
   .navbar .container, .navbar .container-fluid {
     padding: 0 45px 0 45px; }
@@ -6653,97 +6702,99 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     color: white; }
 
 @media (max-width: 1210px) {
-  .navbar .container, .navbar .container-fluid {
-    width: 100%;
-    padding: 0 20px 0 35px; }
-  .navbar .navbar-header {
-    margin: 0;
-    padding-top: 5px; }
-    .navbar .navbar-header .active-page {
-      display: inline-block;
-      white-space: nowrap;
-      max-width: 55%;
-      overflow: hidden;
-      text-overflow: ellipsis; }
-    .navbar .navbar-header .navbar-brand {
-      padding: 15px 0 15px 30px; }
-      .navbar .navbar-header .navbar-brand:before {
-        top: 5px; }
-      .navbar .navbar-header .navbar-brand.rotate-brand {
-        min-height: 41px;
-        min-width: 15px;
-        padding: 0;
-        transform: rotate(270deg); }
-        .navbar .navbar-header .navbar-brand.rotate-brand .brand-name {
-          display: none; }
-          .navbar .navbar-header .navbar-brand.rotate-brand .brand-name:after {
-            display: none; }
-    .navbar .navbar-header .badge.badge_nav {
-      display: block;
-      float: right;
-      position: relative;
-      top: 0;
-      left: 0;
-      margin: 5px 15px 5px 10px; }
-    .navbar .navbar-header .number-of-synchronized-interviews {
-      display: block;
-      float: right;
-      padding: 15px 10px;
-      color: #fff; }
-      .navbar .navbar-header .number-of-synchronized-interviews:hover, .navbar .navbar-header .number-of-synchronized-interviews:focus {
-        text-decoration: none;
-        color: white; }
-  .navbar .navbar-toggle {
-    z-index: 25;
-    margin-right: 0; }
-  .navbar.navbar-fixed-top .navbar-collapse {
-    max-height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    margin: 0;
-    padding: 40px 5%; }
-    .navbar.navbar-fixed-top .navbar-collapse li.active a {
-      color: white; }
-      .navbar.navbar-fixed-top .navbar-collapse li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li.active a:focus {
-        background-color: rgba(255, 255, 255, 0.4); }
-    .navbar.navbar-fixed-top .navbar-collapse li > a {
-      border-radius: 5px;
-      padding: 15px 10px;
-      text-align: left;
-      color: #a6a8a9; }
-      .navbar.navbar-fixed-top .navbar-collapse li > a:hover, .navbar.navbar-fixed-top .navbar-collapse li > a:focus {
-        color: white; }
-    .navbar.navbar-fixed-top .navbar-collapse li a .caret {
-      top: 0;
-      left: 0;
-      position: relative;
+  .navbar {
+    min-height: 60px; }
+    .navbar .container, .navbar .container-fluid {
+      width: 100%;
+      padding: 0 20px 0 35px; }
+    .navbar .navbar-header {
       margin: 0;
-      margin-left: 10px; }
-    .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a {
-      padding: 15px 10px; }
-      .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a:focus {
-        font-family: "RobotoBold"; }
-    .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a {
-      border-radius: 5px;
-      background-color: rgba(42, 129, 203, 0.5); }
-      .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:focus {
-        font-family: "RobotoBold";
-        background-color: #2a81cb; }
-  .navbar.navbar-fixed-top .navbar-right .badge.badge_nav {
-    top: 0;
-    left: 0;
-    position: relative;
-    margin-right: 10px; }
-  .navbar.navbar-fixed-top .navbar-nav > .active > a,
-  .navbar.navbar-fixed-top .navbar-nav > .active > a:hover,
-  .navbar.navbar-fixed-top .navbar-nav > .active > a:focus {
-    background-color: #333; }
+      padding-top: 5px; }
+      .navbar .navbar-header .active-page {
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 55%;
+        overflow: hidden;
+        text-overflow: ellipsis; }
+      .navbar .navbar-header .navbar-brand {
+        padding: 15px 0 15px 30px; }
+        .navbar .navbar-header .navbar-brand:before {
+          top: 5px; }
+        .navbar .navbar-header .navbar-brand.rotate-brand {
+          min-height: 41px;
+          min-width: 15px;
+          padding: 0;
+          transform: rotate(270deg); }
+          .navbar .navbar-header .navbar-brand.rotate-brand .brand-name {
+            display: none; }
+            .navbar .navbar-header .navbar-brand.rotate-brand .brand-name:after {
+              display: none; }
+      .navbar .navbar-header .badge.badge_nav {
+        display: block;
+        float: right;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 5px 15px 5px 10px; }
+      .navbar .navbar-header .number-of-synchronized-interviews {
+        display: block;
+        float: right;
+        padding: 15px 10px;
+        color: #fff; }
+        .navbar .navbar-header .number-of-synchronized-interviews:hover, .navbar .navbar-header .number-of-synchronized-interviews:focus {
+          text-decoration: none;
+          color: white; }
+    .navbar .navbar-toggle {
+      z-index: 25;
+      margin-right: 0; }
+    .navbar.navbar-fixed-top .navbar-collapse {
+      max-height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: black;
+      margin: 0;
+      padding: 40px 5%; }
+      .navbar.navbar-fixed-top .navbar-collapse li.active a {
+        color: white; }
+        .navbar.navbar-fixed-top .navbar-collapse li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li.active a:focus {
+          background-color: rgba(255, 255, 255, 0.4); }
+      .navbar.navbar-fixed-top .navbar-collapse li > a {
+        border-radius: 5px;
+        padding: 15px 10px;
+        text-align: left;
+        color: #a6a8a9; }
+        .navbar.navbar-fixed-top .navbar-collapse li > a:hover, .navbar.navbar-fixed-top .navbar-collapse li > a:focus {
+          color: white; }
+      .navbar.navbar-fixed-top .navbar-collapse li a .caret {
+        top: 0;
+        left: 0;
+        position: relative;
+        margin: 0;
+        margin-left: 10px; }
+      .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a {
+        padding: 15px 10px; }
+        .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a:focus {
+          font-family: "RobotoBold"; }
+      .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a {
+        border-radius: 5px;
+        background-color: rgba(42, 129, 203, 0.5); }
+        .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:focus {
+          font-family: "RobotoBold";
+          background-color: #2a81cb; }
+    .navbar.navbar-fixed-top .navbar-right .badge.badge_nav {
+      top: 0;
+      left: 0;
+      position: relative;
+      margin-right: 10px; }
+    .navbar.navbar-fixed-top .navbar-nav > .active > a,
+    .navbar.navbar-fixed-top .navbar-nav > .active > a:hover,
+    .navbar.navbar-fixed-top .navbar-nav > .active > a:focus {
+      background-color: #333; }
   .icon-bar {
     transition: all 0.5s linear 0s; }
   .navbar-inverse .navbar-toggle {
@@ -7688,11 +7739,10 @@ input.checkbox-filter {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px; }
       .fullscreen-hidden-filters .filters .foldback-button span.arrow {
-        margin-left: 13px;
-        margin-right: 2px;
-        transform: rotate(45deg); }
+        right: 2px;
+        transform: rotate(-45deg); }
         .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
-          transform: rotate(-45deg); }
+          transform: rotate(45deg); }
       .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
         display: inline-block; }
     .fullscreen-hidden-filters .filters .foldback-button {
@@ -7708,11 +7758,10 @@ input.checkbox-filter {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px; }
       .filters .foldback-button span.arrow {
-        margin-left: 13px;
-        margin-right: 2px;
-        transform: rotate(45deg); }
+        right: 2px;
+        transform: rotate(-45deg); }
         .filters .foldback-button span.arrow:first-of-type {
-          transform: rotate(-45deg); }
+          transform: rotate(45deg); }
       .filters .foldback-button .glyphicon {
         display: inline-block; }
   .fullscreen-hidden-filters .filters {
@@ -7729,10 +7778,9 @@ input.checkbox-filter {
       right: 5px;
       background-color: transparent; }
       .fullscreen-hidden-filters .filters .foldback-button span.arrow {
-        margin: 15px 10px;
-        transform: rotate(-45deg); }
+        transform: rotate(45deg); }
         .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
-          transform: rotate(45deg); }
+          transform: rotate(-45deg); }
       .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
         display: none; }
     .fullscreen-hidden-filters .filters .foldback-button {
@@ -9148,34 +9196,14 @@ label.inactive {
   margin-left: 570px;
   width: calc(100% - 570px); }
 
-.details-interview .foldback-button {
-  display: block;
-  top: calc(50% - 23px);
-  right: auto;
-  left: 10px; }
-  .details-interview .foldback-button span {
-    background-color: #fff; }
-    .details-interview .foldback-button span .middle {
-      display: none; }
-
-.web-interview-for-supervisor .content {
-  left: 372px; }
-
-.web-interview-for-supervisor .details-interview.questionnaire {
-  margin-left: 930px;
-  width: calc(100% - 930px); }
-
-.web-interview-for-supervisor .questionnaire .unit-title {
-  position: relative; }
-
 .questionnaire {
   background-color: #f8f8f8;
   transition: margin 0.3s linear 0s; }
   .questionnaire .unit-title {
     z-index: 1;
-    position: fixed;
+    position: relative;
     background-color: #2a81cb;
-    padding: 15px 20px 10px 80px;
+    padding: 20px 20px 15px 80px;
     color: #fff;
     box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.3); }
     .questionnaire .unit-title.is_stuck {
@@ -9195,7 +9223,7 @@ label.inactive {
 
 .question {
   position: relative;
-  padding: 18px 30px 20px 70px;
+  padding: 20px 30px 20px 70px;
   border-bottom: 2px solid #dbdfe2; }
   .question .question-editor .button-flag, .question .question-editor .flag:before {
     position: absolute;
@@ -9252,9 +9280,9 @@ label.inactive {
     z-index: 0;
     color: #a6a8a9; }
 
-.action-container {
-  padding: 18px 30px 20px 80px; }
-  .action-container a {
+.action-container, .wrapper-info {
+  padding: 20px 30px 20px 80px; }
+  .action-container a, .wrapper-info a {
     max-width: 425px;
     white-space: normal;
     text-align: left; }
@@ -9516,21 +9544,61 @@ label.inactive {
   margin-left: 10px;
   max-width: 70%; }
 
+.content .humburger-foldback-button {
+  display: none; }
+
 .fullscreen-hidden-content .content {
   left: -570px;
   box-shadow: none; }
+  .fullscreen-hidden-content .content .humburger-foldback-button {
+    top: 65px;
+    left: auto;
+    right: 20px;
+    background-color: #a6a8a9; }
 
 .fullscreen-hidden-content .questionnaire.details-interview {
   margin-left: 0px;
   width: calc(100% - 0px); }
 
-.fullscreen-hidden-content .details-interview .foldback-button span {
-  background-color: #fff;
+.fullscreen-hidden-content .humburger-foldback-button:before, .fullscreen-hidden-content .humburger-foldback-button:after {
+  left: 10px;
+  top: 9px;
   transform: rotate(0deg); }
-  .fullscreen-hidden-content .details-interview .foldback-button span.middle {
-    top: 7px; }
-  .fullscreen-hidden-content .details-interview .foldback-button span.arrow:first-of-type {
-    top: 14px; }
+
+.fullscreen-hidden-content .humburger-foldback-button:after {
+  top: 21px; }
+
+.fullscreen-hidden-content .humburger-foldback-button span {
+  top: 15px;
+  visibility: visible; }
+
+.web-interview-for-supervisor .content,
+.web-interview-for-supervisor.fullscreen-hidden-content .content,
+.web-interview-for-supervisor.fullscreen-hidden-filters .content,
+.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters .content {
+  left: 372px; }
+
+.web-interview-for-supervisor .details-interview.questionnaire,
+.web-interview-for-supervisor.fullscreen-hidden-content .details-interview.questionnaire,
+.web-interview-for-supervisor.fullscreen-hidden-filters .details-interview.questionnaire,
+.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters .details-interview.questionnaire {
+  margin-left: 930px;
+  width: calc(100% - 930px); }
+
+.wrapper-info {
+  border-bottom: 2px solid #dbdfe2; }
+  .wrapper-info .container-info {
+    max-width: 550px; }
+    .wrapper-info .container-info h2 {
+      margin-top: 20px; }
+    .wrapper-info .container-info p {
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 15px; }
+      .wrapper-info .container-info p:last-of-type {
+        margin-bottom: 0; }
+      .wrapper-info .container-info p a {
+        color: #3f3f3f; }
 
 .footer.footer-adaptive-content.footer-adaptive-filters {
   padding-left: 930px; }
@@ -9581,8 +9649,12 @@ label.inactive {
 @media (max-width: 1210px) {
   .content {
     padding-top: 60px; }
+    .content .questionnaire-content .breadcrumb {
+      margin-right: 30px; }
   .aside-menu {
     right: 0; }
+  .questionnaire .unit-title.is_stuck {
+    top: 60px !important; }
   .web-interview-for-supervisor .filters {
     padding-top: 105px;
     left: -282px;
@@ -9596,8 +9668,6 @@ label.inactive {
     width: calc(100% - 330px); }
   .web-interview-for-supervisor .questionnaire .unit-title {
     padding-left: 50px; }
-  .web-interview-for-supervisor .questionnaire .unit-title.is_stuck {
-    top: 60px !important; }
   .web-interview-for-supervisor.fullscreen-hidden-content .content {
     left: -330px;
     box-shadow: none; }
@@ -9616,10 +9686,9 @@ label.inactive {
       right: 5px;
       background-color: transparent; }
       .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow {
-        margin: 15px 10px;
-        transform: rotate(-45deg); }
+        transform: rotate(45deg); }
         .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
-          transform: rotate(45deg); }
+          transform: rotate(-45deg); }
       .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button .glyphicon {
         display: none; }
   .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire.details-interview {
@@ -9627,7 +9696,7 @@ label.inactive {
     width: calc(100% - 270px); }
   .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .question {
     padding-left: 40px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .action-container {
+  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .action-container, .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .wrapper-info {
     padding-left: 50px; }
   .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .unit-title {
     padding-left: 50px; }
@@ -9644,10 +9713,9 @@ label.inactive {
       right: 5px;
       background-color: transparent; }
       .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
-        margin: 15px 10px;
-        transform: rotate(-45deg); }
+        transform: rotate(45deg); }
         .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
-          transform: rotate(45deg); }
+          transform: rotate(-45deg); }
       .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
         display: none; }
     .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
@@ -9657,7 +9725,7 @@ label.inactive {
     width: calc(100% - 330px); }
   .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
     padding-left: 40px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .action-container {
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .action-container, .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .wrapper-info {
     padding-left: 50px; }
   .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
     left: -20px; }
@@ -9691,11 +9759,10 @@ label.inactive {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px; }
       .web-interview .content .foldback-button span.arrow {
-        margin-left: 13px;
-        margin-right: 2px;
-        transform: rotate(45deg); }
+        right: 2px;
+        transform: rotate(-45deg); }
         .web-interview .content .foldback-button span.arrow:first-of-type {
-          transform: rotate(-45deg); }
+          transform: rotate(45deg); }
       .web-interview .content .foldback-button .glyphicon {
         display: inline-block; }
     .web-interview .content .foldback-button {
@@ -9726,17 +9793,26 @@ label.inactive {
       right: 5px;
       background-color: transparent; }
       .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow {
-        margin: 15px 10px;
-        transform: rotate(-45deg); }
+        transform: rotate(45deg); }
         .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
-          transform: rotate(45deg); }
+          transform: rotate(-45deg); }
       .web-interview.fullscreen-hidden-content .content .foldback-button .glyphicon {
         display: none; }
     .web-interview.fullscreen-hidden-content .content .foldback-button {
       right: 5px;
-      top: 65px; } }
+      top: 65px; }
+    .web-interview.fullscreen-hidden-content .content .humburger-foldback-button {
+      display: block; }
+  .web-interview.fullscreen-hidden-content.fullscreen-hidden-filters .content {
+    display: block; }
+  .web-interview .structured-content > .panel-default:first-of-type > .panel-heading h3 > a {
+    margin-right: 65px; }
+  .web-interview-for-supervisor .structured-content > .panel-default:first-of-type > .panel-heading h3 > a {
+    margin-right: 0; } }
 
 @media only screen and (max-width: 615px) {
+  .web-interview .content .questionnaire-content div h2 {
+    float: none; }
   .web-interview .questionnaire .comment .form-inline .form-group {
     margin-bottom: 15px; }
   .web-interview .questionnaire .question {
