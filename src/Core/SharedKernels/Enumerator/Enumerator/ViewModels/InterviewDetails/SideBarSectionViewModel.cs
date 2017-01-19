@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
+    [DebuggerDisplay("Title = {Title.PlainText}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,

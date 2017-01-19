@@ -143,6 +143,7 @@
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
+    <Compile Include="Utils\SynchronizedList.cs" />
     <Compile Include="ViewModels\InterviewDetails\CountOfInvalidEntitiesIncreasedMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\CoverInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\DynamicTextViewModel.cs" />
