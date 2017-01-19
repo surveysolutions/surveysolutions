@@ -195,20 +195,24 @@
                         }
                     },
                     columns: [
+                        @if (isAdmin)
                         {
-                            "orderable": false,
-                            render: function(data, type, row) {
-                                return "<input class=\"checkbox-filter\" id=\"cbx_" +
-                                    row.userId +
-                                    "\" value=\"" +
-                                    row.userId +
-                                    "\" type=\"checkbox\"> <label for=\"cbx_" +
-                                    row.userId +
-                                    "\"><span class=\"tick\"></span></label> ";
+                            <text>
+                            {
+                                "orderable": false,
+                                render: function(data, type, row) {
+                                    return "<input class=\"checkbox-filter\" id=\"cbx_" +
+                                        row.userId +
+                                        "\" value=\"" +
+                                        row.userId +
+                                        "\" type=\"checkbox\"> <label for=\"cbx_" +
+                                        row.userId +
+                                        "\"><span class=\"tick\"></span></label> ";
+                                },
+                                "class": "checkbox-cell"
                             },
-                            "class": "checkbox-cell",
-                            "visible": @(isAdmin ? "true" : "false")
-                        },
+                            </text>
+                        }
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
@@ -229,12 +233,21 @@
                             },
                             "class": "changed-recently"
                         },
+                        @if (isVisibleSupervisorColumn)
                         {
-                            "orderable": false,
-                            data: "supervisorName",
-                            name: "SupervisorName", // case-sensitive! 
-                            "class": "changed-recently"
-                        },
+                            <text>
+                            {
+                                "orderable":
+                                false,
+                                data:
+                                "supervisorName",
+                                name:
+                                "SupervisorName", // case-sensitive! 
+                                "class":
+                                "changed-recently"
+                            }
+                        ,</text>
+                        }
                         {
                             "orderable": false,
                             data: "deviceId",
@@ -384,12 +397,15 @@
                 <table id="interviewers" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
                     <thead>
                     <tr>
-                        <th class="sorting_disabled checkbox-cell">
-                            <input class="double-checkbox" id="check-all" type="checkbox">
-                            <label for="check-all">
-                                <span class="tick"></span>
-                            </label>
-                        </th>
+                        @if (isAdmin)
+                        {
+                            <th class="sorting_disabled checkbox-cell">
+                                <input class="double-checkbox" id="check-all" type="checkbox">
+                                <label for="check-all">
+                                    <span class="tick"></span>
+                                </label>
+                            </th>
+                        }
                         <th>@Pages.Interviewers_UserNameTitle</th>
                         <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
                         <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
