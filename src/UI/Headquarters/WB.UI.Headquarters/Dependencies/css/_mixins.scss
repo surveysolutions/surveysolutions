@@ -323,11 +323,10 @@
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
         span.arrow{
-            margin-left: 13px;
-            margin-right: 2px;
-            @include rotate(45deg);
+            right: 2px;
+            @include rotate(-45deg);
             &:first-of-type{
-                @include rotate(-45deg);
+                @include rotate(45deg);
             }
         }
         .glyphicon{
@@ -359,10 +358,9 @@
         right: 5px;
         background-color: transparent;
         span.arrow{
-            margin: 15px 10px;
-            @include rotate(-45deg);
+            @include rotate(45deg);
             &:first-of-type{
-                @include rotate(45deg);
+                @include rotate(-45deg);
             }
         }
         .glyphicon{

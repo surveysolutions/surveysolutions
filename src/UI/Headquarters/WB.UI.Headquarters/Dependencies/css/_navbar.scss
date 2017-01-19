@@ -4,7 +4,7 @@
 		padding: 0 ($margin-container/2) 0 ($margin-container/2);
 	}
 	min-width: 400px;
-	min-height: 60px;
+	min-height: 70px;
 	margin-bottom: 0;
 	.navbar-header .navbar-brand{
 		position: relative;
@@ -164,6 +164,7 @@
 }
 @media (max-width: $screen-md-min) {	
 	.navbar{
+		min-height: 60px;
 		.container, .container-fluid {
 			width: 100%;
 		    padding: 0 ($margin-container-md-screen - 15px) 0 $margin-container-md-screen;

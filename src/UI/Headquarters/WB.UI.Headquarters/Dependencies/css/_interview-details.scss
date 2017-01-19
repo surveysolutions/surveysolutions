@@ -132,33 +132,6 @@ label.inactive{
 	&.questionnaire{
 		@include width-questionnaire($content-width);
 	}
-	.foldback-button{
-		display: block;
-		top: calc(50% - 23px);
-		right: auto;
-		left: 10px;
-		span{
-			background-color: #fff;
-			.middle{
-				display: none;
-			}
-		}
-	}
-}
-.web-interview-for-supervisor{
-	.content{
-		left: $filter-width + 12px;
-	}
-	.details-interview{
-		&.questionnaire{
-			@include width-questionnaire(($filter-width + $content-width));
-		}
-	}
-	.questionnaire{
-		.unit-title{
-			position: relative;
-		}
-	}
 }
 .questionnaire{
 	background-color: #f8f8f8;
@@ -169,9 +142,9 @@ label.inactive{
 			top: 70px !important;
 		}
 		z-index: 1;
-		position: fixed;
+		position: relative;
 		background-color: $blue;
-		padding: 15px 20px 10px 80px;
+		padding: 20px 20px 15px 80px;
 		color: $white;
 		@include box-shadow(0 3px 5px 0px rgba(0, 0, 0, 0.3));
 		.breadcrumb {
@@ -194,7 +167,7 @@ label.inactive{
 }
 .question{
 	position: relative;
-	padding: 18px 30px 20px 70px;
+	padding: 20px 30px 20px 70px;
 	border-bottom: 2px solid $gray-form;
 	.question-editor .button-flag{
 		@include absolute(0, null, null, -30px);
@@ -268,7 +241,7 @@ label.inactive{
 	}
 }
 .action-container{
-	padding: 18px 30px 20px 80px;
+	padding: 20px 30px 20px 80px;
 	a{
 		max-width: $width-question-editor - 20px;
 		white-space: normal;
@@ -600,26 +573,68 @@ label.inactive{
 	max-width: 70%;
 	@extend .image-zoom-box;
 }
+.content .humburger-foldback-button{
+	display: none;
+}
 .fullscreen-hidden-content{	
 	.content{
 		left: -$content-width;
 		box-shadow: none;
+		.humburger-foldback-button{
+			top: 65px;
+			left: auto;
+			right: 20px;
+			background-color: $gray_light;
+		}
 	}
 	.questionnaire.details-interview{
 		@include width-questionnaire(12px - 12px);
 	}
+	.humburger-foldback-button{
+		&:before, &:after{
+			left: 10px;
+			top: 9px;
+			@include rotate(0deg);
+		}
+		&:after{
+			top: 21px;
+		}
+		span{
+			top: 15px;
+			visibility: visible;
+		}
+	}
+}
+.web-interview-for-supervisor,
+.web-interview-for-supervisor.fullscreen-hidden-content,
+.web-interview-for-supervisor.fullscreen-hidden-filters,
+.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
+	.content{
+		left: $filter-width + 12px;
+	}
 	.details-interview{
-
-		.foldback-button{
-			span{
-				background-color: #fff;
-				@include rotate(0deg);
-				&.middle{
-					top: 7px;
-				}
-				&.arrow:first-of-type{
-					top: 14px;
-				}
+		&.questionnaire{
+			@include width-questionnaire(($filter-width + $content-width));
+		}
+	}
+}
+.wrapper-info{
+	@extend .action-container;
+	border-bottom: 2px solid $gray-form;
+	.container-info{
+		max-width: 550px;
+		h2{
+			margin-top: 20px;
+		}
+		p{
+			font-size: 14px;
+			line-height: 16px;
+			margin-bottom: 15px;
+			&:last-of-type{
+				margin-bottom: 0;
+			}
+			a{
+				color: $gray-text;
 			}
 		}
 	}
@@ -678,9 +693,17 @@ label.inactive{
 @media (max-width: $screen-md-min){
 	.content{
         padding-top: 60px;
+		.questionnaire-content .breadcrumb{
+			margin-right: 30px;
+		}
     }
     .aside-menu{
     	right: 0;
+    }
+    .questionnaire{
+    	.unit-title.is_stuck{
+	        top: 60px !important;
+	    }
     }
 	.web-interview-for-supervisor{ 
 		.filters{
@@ -701,9 +724,7 @@ label.inactive{
 			.unit-title{
 				padding-left: 50px;
 			}
-			.unit-title.is_stuck{
-		        top: 60px !important;
-		    } 
+			 
 		}
 		&.fullscreen-hidden-content{	
 			.content{
@@ -811,6 +832,7 @@ label.inactive{
 			.foldback-button{
 				top: 120px;
 			} 
+			
 		}
 		.filters{
 			.foldback-button{
@@ -840,12 +862,31 @@ label.inactive{
 			   		right: 5px;
 			   		top: 65px;
 			   	}
+			   	.humburger-foldback-button{
+					display: block;
+				}
 			}
 		}
+		&.fullscreen-hidden-content.fullscreen-hidden-filters{
+			.content{
+				display: block;
+			}
+		}
+		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
+	        margin-right: 65px;
+	    }
+	}
+	.web-interview-for-supervisor{
+		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
+	        margin-right: 0;
+	    }
 	}
 }
 @media only screen and (max-width: 615px){
 	.web-interview{
+		.content .questionnaire-content div h2{
+			float: none;
+		}
 		.questionnaire {
 			.comment .form-inline .form-group{
 				margin-bottom: 15px;
