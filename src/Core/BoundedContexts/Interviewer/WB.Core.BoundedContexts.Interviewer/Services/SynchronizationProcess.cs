@@ -152,6 +152,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Statistics = statistics
                         });
                         break;
+                    case SynchronizationExceptionType.UnacceptableSSLCertificate:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UnexpectedException,
+                            Description = InterviewerUIResources.UnacceptableSSLCertificate,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {
