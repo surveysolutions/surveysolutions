@@ -9,12 +9,15 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using System;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
@@ -255,6 +258,74 @@ namespace WB.Tests.Unit.TestFactories
             var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()));
             result.Init(statefulInterview.Id.FormatGuid(), questionId, 30);
             return result;
+        }
+
+        public SideBarSectionsViewModel SidebarSectionsViewModel(QuestionnaireDocument questionnaireDocument, IStatefulInterview interview, LiteEventRegistry liteEventRegistry)
+        {
+            var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1);
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+
+            var interviewsRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview);
+
+            var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(ServiceLocator.Current);
+            
+            var mvxMessenger = Mock.Of<IMvxMessenger>();
+            var navigationState = Create.Other.NavigationState();
+
+            Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
+                => new SideBarSectionViewModel(
+                    interviewsRepository,
+                    questionnaireRepository,
+                    mvxMessenger,
+                    liteEventRegistry,
+                    Create.ViewModel.DynamicTextViewModel(
+                        liteEventRegistry,
+                        interviewRepository: interviewsRepository),
+                    Create.Entity.AnswerNotifier(liteEventRegistry))
+                {
+                    NavigationState = navigationState,
+                };
+
+            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
+            dispatcherMock
+                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
+                .Callback<Action>(action => action.Invoke());
+
+            Setup.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
+            Setup.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
+                .Returns(sideBarSectionViewModel);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
+                .Returns(() => new SideBarCoverSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                        liteEventRegistry,
+                        interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
+                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                        liteEventRegistry,
+                        interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
+                        Create.Entity.AnswerNotifier(liteEventRegistry)));
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
+                .Returns(sideBarSectionViewModel);
+            Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
+
+            var sidebarViewModel = new SideBarSectionsViewModel(
+                statefulInterviewRepository: interviewsRepository,
+                questionnaireRepository: questionnaireRepository,
+                modelsFactory: sideBarSectionViewModelsFactory,
+                messenger: mvxMessenger,
+                eventRegistry: liteEventRegistry);
+
+            sidebarViewModel.Init("", navigationState);
+
+            return sidebarViewModel;
         }
     }
 }

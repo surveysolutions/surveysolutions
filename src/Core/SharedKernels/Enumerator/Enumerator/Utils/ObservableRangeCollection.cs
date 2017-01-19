@@ -2,20 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using MvvmCross.Platform.Core;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
-
     /// <summary> 
     /// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed. 
     /// </summary> 
     /// <typeparam name="T"></typeparam> 
     public class ObservableRangeCollection<T> : ObservableCollection<T> where T : IDisposable
     {
-        protected void InvokeOnMainThread(Action action)
-            => MvxSingleton<IMvxMainThreadDispatcher>.Instance?.RequestMainThreadAction(action);
-
         /// <summary> 
         /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class. 
         /// </summary> 
@@ -44,18 +39,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            this.InvokeOnMainThread(() =>
+            var startIndex = this.Count;
+
+            foreach (var i in collection)
             {
-                var startIndex = this.Count;
+                Items.Add(i);
+            }
 
-                foreach (var i in collection)
-                {
-                    Items.Add(i);
-                }
-
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
-                    collection, startIndex));
-            });
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
+                collection, startIndex));
         }
 
         /// <summary> 
@@ -68,16 +60,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            this.InvokeOnMainThread(() =>
+            foreach (var i in collection)
             {
-                foreach (var i in collection)
-                {
-                    Items.Insert(index++, i);
-                }
+                Items.Insert(index++, i);
+            }
 
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
-                    collection, index));
-            });
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
+                collection, index));
         }
 
         /// <summary> 
@@ -90,17 +79,14 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            this.InvokeOnMainThread(() =>
+            foreach (var changedItem in collection)
             {
-                foreach (var changedItem in collection)
-                {
-                    changedItem.Dispose();
-                    this.Items.Remove(changedItem);
-                }
+                changedItem.Dispose();
+                this.Items.Remove(changedItem);
+            }
 
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                    collection, -1));
-            });
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                collection, -1));
         }
     }
 }
