@@ -163,6 +163,22 @@
         }
     }
 }
+@media (max-width: 1450px){
+    .import-wrapper {
+      .dataTables_wrapper .dataTables_filter{
+            top: -15px;
+        }  
+        .search{
+            top: -10px;
+        }
+        .active-search .search{
+            top: -12px;
+           .btn-search{          
+                top: -3px;
+            } 
+        } 
+    }
+}
 @media (max-width: $screen-md-min){
     .import-interview{
         tr{
