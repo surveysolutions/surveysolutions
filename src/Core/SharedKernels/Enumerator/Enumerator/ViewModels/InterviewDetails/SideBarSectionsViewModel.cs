@@ -286,6 +286,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var notChangedItems = this.AllVisibleSections.Intersect(this.allVisibleSections).ToArray();
                 var removedViewModels = this.AllVisibleSections.Except(notChangedItems).ToArray();
 
+                foreach (var removedViewModel in removedViewModels)
+                    removedViewModel.Dispose();
+
                 this.AllVisibleSections.RemoveRange(removedViewModels);
 
                 foreach (var addedSectionViewModels in this.sectionViewModels.Except(notChangedItems).OfType<ISideBarSectionItem>().GroupBy(x=>x.SectionIdentity))
