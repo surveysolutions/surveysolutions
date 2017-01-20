@@ -39,28 +39,6 @@ namespace WB.UI.Headquarters.Controllers
             this.deleteSupervisorService = deleteSupervisorService;
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView Interviewers(InterviewersListViewModel filter)
-        {
-            // Headquarter and Admin can view interviewers by any supervisor
-            // Supervisor can view only their interviewers
-            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
-
-            var input = new InterviewersInputModel
-            {
-                Page = filter.PageIndex,
-                PageSize = filter.PageSize,
-                ViewerId = viewerId,
-                SupervisorName = filter.SupervisorName,
-                Orders = filter.SortOrder,
-                SearchBy = filter.SearchBy,
-                Archived = filter.Archived,
-                ConnectedToDevice = filter.ConnectedToDevice
-            };
-
-            return this.interviewersFactory.Load(input);
-        }
 
         [HttpPost]
         [CamelCase]
@@ -164,6 +142,15 @@ namespace WB.UI.Headquarters.Controllers
         public DataTableResponse<InterviewerListItem> AllObservers([FromBody] DataTableRequest request)
         {
             return this.GetUsersInRoleForDataTable(request, UserRoles.Observer);
+        }
+
+
+        [HttpPost]
+        [CamelCase]
+        [Authorize(Roles = "Administrator")]
+        public DataTableResponse<InterviewerListItem> AllSupervisors([FromBody] DataTableRequest request)
+        {
+            return this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
         }
 
         [HttpPost]
