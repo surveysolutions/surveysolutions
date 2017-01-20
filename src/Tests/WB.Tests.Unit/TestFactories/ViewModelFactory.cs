@@ -327,5 +327,21 @@ namespace WB.Tests.Unit.TestFactories
 
             return sidebarViewModel;
         }
+
+        public MultiOptionLinkedToRosterQuestionViewModel MultiOptionLinkedToRosterQuestionViewModel(
+            IQuestionnaire questionnaire = null,
+            IStatefulInterview interview = null,
+            ILiteEventRegistry eventRegistry = null,
+            QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null)
+            => new MultiOptionLinkedToRosterQuestionViewModel(
+                questionState ?? Stub<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>.WithNotEmptyValues,
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<QuestionInstructionViewModel>(),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                Stub.MvxMainThreadDispatcher());
     }
 }
