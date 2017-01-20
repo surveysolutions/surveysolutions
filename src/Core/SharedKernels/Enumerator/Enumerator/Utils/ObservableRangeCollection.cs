@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
@@ -9,7 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed. 
     /// </summary> 
     /// <typeparam name="T"></typeparam> 
-    public class ObservableRangeCollection<T> : ObservableCollection<T> where T : IDisposable
+    [DebuggerDisplay("{typeof(T).Name}[{Count}]")]
+    public class ObservableRangeCollection<T> : ObservableCollection<T>
     {
         /// <summary> 
         /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class. 
@@ -80,10 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             CheckReentrancy();
 
             foreach (var changedItem in collection)
-            {
-                changedItem.Dispose();
                 this.Items.Remove(changedItem);
-            }
 
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
                 collection, -1));
