@@ -33,10 +33,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly MvxSubscriptionToken sectionCollapseSubscriptionToken;
         private readonly MvxSubscriptionToken sectionUpdateSubscriptionToken;
 
-        public SynchronizedList<ISideBarItem> allVisibleSections = new SynchronizedList<ISideBarItem>();
-        public ObservableRangeCollection<ISideBarItem> AllVisibleSections { get; private set; }
+        private readonly SynchronizedList<ISideBarItem> sectionItems = new SynchronizedList<ISideBarItem>();
 
-        private IEnumerable<ISideBarSectionItem> sectionViewModels => this.allVisibleSections.OfType<ISideBarSectionItem>();
+        private ObservableRangeCollection<ISideBarItem> allVisibleSections;
+        public ObservableRangeCollection<ISideBarItem> AllVisibleSections
+        {
+            get { return this.allVisibleSections; }
+            set
+            {
+                this.allVisibleSections = value;
+                this.RaiseAndSetIfChanged(ref this.allVisibleSections, value);
+            }
+        }
+
+        private IEnumerable<ISideBarSectionItem> sectionViewModels => this.sectionItems.OfType<ISideBarSectionItem>();
 
         public SideBarSectionsViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -54,6 +64,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.sectionCollapseSubscriptionToken = this.messenger.Subscribe<SideBarSectionCollapseMessage>(OnSideBarSectionCollapsed);
             this.sectionUpdateSubscriptionToken = this.messenger.Subscribe<SideBarSectionUpdateMessage>(OnSideBarSectionUpdated);
         }
+
+        public class SavedState
+        {
+            public string InterviewId { get; set; }
+        }
+
+        public SavedState SaveState() => new SavedState {InterviewId = this.interviewId};
+        public void ReloadState(SavedState savedState) => this.interviewId = savedState.InterviewId;
 
         public void Init(string interviewId, NavigationState navigationState)
         {
@@ -76,10 +94,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .ToList();
 
             foreach (var sideBarItem in this.GetSectionsWithCoverAndComplete())
-                this.allVisibleSections.Add(sideBarItem);
+                this.sectionItems.Add(sideBarItem);
 
-            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(this.allVisibleSections);
-            this.RaisePropertyChanged(() => this.AllVisibleSections);
+            this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(this.sectionItems);
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs e)
@@ -87,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var expandedSectionIdentities = this.GetExpandedSectionsIdentities(e.TargetGroup).ToList();
 
             foreach (var removedSectionViewModel in this.GetSectionsToRemove(expandedSectionIdentities).ToList())
-                this.allVisibleSections.Remove(removedSectionViewModel);
+                this.sectionItems.Remove(removedSectionViewModel);
 
             foreach (var expandedGroup in expandedSectionIdentities)
                 this.ExpandSection(expandedGroup, false);
@@ -121,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var updatedGroupViewModel = this.sectionViewModels.FirstOrDefault(x => x.SectionIdentity == e.UpdatedGroup);
             if (updatedGroupViewModel == null) return;
 
-            var indexOfUpdatedGroup = this.allVisibleSections.IndexOf(updatedGroupViewModel);
+            var indexOfUpdatedGroup = this.sectionItems.IndexOf(updatedGroupViewModel);
 
             var enabledSubSections = interview.GetEnabledSubgroups(e.UpdatedGroup).ToList();
 
@@ -135,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
 
-                this.allVisibleSections.Insert(indexOfSubsection, sectionViewModel);
+                this.sectionItems.Insert(indexOfSubsection, sectionViewModel);
             }
 
             this.UpdateUI();
@@ -153,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 sectionViewModel => sectionViewModel.ParentsIdentities.Contains(collapsedSection)).ToList();
 
             foreach (var collapsedViewModel in collapsedViewModels)
-                this.allVisibleSections.Remove(collapsedViewModel);
+                this.sectionItems.Remove(collapsedViewModel);
 
             this.UpdateUI();
         }
@@ -166,10 +183,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (expandedGroupViewModel == null) return;
             if (!force && expandedGroupViewModel.Expanded) return;
 
-            var indexOfExpandedGroup = this.allVisibleSections.IndexOf(expandedGroupViewModel);
+            var indexOfExpandedGroup = this.sectionItems.IndexOf(expandedGroupViewModel);
 
             foreach (var subSection in this.GetSubSections(expandedSection))
-                this.allVisibleSections.Insert(indexOfExpandedGroup + 1, subSection);
+                this.sectionItems.Insert(indexOfExpandedGroup + 1, subSection);
 
             this.UpdateUI();
         }
@@ -185,7 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (prevSectionViewModel != null)
             {
-                var indexOfPrevSection = this.allVisibleSections.IndexOf(prevSectionViewModel);
+                var indexOfPrevSection = this.sectionItems.IndexOf(prevSectionViewModel);
                 var numberOfPrevSectionChildren = this.sectionViewModels.Count(
                     viewModel => viewModel.ParentsIdentities.Contains(prevSectionIdentity));
 
@@ -195,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var sectionViewModel = this.modelsFactory.BuildSectionItem(addedSection, this.navigationState,
                 this.interviewId);
 
-            this.allVisibleSections.Insert(indexOfSection, sectionViewModel);
+            this.sectionItems.Insert(indexOfSection, sectionViewModel);
         }
 
         private IEnumerable<ISideBarItem> GetSubSections(Identity expandedGroup)
@@ -262,7 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     sectionViewModel => @event.Groups.Contains(sectionViewModel.SectionIdentity)).ToList();
 
             foreach (var removedViewModel in removedViewModels)
-                this.allVisibleSections.Remove(removedViewModel);
+                this.sectionItems.Remove(removedViewModel);
 
             if(removedViewModels.Any())
                 this.UpdateUI();
@@ -274,7 +291,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity)).ToList();
 
             foreach (var removedViewModel in removedViewModels)
-                this.allVisibleSections.Remove(removedViewModel);
+                this.sectionItems.Remove(removedViewModel);
 
             if(removedViewModels.Any())
                 this.UpdateUI();
@@ -283,7 +300,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void UpdateUI()
         {
             this.InvokeOnMainThread(() => {
-                var notChangedItems = this.AllVisibleSections.Intersect(this.allVisibleSections).ToArray();
+                var notChangedItems = this.AllVisibleSections.Intersect(this.sectionItems).ToArray();
                 var removedViewModels = this.AllVisibleSections.Except(notChangedItems).ToArray();
 
                 foreach (var removedViewModel in removedViewModels)
@@ -291,8 +308,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 this.AllVisibleSections.RemoveRange(removedViewModels);
 
-                foreach (var addedSectionViewModels in this.sectionViewModels.Except(notChangedItems).OfType<ISideBarSectionItem>().GroupBy(x=>x.SectionIdentity))
-                    this.AllVisibleSections.InsertRange(this.allVisibleSections.IndexOf(addedSectionViewModels.First()), addedSectionViewModels);
+                foreach (var addedSectionViewModels in this.sectionViewModels.Except(notChangedItems).OfType<ISideBarSectionItem>().GroupBy(x=>x.SectionIdentity.Id))
+                    this.AllVisibleSections.InsertRange(this.sectionItems.IndexOf(addedSectionViewModels.First()), addedSectionViewModels);
             });
         }
 
