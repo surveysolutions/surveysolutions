@@ -47,7 +47,7 @@ const config = {
         index: 'index.html',
         assetsRoot: path.resolve(__dirname, '../.designTime'),
         assetsSubDirectory: '',
-        assetsPublicPath: '',
+        assetsPublicPath: '/',
         proxyTable: {
             "/signalr": argv.uri == null ? "https://superhq-dev.mysurvey.solutions/signalr" : argv.uri
         },
