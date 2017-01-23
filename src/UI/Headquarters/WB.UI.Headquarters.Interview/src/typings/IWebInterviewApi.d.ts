@@ -7,27 +7,6 @@ declare interface IInterviewEntityWithType {
     identity: string
 }
 
-declare interface IPrefilledPageData {
-    firstSectionId: string,
-    questions: IInterviewEntityWithType[]
-}
-
-declare interface IInterviewDetails {
-    sections: ISectionInfo[]
-}
-
-declare interface ISectionData {
-    entities: IInterviewEntity[]
-    info: ISectionInfo
-    breadcrumps: ISectionBreadcrumps
-}
-
-declare interface ISectionInfo {
-    id: string
-    type: string
-    status: string
-}
-
 declare interface IInterviewEntity {
     id: string
     title: string
@@ -54,10 +33,9 @@ declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
     createInterview(questionnaireId: string): string
 
-    getPrefilledEntities(): IInterviewEntity[]
-    getSectionEntities(sectionId: string): IInterviewEntity[]
-    getEntityDetails(id: string): any
-    getNavigationButtonState(): IInterviewEntity
+    getPrefilledEntities(): IInterviewEntityWithType[]
+    getSectionEntities(sectionId: string): IInterviewEntityWithType[]
+    getEntityDetails(id: string): IInterviewEntity
     getBreadcrumbs(): IBreadcrumpInfo
 
     answerSingleOptionQuestion(answer: number, questionId: string)
