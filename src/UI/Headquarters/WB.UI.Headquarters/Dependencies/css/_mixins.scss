@@ -112,7 +112,7 @@
 
 @mixin cancel($width: 14px){
     $height: 2px; 
-    outline: none;
+    /* outline: none; */
     background-color: transparent;
     @include square($width);
     position: relative;
@@ -142,7 +142,13 @@
 }
 @mixin clear($width: 18px){
     &:hover, &:active:focus, &:focus, &:active{
-        outline: none;
+        /* outline: none; */
+    }
+    &:active, &:active:focus{
+        span:before, span:after{
+            background-color: #000;
+            @include opacity(1);
+        }
     }
     span{
         @include cancel($width);
@@ -293,10 +299,10 @@
 }
 %visibility-visible{
     visibility: visible;
-    opacity: 1;
+    @include opacity(1);
 }
 %visibility-hidden{
-    opacity: 0;
+    @include opacity(0);
     visibility: hidden;
 }
 %action-btn{
@@ -307,7 +313,7 @@
         }
     }
     .question-unit .options-group .field .btn-clear{
-        top: -13px;
+        top: -11px;
     }
     .block-with-data{
         font-size: 14px;
@@ -374,7 +380,25 @@
 }
 %delete-outline{
     &:hover, &:focus, &:active, &.active:focus{
-        outline: none !important;
         box-shadow: none;
+    }
+    /* &:hover, &:active, &.active:focus{
+        outline: none !important;
+    } */
+}
+@mixin focus-for-inputs(){
+    display: block;
+    height: 0;
+    @include opacity(0);
+    &:focus + label .tick:before{
+        display: block;
+        content: "";
+        width: 26px;
+        height: 26px;
+        border: 2px solid $gray_form;
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        border-radius: 5px;
     }
 }
