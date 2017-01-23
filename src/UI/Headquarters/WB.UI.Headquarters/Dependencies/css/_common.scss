@@ -123,9 +123,7 @@ h5{
   	& > li:after{
   		content: "/ ";
 	    padding: 0 5px;
-	    color: #ccc;
-	    line-height: 75%;
-	    font-size: 75%;
+	    @extend %gray-uppercase;
   	}
     li a{
         @extend %gray-uppercase;

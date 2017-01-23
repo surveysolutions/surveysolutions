@@ -1,5 +1,4 @@
 .aside-menu{
-	outline: none;
 	@include absolute(10px, 10px, null, null);
 	button{
 		display: block;
@@ -7,7 +6,6 @@
 		text-align: center;
 		@include size(40px, 45px);
 		&:focus, &:hover, &:active, &:active:focus{
-			outline: none;
 			span{
 				background-color: darken($gray-form, 10%);
 				&:before, &:after{
@@ -57,7 +55,7 @@
 		left: auto;
 		right: 35px;
 		top: 10px;
-		@include opacity(0);
+		@extend %visibility-hidden;
 		@include transform-origin(top);
 		@include animation-fill-mode(forwards);
 		@include scale(1, 0);
@@ -66,6 +64,6 @@
 	}
 	&.open > .dropdown-menu {
 	  	@include scale(1, 1);
-	  	@include opacity(1);
+	  	@extend %visibility-visible;
 	}
 }
