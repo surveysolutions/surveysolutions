@@ -103,6 +103,9 @@ namespace WB.UI.Shared.Enumerator.Activities
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
             messenger.Unsubscribe<CountOfInvalidEntitiesIncreasedMessage>(this.countOfInvalidEntitiesIncreasedToken);
+
+            this.ViewModel.Sections.Dispose();
+
             base.OnStop();
         }
 

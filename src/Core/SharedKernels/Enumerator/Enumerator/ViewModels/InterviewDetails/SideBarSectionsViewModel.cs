@@ -321,7 +321,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.messenger.Unsubscribe<SideBarSectionExpandMessage>(this.sectionExpandSubscriptionToken);
             this.messenger.Unsubscribe<SideBarSectionUpdateMessage>(this.sectionUpdateSubscriptionToken);
 
-            this.AllVisibleSections.ForEach(x => x.Dispose());
+            this.AllVisibleSections?.ForEach(x => x.Dispose());
         }
     }
 }
