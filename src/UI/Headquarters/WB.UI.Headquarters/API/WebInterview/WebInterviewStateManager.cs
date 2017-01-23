@@ -6,9 +6,12 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            if (context.Hub.Clients.CallerState.interviewId != null)
+            var interviewId = context.Hub.Clients.CallerState.interviewId;
+            var sectionId = context.Hub.Clients.CallerState.sectionId;
+
+            if (interviewId != null)
             {
-                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, context.Hub.Clients.CallerState.interviewId);
+                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, $"{sectionId?.ToString() ?? ""}_{interviewId}");
             }
 
             return base.OnAfterIncoming(result, context);
