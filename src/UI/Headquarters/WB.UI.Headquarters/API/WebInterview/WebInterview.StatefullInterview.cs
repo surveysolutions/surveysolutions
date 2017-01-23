@@ -62,8 +62,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         public ButtonState GetNavigationButtonState(string id)
         {
             var sectionId = CallerSectionid;
-            var sections = this.GetCallerQuestionnaire().GetAllSections().ToArray();
+
             var statefulInterview = this.GetCallerInterview();
+
+            var sections = this.GetCallerQuestionnaire().GetAllSections()
+                .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
+                .ToArray();
 
             if (sectionId == null)
             {
