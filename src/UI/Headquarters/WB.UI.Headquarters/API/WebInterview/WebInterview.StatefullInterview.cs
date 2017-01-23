@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var identity = Identity.Parse(id);
             var callerInterview = this.GetCallerInterview();
-
+            
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             if (question != null)
             {
@@ -360,9 +360,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.DateTime:
                     return InterviewEntityType.DateTime;
                 case QuestionType.GpsCoordinates:
-                    return InterviewEntityType.Gps;
+                    return InterviewEntityType.Unsupported; // InterviewEntityType.Gps;
                 case QuestionType.Multimedia:
-                    return InterviewEntityType.Multimedia;
+                    return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
                     return InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
