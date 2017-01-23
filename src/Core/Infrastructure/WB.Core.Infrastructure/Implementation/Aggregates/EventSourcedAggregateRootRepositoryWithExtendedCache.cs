@@ -12,6 +12,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository
     {
         private const int CacheSize = 100;
+        private static readonly object lockObject = new object();
 
         private static ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
 
@@ -43,12 +44,23 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         private static void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
         {
-            cache = ImmutableList.CreateRange(
-                Enumerable
-                    .Concat(
-                        aggregateRoot.ToEnumerable(),
-                        cache.Except(aggregate => aggregate.EventSourceId == aggregateRoot.EventSourceId))
-                    .Take(CacheSize));
+            lock (lockObject)
+            {
+                cache = ImmutableList.CreateRange(
+                    Enumerable
+                        .Concat(
+                            aggregateRoot.ToEnumerable(),
+                            cache.Except(aggregate => aggregate.EventSourceId == aggregateRoot.EventSourceId))
+                        .Take(CacheSize));
+            }
+        }
+
+        public void Evict(IEventSourcedAggregateRoot aggregate)
+        {
+            lock (lockObject)
+            {
+                cache = ImmutableList.CreateRange(cache.Except(ar => aggregate.EventSourceId == ar.EventSourceId));
+            }
         }
     }
 }
