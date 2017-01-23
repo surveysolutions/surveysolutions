@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
-        private void ThrowIfUserDontHavePermissionsToAnswer(Interview interview, InterviewCommand command)
+        private void ThrowIfUserDontHavePermissionsToAnswer(StatefulInterview interview, InterviewCommand command)
         {
             var interviewSummary = this.interviewSummaryViewFactory.Load(interview.EventSourceId);
             if(command.UserId != interviewSummary.TeamLeadId)
