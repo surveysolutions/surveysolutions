@@ -2,7 +2,6 @@
 	font: 12px/14px "TrebuchetMSBold";
 	text-transform: uppercase;
     letter-spacing: 0.13em;
-    /* outline: none; */
 	&:disabled, &.disabled{
 		background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
@@ -12,6 +11,9 @@
 			border-color: $gray-super-light;
 		}
 	}
+	&:hover{
+		outline: none; 
+	}
 }
 a.disabled{
 	pointer-events: none;
@@ -19,12 +21,10 @@ a.disabled{
 }
 .btn-link{
 	@extend %gray-uppercase;
+	color: $blue;
 	&:hover, &:focus{
 		text-decoration: none;
-		color: darken($gray_light, 25%);
-	}
-	&:hover{
-		/* outline: none; */
+		color: darken($blue, 15%);
 	}
 }
 .foldback-button{
@@ -125,9 +125,6 @@ a.disabled{
 		border: none;
 		background-color: darken($gray_form, 20%);
 	}
-	&:hover{
-		/* outline: none; */
-	}
 }
 .back-link{
     text-transform: uppercase;
@@ -140,7 +137,6 @@ a.disabled{
 }
 .cancel{
 	border: none;
-	/* outline: none; */
 }
 .button-flag{
 	display: inline-block;
@@ -152,9 +148,6 @@ a.disabled{
 	border: none;
 	&:hover, &:focus{
 		background-position: -57px 0;
-	}
-	&:hover{
-		/* outline: none; */
 	}
 	&.flagged, &:active{
     	background-position: 0 0;

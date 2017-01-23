@@ -6270,8 +6270,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 .btn {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
-  letter-spacing: 0.13em;
-  /* outline: none; */ }
+  letter-spacing: 0.13em; }
   .btn:disabled, .btn.disabled {
     background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, #a6a8a9 2px, #a6a8a9 6px);
     border-color: transparent !important;
@@ -6279,17 +6278,18 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     cursor: not-allowed; }
     .btn:disabled:hover, .btn:disabled:focus, .btn.disabled:hover, .btn.disabled:focus {
       border-color: #ececec; }
+  .btn:hover {
+    outline: none; }
 
 a.disabled {
   pointer-events: none;
   cursor: not-allowed; }
 
-.btn-link:hover, .btn-link:focus {
-  text-decoration: none;
-  color: #66686a; }
-
-.btn-link:hover {
-  /* outline: none; */ }
+.btn-link {
+  color: #2a81cb; }
+  .btn-link:hover, .btn-link:focus {
+    text-decoration: none;
+    color: #1d598c; }
 
 .foldback-button {
   display: none;
@@ -6383,8 +6383,6 @@ a.disabled {
   .btn-default.btn-gray:hover, .btn-default.btn-gray:focus {
     border: none;
     background-color: #a3adb4; }
-  .btn-default.btn-gray:hover {
-    /* outline: none; */ }
 
 .back-link {
   text-transform: uppercase;
@@ -6396,8 +6394,7 @@ a.disabled {
   display: none; }
 
 .cancel {
-  border: none;
-  /* outline: none; */ }
+  border: none; }
 
 .button-flag, .flag:before {
   display: inline-block;
@@ -6414,8 +6411,6 @@ a.disabled {
       background-size: 75px 22px; } }
   .button-flag:hover, .flag:hover:before, .button-flag:focus, .flag:focus:before {
     background-position: -57px 0; }
-  .button-flag:hover, .flag:hover:before {
-    /* outline: none; */ }
   .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor .button-flag, .question.with-flag .question-editor .flag:before, .button-flag:active, .flag:active:before {
     background-position: 0 0;
     /* outline: none; */ }
