@@ -75,6 +75,7 @@ export default {
         // HACK: Need to find a better solution, maybe push section status calculations on client-side
         dispatch("fetchSection")
         dispatch("fetchBreadcrumbs")
+        dispatch("fetchEntity", { id: "NavigationButton", source: "server"})
     },
 
     async fetchBreadcrumbs({commit}) {

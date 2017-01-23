@@ -1,6 +1,6 @@
 <template>
     <div class="action-container" v-if="$me">
-        <a class="btn btn-lg" :class="[{'btn-back': icon}, css]" @click="navigate"> {{ $me.title}}</a>        
+        <a class="btn btn-lg" :class="css" @click="navigate">{{ $me.title}}</a>
     </div>
 </template>
 <script lang="ts">
@@ -12,19 +12,12 @@
         mixins: [entityDetails],
         name: "NavigationButton",
         computed: {
-            icon() {
-                if (this.isParentButton) {
-                    return true
-                } else {
-                    return null
-                }
-            },
             css() {
                 return [{
                     'btn-success': this.$me.status == GroupStatus.Completed,
                     'btn-danger': this.$me.status == GroupStatus.Invalid,
-                    'btn-default': this.isParentButton,
-                    'btn-primary': !this.isParentButton
+                    'btn-primary': this.$me.status == GroupStatus.Other,
+                    'btn-back': this.isParentButton
                 }]
             },
             to() {
@@ -41,7 +34,7 @@
             }
         },
         watch: {
-            $route(to, fro,) {
+            $route(to, fro, ) {
                 this.fetch();
             }
         },
@@ -55,8 +48,3 @@
         }
     }
 </script>
-<style>
-.rotate-270{
-    transform: rotate(270deg);
-}
-</style>
