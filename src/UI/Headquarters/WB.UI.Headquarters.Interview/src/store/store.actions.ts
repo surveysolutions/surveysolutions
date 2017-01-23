@@ -22,10 +22,6 @@ export default {
                 return
             }
 
-            if (entityDetails.id == null) {
-                entityDetails.id = id
-            }
-
             ctx.commit("SET_ENTITY_DETAILS", entityDetails)
         })
     },

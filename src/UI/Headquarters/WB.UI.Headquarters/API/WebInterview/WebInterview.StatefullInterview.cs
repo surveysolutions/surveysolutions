@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return entities;
         }
 
-        public ButtonState GetNavigationButtonState()
+        public ButtonState GetNavigationButtonState(string id)
         {
             var sectionId = CallerSectionid;
             var sections = this.GetCallerQuestionnaire().GetAllSections().ToArray();
@@ -71,6 +71,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 return new ButtonState
                 {
+                    Id = id,
                     Status = CalculateSimpleStatus(firstSection.Identity, statefulInterview),
                     Title = firstSection.Title.Text,
                     Target = firstSection.Identity.ToString(),
@@ -87,6 +88,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 return new ButtonState
                 {
+                    Id = id,
                     Status = CalculateSimpleStatus(parent, statefulInterview),
                     Title = parentGroup.Title.Text,
                     Target = parent.ToString(),
@@ -100,6 +102,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 return new ButtonState
                 {
+                    Id = id,
                     Title = "Complete interview",
                     Status = SimpleGroupStatus.Other,
                     Target = sectionIdentity.ToString(),
@@ -112,6 +115,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 return new ButtonState
                 {
+                    Id = id,
                     Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
                     Status = CalculateSimpleStatus(nextSectionId, statefulInterview),
                     Target = nextSectionId.ToString(),
@@ -209,7 +213,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             if (id == "NavigationButton")
             {
-                return this.GetNavigationButtonState();
+                return this.GetNavigationButtonState(id);
             }
 
             var identity = Identity.Parse(id);
