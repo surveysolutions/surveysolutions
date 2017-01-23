@@ -2,22 +2,29 @@
 	font: 12px/14px "TrebuchetMSBold";
 	text-transform: uppercase;
     letter-spacing: 0.13em;
-    outline: none;
+    /* outline: none; */
 	&:disabled, &.disabled{
 		background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
 		color: #fff !important;
+		cursor: not-allowed;
 		&:hover, &:focus{
 			border-color: $gray-super-light;
 		}
 	}
 }
+a.disabled{
+	pointer-events: none;
+	cursor: not-allowed;
+}
 .btn-link{
 	@extend %gray-uppercase;
 	&:hover, &:focus{
-		outline: none;
 		text-decoration: none;
 		color: darken($gray_light, 25%);
+	}
+	&:hover{
+		/* outline: none; */
 	}
 }
 .foldback-button{
@@ -115,9 +122,11 @@
 	background-color: darken($gray_form, 10%);
 	border: none;
 	&:hover, &:focus{
-		outline: none;
 		border: none;
 		background-color: darken($gray_form, 20%);
+	}
+	&:hover{
+		/* outline: none; */
 	}
 }
 .back-link{
@@ -131,7 +140,7 @@
 }
 .cancel{
 	border: none;
-	outline: none;
+	/* outline: none; */
 }
 .button-flag{
 	display: inline-block;
@@ -143,11 +152,13 @@
 	border: none;
 	&:hover, &:focus{
 		background-position: -57px 0;
-		outline: none;
+	}
+	&:hover{
+		/* outline: none; */
 	}
 	&.flagged, &:active{
     	background-position: 0 0;
-    	outline: none;
+    	/* outline: none; */
     	&:hover, &:focus{
     		background-position: -19px 0;
     	}
@@ -175,7 +186,6 @@
 	border-color: transparent;
 	color: $gray_light;
 	border-radius: 5px;
-	outline: none;
 	text-transform: none;
 	letter-spacing: 0.5px;
 	font: 14px/18px Arial, sans-serif;
@@ -188,7 +198,6 @@
 }
 .btn-plus{
 	@include cancel(14px);
-	@extend %delete-outline;
 	opacity: 1;
 		&:before, &:after{
 			@include transition(all, 0.2s);
@@ -206,12 +215,13 @@
 }
 .btn-roster-section{
 	letter-spacing: normal;
-	font: 14px/14px Arial, sans-serif;
+	font: 14px/16px Arial, sans-serif;
 	font-weight: bold;
 	width: 100%;
 	text-transform: none;
-	padding: 12px 15px;
+	padding: 11px 15px;
 	text-align: left;
+	white-space: normal;
 }
 .btn-back{
 	padding-left: 40px;

@@ -134,6 +134,20 @@ label.inactive{
 	}
 }
 .questionnaire{
+	.radio {
+		.wb-radio{
+			@include focus-for-inputs();
+			&:focus + label .tick:before{
+				right: -5px;
+	    		border-radius: 100%;
+			}
+		}
+	}
+	.form-group {
+		.wb-checkbox{
+			@include focus-for-inputs();
+		}
+	}
 	background-color: #f8f8f8;
 	@include transition(margin, 0.3s);
 	.unit-title{
@@ -153,6 +167,9 @@ label.inactive{
 					color: rgba(255, 255, 255, 0.5);
 					font: 10px/12px "TrebuchetMS";
 			}
+			& > li:after{
+		  		color: rgba(255, 255, 255, 0.5);
+		  	}
 		}
 		h3{
 			font: 16px/18px "RobotoMedium";
@@ -337,6 +354,9 @@ label.inactive{
 			border-color: $red-super-light;
 		}
 	}  
+	&.has-error .form-control:focus{
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	}
 }
 .question-unit{
 	.options-group{
@@ -379,6 +399,10 @@ label.inactive{
 				font-weight: bold;
 				padding-right: 38px;
 				border-radius: 5px;
+				&:focus{
+					outline: none;
+					box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+				}
 			}
 			.dropdown-toggle {
 				@extend .field-to-fill;
@@ -507,7 +531,7 @@ label.inactive{
 			color: $gray_light;
 			font-size: 18px;
 			line-height: 20px;
-			padding: 11px 5px;
+			padding: 10px 5px;
 			font-weight: normal;
 		}
 		&>span{

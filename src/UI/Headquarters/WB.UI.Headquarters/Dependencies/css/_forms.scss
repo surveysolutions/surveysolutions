@@ -183,7 +183,7 @@ input.double-checkbox-white{
 	width: 315px; 
 	.form-control{
 		border-color: $gray_form;
-		box-shadow: none;
+/* 		box-shadow: none; */
 		input {
 			ul{
 				width: 100%;
@@ -218,7 +218,7 @@ input.double-checkbox-white{
 		line-height: 20px;
 		font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 		border-color:  $gray_form;
-		outline: none !important;
+		/* outline: none !important; */
 		.filter-option{
 			@include text-overflow();
 		}
@@ -235,7 +235,9 @@ input.double-checkbox-white{
 		&:hover, &:focus, &:active{
 			box-shadow: none;
 			background-color: transparent;
-			outline: none !important;
+		}
+		&:hover, &:active{
+/* 			outline: none !important; */
 		}
 	}
 	.dropdown-menu{
@@ -244,8 +246,10 @@ input.double-checkbox-white{
 			padding: 10px;
 			white-space: normal;
 			&:hover, &:focus, &:active{
-				outline: none !important;
 				color: #000;
+			}
+			&:hover, &:active{
+/* 				outline: none !important; */
 			}
 		}
 	} 
@@ -328,7 +332,7 @@ input.double-checkbox-white{
 		@include absolute(0, null, null, 0);
 		border: none;
 		height: 35px;
-		outline: none;
+/* 		outline: none; */
 		display: inline-block;
 		padding: 10px;
 	    background: url('#{$assetsPath}/img/search.png') no-repeat;
@@ -336,7 +340,7 @@ input.double-checkbox-white{
 	    background-size: 80px 20px;
 	    @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
 	    cursor: pointer;
-	    @extend %delete-outline;
+	   /*  @extend %delete-outline; */
 	    &:hover{
 	    	background-position: -40px 8px;
 	    }
@@ -345,7 +349,7 @@ input.double-checkbox-white{
 		@include clear(22px);
 		right: -35px;
 		padding: 6px;
-		@extend %delete-outline;
+		/* @extend %delete-outline; */
 		transition: none;
 	}
 	.form-control{
@@ -355,7 +359,7 @@ input.double-checkbox-white{
 		padding-right: 0;
 		padding-left: 0;
 		border: none;
-		@extend %delete-outline;
+		/* @extend %delete-outline; */
 	}
 }	
 .active-search{
