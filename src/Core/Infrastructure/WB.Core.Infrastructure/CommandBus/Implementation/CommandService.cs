@@ -12,6 +12,8 @@ using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -143,11 +145,15 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
         }
 
-        private void ExecuteEventSourcedCommand(ICommand command, string origin,
-            Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+        private void ExecuteEventSourcedCommand(ICommand command, 
+            string origin,
+            Type aggregateType, 
+            Guid aggregateId, 
+            IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             IEnumerable<Action<IAggregateRoot, ICommand>> preProcessors,
             IEnumerable<Action<IAggregateRoot, ICommand>> postProcessors,
-            Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
+            Action<ICommand, IAggregateRoot> commandHandler,
+            CancellationToken cancellationToken)
         {
             IEventSourcedAggregateRoot aggregate;
 
@@ -192,8 +198,18 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            IEnumerable<CommittedEvent> commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
-            aggregate.MarkChangesAsCommitted();
+            IEnumerable<CommittedEvent> commitedEvents;
+            try
+            {
+                commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+                aggregate.MarkChangesAsCommitted();
+            }
+            catch (Exception)
+            {
+                var cachedRepository = this.eventSourcedRepository as EventSourcedAggregateRootRepositoryWithExtendedCache;
+                cachedRepository?.Evict(aggregate);
+                throw;
+            }
 
             try
             {
