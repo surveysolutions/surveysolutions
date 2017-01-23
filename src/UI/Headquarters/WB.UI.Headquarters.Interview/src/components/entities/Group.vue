@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
+    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :id="hash">
         <div class="question-editor roster-section-block" :class="[{'has-error': hasInvalidAnswers && !isCompleted}, {'answered': isCompleted}]">
             <div class="question-unit">
                 <div class="options-group">
@@ -47,7 +47,8 @@
                 return [{
                     'btn-success': !this.hasInvalidAnswers && this.isCompleted,
                     'btn-danger': this.hasInvalidAnswers,
-                    'btn-primary': !this.hasInvalidAnswers && !this.isCompleted
+                    'btn-primary': !this.hasInvalidAnswers && !this.isCompleted,
+                    'disabled': this.$me.isDisabled
                 }]
             }
         }
