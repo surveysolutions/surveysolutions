@@ -38,9 +38,6 @@
                 }
                 return []
             }
-            // showBreadcrumbs() {
-            //     return this.info != null
-            // }
         },
         methods: {
             loadSection() {

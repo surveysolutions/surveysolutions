@@ -1,26 +1,5 @@
 ﻿namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class InterviewDetails
-    {
-        public SectionInfo[] Sections { get; set; }
-    }
-    
-    public class SectionInfo
-    {
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public SimpleGroupStatus Status { get; set; }
-        public string Title { get; set; }
-    }
-
-    public class SectionData
-    {
-        public SectionInfo Info { get; set; }
-        public Breadcrumb[] Breadcrumbs { set; get; }
-        public InterviewEntityWithType[] Entities { get; set; }
-        public ButtonState NavigationState { get; set; }
-    }
-
     public class ButtonState : InterviewEntity
     {
         public SimpleGroupStatus Status { get; set; }
