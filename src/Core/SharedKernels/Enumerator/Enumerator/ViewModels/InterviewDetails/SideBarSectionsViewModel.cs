@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
+    public class SideBarSectionsViewModel : MvxViewModel,
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<RosterInstancesRemoved>,
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.sectionCollapseSubscriptionToken = this.messenger.Subscribe<SideBarSectionCollapseMessage>(OnSideBarSectionCollapsed);
             this.sectionUpdateSubscriptionToken = this.messenger.Subscribe<SideBarSectionUpdateMessage>(OnSideBarSectionUpdated);
         }
-
+        
         public class SavedState
         {
             public string InterviewId { get; set; }
