@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -10,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview;
 
@@ -26,15 +26,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private static readonly Identity PrefilledQuestion = Create.Entity.Identity(444);
         private static readonly Identity RemovedAnswer = Create.Entity.Identity(555);
 
-        private PlainQuestionnaire _questionnaire;
-        private StatefulInterview _interview;
+        private QuestionnaireDocument questionnaire;
+        private StatefulInterview interview;
         private IWebInterviewNotificationService Subject;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetup()
         {
-            _questionnaire =
-                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(Create.Entity.Identity(101).Id,
+            this.questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.Group(GroupA.Id, children: new List<IComposite>()
                     {
                         Create.Entity.StaticText(StaticText.Id),
@@ -44,19 +43,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                             Create.Entity.TextQuestion(Question2.Id),
                             Create.Entity.TextQuestion(PrefilledQuestion.Id, preFilled: true),
                         })
-                    })));
+                    }));
 
-            var questionnaireRepository =
-                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(this._questionnaire.QuestionnaireId,
-                    this._questionnaire);
 
-            _interview = Create.AggregateRoot.StatefulInterview(questionnaireId: _questionnaire.QuestionnaireId,
-                questionnaireRepository: questionnaireRepository);
+            this.interview = Setup.StatefulInterview(this.questionnaire);
 
-            var repository = Mock.Of<IStatefulInterviewRepository>(sir => sir.Get(It.IsAny<string>()) == _interview);
-
+            var repository = Mock.Of<IStatefulInterviewRepository>(sir => sir.Get(It.IsAny<string>()) == this.interview);
             var mockClients = new Mock<IHubConnectionContext<dynamic>>();
-
             var setup = mockClients.Setup(m => m.Group(It.IsAny<string>(), It.IsAny<string[]>()));
             setup.Returns((string name, string[] exclude) => (object)NewGroup(name).Object);
 
@@ -68,7 +61,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
         private void Act()
         {
-            this.Subject.RefreshEntities(_interview.Id, Question1, Question2, PrefilledQuestion, StaticText, RemovedAnswer);
+            this.Subject.RefreshEntities(this.interview.Id, Question1, Question2, PrefilledQuestion, StaticText, RemovedAnswer);
         }
 
         [Test]
@@ -98,13 +91,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         [Test]
         public void ShouldSendSendInterviewWideNotificationToRefreshSectionForUnexpectedQuestions()
         {
-            var mock = Groups[this._interview.Id.FormatGuid()];
+            var mock = Groups[this.interview.Id.FormatGuid()];
             mock.Verify(g => g.refreshSection(), Times.AtLeastOnce);
         }
 
         private void AssertThatRefreshEntitiesCalledForQuestions(Identity section = null, params Identity[] questions)
         {
-            var prefilledKey = UI.Headquarters.API.WebInterview.WebInterview.GetConnectedClientSectionKey(section?.ToString() ?? string.Empty, this._interview.Id.FormatGuid());
+            var prefilledKey = UI.Headquarters.API.WebInterview.WebInterview.GetConnectedClientSectionKey(section?.ToString() ?? string.Empty, this.interview.Id.FormatGuid());
 
             Assert.That(this.Groups, new DictionaryContainsKeyConstraint(prefilledKey));
             var groupMock = this.Groups[prefilledKey];
