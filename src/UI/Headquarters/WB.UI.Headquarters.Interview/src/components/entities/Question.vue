@@ -1,10 +1,10 @@
 <template>
     <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
         <div class="question-editor" :class="questionEditorClass">
-            <wb-title />
-            <wb-instructions />
+            <wb-title v-if="!noTitle" />
+            <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation />
+            <wb-validation v-if="!noValidation"/>
         </div>
     </div>
 </template>
@@ -13,7 +13,7 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation'],
         computed: {
             id() {
                 return this.question.id

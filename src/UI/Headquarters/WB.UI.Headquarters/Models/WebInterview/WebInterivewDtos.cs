@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Status { get; set; }
         public string StatisticsByAnswersAndSubsections { get; set; }
         public string StatisticsByInvalidAnswers { get; set; }
-        public bool HasInvalidAnswers { get; set; }
+        public Validity Validity { get; set; } = new Validity();
     }
 
     public enum GroupStatus
