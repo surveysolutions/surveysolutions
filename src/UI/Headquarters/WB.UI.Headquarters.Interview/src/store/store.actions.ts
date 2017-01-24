@@ -1,3 +1,4 @@
+import * as _ from "lodash"
 import * as Vue from "vue"
 import { apiCaller } from "../api"
 import router from "./../router"
@@ -19,6 +20,7 @@ export default {
             ctx.commit("SET_ENTITY_DETAILS", entityDetails)
         })
     },
+
     answerSingleOptionQuestion(ctx, answerInfo) {
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
@@ -41,42 +43,45 @@ export default {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
 
-    async fetchSection({ commit }) {
+    fetchSectionEntities: _.debounce(async ({ commit }) => {
         const id = (router.currentRoute.params as any).sectionId
         const section = id == null
             ? await apiCaller(api => api.getPrefilledEntities())
             : await apiCaller(api => api.getSectionEntities(id))
 
         commit("SET_SECTION_DATA", section)
-    },
+    }, 200, { leading: false, trailing: true }),
 
-    refreshEntities({state, dispatch}, questions) {
+    // called by server side. refresh
+    refreshEntities({state, dispatch}, questions: string[]) {
         let needSectionUpdate = false
 
-        for (const idx in questions) {
-            const questionId = questions[idx]
-
-            if (state.entityDetails[questionId]) {
+        _.each(questions, id => {
+            if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 needSectionUpdate = true
 
-                dispatch("fetchEntity", {
-                    id: questionId,
-                    source: "server"
-                })
+                dispatch("fetchEntity", { id, source: "server" })
             }
-        }
+        })
 
-        // HACK: Need to find a better solution, maybe push section status calculations on client-side
-        dispatch("fetchSection")
+        dispatch("refreshSectionState")
+    },
+
+    // refresh state of visible section, excluding entities list.
+    // Debounce will ensure that we not spam server with multiple requests,
+    //   that can happen if server react with several event in one time
+    // TODO: Add sidebar refresh here later
+    refreshSectionState: _.debounce(({ dispatch }) => {
         dispatch("fetchBreadcrumbs")
-        dispatch("fetchEntity", { id: "NavigationButton", source: "server"})
-    },
+        dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
+    }, 50, { leading: false, trailing: true }),
 
-    async fetchBreadcrumbs({commit}) {
-         const crumps = await apiCaller(api => api.getBreadcrumbs())
-         commit("SET_BREADCRUMPS", crumps)
-    },
-    cleanUpEntity({commit}, id) {
+    fetchBreadcrumbs: _.debounce(async ({ commit }) => {
+        const crumps = await apiCaller(api => api.getBreadcrumbs())
+        commit("SET_BREADCRUMPS", crumps)
+    }),
+
+    cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
     }
 }

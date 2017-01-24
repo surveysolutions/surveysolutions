@@ -41,7 +41,7 @@
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("fetchSection")
+                this.$store.dispatch("fetchSectionEntities")
             }
         }
     }
