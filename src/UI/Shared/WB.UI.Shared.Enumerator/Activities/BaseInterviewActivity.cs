@@ -1,14 +1,10 @@
 ﻿using Android.App;
-using Android.Content;
-using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
-using Plugin.CurrentActivity;
-using Plugin.Permissions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -20,8 +16,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
-        private MvxSubscriptionToken countOfInvalidEntitiesIncreasedToken;
-        private Vibrator vibrator;
 
         protected override int ViewResourceId => Resource.Layout.interview;
 
@@ -41,13 +35,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnStart()
         {
-            this.vibrator = (Vibrator)this.GetSystemService(Context.VibratorService);
-
             var messenger = Mvx.Resolve<IMvxMessenger>();
 
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
-            this.countOfInvalidEntitiesIncreasedToken = messenger.Subscribe<CountOfInvalidEntitiesIncreasedMessage>(this.OnCountOfInvalidEntitiesIncreased);
             base.OnStart();
         }
 
@@ -86,12 +77,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private void OnCountOfInvalidEntitiesIncreased(CountOfInvalidEntitiesIncreasedMessage msg)
-        {
-            if (this.vibrator.HasVibrator)
-                vibrator.Vibrate(100);
-        }
-
         private void OnSectionChange(SectionChangeMessage msg)
         {
             Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers(); }, null);
@@ -102,7 +87,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
-            messenger.Unsubscribe<CountOfInvalidEntitiesIncreasedMessage>(this.countOfInvalidEntitiesIncreasedToken);
 
             this.ViewModel.Sections.Dispose();
 
