@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -340,5 +341,12 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher());
+
+        public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
+            IEnumeratorSettings enumeratorSettings = null, IVirbationService virbationService = null)
+            => new VibrationViewModel(
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
+                virbationService ?? Mock.Of<IVirbationService>());
     }
 }

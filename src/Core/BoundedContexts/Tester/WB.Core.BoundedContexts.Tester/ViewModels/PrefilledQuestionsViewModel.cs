@@ -1,13 +1,11 @@
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -22,9 +20,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            ILiteEventRegistry eventRegistry,
-            IEnumeratorSettings settings,
-            IVirbationService virbationService)
+            VibrationViewModel vibrationViewModel)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -34,9 +30,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 principal,
                 commandService,
                 compositeCollectionInflationService,
-                eventRegistry,
-                settings,
-                virbationService) {}
+                vibrationViewModel) {}
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 
