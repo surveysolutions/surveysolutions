@@ -373,9 +373,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsAnswered()) return String.Empty;
 
-            Func<decimal, string> getCategoricalAnswerOptionText = answerOptionValue
-                => Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
-
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
             if (this.IsMultimedia) return this.AsMultimedia.GetAnswer()?.FileName;
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;
@@ -409,12 +406,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return string.Join(", ", formattedAnswers);
             }
 
+            Func<decimal, string> getCategoricalAnswerOptionText = answerOptionValue
+                => Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
+
             if (this.IsSingleFixedOption) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleFixedOption.GetAnswer()?.SelectedValue), getCategoricalAnswerOptionText);
             if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(this.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray(), getCategoricalAnswerOptionText);
             if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), getCategoricalAnswerOptionText);
 
-            if (this.IsSingleLinkedToList) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleLinkedToList.GetAnswer()?.SelectedValue), getCategoricalAnswerOptionText);
-            if (this.IsMultiLinkedToList) return AnswerUtils.AnswerToString(this.AsMultiLinkedToList.GetAnswer()?.ToDecimals()?.ToArray(), getCategoricalAnswerOptionText);
+            if (this.IsSingleLinkedToList)
+            {
+                var singleToListAnswer = Convert.ToDecimal(this.AsSingleLinkedToList.GetAnswer()?.SelectedValue);
+                var refListQuestion = this.Tree.FindEntityInQuestionBranch(this.AsSingleLinkedToList.LinkedSourceId, Identity) as InterviewTreeQuestion;
+                var refListOption = refListQuestion?.AsTextList?.GetAnswer()?.Rows.Single(x => x.Value == singleToListAnswer);
+                return refListOption?.Text;
+            }
+            if (this.IsMultiLinkedToList)
+            {
+                var multiToListAnswers = this.AsMultiLinkedToList.GetAnswer()?.ToDecimals()?.ToHashSet();
+                var refListQuestion = this.Tree.FindEntityInQuestionBranch(this.AsMultiLinkedToList.LinkedSourceId, Identity) as InterviewTreeQuestion;
+                var refListQuestionAllOptions = refListQuestion?.AsTextList?.GetAnswer()?.Rows;
+                var refListOptions = refListQuestionAllOptions?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false).ToArray();
+                return string.Join(", ", refListOptions.Select(o => o.Text));
+            }
 
             return string.Empty;
         }
