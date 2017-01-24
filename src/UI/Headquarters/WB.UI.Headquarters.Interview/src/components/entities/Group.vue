@@ -1,16 +1,14 @@
 <template>
     <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true">
-        <div class="question-unit">
-            <div class="options-group">
+        <div class="options-group">
                 <router-link :to="navigateTo" class="btn btn-roster-section" :class="btnStatusClass">
                     {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
                 </router-link>
-            </div>
-            <div class="information-block roster-section-info">
+         </div>
+         <div class="information-block roster-section-info" v-if="!$me.isDisabled">
                 {{this.$me.statisticsByAnswersAndSubsections}}<span v-if="hasInvalidAnswers">, </span>
                 <span class="error-text" v-if="hasInvalidAnswers">{{this.$me.statisticsByInvalidAnswers}}</span>
-            </div>
-        </div>
+         </div>        
     </wb-question>
 </template>
 

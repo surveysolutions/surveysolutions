@@ -119,11 +119,11 @@ a.disabled{
 .btn-default.btn-gray{
 	color: $white;
 	padding: 12px;
-	background-color: darken($gray_form, 10%);
+	background-color: $gray_light;
 	border: none;
 	&:hover, &:focus{
 		border: none;
-		background-color: darken($gray_form, 20%);
+		background-color: darken($gray_light, 10%);
 	}
 }
 .back-link{
