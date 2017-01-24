@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension,
                 incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
-                origin: Constants.SupervisorSynchronizationOrigin, 
+                origin: Constants.SupervisorSynchronizationOrigin,
                 retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
                 retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                 useBackgroundJobForProcessingPackages: WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false));
@@ -158,8 +158,8 @@ namespace WB.UI.Headquarters
                 new PostgresReadSideModule(
                     WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
                     "readside",
-                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace), 
-                    cacheSettings, 
+                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
+                    cacheSettings,
                     mappingAssemblies)
             );
 
@@ -189,7 +189,7 @@ namespace WB.UI.Headquarters
 
             var exportSettings = new ExportSettings(
                 WebConfigurationManager.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
-            var interviewDataExportSettings=
+            var interviewDataExportSettings =
             new InterviewDataExportSettings(basePath,
                 bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
                 WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
@@ -203,12 +203,12 @@ namespace WB.UI.Headquarters
             kernel.Load(
                 eventStoreModule,
                 new DataCollectionSharedKernelModule().AsNinject(),
-                new HeadquartersBoundedContextModule(basePath, 
+                new HeadquartersBoundedContextModule(basePath,
                     interviewDetailsDataLoaderSettings,
                     readSideSettings,
-                    userPreloadingSettings, 
+                    userPreloadingSettings,
                     exportSettings,
-                    interviewDataExportSettings, 
+                    interviewDataExportSettings,
                     sampleImportSettings,
                     synchronizationSettings,
                     interviewCountLimit));
@@ -221,6 +221,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            RegisterSignalR(kernel);
             CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
@@ -263,7 +264,6 @@ namespace WB.UI.Headquarters
                 }
             }));
 
-            RegisterSignalR(kernel);
 
             return kernel;
         }
@@ -272,10 +272,15 @@ namespace WB.UI.Headquarters
         {
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
             var pipiline = GlobalHost.DependencyResolver.Resolve<IHubPipeline>();
-            
+
             pipiline.AddModule(new SignalrErrorHandler());
             pipiline.AddModule(new PlainSignalRTransactionManager());
             pipiline.AddModule(new WebInterviewStateManager());
+             
+            kernel.Bind<IHubContext>()
+                .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
+                .InSingletonScope()
+                .Named("WebInterview");
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
@@ -292,7 +297,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-                
+
             //Kernel.RegisterDenormalizer<>() - should be used instead
             var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
             foreach (object handler in enumerable)

@@ -12,17 +12,14 @@ namespace WB.UI.Headquarters.API.WebInterview
     public class WebInterviewNotificationService : IWebInterviewNotificationService
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IHubContext webInterviewHubContext;
 
-        public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository)
+        public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository, [Ninject.Named("WebInterview")] IHubContext webInterviewHubContext)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.webInterviewHubContext = webInterviewHubContext;
         }
 
-        private static readonly Lazy<IHubContext> _webInterviewHubInstance = new Lazy<IHubContext>(
-            () => GlobalHost.ConnectionManager.GetHubContext<WebInterview>());
-
-        protected IHubContext HubContext => _webInterviewHubInstance.Value;
-        
         public void RefreshEntities(Guid interviewId, params Identity[] entities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
@@ -33,11 +30,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 if (questionsGroupedByParent.Key == null)
                 {
-                    HubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+                    webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
                     continue;
                 };
 
-                HubContext.Clients.Group(questionsGroupedByParent.Key).refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()));
+                webInterviewHubContext.Clients.Group(questionsGroupedByParent.Key).refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()));
             }
         }
 
