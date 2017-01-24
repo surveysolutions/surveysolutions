@@ -445,7 +445,7 @@
     <value>Ответственный</value>
   </data>
   <data name="Survey_Status_Header" xml:space="preserve">
-    <value>Интервьюеры и исследования</value>
+    <value>Интервьюеры и обследования</value>
   </data>
   <data name="Survey_Status_Title" xml:space="preserve">
     <value>Статус</value>
@@ -475,13 +475,13 @@
     <value>Супервизор назначен</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
-    <value>Название исследования</value>
+    <value>Название обследования</value>
   </data>
   <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
     <value>Команды</value>
   </data>
   <data name="SurveysStatuses_Title" xml:space="preserve">
-    <value>Исследования и статусы</value>
+    <value>Обследования и статусы</value>
   </data>
   <data name="SurveysStatuses_Total" xml:space="preserve">
     <value>Итого</value>

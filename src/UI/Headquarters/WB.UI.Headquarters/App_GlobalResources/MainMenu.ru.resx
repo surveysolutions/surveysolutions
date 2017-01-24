@@ -148,7 +148,7 @@
     <value>Количество</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>Настройка исследований</value>
+    <value>Настройка обследований</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Количество синхронизированных, но пока необработанных интервью</value>
@@ -163,7 +163,7 @@
     <value>Супервизоры</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Исследования и статусы</value>
+    <value>Обследования и статусы</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
     <value>Команды и роли</value>
