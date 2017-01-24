@@ -799,7 +799,6 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\AttachmentViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_without_attachment.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_with_image_attachment.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_AnswersRemoved_for_cascading_question.cs" />

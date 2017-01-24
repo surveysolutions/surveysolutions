@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -67,8 +66,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IViewModelNavigationService viewModelNavigationService,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
-            IJsonAllTypesSerializer jsonSerializer)
-            : base(principal, viewModelNavigationService, commandService)
+            IJsonAllTypesSerializer jsonSerializer,
+            ILiteEventRegistry eventRegistry,
+            IEnumeratorSettings settings,
+            IVirbationService virbationService)
+            : base(principal, viewModelNavigationService, commandService, eventRegistry, settings, virbationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -261,8 +263,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
             this.CurrentStage.DisposeIfDisposable();

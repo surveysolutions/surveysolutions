@@ -339,6 +339,7 @@
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
+    <Compile Include="CustomServices\VibrationService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

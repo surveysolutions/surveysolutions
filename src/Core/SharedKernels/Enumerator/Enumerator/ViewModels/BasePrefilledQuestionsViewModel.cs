@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -29,8 +30,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ILogger logger,
             IPrincipal principal,
             ICommandService commandService,
-            ICompositeCollectionInflationService compositeCollectionInflationService)
-            : base(principal, viewModelNavigationService, commandService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            ILiteEventRegistry eventRegistry,
+            IEnumeratorSettings settings,
+            IVirbationService virbationService)
+            : base(principal, viewModelNavigationService, commandService, eventRegistry, settings, virbationService)
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException(nameof(interviewViewModelFactory));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -102,10 +106,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();
 
-        public void Dispose()
+        public override void Dispose()
         {
-            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
+            base.Dispose();
 
+            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
             foreach (var disposableItem in disposableItems)
             {
                 disposableItem.Dispose();
