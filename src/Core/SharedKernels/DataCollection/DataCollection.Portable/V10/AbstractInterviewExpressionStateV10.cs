@@ -244,7 +244,21 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
             if (areLinkedAndSourceQuestionsOnSameLevel)
-                return true;
+            {
+                if (sourceRosterVector.Length == linkedRosterVector.Length && linkedRosterVector.Length > 0)
+                {
+                    var linkedParentRosterVector = linkedRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
+                    var sourceParentRosterVector = sourceRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
+
+                    var doesScopesHasTheSameParent = sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
+                    if (doesScopesHasTheSameParent)
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
 
             var commonParentRosterScopeIds = this.GetCommonParentRosterScopeIds(linkedRosterScopeIds, sourceRosterScopeIds);
             var hasLinkedAndSourceQuestionsCommonParents = commonParentRosterScopeIds.Length != 0;
