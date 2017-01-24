@@ -154,13 +154,13 @@
     <value>Супервизор назначен</value>
   </data>
   <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>Супервизоры и исследования</value>
+    <value>Супервизоры и обследования</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
-    <value>Название исследования</value>
+    <value>Название обследования</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Исследования и статусы</value>
+    <value>Обследования и статусы</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Команды и статусы</value>

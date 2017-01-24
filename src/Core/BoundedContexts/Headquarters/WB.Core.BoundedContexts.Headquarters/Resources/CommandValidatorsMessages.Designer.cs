@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have already imported other questionnaire with title &apos;{0}&apos; from Designer. If you still want to import this particular one, please rename it using Designer..
+        /// </summary>
+        public static string QuestionnaireNameUniqueFormat {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameUniqueFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only responsible supervisor can answer on supervisor&apos;s questions.
         /// </summary>
         public static string UserDontHavePermissionsToAnswer {

@@ -1831,6 +1831,7 @@
     <Content Include="App_GlobalResources\MainMenu.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MainMenu.ru.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Settings.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1900,6 +1901,7 @@
     <Content Include="App_GlobalResources\Reports.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Reports.ru.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Users.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -2008,7 +2010,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Pages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ru.resx" />
+    <EmbeddedResource Include="Resources\Pages.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.zh.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.fr.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.resx">

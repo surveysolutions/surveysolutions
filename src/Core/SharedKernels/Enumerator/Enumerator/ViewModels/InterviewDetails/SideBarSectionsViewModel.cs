@@ -48,6 +48,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private IEnumerable<ISideBarSectionItem> sectionViewModels => this.sectionItems.OfType<ISideBarSectionItem>();
 
+        private readonly object sectionViewModelsLock = new object();
+
+
         public SideBarSectionsViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
@@ -103,8 +106,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var expandedSectionIdentities = this.GetExpandedSectionsIdentities(e.TargetGroup).ToList();
 
+            lock (sectionViewModelsLock)
+            {
             foreach (var removedSectionViewModel in this.GetSectionsToRemove(expandedSectionIdentities).ToList())
                 this.sectionItems.Remove(removedSectionViewModel);
+            }
 
             foreach (var expandedGroup in expandedSectionIdentities)
                 this.ExpandSection(expandedGroup, false);
@@ -134,6 +140,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void OnSideBarSectionUpdated(SideBarSectionUpdateMessage e)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            lock (sectionViewModelsLock)
+            {
 
             var updatedGroupViewModel = this.sectionViewModels.FirstOrDefault(x => x.SectionIdentity == e.UpdatedGroup);
             if (updatedGroupViewModel == null) return;
@@ -153,6 +161,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
 
                 this.sectionItems.Insert(indexOfSubsection, sectionViewModel);
+
+                }
             }
 
             this.UpdateUI();
@@ -177,7 +187,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void ExpandSection(Identity expandedSection, bool force = true)
         {
-            var expandedGroupViewModel = this.sectionViewModels
+            ISideBarSectionItem expandedGroupViewModel;
+
+            lock (sectionViewModelsLock)
+            {
+                expandedGroupViewModel = this.sectionViewModels
                 .FirstOrDefault(section => section.SectionIdentity == expandedSection);
 
             if (expandedGroupViewModel == null) return;
@@ -187,6 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             foreach (var subSection in this.GetSubSections(expandedSection))
                 this.sectionItems.Insert(indexOfExpandedGroup + 1, subSection);
+            }
 
             this.UpdateUI();
         }
@@ -196,7 +211,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var enabledSections = this.GetEnabledSectionIdentites().ToList();
 
             var indexOfSection = enabledSections.IndexOf(addedSection);
-
+            lock (sectionViewModelsLock)
+            {
             var prevSectionIdentity = enabledSections.ElementAt(indexOfSection - 1);
             var prevSectionViewModel = this.sectionViewModels.FirstOrDefault(viewModel => viewModel.SectionIdentity == prevSectionIdentity);
 
@@ -213,6 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.interviewId);
 
             this.sectionItems.Insert(indexOfSection, sectionViewModel);
+            }
         }
 
         private IEnumerable<ISideBarItem> GetSubSections(Identity expandedGroup)
@@ -275,18 +292,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsDisabled @event)
         {
-            var removedViewModels = this.sectionViewModels.Where(
+            List<ISideBarSectionItem> removedViewModels;
+
+            lock (sectionViewModelsLock)
+            {
+                removedViewModels = this.sectionViewModels.Where(
                     sectionViewModel => @event.Groups.Contains(sectionViewModel.SectionIdentity)).ToList();
 
             foreach (var removedViewModel in removedViewModels)
                 this.sectionItems.Remove(removedViewModel);
-
+            }
             if(removedViewModels.Any())
                 this.UpdateUI();
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
+            List<ISideBarSectionItem> removedViewModels;
+
             var removedViewModels = this.sectionViewModels.Where(sectionViewModel =>
                     @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity)).ToList();
 
@@ -308,8 +331,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 this.AllVisibleSections.RemoveRange(removedViewModels);
 
+                lock (sectionViewModelsLock)
+                {
                 foreach (var addedSectionViewModels in this.sectionViewModels.Except(notChangedItems).OfType<ISideBarSectionItem>().GroupBy(x=>x.SectionIdentity.Id))
                     this.AllVisibleSections.InsertRange(this.sectionItems.IndexOf(addedSectionViewModels.First()), addedSectionViewModels);
+                }
             });
         }
 
