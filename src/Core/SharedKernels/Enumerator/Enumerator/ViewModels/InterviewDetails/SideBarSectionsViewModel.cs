@@ -176,23 +176,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void CollapseSection(Identity collapsedSection)
         {
-            var collapsedViewModels = this.sectionViewModels.Where(
-                sectionViewModel => sectionViewModel.ParentsIdentities.Contains(collapsedSection)).ToList();
+            lock (sectionViewModelsLock)
+            {
+                var collapsedViewModels = this.sectionViewModels.Where(
+                    sectionViewModel => sectionViewModel.ParentsIdentities.Contains(collapsedSection)).ToList();
 
-            foreach (var collapsedViewModel in collapsedViewModels)
-                this.sectionItems.Remove(collapsedViewModel);
-
+                foreach (var collapsedViewModel in collapsedViewModels)
+                    this.sectionItems.Remove(collapsedViewModel);
+            }
             this.UpdateUI();
         }
 
         private void ExpandSection(Identity expandedSection, bool force = true)
         {
-            ISideBarSectionItem expandedGroupViewModel;
-
             lock (sectionViewModelsLock)
             {
-                expandedGroupViewModel = this.sectionViewModels
-                .FirstOrDefault(section => section.SectionIdentity == expandedSection);
+                var expandedGroupViewModel = this.sectionViewModels
+                    .FirstOrDefault(section => section.SectionIdentity == expandedSection);
 
             if (expandedGroupViewModel == null) return;
             if (!force && expandedGroupViewModel.Expanded) return;
@@ -309,13 +309,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(RosterInstancesRemoved @event)
         {
             List<ISideBarSectionItem> removedViewModels;
+            lock (sectionViewModelsLock)
+            {
+                removedViewModels = this.sectionViewModels.Where(sectionViewModel =>
+                            @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity))
+                    .ToList();
 
-            var removedViewModels = this.sectionViewModels.Where(sectionViewModel =>
-                    @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity)).ToList();
-
-            foreach (var removedViewModel in removedViewModels)
-                this.sectionItems.Remove(removedViewModel);
-
+                foreach (var removedViewModel in removedViewModels)
+                    this.sectionItems.Remove(removedViewModel);
+            }
             if(removedViewModels.Any())
                 this.UpdateUI();
         }
