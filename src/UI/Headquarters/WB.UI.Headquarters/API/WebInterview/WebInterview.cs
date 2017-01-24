@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -25,7 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        
+
         private string CallerInterviewId => this.Clients.Caller.interviewId;
         private string CallerSectionid => this.Clients.Caller.sectionId;
 
@@ -36,12 +37,12 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.GetCallerInterview().Language);
 
         public WebInterview(
-            IStatefulInterviewRepository statefulInterviewRepository, 
+            IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
             IUserViewFactory usersRepository,
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigProvider webInterviewConfigProvider)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -68,5 +69,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interviewId = CallerInterviewId;
             if (interviewId != null) data["caller.interviewId"] = interviewId;
         }
+
+        [Localizable(false)]
+        public static string GetConnectedClientSectionKey(string sectionId, string interviewId) => $"{sectionId ?? "PrefilledSection" }x{interviewId}";
     }
 }

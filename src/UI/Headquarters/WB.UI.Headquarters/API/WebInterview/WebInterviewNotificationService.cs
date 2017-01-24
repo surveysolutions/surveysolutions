@@ -18,43 +18,39 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
-        // Singleton instance
-        private static readonly Lazy<IHubContext> _instance = new Lazy<IHubContext>(
+        private static readonly Lazy<IHubContext> _webInterviewHubInstance = new Lazy<IHubContext>(
             () => GlobalHost.ConnectionManager.GetHubContext<WebInterview>());
 
+        protected IHubContext HubContext => _webInterviewHubInstance.Value;
+        
         public void RefreshEntities(Guid interviewId, params Identity[] entities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
-            var refreshLists = from entity in entities
-                     let key = GetRefreshKey(interview, entity)
-                     where key != null
-                     group entity by key into g
-                     select new
-                     {
-                         Key = g.Key,
-                         Questions = g.Select(q => q.ToString()).ToArray()
-                     };
-            
-            foreach(var list in refreshLists)
+            var entitiesToRefresh = entities.Select(identity => Tuple.Create(GetClientGroupIdentity(identity, interview), identity));
+
+            foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
             {
-                _instance.Value.Clients.Group(list.Key).refreshEntities(list.Questions);
-            }            
+                if (questionsGroupedByParent.Key == null)
+                {
+                    HubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+                    continue;
+                };
+
+                HubContext.Clients.Group(questionsGroupedByParent.Key).refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()));
+            }
         }
 
-        private string GetRefreshKey(IStatefulInterview interview, Identity entity)
+        private static string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            var question = interview.GetQuestion(entity);
-            if (question == null) return null;
+            var questionToRefresh = interview.GetQuestion(identity);
+            if (questionToRefresh == null) return null;
 
-            var prefilled = interview.IsQuestionPrefilled(entity);
-            if (prefilled)
-            {
-                return "_" + interview.Id.FormatGuid();
-            }
-
-            var parent = interview.GetParentGroup(entity);
-            return $"{parent?.ToString() ?? ""}_{interview.Id.FormatGuid()}";
+            var sectionKey = questionToRefresh.IsPrefilled
+                ? string.Empty
+                : questionToRefresh.Parent.Identity.ToString();
+            
+            return WebInterview.GetConnectedClientSectionKey(sectionKey, interview.Id.FormatGuid());
         }
     }
 }

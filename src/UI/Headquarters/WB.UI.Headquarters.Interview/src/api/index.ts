@@ -21,14 +21,18 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
         // All client-side subscriptions should be registered in this method
 
         // $.connection.hub.logging = true
-        $.connection.hub.error((error) => {
-            // console.error("SignalR error: " + error)
-        })
+        // tslint:disable-next-line:no-empty
+        $.connection.hub.error((error) => {})
 
         const interviewProxy = $.connection.interview
 
         interviewProxy.client.refreshEntities = (questions) => {
             store.dispatch("refreshEntities", questions)
+        }
+
+        interviewProxy.client.refreshSection = ()  => {
+            store.dispatch("fetchSectionEntities")          // fetching entities in section
+            store.dispatch("refreshSectionState")   // fetching breadcrumbs/sidebar/buttons
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
@@ -66,7 +70,7 @@ interface IServerHubCallback<T> {
 
 // tslint:disable-next-line:max-line-length
 // TODO: Handle connection lifetime - https://www.asp.net/signalr/overview/guide-to-the-api/hubs-api-guide-javascript-client#connectionlifetime
-export async function apiCaller<T>(action: IServerHubCallback<T>) {
+export async function apiCaller<T>(action: IServerHubCallback<T>, reportProgress: string = "") {
     // action return jQuery promise
     // wrap will wrap jq promise into awaitable promise
     const hub = await getInterviewHub()
