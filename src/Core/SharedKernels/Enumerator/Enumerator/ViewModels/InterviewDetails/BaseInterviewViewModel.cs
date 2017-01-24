@@ -67,10 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer,
-            ILiteEventRegistry eventRegistry,
-            IEnumeratorSettings settings,
-            IVirbationService virbationService)
-            : base(principal, viewModelNavigationService, commandService, eventRegistry, settings, virbationService)
+            VibrationViewModel vibrationViewModel)
+            : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;

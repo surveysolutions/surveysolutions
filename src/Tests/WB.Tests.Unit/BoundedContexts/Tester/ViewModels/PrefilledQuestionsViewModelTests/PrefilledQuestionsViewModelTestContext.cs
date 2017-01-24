@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsViewModelTests
 {
@@ -27,9 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             ILogger logger = null,
             IPrincipal principal = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
-            ILiteEventRegistry eventRegistry = null,
-            IEnumeratorSettings settings = null,
-            IVirbationService virbationService = null)
+            VibrationViewModel vibrationViewModel = null)
         {
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
@@ -40,9 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 principal ?? Mock.Of<IPrincipal>(),
                 Mock.Of<ICommandService>(),
                 Mock.Of<ICompositeCollectionInflationService>(),
-                eventRegistry ?? Create.Service.LiteEventRegistry(),
-                settings ?? Mock.Of<IEnumeratorSettings>(),
-                virbationService ?? Mock.Of<IVirbationService>());
+                vibrationViewModel ?? Create.ViewModel.VibrationViewModel());
         }
     }
 }
