@@ -14,21 +14,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToStore;
 
+        private readonly IAssemblyService assemblyService;
+
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyFileAccessor>();
 
-        public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string folderPath, string assemblyDirectoryName)
+        public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, IAssemblyService assemblyService, string folderPath, string assemblyDirectoryName)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.assemblyService = assemblyService;
 
             this.pathToStore = fileSystemAccessor.CombinePath(folderPath, assemblyDirectoryName);
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToStore))
                 fileSystemAccessor.CreateDirectory(this.pathToStore);
-        }
-
-        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
-        {
-            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            return this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
@@ -54,6 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
                     new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             }
 
+            this.assemblyService.SaveAssemblyInfo(assemblyFileName, DateTime.Now, assembly);
+
             this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
 
             this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
@@ -74,6 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             //loaded assembly could be locked
             try
             {
+                this.assemblyService.DeleteAssemblyInfo(assemblyFileName);
                 this.fileSystemAccessor.DeleteFile(pathToSaveAssembly);
             }
             catch (IOException e)
@@ -101,16 +101,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
+            //return this.assemblyService.GetAssemblyInfo(assemblyFileName).Content;
+
+            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
             if (!this.fileSystemAccessor.IsFileExists(pathToAssembly))
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
         }
 
+        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
+        {
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
+            return this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+        }
+
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
+            var fullPath = this.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+
+            var existsLocaly = this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
+            if (existsLocaly)
+                return true;
+
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
+            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
+            if (assemblyInfo == null)
+                return false;
+            
+            this.fileSystemAccessor.WriteAllBytes(fullPath, assemblyInfo.Content);
+
             return this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
         }
 

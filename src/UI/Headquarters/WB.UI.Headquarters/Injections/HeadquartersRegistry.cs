@@ -85,6 +85,8 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
             this.Kernel.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
+
+            this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
         }
 
         protected virtual void RegisterEventHandlers()
