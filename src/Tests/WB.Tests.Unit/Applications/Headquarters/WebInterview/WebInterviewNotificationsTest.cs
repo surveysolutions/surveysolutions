@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -16,7 +17,7 @@ using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
-    public class WebInterviewNotificationsTest
+    public class WebInterviewNotificationsTest : NUnitTestSpecification
     {
         private static readonly Identity GroupA = Create.Entity.Identity(101);
         private static readonly Identity GroupB = Create.Entity.Identity(202);
@@ -25,16 +26,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private static readonly Identity Question2 = Create.Entity.Identity(222);
         private static readonly Identity PrefilledQuestion = Create.Entity.Identity(444);
         private static readonly Identity RemovedAnswer = Create.Entity.Identity(555);
-
-        private QuestionnaireDocument questionnaire;
+        
         private StatefulInterview interview;
-        private IWebInterviewNotificationService Subject;
+        private WebInterviewNotificationService Subject;
 
-        [OneTimeSetUp]
-        public void OneTimeSetup()
+        protected override void Context()
         {
-            this.questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.Group(GroupA.Id, children: new List<IComposite>()
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Group(GroupA.Id, children: new List<IComposite>
                     {
                         Create.Entity.StaticText(StaticText.Id),
                         Create.Entity.Group(GroupB.Id, children: new IComposite[]
@@ -45,21 +44,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                         })
                     }));
 
-
-            this.interview = Setup.StatefulInterview(this.questionnaire);
-
+            this.interview = Setup.StatefulInterview(questionnaire);
             var repository = Mock.Of<IStatefulInterviewRepository>(sir => sir.Get(It.IsAny<string>()) == this.interview);
-            var mockClients = new Mock<IHubConnectionContext<dynamic>>();
-            var setup = mockClients.Setup(m => m.Group(It.IsAny<string>(), It.IsAny<string[]>()));
-            setup.Returns((string name, string[] exclude) => (object)NewGroup(name).Object);
 
-            var context = Mock.Of<IHubContext>(hc => hc.Clients == mockClients.Object);
-            this.Subject = new WebInterviewNotificationService(repository, context);
-
-            Act();
+            this.Subject = new WebInterviewNotificationService(
+                repository, 
+                Create.Fake.HubContextWithGroupMock((name, excludedConnection) => this.NewGroupMock(name).Object));
         }
 
-        private void Act()
+        protected override void Because()
         {
             this.Subject.RefreshEntities(this.interview.Id, Question1, Question2, PrefilledQuestion, StaticText, RemovedAnswer);
         }
@@ -115,7 +108,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
         private Dictionary<string, Mock<IHubGroup>> Groups { get; set; } = new Dictionary<string, Mock<IHubGroup>>();
 
-        private Mock<IHubGroup> NewGroup(string name)
+        private Mock<IHubGroup> NewGroupMock(string name)
         {
             var group = new Mock<IHubGroup>();
             Groups.Add(name, group);
@@ -123,7 +116,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         /// <summary>
-        ///  should be public due to Moq requirements
+        /// Specific interface for hub group mock
         /// </summary>
         public interface IHubGroup
         {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Core.Views;
@@ -44,6 +46,19 @@ namespace WB.Tests.Unit.TestFactories
 
             return Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+        }
+
+        /// <summary>
+        /// Create fake hubs context that has mocked Group call
+        /// </summary>
+        /// <param name="groupGeneratorFunction">The group generator function that will create a group for group name and excluded connections</param>
+        /// <returns></returns>
+        public IHubContext HubContextWithGroupMock(Func<string, string[], object> groupGeneratorFunction)
+        {
+            var mockClients = new Mock<IHubConnectionContext<dynamic>>();
+            var setup = mockClients.Setup(m => m.Group(It.IsAny<string>(), It.IsAny<string[]>()));
+            setup.Returns(groupGeneratorFunction);
+            return Mock.Of<IHubContext>(hc => hc.Clients == mockClients.Object);
         }
 
         public IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(QuestionnaireDocument questionnaire)
