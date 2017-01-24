@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 {
     public interface IQuestionnaireAssemblyFileAccessor
     {
-        string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion);
+        string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion);
 
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64);
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly);

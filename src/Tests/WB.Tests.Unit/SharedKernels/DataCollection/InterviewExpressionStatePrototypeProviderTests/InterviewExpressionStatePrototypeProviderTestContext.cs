@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
         protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
         {
             var result = new Mock<IQuestionnaireAssemblyFileAccessor>();
-            result.Setup(x => x.GetFullPathToAssembly(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+            result.Setup(x => x.CheckAndGetFullPathToAssemblyOrEmpty(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(path);
 
             return result;

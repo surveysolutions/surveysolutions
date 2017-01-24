@@ -100,39 +100,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-
-            //return this.assemblyService.GetAssemblyInfo(assemblyFileName).Content;
-
-            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
-            if (!this.fileSystemAccessor.IsFileExists(pathToAssembly))
-                return null;
-
-            return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
+            string fullPathToAssembly = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            return string.IsNullOrEmpty(fullPathToAssembly) ? null : this.fileSystemAccessor.ReadAllBytes(fullPathToAssembly);
         }
 
-        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
+        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            return this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            var fullPathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+
+            if (this.fileSystemAccessor.IsFileExists(fullPathToAssembly))
+                return fullPathToAssembly;
+
+            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
+            if (assemblyInfo == null)
+                return string.Empty;
+
+            this.fileSystemAccessor.WriteAllBytes(fullPathToAssembly, assemblyInfo.Content);
+
+            return fullPathToAssembly;
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            var fullPath = this.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
-
-            var existsLocaly = this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
-            if (existsLocaly)
-                return true;
-
-            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
-            if (assemblyInfo == null)
-                return false;
-            
-            this.fileSystemAccessor.WriteAllBytes(fullPath, assemblyInfo.Content);
-
-            return this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
+            return !string.IsNullOrEmpty(this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion));
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
