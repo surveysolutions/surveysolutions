@@ -8,12 +8,6 @@ export default {
         const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
-    async startInterview({ commit }, questionnaireId: string) {
-        const interviewId = await apiCaller(api => api.createInterview(questionnaireId)) as string
-        const loc = { name: "prefilled", params: { interviewId } }
-        router.replace(loc)
-    },
-
     fetchEntity(ctx, { id }) {
         fetchAware(ctx, "entity", id, async () => {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))

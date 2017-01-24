@@ -63,27 +63,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
         }
 
-        public string CreateInterview(string questionnaireId)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-
-            var webInterviewConfig = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            if (!webInterviewConfig.Started)
-            {
-                throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
-            }
-            var responsibleId = webInterviewConfig.ResponsibleId;
-            var interviewer = this.usersRepository.Load(new UserViewInputModel(publicKey: responsibleId));
-
-            var interviewId = Guid.NewGuid();
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
-                interviewer.PublicKey, questionnaireIdentity, DateTime.UtcNow,
-                interviewer.Supervisor.Id);
-
-            this.commandService.Execute(createInterviewOnClientCommand);
-            return interviewId.FormatGuid();
-        }
-
         public void FillExceptionData(Dictionary<string, string> data)
         {
             var interviewId = CallerInterviewId;
