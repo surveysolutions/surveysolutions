@@ -304,7 +304,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Para Data.
+        ///   Looks up a localized string similar to Paradata.
         /// </summary>
         internal static string ParaData {
             get {
