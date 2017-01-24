@@ -211,6 +211,10 @@
       <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net" />
@@ -1003,6 +1007,7 @@
     <Content Include="Views\Interviewers\Index.cshtml" />
     <Content Include="Views\WebInterviewSetup\Start.cshtml" />
     <Content Include="Views\WebInterviewSetup\Started.cshtml" />
+    <Content Include="Views\WebInterview\Start.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1604,6 +1609,7 @@
     <Compile Include="Models\User\UserWebViewInputModel.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
+    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Models\WebInterview\WebInterivewDtos.cs" />
     <Compile Include="Models\WebInterview\PrefilledPageData.cs" />
     <Compile Include="Models\WebInterview\SetupModel.cs" />

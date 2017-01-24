@@ -49,6 +49,10 @@ var config = {
         {
             file: "_MainLayout.cshtml",
             folder: '../Views/Shared/'
+        },
+        {
+            file: "Start.cshtml",
+            folder: '../Views/WebInterview/'
         }
     ],
     cssFilesToWatch: './css/*.scss"',

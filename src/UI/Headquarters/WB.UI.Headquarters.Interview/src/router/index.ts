@@ -6,14 +6,12 @@ Vue.use(VueRouter)
 
 import { getInstance as hubProxy } from "../api"
 import Section from "../components/Section"
-import Start from "../components/Start"
 import store from "../store"
 
 const router = new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
-        { name: "root", path: "/:questionnaireId", component: Start },
         { name: "prefilled", path: "/:interviewId/Cover", component: Section },
         { name: "section", path: "/:interviewId/Section/:sectionId", component: Section }
     ],
