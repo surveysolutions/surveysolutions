@@ -61,14 +61,17 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)));
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+
+            this.CreateMap<InterviewTreeGroup, Validity>()
+                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => !HasQuestionsWithInvalidAnswers(x)));
 
             this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeRoster, InterviewEntity>()
                 .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)))
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                 .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
         }
 
