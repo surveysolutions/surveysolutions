@@ -3,8 +3,10 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -33,10 +35,13 @@ namespace WB.UI.Interviewer.ViewModel
             CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
-            IJsonAllTypesSerializer jsonSerializer)
+            IJsonAllTypesSerializer jsonSerializer,
+            ILiteEventRegistry eventRegistry,
+            IEnumeratorSettings settings,
+            IVirbationService virbationService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService, jsonSerializer)
+                interviewViewModelFactory, commandService, jsonSerializer, eventRegistry, settings, virbationService)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;

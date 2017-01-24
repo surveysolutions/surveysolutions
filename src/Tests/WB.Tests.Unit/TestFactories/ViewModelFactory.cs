@@ -53,19 +53,16 @@ namespace WB.Tests.Unit.TestFactories
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
-            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+            ICompositeCollectionInflationService compositeCollectionInflationService = null,
+            IVirbationService virbationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
                 mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),
-                Mock.Of<IMvxMessenger>(),
-                Mock.Of<IEnumeratorSettings>(),
                 compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
