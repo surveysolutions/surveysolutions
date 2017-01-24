@@ -15,10 +15,11 @@
 
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
       <LinearLayout style="@style/Interview_Question_Header">
-        <TextView style="@style/Interview_Complete_Screen_Text" local:MvxBind="Text Localization('Interview_Complete_Questions_Status')" />
+        <TextView style="@style/Interview_Complete_Screen_Text" 
+                  local:MvxBind="Text Localization('Interview_Complete_Questions_Status')" />
       </LinearLayout>
 
-      <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      <TableLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="1">
@@ -26,8 +27,14 @@
 
           <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Column_With_Right_Border" >
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(AnsweredCount)">
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Answered_Counter" local:MvxBind="Text AnsweredCount" />
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Answered_Label" local:MvxBind="Text Localization('Interview_Complete_Answered')" />
+              <TextView 
+                        android:id="@+id/Complete_AnsweredCount"
+                        style="@style/Interview_Complete_Screen_Statistics_Answered_Counter" 
+                        local:MvxBind="Text AnsweredCount" />
+              <TextView 
+                        android:id="@+id/Complete_AnsweredCountLabel"
+                        style="@style/Interview_Complete_Screen_Statistics_Answered_Label" 
+                        local:MvxBind="Text Localization('Interview_Complete_Answered')" />
             </LinearLayout>
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(AnsweredCount)">
               <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
@@ -37,8 +44,14 @@
 
           <LinearLayout  style="@style/Interview_Complete_Screen_Statistics_Column_With_Right_Border">
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(UnansweredCount)">
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter" local:MvxBind="Text UnansweredCount" />
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Unanswered_Label" local:MvxBind="Text Localization('Interview_Complete_Unanswered')" />
+              <TextView
+                  android:id="@+id/Complete_UnAnsweredCount"
+                  style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter" 
+                  local:MvxBind="Text UnansweredCount" />
+              <TextView 
+                  android:id="@+id/Complete_UnAnsweredCountLabel"
+                  style="@style/Interview_Complete_Screen_Statistics_Unanswered_Label" 
+                  local:MvxBind="Text Localization('Interview_Complete_Unanswered')" />
             </LinearLayout>
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(UnansweredCount)">
               <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
@@ -48,8 +61,14 @@
 
           <LinearLayout  style="@style/Interview_Complete_Screen_Statistics_Column">
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(ErrorsCount)">
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Errors_Counter" local:MvxBind="Text ErrorsCount" />
-              <TextView style="@style/Interview_Complete_Screen_Statistics_Errors_Label" local:MvxBind="Text Localization('Interview_Complete_Errors')" />
+              <TextView 
+                  android:id="@+id/Complete_ErrorsCount"
+                  style="@style/Interview_Complete_Screen_Statistics_Errors_Counter"
+                  local:MvxBind="Text ErrorsCount" />
+              <TextView
+                  android:id="@+id/Complete_ErrorsCountLabel"
+                  style="@style/Interview_Complete_Screen_Statistics_Errors_Label" 
+                  local:MvxBind="Text Localization('Interview_Complete_Errors')" />
             </LinearLayout>
             <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(ErrorsCount)">
               <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
@@ -66,13 +85,14 @@
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical" local:MvxBind="Visibility Visibility(ErrorsCount)">
       <LinearLayout style="@style/Interview_Question_Header">
         <TextView
+            android:id="@+id/Complete_EntitiesWithErrorsDescription"
             style="@style/Interview_Complete_Screen_Text"
             local:MvxBind="Text EntitiesWithErrorsDescription" />
       </LinearLayout>
       <MvxLinearLayout style="@style/Interview_Question_Header"
-  android:orientation="vertical"
-  local:MvxBind="ItemsSource EntitiesWithErrors;"
-  local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
+            android:orientation="vertical"
+            local:MvxBind="ItemsSource EntitiesWithErrors;"
+            local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
     </LinearLayout>
 
     <View style="@style/Interview_Entity_Divider" />
@@ -82,6 +102,7 @@
         style="@style/Interview_Complete_Screen_Text"
         local:MvxBind="Text Localization('Interview_Complete_Note_For_Supervisor')" />
       <EditText
+        android:id="@+id/Complete_NoteToSupervisorTxt"
         android:inputType="textMultiLine"
         android:maxLines="5"
         android:scrollbars="vertical"
@@ -97,11 +118,12 @@
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
 
       <Button
+          android:id="@+id/Complete_CompleteBtn"
           style="@style/Interview_Complete_Screen_Button"
           local:MvxBind="HideKeyboardOnClick .; 
-        Click CompleteInterviewCommand; 
-        Text Localization('Interview_Complete_Button'); 
-        ButtonGroupStyle InterviewState; "/>
+                         Click CompleteInterviewCommand; 
+                         Text Localization('Interview_Complete_Button'); 
+                         ButtonGroupStyle InterviewState; "/>
 
       <TextView
         style="@style/Interview_Complete_Screen_Text"
