@@ -52,8 +52,20 @@
                             <div class="form-group">
                                 @Html.AntiForgeryToken()
                             </div>
-                             if (!CoreSettings.IsDevelopmentEnvironment)
-                             {
+                            if (Model.UseCaptcha)
+                            {
+
+                                if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
+                                {
+                                    <div class="form-group has-error">
+                                        <p>
+                                            <span class="help-block">
+                                                @Html.ValidationMessage("InvalidCaptcha")
+                                            </span>
+                                        </p>
+                                    </div>
+                                }
+
                                  <div class="form-group">
                                      @Html.Recaptcha()
                                  </div>
