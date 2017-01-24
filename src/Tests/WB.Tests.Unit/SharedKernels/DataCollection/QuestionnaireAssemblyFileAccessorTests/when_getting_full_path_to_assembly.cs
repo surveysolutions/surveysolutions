@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using It = Machine.Specifications.It;
 
@@ -15,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
             questionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, version);
+        Because of = () => questionnaireAssemblyFileAccessor.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, version);
 
         It should_combine_path_called = () =>
             FileSystemAccessorMock.Verify(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.Is<string>(name => name.Contains(questionnaireId.ToString()))), Times.Once);
