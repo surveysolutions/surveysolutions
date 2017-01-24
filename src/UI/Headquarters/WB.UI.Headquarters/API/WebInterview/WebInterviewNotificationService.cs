@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -34,19 +35,36 @@ namespace WB.UI.Headquarters.API.WebInterview
                     continue;
                 };
 
-                webInterviewHubContext.Clients.Group(questionsGroupedByParent.Key).refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()));
+                var clients = webInterviewHubContext.Clients;
+                var group = clients.Group(questionsGroupedByParent.Key);
+
+                group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
             }
         }
 
-        private static string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
+        private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
             var questionToRefresh = interview.GetQuestion(identity);
-            if (questionToRefresh == null) return null;
+            if (questionToRefresh != null)
+            {
+                return BuildClientGroupIdentityKey(interview, questionToRefresh.Parent, questionToRefresh.IsPrefilled);
+            }
 
-            var sectionKey = questionToRefresh.IsPrefilled
-                ? string.Empty
-                : questionToRefresh.Parent.Identity.ToString();
-            
+            var staticText = interview.GetStaticText(identity);
+            if (staticText != null)
+            {
+                return BuildClientGroupIdentityKey(interview, staticText.Parent, false);
+            }
+
+            return null;
+        }
+
+        private string BuildClientGroupIdentityKey(IStatefulInterview interview, IInterviewTreeNode parent, bool isPrefilled)
+        {
+            var sectionKey = isPrefilled
+              ? string.Empty
+              : parent.Identity.ToString();
+
             return WebInterview.GetConnectedClientSectionKey(sectionKey, interview.Id.FormatGuid());
         }
     }
