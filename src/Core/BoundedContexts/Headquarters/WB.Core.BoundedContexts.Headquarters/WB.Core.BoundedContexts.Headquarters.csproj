@@ -273,6 +273,7 @@
     <Compile Include="Implementation\Repositories\TranslationStorage.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
+    <Compile Include="Implementation\Services\AssemblyService.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Implementation\Services\FileNameService.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
+    <Compile Include="Mappings\AssemblyInfoMap.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
@@ -382,6 +384,7 @@
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
+    <Compile Include="Services\IAssemblyService.cs" />
     <Compile Include="Services\IAttachmentContentService.cs" />
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
@@ -544,6 +547,7 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\AssemblyInfo.cs" />
     <Compile Include="Views\Questionnaire\AttachmentContent.cs" />
     <Compile Include="Views\Questionnaire\AttachmentInfoView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
