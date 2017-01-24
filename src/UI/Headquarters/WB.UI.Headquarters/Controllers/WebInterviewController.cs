@@ -43,7 +43,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Start(string id)
         {
-            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(QuestionnaireIdentity.Parse(id));
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            if (!this.configProvider.Get(questionnaireIdentity).Started)
+            {
+                return this.HttpNotFound();
+            }
+
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
             var model = new StartWebInterview();
             model.QuestionnaireTitle = questionnaireBrowseItem.Title;
@@ -56,13 +62,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> StartPost(string id)
         {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            if (!this.configProvider.Get(questionnaireIdentity).Started)
+            {
+                return this.HttpNotFound();
+            }
+
             if (!CoreSettings.IsDevelopmentEnvironment)
             {
                 var helper = this.GetRecaptchaVerificationHelper();
                 var verifyResult = await helper.VerifyRecaptchaResponseTaskAsync();
                 if (verifyResult != RecaptchaVerificationResult.Success)
                 {
-                    var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(QuestionnaireIdentity.Parse(id));
+                    var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
                     var model = new StartWebInterview();
                     model.QuestionnaireTitle = questionnaireBrowseItem.Title;
@@ -71,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
             }
 
-            string interviewId = CreateInterview(QuestionnaireIdentity.Parse(id));
+            string interviewId = CreateInterview(questionnaireIdentity);
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
         }
 
