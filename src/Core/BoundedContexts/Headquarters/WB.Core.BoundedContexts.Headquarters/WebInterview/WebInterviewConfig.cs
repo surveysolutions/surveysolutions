@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Started { get; set; }
         public Guid ResponsibleId { get; set; }
+        public bool UseCaptcha { get; set; }
     }
 }

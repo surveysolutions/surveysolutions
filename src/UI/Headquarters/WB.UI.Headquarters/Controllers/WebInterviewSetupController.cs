@@ -47,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
+            model.UseCaptcha = true;
 
             return View(model);
         }
@@ -69,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             if (model.ResponsibleId.HasValue)
             {
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-                this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value);
+                this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value, model.UseCaptcha);
                 return RedirectToAction("Started", new {id = questionnaireIdentity});
             }
 

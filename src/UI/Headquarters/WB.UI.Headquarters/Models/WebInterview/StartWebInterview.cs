@@ -8,5 +8,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class StartWebInterview
     {
         public string QuestionnaireTitle { get; set; }
+        public bool UseCaptcha { get; set; }
     }
 }

@@ -169,6 +169,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fill in captcha.
+        /// </summary>
+        public static string PleaseFillCaptcha {
+            get {
+                return ResourceManager.GetString("PleaseFillCaptcha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start interview.
         /// </summary>
         public static string Start {

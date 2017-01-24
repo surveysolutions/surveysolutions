@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -44,15 +45,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Start(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            if (!this.configProvider.Get(questionnaireIdentity).Started)
+            var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
+            if (!webInterviewConfig.Started)
             {
                 return this.HttpNotFound();
             }
 
-            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-
-            var model = new StartWebInterview();
-            model.QuestionnaireTitle = questionnaireBrowseItem.Title;
+            var model = this.GetModel(questionnaireIdentity, webInterviewConfig);
 
             return this.View(model);
         }
@@ -63,28 +62,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public async Task<ActionResult> StartPost(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            if (!this.configProvider.Get(questionnaireIdentity).Started)
+            var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
+            if (!webInterviewConfig.Started)
             {
                 return this.HttpNotFound();
             }
 
-            if (!CoreSettings.IsDevelopmentEnvironment)
+            if (webInterviewConfig.UseCaptcha)
             {
                 var helper = this.GetRecaptchaVerificationHelper();
                 var verifyResult = await helper.VerifyRecaptchaResponseTaskAsync();
                 if (verifyResult != RecaptchaVerificationResult.Success)
                 {
-                    var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-
-                    var model = new StartWebInterview();
-                    model.QuestionnaireTitle = questionnaireBrowseItem.Title;
-
+                    var model = this.GetModel(questionnaireIdentity, webInterviewConfig);
+                    this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
                     return this.View(model);
                 }
             }
 
-            string interviewId = CreateInterview(questionnaireIdentity);
+            string interviewId = this.CreateInterview(questionnaireIdentity);
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
+        }
+
+        private StartWebInterview GetModel(QuestionnaireIdentity questionnaireIdentity, WebInterviewConfig webInterviewConfig)
+        {
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+
+            var model = new StartWebInterview();
+            model.QuestionnaireTitle = questionnaireBrowseItem.Title;
+            model.UseCaptcha = webInterviewConfig.UseCaptcha;
+            return model;
         }
 
         public ActionResult Index(string id)
