@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>You have already imported other questionnaire with title '{0}' from Designer. If you still want to import this particular one, please rename it using Designer.</value>
+  </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Only responsible supervisor can answer on supervisor's questions</value>
   </data>
