@@ -31,7 +31,6 @@ declare enum GroupStatus {
 
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
-    createInterview(questionnaireId: string): string
 
     getPrefilledEntities(): IInterviewEntityWithType[]
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
