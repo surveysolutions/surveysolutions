@@ -73,6 +73,14 @@
             @Html.AntiForgeryToken()
             
             <input name="@Html.NameFor(x => x.ResponsibleId)" type="hidden" data-bind="value: selectedResponsibleId">
+            
+            <div class="checkbox info-block">
+                @Html.CheckBoxFor(x => x.UseCaptcha, new {@class= "checkbox-filter", id="useCaptcha" }) 
+                <label for="useCaptcha">
+                    <span class="tick"></span>
+                    @WebInterviewSetup.UseCaptcha
+                </label>
+            </div>
 
             <div class="form-group">
                 <label class="control-label">@WebInterviewSetup.SelectInterviwer</label>

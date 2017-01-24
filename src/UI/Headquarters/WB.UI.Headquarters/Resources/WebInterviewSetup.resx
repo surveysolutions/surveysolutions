@@ -150,4 +150,7 @@
   <data name="WebLinkTitle" xml:space="preserve">
     <value>Use this link to start interview</value>
   </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Enable spam protection</value>
+  </data>
 </root>
