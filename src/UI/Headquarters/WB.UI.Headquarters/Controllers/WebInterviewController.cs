@@ -1,30 +1,102 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Ajax.Utilities;
+using Recaptcha.Web;
+using Recaptcha.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.WebInterview;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
+    [WebInterviewEnabled]
     public class WebInterviewController : BaseController
     {
-        public WebInterviewController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
+        private readonly ICommandService commandService;
+        private readonly IWebInterviewConfigProvider configProvider;
+        private readonly IUserViewFactory usersRepository;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+
+        public WebInterviewController(ICommandService commandService, 
+            IWebInterviewConfigProvider configProvider,
+            IGlobalInfoProvider globalInfo, 
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
         {
-
+            this.commandService = commandService;
+            this.configProvider = configProvider;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.usersRepository = usersRepository;
         }
 
-        [ValidateInput(false)]
-        public ActionResult Index()
+        public ActionResult Start(string id)
         {
-            if (!LegacyOptions.WebInterviewEnabled) return this.HttpNotFound();
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(QuestionnaireIdentity.Parse(id));
 
+            var model = new StartWebInterview();
+            model.QuestionnaireTitle = questionnaireBrowseItem.Title;
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [ActionName("Start")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> StartPost(string id)
+        {
+            if (!CoreSettings.IsDevelopmentEnvironment)
+            {
+                var helper = this.GetRecaptchaVerificationHelper();
+                var verifyResult = await helper.VerifyRecaptchaResponseTaskAsync();
+                if (verifyResult != RecaptchaVerificationResult.Success)
+                {
+                    var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(QuestionnaireIdentity.Parse(id));
+
+                    var model = new StartWebInterview();
+                    model.QuestionnaireTitle = questionnaireBrowseItem.Title;
+
+                    return this.View(model);
+                }
+            }
+
+            string interviewId = CreateInterview(QuestionnaireIdentity.Parse(id));
+            return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
+        }
+
+        public ActionResult Index(string id)
+        {
             return this.View();
+        }
+
+        private string CreateInterview(QuestionnaireIdentity questionnaireId)
+        {
+            var webInterviewConfig = this.configProvider.Get(questionnaireId);
+            if (!webInterviewConfig.Started)
+            {
+                throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
+            }
+            var responsibleId = webInterviewConfig.ResponsibleId;
+            var interviewer = this.usersRepository.Load(new UserViewInputModel(publicKey: responsibleId));
+
+            var interviewId = Guid.NewGuid();
+            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
+                interviewer.PublicKey, questionnaireId, DateTime.UtcNow,
+                interviewer.Supervisor.Id);
+
+            this.commandService.Execute(createInterviewOnClientCommand);
+            return interviewId.FormatGuid();
         }
 
         protected override void OnException(ExceptionContext filterContext)

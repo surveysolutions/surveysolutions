@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void FillExceptionData(Dictionary<string, string> data)
         {
             var interviewId = CallerInterviewId;
-            if (interviewId != null) data["caller.interviewId"] = interviewId;            
+            if (interviewId != null) data["caller.interviewId"] = interviewId;
         }
     }
 }

@@ -149,5 +149,50 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Interview_Group_Subgroups_Zero", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
+        /// </summary>
+        public static string InvitationSmallText {
+            get {
+                return ResourceManager.GetString("InvitationSmallText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have been invited to take part in the following survey: {0}.
+        /// </summary>
+        public static string InvitationText {
+            get {
+                return ResourceManager.GetString("InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start interview.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Survey.
+        /// </summary>
+        public static string StartPageTitle {
+            get {
+                return ResourceManager.GetString("StartPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hellow and Welcome to the Survey Solutions Web Survey.
+        /// </summary>
+        public static string WelcomeText {
+            get {
+                return ResourceManager.GetString("WelcomeText", resourceCulture);
+            }
+        }
     }
 }
