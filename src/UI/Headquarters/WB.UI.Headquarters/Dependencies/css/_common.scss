@@ -29,6 +29,7 @@ html {
   position: relative;
   min-height: 100%;
 	body {
+		color: $gray_text; 
 		min-width: 400px;
 		margin-bottom: 100px;
 		font-family: Arial, sans-serif;
@@ -36,7 +37,6 @@ html {
 		line-height: 18px;
 		@include gradient-horizontal($gray_form, $gray_form);
 		background-repeat: repeat-y;
-/* 		@include gradient($gray_form, $gray_form, null, null); */
 		background-size: 12px 100%;
 		padding-top: 70px;
 		.footer {
