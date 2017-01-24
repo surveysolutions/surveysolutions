@@ -56,7 +56,7 @@ export default {
     refreshEntities({state, dispatch}, questions: string[]) {
         let needSectionUpdate = false
 
-        _.each(questions, id => {
+        questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 needSectionUpdate = true
 
