@@ -18,12 +18,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
             this.fileSystemAccessor = fileSystemAccessor;
             this.assemblyStorageDirectory = assemblyStorageDirectory;
         }
-
-        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
-        {
-            return this.GetFullPathToAssembly(questionnaireId);
-        }
-
+        
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
         {
             throw new NotImplementedException();
@@ -91,7 +86,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            var assemblyPath = this.GetFullPathToAssembly(questionnaireId);
+            var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
             if (!this.fileSystemAccessor.IsFileExists(assemblyPath))
                 return null;
 
@@ -103,7 +98,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
             return String.Format("dir-{0}", questionnaireId);
         }
 
-        private string GetFullPathToAssembly(Guid questionnaireId)
+        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             var folderName = this.GetFolderNameForTemplate(questionnaireId);
             var assemblySearchPath = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);

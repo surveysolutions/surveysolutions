@@ -15,13 +15,11 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
+namespace WB.UI.Headquarters.API.Interviewer
 {
     public class QuestionnairesControllerBase : ApiController
     {
@@ -119,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StreamContent(File.OpenRead(this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(id, version)))
+                Content = new StreamContent(File.OpenRead(this.questionnareAssemblyFileAccessor.CheckAndGetFullPathToAssemblyOrEmpty(id, version)))
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");

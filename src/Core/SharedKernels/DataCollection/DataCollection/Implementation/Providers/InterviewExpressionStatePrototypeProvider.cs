@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         public ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
-            string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+            string assemblyFile = this.questionnaireAssemblyFileAccessor.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
 
             if (!fileSystemAccessor.IsFileExists(assemblyFile))
             {
