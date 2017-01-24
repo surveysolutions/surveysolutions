@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -21,8 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public void Validate(Questionnaire aggregate, ImportFromDesigner command)
         {
             if (this.DoesOtherQuestionnaireWithSameTitleExist(command.QuestionnaireId, command.Source.Title))
-                throw new QuestionnaireException(
-                    $"You have already imported other questionnaire with title '{command.Source.Title}' from Designer. If you still want to import this particular one, please rename it using Designer.");
+                throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireNameUniqueFormat,
+                    command.Source.Title));
         }
 
         private bool DoesOtherQuestionnaireWithSameTitleExist(Guid questionnaireId, string questionnaireTitle)

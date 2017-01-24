@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             this.eventRegistry.Unsubscribe(this);
 
-            foreach (var rosterInstance in this.RosterInstances)
+            foreach (var rosterInstance in this.RosterInstances.ToList())
             {
                 rosterInstance.DisposeIfDisposable();
             }
