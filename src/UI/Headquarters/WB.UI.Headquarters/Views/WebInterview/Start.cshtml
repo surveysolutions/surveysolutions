@@ -1,0 +1,81 @@
+﻿@using WB.UI.Shared.Web.Extensions
+@using Recaptcha.Web.Mvc;
+@using WB.UI.Headquarters.Code
+@using WB.UI.Shared.Web.Settings
+@model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
+
+    <!-- cssLibs:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
+    <!-- endinject -->
+    <!-- cssApp:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- endinject -->
+
+    <title>@WebInterview.StartPageTitle</title>
+</head>
+<body>
+    <main>
+        <div class="container-fluid">
+            <div class="row two-columns-form">
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" />
+                            <div class="default-logo"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 right-column">
+                    <div class="centered-box-table">
+                        <h1>
+                            @WebInterview.WelcomeText
+                        </h1>
+                        <h3>
+                            @string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle)
+                        </h3>
+                        <p>
+                            @WebInterview.InvitationSmallText
+                        </p>
+                        @using (Html.BeginForm())
+                        {
+                            <div class="form-group">
+                                @Html.AntiForgeryToken()
+                            </div>
+                             if (!CoreSettings.IsDevelopmentEnvironment)
+                             {
+                                 <div class="form-group">
+                                     @Html.Recaptcha()
+                                 </div>
+                             }
+                            <div class="form-actions">
+                                <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
+    <script type="text/javascript">
+        $("<img/>")
+            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+            .attr("src", $("img#placeholder").attr("src"))
+    </script>
+</body>
+</html>
