@@ -17,7 +17,7 @@ using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
-    public class WebInterviewNotificationsTest : NUnitTestSpecification
+    public class When_WebInterviewNotifications_Receive_RefreshTest : NUnitTestSpecification
     {
         private static readonly Identity GroupA = Create.Entity.Identity(101);
         private static readonly Identity GroupB = Create.Entity.Identity(202);
@@ -58,31 +58,31 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         [Test]
-        public void ShouldSendAtLeastOneNotification()
+        public void Should_send_AtLeastOne_Notification()
         {
             Assert.That(Groups.Count, Is.GreaterThan(0));
         }
 
         [Test]
-        public void ShouldSendNotificationOnChangeForPrefilledQuestionToClientWithoutSection()
+        public void should_send_NotificationOnChange_forPrefilledQuestion_ToClient_WithoutSection()
         {
             AssertThatRefreshEntitiesCalledForQuestions(null, PrefilledQuestion);
         }
 
         [Test]
-        public void ShouldSendNotificationOnChangeQuestionsInGroupB()
+        public void Should_Send_NotificationOnChange_Questions_InGroupB()
         {
             AssertThatRefreshEntitiesCalledForQuestions(GroupB, Question1, Question2);
         }
 
         [Test]
-        public void ShouldSendNotificationOnChangeForStaticTextInGroupA()
+        public void Should_Send_Notification_OnChangeForStaticText_InGroupA()
         {
             AssertThatRefreshEntitiesCalledForQuestions(GroupA, StaticText);
         }
 
         [Test]
-        public void ShouldSendSendInterviewWideNotificationToRefreshSectionForUnexpectedQuestions()
+        public void Should_Send_SendInterviewWideNotification_ToRefreshSection_ForUnexpectedQuestions()
         {
             var mock = Groups[this.interview.Id.FormatGuid()];
             mock.Verify(g => g.refreshSection(), Times.AtLeastOnce);
