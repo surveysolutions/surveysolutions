@@ -254,6 +254,7 @@
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\BasePrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
+    <Compile Include="ViewModels\VibrationViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
     <Compile Include="Views\AttachmentContentData.cs" />
     <Compile Include="Views\AttachmentContentMetadata.cs" />
