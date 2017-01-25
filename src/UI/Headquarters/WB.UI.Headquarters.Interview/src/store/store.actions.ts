@@ -40,9 +40,9 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerTextQuestion(identity, text))
     },
-    answerMutliOptionQuestion({ dispatch }, { answer, questionId }) {
+    answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
         dispatch("fetch", { id: questionId })
-        apiCaller(api => api.answerMutliOptionQuestion(answer, questionId))
+        apiCaller(api => api.answerMultiOptionQuestion(answer, questionId))
     },
     answerIntegerQuestion({ dispatch }, { identity, answer }) {
         dispatch("fetch", { id: identity })
