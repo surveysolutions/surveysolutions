@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web interview stopped.
+        /// </summary>
+        public static string Stopped {
+            get {
+                return ResourceManager.GetString("Stopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hellow and Welcome to the Survey Solutions Web Survey.
         /// </summary>
         public static string WelcomeText {
