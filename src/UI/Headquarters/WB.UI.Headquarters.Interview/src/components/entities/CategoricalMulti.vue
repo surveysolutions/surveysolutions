@@ -29,7 +29,7 @@
                 set(value) {
                     if (!this.$me.isRosterSize)
                     {
-                        this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
                         return;
                     }
 
@@ -39,7 +39,7 @@
 
                     if (!isNeedRemoveRosters)
                     {
-                        this.$store.dispatch('answerMutliOptionQuestion', { answer: value, questionId: this.$me.id });
+                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, questionId: this.$me.id });
                         return;
                     }
 
@@ -47,7 +47,7 @@
 
                     modal.methods.confirm(confirmMessage,  result => {
                         if (result) {
-                            this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+                            this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
                             return;
                         } else {
                             this.fetch()

@@ -39,7 +39,7 @@ declare interface IWebInterviewApi {
     getBreadcrumbs(): IBreadcrumpInfo
 
     answerSingleOptionQuestion(answer: number, questionId: string)
-    answerMutliOptionQuestion(answer: number, questionId: string)
+    answerMultiOptionQuestion(answer: number, questionId: string)
     answerTextQuestion(questionIdentity: string, text: string): void
     answerIntegerQuestion(questionIdentity: string, answer: number): void
     answerDoubleQuestion(questionIdentity: string, answer: number): void
