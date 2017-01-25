@@ -595,4 +595,7 @@
   <data name="InstallationInstruction" xml:space="preserve">
     <value>Инструкции установки</value>
   </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>интервьювер(ов) выбрано</value>
+  </data>
 </root>

@@ -263,7 +263,7 @@
                     pagingType: "full_numbers",
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
-                    "order": [[1, 'desc']],
+                    "order": [[1, 'asc']],
                     conditionalPaging: true
                 });
 
@@ -422,9 +422,9 @@
                 {
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
                         <div class="panel-body">
-                            <input class="double-checkbox-white" id="q1az" type="checkbox" checked>
+                            <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
                             <label for="q1az">
-                                <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' interview(s) selected'"></span> 
+                                <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' @Pages.Interviewers_Selected'"></span> 
                             </label>
                             <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
                             <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
