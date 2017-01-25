@@ -29,6 +29,7 @@ html {
   position: relative;
   min-height: 100%;
 	body {
+		color: $gray_text; 
 		min-width: 400px;
 		margin-bottom: 100px;
 		font-family: Arial, sans-serif;
@@ -36,7 +37,6 @@ html {
 		line-height: 18px;
 		@include gradient-horizontal($gray_form, $gray_form);
 		background-repeat: repeat-y;
-/* 		@include gradient($gray_form, $gray_form, null, null); */
 		background-size: 12px 100%;
 		padding-top: 70px;
 		.footer {
@@ -123,9 +123,7 @@ h5{
   	& > li:after{
   		content: "/ ";
 	    padding: 0 5px;
-	    color: #ccc;
-	    line-height: 75%;
-	    font-size: 75%;
+	    @extend %gray-uppercase;
   	}
     li a{
         @extend %gray-uppercase;
@@ -388,8 +386,11 @@ table{
 	} 
 }
 @media (max-width: $screen-md-min){
-	.main-information .page-header div{
-		padding-right: 255px;
+	.main-information {
+		padding-right: 20px;
+		.page-header div{
+			padding-right: 255px;
+		}
 	}
 }
 @media (max-width: $screen-sm-min){
