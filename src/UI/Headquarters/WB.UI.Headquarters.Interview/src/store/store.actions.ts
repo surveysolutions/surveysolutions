@@ -6,7 +6,7 @@ import router from "./../router"
 
 let fetchEntityQueue: string[] = []
 
-async function fetchEntities({commit, dispatch}) {
+async function fetchEntities({ commit, dispatch }) {
     const ids = fetchEntityQueue
     fetchEntityQueue = []
     const details = await apiCaller(api => api.getEntitiesDetails(ids))
@@ -32,28 +32,28 @@ export default {
         }
     },
 
-    answerSingleOptionQuestion(ctx, answerInfo) {
-        ctx.dispatch("fetch", { id: answerInfo.questionId })
+    answerSingleOptionQuestion({ dispatch }, answerInfo) {
+        dispatch("fetch", { id: answerInfo.questionId })
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    answerTextQuestion(ctx, { identity, text }) {
-        ctx.dispatch("fetch", { id: identity })
+    answerTextQuestion({ dispatch }, { identity, text }) {
+        dispatch("fetch", { id: identity })
         apiCaller(api => api.answerTextQuestion(identity, text))
     },
-    answerMutliOptionQuestion(ctx, { answer, questionId }) {
-        ctx.dispatch("fetch", { id: questionId })
+    answerMutliOptionQuestion({ dispatch }, { answer, questionId }) {
+        dispatch("fetch", { id: questionId })
         apiCaller(api => api.answerMutliOptionQuestion(answer, questionId))
     },
-    answerIntegerQuestion(ctx, { identity, answer }) {
-        ctx.dispatch("fetch", { id: identity })
+    answerIntegerQuestion({ dispatch }, { identity, answer }) {
+        dispatch("fetch", { id: identity })
         apiCaller(api => api.answerIntegerQuestion(identity, answer))
     },
-    answerDoubleQuestion(ctx, { identity, answer }) {
-        ctx.dispatch("fetch", { id: identity })
+    answerDoubleQuestion({ dispatch }, { identity, answer }) {
+        dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
-    removeAnswer(ctx, questionId: string) {
-        ctx.dispatch("fetch", { id: questionId })
+    removeAnswer({ dispatch }, questionId: string) {
+        dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))
     },
     setAnswerAsNotSaved({ commit }, entity) {
@@ -67,7 +67,7 @@ export default {
             : await apiCaller(api => api.getSectionEntities(id))
 
         commit("SET_SECTION_DATA", section)
-    }, 200, { leading: false, trailing: true }),
+    }, 200),
 
     // called by server side. refresh
     refreshEntities({state, dispatch}, questions: string[]) {
@@ -91,7 +91,7 @@ export default {
     refreshSectionState: _.debounce(({ dispatch }) => {
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-    }, 50, { leading: false, trailing: true }),
+    }, 50),
 
     fetchBreadcrumbs: _.debounce(async ({ commit }) => {
         const crumps = await apiCaller(api => api.getBreadcrumbs())
@@ -100,5 +100,5 @@ export default {
 
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
-    },
+    }
 }

@@ -3,12 +3,11 @@ import * as Vue from "vue"
 import * as Vuex from "vuex"
 
 export default {
-    SET_ENTITY_DETAILS(state, entity: IInterviewEntity) {
-        Vue.set(state.entityDetails, entity.id, entity)
-    },
     SET_ENTITIES_DETAILS(state, entities: IInterviewEntity[]) {
         _.forEach(entities, entity => {
-            Vue.set(state.entityDetails, entity.id, entity)
+            if (entity != null) {
+                Vue.set(state.entityDetails, entity.id, entity)
+            }
         })
     },
     SET_SECTION_DATA(state, sectionData: IInterviewEntityWithType[]) {
