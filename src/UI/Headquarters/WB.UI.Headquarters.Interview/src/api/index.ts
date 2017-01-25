@@ -48,11 +48,15 @@ async function hubStarter() {
         $.connection.hub.url = signalrUrlOverride
     }
 
+    $.connection.hub.qs = queryString
+
     // { transport: supportedTransports }
     await wrap($.signalR.hub.start())
+    // await wrap($.signalR.hub.start( { transport: "longPolling" }))
 }
 
 let connected = false
+export const queryString = {}
 
 export async function getInstance() {
     await scriptIncludedPromise
