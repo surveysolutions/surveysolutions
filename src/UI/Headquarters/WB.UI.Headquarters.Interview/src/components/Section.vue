@@ -7,7 +7,6 @@
 
 <script lang="ts">
     import * as Vue from 'vue'
-    import Breadcrumbs from "./Breadcrumbs"
     import * as debounce from "lodash/debounce"
 
     export default {
@@ -35,9 +34,6 @@
                     this.$store.dispatch("scroll")
                 }, 300)
             }
-        },
-        components: {
-            Breadcrumbs
         },
         computed: {
             entities() {
