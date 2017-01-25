@@ -9,34 +9,48 @@ export default {
         const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
-    fetchEntity(ctx, { id }) {
-        fetchAware(ctx, "entity", id, async () => {
+
+    async fetchEntity({commit, dispatch}, { id }) {
+        dispatch("fetch", { id, fetch: true })
+        try {
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
 
             if (entityDetails == null) {
                 return
             }
 
-            ctx.commit("SET_ENTITY_DETAILS", entityDetails)
-        })
+            commit("SET_ENTITY_DETAILS", entityDetails)
+        } finally {
+            dispatch("fetch", { id, fetch: false })
+        }
+    },
+
+    fetch({ commit }, state) {
+        commit("SET_FETCH", state)
     },
 
     answerSingleOptionQuestion(ctx, answerInfo) {
+        ctx.dispatch("fetch", { id: answerInfo.questionId, fetch: true })
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
     answerTextQuestion(ctx, entity) {
+        ctx.dispatch("fetch", { id: entity.identity, fetch: true })
         apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
     },
     answerMutliOptionQuestion(ctx, answerInfo) {
+        ctx.dispatch("fetch", { id: answerInfo.questionI, fetch: true })
         apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    answerIntegerQuestion(ctx, entity) {
-        apiCaller(api => api.answerIntegerQuestion(entity.identity, entity.answer))
+    answerIntegerQuestion(ctx, {identity, answer}) {
+        ctx.dispatch("fetch", { id: identity, fetch: true })
+        apiCaller(api => api.answerIntegerQuestion(identity, answer))
     },
-    answerDoubleQuestion(ctx, entity) {
-        apiCaller(api => api.answerDoubleQuestion(entity.identity, entity.answer))
+    answerDoubleQuestion(ctx, {identity, answer}) {
+        ctx.dispatch("fetch", { id: identity, fetch: true })
+        apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
     removeAnswer(ctx, questionId: string) {
+        ctx.dispatch("fetch", { id: questionId, fetch: true })
         apiCaller(api => api.removeAnswer(questionId))
     },
     setAnswerAsNotSaved({commit}, entity) {
@@ -83,5 +97,5 @@ export default {
 
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
-    }
+    },
 }

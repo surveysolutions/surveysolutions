@@ -55,7 +55,7 @@ function handleErrors(object, section) {
     return object
 }
 
-export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations", "getters"]) {
+export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
 
     for (let field in fieldToSafe) {
         let item = fieldToSafe[field]
