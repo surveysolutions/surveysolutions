@@ -7,20 +7,12 @@ import fetch from "./store.fetch"
 import mutations from "./store.mutations"
 
 const store = new Vuex.Store(safeStore({
-    modules: {
-        fetch: safeStore(fetch)
-    },
+    modules: { fetch },
     state: {
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
             breadcrumbs: []
-        },
-        fetch: {
-            progress: {}
-        },
-        interview: {
-            questionnaire: null
         }
     },
     actions,

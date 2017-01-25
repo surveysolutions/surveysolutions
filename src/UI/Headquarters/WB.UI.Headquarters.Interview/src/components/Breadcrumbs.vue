@@ -34,7 +34,7 @@
         methods: {
             navigate(breadcrumb) {
                 if (breadcrumb.scrollTo) {
-                    this.$store.dispatch("fetch/sectionRequireScroll", { id: breadcrumb.scrollTo })
+                    this.$store.dispatch("sectionRequireScroll", { id: breadcrumb.scrollTo })
                 }
 
                 this.$router.push({

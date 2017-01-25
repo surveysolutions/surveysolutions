@@ -17,18 +17,17 @@ const router = new VueRouter({
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
-            // handling history back event, setting scroll requirement for `from` sectionId
-            store.dispatch("fetch/sectionRequireScroll", { id: (from.params as any).sectionId })
-        } else if (!(store.state as any).fetch.scroll) {
-            store.dispatch("fetch/sectionRequireScroll", { top: 0 })
+            store.dispatch("sectionRequireScroll", { id: (from.params as any).sectionId })
         }
     }
 })
 
 router.afterEach((to, from) => {
+    // tslint:disable-next-line:no-string-literal
     queryString["interviewId"] = to.params["interviewId"]
 
     hubProxy().then((proxy) => {
+        // tslint:disable-next-line:no-string-literal
         proxy.state.sectionId = to.params["sectionId"]
     })
 })
