@@ -22,7 +22,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
 
         // $.connection.hub.logging = true
         // tslint:disable-next-line:no-empty
-        $.connection.hub.error((error) => {})
+        $.connection.hub.error((error) => { })
 
         const interviewProxy = $.connection.interview
 
@@ -30,7 +30,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             store.dispatch("refreshEntities", questions)
         }
 
-        interviewProxy.client.refreshSection = ()  => {
+        interviewProxy.client.refreshSection = () => {
             store.dispatch("fetchSectionEntities")          // fetching entities in section
             store.dispatch("refreshSectionState")   // fetching breadcrumbs/sidebar/buttons
         }
@@ -52,7 +52,7 @@ async function hubStarter() {
 
     // { transport: supportedTransports }
     await wrap($.signalR.hub.start())
-    // await wrap($.signalR.hub.start( { transport: "longPolling" }))
+    // await wrap($.signalR.hub.start({ transport: "longPolling" }))
 }
 
 let connected = false
@@ -79,9 +79,13 @@ export async function apiCaller<T>(action: IServerHubCallback<T>, reportProgress
     // wrap will wrap jq promise into awaitable promise
     const hub = await getInterviewHub()
 
+    store.dispatch("fetchProgress", 1)
+
     try {
         return await wrap(action(hub))
     } catch (err) {
         store.dispatch("UNHANDLED_ERROR", err)
+    } finally {
+        store.dispatch("fetchProgress", -1)
     }
 }

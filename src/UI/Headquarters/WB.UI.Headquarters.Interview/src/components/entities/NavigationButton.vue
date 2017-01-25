@@ -41,7 +41,7 @@
         methods: {
             navigate() {
                 if (this.isParentButton) {
-                    this.$store.dispatch("fetch/sectionRequireScroll", { id: this.$route.params.sectionId })
+                    this.$store.dispatch("sectionRequireScroll", { id: this.$route.params.sectionId })
                 }
                 this.$router.push(this.to)
             }

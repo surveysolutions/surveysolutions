@@ -6,6 +6,7 @@
             <slot />
             <wb-validation v-if="!noValidation"/>
         </div>
+        <wb-progress :visible="isFetchInProgress" />
     </div>
 </template>
 <script lang="ts">
@@ -20,6 +21,9 @@
             },
             hash() {
                 return getLocationHash(this.question.id)
+            },
+            isFetchInProgress() {
+                return this.question.fetching
             },
             isEnabled() {
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
