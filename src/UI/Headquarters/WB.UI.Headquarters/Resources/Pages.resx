@@ -601,4 +601,7 @@
   <data name="FilterTitle" xml:space="preserve">
     <value>Filters</value>
   </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>interviewer(s) selected</value>
+  </data>
 </root>
