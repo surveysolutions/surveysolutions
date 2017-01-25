@@ -8,6 +8,7 @@
 <script lang="ts">
     import * as Vue from 'vue'
     import Breadcrumbs from "./Breadcrumbs"
+    import * as debounce from "lodash/debounce"
 
     export default {
         name: 'section-view',
@@ -15,14 +16,35 @@
             this.loadSection()
         },
         watch: {
-            $route(from, to) {
+            $route(to, from) {
                 this.loadSection()
+            },
+            fetchProgress(to, from) {
+                if (to === 0) {
+                    this.scroll()
+                } else {
+                    // cancel scroll - there is still some fetch activity occure
+                    this.scroll.cancel()
+                }
             }
         },
-        components: { Breadcrumbs },
+        data: () => {
+            return {
+                // scrolls current section view when all fetch actions are done
+                scroll: debounce(function () {
+                    this.$store.dispatch("scroll")
+                }, 300)
+            }
+        },
+        components: {
+            Breadcrumbs
+        },
         computed: {
             entities() {
                 return this.$store.state.entities
+            },
+            fetchProgress() {
+                return this.$store.state.fetch.inProgress
             },
             info() {
                 return this.$store.state.breadcrumbs

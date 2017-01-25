@@ -1,8 +1,8 @@
 import * as _ from "lodash"
 import * as Vue from "vue"
 import { apiCaller } from "../api"
+import { getLocationHash } from "../store/store.fetch"
 import router from "./../router"
-import { fetchAware } from "./store.fetch"
 
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
@@ -10,9 +10,9 @@ export default {
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
 
-    async fetchEntity({commit, dispatch}, { id }) {
-        dispatch("fetch", { id, fetch: true })
+    async fetchEntity({ commit, dispatch }, { id }) {
         try {
+            dispatch("fetch", { id })
             const entityDetails = await apiCaller(api => api.getEntityDetails(id))
 
             if (entityDetails == null) {
@@ -21,39 +21,35 @@ export default {
 
             commit("SET_ENTITY_DETAILS", entityDetails)
         } finally {
-            dispatch("fetch", { id, fetch: false })
+            dispatch("fetch", { id, done: true })
         }
     },
 
-    fetch({ commit }, state) {
-        commit("SET_FETCH", state)
-    },
-
     answerSingleOptionQuestion(ctx, answerInfo) {
-        ctx.dispatch("fetch", { id: answerInfo.questionId, fetch: true })
+        ctx.dispatch("fetch", { id: answerInfo.questionId })
         apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
     },
-    answerTextQuestion(ctx, entity) {
-        ctx.dispatch("fetch", { id: entity.identity, fetch: true })
-        apiCaller(api => api.answerTextQuestion(entity.identity, entity.text))
+    answerTextQuestion(ctx, { identity, text }) {
+        ctx.dispatch("fetch", { id: identity })
+        apiCaller(api => api.answerTextQuestion(identity, text))
     },
-    answerMutliOptionQuestion(ctx, answerInfo) {
-        ctx.dispatch("fetch", { id: answerInfo.questionI, fetch: true })
-        apiCaller(api => api.answerMutliOptionQuestion(answerInfo.answer, answerInfo.questionId))
+    answerMutliOptionQuestion(ctx, { answer, questionId }) {
+        ctx.dispatch("fetch", { id: questionId })
+        apiCaller(api => api.answerMutliOptionQuestion(answer, questionId))
     },
-    answerIntegerQuestion(ctx, {identity, answer}) {
-        ctx.dispatch("fetch", { id: identity, fetch: true })
+    answerIntegerQuestion(ctx, { identity, answer }) {
+        ctx.dispatch("fetch", { id: identity })
         apiCaller(api => api.answerIntegerQuestion(identity, answer))
     },
-    answerDoubleQuestion(ctx, {identity, answer}) {
-        ctx.dispatch("fetch", { id: identity, fetch: true })
+    answerDoubleQuestion(ctx, { identity, answer }) {
+        ctx.dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
     removeAnswer(ctx, questionId: string) {
-        ctx.dispatch("fetch", { id: questionId, fetch: true })
+        ctx.dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))
     },
-    setAnswerAsNotSaved({commit}, entity) {
+    setAnswerAsNotSaved({ commit }, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
 
