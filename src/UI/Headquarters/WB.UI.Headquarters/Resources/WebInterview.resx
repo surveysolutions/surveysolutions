@@ -166,4 +166,7 @@
   <data name="PleaseFillCaptcha" xml:space="preserve">
     <value>Please fill in captcha</value>
   </data>
+  <data name="Stopped" xml:space="preserve">
+    <value>Web interview stopped</value>
+  </data>
 </root>

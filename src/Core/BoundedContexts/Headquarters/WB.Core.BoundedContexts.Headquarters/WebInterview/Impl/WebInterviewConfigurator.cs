@@ -30,5 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
             this.configs.Store(webInterviewConfig, questionnaireId.ToString());
         }
+
+        public void Stop(QuestionnaireIdentity questionnaireId)
+        {
+            this.configs.Remove(questionnaireId.ToString());
+        }
     }
 }
