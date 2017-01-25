@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private string BuildClientGroupIdentityKey(IStatefulInterview interview, IInterviewTreeNode parent, bool isPrefilled)
         {
             var sectionKey = isPrefilled
-              ? string.Empty
+              ? null
               : parent.Identity.ToString();
 
             return WebInterview.GetConnectedClientSectionKey(sectionKey, interview.Id.FormatGuid());
