@@ -213,6 +213,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             return SimpleGroupStatus.Completed;
         }
 
+        public InterviewEntity[] GetEntitiesDetails(string[] ids)
+        {
+            return ids.Select(GetEntityDetails).ToArray();
+        }
+
         public InterviewEntity GetEntityDetails(string id)
         {
             if (id == "NavigationButton")

@@ -4,6 +4,16 @@ import { apiCaller } from "../api"
 import { getLocationHash } from "../store/store.fetch"
 import router from "./../router"
 
+let fetchEntityQueue: string[] = []
+
+async function fetchEntities({commit, dispatch}) {
+    const ids = fetchEntityQueue
+    fetchEntityQueue = []
+    const details = await apiCaller(api => api.getEntitiesDetails(ids))
+    dispatch("fetch", { ids, done: true })
+    commit("SET_ENTITIES_DETAILS", details)
+}
+
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
         const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
@@ -11,17 +21,14 @@ export default {
     },
 
     async fetchEntity({ commit, dispatch }, { id }) {
-        try {
-            dispatch("fetch", { id })
-            const entityDetails = await apiCaller(api => api.getEntityDetails(id))
+        dispatch("fetch", { id })
 
-            if (entityDetails == null) {
-                return
-            }
+        fetchEntityQueue.push(id)
 
-            commit("SET_ENTITY_DETAILS", entityDetails)
-        } finally {
-            dispatch("fetch", { id, done: true })
+        if (fetchEntityQueue.length === 1) {
+            Vue.nextTick(() => fetchEntities({ commit, dispatch }))
+        } else if (fetchEntities.length > 100) {
+            await fetchEntities({ commit, dispatch })
         }
     },
 

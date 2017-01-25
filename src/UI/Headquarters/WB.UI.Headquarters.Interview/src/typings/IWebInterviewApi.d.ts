@@ -35,6 +35,7 @@ declare interface IWebInterviewApi {
     getPrefilledEntities(): IInterviewEntityWithType[]
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntityDetails(id: string): IInterviewEntity
+    getEntitiesDetails(ids: string[]): IInterviewEntity[]
     getBreadcrumbs(): IBreadcrumpInfo
 
     answerSingleOptionQuestion(answer: number, questionId: string)
