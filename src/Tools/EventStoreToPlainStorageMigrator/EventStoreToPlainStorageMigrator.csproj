@@ -137,13 +137,9 @@
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
-      <Project>{29a132b5-a573-40d2-9e8f-2871e95d7766}</Project>
-      <Name>WB.Core.SharedKernels.SurveyManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
-      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
-      <Name>WB.Core.Synchronization</Name>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
