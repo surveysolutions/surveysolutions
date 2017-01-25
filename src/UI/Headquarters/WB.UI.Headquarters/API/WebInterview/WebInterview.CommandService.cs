@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
-        public void AnswerMutliOptionQuestion(int[] answer, string questionId)
+        public void AnswerMultiOptionQuestion(int[] answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);
             ExecuteCommand(new AnswerMultipleOptionsQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
