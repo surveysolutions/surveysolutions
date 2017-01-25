@@ -4,7 +4,7 @@ import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
-import { getInstance as hubProxy } from "../api"
+import { getInstance as hubProxy, queryString } from "../api"
 import Section from "../components/Section"
 import store from "../store"
 
@@ -26,10 +26,9 @@ const router = new VueRouter({
 })
 
 router.afterEach((to, from) => {
+    queryString["interviewId"] = to.params["interviewId"]
+
     hubProxy().then((proxy) => {
-        // tslint:disable-next-line:no-string-literal
-        proxy.state.interviewId = to.params["interviewId"]
-        // tslint:disable-next-line:no-string-literal
         proxy.state.sectionId = to.params["sectionId"]
     })
 })
