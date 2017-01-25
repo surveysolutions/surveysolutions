@@ -23,24 +23,6 @@
     <!-- endinject -->
 
     <title>@WebInterview.StartPageTitle</title>
-    <script>
-        jQuery.fn.preventDoubleSubmission = function () {
-            $(this).on('submit', function (e) {
-                var $form = $(this);
-
-                if ($form.data('submitted') === true) {
-                    e.preventDefault();
-                } else {
-                    $form.data('submitted', true);
-                }
-            });
-
-            // Keep chainability
-            return this;
-        };
-
-        $('form').preventDoubleSubmission();
-    </script>
 </head>
 <body>
     <main>
@@ -104,8 +86,26 @@
     <!-- endinject -->
     <script type="text/javascript">
         $("<img/>")
-            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
-            .attr("src", $("img#placeholder").attr("src"))
+            .on('error', function() { $("img#placeholder").parent().addClass("no-logo"); })
+            .attr("src", $("img#placeholder").attr("src"));
+
+        $.fn.preventDoubleSubmission = function () {
+            $(this).on('submit', function (e) {
+                var $form = $(this);
+
+                if ($form.data('submitted') === true) {
+                    e.preventDefault();
+                } else {
+                    $form.data('submitted', true);
+                }
+            });
+
+            // Keep chainability
+            return this;
+        };
+        $(function () {
+            $('form').preventDoubleSubmission();
+        });
     </script>
 </body>
 </html>
