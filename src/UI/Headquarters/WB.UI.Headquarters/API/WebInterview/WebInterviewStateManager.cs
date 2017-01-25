@@ -6,7 +6,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            var interviewId = context.Hub.Clients.CallerState.interviewId as string;
+            var interviewId = context.Hub.Context.QueryString[@"interviewId"];
             var sectionId = context.Hub.Clients.CallerState.sectionId as string;
 
             if (interviewId != null)
