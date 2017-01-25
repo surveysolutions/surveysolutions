@@ -320,14 +320,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        public int CountActiveAnsweredQuestionsInInterview()
-            => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
-                    && question.IsAnswered()
-                    && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
-                    && question.IsInterviewer);
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
+            => this.Tree.FindQuestions().Where(question =>
+                !question.IsDisabled() &&
+                (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)) &&
+                question.IsInterviewer);
 
-        public int CountActiveQuestionsInInterview()
-            => this.Tree.FindQuestions().Count(question => !question.IsDisabled() && !question.IsPrefilled && question.IsInterviewer);
+        public int CountActiveAnsweredQuestionsInInterview()
+            => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
+
+        public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
