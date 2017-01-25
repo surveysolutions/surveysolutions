@@ -22,5 +22,10 @@ export default {
     },
     SET_BREADCRUMPS(state, crumps) {
         Vue.set(state, "breadcrumbs", crumps)
-    }
+    },
+    SET_FETCH(state, {id, fetch}) {
+        if (state.entityDetails[id]) {
+            Vue.set(state.entityDetails[id], "fetching", fetch)
+        }
+    },
 }
