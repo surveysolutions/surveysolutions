@@ -1066,6 +1066,7 @@
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
+    <Compile Include="API\WebInterview\WebInterviewAllowedModule.cs" />
     <Compile Include="API\WebInterview\WebInterviewNotificationService.cs" />
     <Compile Include="API\WebInterview\WebInterviewStateManager.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">

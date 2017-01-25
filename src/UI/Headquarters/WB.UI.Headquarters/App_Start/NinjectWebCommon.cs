@@ -275,6 +275,7 @@ namespace WB.UI.Headquarters
 
             pipiline.AddModule(new SignalrErrorHandler());
             pipiline.AddModule(new PlainSignalRTransactionManager());
+            pipiline.AddModule(new WebInterviewAllowedModule());
             pipiline.AddModule(new WebInterviewStateManager());
              
             kernel.Bind<IHubContext>()

@@ -23,6 +23,24 @@
     <!-- endinject -->
 
     <title>@WebInterview.StartPageTitle</title>
+    <script>
+        jQuery.fn.preventDoubleSubmission = function () {
+            $(this).on('submit', function (e) {
+                var $form = $(this);
+
+                if ($form.data('submitted') === true) {
+                    e.preventDefault();
+                } else {
+                    $form.data('submitted', true);
+                }
+            });
+
+            // Keep chainability
+            return this;
+        };
+
+        $('form').preventDoubleSubmission();
+    </script>
 </head>
 <body>
     <main>
