@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
         private void AssertThatRefreshEntitiesCalledForQuestions(Identity section = null, params Identity[] questions)
         {
-            var prefilledKey = UI.Headquarters.API.WebInterview.WebInterview.GetConnectedClientSectionKey(section?.ToString() ?? string.Empty, this.interview.Id.FormatGuid());
+            var prefilledKey = UI.Headquarters.API.WebInterview.WebInterview.GetConnectedClientSectionKey(section?.ToString(), this.interview.Id.FormatGuid());
 
             Assert.That(this.Groups, new DictionaryContainsKeyConstraint(prefilledKey));
             var groupMock = this.Groups[prefilledKey];
