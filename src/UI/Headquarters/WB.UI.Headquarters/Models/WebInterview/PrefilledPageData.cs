@@ -8,7 +8,8 @@
     }
 
     public enum ButtonType
-    {Start = 0, Next, Parent, Complete
+    {
+        Start = 0, Next, Parent, Complete
     }
 
     public class BreadcrumbInfo

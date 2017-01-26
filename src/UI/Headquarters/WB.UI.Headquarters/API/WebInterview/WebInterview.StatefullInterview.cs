@@ -341,6 +341,34 @@ namespace WB.UI.Headquarters.API.WebInterview
             return null;
         }
 
+        public SidebarPanel[] GetSidebarState()
+        {
+            var sectionId = this.CallerSectionid;
+
+            if (sectionId == null)
+            {
+                return Array.Empty<SidebarPanel>();
+            }
+
+            var interview = this.GetCallerInterview();
+            var questionarrie = this.GetCallerQuestionnaire();
+
+            var sections = questionarrie.GetAllSections();
+
+            var result = new List<SidebarPanel>();
+
+            foreach (var sec in sections.Select(s => Identity.Create(s, RosterVector.Empty)))
+            {
+                var panel = new SidebarPanel {Id = sec.ToString()};
+                panel.Title = interview.GetTitleText(sec);
+                panel.State = CalculateSimpleStatus(sec, interview);
+                //panel.
+                result.Add(panel);
+            }
+
+            return result.ToArray();
+        }
+
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
