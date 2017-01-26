@@ -56,6 +56,18 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return BuildClientGroupIdentityKey(interview, staticText.Parent, false);
             }
 
+            var roster = interview.GetRoster(identity);
+            if (roster != null)
+            {
+                return BuildClientGroupIdentityKey(interview, roster.Parent, false);
+            }
+
+            var group = interview.GetGroup(identity);
+            if (group != null)
+            {
+                return BuildClientGroupIdentityKey(interview, group.Parent, false);
+            }
+
             return null;
         }
 
