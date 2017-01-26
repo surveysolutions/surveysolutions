@@ -10,8 +10,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
             return
-                this.View(new UserBatchUploadModel()
+                this.View(new UserBatchUploadModel
                 {
                     AvaliableDataColumnNames = userPreloadingService.GetAvaliableDataColumnNames()
                 });
