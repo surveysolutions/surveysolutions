@@ -1474,6 +1474,7 @@
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
+    <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\WebInterviewEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
     <Compile Include="FilteredCamelCasePropertyNamesContractResolver.cs" />
