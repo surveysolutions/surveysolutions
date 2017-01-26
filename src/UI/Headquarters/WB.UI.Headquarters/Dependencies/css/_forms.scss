@@ -323,7 +323,7 @@ input.double-checkbox-white{
 .search{
 	min-width: 30px;
 	display: block;
-	@include absolute(-5px, null, null, 0);
+	@include absolute(0, null, null, 0);
  	background-color: #fff;
 	border: 1px solid transparent;
 	border-radius: 3px;

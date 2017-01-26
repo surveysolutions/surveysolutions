@@ -386,8 +386,11 @@ table{
 	} 
 }
 @media (max-width: $screen-md-min){
-	.main-information .page-header div{
-		padding-right: 255px;
+	.main-information {
+		padding-right: 20px;
+		.page-header div{
+			padding-right: 255px;
+		}
 	}
 }
 @media (max-width: $screen-sm-min){
