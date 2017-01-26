@@ -248,6 +248,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Synchronize(SynchronizeInterviewCommand command)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
 
             base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
                 command.UserId,
@@ -262,18 +264,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.CreatedOnClient
             );
 
-            this.SynchronizeInterview(command.UserId, command.SynchronizedInterview);
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
         }
-
-        internal void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
-        {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-        }
-
+        
         #endregion
 
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
