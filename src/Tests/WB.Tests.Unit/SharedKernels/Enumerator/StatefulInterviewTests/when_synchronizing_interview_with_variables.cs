@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 variables: new Dictionary<InterviewItemId, object>() {{ Create.Entity.InterviewItemId(variableIdentity.Id, variableIdentity.RosterVector), "test"}});
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
         It should_return_variable_set_value = () => interview.GetVariableValueByOrDeeperRosterLevel(variableIdentity.Id, variableIdentity.RosterVector).ShouldEqual("test");
 
