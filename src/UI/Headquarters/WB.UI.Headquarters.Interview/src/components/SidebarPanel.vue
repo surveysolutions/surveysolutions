@@ -2,51 +2,84 @@
     <div class="panel panel-default">
         <div class="panel-heading" role="tab">
             <h3 class="panel-title" :class="titleCss">
-                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{collapsed: collapsed}" type="button" @click="toggle"><span></span></button>
-                <router-link :to="id">{{title}}</router-link>
+                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{collapsed: isCollapsed}" type="button" @click="toggle"><span></span></button>
+                <router-link :to="to">{{panel.title}}</router-link>
             </h3>
         </div>
-        <div class="panel-collapse collapse" :class="{in: !collapsed}" role="tabpanel" v-if="hasChild">
+        <div class="panel-collapse collapse" :class="{in: !isCollapsed}" role="tabpanel" v-if="hasChild && !isCollapsed">
             <div class="panel-body">
                 <div class="panel-group" role="tablist">
-                    <sidebar-panel v-for="panel in panels"
-                        :id="panel.id"
-                        :title="panel.title"
-                        :state="panel.state"
-                        :childPanels="panel.panels"
-                        :collapsed="panel.collapsed"></sidebar-panel>
+                    <sidebar-panel v-for="childPanel in childPanels" :key="childPanel.id" :panel="childPanel" :currentPanel="currentPanel">
+                    </sidebar-panel>
+                    <sidebar-panel :panel="loading" :currentPanel="currentPanel" v-if="childPanels.length === 0"></sidebar-panel>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script lang='ts'>
-    import { GroupStatus } from "components/entities"
-
     export default {
         name: 'sidebar-panel',
         props: {
-            id: { required: true, type: String },
-            title: { required: true, type: String },
-            panels: {},
-            collapsed: { type: Boolean, default: true },
-            state: { type: Number, default: GroupStatus.Other }
+            panel: { required: true },
+            currentPanel: {}
         },
         computed: {
+            loading() {
+                return {
+                    collapsed: true,
+                    title: "...",
+                    id: this.panel.id,
+                    validity: {
+                        isValid: true
+                    }
+                }
+            },
+            to() {
+                return { name: 'section', params: { sectionId: this.panel.id } }
+            },
+            isCollapsed() {
+                return this.panel.collapsed
+            },
             hasChild() {
-                return this.panels != null && this.panels.length > 0
+                return this.panel.hasChildrens
+            },
+            childPanels() {
+                return this.panel.childs
             },
             titleCss() {
                 return [{
-                    group: !this.hasChild,
-                    'has-error': this.state == GroupStatus.Invalid,
-                    'complete': this.state == GroupStatus.Completed,
+                    active: this.currentPanel == this.panel.id,
+                    complete: this.panel.state === "Completed" && this.panel.validity.isValid,
+                    "has-error": !this.panel.validity.isValid
                 }]
             }
         },
+        watch: {
+            $route(to, from) {
+                this.update()
+            },
+            "panel"(to, from) {
+                this.update()
+            }
+        },
+        mounted() {
+            this.update()
+        },
         methods: {
+            fetchChild() {
+                this.$store.dispatch("fetchChildSidebar", this.panel.id)
+            },
+            update() {
+                if (this.panel.hasChildrens && !this.panel.collapsed && this.panel.childs.length === 0) {
+                    this.fetchChild()
+                }
+            },
             toggle() {
-                this.collapsed = !this.collapsed
+                this.$store.dispatch("toggleSidebar", {
+                    id: this.panel.id,
+                    collapsed: !this.panel.collapsed
+                })
             }
         }
     }

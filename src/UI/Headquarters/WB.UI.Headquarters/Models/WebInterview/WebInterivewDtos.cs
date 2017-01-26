@@ -89,9 +89,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class SidebarPanel
     {
         public string Id { get; set; }
+        public string ParentId { get; set; }
         public string Title { get; set;}
-        public SimpleGroupStatus State { get;set; }
-        public SidebarPanel[] Panels { get; set; }
+        public string State { get;set; }
+        public bool Collapsed { get; set; }
+        public bool HasChildrens { get; set; }
+        public SidebarPanel[] Childs { get; set; }
+        public Validity Validity { get; set; } = new Validity();
     }
 
     public enum GroupStatus

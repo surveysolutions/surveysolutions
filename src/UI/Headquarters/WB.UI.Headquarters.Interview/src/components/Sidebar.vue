@@ -1,25 +1,24 @@
 <template>
-    <aside class="content" v-if="panels.length > 0">
+    <aside class="content" v-if="sections && sections.length > 0" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
-            <SidebarPanel v-for="panel in panels"
-                :id="panel.id"
-                :title="panel.title"
-                :panels="panel.panels"
-                :state="panel.state"
-                :collapsed="panel.collapsed">
+            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
             </SidebarPanel>
         </div>
     </aside>
 </template>
 <script lang="ts">
     import SidebarPanel from "./SidebarPanel"
+    import * as Vue from "vue"
 
     export default {
         name: 'sidebar',
         components: { SidebarPanel },
         computed: {
-            panels() {
-                return this.$store.state.sidebar
+            sections() {
+                return this.$store.state.sidebar.panels
+            },
+            currentPanel() {
+                return this.$route.params.sectionId
             }
         },
         beforeMount() {
@@ -32,7 +31,9 @@
         },
         methods: {
             fetchSidebar() {
-                this.$store.dispatch("fetchSidebar")
+                if (this.currentPanel) {
+                    Vue.nextTick(() => this.$store.dispatch("fetchSidebar"))
+                }
             }
         }
     }

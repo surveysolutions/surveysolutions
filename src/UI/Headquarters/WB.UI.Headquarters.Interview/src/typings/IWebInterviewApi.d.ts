@@ -31,9 +31,11 @@ declare enum GroupStatus {
 
 declare interface ISidebarPanel {
     id: string
+    parentId: string
     title: string
     state: GroupStatus
-    panels: ISidebarPanel[]
+    collapsed: Boolean
+    hasChildren: Boolean
 }
 
 declare interface IWebInterviewApi {
@@ -45,6 +47,7 @@ declare interface IWebInterviewApi {
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
     getBreadcrumbs(): IBreadcrumpInfo
     getSidebarState(): ISidebarPanel[]
+    getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
 
     answerSingleOptionQuestion(answer: number, questionId: string)
     answerMultiOptionQuestion(answer: number, questionId: string)

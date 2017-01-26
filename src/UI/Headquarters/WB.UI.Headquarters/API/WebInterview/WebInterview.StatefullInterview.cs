@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using NHibernate.Proxy;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -43,7 +45,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
             var statefulInterview = this.GetCallerInterview();
-            
+
             var ids = statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
 
             var entities = ids
@@ -227,7 +229,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var identity = Identity.Parse(id);
             var callerInterview = this.GetCallerInterview();
-            
+
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             if (question != null)
             {
@@ -345,32 +347,39 @@ namespace WB.UI.Headquarters.API.WebInterview
             return null;
         }
 
-        public SidebarPanel[] GetSidebarState()
+        private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
         {
+            opts.AfterMap((InterviewTreeGroup g, SidebarPanel sidebarPanel) =>
+            {
+                sidebarPanel.Collapsed = !shownLookup.Contains(g.Identity);
+            });
+        }
+
+        public List<SidebarPanel> GetSidebarChildSectionsOf(string[] parentIds)
+        {
+            var interview = this.GetCallerInterview();
             var sectionId = this.CallerSectionid;
 
-            if (sectionId == null)
-            {
-                return Array.Empty<SidebarPanel>();
-            }
-
-            var interview = this.GetCallerInterview();
-            var questionarrie = this.GetCallerQuestionnaire();
-
-            var sections = questionarrie.GetAllSections();
+            var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
+            var shownPanels = currentOpenSection.Parents.Union(new[] { currentOpenSection });
+            var visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
 
             var result = new List<SidebarPanel>();
 
-            foreach (var sec in sections.Select(s => Identity.Create(s, RosterVector.Empty)))
+            foreach (var parentId in parentIds)
             {
-                var panel = new SidebarPanel {Id = sec.ToString()};
-                panel.Title = interview.GetTitleText(sec);
-                panel.State = CalculateSimpleStatus(sec, interview);
-                //panel.
-                result.Add(panel);
+                var childs = parentId == null
+                    ? interview.GetEnabledSections()
+                    : interview.GetGroup(Identity.Parse(parentId)).Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
+
+                foreach (var child in childs)
+                {
+                    var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, opts => SidebarMapOptions(opts, visibleSections));
+                    result.Add(sidebar);
+                }
             }
 
-            return result.ToArray();
+            return result;
         }
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
