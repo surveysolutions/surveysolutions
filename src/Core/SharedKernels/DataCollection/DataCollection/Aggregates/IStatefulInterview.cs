@@ -101,6 +101,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
+        IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
+
         int CountActiveAnsweredQuestionsInInterview();
 
         int CountActiveQuestionsInInterview();
