@@ -41,17 +41,17 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
         public void When_cached_aggregate_has_no_uncommitted_changes_Then_returns_cached_aggregate()
         {
             // arrange
-            var dirtyAggregate = Mock.Of<IEventSourcedAggregateRoot>(_
+            var cleanAggregate = Mock.Of<IEventSourcedAggregateRoot>(_
                 => _.HasUncommittedChanges() == false);
 
             var domainRepository = Mock.Of<IDomainRepository>();
-            Mock.Get(domainRepository).SetReturnsDefault(dirtyAggregate);
+            Mock.Get(domainRepository).SetReturnsDefault(cleanAggregate);
 
             var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithCache(repository: domainRepository);
 
             // act - get twice
-            eventSourcedRepository.GetLatest(dirtyAggregate.GetType(), Guid.Empty);
-            eventSourcedRepository.GetLatest(dirtyAggregate.GetType(), Guid.Empty);
+            eventSourcedRepository.GetLatest(cleanAggregate.GetType(), Guid.Empty);
+            eventSourcedRepository.GetLatest(cleanAggregate.GetType(), Guid.Empty);
 
             // assert - expect load once
             Mock.Get(domainRepository).Verify(
