@@ -443,7 +443,7 @@ namespace WB.Tests.Unit.TestFactories
             HashSet<InterviewItemId> invalidQuestions = null,
             Guid? interviewId = null,
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = null,
-            InterviewStatus status = InterviewStatus.SupervisorAssigned,
+            InterviewStatus status = InterviewStatus.InterviewerAssigned,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
             bool? wasCompleted = false,
             List<Identity> disabledStaticTexts = null,

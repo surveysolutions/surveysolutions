@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_synchronizing_interview_with_no_failing_validation_conditions : StatefulInterviewTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
@@ -63,9 +64,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             };
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
+
+            command = Create.Command.Synchronize(userId, synchronizationDto);
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.Synchronize(command);
 
         It should_return_empty_failed_condition_messages = () => interview.GetFailedValidationMessages(questionIdentity).Count().ShouldEqual(0);
 
@@ -73,5 +76,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         static StatefulInterview interview;
         static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
         static Identity questionIdentity;
+        private static SynchronizeInterviewCommand command;
     }
 }
