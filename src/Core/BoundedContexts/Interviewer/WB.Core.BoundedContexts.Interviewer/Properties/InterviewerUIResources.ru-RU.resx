@@ -201,7 +201,7 @@
     <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Вашей учетной записи не назначена роль интервьювера</value>
+    <value>Вашей учетной записи не назначена роль интервьюера</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>

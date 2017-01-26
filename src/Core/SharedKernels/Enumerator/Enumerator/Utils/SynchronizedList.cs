@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         // ReSharper disable once UnusedParameter.Local
         private void CheckIndex(int index)
         {
-            if (index < 0 || index >= this._items.Count)
+            if (index < 0 || index > this._items.Count)
             {
                 throw new ArgumentOutOfRangeException();
             }
