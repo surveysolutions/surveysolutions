@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.Models.WebInterview
@@ -78,6 +80,15 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                 .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
+
+            this.CreateMap<InterviewTreeGroup, SidebarPanel>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.State, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
+                .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
+                .ForMember(x => x.HasChildrens, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any()))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.Childs, opts => opts.MapFrom(x => Array.Empty<SidebarPanel>()))
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)
@@ -94,7 +105,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup @group)
             => @group.Children
                 .OfType<InterviewTreeGroup>()
-                .Where(subGroup=> !subGroup.IsDisabled())
+                .Where(subGroup => !subGroup.IsDisabled())
                 .Any(subGroup => GetGroupStatus(subGroup) != GroupStatus.Completed || HasQuestionsWithInvalidAnswers(subGroup));
 
         private string GetGroupStatisticsByInvalidAnswers(InterviewTreeGroup group)
@@ -122,8 +133,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
             var subGroupsText = GetInformationBySubgroups(group);
             var enabledAnsweredQuestionsCount = @group.CountEnabledAnsweredQuestions();
 
-            return $@"{(enabledAnsweredQuestionsCount == 1 ? 
-                Resources.WebInterview.Interview_Group_AnsweredQuestions_One : 
+            return $@"{(enabledAnsweredQuestionsCount == 1 ?
+                Resources.WebInterview.Interview_Group_AnsweredQuestions_One :
                 string.Format(Resources.WebInterview.Interview_Group_AnsweredQuestions_Many, enabledAnsweredQuestionsCount))}, {subGroupsText}";
         }
 

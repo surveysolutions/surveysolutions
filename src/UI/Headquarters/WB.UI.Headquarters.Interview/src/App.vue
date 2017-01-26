@@ -15,7 +15,7 @@
         name: 'app',
         computed: {
             showSidebar() {
-                return this.$store.state.sidebar != null && this.$store.state.sidebar.length > 0
+                return this.$store.getters.showSidebar
             }
         }
     }

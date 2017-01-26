@@ -1,18 +1,10 @@
-import * as _ from "lodash"
+import * as debounce from "lodash/debounce"
+import * as map from "lodash/map"
 import * as Vue from "vue"
 import { apiCaller } from "../api"
-import { getLocationHash } from "../store/store.fetch"
 import router from "./../router"
 
-let fetchEntityQueue: string[] = []
-
-async function fetchEntities({ commit, dispatch }) {
-    const ids = fetchEntityQueue
-    fetchEntityQueue = []
-    const details = await apiCaller(api => api.getEntitiesDetails(ids))
-    dispatch("fetch", { ids, done: true })
-    commit("SET_ENTITIES_DETAILS", details)
-}
+import { batchedAction } from "./helpers"
 
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
@@ -20,17 +12,11 @@ export default {
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
 
-    async fetchEntity({ commit, dispatch }, { id }) {
-        dispatch("fetch", { id })
-
-        fetchEntityQueue.push(id)
-
-        if (fetchEntityQueue.length === 1) {
-            Vue.nextTick(() => fetchEntities({ commit, dispatch }))
-        } else if (fetchEntities.length > 100) {
-            await fetchEntities({ commit, dispatch })
-        }
-    },
+    fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
+        const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
+        dispatch("fetch", { ids, done: true })
+        commit("SET_ENTITIES_DETAILS", details)
+    }, "fetch", 100),
 
     answerSingleOptionQuestion({ dispatch }, answerInfo) {
         dispatch("fetch", { id: answerInfo.questionId })
@@ -52,7 +38,7 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
-    answerDateQuestion({dispatch}, {identity, date}) {
+    answerDateQuestion({ dispatch }, { identity, date }) {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDateQuestion(identity, date))
     },
@@ -64,17 +50,8 @@ export default {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
 
-    fetchSectionEntities: _.debounce(async ({ commit }) => {
-        const id = (router.currentRoute.params as any).sectionId
-        const section = id == null
-            ? await apiCaller(api => api.getPrefilledEntities())
-            : await apiCaller(api => api.getSectionEntities(id))
-
-        commit("SET_SECTION_DATA", section)
-    }, 200),
-
     // called by server side. refresh
-    refreshEntities({state, dispatch}, questions: string[]) {
+    refreshEntities({ state, dispatch }, questions: string[]) {
         let needSectionUpdate = false
 
         questions.forEach(id => {
@@ -88,24 +65,28 @@ export default {
         dispatch("refreshSectionState")
     },
 
+    fetchSectionEntities: debounce(async ({ commit }) => {
+        const id = (router.currentRoute.params as any).sectionId
+        const section = id == null
+            ? await apiCaller(api => api.getPrefilledEntities())
+            : await apiCaller(api => api.getSectionEntities(id))
+
+        commit("SET_SECTION_DATA", section)
+    }, 200),
+
     // refresh state of visible section, excluding entities list.
     // Debounce will ensure that we not spam server with multiple requests,
     //   that can happen if server react with several event in one time
     // TODO: Add sidebar refresh here later
-    refreshSectionState: _.debounce(({ dispatch }) => {
+    refreshSectionState: debounce(({ dispatch }, sections) => {
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-        dispatch("fetchSidebar")
+        dispatch("fetchSidebar", sections)
     }, 50),
 
-    fetchBreadcrumbs: _.debounce(async ({ commit }) => {
+    fetchBreadcrumbs: debounce(async ({ commit }) => {
         const crumps = await apiCaller(api => api.getBreadcrumbs())
         commit("SET_BREADCRUMPS", crumps)
-    }),
-
-    fetchSidebar: _.debounce(async ({ commit }) => {
-        const crumps = await apiCaller(api => api.getSidebarState())
-        commit("SET_SIDEBAR_STATE", crumps)
     }),
 
     cleanUpEntity({ commit }, id) {
