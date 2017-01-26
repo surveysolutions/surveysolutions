@@ -194,9 +194,6 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarCompleteSectionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarCoverSectionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\SideBarSectionCollapseMessage.cs" />
-    <Compile Include="ViewModels\InterviewDetails\SideBarSectionExpandMessage.cs" />
-    <Compile Include="ViewModels\InterviewDetails\SideBarSectionUpdateMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\VariableViewModel.cs" />
