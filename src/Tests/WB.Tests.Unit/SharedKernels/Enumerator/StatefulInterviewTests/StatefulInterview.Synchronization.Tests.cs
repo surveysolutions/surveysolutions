@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -58,6 +59,45 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var multiLinkedToList = interview.GetMultiOptionLinkedToListQuestion(Create.Entity.Identity(multiLinkedToListId, Create.Entity.RosterVector(1)));
 
             Assert.That(multiLinkedToList.Options, Is.EquivalentTo(new[] {1, 5}));
+        }
+
+        [Test]
+        public void When_rejected_interview_has_comment_for_removed_answer_Should_skip_that_comment_and_successfully_sync_without_exception()
+        {
+            //arrange
+            var textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var textQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextListQuestion(textListQuestionId),
+                Create.Entity.ListRoster(rosterSizeQuestionId: textListQuestionId, children: new[]
+                {
+                    Create.Entity.TextQuestion(textQuestionId)
+                }));
+
+            var interview = Setup.StatefulInterview(questionnaire);
+
+            var answerOnTextList = Create.Entity.AnsweredQuestionSynchronizationDto(
+                questionId: textListQuestionId,
+                answer: new[] { new Tuple<decimal, string>(2, "option 2"), new Tuple<decimal, string>(5, "option 5") });
+
+            var answerTextQuestion = Create.Entity.AnsweredQuestionSynchronizationDto(
+                questionId: textQuestionId, 
+                rosterVector:Create.Entity.RosterVector(1),
+                answer: null, 
+                comments: Create.Entity.CommentSynchronizationDto("comment"));
+
+            var syncDto = Create.Entity.InterviewSynchronizationDto(answers: new[]
+            {
+                answerOnTextList,
+                answerTextQuestion
+            });
+
+            //act
+            TestDelegate sync = () => interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+
+            //assert
+            Assert.DoesNotThrow(sync);
         }
     }
 }
