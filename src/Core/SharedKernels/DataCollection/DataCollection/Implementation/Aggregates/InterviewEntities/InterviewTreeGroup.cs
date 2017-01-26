@@ -251,6 +251,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool HasUnansweredQuestions()
             => this.GetEnabledInterviewerQuestions().Any(question => !question.IsAnswered());
+
+        public IEnumerable<Identity> GetEnabledSubGroups()
+            => this.Children.OfType<InterviewTreeGroup>()
+                .Where(group => !group.IsDisabled())
+                .Select(group => group.Identity);
     }
 
     [DebuggerDisplay("{ToString()}")]
