@@ -42,11 +42,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
             };
 
-            interview.RestoreInterviewStateFromSyncPackage(userId, Create.Entity.InterviewSynchronizationDto(
+            var interviewSynchronizationDto = Create.Entity.InterviewSynchronizationDto(
                 questionnaireId: questionnaireId,
                 userId: userId,
                 answers: answersDtos,
-                disabledQuestions: new HashSet<InterviewItemId> { Create.Entity.InterviewItemId(disabledQuestionId, rosterVector) }));
+                disabledQuestions: new HashSet<InterviewItemId> { Create.Entity.InterviewItemId(disabledQuestionId, rosterVector) });
+            interview.Synchronize(Create.Command.Synchronize(userId, interviewSynchronizationDto));
         };
 
         Because of = () =>

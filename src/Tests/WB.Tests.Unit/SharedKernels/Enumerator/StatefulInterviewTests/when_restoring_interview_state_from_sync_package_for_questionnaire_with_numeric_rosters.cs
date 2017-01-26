@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             eventContext = null;
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
         It should_set_roster_title_to_roster1 = () =>
             interview.GetRosterTitle(Identity.Create(roster1Id, rosterVector)).ShouldEqual("10.5");

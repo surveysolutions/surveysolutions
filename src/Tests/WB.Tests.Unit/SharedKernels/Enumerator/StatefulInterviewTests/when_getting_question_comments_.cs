@@ -44,11 +44,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     )
             };
 
-            interview.RestoreInterviewStateFromSyncPackage(interviewerId, Create.Entity.InterviewSynchronizationDto(
+            var interviewSynchronizationDto = Create.Entity.InterviewSynchronizationDto(
                 questionnaireId: questionnaireId,
                 userId: interviewerId,
                 supervisorId: supervisorId,
-                answers: answersDtos));
+                answers: answersDtos);
+            interview.Synchronize(Create.Command.Synchronize(interviewerId, interviewSynchronizationDto));
         };
 
         Because of = () =>

@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             eventContext = null;
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
         It should_rise_InterviewSynchronized_event = () =>
              eventContext.ShouldContainEvent<InterviewSynchronized>(x => x.InterviewData == synchronizationDto);

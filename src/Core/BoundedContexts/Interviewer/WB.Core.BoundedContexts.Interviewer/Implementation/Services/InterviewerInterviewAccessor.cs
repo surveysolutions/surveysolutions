@@ -171,28 +171,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
-            var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor :  InterviewStatus.InterviewerAssigned;
+            var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor : InterviewStatus.InterviewerAssigned;
             var interviewDetails = this.synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(details.Details);
-
-            var createInterviewFromSynchronizationMetadataCommand = new CreateInterviewFromSynchronizationMetadata(
-                interviewId: info.Id,
-                userId: this.principal.CurrentUserIdentity.UserId,
-                questionnaireId: info.QuestionnaireIdentity.QuestionnaireId,
-                questionnaireVersion: info.QuestionnaireIdentity.Version,
-                status: interviewStatus,
-                featuredQuestionsMeta: details.AnswersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],
-                comments: interviewDetails.Comments,
-                rejectedDateTime: interviewDetails.RejectDateTime,
-                interviewerAssignedDateTime: interviewDetails.InterviewerAssignedDateTime,
-                valid: true,
-                createdOnClient: questionnaireView.Census);
 
            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
+                featuredQuestionsMeta: details.AnswersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],
+                createdOnClient: questionnaireView.Census,
+                initialStatus: interviewStatus,
                 sycnhronizedInterview: interviewDetails);
 
-            await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);
             await this.commandService.ExecuteAsync(synchronizeInterviewCommand);
         }
     }
