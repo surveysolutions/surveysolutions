@@ -32,6 +32,14 @@
             return;
         }
 
+        var showPagination = function($paging) {
+            //$paging.css('visibility', '');
+            $paging.css('display', 'block');
+        };
+        var hidePagination = function($paging) {
+            $paging.css('display', 'none');
+        };
+
         var options = dtSettings.oInit.conditionalPaging;
 
         if ($.isPlainObject(options) || options === true) {
@@ -48,7 +56,8 @@
                                 $paging.stop().fadeTo(speed, 0);
                             }
                             else {
-                                $paging.css('visibility', 'hidden');
+                                hidePagination($paging);
+                                
                             }
                         }
                         else {
@@ -56,7 +65,8 @@
                                 $paging.stop().fadeTo(speed, 1);
                             }
                             else {
-                                $paging.css('visibility', '');
+                                showPagination($paging);
+                                
                             }
                         }
                     }
@@ -65,7 +75,7 @@
                             $paging.css('opacity', 0);
                         }
                         else {
-                            $paging.css('visibility', 'hidden');
+                            hidePagination($paging);
                         }
                     }
                 };
