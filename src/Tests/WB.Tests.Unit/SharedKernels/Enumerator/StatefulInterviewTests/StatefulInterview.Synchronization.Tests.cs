@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var syncDto = Create.Entity.InterviewSynchronizationDto(
                 answers: new[] {commentedAnswer});
 
-            interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionId)).ToList();
 
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var syncDto = Create.Entity.InterviewSynchronizationDto(answers: new[] { answerOnTextList });
 
             //act
-            interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
             //assert
             var multiLinkedToList = interview.GetMultiOptionLinkedToListQuestion(Create.Entity.Identity(multiLinkedToListId, Create.Entity.RosterVector(1)));
