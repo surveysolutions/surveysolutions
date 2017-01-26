@@ -24,5 +24,8 @@ export default {
     },
     SET_BREADCRUMPS(state, crumps) {
         Vue.set(state, "breadcrumbs", crumps)
+    },
+    SET_SIDEBAR_STATE(state, sidebars) {
+        Vue.set(state, "sidebar", sidebars)
     }
 }

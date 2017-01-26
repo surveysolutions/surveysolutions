@@ -3,7 +3,7 @@
         <Navbar slot="header" />
         <div class="row" slot>
             <Sidebar />
-            <section class="questionnaire">
+            <section class="questionnaire" :class="{'details-interview': showSidebar}">
                 <router-view></router-view>
             </section>
         </div>
@@ -12,7 +12,12 @@
 
 <script lang="ts">
     export default {
-        name: 'app'
+        name: 'app',
+        computed: {
+            showSidebar() {
+                return this.$store.state.sidebar != null && this.$store.state.sidebar.length > 0
+            }
+        }
     }
 </script>
 
