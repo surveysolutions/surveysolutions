@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
-    public class When_WebInterviewNotifications_Receive_RefreshTest : NUnitTestSpecification
+    public class When_WebInterviewNotifications_Receive_Refresh: TestSpecification
     {
         private static readonly Identity GroupA = Create.Entity.Identity(101);
         private static readonly Identity GroupB = Create.Entity.Identity(202);
@@ -30,25 +24,24 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private StatefulInterview interview;
         private WebInterviewNotificationService Subject;
 
-        protected override void Context()
+        protected override void Establish()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.Group(GroupA.Id, children: new List<IComposite>
+                Create.Entity.Group(GroupA.Id, children: new List<IComposite>
+                {
+                    Create.Entity.StaticText(StaticText.Id),
+                    Create.Entity.Group(GroupB.Id, children: new IComposite[]
                     {
-                        Create.Entity.StaticText(StaticText.Id),
-                        Create.Entity.Group(GroupB.Id, children: new IComposite[]
-                        {
-                            Create.Entity.TextQuestion(Question1.Id),
-                            Create.Entity.TextQuestion(Question2.Id),
-                            Create.Entity.TextQuestion(PrefilledQuestion.Id, preFilled: true),
-                        })
-                    }));
+                        Create.Entity.TextQuestion(Question1.Id),
+                        Create.Entity.TextQuestion(Question2.Id),
+                        Create.Entity.TextQuestion(PrefilledQuestion.Id, preFilled: true),
+                    })
+                }));
 
             this.interview = Setup.StatefulInterview(questionnaire);
-            var repository = Mock.Of<IStatefulInterviewRepository>(sir => sir.Get(It.IsAny<string>()) == this.interview);
 
             this.Subject = new WebInterviewNotificationService(
-                repository, 
+                Setup.StatefulInterviewRepository(this.interview), 
                 Create.Fake.HubContextWithGroupMock((name, excludedConnection) => this.NewGroupMock(name).Object));
         }
 
@@ -66,41 +59,44 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         [Test]
         public void should_send_NotificationOnChange_forPrefilledQuestion_ToClient_WithoutSection()
         {
-            AssertThatRefreshEntitiesCalledForQuestions(null, PrefilledQuestion);
+            this.AssertThatCalledRefreshEntitiesForQuestionsPerSpecifiedSection(null, PrefilledQuestion);
         }
 
         [Test]
         public void Should_Send_NotificationOnChange_Questions_InGroupB()
         {
-            AssertThatRefreshEntitiesCalledForQuestions(GroupB, Question1, Question2);
+            this.AssertThatCalledRefreshEntitiesForQuestionsPerSpecifiedSection(GroupB, Question1, Question2);
         }
 
         [Test]
         public void Should_Send_Notification_OnChangeForStaticText_InGroupA()
         {
-            AssertThatRefreshEntitiesCalledForQuestions(GroupA, StaticText);
+            this.AssertThatCalledRefreshEntitiesForQuestionsPerSpecifiedSection(GroupA, StaticText);
         }
 
         [Test]
-        public void Should_Send_SendInterviewWideNotification_ToRefreshSection_ForUnexpectedQuestions()
+        public void Should_Send_Send_InterviewWideNotification_ToRefreshSection_ForUnexpectedQuestions()
         {
             var mock = Groups[this.interview.Id.FormatGuid()];
             mock.Verify(g => g.refreshSection(), Times.AtLeastOnce);
         }
 
-        private void AssertThatRefreshEntitiesCalledForQuestions(Identity section = null, params Identity[] questions)
+        private void AssertThatCalledRefreshEntitiesForQuestionsPerSpecifiedSection(Identity section, params Identity[] questions)
         {
             var prefilledKey = UI.Headquarters.API.WebInterview.WebInterview.GetConnectedClientSectionKey(section?.ToString(), this.interview.Id.FormatGuid());
 
             Assert.That(this.Groups, new DictionaryContainsKeyConstraint(prefilledKey));
             var groupMock = this.Groups[prefilledKey];
 
+            var questionsThatShouldBeCalled = questions.Select(q => q.Id.FormatGuid()).ToArray();
+
             groupMock.Verify(g => g.refreshEntities(It.Is<string[]>(
-                    ids => AssertCollectionsEqual(ids, questions.Select(q => q.Id.FormatGuid()).ToArray())
-                )),
+                    ids => AssertCollectionsEqual(ids, questionsThatShouldBeCalled))
+                ),
                 Times.Once);
         }
 
+        // asert that source collection has all items from target collection
         private bool AssertCollectionsEqual<T>(IEnumerable<T> source, IEnumerable<T> target)
         {
             return !source.Except(target).Any();
@@ -116,7 +112,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         /// <summary>
-        /// Specific interface for hub group mock
+        /// Specific for this test onlyinternal interface for hub group mock
+        /// Cannot be marked as internal, due to Moq restrictions
         /// </summary>
         public interface IHubGroup
         {
