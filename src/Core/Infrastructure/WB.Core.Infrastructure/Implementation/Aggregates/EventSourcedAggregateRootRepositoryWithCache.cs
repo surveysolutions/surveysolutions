@@ -23,13 +23,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregateRoot;
-
-            if (memoryCache.TryGetValue(aggregateType, out aggregateRoot)
-                && aggregateRoot.EventSourceId == aggregateId)
-                return aggregateRoot;
-
-            aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+            var aggregateRoot =
+                GetFromCache(aggregateType, aggregateId) ??
+                base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
             if (aggregateRoot != null)
             {
@@ -37,6 +33,22 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             }
 
             return aggregateRoot;
+        }
+
+        private static IEventSourcedAggregateRoot GetFromCache(Type aggregateType, Guid aggregateId)
+        {
+            IEventSourcedAggregateRoot cachedAggregate;
+
+            bool foundInCache = memoryCache.TryGetValue(aggregateType, out cachedAggregate);
+            if (!foundInCache) return null;
+
+            bool hasSameId = cachedAggregate.EventSourceId == aggregateId;
+            if (!hasSameId) return null;
+
+            bool isDirty = cachedAggregate.HasUncommittedChanges();
+            if (isDirty) return null;
+
+            return cachedAggregate;
         }
 
         public void CleanCache()

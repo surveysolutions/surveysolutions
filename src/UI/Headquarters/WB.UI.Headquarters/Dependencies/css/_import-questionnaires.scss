@@ -66,7 +66,7 @@
 .import-interview{
     tr{
         td, th{
-            width: 10%;  
+            width: 10%; 
         }
         .size{
             width: 6%;
@@ -75,10 +75,18 @@
     thead{
         tr{
             border-bottom: 2px solid #ddd;
+           th{
+                .search{
+                    top: -5px;
+                }
+                padding: 8px 10px; 
+                &:after, &.sorting::after{
+                    top: 10px;
+                }
+            } 
         }
         th.column-questionnaire-title{
             width: 44%;
-
         }
     }
     tbody{
