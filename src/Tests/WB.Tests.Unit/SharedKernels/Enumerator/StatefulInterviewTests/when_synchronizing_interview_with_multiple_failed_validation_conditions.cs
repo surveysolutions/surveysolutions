@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances, failedValidationConditions: failedValidationConditions);
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
         It should_return_empty_failed_condition_messages =
             () => interview.GetFailedValidationMessages(questionIdentity)

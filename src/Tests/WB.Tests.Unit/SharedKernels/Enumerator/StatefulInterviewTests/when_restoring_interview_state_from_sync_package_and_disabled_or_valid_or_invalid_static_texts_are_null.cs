@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: new AnsweredQuestionSynchronizationDto[0]);
         };
 
-        Because of = () => exception = Catch.Exception(()=>interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto));
+        Because of = () => exception = Catch.Exception(()=>interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto)));
 
         It should_not_throw_an_exception = () =>
              exception.ShouldBeNull();

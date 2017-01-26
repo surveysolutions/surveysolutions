@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             syncDto = Create.Entity.InterviewSynchronizationDto(questionnaireId, rosterGroupInstances: rosterSynchronizationDtoses);
         };
 
-        Because of = () => interview.RestoreInterviewStateFromSyncPackage(Guid.Empty, syncDto);
+        Because of = () => interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
         It should_recalculate_roster_titles = () => interview.GetTitleText(Identity.Create(substitutedQuestionId, Create.Entity.RosterVector(0))).ShouldEqual($"uses {rosterTitle}");
 
