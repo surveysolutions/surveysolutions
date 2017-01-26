@@ -577,7 +577,7 @@
     <value>Пароль</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
-    <value>Дата создания учетной записи интервьювера</value>
+    <value>Дата создания учетной записи интервьюера</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Имя супервизора</value>
@@ -596,6 +596,6 @@
     <value>Инструкции установки</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
-    <value>интервьювер(ов) выбрано</value>
+    <value>интервьюер(ов) выбрано</value>
   </data>
 </root>
