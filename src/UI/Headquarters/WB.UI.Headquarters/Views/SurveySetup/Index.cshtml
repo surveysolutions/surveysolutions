@@ -84,14 +84,21 @@
                 var items = {}
 
                 if (!(selectedRow.disabled || selectedRow.allowCensusMode)) {
-                    items["addNew"] = {
-                        name: "@Dashboard.NewInterview",
-                        callback: addNewInterview
-                    };
-                    items["batchUpload"] = {
-                        name: "@Dashboard.BatchUpload",
-                        callback: interviewsBatchUpload
-                    };
+                    @if (!Context.User.Identity.IsObserver())
+                    {
+                        <text>
+                            items["addNew"] = {
+                                name: "@Dashboard.NewInterview",
+                                callback: addNewInterview
+                            };
+                            items["batchUpload"] = {
+                                name: "@Dashboard.BatchUpload",
+                                callback: interviewsBatchUpload
+                            };
+                        </text>
+                    }
+
+
                     @if (User.IsInRole("Administrator"))
                     {
                     <text>

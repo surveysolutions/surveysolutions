@@ -5,6 +5,7 @@ using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -37,15 +38,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.InterviewerId = @event.UserId;
 
             this.sourceInterview = this.Tree.Clone();
-        }
-
-        public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
-        {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
         public void Apply(InterviewSynchronized @event)
@@ -253,12 +245,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : new InterviewDeclaredValid());
         }
 
-        public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
+        public void Synchronize(SynchronizeInterviewCommand command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(synchronizedInterview.QuestionnaireId, synchronizedInterview.QuestionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
 
-            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
-            
+            base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
+                command.UserId,
+                command.SynchronizedInterview.QuestionnaireId,
+                command.SynchronizedInterview.QuestionnaireVersion,
+                command.InitialStatus,
+                command.FeaturedQuestionsMeta,
+                command.SynchronizedInterview.Comments,
+                command.SynchronizedInterview.RejectDateTime,
+                command.SynchronizedInterview.InterviewerAssignedDateTime,
+                true,
+                command.CreatedOnClient
+            );
+
+            this.SynchronizeInterview(command.UserId, command.SynchronizedInterview);
+        }
+
+        internal void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
