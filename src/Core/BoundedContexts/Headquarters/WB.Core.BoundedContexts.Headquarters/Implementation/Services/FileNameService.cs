@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
-            var questionnaireTitle = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString())?.Title);
+            var questionnaireTitle = this.transactionManager.ExecuteInPlainTransaction(() => this.questionnaires.GetById(identity.ToString())?.Title);
 
             questionnaireTitle = this.fileSystemAccessor.MakeValidFileName(questionnaireTitle);
             
