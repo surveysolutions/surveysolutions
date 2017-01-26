@@ -3,12 +3,12 @@ using NUnit.Framework;
 namespace WB.Tests.Unit
 {
     [TestFixture]
-    public class NUnitTestSpecification
+    public class TestSpecification
     {
         [OneTimeSetUp]
         public virtual void Arrange()
         {
-            this.Context();
+            this.Establish();
             this.Because();
         }
 
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit
         {
         }
 
-        protected virtual void Context()
+        protected virtual void Establish()
         {
         }
 
