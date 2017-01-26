@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views
@@ -412,7 +413,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             if (interviewQuestion.IsDisabled())
                 return null;
 
-            return this.GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
+            return this.GetFormattedAnswerForTitleSubstitution(interviewQuestion, currentInterviewLevel, upperInterviewLevels, interviewInfo, interviewLinkedQuestionOptions);
         }
 
         private string SubstituteRosterTitle(string variableName, InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
@@ -477,7 +478,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             return null;
         }
 
-        private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+        private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, 
+            InterviewLevel currentInterviewLevel,
+            List<InterviewLevel> upperInterviewLevels,
+            InterviewInfoInternal interviewInfo, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             if (interviewQuestion.Answer == null)
                 return null;
@@ -506,7 +511,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                         return selectedAnswer?.AnswerText;
                     }
 
-                    decimal[] selectedRosterVector = ((IEnumerable) interviewQuestion.Answer).OfType<decimal>().ToArray();
+                    if (question.LinkedToQuestionId.HasValue)
+                    {
+                        var linkedQuestion = interviewInfo.Questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value);
+
+                        if (linkedQuestion.QuestionType == QuestionType.TextList)
+                        { 
+                            var listQuestion = GetQuestion(question.LinkedToQuestionId.Value, currentInterviewLevel, upperInterviewLevels);
+                            var listQuestionAnswers = listQuestion.Answer as InterviewTextListAnswers;
+                            var answeredListQuestionValue = (decimal)interviewQuestion.Answer;
+                            var textListAnswer = listQuestionAnswers?.Answers.SingleOrDefault(a => a.Value == answeredListQuestionValue);
+                            return textListAnswer?.Answer;
+                        }
+                    }
+
+                    decimal[] selectedRosterVector = ((IEnumerable)interviewQuestion.Answer).OfType<decimal>().ToArray();
 
                     Dictionary<decimal[], string> availableOptions = question.LinkedToQuestionId.HasValue
                         ? this.GetAvailableOptions(question, selectedRosterVector, interviewInfo, interviewLinkedQuestionOptions)
