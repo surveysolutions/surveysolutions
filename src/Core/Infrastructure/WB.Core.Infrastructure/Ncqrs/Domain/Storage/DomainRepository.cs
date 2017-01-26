@@ -21,10 +21,10 @@ namespace Ncqrs.Domain.Storage
             this.serviceLocator = serviceLocator;
         }
 
-        public EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
+        public IEventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
             => this.Load(aggreateRootType, eventStream.SourceId, snapshot, eventStream);
 
-        public EventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
+        public IEventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
         {
             EventSourcedAggregateRoot aggregate;
 
@@ -36,7 +36,7 @@ namespace Ncqrs.Domain.Storage
             return aggregate;
         }
 
-        public EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, int lastEventSequence)
+        public IEventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, int lastEventSequence)
         {
             var aggregateRoot = (EventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateRootType);
 
