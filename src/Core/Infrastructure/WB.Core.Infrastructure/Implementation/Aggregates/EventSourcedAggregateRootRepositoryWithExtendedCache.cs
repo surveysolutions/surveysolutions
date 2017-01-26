@@ -14,7 +14,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         private const int CacheSize = 100;
         private static readonly object lockObject = new object();
 
-        private static ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
+        private ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
 
         public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
             : base(eventStore, snapshotStore, repository) { }
@@ -26,27 +26,35 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             IEventSourcedAggregateRoot aggregateRoot
-                = GetFromCache(aggregateId)
+                = this.GetFromCache(aggregateId)
                 ?? base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
             if (aggregateRoot != null)
             {
-                PutToTopOfCache(aggregateRoot);
+                this.PutToTopOfCache(aggregateRoot);
             }
 
             return aggregateRoot;
         }
 
-        private static IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
+        private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            return cache.SingleOrDefault(aggregate => aggregate.EventSourceId == aggregateId);
+            var cachedAggregate = this.cache.SingleOrDefault(aggregate => aggregate.EventSourceId == aggregateId);
+
+            if (cachedAggregate == null) return null;
+
+            bool isDirty = cachedAggregate.HasUncommittedChanges();
+
+            if (isDirty) return null;
+
+            return cachedAggregate;
         }
 
-        private static void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
+        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
         {
             lock (lockObject)
             {
-                cache = ImmutableList.CreateRange(
+                this.cache = ImmutableList.CreateRange(
                     Enumerable
                         .Concat(
                             aggregateRoot.ToEnumerable(),
@@ -59,7 +67,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             lock (lockObject)
             {
-                cache = ImmutableList.CreateRange(cache.Except(ar => aggregate.EventSourceId == ar.EventSourceId));
+                this.cache = ImmutableList.CreateRange(cache.Except(ar => aggregate.EventSourceId == ar.EventSourceId));
             }
         }
     }
