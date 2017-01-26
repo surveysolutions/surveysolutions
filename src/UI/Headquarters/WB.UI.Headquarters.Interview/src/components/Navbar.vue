@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#" title="Web interview #23-44-32-12">Web interview #23-44-32-12</a></li>
                     <li><a href="#" title="Restart">Restart</a></li>
-                    <li><a href="#" title="List of pre-filled questions">List of pre-filled questions</a></li>
+                    <li><router-link :to="{name: 'prefilled'}">List of pre-filled questions</router-link></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">

@@ -6,7 +6,6 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import { GroupStatus, ButtonType } from "components/entities"
-    import * as _ from "lodash"
 
     export default {
         mixins: [entityDetails],

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -25,13 +26,18 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
-            var entitiesToRefresh = entities.Select(identity => Tuple.Create(GetClientGroupIdentity(identity, interview), identity));
+            var sectionsToRefresh = new HashSet<string>();
+
+            var entitiesToRefresh = entities.Select(identity =>
+            {
+                sectionsToRefresh.Add(identity.ToString());
+                return Tuple.Create(GetClientGroupIdentity(identity, interview), identity);
+            });
 
             foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
             {
                 if (questionsGroupedByParent.Key == null)
                 {
-                    webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
                     continue;
                 };
 
@@ -40,42 +46,31 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
             }
+
+            webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection(sectionsToRefresh.ToArray());
+        }
+
+        private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
+        {
+            return ((IInterviewTreeNode) interview.GetQuestion(identity) 
+                ?? (IInterviewTreeNode) interview.GetStaticText(identity)
+                ?? (IInterviewTreeNode) interview.GetRoster(identity) 
+                ?? (IInterviewTreeNode) interview.GetGroup(identity))
+                ?.Parent?.Identity;
         }
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            var questionToRefresh = interview.GetQuestion(identity);
-            if (questionToRefresh != null)
+            string sectionKey;
+
+            if (interview.GetQuestion(identity)?.IsPrefilled ?? false)
             {
-                return BuildClientGroupIdentityKey(interview, questionToRefresh.Parent, questionToRefresh.IsPrefilled);
+                sectionKey = null;
             }
-
-            var staticText = interview.GetStaticText(identity);
-            if (staticText != null)
+            else
             {
-                return BuildClientGroupIdentityKey(interview, staticText.Parent, false);
+                sectionKey = this.GetParentIdentity(identity, interview)?.ToString();
             }
-
-            var roster = interview.GetRoster(identity);
-            if (roster != null)
-            {
-                return BuildClientGroupIdentityKey(interview, roster.Parent, false);
-            }
-
-            var group = interview.GetGroup(identity);
-            if (group != null)
-            {
-                return BuildClientGroupIdentityKey(interview, group.Parent, false);
-            }
-
-            return null;
-        }
-
-        private string BuildClientGroupIdentityKey(IStatefulInterview interview, IInterviewTreeNode parent, bool isPrefilled)
-        {
-            var sectionKey = isPrefilled
-              ? null
-              : parent.Identity.ToString();
 
             return WebInterview.GetConnectedClientSectionKey(sectionKey, interview.Id.FormatGuid());
         }
