@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Web.Http;
 using ImageResizer;
 using WB.Core.BoundedContexts.Headquarters.Services;

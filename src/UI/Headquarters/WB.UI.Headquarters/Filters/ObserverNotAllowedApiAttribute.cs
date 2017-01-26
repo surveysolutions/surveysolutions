@@ -22,17 +22,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
                 base.OnActionExecuting(filterContext);
         }
     }
-
-    public class ObserverNotAllowedAttribute : ActionFilterAttribute
-    {
-        public override void OnActionExecuting(HttpActionContext actionContext)
-        {
-            if (HttpContext.Current.User.Identity.IsObserver())
-            {
-                throw new HttpException(403, Strings.ObserverNotAllowed);
-            }
-
-            base.OnActionExecuting(actionContext);
-        }
-    }
 }
