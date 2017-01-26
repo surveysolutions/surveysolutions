@@ -441,7 +441,7 @@
     <value>Комментарий хедквотера</value>
   </data>
   <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
-    <value>Комментарий интервьювера</value>
+    <value>Комментарий интервьюера</value>
   </data>
   <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование текущего положения устройства для ответа на данный вопрос</value>

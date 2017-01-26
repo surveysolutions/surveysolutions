@@ -12,6 +12,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    public delegate void SideBarSectionUpdated();
+
     [DebuggerDisplay("Title = {Title.PlainText}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
         ILiteEventHandler<RosterInstancesAdded>,
@@ -29,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private string interviewId;
         private Guid[] rostersInGroup;
+        
+        public event SideBarSectionUpdated OnSectionUpdated;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -134,12 +138,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void Toggle()
         {
-            if(this.Expanded)
-                this.messenger.Publish(new SideBarSectionCollapseMessage(this, this.SectionIdentity));
-            else
-                this.messenger.Publish(new SideBarSectionExpandMessage(this, this.SectionIdentity));
-
             this.Expanded = !this.Expanded;
+            this.OnSectionUpdated?.Invoke();
         }
 
         private void NavigateToSection()
@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             if (addedSubGroups.Any(x => interview.GetGroup(x)?.Parent?.Identity == this.SectionIdentity))
-                this.messenger.Publish(new SideBarSectionUpdateMessage(this, this.SectionIdentity));
+                this.OnSectionUpdated?.Invoke();
         }
 
         public void Handle(RosterInstancesAdded @event)

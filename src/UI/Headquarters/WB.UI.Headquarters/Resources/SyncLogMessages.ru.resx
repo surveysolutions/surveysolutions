@@ -169,7 +169,7 @@
     <value>Загрузить вложения опросника: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>Интервьювер уже привязан к планшету</value>
+    <value>Интервьюер уже привязан к планшету</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
     <value>&lt;font color="green" '=""&gt;Интервью пакет &lt;b&gt;{0}&lt;/b&gt; успешно обработан&lt;/font&gt;</value>
@@ -178,7 +178,7 @@
     <value>&lt;font color="green" '=""&gt;Интервью &lt;b&gt;{0}&lt;/b&gt; успешно обработано&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
-    <value>Привязать интервьювера к планшету</value>
+    <value>Привязать интервьюера к планшету</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
     <value>Нет новых интервью пакетов для загрузки</value>
