@@ -10,7 +10,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class EventSourcedAggregateRootRepositoryWithCache : EventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache
     {
-        static readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
+        private readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
 
         public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
             : base(eventStore, snapshotStore, repository)
@@ -24,22 +24,22 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             var aggregateRoot =
-                GetFromCache(aggregateType, aggregateId) ??
+                this.GetFromCache(aggregateType, aggregateId) ??
                 base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
             if (aggregateRoot != null)
             {
-                memoryCache[aggregateType] = aggregateRoot;
+                this.memoryCache[aggregateType] = aggregateRoot;
             }
 
             return aggregateRoot;
         }
 
-        private static IEventSourcedAggregateRoot GetFromCache(Type aggregateType, Guid aggregateId)
+        private IEventSourcedAggregateRoot GetFromCache(Type aggregateType, Guid aggregateId)
         {
             IEventSourcedAggregateRoot cachedAggregate;
 
-            bool foundInCache = memoryCache.TryGetValue(aggregateType, out cachedAggregate);
+            bool foundInCache = this.memoryCache.TryGetValue(aggregateType, out cachedAggregate);
             if (!foundInCache) return null;
 
             bool hasSameId = cachedAggregate.EventSourceId == aggregateId;
@@ -53,7 +53,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public void CleanCache()
         {
-            memoryCache.Clear();
+            this.memoryCache.Clear();
         }
     }
 }
