@@ -91,11 +91,17 @@ export default {
     refreshSectionState: _.debounce(({ dispatch }) => {
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
+        dispatch("fetchSidebar")
     }, 50),
 
     fetchBreadcrumbs: _.debounce(async ({ commit }) => {
         const crumps = await apiCaller(api => api.getBreadcrumbs())
         commit("SET_BREADCRUMPS", crumps)
+    }),
+
+    fetchSidebar: _.debounce(async ({ commit }) => {
+        const crumps = await apiCaller(api => api.getSidebarState())
+        commit("SET_SIDEBAR_STATE", crumps)
     }),
 
     cleanUpEntity({ commit }, id) {

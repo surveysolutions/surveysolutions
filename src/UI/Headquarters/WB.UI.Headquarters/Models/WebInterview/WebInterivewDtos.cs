@@ -79,6 +79,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public Validity Validity { get; set; } = new Validity();
     }
 
+    public class SidebarPanel
+    {
+        public string Id { get; set; }
+        public string Title { get; set;}
+        public SimpleGroupStatus State { get;set; }
+        public SidebarPanel[] Panels { get; set; }
+    }
+
     public enum GroupStatus
     {
         NotStarted = 1,

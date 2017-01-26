@@ -13,7 +13,8 @@ const store = new Vuex.Store(safeStore({
         entityDetails: { /* string: object */ },
         breadcrumbs: {
             breadcrumbs: []
-        }
+        },
+        sidebar: [ /* ISidebarPanel */]
     },
     actions,
     mutations
