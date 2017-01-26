@@ -12,15 +12,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     internal class ExportExportFileNameService : IExportFileNameService
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
-        private readonly IPlainTransactionManager transactionManager;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
+        private IPlainTransactionManager transactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
+
+
         public ExportExportFileNameService(
-            IPlainTransactionManager transactionManager, 
+            IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IFileSystemAccessor fileSystemAccessor)
         {
-            this.transactionManager = transactionManager;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaires = questionnaires;
             this.fileSystemAccessor = fileSystemAccessor;
         }
@@ -52,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
-            var questionnaireTitle = this.transactionManager.ExecuteInPlainTransaction(() => this.questionnaires.GetById(identity.ToString())?.Title);
+            var questionnaireTitle = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString())?.Title);
 
             questionnaireTitle = this.fileSystemAccessor.MakeValidFileName(questionnaireTitle);
             
