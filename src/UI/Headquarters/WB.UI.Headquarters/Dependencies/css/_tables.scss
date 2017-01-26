@@ -27,23 +27,37 @@
             }
         }
         @include transition(all, 0.1s);
-        /* height: 35px; */
         td{
             word-break: break-all;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
         th{
-/*             overflow-wrap: break-word;
-            word-wrap: break-word; */
             &.with-search{
                 padding-left: 40px;
                 min-width: 150px;
             }
         }
+        &.disabled{
+            background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px);
+            a, label, input, button{
+                cursor: not-allowed;
+                pointer-events: none;
+                
+            }
+            td{
+                &:hover, &:focus, &:active{
+                    a, a:hover, a:focus, a:active{
+                        color: $gray_text !important;
+                    }
+                }
+            }
+            
+        }
     }
     thead{
-        @extend %uppercase-font;
+        @extend %uppercase-font; 
+        letter-spacing: 0.5px;
         color: $gray_light;
         tr th{
             padding: 15px;
@@ -312,9 +326,9 @@
     }
     .dataTables_paginate{
         position: relative;
-        padding: 40px 0 0 0;
+        padding: 40px 0 10px 0;
         overflow: hidden;
-        @extend %uppercase-font;
+        @extend %uppercase-font; 
         font-size: 14px;
         line-height: 16px;
         &>span{

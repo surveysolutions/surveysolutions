@@ -1,7 +1,7 @@
 ﻿var Notifier = function () {
     var self = this;
     var loadingIndicator = null;
-    var stack_modal = { "dir1": "down", "dir2": "right", "push": "top", "modal": true, "overlay_close": false };
+    var stack_modal = { "dir1": "down", "dir2": "right", "push": "center", "modal": true, "overlay_close": false };
     var loadingIndicatorOptions = {
         title: "Loading, please wait",
         text: false,
@@ -31,7 +31,7 @@
             title: title,
             text: message,
             hide: false,
-            addclass: "stack-modal",
+            addclass: "centered-modal",
             confirm: {
                 confirm: true
             },
