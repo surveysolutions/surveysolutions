@@ -121,6 +121,13 @@ namespace WB.Tests.Unit.TestFactories
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
 
+        public EventSourcedAggregateRootRepositoryWithCache EventSourcedAggregateRootRepositoryWithCache(
+            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithCache(
+                eventStore ?? Mock.Of<IEventStore>(),
+                snapshotStore ?? Mock.Of<ISnapshotStore>(),
+                repository ?? Mock.Of<IDomainRepository>());
+
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
 

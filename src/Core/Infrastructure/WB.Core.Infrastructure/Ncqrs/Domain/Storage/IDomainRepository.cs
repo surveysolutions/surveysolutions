@@ -19,11 +19,11 @@ namespace Ncqrs.Domain.Storage
         /// <param name="eventStream">A stream of events (is snapshot is provided, stream starts at next event 
         /// after snapshot. Otherwise it starts from the beginning of aggregate's life).</param>
         /// <returns>Aggregate root instance.</returns>
-        EventSourcedAggregateRoot Load(Type aggregateRootType, Snapshot snapshot, CommittedEventStream eventStream);
+        IEventSourcedAggregateRoot Load(Type aggregateRootType, Snapshot snapshot, CommittedEventStream eventStream);
 
-        EventSourcedAggregateRoot Load(Type aggregateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
+        IEventSourcedAggregateRoot Load(Type aggregateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
 
-        EventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, int lastEventSequence);
+        IEventSourcedAggregateRoot LoadStateless(Type aggregateRootType, Guid aggregateRootId, int lastEventSequence);
 
         /// <summary>
         /// Takes a snapshot of provided aggregate root.
