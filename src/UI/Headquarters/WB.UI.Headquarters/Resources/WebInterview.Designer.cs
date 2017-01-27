@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hellow and Welcome to the Survey Solutions Web Survey.
+        ///   Looks up a localized string similar to Hello and Welcome to the Survey Solutions Web Survey.
         /// </summary>
         public static string WelcomeText {
             get {
