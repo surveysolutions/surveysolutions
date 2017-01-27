@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.Models.Template
         
         public virtual bool AllowCensusMode { get; set; }
 
-        public virtual bool Disabled { get; set; }
+        public virtual bool IsDisabled { get; set; }
 
         public virtual string CreationDate { get; set; }
 

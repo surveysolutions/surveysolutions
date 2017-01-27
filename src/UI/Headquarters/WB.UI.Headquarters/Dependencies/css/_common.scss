@@ -280,8 +280,15 @@ body > .ui-pnotify
             margin: 0;
     	}
     }
+    &.centered-modal{
+        position: fixed;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
 }
-.ui-pnotify.stack-modal{
+.ui-pnotify{
 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
 	border-radius: 0;
 	.alert{
