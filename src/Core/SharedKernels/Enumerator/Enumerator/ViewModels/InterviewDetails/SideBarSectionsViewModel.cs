@@ -110,8 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.UpdateSections();
         }
 
-        private void UpdateSections() => this.UpdateSections(false);
-        private void UpdateSections(bool force)
+        private void UpdateSections(object sender, EventArgs e) => this.UpdateSections();
+        private void UpdateSections(bool force = false)
         {
             this.UpdateViewModels(force);
             this.UpdateUI();
