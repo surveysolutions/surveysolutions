@@ -5,16 +5,24 @@ using CommandLine.Text;
 using System.Linq;
 using System.Reflection;
 using Humanizer;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
+using NinjectAdapter;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace A2DB
 {
@@ -22,7 +30,7 @@ namespace A2DB
     {
         protected class Options
         {
-            [Option('p', "plainstore", Required = true, HelpText = "PostgreSql plain storage connection string.")]
+            [Option('p', "plainstore", Required = true, HelpText = "PostgreSql storage connection string.")]
             public string PGPlainConnection { get; set; }
 
             [Option('f', "folder", Required = true, HelpText = "Folder for assemblies to search in.")]
@@ -59,9 +67,33 @@ namespace A2DB
 
         private static void SaveAssemblies(Options options)
         {
-            var plainPostgresTransactionManager = new PlainPostgresTransactionManager(BuildSessionFactory(options.PGPlainConnection));
+            var schemaName = "plainstore";
+            var plainPostgresTransactionManager = new PlainPostgresTransactionManager(BuildSessionFactory(schemaName, options.PGPlainConnection));
 
             var assemblyStorage = new PostgresPlainStorageRepository<AssemblyInfo>(plainPostgresTransactionManager);
+
+
+            var serviceLocator = new Mock<IServiceLocator>();
+
+            var logger = new Mock<ILogger>();
+            
+            serviceLocator.Setup(locator => locator.GetInstance<ILogger>()).Returns(Mock.Of<ILogger>());
+
+            var loggerProvider = new Mock<ILoggerProvider>();
+            loggerProvider.Setup(provider => provider.GetForType(typeof(DbMigrationsRunner))).Returns(logger.Object);
+
+            serviceLocator.Setup(locator => locator.GetInstance<ILoggerProvider>())
+                .Returns(Mock.Of<ILoggerProvider>());
+            
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocator.Object);
+            
+            WB.Infrastructure.Native.Storage.Postgre.DbMigrations.DbMigrationsRunner.MigrateToLatest(
+                options.PGPlainConnection,
+                schemaName,
+                new DbUpgradeSettings(
+                    typeof(WB.UI.Headquarters.Migrations.PlainStore.M001_Init).Assembly, 
+                    typeof(WB.UI.Headquarters.Migrations.PlainStore.M001_Init).Namespace));
 
             var service = new AssemblyService(assemblyStorage);
 
@@ -72,11 +104,20 @@ namespace A2DB
                 var fileCreated = File.GetCreationTime(assemblyFile);
                 var fileName = Path.GetFileName(assemblyFile);
                 var fileContent = File.ReadAllBytes(assemblyFile);
-                service.SaveAssemblyInfo(fileName, fileCreated, fileContent);
+
+                Console.WriteLine("Saving " + fileName);
+
+                plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
+                {
+                    service.SaveAssemblyInfo(fileName, fileCreated, fileContent);
+                });
+
+                File.Move(assemblyFile, assemblyFile + ".moved");
             }
         }
-       
-        private static ISessionFactory BuildSessionFactory(string plainStorageConnection)
+
+
+        private static ISessionFactory BuildSessionFactory(string schemaName, string plainStorageConnection)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
@@ -86,20 +127,19 @@ namespace A2DB
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappings(), "Plain");
-            var update = new SchemaUpdate(cfg);
-            update.Execute(true, true);
-
+            cfg.AddDeserializedMapping(GetMappings(schemaName), "Plain");
+            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             return cfg.BuildSessionFactory();
         }
 
-        private static HbmMapping GetMappings()
+        private static HbmMapping GetMappings(string schemaName)
         {
             var mapper = new ModelMapper();
             var mappingTypes = new[] { typeof(AssemblyInfo).Assembly }
-                .SelectMany(x => x.GetExportedTypes())
-                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
-                            x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+                
+                                            .SelectMany(x => x.GetExportedTypes())
+                                            .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
+                                                        x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
 
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
@@ -114,9 +154,16 @@ namespace A2DB
             {
                 var tableName = type.Name.Pluralize();
                 customizer.Table(tableName);
+                customizer.Schema(schemaName);
             };
+            mapper.BeforeMapSet += (inspector, member, customizer) => customizer.Schema(schemaName);
+            mapper.BeforeMapBag += (inspector, member, customizer) => customizer.Schema(schemaName);
+            mapper.BeforeMapList += (inspector, member, customizer) => customizer.Schema(schemaName);
 
-            return mapper.CompileMappingForAllExplicitlyAddedEntities();
+            var map = mapper.CompileMappingForAllExplicitlyAddedEntities();
+
+            return map;
+
         }
     }
 }
