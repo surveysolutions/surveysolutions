@@ -12,8 +12,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public delegate void SideBarSectionUpdated();
-
     [DebuggerDisplay("Title = {Title.PlainText}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
         ILiteEventHandler<RosterInstancesAdded>,
@@ -32,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string interviewId;
         private Guid[] rostersInGroup;
         
-        public event SideBarSectionUpdated OnSectionUpdated;
+        public event EventHandler OnSectionUpdated;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -139,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void Toggle()
         {
             this.Expanded = !this.Expanded;
-            this.OnSectionUpdated?.Invoke();
+            this.OnSectionUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         private void NavigateToSection()
@@ -170,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             if (addedSubGroups.Any(x => interview.GetGroup(x)?.Parent?.Identity == this.SectionIdentity))
-                this.OnSectionUpdated?.Invoke();
+                this.OnSectionUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public void Handle(RosterInstancesAdded @event)
