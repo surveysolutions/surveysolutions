@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -94,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             });
 
             //act
-            TestDelegate sync = () => interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            TestDelegate sync = () => interview.ApplyEvent(new InterviewSynchronized(syncDto));
 
             //assert
             Assert.DoesNotThrow(sync);
