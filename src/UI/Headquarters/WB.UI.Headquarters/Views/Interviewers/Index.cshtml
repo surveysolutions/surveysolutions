@@ -50,6 +50,7 @@
             var unArchiveUserCommad = "UnarchiveUserCommand";
             var self = this;
 
+            self.Url = new Url();
             self.SupervisorUrl = supervisorsUrl;
             self.IsSupervisorsLoading = ko.observable(false);
             self.Supervisors = function(query, sync, pageSize) {
@@ -114,6 +115,17 @@
 
             self.load = function(updater) {
                 self.updater = updater;
+
+                if (self.QueryString['supervisor'] != null) {
+                    self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
+                }
+
+                self.Archived(self.QueryString['archived']);
+                self.ConnectedToDevice(self.QueryString['connectedToDevice']);
+
+                self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
+                self.Url.query['archived'] = self.QueryString['archived'] || "";
+                self.Url.query['connectedToDevice'] = self.QueryString['connectedToDevice'] || "";
 
                 self.SelectedSupervisor.subscribe(updater);
                 self.Archived.subscribe(updater);
