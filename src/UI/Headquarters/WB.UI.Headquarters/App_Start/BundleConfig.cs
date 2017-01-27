@@ -212,7 +212,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
                 "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/viewmodels/pages/interviewers.js"
+                "~/Scripts/viewmodels/pages/interviewers.js",
+                "~/Scripts/query-string.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/users").Include(
