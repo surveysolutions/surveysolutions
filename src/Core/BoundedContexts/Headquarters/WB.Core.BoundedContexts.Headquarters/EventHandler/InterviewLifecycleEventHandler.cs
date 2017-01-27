@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<SubstitutionTitlesChanged>,
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
@@ -134,5 +135,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<GroupsDisabled> @event)
             => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
+
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+        }
     }
 }
