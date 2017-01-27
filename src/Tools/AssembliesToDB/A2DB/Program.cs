@@ -42,14 +42,15 @@ namespace A2DB
             [HelpOption]
             public string GetUsage()
             {
-                return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+                return HelpText.AutoBuild(this,
+                    (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
             }
         }
 
         static void Main(string[] args)
         {
             Console.WriteLine("This tool will scan and save Assemblies *.dll from folder to DB.");
-            
+
             var options = new Options();
             if (Parser.Default.ParseArguments(args, options))
             {
@@ -61,14 +62,15 @@ namespace A2DB
             {
                 Console.WriteLine(
                     "Example: A2DB -p \"Server = 127.0.0.1; Port = 5432; User Id = postgres; Password = Qwerty1234; Database = SuperHQ-Plain\" -f \"c:temp\assemblies\"");
-                
+
             }
         }
 
         private static void SaveAssemblies(Options options)
         {
             var schemaName = "plainstore";
-            var plainPostgresTransactionManager = new PlainPostgresTransactionManager(BuildSessionFactory(schemaName, options.PGPlainConnection));
+            var plainPostgresTransactionManager =
+                new PlainPostgresTransactionManager(BuildSessionFactory(schemaName, options.PGPlainConnection));
 
             var assemblyStorage = new PostgresPlainStorageRepository<AssemblyInfo>(plainPostgresTransactionManager);
 
@@ -76,7 +78,7 @@ namespace A2DB
             var serviceLocator = new Mock<IServiceLocator>();
 
             var logger = new Mock<ILogger>();
-            
+
             serviceLocator.Setup(locator => locator.GetInstance<ILogger>()).Returns(Mock.Of<ILogger>());
 
             var loggerProvider = new Mock<ILoggerProvider>();
@@ -84,15 +86,15 @@ namespace A2DB
 
             serviceLocator.Setup(locator => locator.GetInstance<ILoggerProvider>())
                 .Returns(Mock.Of<ILoggerProvider>());
-            
+
 
             ServiceLocator.SetLocatorProvider(() => serviceLocator.Object);
-            
+
             WB.Infrastructure.Native.Storage.Postgre.DbMigrations.DbMigrationsRunner.MigrateToLatest(
                 options.PGPlainConnection,
                 schemaName,
                 new DbUpgradeSettings(
-                    typeof(WB.UI.Headquarters.Migrations.PlainStore.M001_Init).Assembly, 
+                    typeof(WB.UI.Headquarters.Migrations.PlainStore.M001_Init).Assembly,
                     typeof(WB.UI.Headquarters.Migrations.PlainStore.M001_Init).Namespace));
 
             var service = new AssemblyService(assemblyStorage);
@@ -112,7 +114,15 @@ namespace A2DB
                     service.SaveAssemblyInfo(fileName, fileCreated, fileContent);
                 });
 
-                File.Move(assemblyFile, assemblyFile + ".moved");
+                try
+                {
+                    File.Move(assemblyFile, assemblyFile + ".moved");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Renaming failed for " + fileName);
+                }
+                
             }
         }
 
