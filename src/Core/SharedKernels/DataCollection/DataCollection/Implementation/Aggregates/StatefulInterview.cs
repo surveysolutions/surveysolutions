@@ -55,6 +55,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
+                if (question == null)
+                {
+                    //now answers from removed rosters are in sync package.
+                    continue;    
+                }
+
                 if (answerDto.Answer != null)
                 {
                     question.SetObjectAnswer(answerDto.Answer);
