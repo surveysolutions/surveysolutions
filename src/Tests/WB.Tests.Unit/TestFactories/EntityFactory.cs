@@ -42,6 +42,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -1386,5 +1387,10 @@ namespace WB.Tests.Unit.TestFactories
 
         public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
             => new ChangedVariable(changedVariable, newValue);
+
+        public InterviewTextListAnswers InterviewTextListAnswers(IEnumerable<Tuple<decimal, string>> answers)
+        {
+            return new InterviewTextListAnswers(answers);
+        }
     }
 }
