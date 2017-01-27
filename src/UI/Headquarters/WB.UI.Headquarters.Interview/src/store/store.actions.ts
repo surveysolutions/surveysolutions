@@ -52,6 +52,10 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
+    answerDateQuestion({dispatch}, {identity, date}) {
+        dispatch("fetch", { id: identity })
+        apiCaller(api => api.answerDateQuestion(identity, date))
+    },
     removeAnswer({ dispatch }, questionId: string) {
         dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))

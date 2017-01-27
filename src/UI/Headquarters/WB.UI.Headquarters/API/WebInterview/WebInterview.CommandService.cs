@@ -30,6 +30,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
         }
 
+        public void AnswerDateQuestion(string questionIdenty, DateTime answer)
+        {
+            var identity = Identity.Parse(questionIdenty);
+            ExecuteCommand(new AnswerDateTimeQuestionCommand(this.GetCallerInterview().Id,
+                this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
+        }
+
         public void AnswerSingleOptionQuestion(int answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);

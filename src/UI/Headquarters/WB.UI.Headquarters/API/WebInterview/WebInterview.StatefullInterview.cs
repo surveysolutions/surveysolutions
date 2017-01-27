@@ -289,6 +289,10 @@ namespace WB.UI.Headquarters.API.WebInterview
                     typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                 }
+                else if (question.IsDateTime)
+                {
+                    result = this.autoMapper.Map<InterviewDateQuestion>(question);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
