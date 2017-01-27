@@ -177,12 +177,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 if(sectionOrSubSection.Parent == null) continue;
 
-                if (clearExpanded &&
-                    (parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity) ||
-                     sectionOrSubSection.Parent.Identity == currentGroup?.Identity))
+                var isInCurrentSection = sectionOrSubSection.Parent.Identity == currentGroup?.Identity;
+                var isParentOfCurrentSection = parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
+                var isExpandedSection = expandedSectionIdentities.Contains(sectionOrSubSection.Parent.Identity);
+
+                if (clearExpanded && (isParentOfCurrentSection || isInCurrentSection))
                     yield return sectionOrSubSection.Identity;
 
-                if(!clearExpanded && expandedSectionIdentities.Contains(sectionOrSubSection.Parent.Identity))
+                if (!clearExpanded && isExpandedSection)
                     yield return sectionOrSubSection.Identity;
             }
         }
