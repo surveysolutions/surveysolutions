@@ -155,7 +155,7 @@
     <comment>{0} - name of the questionnaire without version</comment>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Hellow and Welcome to the Survey Solutions Web Survey</value>
+    <value>Hello and Welcome to the Survey Solutions Web Survey</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start interview</value>
