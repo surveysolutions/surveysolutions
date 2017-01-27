@@ -1,3 +1,4 @@
+using System;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -8,6 +9,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         Identity[] ParentsIdentities { get; }
         Identity ParentIdentity { get; }
         
-        event SideBarSectionUpdated OnSectionUpdated;
+        event EventHandler OnSectionUpdated;
     }
 }
