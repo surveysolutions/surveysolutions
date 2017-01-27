@@ -26,6 +26,7 @@
     "toastr": "^2.1.2",
     "typescript": "^2.1.4",
     "vue": "^2.1.10",
+    "vue-flatpickr": "^2.2.9",
     "vue-router": "^2.2.0",
     "vuex": "^2.1.1"
   },

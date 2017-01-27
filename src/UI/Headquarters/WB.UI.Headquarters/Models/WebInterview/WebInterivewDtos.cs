@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
 
@@ -27,6 +28,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewSingleOptionQuestion : CategoricalQuestion
     {
         public int? Answer { get; set; }
+    }
+
+    public class InterviewDateQuestion : GenericQuestion
+    {
+        public DateTime? Answer { get; set; }
     }
 
     public class InterviewMutliOptionQuestion : CategoricalQuestion
