@@ -44,7 +44,6 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             if (cachedAggregate == null) return null;
 
             bool isDirty = cachedAggregate.HasUncommittedChanges();
-
             if (isDirty) return null;
 
             return cachedAggregate;
