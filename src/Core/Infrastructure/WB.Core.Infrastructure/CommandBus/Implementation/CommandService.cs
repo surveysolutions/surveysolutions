@@ -198,18 +198,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            IEnumerable<CommittedEvent> commitedEvents;
-            try
-            {
-                commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
-                aggregate.MarkChangesAsCommitted();
-            }
-            catch (Exception)
-            {
-                var cachedRepository = this.eventSourcedRepository as EventSourcedAggregateRootRepositoryWithExtendedCache;
-                cachedRepository?.Evict(aggregate);
-                throw;
-            }
+            var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            aggregate.MarkChangesAsCommitted();
 
             try
             {

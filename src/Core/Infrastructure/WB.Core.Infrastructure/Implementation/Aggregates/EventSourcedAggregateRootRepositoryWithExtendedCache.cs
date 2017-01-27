@@ -62,13 +62,5 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                         .Take(CacheSize));
             }
         }
-
-        public void Evict(IEventSourcedAggregateRoot aggregate)
-        {
-            lock (lockObject)
-            {
-                this.cache = ImmutableList.CreateRange(cache.Except(ar => aggregate.EventSourceId == ar.EventSourceId));
-            }
-        }
     }
 }
