@@ -1,5 +1,5 @@
 <template>
-    <aside class="content" v-if="sections && sections.length > 0" style="transform: translateZ(0);">
+    <aside class="content" v-if="sections && sections.length > 0 && $route.params.sectionId" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
             </SidebarPanel>
@@ -15,7 +15,7 @@
         components: { SidebarPanel },
         computed: {
             sections() {
-                return this.$store.state.sidebar.panels
+                return this.$store.state.sidebar.panels["root"]
             },
             currentPanel() {
                 return this.$route.params.sectionId
