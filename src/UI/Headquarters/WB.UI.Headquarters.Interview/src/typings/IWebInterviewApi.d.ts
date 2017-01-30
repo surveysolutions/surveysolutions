@@ -29,6 +29,11 @@ declare enum GroupStatus {
     Other = 0,
 }
 
+declare interface IValidity {
+    isValid: Boolean
+
+}
+
 declare interface ISidebarPanel {
     id: string
     parentId: string
@@ -36,6 +41,7 @@ declare interface ISidebarPanel {
     state: GroupStatus
     collapsed: Boolean
     hasChildren: Boolean
+    validity: IValidity
 }
 
 declare interface IWebInterviewApi {
@@ -56,7 +62,7 @@ declare interface IWebInterviewApi {
     answerDoubleQuestion(questionIdentity: string, answer: number): void
     answerDateQuestion(questionIdentity: string, answer: Date): void
 
-    answerTextListQuestion(questionIdentity: string, rows: TextListAnswerRow[]): void
+    answerTextListQuestion(questionIdentity: string, rows: any[]): void
 
     removeAnswer(questionId: string): void
 }

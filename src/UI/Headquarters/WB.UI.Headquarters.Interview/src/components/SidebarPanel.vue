@@ -45,7 +45,7 @@
                 return this.panel.hasChildrens
             },
             childPanels() {
-                return this.panel.childs
+                return this.$store.state.sidebar.panels[this.panel.id] || []
             },
             titleCss() {
                 return [{
@@ -71,13 +71,13 @@
                 this.$store.dispatch("fetchChildSidebar", this.panel.id)
             },
             update() {
-                if (this.panel.hasChildrens && !this.panel.collapsed && this.panel.childs.length === 0) {
+                if (this.panel.hasChildrens && !this.panel.collapsed) {
                     this.fetchChild()
                 }
             },
             toggle() {
                 this.$store.dispatch("toggleSidebar", {
-                    id: this.panel.id,
+                    panel: this.panel,
                     collapsed: !this.panel.collapsed
                 })
             }

@@ -94,7 +94,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
                 .ForMember(x => x.HasChildrens, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any()))
                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
-                .ForMember(x => x.Childs, opts => opts.MapFrom(x => Array.Empty<SidebarPanel>()))
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
         }
 
