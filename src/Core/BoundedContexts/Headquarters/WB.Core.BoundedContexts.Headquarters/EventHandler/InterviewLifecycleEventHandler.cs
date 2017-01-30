@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<StaticTextsDisabled>,
         IEventHandler<StaticTextsEnabled>,
         IEventHandler<TextQuestionAnswered>,
+        IEventHandler<TextListQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
@@ -140,5 +141,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
         }
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
     }
 }

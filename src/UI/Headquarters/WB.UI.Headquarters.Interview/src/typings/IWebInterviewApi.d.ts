@@ -56,5 +56,7 @@ declare interface IWebInterviewApi {
     answerDoubleQuestion(questionIdentity: string, answer: number): void
     answerDateQuestion(questionIdentity: string, answer: Date): void
 
+    answerTextListQuestion(questionIdentity: string, rows: TextListAnswerRow[]): void
+
     removeAnswer(questionId: string): void
 }

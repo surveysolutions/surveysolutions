@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -28,6 +30,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             var identity = Identity.Parse(questionIdenty);
             ExecuteCommand(new AnswerTextQuestionCommand(this.GetCallerInterview().Id,
                 this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
+        }
+
+        public void AnswerTextListQuestion(string questionIdenty, TextListAnswerRow[] rows)
+        {
+            var identity = Identity.Parse(questionIdenty);
+            ExecuteCommand(new AnswerTextListQuestionCommand(this.GetCallerInterview().Id,
+                this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow,
+                rows.Select(row => new Tuple<decimal, string>(row.Value, row.Text)).ToArray()));
         }
 
         public void AnswerDateQuestion(string questionIdenty, DateTime answer)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Models.WebInterview
@@ -47,6 +48,23 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class CategoricalQuestion: GenericQuestion
     {
         public List<CategoricalOption> Options { get; set; }
+    }
+
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTextListQuestion : GenericQuestion
+    {
+        public int? MaxAnswersCount { get; set; }
+        public List<TextListAnswerRow> Rows { get; set; }
+        public override string ToString() => string.Join(@", ", Rows);
+    }
+
+    [DebuggerDisplay("{ToString()}")]
+    public class TextListAnswerRow
+    {
+        public decimal Value { get; set; }
+        public string Text { get; set; }
+
+        public override string ToString() => $@"{Value} -> {Text}";
     }
 
     public abstract class GenericQuestion : InterviewEntity
