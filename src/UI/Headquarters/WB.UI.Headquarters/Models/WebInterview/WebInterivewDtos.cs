@@ -138,6 +138,19 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Completed
     }
 
+    public class DropdownItem
+    {
+        public DropdownItem(int value, string title)
+        {
+            this.Value = value;
+            this.Title = title;
+        }
+
+        public int Value { get; set; }
+
+        public string Title { get; set; }
+    }
+
     /// <summary>
     /// Used during dev, should be deleted when all types of questions are implemented
     /// </summary>

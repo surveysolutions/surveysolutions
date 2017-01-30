@@ -43,10 +43,14 @@ declare interface ISidebarPanel {
     hasChildren: Boolean
     validity: IValidity
 }
-
 declare interface ITextListAnswerRow {
     value: number
     text: string
+}
+
+declare interface IDropdownItem {
+    value: number
+    title: string
 }
 
 declare interface IWebInterviewApi {
@@ -58,6 +62,7 @@ declare interface IWebInterviewApi {
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
     getBreadcrumbs(): IBreadcrumpInfo
     getSidebarState(): ISidebarPanel[]
+    getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
     getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
 
     answerSingleOptionQuestion(answer: number, questionId: string)
