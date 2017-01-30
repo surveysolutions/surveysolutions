@@ -41,6 +41,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
                .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
 
+            this.CreateMap<Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.TextListAnswerRow, TextListAnswerRow>()
+                .ForMember(x => x.Text, opts => opts.MapFrom(x => x.Text))
+                .ForMember(x => x.Value, opts => opts.MapFrom(x => x.Value));
+            this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()
+               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.AsTextList.GetAnswer().Rows));
+
             this.CreateMap<InterviewTreeStaticText, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
 

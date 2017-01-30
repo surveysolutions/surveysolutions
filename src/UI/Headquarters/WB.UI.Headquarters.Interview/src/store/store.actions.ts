@@ -42,6 +42,10 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDateQuestion(identity, date))
     },
+    answerTextListQuestion({dispatch}, {identity, rows}) {
+        dispatch("fetch", { id: identity })
+        apiCaller(api => api.answerTextListQuestion(identity, rows))
+    },
     removeAnswer({ dispatch }, questionId: string) {
         dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))
