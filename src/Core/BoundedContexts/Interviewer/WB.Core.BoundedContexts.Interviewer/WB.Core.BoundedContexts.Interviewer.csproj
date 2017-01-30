@@ -119,7 +119,6 @@
   <ItemGroup>
     <Compile Include="Implementation\Services\InterviewerPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
-    <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewEventStreamOptimizer.cs" />

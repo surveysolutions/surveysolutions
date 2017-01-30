@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -27,6 +28,17 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             throw new NotImplementedException();
+        }
+
+        public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
+        {
+            var path = CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            //please don't use LoadFile or Load here, but use LoadFrom
+            //dependent assemblies could not be resolved
+            return Assembly.LoadFrom(path);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64String)

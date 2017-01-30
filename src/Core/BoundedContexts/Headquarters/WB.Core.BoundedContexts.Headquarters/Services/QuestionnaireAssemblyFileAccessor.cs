@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -11,21 +12,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     internal class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string pathToStore;
-
         private readonly IAssemblyService assemblyService;
+        private readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
 
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyFileAccessor>();
 
-        public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, IAssemblyService assemblyService, string folderPath, string assemblyDirectoryName)
+        public QuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.assemblyService = assemblyService;
+        }
 
-            this.pathToStore = fileSystemAccessor.CombinePath(folderPath, assemblyDirectoryName);
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToStore))
-                fileSystemAccessor.CreateDirectory(this.pathToStore);
+
+        private class AssemblyHolder
+        {
+            public AssemblyHolder(string assemblyFileName, byte[] assemblyContent)
+            {
+                this.FileName = assemblyFileName;
+                
+                this.AssemblyContent = assemblyContent;
+            }
+
+            private Assembly assembly = null;
+
+            public string FileName { private set; get; }
+
+            public Assembly Assembly
+            {
+                get
+                {
+                    if(assembly == null)
+                        assembly = Assembly.Load(AssemblyContent);
+                    return this.assembly;
+
+                } 
+            }
+            public byte[] AssemblyContent { private set; get; }
+        }
+
+
+        private AssemblyHolder GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
+        {
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
+
+            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
+            if (assemblyInfo == null)
+                return null;
+
+            var assembly = this.assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName, assemblyInfo.Content));
+
+            return assembly;
+
+    }
+
+        public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
+        {
+            var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
+            return assembly?.Assembly;
+        }
+
+        private AssemblyHolder CreateAssemblyHolder(string assemblyFileName, byte[] assemblyContent)
+        {
+            
+            return new AssemblyHolder(assemblyFileName, assemblyContent);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
@@ -42,9 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             }
 
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            if (this.fileSystemAccessor.IsFileExists(pathToSaveAssembly))
+            if (this.assemblyService.GetAssemblyInfo(assemblyFileName) != null)
             {
                 throw new QuestionnaireAssemblyAlreadyExistsException(
                     "Questionnaire assembly file already exists and can not be overwritten",
@@ -52,10 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             }
 
             this.assemblyService.SaveAssemblyInfo(assemblyFileName, DateTime.Now, assembly);
-
-            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
-
-            this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
+            
         }
 
         public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
@@ -66,15 +110,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
-
+            
             Logger.Info($"Trying to delete assembly for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
-
-            //loaded assembly could be locked
+            
             try
             {
                 this.assemblyService.DeleteAssemblyInfo(assemblyFileName);
-                this.fileSystemAccessor.DeleteFile(pathToSaveAssembly);
             }
             catch (IOException e)
             {
@@ -90,40 +131,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
-            byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
+            var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
 
-            if (assemblyAsByteArray == null)
+            if (assembly == null)
                 return null;
 
-            return Convert.ToBase64String(assemblyAsByteArray);
+            return Convert.ToBase64String(assembly.AssemblyContent);
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            string fullPathToAssembly = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
-            return string.IsNullOrEmpty(fullPathToAssembly) ? null : this.fileSystemAccessor.ReadAllBytes(fullPathToAssembly);
-        }
-
-        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
-        {
-            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var fullPathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
-
-            if (this.fileSystemAccessor.IsFileExists(fullPathToAssembly))
-                return fullPathToAssembly;
-
-            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
-            if (assemblyInfo == null)
-                return string.Empty;
-
-            this.fileSystemAccessor.WriteAllBytes(fullPathToAssembly, assemblyInfo.Content);
-
-            return fullPathToAssembly;
+            var assembly = GetAssemblyHolder(questionnaireId, questionnaireVersion);
+            return assembly?.AssemblyContent;
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            return !string.IsNullOrEmpty(this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion));
+            return GetAssemblyHolder(questionnaireId, questionnaireVersion) != null;
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)

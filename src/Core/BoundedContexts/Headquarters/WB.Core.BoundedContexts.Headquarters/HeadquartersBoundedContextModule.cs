@@ -90,7 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
-        private readonly string questionnaireAssembliesDirectoryName;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -106,8 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
             int? interviewLimitCount = null,
-            string syncDirectoryName = "SYNC",
-            string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
+            string syncDirectoryName = "SYNC")
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -119,7 +117,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
-            this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
         }
 
         public override void Load()
@@ -329,9 +326,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewSynchronizationFileStorage>().To<InterviewSynchronizationFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
 
-            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnaireAssemblyFileAccessor>()
-                .InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
-
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnaireAssemblyFileAccessor>().InSingletonScope();
+           
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
 
