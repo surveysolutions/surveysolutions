@@ -1,13 +1,24 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="time-question">
+    <wb-question :question="$me" :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group">
+                <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <Flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
+                        <Flatpickr  :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
                         <wb-remove-answer />
                     </div>
                 </div>
+                <div v-else>
+                    <div class="field" :class="{answered: $me.isAnswered}">
+                        <div class="block-with-data">{{answer}}</div>
+                        <wb-remove-answer />
+                    </div>
+                    <div class="action-btn-holder time-question" @click="answerDate">
+                        <button type="button" class="btn btn-default btn-lg btn-action-questionnaire">
+                            Record current time
+                        </button>
+                    </div>
+                <div>
             </div>
         </div>
     </wb-question>
@@ -34,20 +45,24 @@
         computed: {
             answer() {
                 if (this.$me && this.$me.answer) {
-                    return moment(this.$me.answer).format("YYYY-MM-DD")
+                    return moment(this.$me.answer).format(this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
                 }
                 return ""
             }
         },
         methods: {
             answerDate(answer) {
-                const oldAnswer = moment(this.$me.answer)
-                const newAnswer = moment(answer)
+                if(!this.$me.isTimestamp){
+                    const oldAnswer = moment(this.$me.answer)
+                    const newAnswer = moment(answer)
 
-                if (!oldAnswer.isSame(newAnswer)) {
-                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: newAnswer })
+                    if (!oldAnswer.isSame(newAnswer)) {
+                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: newAnswer })
+                    }
                 }
-
+                else{
+                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: moment() })
+                }
             }
         },
         components: {

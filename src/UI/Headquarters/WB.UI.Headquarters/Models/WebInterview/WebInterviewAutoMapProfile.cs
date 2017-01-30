@@ -36,6 +36,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewDateQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
 
             this.CreateMap<InterviewTreeStaticText, Validity>()
