@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
             QuestionnaireDocument sourceQuestionnaireClone = 
-                this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion).Clone();
+                this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion)?.Clone();
 
             this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaireClone);
 
