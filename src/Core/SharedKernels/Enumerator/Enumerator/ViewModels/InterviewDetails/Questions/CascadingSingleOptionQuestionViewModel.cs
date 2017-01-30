@@ -43,11 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        protected IStatefulInterview interview;
 
         private Identity questionIdentity;
         private Identity parentQuestionIdentity;
-        private Guid interviewId;
+        private string interviewId;
+        private Guid interviewGuid;
         private decimal? answerOnParentQuestion = null;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -93,8 +93,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
             if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
@@ -102,7 +102,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
 
             this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
+            this.interviewGuid = interview.Id;
+            this.interviewId = interviewId;
             var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
 
             this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
@@ -116,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var singleOptionQuestion = interview.GetSingleOptionQuestion(entityIdentity);
             if (singleOptionQuestion.IsAnswered)
             {
-                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
+                var answerOption = interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
                     singleOptionQuestion.GetAnswer().SelectedValue, (int?)this.answerOnParentQuestion);
 
                 this.selectedObject = this.CreateFormattedOptionModel(answerOption);
@@ -171,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     try
                     {
                         await this.Answering.SendRemoveAnswerCommandAsync(
-                            new RemoveAnswerCommand(this.interviewId,
+                            new RemoveAnswerCommand(this.interviewGuid,
                                 this.principal.CurrentUserIdentity.UserId,
                                 this.questionIdentity,
                                 DateTime.UtcNow));
@@ -263,7 +264,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!this.answerOnParentQuestion.HasValue) 
                 yield break;
 
-            var options = this.interview.GetTopFilteredOptionsForQuestion(questionIdentity, (int)this.answerOnParentQuestion.Value, 
+            var interview = this.interviewRepository.Get(this.interviewId);
+
+            var options = interview.GetTopFilteredOptionsForQuestion(questionIdentity, (int)this.answerOnParentQuestion.Value, 
                 textHint, SuggestionsMaxCount);
 
             foreach (var cascadingComboboxItemViewModel in options)
@@ -310,7 +313,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!this.answerOnParentQuestion.HasValue)
                 return;
 
-            var answerViewModel = this.interview.GetOptionForQuestionWithFilter(this.questionIdentity, enteredText, (int)answerOnParentQuestion.Value); 
+            var interview = this.interviewRepository.Get(this.interviewId);
+
+            var answerViewModel = interview.GetOptionForQuestionWithFilter(this.questionIdentity, enteredText, (int)answerOnParentQuestion.Value);
                 
             if (answerViewModel == null)
             {
@@ -331,7 +336,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task SendAnswerFilteredComboboxQuestionCommandAsync(decimal answerValue)
         {
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                this.interviewGuid,
                 this.principal.CurrentUserIdentity.UserId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
@@ -356,7 +361,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+                var interview = this.interviewRepository.Get(this.interviewId);
+                var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
                 if (parentSingleOptionQuestion.IsAnswered)
                 {
                     this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
