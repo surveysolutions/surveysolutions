@@ -16,23 +16,25 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             : base(eventStore, snapshotStore, repository)
         {
         }
-
-
+        
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
             => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            var aggregateRoot =
-                this.GetFromCache(aggregateType, aggregateId) ??
-                base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
-
-            if (aggregateRoot != null)
+            lock (this.memoryCache)
             {
-                this.memoryCache[aggregateType] = aggregateRoot;
-            }
+                var aggregateRoot =
+                      this.GetFromCache(aggregateType, aggregateId) ??
+                      base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
-            return aggregateRoot;
+                if (aggregateRoot != null)
+                {
+                      this.memoryCache[aggregateType] = aggregateRoot;
+                }
+
+                return aggregateRoot; 
+            }
         }
 
         private IEventSourcedAggregateRoot GetFromCache(Type aggregateType, Guid aggregateId)
