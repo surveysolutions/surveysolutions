@@ -295,6 +295,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = this.autoMapper.Map<InterviewDateQuestion>(question);
                 }
+                else if (question.IsTextList)
+                {
+                    result = this.autoMapper.Map<InterviewTextListQuestion>(question);
+                    var typedResult = (InterviewTextListQuestion)result;
+                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -427,6 +434,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                         : InterviewEntityType.Double;
                 case QuestionType.Text:
                     return InterviewEntityType.TextQuestion;
+                case QuestionType.TextList:
+                    return InterviewEntityType.TextList;
                 default:
                     return InterviewEntityType.Unsupported;
             }
