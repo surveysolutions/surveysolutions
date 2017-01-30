@@ -89,7 +89,7 @@ namespace WB.UI.Headquarters.API
             switch (dataExportType)
             {
                 case DataExportFormat.Paradata:
-                    this.dataExportProcessesService.AddParaDataExport(dataExportType);
+                    this.dataExportProcessesService.AddParaDataExport(DataExportFormat.Tabular);
                     break;
                 case DataExportFormat.DDI:
                     return this.BadRequest(@"Not supported export type");
@@ -150,9 +150,16 @@ namespace WB.UI.Headquarters.API
             if (!Enum.TryParse(exportType, true, out exportFormat))
                 return this.Content(HttpStatusCode.NotFound, @"Unknown export type");
 
-            var dataExportType = exportFormat == DataExportFormat.Paradata
-                ? DataExportType.ParaData
-                : DataExportType.Data;
+            DataExportType dataExportType;
+            if (exportFormat == DataExportFormat.Paradata)
+            {
+                exportFormat = DataExportFormat.Tabular;
+                dataExportType = DataExportType.ParaData;
+            }
+            else
+            {
+                dataExportType = DataExportType.Data;
+            }
 
             var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
 
