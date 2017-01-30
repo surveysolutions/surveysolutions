@@ -9,11 +9,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
     [Subject(typeof(QuestionnaireAssemblyFileAccessor))]
     class QuestionnaireAssemblyFileAccessorTestsContext
     {
-        protected static QuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor = null, 
-            IAssemblyService assemblyService = null)
+        protected static QuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
         {
-            return new QuestionnaireAssemblyFileAccessor(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, 
-                assemblyService ?? CreateIAssemblyService().Object, "", "QuestionnaireAssembly");
+            return new QuestionnaireAssemblyFileAccessor(assemblyService ?? CreateIAssemblyService().Object);
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

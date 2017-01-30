@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.API.Interviewer
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StreamContent(File.OpenRead(this.questionnareAssemblyFileAccessor.CheckAndGetFullPathToAssemblyOrEmpty(id, version)))
+                Content = new ByteArrayContent(this.questionnareAssemblyFileAccessor.GetAssemblyAsByteArray(id, version))
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");

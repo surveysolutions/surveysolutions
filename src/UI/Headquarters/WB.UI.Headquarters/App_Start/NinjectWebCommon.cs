@@ -132,7 +132,8 @@ namespace WB.UI.Headquarters
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
-                }
+                },
+                BasePath = basePath
             };
 
             var cacheSettings = new ReadSideCacheSettings(
@@ -263,7 +264,6 @@ namespace WB.UI.Headquarters
                     }
                 }
             }));
-
 
             return kernel;
         }

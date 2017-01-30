@@ -69,6 +69,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
 
+            this.Bind<LegacyAssemblySettings>().ToConstant(new LegacyAssemblySettings()
+            {
+                FolderPath = this.settings.BasePath,
+                AssembliesDirectoryName = "QuestionnaireAssemblies"
+            });
+
             DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
         }
 
