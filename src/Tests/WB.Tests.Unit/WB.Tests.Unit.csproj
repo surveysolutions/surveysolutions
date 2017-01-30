@@ -472,8 +472,6 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_with_filtered_options.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\SynchronizationProcessTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\SynchronizationViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_password.cs" />
@@ -1389,8 +1387,6 @@
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_base_64_string.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_byte_array.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_getting_full_path_to_assembly.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_questionnaire_has_cascading_options.cs" />

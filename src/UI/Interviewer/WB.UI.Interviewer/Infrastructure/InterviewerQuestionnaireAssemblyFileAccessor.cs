@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.UI.Interviewer.Infrastructure
 {
     public class InterviewerQuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
@@ -75,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.fileSystemAccessor);
         }
 
-        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
+        private string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
@@ -90,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var path = CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            var path = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
             if (string.IsNullOrEmpty(path))
                 return null;
 
@@ -122,7 +121,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            var assemblyFile = this.fileSystemAccessor.OpenOrCreateFile(Path.Combine(this.pathToStore, assemblyFileName), false);
+            var assemblyFile = this.fileSystemAccessor.OpenOrCreateFile(this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName), false);
             using (assemblyFile)
             {
                 await assemblyFile.WriteAsync(assembly, 0, assembly.Length);

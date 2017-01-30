@@ -395,6 +395,7 @@
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
+    <Compile Include="Infrastructure\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Infrastructure\Logging\NLogLogger.cs" />
     <Compile Include="Infrastructure\Logging\NLogLoggerProvider.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />

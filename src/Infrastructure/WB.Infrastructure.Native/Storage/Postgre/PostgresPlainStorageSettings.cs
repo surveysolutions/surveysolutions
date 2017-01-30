@@ -16,5 +16,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public List<Assembly> MappingAssemblies { get; set; }
         public string SchemaName { get; set; }
+
+        public string BasePath { get; set; }
     }
 }

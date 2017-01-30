@@ -1,7 +1,7 @@
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.UI.Interviewer.Implementations.Services;

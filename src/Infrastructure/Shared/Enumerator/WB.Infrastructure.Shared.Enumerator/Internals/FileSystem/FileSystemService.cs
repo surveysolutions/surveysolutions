@@ -181,13 +181,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             File.SetAttributes(pathToFile, FileAttributes.ReadOnly);
         }
 
-        public Assembly LoadAssembly(string assemblyFile)
-        {
-            //please don't use LoadFile or Load here, but use LoadFrom
-            //dependent assemblies could not be resolved
-            return Assembly.LoadFrom(assemblyFile);
-        }
-
         public bool IsWritePermissionExists(string path)
         {
             throw new NotImplementedException();

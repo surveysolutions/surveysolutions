@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -7,7 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 {
     public interface IQuestionnaireAssemblyFileAccessor
     {
-        string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion);
+        //string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion);
+
+        Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion);
 
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64);
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly);

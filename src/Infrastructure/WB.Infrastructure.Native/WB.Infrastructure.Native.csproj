@@ -197,6 +197,7 @@
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
+    <Compile Include="LegacyAssemblySettings.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
