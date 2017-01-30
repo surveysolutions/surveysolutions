@@ -113,7 +113,6 @@ namespace WB.Tests.Integration
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                messenger: mvxMessenger,
                 eventRegistry: liteEventRegistry);
 
             sidebarViewModel.Init("", navigationState);
