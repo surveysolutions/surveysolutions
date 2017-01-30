@@ -30,12 +30,12 @@
                     return commandCall(type, command);
                 };
 
-                commandService.updateAttachment = function (questionnaireId, attachment) {
+                commandService.updateAttachment = function (questionnaireId, attachmentId, attachment) {
                     blockUI.start();
 
                     var command = {
                         questionnaireId: questionnaireId,
-                        attachmentId: attachment.attachmentId,
+                        attachmentId: attachmentId,
                         attachmentName: attachment.name,
                         oldAttachmentId: attachment.oldAttachmentId
                     };
