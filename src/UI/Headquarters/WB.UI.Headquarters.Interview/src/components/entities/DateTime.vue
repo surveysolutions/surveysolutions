@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <Flatpickr  :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
+                        <Flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
                         <wb-remove-answer />
                     </div>
                 </div>

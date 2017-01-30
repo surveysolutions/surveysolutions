@@ -3,8 +3,8 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field answered">
-                        <input type="text" class="field-to-fill" />
+                    <div class="field" :class="{answered: $me.isAnswered}">
+                        <wb-typeahead :questionId="$me.id" :value="$me.answer" @input="answerComboboxQuestion" />
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -14,23 +14,29 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
+    import wbTypeahead from "./ui/typeahead"
 
     export default {
         name: 'ComboboxQuestion',
         mixins: [entityDetails],
         data() {
             return {
-                selected: null
+                answer: null,
             }
         },
         computed: {
 
         },
+        watch: {
+            answer(newValue) {
+                this.answerComboboxQuestion(newValue)
+            }
+        },
         methods: {
+            answerComboboxQuestion(newValue) {
+                 this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
+            }
         },
-        directives: {
-
-        },
-        components: {  }
+        components: { wbTypeahead }
     }
 </script>

@@ -404,6 +404,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
+        public DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
+        {
+            var statefulInterview = this.GetCallerInterview();
+            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(Identity.Parse(id), null, filter, count);
+            return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
+        }
+
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
