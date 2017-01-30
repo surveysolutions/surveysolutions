@@ -20,6 +20,8 @@
                             var answer = Convert.ToDecimal(Model.Answer);
                             @Model.Options.First(option => answer == Convert.ToDecimal(option.Value)).Label
                         }
+                    } else if (singleOptionSetting.IsLinkedToListQuestion) {
+                        @Model.AnswerString
                     }
                     else
                     {
@@ -52,6 +54,8 @@
                     if (multiQuestionSettings.YesNoQuestion)
                     {
                         @Html.Partial("ReadOnlyYesNoQuestionPartialView", Model)
+                    } else if (multiQuestionSettings.IsLinkedToListQuestion) {
+                        @Model.AnswerString
                     }
                     else
                     {
