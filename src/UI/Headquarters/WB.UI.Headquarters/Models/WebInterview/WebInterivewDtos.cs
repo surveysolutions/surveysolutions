@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewDateQuestion : GenericQuestion
     {
+        public bool IsTimestamp { get; set; }
         public DateTime? Answer { get; set; }
     }
 
