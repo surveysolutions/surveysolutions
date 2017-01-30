@@ -5,6 +5,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Group = 1,
         StaticText,
         CategoricalSingle,
+        Combobox,
         CategoricalMulti,
         CategoricalYesNo,
         Integer,

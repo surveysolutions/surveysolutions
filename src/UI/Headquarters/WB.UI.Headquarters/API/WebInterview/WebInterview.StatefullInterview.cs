@@ -411,7 +411,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.MultyOption:
                     return InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    return InterviewEntityType.CategoricalSingle;
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) ? InterviewEntityType.Combobox : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:
                     return callerQuestionnaire.IsQuestionInteger(entityId)
                         ? InterviewEntityType.Integer
