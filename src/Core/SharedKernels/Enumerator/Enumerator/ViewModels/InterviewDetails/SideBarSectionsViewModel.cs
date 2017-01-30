@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -20,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesRemoved>,
         IDisposable
     {
-        private readonly IMvxMessenger messenger;
         private readonly ILiteEventRegistry eventRegistry;
         private NavigationState navigationState;
 
@@ -43,13 +41,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMessenger messenger,
             ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.messenger = messenger;
             this.eventRegistry = eventRegistry;
         }
 
@@ -204,7 +200,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.isDisposed = true;
 
                 this.eventRegistry.Unsubscribe(this);
-                this.AllVisibleSections.ForEach(viewModel =>
+                this.AllVisibleSections?.ForEach(viewModel =>
                 {
                     var sectionViewModel = viewModel as ISideBarSectionItem;
                     if (sectionViewModel != null)
