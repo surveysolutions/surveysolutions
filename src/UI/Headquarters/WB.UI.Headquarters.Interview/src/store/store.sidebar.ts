@@ -4,11 +4,14 @@ import * as groupBy from "lodash/groupby"
 import * as Vue from "vue"
 import { apiCaller } from "../api"
 import { safeStore } from "../errors"
-import { batchedAction, searchTree } from "./helpers"
+import { batchedAction } from "./helpers"
 
 export default safeStore({
     state: {
-        panels: []
+        panels: {
+            // organized by parentId, that way it easier to search and request data
+            // sectionId1: [sectiondata1, sectiondata2, sectiondata3], root: [section1, section2], ... etc
+        }
     },
 
     actions: {
@@ -17,42 +20,40 @@ export default safeStore({
             commit("SET_SIDEBAR_STATE", panels)
         }),
 
-        fetchChildSidebar: batchedAction(async ({commit}, ids) => {
+        fetchChildSidebar: batchedAction(async ({ commit }, ids) => {
             const childs = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
             commit("SET_SIDEBAR_STATE_CHILD", { childs })
         }, null, null),
 
-        toggleSidebar({ commit, dispatch, state }, { id, collapsed }) {
-            commit("SET_SIDEBAR_TOGGLE", { id, collapsed })
+        toggleSidebar({ commit, dispatch, state }, { panel, collapsed }) {
+            commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
             if (collapsed === false) {
-                dispatch("fetchChildSidebar", id)
+                dispatch("fetchChildSidebar", panel.id)
             }
         }
     },
 
     mutations: {
         SET_SIDEBAR_STATE(state, sidebars) {
-            Vue.set(state, "panels", sidebars)
+            Vue.set(state.panels, "root", sidebars)
         },
         SET_SIDEBAR_STATE_CHILD(state, { childs }) {
             const byParentId = groupBy(childs, "parentId")
-            const keys = Object.keys(byParentId)
 
-            searchTree(state.panels, keys, panel => {
-                Vue.set(panel, "childs", byParentId[panel.id])
+            forEach(byParentId, (panels, id) => {
+                Vue.set(state.panels, id || "root", panels)
             })
         },
-        SET_SIDEBAR_TOGGLE(state, {id, collapsed}) {
-            searchTree(state.panels, [id], panel => {
-                Vue.set(panel, "collapsed", collapsed)
-            })
+        SET_SIDEBAR_TOGGLE(state, {panel, collapsed}) {
+            Vue.set(panel, "collapsed", collapsed)
         }
     },
 
     getters: {
-        showSidebar(state) {
-            return state.panels && state.panels.length > 0
+        hasSidebarData(state) {
+            // tslint:disable-next-line:no-string-literal
+            return state.panels && state.panels["root"] && state.panels["root"].length > 0
         }
     }
 })

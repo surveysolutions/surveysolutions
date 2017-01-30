@@ -37,25 +37,3 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
         forEachIfNeeded(data, item => queue.push(item))
     }
 }
-
-export function searchTree(panels, ids: string[], callback, idPropName = "id", childPropName = "childs") {
-    if (ids.length === 0) {
-        return
-    }
-
-    for (let i in panels) {
-        const panel = panels[i]
-        const foundIdx = indexOf(ids, panel[idPropName])
-
-        if (foundIdx >= 0) {
-            callback(panel)
-            ids.splice(foundIdx, 1)
-
-            if (ids.length === 0) {
-                return
-            }
-        } else if (panel.childs && panel[childPropName].length > 0) {
-            searchTree(panel[childPropName], ids, callback, idPropName, childPropName, )
-        }
-    }
-}

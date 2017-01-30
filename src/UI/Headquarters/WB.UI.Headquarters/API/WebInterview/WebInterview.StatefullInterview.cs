@@ -364,9 +364,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public List<SidebarPanel> GetSidebarChildSectionsOf(string[] parentIds)
         {
-            var interview = this.GetCallerInterview();
             var sectionId = this.CallerSectionid;
+            if (sectionId == null)
+            {
+                return null;
+            }
 
+            var interview = this.GetCallerInterview();
             var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
             var shownPanels = currentOpenSection.Parents.Union(new[] { currentOpenSection });
             var visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));

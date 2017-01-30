@@ -112,7 +112,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string State { get;set; }
         public bool Collapsed { get; set; }
         public bool HasChildrens { get; set; }
-        public SidebarPanel[] Childs { get; set; }
         public Validity Validity { get; set; } = new Validity();
     }
 

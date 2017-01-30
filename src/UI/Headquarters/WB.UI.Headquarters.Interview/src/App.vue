@@ -15,7 +15,7 @@
         name: 'app',
         computed: {
             showSidebar() {
-                return this.$store.getters.showSidebar
+                return this.$store.getters.hasSidebarData && this.$route.params.sectionId != null
             }
         }
     }
