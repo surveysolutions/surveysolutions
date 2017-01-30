@@ -318,7 +318,6 @@ namespace WB.Tests.Unit.TestFactories
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                messenger: mvxMessenger,
                 eventRegistry: liteEventRegistry);
 
             sidebarViewModel.Init("", navigationState);

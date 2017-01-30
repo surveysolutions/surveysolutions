@@ -68,19 +68,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         {
             this.ThrowIfQuestionnaireIsAbsentOrDisabled(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            QuestionnaireDocument sourceQuestionnaire = this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion);
+            QuestionnaireDocument sourceQuestionnaireClone = 
+                this.questionnaireStorage.GetQuestionnaireDocument(command.QuestionnaireId, command.SourceQuestionnaireVersion).Clone();
 
-            this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaire);
+            this.ThrowIfTitleIsInvalid(command.NewTitle, sourceQuestionnaireClone);
 
             string assemblyAsBase64 = this.questionnaireAssemblyFileAccessor.GetAssemblyAsBase64String(command.QuestionnaireId, command.SourceQuestionnaireVersion);
             QuestionnaireBrowseItem questionnaireBrowseItem = this.GetQuestionnaireBrowseItem(command.QuestionnaireId, command.SourceQuestionnaireVersion);
 
-            sourceQuestionnaire.Title = command.NewTitle;
+            sourceQuestionnaireClone.Title = command.NewTitle;
 
-            CloneTranslations(sourceQuestionnaire.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
+            CloneTranslations(sourceQuestionnaireClone.PublicKey, command.SourceQuestionnaireVersion, command.NewQuestionnaireVersion);
 
             this.StoreQuestionnaireAndProjectionsAsNewVersion(
-                sourceQuestionnaire,
+                sourceQuestionnaireClone,
                 assemblyAsBase64, 
                 questionnaireBrowseItem.AllowCensusMode, 
                 questionnaireBrowseItem.QuestionnaireContentVersion,

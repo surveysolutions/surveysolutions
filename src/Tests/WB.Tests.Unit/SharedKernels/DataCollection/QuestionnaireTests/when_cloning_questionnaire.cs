@@ -15,8 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire : QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
+            questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
+            questionnaireDocumentFromRepository.Title = originalTitle;
+
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
@@ -36,13 +39,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaireIdentity: questionnaireIdentity, newTitle: newQuestionnaireTitle,
                 newQuestionnaireVersion: questionnaireIdentity.Version + 1));
 
-        It should_store_questionnaire_document_which_was_read_from_repository = () =>
+        It should_not_store_questionnaire_document_which_was_read_from_repository = () =>
             plainQuestionnaireRepositoryMock.Verify(
                 repository => repository.StoreQuestionnaire(
                     questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version + 1,
                     questionnaireDocumentFromRepository),
-                Times.Once);
+                Times.Never);
 
         It should_store_questionnaire_document_with_new_title = () =>
             plainQuestionnaireRepositoryMock.Verify(
@@ -52,11 +55,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     Moq.It.Is<QuestionnaireDocument>(document => document.Title == newQuestionnaireTitle)),
                 Times.Once);
 
+        It should_not_change_original_title = () => 
+            questionnaireDocumentFromRepository.Title.ShouldEqual(originalTitle);
+
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
             = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);
         private static string newQuestionnaireTitle = "New Questionnaire Title";
         private static Mock<IQuestionnaireStorage> plainQuestionnaireRepositoryMock;
-        private static QuestionnaireDocument questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
+        private static QuestionnaireDocument questionnaireDocumentFromRepository;
+        private static readonly string originalTitle = "original title";
     }
 }
