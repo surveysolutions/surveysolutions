@@ -19,7 +19,6 @@
     "jquery": "^3.1.1",
     "jquery-mask-plugin": "^1.14.8",
     "lodash": "^4.17.4",
-    "lodash.isarray": "^4.0.0",
     "scriptjs": "^2.5.8",
     "signalr": "^2.2.1",
     "smoothscroll-polyfill": "^0.3.4",
