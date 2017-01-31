@@ -16,7 +16,7 @@ export default {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", details)
-    }, "fetch", 100),
+    }, "fetch", /* limit */ 100),
 
     answerSingleOptionQuestion({ dispatch }, answerInfo) {
         dispatch("fetch", { id: answerInfo.questionId })
@@ -54,6 +54,15 @@ export default {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
 
+    fetchSectionEntities: debounce(async ({ commit }) => {
+        const id = (router.currentRoute.params as any).sectionId
+        const section = id == null
+            ? await apiCaller(api => api.getPrefilledEntities())
+            : await apiCaller(api => api.getSectionEntities(id))
+
+        commit("SET_SECTION_DATA", section)
+    }, 200),
+
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions: string[]) {
         let needSectionUpdate = false
@@ -69,15 +78,6 @@ export default {
         dispatch("refreshSectionState")
     },
 
-    fetchSectionEntities: debounce(async ({ commit }) => {
-        const id = (router.currentRoute.params as any).sectionId
-        const section = id == null
-            ? await apiCaller(api => api.getPrefilledEntities())
-            : await apiCaller(api => api.getSectionEntities(id))
-
-        commit("SET_SECTION_DATA", section)
-    }, 200),
-
     // refresh state of visible section, excluding entities list.
     // Debounce will ensure that we not spam server with multiple requests,
     //   that can happen if server react with several event in one time
@@ -91,7 +91,7 @@ export default {
     fetchBreadcrumbs: debounce(async ({ commit }) => {
         const crumps = await apiCaller(api => api.getBreadcrumbs())
         commit("SET_BREADCRUMPS", crumps)
-    }),
+    }, 200),
 
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
