@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private void ValidatePreloadedValues(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        private void ValidatePreloadValues(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -28,18 +28,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.RequireTextPreloadedValueAllowed(questionId, questionnaire);
+                        this.RequireTextPreloadValueAllowed(questionId, questionnaire);
                         break;
 
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.RequireNumericIntegerPreloadedValueAllowed(questionId, ((NumericIntegerAnswer) answer).Value, questionnaire);
+                            this.RequireNumericIntegerPreloadValueAllowed(questionId, ((NumericIntegerAnswer) answer).Value, questionnaire);
                         else
-                            this.RequireNumericRealPreloadedValueAllowed(questionId, questionnaire);
+                            this.RequireNumericRealPreloadValueAllowed(questionId, questionnaire);
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: false);
+                        this.RequireDateTimePreloadValueAllowed(questionId, questionnaire);
                         break;
 
                     case QuestionType.SingleOption:
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: true);
+                        this.RequireDateTimeAnswerAllowed(questionId, currentRosterVector, answeredQuestion, questionnaire, tree);
                         break;
 
                     case QuestionType.SingleOption:
@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, linkedQuestionSelectedOption);
         }
 
-        private void RequireTextPreloadedValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        private void RequireTextPreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
         {
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion(QuestionType.Text);
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled(answeredQuestion);
         }
 
-        private void RequireNumericIntegerPreloadedValueAllowed(Guid questionId, int answer, IQuestionnaire questionnaire)
+        private void RequireNumericIntegerPreloadValueAllowed(Guid questionId, int answer, IQuestionnaire questionnaire)
         {
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion(QuestionType.Numeric)
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled(answeredQuestion);
         }
 
-        private void RequireNumericRealPreloadedValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        private void RequireNumericRealPreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
         {
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion(QuestionType.Numeric)
@@ -249,19 +249,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled(answeredQuestion);
         }
 
-        private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
+        private void RequireDateTimePreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
         {
-            var treeInvariants = new InterviewTreeInvariants(tree);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.DateTime);
+        }
 
+        private void RequireDateTimeAnswerAllowed(Guid questionId, RosterVector rosterVector, Identity answeredQuestion,
+            IQuestionnaire questionnaire, InterviewTree tree)
+        {
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion(QuestionType.DateTime);
 
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
-                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-            }
+            new InterviewTreeInvariants(tree)
+                .RequireQuestionInstanceExists(questionId, rosterVector)
+                .RequireQuestionIsEnabled(answeredQuestion);
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
