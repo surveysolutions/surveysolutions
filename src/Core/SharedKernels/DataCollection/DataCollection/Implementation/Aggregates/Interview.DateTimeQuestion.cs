@@ -18,8 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
-            
+            this.RequireDateTimeAnswerAllowed(questionId, rosterVector, answeredQuestion, questionnaire, this.Tree);
+
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(answeredQuestion).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
 
