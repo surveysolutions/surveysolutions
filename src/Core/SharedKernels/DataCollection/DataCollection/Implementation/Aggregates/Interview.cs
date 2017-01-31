@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var preloadedLevel = orderedData[index];
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
 
-                this.ValidatePrefilledQuestions(changedInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, false);
+                this.ValidatePreloadedValues(changedInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector);
 
                 var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion =>
@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            this.ValidatePrefilledQuestions(this.Tree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
+            this.ValidatePrefilledAnswers(this.Tree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (var answer in prefilledQuestionsWithAnswers)
@@ -263,7 +263,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
@@ -280,7 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
@@ -297,7 +297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }

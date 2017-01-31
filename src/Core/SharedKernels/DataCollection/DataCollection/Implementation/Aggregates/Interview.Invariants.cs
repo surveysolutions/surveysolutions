@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private void ValidatePrefilledQuestions(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null, bool applyStrongChecks = true)
+        private void ValidatePreloadedValues(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -28,45 +28,104 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                        this.RequireTextPreloadedValueAllowed(questionId, questionnaire);
                         break;
 
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, ((NumericIntegerAnswer)answer).Value, questionnaire,
-                                answeredQuestion, tree, applyStrongChecks);
+                            this.RequireNumericIntegerPreloadedValueAllowed(questionId, ((NumericIntegerAnswer) answer).Value, questionnaire);
                         else
-                            this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, ((NumericRealAnswer)answer).Value, questionnaire,
-                                answeredQuestion, tree, applyStrongChecks);
+                            this.RequireNumericRealPreloadedValueAllowed(questionId, questionnaire);
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: false);
                         break;
 
                     case QuestionType.SingleOption:
                         this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire,
-                            answeredQuestion, tree, false ,applyStrongChecks);
+                            answeredQuestion, tree, false, applyStrongChecks: false);
                         break;
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: false);
                         }
                         else
                         {
-                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, answeredQuestion, tree, isLinkedToList: false, applyStrongChecks: false);
                         }
                         break;
                     case QuestionType.QRBarcode:
-                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.GpsCoordinates:
-                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.TextList:
-                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks);
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks: false);
+                        break;
+
+                    default:
+                        throw new InterviewException(
+                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                }
+            }
+        }
+
+        private void ValidatePrefilledAnswers(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null)
+        {
+            var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
+            foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            {
+                Guid questionId = answerToFeaturedQuestion.Key;
+                AbstractAnswer answer = answerToFeaturedQuestion.Value;
+
+                var answeredQuestion = new Identity(questionId, currentRosterVector);
+
+                QuestionType questionType = questionnaire.GetQuestionType(questionId);
+
+                switch (questionType)
+                {
+                    case QuestionType.Text:
+                        this.RequireTextAnswerAllowed(questionId, currentRosterVector, questionnaire, answeredQuestion, tree);
+                        break;
+
+                    case QuestionType.Numeric:
+                        if (questionnaire.IsQuestionInteger(questionId))
+                            this.RequireNumericIntegerAnswerAllowed(questionId, currentRosterVector, ((NumericIntegerAnswer) answer).Value, answeredQuestion, questionnaire, tree);
+                        else
+                            this.RequireNumericRealAnswerAllowed(questionId, currentRosterVector, ((NumericRealAnswer) answer).Value, answeredQuestion, questionnaire, tree);
+                        break;
+
+                    case QuestionType.DateTime:
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: true);
+                        break;
+
+                    case QuestionType.SingleOption:
+                        this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire,
+                            answeredQuestion, tree, false, applyStrongChecks: true);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        if (questionnaire.IsQuestionYesNo(questionId))
+                        {
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: true);
+                        }
+                        else
+                        {
+                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, answeredQuestion, tree, isLinkedToList: false, applyStrongChecks: true);
+                        }
+                        break;
+                    case QuestionType.QRBarcode:
+                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: true);
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks: true);
+                        break;
+                    case QuestionType.TextList:
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks: true);
                         break;
 
                     default:
@@ -87,7 +146,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
 
@@ -113,7 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
 
@@ -122,22 +181,72 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, linkedQuestionSelectedOption);
         }
 
-        private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, double answer,
-           IQuestionnaire questionnaire,
-           Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
+        private void RequireTextPreloadedValueAllowed(Guid questionId, IQuestionnaire questionnaire)
         {
-            var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Text);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.Numeric);
-            questionInvariants.RequireNumericRealQuestion();
+        private void RequireTextAnswerAllowed(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
+            Identity answeredQuestion, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Text);
 
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-                questionInvariants.RequireAllowedDecimalPlaces(answer);
-            }
+            new InterviewTreeInvariants(tree)
+                .RequireQuestionInstanceExists(questionId, rosterVector)
+                .RequireQuestionIsEnabled(answeredQuestion);
+        }
+
+        private void RequireNumericIntegerPreloadedValueAllowed(Guid questionId, int answer, IQuestionnaire questionnaire)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericIntegerQuestion()
+                .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
+                    answer,
+                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                        ? questionnaire.GetMaxLongRosterRowCount()
+                        : questionnaire.GetMaxRosterRowCount());
+        }
+
+        private void RequireNumericIntegerAnswerAllowed(Guid questionId, RosterVector rosterVector, int answer, Identity answeredQuestion,
+            IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericIntegerQuestion()
+                .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
+                    answer,
+                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                        ? questionnaire.GetMaxLongRosterRowCount()
+                        : questionnaire.GetMaxRosterRowCount());
+
+            new InterviewTreeInvariants(tree)
+                .RequireQuestionInstanceExists(questionId, rosterVector)
+                .RequireQuestionIsEnabled(answeredQuestion);
+        }
+
+        private void RequireNumericRealPreloadedValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericRealQuestion();
+        }
+
+        private void RequireNumericRealAnswerAllowed(Guid questionId, RosterVector rosterVector, double answer, Identity answeredQuestion,
+            IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericRealQuestion()
+                .RequireAllowedDecimalPlaces(answer);
+
+            new InterviewTreeInvariants(tree)
+                .RequireQuestionInstanceExists(questionId, rosterVector)
+                .RequireQuestionIsEnabled(answeredQuestion);
         }
 
         private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
@@ -150,7 +259,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
@@ -177,7 +286,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (applyStrongChecks)
             {
                 treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
@@ -209,16 +318,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException($"Question {questionId} has Yes/No type, but command is sent to Multiopions type. questionnaireId: {this.QuestionnaireId}, interviewId {this.EventSourceId}");
             }
 
-            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
-            {
-                questionInvariants.RequireRosterSizeAnswerNotNegative(selectedValues.Count);
-                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
-            }
+            questionInvariants.RequireRosterSizeAnswerNotNegative(selectedValues.Count);
+            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 questionInvariants.RequireMaxAnswersCountLimit(selectedValues.Count);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
@@ -235,58 +341,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionInvariants.RequireQuestion(QuestionType.MultyOption);
             questionInvariants.RequireOptionsExist(selectedValues);
 
-            if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
-            {
-                questionInvariants.RequireRosterSizeAnswerNotNegative(yesAnswersCount);
-                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
-                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
-            }
+            questionInvariants.RequireRosterSizeAnswerNotNegative(yesAnswersCount);
+            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
+            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
 
             questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(question.Id, question.RosterVector);
+                treeInvariants.RequireQuestionInstanceExists(question.Id, question.RosterVector);
                 treeInvariants.RequireQuestionIsEnabled(question);
-            }
-        }
-
-        private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
-        {
-            var treeInvariants = new InterviewTreeInvariants(tree);
-
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
-                .RequireQuestion(QuestionType.Text);
-
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-            }
-        }
-
-        private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
-        {
-            var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
-
-            questionInvariants.RequireQuestion(QuestionType.Numeric);
-            questionInvariants.RequireNumericIntegerQuestion();
-
-            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
-            {
-                questionInvariants.RequireRosterSizeAnswerNotNegative(answer);
-                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer, questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
-                    ? questionnaire.GetMaxLongRosterRowCount()
-                    : questionnaire.GetMaxRosterRowCount());
-            }
-
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -297,16 +361,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionInvariants.RequireQuestion(QuestionType.TextList);
 
-            if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
-            {
-                questionInvariants.RequireRosterSizeAnswerNotNegative(answers.Length);
-                var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
-            }
+            questionInvariants.RequireRosterSizeAnswerNotNegative(answers.Length);
+            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
+            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
                 questionInvariants.RequireUniqueValues(answers);
                 questionInvariants.RequireNotEmptyTexts(answers);
@@ -324,7 +385,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
@@ -339,7 +400,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+                treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
