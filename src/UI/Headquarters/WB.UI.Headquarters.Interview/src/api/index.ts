@@ -30,9 +30,9 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             store.dispatch("refreshEntities", questions)
         }
 
-        interviewProxy.client.refreshSection = (sections) => {
+        interviewProxy.client.refreshSection = () => {
             store.dispatch("fetchSectionEntities")          // fetching entities in section
-            store.dispatch("refreshSectionState", sections)           // fetching breadcrumbs/sidebar/buttons
+            store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {

@@ -16,7 +16,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IHubContext webInterviewHubContext;
 
-        public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository, [Ninject.Named("WebInterview")] IHubContext webInterviewHubContext)
+        public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository,
+            [Ninject.Named("WebInterview")] IHubContext webInterviewHubContext)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewHubContext = webInterviewHubContext;
@@ -26,20 +27,14 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
-            var sectionsToRefresh = new HashSet<string>();
-
-            var entitiesToRefresh = entities.Select(identity =>
-            {
-                sectionsToRefresh.Add(identity.ToString());
-                return Tuple.Create(GetClientGroupIdentity(identity, interview), identity);
-            });
+            var entitiesToRefresh = entities.Select(identity => Tuple.Create(this.GetClientGroupIdentity(identity, interview), identity));
 
             foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
             {
                 if (questionsGroupedByParent.Key == null)
                 {
                     continue;
-                };
+                }
 
                 var clients = webInterviewHubContext.Clients;
                 var group = clients.Group(questionsGroupedByParent.Key);
@@ -47,15 +42,15 @@ namespace WB.UI.Headquarters.API.WebInterview
                 group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
             }
 
-            webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection(sectionsToRefresh.ToArray());
+            webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
         }
 
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
         {
-            return ((IInterviewTreeNode) interview.GetQuestion(identity) 
-                ?? (IInterviewTreeNode) interview.GetStaticText(identity)
-                ?? (IInterviewTreeNode) interview.GetRoster(identity) 
-                ?? (IInterviewTreeNode) interview.GetGroup(identity))
+            return ((IInterviewTreeNode) interview.GetQuestion(identity)
+                    ?? (IInterviewTreeNode) interview.GetStaticText(identity)
+                    ?? (IInterviewTreeNode) interview.GetRoster(identity)
+                    ?? (IInterviewTreeNode) interview.GetGroup(identity))
                 ?.Parent?.Identity;
         }
 
