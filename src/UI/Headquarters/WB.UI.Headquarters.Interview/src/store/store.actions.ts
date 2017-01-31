@@ -79,18 +79,14 @@ export default {
             }
         })
 
-        dispatch("refreshSectionState")
+        dispatch("refreshSectionState", null)
     },
 
-    // refresh state of visible section, excluding entities list.
-    // Debounce will ensure that we not spam server with multiple requests,
-    //   that can happen if server react with several event in one time
-    // TODO: Add sidebar refresh here later
-    refreshSectionState: debounce(({ dispatch }, sections) => {
+    refreshSectionState: debounce(({ dispatch }) => {
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
-        dispatch("fetchSidebar", sections)
-    }, 50),
+        dispatch("fetchSidebar")
+    }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit }) => {
         const crumps = await apiCaller(api => api.getBreadcrumbs())
