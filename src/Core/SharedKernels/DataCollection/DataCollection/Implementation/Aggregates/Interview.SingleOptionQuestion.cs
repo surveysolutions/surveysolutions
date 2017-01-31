@@ -10,7 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 

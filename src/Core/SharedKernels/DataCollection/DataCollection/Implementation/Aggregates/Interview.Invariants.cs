@@ -83,8 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.MultyOption);
+            questionInvariants.RequireQuestion(QuestionType.MultyOption);
 
             if (applyStrongChecks)
             {
@@ -110,8 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.SingleOption);
+            questionInvariants.RequireQuestion(QuestionType.SingleOption);
 
             if (applyStrongChecks)
             {
@@ -131,8 +129,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.Numeric);
+            questionInvariants.RequireQuestion(QuestionType.Numeric);
             questionInvariants.RequireNumericRealQuestion();
 
             if (applyStrongChecks)
@@ -147,10 +144,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.DateTime);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.DateTime);
 
             if (applyStrongChecks)
             {
@@ -166,8 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.SingleOption);
+            questionInvariants.RequireQuestion(QuestionType.SingleOption);
 
             if (isLinkedToList)
             {
@@ -194,8 +189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.MultyOption);
+            questionInvariants.RequireQuestion(QuestionType.MultyOption);
 
             if (isLinkedToList)
             {
@@ -238,8 +232,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, question.Id, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.MultyOption);
+            questionInvariants.RequireQuestion(QuestionType.MultyOption);
             questionInvariants.RequireOptionsExist(selectedValues);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
@@ -262,10 +255,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.Text);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.Text);
 
             if (applyStrongChecks)
             {
@@ -280,8 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.Numeric);
+            questionInvariants.RequireQuestion(QuestionType.Numeric);
             questionInvariants.RequireNumericIntegerQuestion();
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
@@ -304,8 +295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.TextList);
+            questionInvariants.RequireQuestion(QuestionType.TextList);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
@@ -328,10 +318,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.GpsCoordinates);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.GpsCoordinates);
 
             if (applyStrongChecks)
             {
@@ -344,10 +333,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.QRBarcode);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.QRBarcode);
 
             if (applyStrongChecks)
             {

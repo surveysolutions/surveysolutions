@@ -256,8 +256,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Synchronize(SynchronizeInterviewCommand command)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
+
+            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
 
             base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
                 command.UserId,

@@ -13,7 +13,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var answeredQuestion = new Identity(questionId, rosterVector);

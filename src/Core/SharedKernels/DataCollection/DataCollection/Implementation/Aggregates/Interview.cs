@@ -253,14 +253,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion();
+
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
@@ -268,14 +270,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion();
+
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
@@ -283,14 +287,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion();
+
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));

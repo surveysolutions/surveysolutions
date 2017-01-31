@@ -24,21 +24,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private string InfoForException => $"Question ID: {this.QuestionId.FormatGuid()}. Interview ID: {this.InterviewId}.";
 
-        public void RequireQuestionExists()
+        public InterviewQuestionInvariants RequireQuestion(QuestionType? questionType = null)
+        {
+            this.RequireQuestionExists();
+
+            if (questionType.HasValue)
+            {
+                this.RequireQuestionType(questionType.Value);
+            }
+
+            return this;
+        }
+
+        private void RequireQuestionExists()
         {
             if (!this.Questionnaire.HasQuestion(this.QuestionId))
                 throw new InterviewException(
                     $"Question is missing. {this.InfoForException}");
         }
 
-        public void RequireQuestionType(params QuestionType[] expectedQuestionTypes)
+        private void RequireQuestionType(QuestionType expectedQuestionType)
         {
             QuestionType actualQuestionType = this.Questionnaire.GetQuestionType(this.QuestionId);
 
-            if (!expectedQuestionTypes.Contains(actualQuestionType))
+            if (expectedQuestionType != actualQuestionType)
                 throw new AnswerNotAcceptedException(
                     $"Question {this.FormatQuestionForException()} has type {actualQuestionType}. " +
-                    $"But one of the following types was expected: {JoinUsingCommas(expectedQuestionTypes)}. " +
+                    $"But following type was expected: {expectedQuestionType}. " +
                     this.InfoForException);
         }
 

@@ -12,17 +12,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
 
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.QRBarcode);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.QRBarcode);
+
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
