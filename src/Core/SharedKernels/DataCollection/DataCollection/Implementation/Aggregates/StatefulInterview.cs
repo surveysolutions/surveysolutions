@@ -77,28 +77,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
 
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
-                this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
+                this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector))?.Disable();
 
             foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
-                this.Tree.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector)).Disable();
+                this.Tree.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector))?.Disable();
 
             foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
-                this.Tree.GetQuestion(invalidQuestion.Key).MarkInvalid(invalidQuestion.Value);
+                this.Tree.GetQuestion(invalidQuestion.Key)?.MarkInvalid(invalidQuestion.Value);
 
             foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
-                this.Tree.GetStaticText(disabledStaticText).Disable();
+                this.Tree.GetStaticText(disabledStaticText)?.Disable();
 
             foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
-                this.Tree.GetStaticText(invalidStaticText.Key).MarkInvalid(invalidStaticText.Value);
+                this.Tree.GetStaticText(invalidStaticText.Key)?.MarkInvalid(invalidStaticText.Value);
 
             foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
-                this.Tree.GetStaticText(validStaticText).MarkValid();
+                this.Tree.GetStaticText(validStaticText)?.MarkValid();
 
             foreach (var variable in @event.InterviewData.Variables)
                 this.Tree.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector))?.SetValue(variable.Value);
 
             foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
-                this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
+                this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector))?.Disable();
 
             this.Tree.ReplaceSubstitutions();
 

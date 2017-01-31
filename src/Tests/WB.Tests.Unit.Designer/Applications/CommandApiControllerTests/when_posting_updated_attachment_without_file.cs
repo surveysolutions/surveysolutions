@@ -14,9 +14,9 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
     {
         Establish context = () =>
         {
-            var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, null, responsibleId, name);
+            var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, null, responsibleId, name, oldAttachmentId);
 
-            attachmentServiceMock.Setup(x => x.GetAttachmentContentId(attachmentId)).Returns(attachmentContentId);
+            attachmentServiceMock.Setup(x => x.GetAttachmentContentId(oldAttachmentId)).Returns(attachmentContentId);
 
             var commandDeserializerMock = new Mock<ICommandDeserializer>();
 
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             controller.UpdateAttachment(new CommandController.AttachmentModel { Command = serializedUpdateAttachmentCommand, FileName = fileName});
 
         It should_get_content_id_by_attachmentId = () =>
-            attachmentServiceMock.Verify(x=>x.GetAttachmentContentId(attachmentId), Times.Once);
+            attachmentServiceMock.Verify(x=>x.GetAttachmentContentId(oldAttachmentId), Times.Once);
 
         It should_not_save_content = () =>
             attachmentServiceMock.Verify(x => x.SaveContent(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
@@ -54,6 +54,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
         private static readonly string fileName = "Attachment.PNG";
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid oldAttachmentId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
+    
 }
