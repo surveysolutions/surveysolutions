@@ -12,7 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(command.QuestionId, command.RosterVector);
 

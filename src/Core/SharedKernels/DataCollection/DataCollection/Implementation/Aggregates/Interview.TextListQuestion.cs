@@ -12,7 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
