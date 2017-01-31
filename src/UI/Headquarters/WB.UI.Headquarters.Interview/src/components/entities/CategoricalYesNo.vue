@@ -85,9 +85,9 @@
                     return;
                 }
 
-                const currentAnswerCount = newAnswer.length;
-                const previousAnswersCount = this.$me.answer.length;
-                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+                const currentYesAnswerCount = $.grep(newAnswer, function(e){ return e.yes; }).length;
+                const previousYesAnswersCount = $.grep(this.$me.answer, function(e){ return e.yes; }).length;
+                const isNeedRemoveRosters = currentYesAnswerCount < previousYesAnswersCount;
 
                 if (!isNeedRemoveRosters)
                 {
