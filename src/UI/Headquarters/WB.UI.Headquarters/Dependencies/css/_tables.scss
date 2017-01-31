@@ -26,7 +26,7 @@
                 }
             }
         }
-        @include transition(all, 0.1s);
+        @include transition(all, 0.2s);
         td{
             word-break: break-all;
             word-wrap: break-word;
@@ -43,7 +43,6 @@
             a, label, input, button{
                 cursor: not-allowed;
                 pointer-events: none;
-                
             }
             td{
                 &:hover, &:focus, &:active{
@@ -51,8 +50,7 @@
                         color: $gray_text !important;
                     }
                 }
-            }
-            
+            }   
         }
     }
     thead{
@@ -235,10 +233,16 @@
     thead tr, tbody tr{
         td, th{
             &.checkbox-cell{
-                width: 40px !important;
+                min-width: 40px !important;
                 max-width: 40px !important;
                 text-align: center;
-                padding: 10px 0 !important;
+                padding: 0;
+            }
+        }
+        th{
+            &.checkbox-cell{
+                padding-top: 12px;
+                padding-right: 0 !important;
             }
         }
     }
@@ -371,6 +375,24 @@
         box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
     }
 }
+.dataTables_scroll{
+    overflow-x: auto;
+    .dataTables_scrollHead{
+        .table{
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    .dataTables_scrollBody{
+        th{
+            *{display: none;}
+            &:after{
+                display: none !important;
+            }
+        }
+    }
+}
+
 @media (max-width: 1450px){
     .table-ordered{
         thead{
@@ -401,9 +423,6 @@
                 }
             }
         }
-    }
-    .dataTables_wrapper {
-        overflow-x: auto;
     }
 }
 @media (max-width: $screen-md-min){
@@ -587,3 +606,5 @@
         }
     }
 }
+
+

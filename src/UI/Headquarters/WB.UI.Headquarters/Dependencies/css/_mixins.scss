@@ -6,29 +6,6 @@
          url('#{$assetsPath}/fonts/#{$family}.ttf') format('truetype'),
          url('#{$assetsPath}/fonts/#{$family}.svg##{$family}') format('svg');}
 }
-@mixin gradient($first_color, $second_color, $first_color2, $second_color2){
-		@if $first_color2==null and $second_color2==null{
-				background-color: $first_color;
-		-webkit-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		   -moz-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  	-ms-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  	 -o-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  		background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		}	
-		@else {
-			background-color: $first_color;
-	background: -webkit-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-				-webkit-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-	   background: -moz-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-	   			   -moz-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-		background: -ms-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-					-ms-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-		 background: -o-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-		 			 -o-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-			background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0,
-						linear-gradient(0deg, $first_color2, $second_color2) no-repeat 0 0;
-		}
-}
 @mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
     position: absolute;
     top: $top;
@@ -112,7 +89,6 @@
 
 @mixin cancel($width: 14px){
     $height: 2px; 
-    /* outline: none; */
     background-color: transparent;
     @include square($width);
     position: relative;
@@ -129,6 +105,7 @@
         @include rotate(45deg);
         position: relative;
         top: ($width - $height)/2;
+        @include transition(background, 0.2s);
     }
     &:after{
         @include rotate(-45deg);
@@ -141,9 +118,6 @@
     }
 }
 @mixin clear($width: 18px){
-    &:hover, &:active:focus, &:focus, &:active{
-        /* outline: none; */
-    }
     &:active, &:active:focus{
         span:before, span:after{
             background-color: #000;
@@ -154,7 +128,6 @@
         @include cancel($width);
     }
     @include absolute(0, 0);
-    @include transition(all, 0.2s);
     @extend %visibility-hidden;
 }
 @mixin question_title_colors($default, $with_error, $filled){
@@ -196,7 +169,6 @@
             background-color: lighten($base-color, 40%);
             color: $base-color;
             border-color: darken($base-color, 10%);
-
         }
     }
     &:hover,
@@ -206,23 +178,6 @@
         border-color: darken($base-color, 10%);
     }
 }
-/* @mixin colorful-cancel($color){
-    .close{
-        &:hover, &:focus, &:active{
-            span{
-                &:before, &:after{
-                    background-color: darken($color, 20%);
-                }
-            }
-        }
-        span{
-            opacity: 0.7;
-            &:before, &:after{
-                background-color: $color;  
-            }
-        }
-    }
-} */
 %font-header{
     color: $white;
     font-family: "RobotoLight";
@@ -255,8 +210,8 @@
 %uppercase-font{
     font: 12px/14px "TrebuchetMSBold";
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+    letter-spacing: 0.13em;
+} 
 %gray-uppercase{
     color: $gray_light;
     font: 11px/13px "TrebuchetMSBold";
@@ -361,7 +316,7 @@
 }
 @mixin visible-foldback-button(){
     .foldback-button{
-        right: 5px;
+        right: 10px;
         background-color: transparent;
         span.arrow{
             @include rotate(45deg);
@@ -382,15 +337,13 @@
     &:hover, &:focus, &:active, &.active:focus{
         box-shadow: none;
     }
-    /* &:hover, &:active, &.active:focus{
-        outline: none !important;
-    } */
 }
 @mixin focus-for-inputs(){
     display: block;
     height: 0;
     @include opacity(0);
-    &:focus + label .tick:before{
+    & + label .tick:before{
+        @extend %visibility-hidden;
         display: block;
         content: "";
         width: 26px;
@@ -400,5 +353,22 @@
         top: -6px;
         right: -6px;
         border-radius: 5px;
+        @include transition(all, 0.2s);
     }
+    &:focus + label .tick:before{
+        @extend %visibility-visible;
+    }
+}
+@mixin fullscreen-hidden-filter($block){
+    .fullscreen-hidden-filters .#{$block}{
+        margin-left: 0;
+        padding-left: 12px;
+    } 
+}
+@mixin stripe-gradient($first-color, $second-color){
+    background-image: -webkit-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: -o-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: -moz-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-size: 8px 8px;
 }

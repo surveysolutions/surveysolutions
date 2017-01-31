@@ -113,6 +113,21 @@ input.checkbox-filter{
 		display: block;
 	}
 }
+@media (max-width: 1300px){
+	.foldback-button{
+		display: block;
+	}
+	.fullscreen-hidden-filters{
+		.filters{
+			left: - $filter-width - 12px;
+			overflow: visible;
+			@include hidden-foldback-button();
+			.foldback-button{
+                right: - $width-foldback-button;
+            }
+		}
+	}
+}
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
 	.foldback-button{
@@ -161,6 +176,7 @@ input.checkbox-filter{
 	}
 	
 }
+
 @media (max-width: $screen-xs-min){
 	.fullscreen-hidden-filters{
 		.filters{
