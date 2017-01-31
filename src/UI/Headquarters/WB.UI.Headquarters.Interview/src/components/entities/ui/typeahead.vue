@@ -24,7 +24,7 @@
         name: 'wb-typeahead',
         props: {
             value: {
-                type: Number,
+                type: Object,
                 default: null
             },
             questionId: {
@@ -44,8 +44,11 @@
             }
         },
         methods: {
-            async updateOptionsList(e) {
-                const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, e.target.value, 30))
+            updateOptionsList(e) {
+                this.loadOptions(e.target.value)
+            },
+            async loadOptions(filter:string) {
+                const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
                 this.options = options
             },
             selectOption(value) {
@@ -62,6 +65,8 @@
             jqEl.on('hidden.bs.dropdown', () => {
                 focusTo.text('')
             })
+
+            this.loadOptions(null)
         }
     }
 </script>
