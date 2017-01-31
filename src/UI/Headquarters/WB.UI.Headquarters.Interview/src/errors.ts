@@ -17,7 +17,7 @@ function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function () {
         try {
-            if (verboseMode) {
+            if (verboseMode && !(window as any).NODEBUG) {
                 let argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 // tslint:disable-next-line:no-console

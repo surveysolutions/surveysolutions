@@ -20,7 +20,11 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
             forEachIfNeeded(data, id => ctx.dispatch(fetchAction, { id }))
         }
 
-        if (queue.length === 0) {
+        let isQueueWereEmpty = queue.length === 0
+
+        forEachIfNeeded(data, item => queue.push(item))
+
+        if (isQueueWereEmpty) {
             Vue.nextTick(async () => {
                 const ids = queue
                 queue = []
@@ -33,7 +37,5 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
             queue = []
             await callback(ctx, ids)
         }
-
-        forEachIfNeeded(data, item => queue.push(item))
     }
 }

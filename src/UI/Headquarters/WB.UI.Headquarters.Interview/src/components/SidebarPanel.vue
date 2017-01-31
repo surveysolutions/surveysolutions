@@ -47,9 +47,12 @@
             childPanels() {
                 return this.$store.state.sidebar.panels[this.panel.id] || []
             },
+            isActive() {
+                return this.currentPanel == this.panel.id
+            },
             titleCss() {
                 return [{
-                    active: this.currentPanel == this.panel.id,
+                    active: this.isActive,
                     complete: this.panel.state === "Completed" && this.panel.validity.isValid,
                     "has-error": !this.panel.validity.isValid
                 }]
@@ -68,7 +71,7 @@
         },
         methods: {
             fetchChild() {
-                this.$store.dispatch("fetchChildSidebar", this.panel.id)
+                this.$store.dispatch("fetchSidebar", this.panel.id)
             },
             update() {
                 if (this.panel.hasChildrens && !this.panel.collapsed) {
