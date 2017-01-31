@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -29,6 +30,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiFixedOption.GetAnswer().CheckedValues));
+            this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
+            this.CreateMap<InterviewTreeQuestion, InterviewYesNoQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsYesNo.GetAnswer().CheckedOptions));
             this.CreateMap<InterviewTreeQuestion, InterviewIntegerQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsInteger.GetAnswer().Value));
