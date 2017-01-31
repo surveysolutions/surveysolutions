@@ -2,11 +2,13 @@
 	font: 12px/14px "TrebuchetMSBold";
 	text-transform: uppercase;
     letter-spacing: 0.13em;
+    @include transition(background, 0.2s);
 	&:disabled, &.disabled{
-		background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		//background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
 		color: #fff !important;
 		cursor: not-allowed;
+		@include stripe-gradient(#d7d7d7, $gray_light);
 		&:hover, &:focus{
 			border-color: $gray-super-light;
 		}

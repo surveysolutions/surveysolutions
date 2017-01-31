@@ -22,7 +22,8 @@
 	}
 }
 .separate-filters-group{
-	@include gradient($gray_form, $gray_form, null, null);
+	@include gradient-horizontal($gray_form, $gray_form);
+	background-repeat: no-repeat;
 	background-size: 65px 1px;
 	background-position: 0 100%; 
 	padding: 15px 0;
@@ -186,12 +187,14 @@ label.inactive{
 	position: relative;
 	padding: 20px 30px 20px 70px;
 	border-bottom: 2px solid $gray-form;
+	@include transition(background, 0.3s);
 	.question-editor .button-flag{
 		@include absolute(0, null, null, -30px);
 	}
 	&.with-flag{
 		display: block;
-		@include gradient($gray-super-light, $gray-super-light, null, null);
+		@include gradient-horizontal($gray-super-light, $gray-super-light);
+		background-repeat: repeat-y;
 		background-size: 12px 100%;
 		.question-editor .button-flag{
 			@extend .flagged;
@@ -291,12 +294,23 @@ label.inactive{
 .roster-section-btn-wrapper{
 	padding: 0 10px;
 }
+.question:after{
+  	content: '';
+  	@include absolute(0, 0);
+  	@include square(100%);
+  	@include stripe-gradient(#dbdfe2, transparent);
+  	@include transition(opacity, 0.3s);
+  	@extend %visibility-hidden;
+}
 .question.disabled-question{
 	min-height: 65px;
-	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, transparent 2px, transparent 6px);
+	&:after{
+		@extend %visibility-visible;
+	}
 	h5{
 		margin: 0;
 		color: $gray_light;
+		z-index: 1;
 	}
 	.question-editor .button-flag{
 		z-index: 0;
@@ -312,6 +326,9 @@ label.inactive{
 .question.hidden-by-filter {
 	background: #f8f8f8;
 	padding: 2px;
+	&.disabled-question:after{
+		@extend %visibility-hidden;
+	}
 	& > .question-editor, 
 	& > h5, 
 	& > .dropdown{
@@ -331,6 +348,9 @@ label.inactive{
 	.question{
 		padding: 2px 0; 
 		background: #f8f8f8;
+		&:after{
+			@extend %visibility-hidden;
+		}
 		& *{
 			display: none;
 		}
@@ -639,20 +659,8 @@ label.inactive{
 			visibility: visible;
 		}
 	}
-}
-.web-interview-for-supervisor,
-.web-interview-for-supervisor.fullscreen-hidden-content,
-.web-interview-for-supervisor.fullscreen-hidden-filters,
-.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
-	.content{
-		left: $filter-width + 12px;
-	}
-	.details-interview{
-		&.questionnaire{
-			@include width-questionnaire(($filter-width + $content-width));
-		}
-	}
-}
+} 
+
 .wrapper-info{
 	@extend .action-container;
 	border-bottom: 2px solid $gray-form;
@@ -683,6 +691,19 @@ label.inactive{
 .footer.footer-adaptive-filters{
 	padding-left: $filter-width;
 } 
+.web-interview-for-supervisor,
+.web-interview-for-supervisor.fullscreen-hidden-content,
+.web-interview-for-supervisor.fullscreen-hidden-filters,
+.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
+	.content{
+		left: $filter-width + 12px;
+	}
+	.details-interview{
+		&.questionnaire{
+			@include width-questionnaire(($filter-width + $content-width));
+		}
+	}
+}
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
 		@include tight-filters-aside();
@@ -691,14 +712,6 @@ label.inactive{
 			.foldback-button{
 	            top: 75px;
 	        }
-		}
-		.content{
-			left: $filter-small-width +12px;
-		}
-		.details-interview{
-			&.questionnaire{
-				@include width-questionnaire($content-width-small + $filter-small-width);
-			}
 		}
 	}
 	.content{
@@ -724,6 +737,91 @@ label.inactive{
 	.footer.footer-adaptive-filters{
 		padding-left: $filter-small-width;
 	} 
+	.web-interview-for-supervisor,
+	.web-interview-for-supervisor.fullscreen-hidden-content,
+	.web-interview-for-supervisor.fullscreen-hidden-filters,
+	.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
+		.content{
+			left: $filter-small-width + 12px;
+			box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+
+		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire(($filter-small-width + $content-width-small));
+			}
+		}
+	}
+}
+@media only screen and (max-width: 1300px){
+	.web-interview-for-supervisor{
+		.content{
+			left: $filter-small-width + 12px;
+		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire(($filter-small-width + $content-width-small));
+			}
+		}
+		&.fullscreen-hidden-content{	
+			.content{
+				left: -$content-width-small;
+				box-shadow: none;
+				@include hidden-foldback-button();
+				z-index: 5;
+				overflow: visible;
+				 .foldback-button{
+	                right: - $width-foldback-button;
+	            }
+			}
+			.questionnaire.details-interview{
+				@include width-questionnaire($filter-small-width);
+			}
+			.filters{
+				overflow: auto;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+			}
+		}
+		&.fullscreen-hidden-filters{
+			.filters{
+				left: - $filter-small-width - 12px;
+				overflow: visible;
+				@include hidden-foldback-button();
+				 .foldback-button{
+	                right: - $width-foldback-button;
+	            }
+			}
+			.content{
+				left: 12px;
+				.questionnaire-content{
+					padding-left: 45px;
+				}
+			}
+			.details-interview{
+				&.questionnaire{
+					@include width-questionnaire($content-width-small);
+				}
+			}
+		} 
+		&.fullscreen-hidden-filters.fullscreen-hidden-content{
+			.filters{
+				left: - $filter-small-width - 12px;
+				box-shadow: none;
+			}
+			.content{
+				left: -$content-width-small;
+				box-shadow: none;
+				.foldback-button{
+					top: 125px;
+				} 
+			}
+			.details-interview{
+				&.questionnaire{
+					@include width-questionnaire(0px);
+				}
+			}
+		}
+	}
 }
 @media (max-width: $screen-md-min){
 	.content{
@@ -813,6 +911,9 @@ label.inactive{
 				.questionnaire-content{
 					padding-left: 50px;
 				}
+				.foldback-button{
+		            top: 75px;
+		        }
 			}
 			.questionnaire{
 				&.details-interview{
@@ -894,7 +995,6 @@ label.inactive{
 				border: none;
 				@include visible-foldback-button();
 				.foldback-button{
-			   		right: 5px;
 			   		top: 65px;
 			   	}
 			   	.humburger-foldback-button{
@@ -904,7 +1004,11 @@ label.inactive{
 		}
 		&.fullscreen-hidden-content.fullscreen-hidden-filters{
 			.content{
+				left: 0;
 				display: block;
+				.foldback-button{
+			   		top: 65px;
+			   	}
 			}
 		}
 		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
