@@ -22,6 +22,7 @@ import Question from "./Question"
 import StaticText from "./StaticText"
 import TextList from "./TextList"
 import TextQuestion from "./TextQuestion"
+import Unsupported from "./Unsupported"
 
 vue.component("TextList", TextList)
 vue.component("DateTime", DateTime)
@@ -36,6 +37,7 @@ vue.component("wb-question", Question)
 vue.component("StaticText", StaticText)
 vue.component("Group", Group)
 vue.component("NavigationButton", NavigationButton)
+vue.component("Unsupported", Unsupported)
 
 export const GroupStatus = {
     Completed: 1,
