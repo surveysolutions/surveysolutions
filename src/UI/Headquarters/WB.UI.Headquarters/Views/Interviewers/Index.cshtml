@@ -43,12 +43,17 @@
             commandExecutionUrl,
             interviewersPageUrl,
             supervisorsUrl,
+            ajax,
             notifier) {
             Supervisor.VM.InterviewersNew.superclass.constructor.apply(this, [commandExecutionUrl]);
+
+            var $commandsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
 
             var archiveUserCommad = "ArchiveUserCommad";
             var unArchiveUserCommad = "UnarchiveUserCommand";
             var self = this;
+
+
 
             self.Url = new Url();
             self.SupervisorUrl = supervisorsUrl;
@@ -88,12 +93,26 @@
                             type: commandName,
                             commands: commands
                         };
-                        self.SendCommands(command,
-                            function() {
-                                setTimeout(function() {
-                                        self.updater();
-                                    },
-                                    200);
+
+                        ajax.sendRequest($commandsUrl, "post", command, false,
+                            // onSuccess
+                            function (data) {
+                                var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
+                                    return !cmd.IsSuccess;
+                                });
+
+                                if (failedCommands.length > 0) {
+                                    var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function (failedCommand) {
+                                        if (!Supervisor.Framework.Objects.isUndefined(failedCommand.DomainException) && failedCommand.DomainException !== null)
+                                            return failedCommand.DomainException;
+                                        else {
+                                            return input.settings.messages.unhandledExceptionMessage;
+                                        }
+                                    });
+                                    $.each(failedDomainExceptions, function (index, message) {
+                                        notifier.showError("Operation failed" ,  message );
+                                    });
+                                } 
                             });
                     },
                     // cancel
@@ -158,6 +177,7 @@
                 $commandExecutionUrl,
                 $interviewersPageUrl,
                 $supervisorsUrl,
+                ajax,
                 notifier);
             ko.applyBindings(model);
 
@@ -237,7 +257,7 @@
                         },
                         {
                             data: "creationDate",
-                            name: "CreationDate", // case-sensitive! 
+                            name: "CreationDate", // case-sensitive!
                             "class": "changed-recently"
                         },
                         {
@@ -257,7 +277,7 @@
                                 data:
                                 "supervisorName",
                                 name:
-                                "SupervisorName", // case-sensitive! 
+                                "SupervisorName", // case-sensitive!
                                 "class":
                                 "changed-recently"
                             }
@@ -266,7 +286,7 @@
                         {
                             "orderable": false,
                             data: "deviceId",
-                            name: "DeviceId", // case-sensitive! 
+                            name: "DeviceId", // case-sensitive!
                             render: function(data, type, row) {
                                 return (row.deviceId === null ? "No" : "Yes");
                             },
