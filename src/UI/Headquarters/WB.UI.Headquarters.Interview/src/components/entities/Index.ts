@@ -20,8 +20,8 @@ import Integer from "./Integer"
 import NavigationButton from "./NavigationButton"
 import Question from "./Question"
 import StaticText from "./StaticText"
-import TextQuestion from "./TextQuestion"
 import TextList from "./TextList"
+import TextQuestion from "./TextQuestion"
 
 vue.component("TextList", TextList)
 vue.component("DateTime", DateTime)
