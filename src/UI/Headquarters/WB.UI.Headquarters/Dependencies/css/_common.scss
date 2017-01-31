@@ -204,25 +204,16 @@ h5{
 		}
 		&.alert-success {
 		  @include alert-variant($alert-success-bg, $alert-success-border, $alert-success-text);
-		  /* @include colorful-cancel($alert-success-text); */
 		}
 		&.alert-info {
 		  @include alert-variant($alert-info-bg, $alert-info-border, $alert-info-text);
-		  /* @include colorful-cancel($alert-info-text); */
 		}
 		&.alert-warning {
 		  @include alert-variant($alert-warning-bg, $alert-warning-border, $alert-warning-text);
-		  /* @include colorful-cancel($alert-warning-text); */
 		}
 		&.alert-danger {
 		  @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
-		  /* @include colorful-cancel($alert-danger-text); */
 		}
-		/* .close{
-			span{
-				@include cancel(20px);
-			}
-		} */
 	}
 }
 body > .ui-pnotify
@@ -233,13 +224,14 @@ body > .ui-pnotify
     background-color: rgba(0,0,0,.2);
 }
 .ui-pnotify{
- 	border-radius: 4px;
  	background: #fff;
- 	box-shadow: 0 0 30px #323232;
+ 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
+	border-radius: 0;
   	.alert{
    		font-family: "RobotoMedium";
-        padding: 15px;
         margin: 0;
+        border-top: none !important;
+  		padding: 20px;
         &.alert-warning{
             border-top: 10px solid $blue;
             color: $blue;
@@ -262,6 +254,27 @@ body > .ui-pnotify
     	.ui-pnotify-text{
      		font-size: 14px;
      		line-height: 16px;
+     		color: $gray_text;
+    	}
+    	.ui-pnotify-action-bar{
+			margin-top: 20px !important;
+			text-align: left !important;
+			.btn{
+				border-color: transparent;
+				color: $blue;
+				padding: 0;
+				margin-right: 20px;
+				&:last-of-type{
+					margin-right: 0;
+				}
+				&:hover, &:focus, &:active{
+					background-color: transparent;
+					text-decoration: underline;
+				}
+			}
+		}
+		.ui-pnotify-closer span{
+    		@include cancel(16px);
     	}
   	}
     &.loading-indicator{
@@ -288,7 +301,7 @@ body > .ui-pnotify
         margin: 0;
     }
 }
-.ui-pnotify{
+/* .ui-pnotify.stack-modal{
 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
 	border-radius: 0;
 	.alert{
@@ -319,7 +332,7 @@ body > .ui-pnotify
     		@include cancel(16px);
     	}
 	}
-}
+} */
 .error-text{
 	color: $red_error;
 }
@@ -374,44 +387,4 @@ table{
     font-style: italic;
     font-weight: bold;
 }
-.main-information{
-	margin-left: $filter-width - $margin-container + 12px +15px;
-	padding: 0 0 0 30px;
-	@include transition(margin, 0.3s);
-	.page-header{
-		div{
-			h1{
-				padding: 0;
-			}
-			padding-right: 365px; 
-			&:after{
-				display: table;
-				content: "";
-				clear: both;
-			}
-		}
-	} 
-}
-@media (max-width: $screen-md-min){
-	.main-information {
-		padding-right: 20px;
-		.page-header div{
-			padding-right: 255px;
-		}
-	}
-}
-@media (max-width: $screen-sm-min){
-	.main-information{
-		padding-right: 15px;
-		padding-left: 0;
-		.page-header div{
-			padding-right: 0;
-		}
-	}
-}
-@media (max-width: $screen-xs-min){
-	.main-information{
-		padding-right: 0px;
-		padding-top: 10px;
-	}
-}
+
