@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             result.ShouldBeOfExactType<OkResult>();
 
         It should_call_add_paradata_export_method_in_data_export_processes_service = () =>
-            mockOfDataExportProcessesService.Verify(x=>x.AddParaDataExport(DataExportFormat.Paradata), Times.Once);
+            mockOfDataExportProcessesService.Verify(x=>x.AddParaDataExport(DataExportFormat.Tabular), Times.Once);
 
         private static ExportController controller;
 

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             var questionnaireExportStructureStorage = Mock.Of<IQuestionnaireExportStructureStorage>(
                     x => x.GetQuestionnaireExportStructure(questionnaireIdentity) == new QuestionnaireExportStructure());
 
-            paraDataExportProcessDetails = new ParaDataExportProcessDetails(DataExportFormat.Paradata)
+            paraDataExportProcessDetails = new ParaDataExportProcessDetails(DataExportFormat.Tabular)
             {
                 Status = DataExportStatus.Running,
                 ProgressInPercents = 98
