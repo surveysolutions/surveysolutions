@@ -1,9 +1,9 @@
 import * as indexOf from "lodash.indexOf"
-import * as isArray from "lodash.isarray"
+
 import * as Vue from "vue"
 
 function forEachIfNeeded(data, each) {
-    if (isArray(data)) {
+    if (Array.isArray(data)) {
         data.forEach(section => {
             each(section)
         })
