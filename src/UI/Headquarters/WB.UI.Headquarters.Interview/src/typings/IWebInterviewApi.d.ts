@@ -44,6 +44,11 @@ declare interface ISidebarPanel {
     validity: IValidity
 }
 
+declare interface ITextListAnswerRow {
+    value: number
+    text: string
+}
+
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
 
@@ -62,7 +67,7 @@ declare interface IWebInterviewApi {
     answerDoubleQuestion(questionIdentity: string, answer: number): void
     answerDateQuestion(questionIdentity: string, answer: Date): void
 
-    answerTextListQuestion(questionIdentity: string, rows: any[]): void
+    answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
 
     removeAnswer(questionId: string): void
 }
