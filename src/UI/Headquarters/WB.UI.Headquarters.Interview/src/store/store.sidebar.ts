@@ -15,45 +15,45 @@ export default safeStore({
     },
 
     actions: {
-        fetchSidebar: debounce(async ({ commit }) => {
-            const panels = await apiCaller(api => api.getSidebarChildSectionsOf([null]))
-            commit("SET_SIDEBAR_STATE", panels)
-        }, 200),
 
-        fetchChildSidebar: batchedAction(async ({ commit }, ids) => {
+        fetchSidebar: batchedAction (async ({ commit }, ids) => {
             const childs = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
-            commit("SET_SIDEBAR_STATE_CHILD", { childs })
+            commit("SET_SIDEBAR_STATE", childs)
         }, null, null),
 
-        toggleSidebar({ commit, dispatch, state }, { panel, collapsed }) {
+        toggleSidebar ({ commit, dispatch, state }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
             if (collapsed === false) {
-                dispatch("fetchChildSidebar", panel.id)
+                dispatch("fetchSidebar", panel.id)
             }
         }
     },
 
     mutations: {
-        SET_SIDEBAR_STATE(state, sidebars) {
-            Vue.set(state.panels, "root", sidebars)
-        },
-        SET_SIDEBAR_STATE_CHILD(state, { childs }) {
+        SET_SIDEBAR_STATE (state, childs) {
             const byParentId = groupBy(childs, "parentId")
 
             forEach(byParentId, (panels, id) => {
-                Vue.set(state.panels, id || "root", panels)
+                // groupBy will set id == "null" if parentId of panel is null
+                Vue.set(state.panels, id, panels)
             })
         },
-        SET_SIDEBAR_TOGGLE(state, {panel, collapsed}) {
+        SET_SIDEBAR_TOGGLE (state, {panel, collapsed}) {
             Vue.set(panel, "collapsed", collapsed)
         }
     },
 
     getters: {
-        hasSidebarData(state) {
-            // tslint:disable-next-line:no-string-literal
-            return state.panels && state.panels["root"] && state.panels["root"].length > 0
+        hasSidebarData (state, getters) {
+            return getters.rootSections.length > 0
+        },
+        rootSections (state) {
+            if (state.panels["null"]) {
+                return state.panels["null"]
+            }
+
+            return []
         }
     }
 })

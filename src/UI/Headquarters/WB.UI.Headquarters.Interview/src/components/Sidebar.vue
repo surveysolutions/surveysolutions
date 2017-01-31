@@ -15,7 +15,7 @@
         components: { SidebarPanel },
         computed: {
             sections() {
-                return this.$store.state.sidebar.panels["root"]
+                return this.$store.getters.rootSections
             },
             currentPanel() {
                 return this.$route.params.sectionId
@@ -32,7 +32,7 @@
         methods: {
             fetchSidebar() {
                 if (this.currentPanel) {
-                    Vue.nextTick(() => this.$store.dispatch("fetchSidebar"))
+                    Vue.nextTick(() => this.$store.dispatch("fetchSidebar", null))
                 }
             }
         }

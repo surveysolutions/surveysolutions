@@ -392,9 +392,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 var childs = parentId == null
                     ? interview.GetEnabledSections()
-                    : interview.GetGroup(Identity.Parse(parentId)).Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
+                    : interview.GetGroup(Identity.Parse(parentId))?.Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                foreach (var child in childs)
+                foreach (var child in childs ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, opts => SidebarMapOptions(opts, visibleSections));
                     result.Add(sidebar);
