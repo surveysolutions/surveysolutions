@@ -5,12 +5,14 @@
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options">
                     <div class="field">
-                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_yes'" :checked="isYesChecked(option.value)" value="true" @click="answerYes(option.value)" />
+                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_yes'" :checked="isYesChecked(option.value)" value="true"
+                            @click="answerYes(option.value)" v-disabledWhenUnchecked="allAnswersGiven" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
                         </label>
                         <b>/</b>
-                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_no'" :checked="isNoChecked(option.value)" value="false" @click="answerNo(option.value)" />
+                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_no'" :checked="isNoChecked(option.value)" value="false"
+                            @click="answerNo(option.value)" />
                         <label :for="$me.id + '_' + option.value + '_no'">
                             <span class="tick"></span>
                         </label>
@@ -33,44 +35,42 @@
     export default {
         name: 'CategoricalYesNo',
         computed: {
-            answer: {
-                get() {
-                    return this.$me.answer
-                },
-            },
             allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+                const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
+                const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount;
+                return isMaxLimitReached;
             }
         },
         methods: {
-            answerYes(optionVlue){
-                 this.sendAnswer(optionVlue, true);
+            answerYes(optionValue){
+                 this.sendAnswer(optionValue, true);
                  return true;
             },
-            answerNo(optionVlue){
-                 this.sendAnswer(optionVlue, false);
+            answerNo(optionValue){
+                 this.sendAnswer(optionValue, false);
                  return true;
             },
-            clearAnswer(optionVlue){
-                 this.sendAnswer(optionVlue, null);
+            clearAnswer(optionValue){
+                 this.sendAnswer(optionValue, null);
                  return true;
             },
-            getAnswerOrder(answerValue){
+            isCanBeenAnswered(optionValue){
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
-                const answerIndex = yesAnswers.findIndex(x => x.value == answerValue)
+                const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount;
+                return isMaxLimitReached;
+            },
+            getAnswerOrder(optionValue){
+                const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
+                const answerIndex = yesAnswers.findIndex(x => x.value == optionValue)
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             },
-            isYesChecked(answerValue) {
-                const answerObj = $.grep(this.$me.answer, function(e){ return e.value == answerValue; });
+            isYesChecked(optionValue) {
+                const answerObj = $.grep(this.$me.answer, function(e){ return e.value == optionValue; });
                 return answerObj.length == 0 ? false : answerObj[0].yes;
             },
-            isNoChecked(answerValue) {
-                const answerObj = $.grep(this.$me.answer, function(e){ return e.value == answerValue; });
-                if (answerObj.length == 0) {
-                    return false;
-                } else {
-                    return !answerObj[0].yes;
-                }
+            isNoChecked(optionValue) {
+                const answerObj = $.grep(this.$me.answer, function(e){ return e.value == optionValue; });
+                return answerObj.length == 0 ? false : !answerObj[0].yes;
             },
             sendAnswer(optionValue, answerValue) {
                 const previousAnswer = this.$me.answer;
@@ -110,6 +110,9 @@
         },
         directives: {
             disabledWhenUnchecked: {
+                bind: (el, binding) => {
+                    $(el).prop("disabled", binding.value && !el.checked)
+                },
                 update: (el, binding) => {
                     $(el).prop("disabled", binding.value && !el.checked)
                 }
