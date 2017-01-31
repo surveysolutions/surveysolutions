@@ -8,7 +8,7 @@
             <li>
                 <input type="text" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" />
             </li>
-            <li v-for="option in options">
+            <li v-for="option in options" :key="option.value">
                 <a href="javascript:void(0);" @click="selectOption(option.value)">{{option.title}}</a>
             </li>
         </ul>

@@ -227,22 +227,37 @@ namespace WB.UI.Headquarters.API.WebInterview
             var callerInterview = this.GetCallerInterview();
 
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
+            var questionnaire = this.GetCallerQuestionnaire();
             if (question != null)
             {
                 GenericQuestion result = new StubEntity { Id = id, Title = question.Title.Text};
 
                 if (question.IsSingleFixedOption)
                 {
-                    result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
+                    if (questionnaire.IsQuestionFilteredCombobox(identity.Id))
+                    {
+                        result = this.autoMapper.Map<InterviewFilteredQuestion>(question);
+                        var typedResult = (InterviewFilteredQuestion)result;
+                        if (question.IsAnswered())
+                        {
+                            var answer = question.AsSingleFixedOption.GetAnswer().SelectedValue;
+                            var answerText = callerInterview.GetAnswerAsString(identity);
+                            typedResult.Answer = new DropdownItem(answer, answerText);
+                        }
+                    }
+                    else
+                    {
+                        result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
 
-                    var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                    ((InterviewSingleOptionQuestion)result).Options = options;
+                        var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                        ((InterviewSingleOptionQuestion) result).Options = options;
+                    }
                 }
                 else if (question.IsText)
                 {
                     InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
                     result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
-                    var textQuestionMask = this.GetCallerQuestionnaire().GetTextQuestionMask(identity.Id);
+                    var textQuestionMask = questionnaire.GetTextQuestionMask(identity.Id);
                     if (!string.IsNullOrEmpty(textQuestionMask))
                     {
                         ((InterviewTextQuestion)result).Mask = textQuestionMask;
@@ -252,7 +267,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     InterviewTreeQuestion integerQuestion = callerInterview.GetQuestion(identity);
                     var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(integerQuestion);
-                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    var callerQuestionnaire = questionnaire;
 
                     interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
                     var isRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
@@ -270,7 +285,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
                     var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(textQuestion);
-                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    var callerQuestionnaire = questionnaire;
                     interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                     interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
                     result = interviewDoubleQuestion;
@@ -282,7 +297,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                     var typedResult = (InterviewMutliOptionQuestion)result;
                     typedResult.Options = options;
-                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    var callerQuestionnaire = questionnaire;
                     typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                     typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
@@ -295,7 +310,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = this.autoMapper.Map<InterviewTextListQuestion>(question);
                     var typedResult = (InterviewTextListQuestion)result;
-                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    var callerQuestionnaire = questionnaire;
                     typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                 }                
@@ -304,7 +319,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
                     var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                     interviewYesNoQuestion.Options = options;
-                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    var callerQuestionnaire = questionnaire;
                     interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                     interviewYesNoQuestion.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
@@ -325,7 +340,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 InterviewStaticText result = new InterviewStaticText() { Id = id };
                 result = this.autoMapper.Map<InterviewStaticText>(staticText);
 
-                var callerQuestionnaire = this.GetCallerQuestionnaire();
+                var callerQuestionnaire = questionnaire;
                 var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
                 if (attachment != null)
                 {
