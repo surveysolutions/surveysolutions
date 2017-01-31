@@ -63,14 +63,12 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
-        public void AnswerYesNoQuestion(string questionId, object answer)
+        public void AnswerYesNoQuestion(string questionId, InterviewYesNoAnswer[] answerDto)
         {
             Identity identity = Identity.Parse(questionId);
-
-            IEnumerable<AnsweredYesNoOption> answeredOptions = Enumerable.Empty<AnsweredYesNoOption>();
-
+            var answer = answerDto.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             ExecuteCommand(new AnswerYesNoQuestion(this.GetCallerInterview().Id, commandResponsibleId,
-                identity.Id, identity.RosterVector, DateTime.UtcNow, answeredOptions));
+                identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
         public void AnswerIntegerQuestion(string questionIdenty, int answer)
