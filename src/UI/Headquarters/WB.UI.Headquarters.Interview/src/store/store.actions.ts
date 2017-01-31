@@ -30,6 +30,10 @@ export default {
         dispatch("fetch", { id: questionId })
         apiCaller(api => api.answerMultiOptionQuestion(answer, questionId))
     },
+    answerYesNoQuestion({ dispatch }, { questionId, answer }) {
+        dispatch("fetch", { id: questionId })
+        apiCaller(api => api.answerYesNoQuestion(questionId, answer))
+    },
     answerIntegerQuestion({ dispatch }, { identity, answer }) {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerIntegerQuestion(identity, answer))

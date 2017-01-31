@@ -292,7 +292,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 else if (question.IsDateTime)
                 {
                     result = this.autoMapper.Map<InterviewDateQuestion>(question);
-                }
+                }                
                 else if (question.IsTextList)
                 {
                     result = this.autoMapper.Map<InterviewTextListQuestion>(question);
@@ -300,6 +300,18 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var callerQuestionnaire = this.GetCallerQuestionnaire();
                     typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                }                
+                else if (question.IsYesNo)
+                {
+                    var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
+                    var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                    interviewYesNoQuestion.Options = options;
+                    var callerQuestionnaire = this.GetCallerQuestionnaire();
+                    interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                    interviewYesNoQuestion.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                    interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+
+                    result = interviewYesNoQuestion;
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
@@ -428,7 +440,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
-                    return InterviewEntityType.CategoricalMulti;
+                    return callerQuestionnaire.IsQuestionYesNo(entityId)
+                        ? InterviewEntityType.CategoricalYesNo
+                        : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
                     return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) ? InterviewEntityType.Combobox : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:

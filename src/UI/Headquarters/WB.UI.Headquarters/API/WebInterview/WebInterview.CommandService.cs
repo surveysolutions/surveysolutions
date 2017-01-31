@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -6,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -59,6 +61,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             Identity identity = Identity.Parse(questionId);
             ExecuteCommand(new AnswerMultipleOptionsQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
+        }
+
+        public void AnswerYesNoQuestion(string questionId, object answer)
+        {
+            Identity identity = Identity.Parse(questionId);
+
+            IEnumerable<AnsweredYesNoOption> answeredOptions = Enumerable.Empty<AnsweredYesNoOption>();
+
+            ExecuteCommand(new AnswerYesNoQuestion(this.GetCallerInterview().Id, commandResponsibleId,
+                identity.Id, identity.RosterVector, DateTime.UtcNow, answeredOptions));
         }
 
         public void AnswerIntegerQuestion(string questionIdenty, int answer)

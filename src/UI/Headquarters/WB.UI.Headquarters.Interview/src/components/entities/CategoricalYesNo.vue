@@ -1,0 +1,101 @@
+<template>
+    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
+        <div class="question-unit">
+            <div class="yes-no-mark">Yes <b>/</b> No</div>
+            <div class="options-group">
+                <div class="radio" v-for="option in $me.options">
+                    <div class="field">
+                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_yes'" :checked="isYesChecked(option.value)" value="true"  v-model="answer" />
+                        <label :for="$me.id + '_' + option.value + '_yes'">
+                            <span class="tick"></span>
+                        </label>
+                        <b>/</b>
+                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value" :id="$me.id + '_' + option.value + '_no'" :checked="isNoChecked(option.value)" value="false"  />
+                        <label :for="$me.id + '_' + option.value + '_no'">
+                            <span class="tick"></span>
+                        </label>
+                        <span>{{option.title}}</span>
+                        <button type="submit" class="btn btn-link btn-clear">
+                            <span></span>
+                        </button>
+                        <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </wb-question>
+</template>
+<script lang="ts">
+    import { entityDetails } from "components/mixins"
+    import * as $ from "jquery"
+    import modal from "../Modal"
+
+    export default {
+        name: 'CategoricalYesNo',
+        computed: {
+            answer: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    if (!this.$me.isRosterSize)
+                    {
+                        this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: value })
+                        return;
+                    }
+
+                    const currentAnswerCount = value.length;
+                    const previousAnswersCount = this.$me.answer.length;
+                    const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+
+                    if (!isNeedRemoveRosters)
+                    {
+                        this.$store.dispatch('answerYesNoQuestion', { questionId: this.$me.id, answer: value });
+                        return;
+                    }
+
+                    const confirmMessage = 'Are you sure you want to remove related roster?';
+
+                    modal.methods.confirm(confirmMessage,  result => {
+                        if (result) {
+                            this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: value })
+                            return;
+                        } else {
+                            this.fetch()
+                            return
+                        }
+                    })
+                }
+            },
+            allAnswersGiven() {
+                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+            }
+        },
+        methods: {
+            getAnswerOrder(answerValue){
+                var answerIndex = this.$me.answer.indexOf(answerValue)
+                return  answerIndex > -1 ? answerIndex + 1 : ""
+            },
+            isYesChecked(answerValue) {
+                var answerObj = $.grep(this.$me.answer, function(e){ return e.value == answerValue; });
+                return answerObj.length == 0 ? false : answerObj[0].yes;
+            },
+            isNoChecked(answerValue) {
+                var answerObj = $.grep(this.$me.answer, function(e){ return e.value == answerValue; });
+                if (answerObj.length == 0) {
+                    return false;
+                } else {
+                    return !answerObj[0].yes;
+                }
+            }
+        },
+        directives: {
+            disabledWhenUnchecked: {
+                update: (el, binding) => {
+                    $(el).prop("disabled", binding.value && !el.checked)
+                }
+            }
+        },
+        mixins: [entityDetails]
+    }
+</script>
