@@ -118,9 +118,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = this.userIdentity.Name;
 
 #if DEBUG
-            this.Endpoint = "https://superhq-rc.mysurvey.solutions";
-            this.UserName = "ank";
-            this.Password = "P@$$w0rd";
+            this.Endpoint = "http://192.168.88./headquarters";
+            this.UserName = "int";
+            this.Password = "1";
 #endif
         }
 

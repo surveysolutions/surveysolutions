@@ -32,6 +32,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected string interviewId;
 
+        public class SavedState
+        {
+            public string InteriewId { get; set; }
+        }
+
+        public void ReloadState(SavedState savedState) => this.Initialize(savedState.InteriewId);
+
         protected void Initialize(string interviewId)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));

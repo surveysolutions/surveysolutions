@@ -49,7 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly CoverStateViewModel coverState;
         private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private IStatefulInterview interview;
         private readonly IJsonAllTypesSerializer jsonSerializer;
 
         protected BaseInterviewViewModel(
@@ -102,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override void Load()
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            interview = this.interviewRepository.Get(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
 
             if (interview == null)
             {
@@ -110,12 +109,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
             }
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             if (questionnaire == null)
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
-            this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(this.interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = this.interview.CountCommentedQuestions() > 0;
+            this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
+            this.HasCommentsFromSupervior = interview.CountCommentedQuestions() > 0;
             this.HasPrefilledQuestions = questionnaire
                 .GetPrefilledQuestions()
                 .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
@@ -123,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionnaireTitle = questionnaire.Title;
         
             this.availableLanguages = questionnaire.GetTranslationLanguages();
-            this.currentLanguage = this.interview.Language;
+            this.currentLanguage = interview.Language;
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(interviewId, this.navigationState);
@@ -164,7 +163,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
-                    IEnumerable<Identity> questionsToListen = this.interview.GetChildQuestions(eventArgs.TargetGroup);
+                    var interview = this.interviewRepository.Get(this.interviewId);
+                    IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
                     this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                     break;
@@ -201,18 +201,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         case ScreenType.PrefieldScreen: return NavigationDirection.Next;
 
                         default:
+                            var interview = this.interviewRepository.Get(this.interviewId);
+
                             if (eventArgs.PreviousGroup == null || eventArgs.TargetGroup == null)
                                 return NavigationDirection.Next;
 
-                            var isTargetGroupInsidePrevious = eventArgs.TargetGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.PreviousGroup);
+                            var isTargetGroupInsidePrevious = eventArgs.TargetGroup.UnwrapReferences(interview.GetParentGroup).Contains(eventArgs.PreviousGroup);
                             if (isTargetGroupInsidePrevious)
                                 return NavigationDirection.Inside;
 
-                            var isPreviousGroupInsideTarget = eventArgs.PreviousGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.TargetGroup);
+                            var isPreviousGroupInsideTarget = eventArgs.PreviousGroup.UnwrapReferences(interview.GetParentGroup).Contains(eventArgs.TargetGroup);
                             if (isPreviousGroupInsideTarget)
                                 return NavigationDirection.Outside;
 
-                            return this.interview.IsFirstEntityBeforeSecond(eventArgs.PreviousGroup, eventArgs.TargetGroup)
+                            return interview.IsFirstEntityBeforeSecond(eventArgs.PreviousGroup, eventArgs.TargetGroup)
                                 ? NavigationDirection.Next
                                 : NavigationDirection.Previous;
                     }
