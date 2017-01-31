@@ -5,6 +5,17 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
+    public class LinkedOption
+    {
+        public RosterVector RosterVector { get; set; }
+        public string Title { get; set; }
+    }
+
+    public class InterviewLinkedSingleQuestion : LinkedCategoricalQuestion
+    {
+        public RosterVector Answer { get; set; }
+    }
+
     public class InterviewTextQuestion : GenericQuestion
     {
         public string Mask { get; set; }
@@ -76,6 +87,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public int Value { get; set; }
         public bool Yes { get; set; }
+    }
+
+    public class LinkedCategoricalQuestion : GenericQuestion
+    {
+        public List<LinkedOption> Options { get; set; }
     }
 
     public class CategoricalQuestion: GenericQuestion

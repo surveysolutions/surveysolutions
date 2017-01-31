@@ -321,6 +321,18 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = this.autoMapper.Map<InterviewGpsQuestion>(question);
                 }
+                else if (question.IsSingleLinkedOption)
+                {
+                    var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
+                    List<LinkedOption> options = question.AsLinked.Options.Select(x => new LinkedOption
+                    {
+                        RosterVector = x,
+                        Title = callerInterview.GetLinkedOptionTitle(identity, x)
+                    }).ToList();
+
+                    singleLinkedOption.Options = options;
+                    result = singleLinkedOption;
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -471,7 +483,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) || callerQuestionnaire.IsQuestionCascading(entityId)
+                    if (callerQuestionnaire.IsQuestionLinked(entityId))
+                        return InterviewEntityType.LinkedSingle;
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) 
                         ? InterviewEntityType.Combobox
                         : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:

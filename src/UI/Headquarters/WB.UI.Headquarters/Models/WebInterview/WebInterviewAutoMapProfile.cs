@@ -43,6 +43,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
                     opts.Condition(x => x.AsCascading != null);
                     opts.MapFrom(x => x.IsDisabled());
                 });
+                
+             this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
+               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
 
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
