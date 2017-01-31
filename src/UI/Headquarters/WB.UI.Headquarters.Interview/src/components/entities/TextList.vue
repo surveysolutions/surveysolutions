@@ -5,7 +5,7 @@
                 <div class="form-group" v-for="(row, index) in $me.rows">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" v-on:blur="updateRow($event, row)" />
-                        <button type="submit" class="btn btn-link btn-clear" v-on:click="removeRow(index)"><span></span></button>
+                        <button type="submit" class="btn btn-link btn-clear" v-on:click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>
                 <div class="form-group" v-if="$me.rows == undefined || $me.maxAnswersCount > $me.rows.length">
@@ -20,8 +20,9 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
+    import modal from "../Modal"
 
-    class TextListAnswerRow {
+    class TextListAnswerRow implements ITextListAnswerRow {
         value: number
         text: string
         constructor(value: number, text: string) {
@@ -37,6 +38,22 @@
             markAnswerAsNotSavedWithMessage(message) {
                 const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
+            },
+            confirmAndRemoveRow(index) {
+                if (!this.$me.isRosterSize) {
+                    this.removeRow(index)
+                    return
+                }
+
+                modal.methods.confirm('Are you sure you want to remove related roster?', result => {
+                    if (result) {
+                        this.removeRow(index)
+                        return;
+                    } else {
+                        this.fetch()
+                        return
+                    }
+                })
             },
             removeRow(index) {
                 this.$me.rows.splice(index, 1)

@@ -55,6 +55,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public int? MaxAnswersCount { get; set; }
         public List<TextListAnswerRow> Rows { get; set; }
+        public bool IsRosterSize { get; set; }
+
         public override string ToString() => string.Join(@", ", Rows);
     }
 

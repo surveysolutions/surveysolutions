@@ -301,6 +301,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var typedResult = (InterviewTextListQuestion)result;
                     var callerQuestionnaire = this.GetCallerQuestionnaire();
                     typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                    typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
