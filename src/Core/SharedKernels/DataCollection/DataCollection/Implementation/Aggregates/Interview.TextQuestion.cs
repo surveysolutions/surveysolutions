@@ -1,5 +1,6 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
@@ -16,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
+            this.RequireTextAnswerAllowed(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 

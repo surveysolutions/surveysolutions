@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewTree InterviewTree { get; }
 
-        public void RequireRosterVectorQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
+        public InterviewTreeInvariants RequireQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
         {
             if (rosterVector == null)
                 throw new InterviewException(
@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
                     $"Question ID: {questionId.FormatGuid()}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
         }
 
         public void RequireQuestionIsEnabled(Identity questionIdentity)

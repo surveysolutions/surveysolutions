@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion(QuestionType.Multimedia);
 
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             var changedInterviewTree = this.Tree.Clone();

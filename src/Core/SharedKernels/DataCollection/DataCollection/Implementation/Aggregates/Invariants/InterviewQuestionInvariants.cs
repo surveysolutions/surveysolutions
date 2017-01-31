@@ -54,18 +54,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     this.InfoForException);
         }
 
-        public void RequireNumericRealQuestion()
+        public InterviewQuestionInvariants RequireNumericRealQuestion()
         {
             if (this.Questionnaire.IsQuestionInteger(this.QuestionId))
                 throw new AnswerNotAcceptedException(
                     $"Question {this.FormatQuestionForException()} doesn't support answer of type real. {this.InfoForException}");
+
+            return this;
         }
 
-        public void RequireNumericIntegerQuestion()
+        public InterviewQuestionInvariants RequireNumericIntegerQuestion()
         {
             if (!this.Questionnaire.IsQuestionInteger(this.QuestionId))
                 throw new AnswerNotAcceptedException(
                     $"Question {this.FormatQuestionForException()} doesn't support answer of type integer. {this.InfoForException}");
+
+            return this;
         }
 
         public void RequireMaxAnswersCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit)
@@ -131,15 +135,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Answer '{answer}' for question {this.FormatQuestionForException()}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {countOfDecimalPlacesAllowed.Value}. {this.InfoForException}");
         }
 
-        public void RequireRosterSizeAnswerNotNegative(int answer)
+        public InterviewQuestionInvariants RequireRosterSizeAnswerNotNegative(int answer)
         {
+            if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
+                return this;
+
             if (answer < 0)
                 throw new AnswerNotAcceptedException(
                     $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is negative. {this.InfoForException}");
+
+            return this;
         }
 
         public void RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer, int maxRosterRowCount)
         {
+            if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
+                return;
+
             if (answer > maxRosterRowCount)
                 throw new AnswerNotAcceptedException(
                     $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is greater than {maxRosterRowCount}. {this.InfoForException}");
