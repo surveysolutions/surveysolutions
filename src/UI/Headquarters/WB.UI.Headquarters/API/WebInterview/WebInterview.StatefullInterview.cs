@@ -27,7 +27,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             return this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
-                .Where(x => this.GetEntityType(x) != InterviewEntityType.Unsupported)
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
@@ -47,7 +46,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             var ids = statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
 
             var entities = ids
-                .Where(x => this.GetEntityType(x.Id) != InterviewEntityType.Unsupported)
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
@@ -231,7 +229,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             if (question != null)
             {
-                GenericQuestion result = new StubEntity { Id = id };
+                GenericQuestion result = new StubEntity { Id = id, Title = question.Title.Text};
 
                 if (question.IsSingleFixedOption)
                 {
