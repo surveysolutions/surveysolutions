@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<YesNoQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
         IEventHandler<StaticTextsDeclaredValid>,
@@ -139,10 +140,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<GroupsDisabled> @event)
             => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
 
-        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
-        {
-            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-        }
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt) 
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
 
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
@@ -151,6 +150,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+            
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
     }
 }
