@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
-using NHibernate.Proxy;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
