@@ -1,11 +1,22 @@
 <template>
-    <select />
+    <div class="btn-group btn-input clearfix">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+            <span data-bind="label" v-if="value === null" class="gray-text">Click to answer</span>
+            <span data-bind="label" v-else >{{value.title}}</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <input type="text" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" />
+            </li>
+            <li v-for="option in options">
+                <a href="javascript:void(0);" @click="selectOption(option.value)">{{option.title}}</a>
+            </li>
+        </ul>
+    </div>
 </template>
 <script lang="ts">
-    import "choices.js/assets/styles/css/base.css"
-    import "choices.js/assets/styles/css/choices.css"
-
-    import * as choices from "choices.js"
+    import "bootstrap"
+    import * as $ from "jquery"
 
     import { apiCaller } from "src/api"
 
@@ -16,50 +27,41 @@
                 type: Number,
                 default: null
             },
-            options: {
-                type: Array,
-                default: () => []
-            },
             questionId: {
                 type: String,
                 default: null
             }
         },
-        data() {
-            return {
-                control: null
+        computed: {
+            searchBoxId() {
+                return `sb_${this.questionId}`
             }
         },
-        watch: {
-            value(newValue) {
-                if (newValue === null || newValue === undefined) {
-                    this.control.removeActiveItems()
-                }
+        data() {
+            return {
+                control: null,
+                options: []
+            }
+        },
+        methods: {
+            async updateOptionsList(e) {
+                const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, e.target.value, 30))
+                this.options = options
+            },
+            selectOption(value) {
+                this.$emit('input', value)
             }
         },
         mounted() {
-            this.control = new choices(this.$el, {
-                duplicateItems: false,
-                searchFloor: 0,
-                maxItemCount: 1,
-                placeholderValue: "Enter answer",
-                fuseOptions: {
-                    keys: ["title"]
-                },
-            })
-            this.control.ajax(async (callback) => {
-                const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, null, 15000))
-                callback(options, 'value', 'title')
-                this.control.setValueByChoice(this.value)
-            })
+            const jqEl = $(this.$el)
+            const focusTo = jqEl.find(`#${this.searchBoxId}`)
+            jqEl.on('shown.bs.dropdown', () => {
+                    focusTo.focus()
+                })
 
-            this.$el.addEventListener("change", (value) => {
-                this.$emit('input', value.detail.value)
+            jqEl.on('hidden.bs.dropdown', () => {
+                focusTo.text('')
             })
-        },
-        destroyed() {
-            this.control.destroy()
-            this.control = null
         }
     }
 </script>
