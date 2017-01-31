@@ -9,6 +9,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         CategoricalMulti,
         CategoricalYesNo,
         Integer,
+        LinkedSingle,
         Double,
         DateTime,
         Gps,
