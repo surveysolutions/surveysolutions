@@ -18,7 +18,7 @@ export default safeStore({
         fetchSidebar: debounce(async ({ commit }) => {
             const panels = await apiCaller(api => api.getSidebarChildSectionsOf([null]))
             commit("SET_SIDEBAR_STATE", panels)
-        }),
+        }, 200),
 
         fetchChildSidebar: batchedAction(async ({ commit }, ids) => {
             const childs = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
