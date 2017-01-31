@@ -11,6 +11,7 @@ import * as vue from "vue"
 
 import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
+import CategoricalYesNo from "./CategoricalYesNo"
 import Combobox from "./Combobox"
 import DateTime from "./DateTime"
 import Double from "./Double"
@@ -27,6 +28,7 @@ vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
 vue.component("Double", Double)
 vue.component("TextQuestion", TextQuestion)
+vue.component("CategoricalYesNo", CategoricalYesNo)
 vue.component("CategoricalSingle", CategoricalSingle)
 vue.component("Combobox", Combobox)
 vue.component("CategoricalMulti", CategoricalMulti)

@@ -45,6 +45,20 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool IsRosterSize { get; set; }
     }
 
+    public class InterviewYesNoQuestion : CategoricalQuestion
+    {
+        public int? MaxSelectedAnswersCount { get; set; }
+        public bool Ordered { get; set; }
+        public InterviewYesNoAnswer[] Answer { get; set; }
+        public bool IsRosterSize { get; set; }
+    }
+
+    public class InterviewYesNoAnswer
+    {
+        public int Value { get; set; }
+        public bool Yes { get; set; }
+    }
+
     public class CategoricalQuestion: GenericQuestion
     {
         public List<CategoricalOption> Options { get; set; }
