@@ -4,13 +4,13 @@
             <div class="options-group">
                 <div class="form-group" v-for="(row, index) in $me.rows">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" v-on:blur="updateRow($event, row)" />
+                        <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" @blur="updateRow($event, row)" @keyup.enter="updateRow($event, row)"/>
                         <button type="submit" class="btn btn-link btn-clear" v-on:click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>
                 <div class="form-group" v-if="$me.rows == undefined || $me.maxAnswersCount > $me.rows.length">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" v-on:blur="addRow" />
+                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" @blur="addRow" @keyup.enter="addRow"/>
                     </div>
                 </div>
             </div>
