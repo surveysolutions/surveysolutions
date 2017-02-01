@@ -36,6 +36,9 @@
                 },
                 set(value) {
                     const selectedOption = this.$me.options.find((option) => { return option.value == value; });
+                    if (this.$me.isLinkedToList){
+                        this.$store.dispatch("answerLinkedToListSingleQuestion", { answer: value[0], questionIdentity: this.$me.id })
+                    }
                     this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionIdentity: this.$me.id })
                 }
             }

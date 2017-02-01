@@ -26,7 +26,10 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
+                    if (this.$me.isLinkedToList){
+                        this.$store.dispatch("answerLinkedToListMultiQuestion", { answer: value, questionIdentity: this.$me.id })
+                    }
+                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionIdentity: this.$me.id })
                     return;
                 }
             },
