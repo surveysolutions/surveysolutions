@@ -6276,7 +6276,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.13em;
-  transition: background 0.2s linear 0s; }
+  transition: background 0.2s linear 0s;
+  word-break: break-all; }
   .btn:disabled, .btn.disabled {
     border-color: transparent !important;
     color: #fff !important;
@@ -6286,7 +6287,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     .btn:disabled:hover, .btn:disabled:focus, .btn.disabled:hover, .btn.disabled:focus {
       border-color: #ececec; }
   .btn:hover {
-    outline: none; }
+    /* outline: none;  */ }
+  .btn:focus {
+    outline: 1px auto #2a81cb; }
 
 a.disabled {
   pointer-events: none;
@@ -6529,18 +6532,26 @@ a.disabled {
   white-space: normal; }
 
 .btn-back {
-  padding-left: 40px;
+  display: table;
+  padding-left: 10px;
   background-color: transparent;
-  border-width: 3px;
-  min-height: 60px;
-  background-size: 22.5px 33.75px;
-  background-position: 10px 10px; }
+  border-width: 3px; }
+  .btn-back:before {
+    content: "";
+    display: block;
+    float: left;
+    width: 22.5px;
+    height: 33.75px;
+    margin-right: 15px; }
+  .btn-back span {
+    display: table-cell;
+    vertical-align: middle; }
   .btn-back.btn-success {
-    background: url("../img/back-to-parrent-1-no-animation-2.png") no-repeat;
-    background-size: 22.5px 33.75px;
-    background-position: 10px 10px;
     color: #3ca21a;
     border-color: #3ca21a; }
+    .btn-back.btn-success:before {
+      background: url("../img/back-to-parrent-1-no-animation-2.png") no-repeat;
+      background-size: 22.5px 33.75px; }
     .btn-back.btn-success:active:focus {
       background-color: #afef99;
       color: #3ca21a;
@@ -6550,11 +6561,11 @@ a.disabled {
       color: #3ca21a;
       border-color: #2c7613; }
   .btn-back.btn-danger {
-    background: url("../img/back-to-parrent-1-no-animation-3.png") no-repeat;
-    background-size: 22.5px 33.75px;
-    background-position: 10px 10px;
     color: #f05a26;
     border-color: #f05a26; }
+    .btn-back.btn-danger:before {
+      background: url("../img/back-to-parrent-1-no-animation-3.png") no-repeat;
+      background-size: 22.5px 33.75px; }
     .btn-back.btn-danger:active:focus {
       background-color: #fdebe5;
       color: #f05a26;
@@ -6564,11 +6575,11 @@ a.disabled {
       color: #f05a26;
       border-color: #d4420f; }
   .btn-back.btn-primary {
-    background: url("../img/back-to-parrent-1-no-animation-1.png") no-repeat;
-    background-size: 22.5px 33.75px;
-    background-position: 10px 10px;
     color: #2a81cb;
     border-color: #2a81cb; }
+    .btn-back.btn-primary:before {
+      background: url("../img/back-to-parrent-1-no-animation-1.png") no-repeat;
+      background-size: 22.5px 33.75px; }
     .btn-back.btn-primary:active:focus {
       background-color: #cce2f5;
       color: #2a81cb;
@@ -7526,6 +7537,7 @@ input.double-checkbox-white {
   .aside-menu.open button:focus span:before, .aside-menu.open button:focus span:after, .aside-menu.open button:hover span:before, .aside-menu.open button:hover span:after, .aside-menu.open button:active span:before, .aside-menu.open button:active span:after {
     background-color: #a3adb4; }
   .aside-menu .dropdown-menu {
+    z-index: 1;
     left: auto;
     right: 35px;
     top: 10px;
@@ -9242,6 +9254,7 @@ label.inactive {
   .questionnaire .radio .wb-radio {
     display: block;
     height: 0;
+    position: absolute;
     opacity: 0;
     filter: alpha(opacity=0); }
     .questionnaire .radio .wb-radio + label .tick:before {
@@ -9261,6 +9274,7 @@ label.inactive {
   .questionnaire .form-group .wb-checkbox {
     display: block;
     height: 0;
+    position: absolute;
     opacity: 0;
     filter: alpha(opacity=0); }
     .questionnaire .form-group .wb-checkbox + label .tick:before {
@@ -9331,6 +9345,7 @@ label.inactive {
     display: block; }
   .information-block p {
     width: 90%;
+    word-break: break-all;
     font-style: italic; }
     .information-block p p:last-of-type {
       margin-bottom: 10px; }
@@ -9456,6 +9471,7 @@ label.inactive {
   .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a, .question-editor .preset-filters-container .export-queue, .preset-filters-container .question-editor .export-queue {
     padding: 0 10px;
     margin: 0 0 10px;
+    word-break: break-all;
     position: relative; }
     .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
       left: -25px; }
@@ -9505,6 +9521,7 @@ label.inactive {
         outline: none;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
     .question-editor .options-group .field .dropdown-toggle {
+      height: 40px;
       padding: 11px 38px 11px 15px; }
       .question-editor .options-group .field .dropdown-toggle span {
         position: static;
@@ -9514,11 +9531,15 @@ label.inactive {
       .question-editor .options-group .field .dropdown-toggle:hover, .question-editor .options-group .field .dropdown-toggle:focus, .question-editor .options-group .field .dropdown-toggle:active {
         z-index: 0; }
     .question-editor .options-group .field .dropdown-menu {
-      z-index: 2;
+      z-index: 1;
       width: 100%;
       padding: 5px 10px; }
       .question-editor .options-group .field .dropdown-menu li {
         border-bottom: 1px solid #dbdfe2; }
+        .question-editor .options-group .field .dropdown-menu li > input {
+          width: 100%;
+          border: none;
+          padding: 7px 10px; }
         .question-editor .options-group .field .dropdown-menu li:last-child {
           border: none; }
 
