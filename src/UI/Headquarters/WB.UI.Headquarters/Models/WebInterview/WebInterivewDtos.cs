@@ -7,7 +7,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
 {
     public class LinkedOption
     {
-        public RosterVector RosterVector { get; set; }
+        public string Value { get; set; }
+        public int[] RosterVector { get; set; }
         public string Title { get; set; }
     }
 
