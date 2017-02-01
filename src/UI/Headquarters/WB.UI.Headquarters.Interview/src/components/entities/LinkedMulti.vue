@@ -8,7 +8,7 @@
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
-                    <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
+                    <!--<div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>-->
                 </div>
             </div>
         </div>
@@ -18,29 +18,36 @@
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
 
+    let equals: (x: number[], y: number[])=>boolean = function (x: number[], y: number[]) : boolean {
+        if (x == null || y == null)
+            return false;
+        if (x.length!=y.length)
+            return false;
+        return x.every((element, index) => {  return element == y[index]; });
+    }
+
     export default {
         name: 'LinkedMulti',
         computed: {
             answer: {
                 get() {
-                    return this.$me.answer
+                    const selectedOptions = this.$me.answer.map((a) => {return this.$me.options.find((option) => { return equals(option.rosterVector, a ); })});
+                    return selectedOptions
                 },
                 set(value) {
                     if (this.$me.isLinkedToList){
+                        const selectedOptions = value.map((v) => { return this.$me.options.find((option) => {return option.value == v; }).rosterVector[0]; });
                         this.$store.dispatch("answerLinkedToListMultiQuestion", { answer: value, questionIdentity: this.$me.id })
+                    }else{
+                        const selectedOptions = value.map((v) => { return this.$me.options.find((option) => {return option.value == v; }).rosterVector });
+                        this.$store.dispatch("answerLinkedMultiOptionQuestion", { answer: value, questionIdentity: this.$me.id })
                     }
-                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionIdentity: this.$me.id })
+
                     return;
                 }
             },
             allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-            }
-        },
-        methods: {
-            getAnswerOrder(answerValue){
-                var answerIndex = this.$me.answer.indexOf(answerValue)
-                return  answerIndex > -1 ? answerIndex + 1 : ""
+                return false;
             }
         },
         directives: {

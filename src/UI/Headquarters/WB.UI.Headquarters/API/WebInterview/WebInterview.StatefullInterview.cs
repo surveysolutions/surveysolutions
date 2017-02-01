@@ -366,8 +366,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                 else if (question.IsMultiLinkedToList)
                 {
                     var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
-                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsSingleLinkedToList.LinkedSourceId, identity)?.AsTextList;
-                    List<LinkedOption> options = question.AsSingleLinkedToList.Options.Select(x => new LinkedOption
+                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsMultiLinkedToList.LinkedSourceId, identity)?.AsTextList;
+                    List<LinkedOption> options = question.AsMultiLinkedToList.Options.Select(x => new LinkedOption
                     {
                         Value = x.ToString(),
                         RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
@@ -524,13 +524,17 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
-                    if (callerQuestionnaire.IsQuestionLinked(entityId) || callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                    if (callerQuestionnaire.IsQuestionLinked(entityId) 
+                        || callerQuestionnaire.IsLinkedToListQuestion(entityId) 
+                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedMulti;
                     return callerQuestionnaire.IsQuestionYesNo(entityId)
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    if (callerQuestionnaire.IsQuestionLinked(entityId) || callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                    if (callerQuestionnaire.IsQuestionLinked(entityId) 
+                        || callerQuestionnaire.IsLinkedToListQuestion(entityId)
+                        || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
                     return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) 
                         ? InterviewEntityType.Combobox
