@@ -234,18 +234,9 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 if (question.IsSingleFixedOption)
                 {
-                    if (questionnaire.IsQuestionFilteredCombobox(identity.Id))
+                    if (questionnaire.IsQuestionFilteredCombobox(identity.Id) || question.IsCascading)
                     {
                         result = this.Map<InterviewFilteredQuestion>(question);
-                    }
-                    else if (question.IsCascading)
-                    {
-                        result = this.Map<InterviewCascadingComboboxQuestion>(question, res =>
-                        {
-                            var parentCascadingQuestion = question.AsCascading.GetCascadingParentQuestion();
-                            var parentAnswer = (parentCascadingQuestion?.IsAnswered ?? false) ? parentCascadingQuestion?.GetAnswer().SelectedValue : null;
-                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentAnswer, null, 200);
-                        });
                     } else {
                         result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
@@ -476,11 +467,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId)
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) || callerQuestionnaire.IsQuestionCascading(entityId)
                         ? InterviewEntityType.Combobox
-                        : (callerQuestionnaire.IsQuestionCascading(entityId)
-                            ? InterviewEntityType.Combobox
-                            : InterviewEntityType.CategoricalSingle);
+                        : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:
                     return callerQuestionnaire.IsQuestionInteger(entityId)
                         ? InterviewEntityType.Integer

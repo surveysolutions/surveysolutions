@@ -31,8 +31,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
-
-            this.CreateMap<InterviewTreeQuestion, InterviewCascadingComboboxQuestion>()
+            
+            this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts =>
                 {
@@ -43,14 +43,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 {
                     opts.Condition(x => x.AsCascading != null);
                     opts.MapFrom(x => x.IsDisabled());
-                });
-
-            this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
-                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts =>
-                {
-                    opts.PreCondition(x => x.IsAnswered());
-                    opts.MapFrom(x => GetSingleFixedOptionAnswerAsDropdownItem(x));
                 });
 
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
