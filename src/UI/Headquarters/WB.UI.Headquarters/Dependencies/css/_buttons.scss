@@ -3,6 +3,7 @@
 	text-transform: uppercase;
     letter-spacing: 0.13em;
     @include transition(background, 0.2s);
+    word-break: break-all;
 	&:disabled, &.disabled{
 		//background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
@@ -14,7 +15,10 @@
 		}
 	}
 	&:hover{
-		outline: none; 
+		/* outline: none;  */
+	}
+	&:focus{
+		outline: 1px auto $blue;
 	}
 }
 a.disabled{
@@ -219,12 +223,21 @@ a.disabled{
 	white-space: normal;
 }
 .btn-back{
-	padding-left: 40px;
+	&:before{
+		content: "";
+		display: block;
+		float: left;
+		@include size(22.5px, 33.75px);
+		margin-right: 15px;
+	}
+	span{
+		display: table-cell;
+		vertical-align: middle;
+	}
+	display: table;
+	padding-left: 10px;
 	background-color: transparent;
 	border-width: 3px;
-	min-height: 60px;
-	background-size: 22.5px 33.75px;
-	background-position: 10px 10px;
 	&.btn-success{
 		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
 	}
