@@ -18,6 +18,7 @@ import Double from "./Double"
 import Gps from "./Gps"
 import Group from "./Group"
 import Integer from "./Integer"
+import LinkedMulti from "./LinkedMulti"
 import LinkedSingle from "./LinkedSingle"
 import NavigationButton from "./NavigationButton"
 import Question from "./Question"
@@ -32,6 +33,7 @@ vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
 vue.component("Double", Double)
 vue.component("TextQuestion", TextQuestion)
+vue.component("LinkedMulti", LinkedMulti)
 vue.component("LinkedSingle", LinkedSingle)
 vue.component("CategoricalYesNo", CategoricalYesNo)
 vue.component("CategoricalSingle", CategoricalSingle)
