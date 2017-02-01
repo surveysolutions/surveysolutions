@@ -74,6 +74,10 @@
             },
             sendAnswer(optionValue, answerValue) {
                 const previousAnswer = this.$me.answer;
+                const isChangedAnswerOnOption = previousAnswer.findIndex(x => x.value == optionValue && x.yes == answerValue) < 0;
+                if (!isChangedAnswerOnOption)
+                    return;
+
                 const previousAnswerWithoutCurrecntAnswered = $.grep(this.$me.answer, function(e){ return e.value != optionValue; });
                 const newAnswer = answerValue == null
                     ? previousAnswerWithoutCurrecntAnswered
