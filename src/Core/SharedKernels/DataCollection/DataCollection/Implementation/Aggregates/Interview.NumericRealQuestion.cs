@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.RequireNumericRealAnswerAllowed(questionIdentity, answer, questionnaire, this.Tree);
+            RequireNumericRealAnswerAllowed(questionIdentity, answer, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).AsDouble.SetAnswer(NumericRealAnswer.FromDouble(answer));

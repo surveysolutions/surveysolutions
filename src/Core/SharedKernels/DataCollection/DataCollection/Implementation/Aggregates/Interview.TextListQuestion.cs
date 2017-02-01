@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckTextListInvariants(questionIdentity, answers, questionnaire, this.Tree);
+            CheckTextListInvariants(questionIdentity, answers, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 

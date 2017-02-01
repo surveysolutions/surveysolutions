@@ -3,24 +3,34 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
 {
     internal class InterviewQuestionInvariants
     {
-        public InterviewQuestionInvariants(string interviewId, Guid questionId, IQuestionnaire questionnaire)
+        private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
+
+        public InterviewQuestionInvariants(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree interviewTree)
         {
-            this.InterviewId = interviewId;
-            this.QuestionId = questionId;
+            this.QuestionIdentity = questionIdentity;
             this.Questionnaire = questionnaire;
+            this.InterviewTree = interviewTree;
         }
 
-        private string InterviewId { get; }
-        private Guid QuestionId { get; }
+        public Identity QuestionIdentity { get; }
         private IQuestionnaire Questionnaire { get; }
+        private InterviewTree InterviewTree { get; }
+
+        private string InterviewId => this.InterviewTree.InterviewId;
+        private Guid QuestionId => this.QuestionIdentity.Id;
 
         private string InfoForException => $"Question ID: {this.QuestionId.FormatGuid()}. Interview ID: {this.InterviewId}.";
 
@@ -95,13 +105,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Decimal values should be unique for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
-        public void RequireOptionExists(decimal value)
+        public InterviewQuestionInvariants RequireOptionExists(decimal value)
         {
             var availableValues = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value);
 
             if (availableValues == null)
                 throw new AnswerNotAcceptedException(
                     $"For question {this.FormatQuestionForException()} was provided selected value {value} as answer. {this.InfoForException}");
+
+            return this;
         }
 
         public void RequireOptionsExist(IReadOnlyCollection<int> values)
@@ -123,16 +135,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"For question {this.FormatQuestionForException()} number of answers is greater than the maximum number of selected answers. {this.InfoForException}");
         }
 
-        public void RequireAllowedDecimalPlaces(double answer)
+        public InterviewQuestionInvariants RequireAllowedDecimalPlaces(double answer)
         {
             int? countOfDecimalPlacesAllowed = this.Questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(this.QuestionId);
             if (!countOfDecimalPlacesAllowed.HasValue)
-                return;
+                return this;
 
             var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
             if (roundedAnswer != answer)
                 throw new AnswerNotAcceptedException(
                     $"Answer '{answer}' for question {this.FormatQuestionForException()}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {countOfDecimalPlacesAllowed.Value}. {this.InfoForException}");
+
+            return this;
         }
 
         public InterviewQuestionInvariants RequireRosterSizeAnswerNotNegative(int answer)
@@ -147,14 +161,110 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public void RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer, int maxRosterRowCount)
+        public InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer, int maxRosterRowCount)
         {
             if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
-                return;
+                return this;
 
             if (answer > maxRosterRowCount)
                 throw new AnswerNotAcceptedException(
                     $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is greater than {maxRosterRowCount}. {this.InfoForException}");
+
+            return this;
+        }
+
+        public InterviewQuestionInvariants RequireQuestionInstanceExists()
+        {
+            if (this.QuestionIdentity.RosterVector == null)
+                throw new InterviewException(
+                    $"Roster information for question is missing. " +
+                    $"Roster vector cannot be null. " +
+                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
+            var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
+
+            if (!rosterVectors.Contains(this.QuestionIdentity.RosterVector))
+                throw new InterviewException(
+                    $"Roster information for question is incorrect. " +
+                    $"No questions found for roster vector {this.QuestionIdentity.RosterVector}. " +
+                    $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
+                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
+        }
+
+        public InterviewQuestionInvariants RequireQuestionIsEnabled()
+        {
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
+
+            if (question.IsDisabled())
+                throw new InterviewException(
+                    $"Question {question.FormatForException()} (or it's parent) is disabled " +
+                    $"and question's answer cannot be changed. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
+        }
+
+        public void RequireLinkedOptionIsAvailable(RosterVector option)
+        {
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
+
+            if (!question.AsLinked.Options.Contains(option))
+                throw new InterviewException(
+                    $"Answer on linked categorical question {question.FormatForException()} cannot be saved. " +
+                    $"Specified option {option} is absent. " +
+                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+        }
+
+        public InterviewQuestionInvariants RequireLinkedToListOptionIsAvailable(decimal option)
+        {
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
+
+            if (!question.AsLinkedToList.Options.Contains(option))
+                throw new InterviewException(
+                    $"Answer on linked to list question {question.FormatForException()} cannot be saved. " +
+                    $"Specified option {option} is absent. " +
+                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
+        }
+
+        public InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
+        {
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
+
+            if (!question.IsCascading)
+                return this;
+
+            var answerOption = this.QuestionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+                this.QuestionIdentity.Id, answer, translation);
+
+            if (!answerOption.ParentValue.HasValue)
+                throw new QuestionnaireException(
+                    $"Answer option has no parent value. Option value: {answer}, Question id: '{this.QuestionIdentity.Id}'.");
+
+            int answerParentValue = answerOption.ParentValue.Value;
+            var parentQuestion = question.AsCascading.GetCascadingParentQuestion();
+
+            if (!parentQuestion.IsAnswered)
+                return this;
+
+            int actualParentValue = parentQuestion.GetAnswer().SelectedValue;
+
+            if (answerParentValue != actualParentValue)
+                throw new AnswerNotAcceptedException(
+                    $"For question {question.FormatForException()} was provided " +
+                    $"selected value {answer} as answer with parent value {answerParentValue}, " +
+                    $"but this do not correspond to the parent answer selected value {actualParentValue}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
         }
 
         private string FormatQuestionForException()
