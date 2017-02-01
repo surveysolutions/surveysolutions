@@ -30,12 +30,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public int? Answer { get; set; }
     }
-
-    public class InterviewCascadingComboboxQuestion : CategoricalQuestion
-    {
-        public DropdownItem Answer { get; set; }
-    }
-
+    
     public class InterviewFilteredQuestion : GenericQuestion
     {
         public DropdownItem Answer { get; set; }
