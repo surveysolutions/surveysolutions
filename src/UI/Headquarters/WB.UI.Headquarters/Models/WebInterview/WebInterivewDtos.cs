@@ -98,6 +98,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class LinkedCategoricalQuestion : GenericQuestion
     {
         public List<LinkedOption> Options { get; set; }
+
+        public bool IsLinkedToList { get; set; } = false;
     }
 
     public class CategoricalQuestion: GenericQuestion
