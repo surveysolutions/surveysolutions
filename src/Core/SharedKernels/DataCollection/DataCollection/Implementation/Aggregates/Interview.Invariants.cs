@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.SingleOption:
-                        this.CheckSingleOptionQuestionInvariants(questionIdentity, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire, tree, false, applyStrongChecks: false);
+                        this.RequireFixedSingleOptionPreloadValueAllowed(questionId, ((CategoricalFixedSingleOptionAnswer) answer).SelectedValue, questionnaire);
                         break;
 
                     case QuestionType.MultyOption:
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.SingleOption:
-                        this.CheckSingleOptionQuestionInvariants(questionIdentity, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire, tree, false, applyStrongChecks: true);
+                        this.RequireFixedSingleOptionAnswerAllowed(questionIdentity, ((CategoricalFixedSingleOptionAnswer) answer).SelectedValue, questionnaire, tree);
                         break;
 
                     case QuestionType.MultyOption:
@@ -155,22 +155,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             questionInvariants.RequireMaxAnswersCountLimit(linkedQuestionSelectedOptions.Length);
-        }
-
-        private void CheckLinkedSingleOptionQuestionInvariants(Identity questionIdentity, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
-        {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
-
-            questionInvariants.RequireQuestion(QuestionType.SingleOption);
-
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
-            }
-
-            treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionSelectedOption);
         }
 
         private void RequireTextPreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
@@ -254,28 +238,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled();
         }
 
-        private void CheckSingleOptionQuestionInvariants(Identity questionIdentity, decimal selectedValue, IQuestionnaire questionnaire, InterviewTree tree, bool isLinkedToList, bool applyStrongChecks = true)
+        private void RequireFixedSingleOptionPreloadValueAllowed(Guid questionId, decimal selectedValue, IQuestionnaire questionnaire)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
+            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireOptionExists(selectedValue);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.SingleOption);
+        private void RequireFixedSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireOptionExists(selectedValue);
 
-            if (isLinkedToList)
-            {
-                treeInvariants.RequireLinkedToListOptionIsAvailable(selectedValue);
-            }
-            else
-            {
-                questionInvariants.RequireOptionExists(selectedValue);
-            }
+            new InterviewTreeInvariants(questionIdentity, tree)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
+        }
 
-            if (applyStrongChecks)
-            {
-                treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
-            }
+        private void RequireLinkedToListSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+                .RequireQuestion(QuestionType.SingleOption);
+
+            new InterviewTreeInvariants(questionIdentity, tree)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedToListOptionIsAvailable(selectedValue);
+        }
+
+        private void RequireLinkedToRosterSingleOptionAnswerAllowed(Identity questionIdentity, decimal[] selectedLinkedOption, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+                .RequireQuestion(QuestionType.SingleOption);
+
+            new InterviewTreeInvariants(questionIdentity, tree)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedOptionIsAvailable(selectedLinkedOption);
         }
 
         private void CheckMultipleOptionQuestionInvariants(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree, bool isLinkedToList, bool applyStrongChecks = true)
