@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public void RequireQuestionIsEnabled()
+        public InterviewTreeInvariants RequireQuestionIsEnabled()
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
@@ -54,14 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Question {question.FormatForException()} (or it's parent) is disabled " +
                     $"and question's answer cannot be changed. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
         }
 
         public void RequireLinkedOptionIsAvailable(RosterVector option)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
-
-            if (!question.IsLinked)
-                return;
 
             if (!question.AsLinked.Options.Contains(option))
                 throw new InterviewException(
@@ -71,12 +70,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireLinkedToListOptionIsAvailable(decimal option)
+        public InterviewTreeInvariants RequireLinkedToListOptionIsAvailable(decimal option)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
-
-            if (!question.IsLinkedToListQuestion)
-                return;
 
             if (!question.AsLinkedToList.Options.Contains(option))
                 throw new InterviewException(
@@ -84,14 +80,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Specified option {option} is absent. " +
                     $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
         }
 
-        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
+        public InterviewTreeInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsCascading)
-                return;
+                return this;
 
             var answerOption = this.QuestionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
                 this.QuestionIdentity.Id, answer, translation);
@@ -104,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var parentQuestion = question.AsCascading.GetCascadingParentQuestion();
 
             if (!parentQuestion.IsAnswered)
-                return;
+                return this;
 
             int actualParentValue = parentQuestion.GetAnswer().SelectedValue;
 
@@ -114,6 +112,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"selected value {answer} as answer with parent value {answerParentValue}, " +
                     $"but this do not correspond to the parent answer selected value {actualParentValue}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
+
+            return this;
         }
     }
 }
