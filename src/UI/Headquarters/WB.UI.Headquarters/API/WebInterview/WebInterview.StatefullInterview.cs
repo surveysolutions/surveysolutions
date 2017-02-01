@@ -230,27 +230,27 @@ namespace WB.UI.Headquarters.API.WebInterview
             var questionnaire = this.GetCallerQuestionnaire();
             if (question != null)
             {
-                GenericQuestion result = new StubEntity { Id = id, Title = question.Title.Text};
+                GenericQuestion result = new StubEntity { Id = id, Title = question.Title.Text };
 
                 if (question.IsSingleFixedOption)
                 {
                     if (questionnaire.IsQuestionFilteredCombobox(identity.Id))
                     {
-                        result = this.autoMapper.Map<InterviewFilteredQuestion>(question);
-                        var typedResult = (InterviewFilteredQuestion)result;
-                        if (question.IsAnswered())
-                        {
-                            var answer = question.AsSingleFixedOption.GetAnswer().SelectedValue;
-                            var answerText = callerInterview.GetAnswerAsString(identity);
-                            typedResult.Answer = new DropdownItem(answer, answerText);
-                        }
+                        result = this.Map<InterviewFilteredQuestion>(question);
                     }
-                    else
+                    else if (question.IsCascading)
                     {
-                        result = this.autoMapper.Map<InterviewSingleOptionQuestion>(question);
-
-                        var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                        ((InterviewSingleOptionQuestion) result).Options = options;
+                        result = this.Map<InterviewCascadingComboboxQuestion>(question, res =>
+                        {
+                            var parentCascadingQuestion = question.AsCascading.GetCascadingParentQuestion();
+                            var parentAnswer = (parentCascadingQuestion?.IsAnswered ?? false) ? parentCascadingQuestion?.GetAnswer().SelectedValue : null;
+                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentAnswer, null, 200);
+                        });
+                    } else {
+                        result = this.Map<InterviewSingleOptionQuestion>(question, res =>
+                        {
+                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+                        });
                     }
                 }
                 else if (question.IsText)
@@ -305,7 +305,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 else if (question.IsDateTime)
                 {
                     result = this.autoMapper.Map<InterviewDateQuestion>(question);
-                }                
+                }
                 else if (question.IsTextList)
                 {
                     result = this.autoMapper.Map<InterviewTextListQuestion>(question);
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var callerQuestionnaire = questionnaire;
                     typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
-                }                
+                }
                 else if (question.IsYesNo)
                 {
                     var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
@@ -378,6 +378,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             return null;
         }
 
+        private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)
+        {
+            return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
+        }
+
         private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
         {
             opts.AfterMap((InterviewTreeGroup g, SidebarPanel sidebarPanel) =>
@@ -419,8 +424,15 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
         {
+            var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();
-            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(Identity.Parse(id), null, filter, count);
+            var question = statefulInterview.GetQuestion(questionIdentity);
+            var parentCascadingQuestion = question.AsCascading?.GetCascadingParentQuestion();
+            var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered ?? false
+                ? parentCascadingQuestion?.GetAnswer()?.SelectedValue
+                : null;
+
+            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count);
             return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
         }
 
@@ -464,7 +476,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) ? InterviewEntityType.Combobox : InterviewEntityType.CategoricalSingle;
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId)
+                        ? InterviewEntityType.Combobox
+                        : (callerQuestionnaire.IsQuestionCascading(entityId)
+                            ? InterviewEntityType.Combobox
+                            : InterviewEntityType.CategoricalSingle);
                 case QuestionType.Numeric:
                     return callerQuestionnaire.IsQuestionInteger(entityId)
                         ? InterviewEntityType.Integer
