@@ -230,7 +230,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var questionnaire = this.GetCallerQuestionnaire();
             if (question != null)
             {
-                GenericQuestion result = new StubEntity { Id = id, Title = question.Title.Text };
+                GenericQuestion result = this.Map<StubEntity>(question);
 
                 if (question.IsSingleFixedOption)
                 {
