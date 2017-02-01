@@ -14,15 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.RequireNumericRealAnswerAllowed(questionId, rosterVector, answer, answeredQuestion, questionnaire, this.Tree);
+            this.RequireNumericRealAnswerAllowed(questionIdentity, answer, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
-            changedInterviewTree.GetQuestion(answeredQuestion).AsDouble.SetAnswer(NumericRealAnswer.FromDouble(answer));
+            changedInterviewTree.GetQuestion(questionIdentity).AsDouble.SetAnswer(NumericRealAnswer.FromDouble(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
