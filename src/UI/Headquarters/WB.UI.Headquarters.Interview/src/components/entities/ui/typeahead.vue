@@ -2,14 +2,17 @@
     <div class="btn-group btn-input clearfix">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
             <span data-bind="label" v-if="value === null" class="gray-text">Click to answer</span>
-            <span data-bind="label" v-else >{{value.title}}</span>
+            <span data-bind="label" v-else>{{value.title}}</span>
         </button>
         <ul class="dropdown-menu" role="menu">
             <li>
-                <input type="text" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" />
+                <input type="text" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" v-model="searchTerm" />
             </li>
             <li v-for="option in options" :key="option.value">
-                <a href="javascript:void(0);" @click="selectOption(option.value)">{{option.title}}</a>
+                <a href="javascript:void(0);" @click="selectOption(option.value)" v-html="highlight(option.title, searchTerm)"></a>
+            </li>
+            <li v-if="options.length === 0">
+                <a>No results found</a>
             </li>
         </ul>
     </div>
@@ -19,6 +22,7 @@
     import * as $ from "jquery"
 
     import { apiCaller } from "src/api"
+    import * as _ from "lodash"
 
     export default {
         name: 'wb-typeahead',
@@ -39,7 +43,7 @@
         },
         data() {
             return {
-                control: null,
+                searchTerm: '',
                 options: []
             }
         },
@@ -47,20 +51,33 @@
             updateOptionsList(e) {
                 this.loadOptions(e.target.value)
             },
-            async loadOptions(filter:string) {
+            async loadOptions(filter: string) {
                 const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
                 this.options = options
             },
-            selectOption(value) {
+            selectOption(value: string) {
                 this.$emit('input', value)
+            },
+            highlight(title: string, searchTerm: string) {
+                const encodedTitle = _.escape(title)
+                if (searchTerm) {
+                    const safeSearchTerm = _.escape(_.escapeRegExp(searchTerm))
+
+                    var iQuery = new RegExp(safeSearchTerm, "ig")
+                    return encodedTitle.replace(iQuery, (matchedTxt, a, b) => {
+                        return `<strong>${matchedTxt}</strong>`
+                    })
+                }
+
+                return encodedTitle
             }
         },
         mounted() {
             const jqEl = $(this.$el)
             const focusTo = jqEl.find(`#${this.searchBoxId}`)
             jqEl.on('shown.bs.dropdown', () => {
-                    focusTo.focus()
-                })
+                focusTo.focus()
+            })
 
             jqEl.on('hidden.bs.dropdown', () => {
                 focusTo.text('')
