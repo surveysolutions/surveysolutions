@@ -42,6 +42,10 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDoubleQuestion(identity, answer))
     },
+    answerGpsQuestion({ dispatch }, { identity, answer }) {
+        dispatch("fetch", { id: identity })
+        apiCaller(api => api.answerGpsQuestion(identity, answer))
+    },
     answerDateQuestion({ dispatch }, { identity, date }) {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerDateQuestion(identity, date))

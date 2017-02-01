@@ -48,6 +48,14 @@ declare interface ITextListAnswerRow {
     text: string
 }
 
+declare interface IGpsAnswer {
+    latitude: number
+    longitude: number
+    accuracy: number
+    altitude: number
+    timestamp: number
+}
+
 declare interface IDropdownItem {
     value: number
     title: string
@@ -74,6 +82,7 @@ declare interface IWebInterviewApi {
     answerDateQuestion(questionIdentity: string, answer: Date): void
 
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
+    answerGpsQuestion(identity, answer: IGpsAnswer)
 
     removeAnswer(questionId: string): void
 }

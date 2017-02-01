@@ -42,6 +42,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                 rows.Select(row => new Tuple<decimal, string>(row.Value, row.Text)).ToArray()));
         }
 
+        public void AnswerGpsQuestion(string questionIdenty, GpsAnswer answer)
+        {
+            var identity = Identity.Parse(questionIdenty);
+            ExecuteCommand(new AnswerGeoLocationQuestionCommand(this.GetCallerInterview().Id,
+                this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer.Latitude, answer.Longitude,
+                answer.Accuracy ?? 0, answer.Altitude ?? 0, DateTimeOffset.FromUnixTimeMilliseconds(answer.Timestamp ?? 0)));
+        }
+
         public void AnswerDateQuestion(string questionIdenty, DateTime answer)
         {
             var identity = Identity.Parse(questionIdenty);
