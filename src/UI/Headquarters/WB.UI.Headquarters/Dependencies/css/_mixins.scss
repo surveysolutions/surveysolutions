@@ -159,9 +159,10 @@
     }
 }
 @mixin btn-back-questionnaire($base-color, $arrow) {
-    background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
-    background-size: 22.5px 33.75px;
-    background-position: 10px 10px;
+    &:before{
+        background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
+        background-size: 22.5px 33.75px;
+    }
     color: $base-color;
     border-color: $base-color;
     &:active{
@@ -341,6 +342,7 @@
 @mixin focus-for-inputs(){
     display: block;
     height: 0;
+    position: absolute;
     @include opacity(0);
     & + label .tick:before{
         @extend %visibility-hidden;
