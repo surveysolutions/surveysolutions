@@ -49,7 +49,8 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
                     Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1,
-                        propagationVector: new decimal[] { })
+                        propagationVector: new decimal[] { }),
+                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())
@@ -66,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_throw_InterviewException = () =>
+        It should_throw_AnswerNotAcceptedException = () =>
             results.ExceptionType.ShouldEqual(typeof(AnswerNotAcceptedException));
 
         It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
