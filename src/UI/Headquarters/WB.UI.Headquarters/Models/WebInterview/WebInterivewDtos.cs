@@ -42,6 +42,20 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public DateTime? Answer { get; set; }
     }
 
+    public class InterviewGpsQuestion : GenericQuestion
+    {
+        public GpsAnswer Answer { get; set; }
+    }
+
+    public class GpsAnswer
+    {
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double? Accuracy { get; set; }
+        public double? Altitude { get; set; }
+        public long? Timestamp { get; set; }
+    }
+
     public class InterviewMutliOptionQuestion : CategoricalQuestion
     {
         public int? MaxSelectedAnswersCount { get; set; }
