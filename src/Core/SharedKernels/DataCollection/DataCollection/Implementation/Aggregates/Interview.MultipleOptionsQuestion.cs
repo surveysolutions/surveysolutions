@@ -14,26 +14,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var isLinkedToList = this.Tree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
+            var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
 
-            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, this.Tree, isLinkedToList);
+            this.CheckMultipleOptionQuestionInvariants(questionIdentity, selectedValues, questionnaire, this.Tree, isLinkedToList);
 
             var changedInterviewTree = this.Tree.Clone();
 
             if (isLinkedToList)
             {
-                changedInterviewTree.GetQuestion(answeredQuestion).AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+                changedInterviewTree.GetQuestion(questionIdentity).AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
             }
             else
-                changedInterviewTree.GetQuestion(answeredQuestion).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+                changedInterviewTree.GetQuestion(questionIdentity).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);

@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(command.QuestionId, command.RosterVector);
+            var questionIdentity = new Identity(command.QuestionId, command.RosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -23,11 +23,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            changedInterviewTree.GetQuestion(answeredQuestion).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions));
+            changedInterviewTree.GetQuestion(questionIdentity).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions));
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, command.UserId);

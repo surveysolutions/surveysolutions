@@ -258,12 +258,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
@@ -275,12 +275,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists();
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
@@ -292,12 +292,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
             new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
                 .RequireQuestion();
 
-            treeInvariants.RequireQuestionInstanceExists(questionId, rosterVector);
+            treeInvariants.RequireQuestionInstanceExists();
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }

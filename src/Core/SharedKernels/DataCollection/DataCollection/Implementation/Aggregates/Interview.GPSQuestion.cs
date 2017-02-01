@@ -17,16 +17,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
-            this.CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
+            this.CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, this.Tree);
           
             var changedInterviewTree = this.Tree.Clone();
 
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
-            changedInterviewTree.GetQuestion(answeredQuestion).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(answer));
+            changedInterviewTree.GetQuestion(questionIdentity).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
