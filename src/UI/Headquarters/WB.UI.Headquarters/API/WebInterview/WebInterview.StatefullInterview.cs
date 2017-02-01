@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -334,6 +335,21 @@ namespace WB.UI.Headquarters.API.WebInterview
                     singleLinkedOption.Options = options;
                     result = singleLinkedOption;
                 }
+                else if (question.IsSingleLinkedToList)
+                {
+                    var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
+                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsSingleLinkedToList.LinkedSourceId, identity)?.AsTextList;
+                    List<LinkedOption> options = question.AsSingleLinkedToList.Options.Select(x => new LinkedOption
+                    {
+                        Value = x.ToString(),
+                        RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
+                        Title = listQuestion?.GetTitleByItemCode(x)
+                    }).ToList();
+
+                    singleLinkedOption.Options = options;
+                    singleLinkedOption.IsLinkedToList = true;
+                    result = singleLinkedOption;
+                }
                 else if (question.IsMultiLinkedOption)
                 {
                     var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
@@ -345,6 +361,21 @@ namespace WB.UI.Headquarters.API.WebInterview
                     }).ToList();
 
                     multiLinkedOption.Options = options;
+                    result = multiLinkedOption;
+                }
+                else if (question.IsMultiLinkedToList)
+                {
+                    var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
+                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsSingleLinkedToList.LinkedSourceId, identity)?.AsTextList;
+                    List<LinkedOption> options = question.AsSingleLinkedToList.Options.Select(x => new LinkedOption
+                    {
+                        Value = x.ToString(),
+                        RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
+                        Title = listQuestion?.GetTitleByItemCode(x)
+                    }).ToList();
+
+                    multiLinkedOption.Options = options;
+                    multiLinkedOption.IsLinkedToList = true;
                     result = multiLinkedOption;
                 }
 
