@@ -20,6 +20,17 @@
 
     export default {
         name: "LinkedSingle",
+        computed: {
+            answer: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    const selectedOption = this.$me.options.find((option) => { return option.value == value; });
+                    this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionId: this.$me.id })
+                }
+            }
+        },
         mixins: [entityDetails]
     }
 </script>
