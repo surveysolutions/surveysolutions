@@ -28,28 +28,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.RequireTextPreloadValueAllowed(questionId, questionnaire);
+                        RequireTextPreloadValueAllowed(questionIdentity, questionnaire, tree);
                         break;
 
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.RequireNumericIntegerPreloadValueAllowed(questionId, ((NumericIntegerAnswer) answer).Value, questionnaire);
+                            RequireNumericIntegerPreloadValueAllowed(questionIdentity, ((NumericIntegerAnswer) answer).Value, questionnaire, tree);
                         else
-                            this.RequireNumericRealPreloadValueAllowed(questionId, questionnaire);
+                            RequireNumericRealPreloadValueAllowed(questionIdentity, questionnaire, tree);
                         break;
 
                     case QuestionType.DateTime:
-                        this.RequireDateTimePreloadValueAllowed(questionId, questionnaire);
+                        RequireDateTimePreloadValueAllowed(questionIdentity, questionnaire, tree);
                         break;
 
                     case QuestionType.SingleOption:
-                        this.RequireFixedSingleOptionPreloadValueAllowed(questionId, ((CategoricalFixedSingleOptionAnswer) answer).SelectedValue, questionnaire);
+                        RequireFixedSingleOptionPreloadValueAllowed(questionIdentity, ((CategoricalFixedSingleOptionAnswer) answer).SelectedValue, questionnaire, tree);
                         break;
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: false);
+                            CheckYesNoQuestionInvariants(questionIdentity, (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: false);
                         }
                         else
                         {
@@ -57,13 +57,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
                         break;
                     case QuestionType.QRBarcode:
-                        this.CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
+                        CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.GpsCoordinates:
-                        this.CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
+                        CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.TextList:
-                        this.CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: false);
+                        CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: false);
                         break;
 
                     default:
@@ -88,18 +88,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.RequireTextAnswerAllowed(questionIdentity, questionnaire, tree);
+                        RequireTextAnswerAllowed(questionIdentity, questionnaire, tree);
                         break;
 
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.RequireNumericIntegerAnswerAllowed(questionIdentity, ((NumericIntegerAnswer) answer).Value, questionnaire, tree);
+                            RequireNumericIntegerAnswerAllowed(questionIdentity, ((NumericIntegerAnswer) answer).Value, questionnaire, tree);
                         else
-                            this.RequireNumericRealAnswerAllowed(questionIdentity, ((NumericRealAnswer) answer).Value, questionnaire, tree);
+                            RequireNumericRealAnswerAllowed(questionIdentity, ((NumericRealAnswer) answer).Value, questionnaire, tree);
                         break;
 
                     case QuestionType.DateTime:
-                        this.RequireDateTimeAnswerAllowed(questionIdentity, questionnaire, tree);
+                        RequireDateTimeAnswerAllowed(questionIdentity, questionnaire, tree);
                         break;
 
                     case QuestionType.SingleOption:
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: true);
+                            CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: true);
                         }
                         else
                         {
@@ -117,13 +117,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
                         break;
                     case QuestionType.QRBarcode:
-                        this.CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
+                        CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
                         break;
                     case QuestionType.GpsCoordinates:
-                        this.CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
+                        CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
                         break;
                     case QuestionType.TextList:
-                        this.CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: true);
+                        CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: true);
                         break;
 
                     default:
@@ -133,17 +133,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckLinkedMultiOptionQuestionInvariants(Identity questionIdentity, decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void CheckLinkedMultiOptionQuestionInvariants(Identity questionIdentity, decimal[][] linkedQuestionSelectedOptions,
+            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
             questionInvariants.RequireQuestion(QuestionType.MultyOption);
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionIsEnabled();
             }
 
             if (!linkedQuestionSelectedOptions.Any())
@@ -151,44 +151,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var selectedRosterVector in linkedQuestionSelectedOptions)
             {
-                treeInvariants.RequireLinkedOptionIsAvailable(selectedRosterVector);
+                questionInvariants.RequireLinkedOptionIsAvailable(selectedRosterVector);
             }
 
             questionInvariants.RequireMaxAnswersCountLimit(linkedQuestionSelectedOptions.Length);
         }
 
-        private void RequireTextPreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        private static void RequireTextPreloadValueAllowed(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.Text);
         }
 
-        private void RequireTextAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
+        private static void RequireTextAnswerAllowed(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.Text);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.Text)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled();
         }
 
-        private void RequireNumericIntegerPreloadValueAllowed(Guid questionId, int answer, IQuestionnaire questionnaire)
+        private static void RequireNumericIntegerPreloadValueAllowed(Identity questionIdentity, int answer,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
-                .RequireQuestion(QuestionType.Numeric)
-                .RequireNumericIntegerQuestion()
-                .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
-                    answer,
-                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
-                        ? questionnaire.GetMaxLongRosterRowCount()
-                        : questionnaire.GetMaxRosterRowCount());
-        }
-
-        private void RequireNumericIntegerAnswerAllowed(Identity questionIdentity, int answer, IQuestionnaire questionnaire, InterviewTree tree)
-        {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.Numeric)
                 .RequireNumericIntegerQuestion()
                 .RequireRosterSizeAnswerNotNegative(answer)
@@ -197,92 +185,102 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionnaire.IsQuestionIsRosterSizeForLongRoster(questionIdentity.Id)
                         ? questionnaire.GetMaxLongRosterRowCount()
                         : questionnaire.GetMaxRosterRowCount());
+        }
 
-            new InterviewTreeInvariants(questionIdentity, tree)
+        private static void RequireNumericIntegerAnswerAllowed(Identity questionIdentity, int answer,
+            IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericIntegerQuestion()
+                .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
+                    answer,
+                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionIdentity.Id)
+                        ? questionnaire.GetMaxLongRosterRowCount()
+                        : questionnaire.GetMaxRosterRowCount())
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled();
         }
 
-        private void RequireNumericRealPreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        private static void RequireNumericRealPreloadValueAllowed(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.Numeric)
                 .RequireNumericRealQuestion();
         }
 
-        private void RequireNumericRealAnswerAllowed(Identity questionIdentity, double answer, IQuestionnaire questionnaire, InterviewTree tree)
+        private static void RequireNumericRealAnswerAllowed(Identity questionIdentity, double answer,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.Numeric)
                 .RequireNumericRealQuestion()
-                .RequireAllowedDecimalPlaces(answer);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+                .RequireAllowedDecimalPlaces(answer)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled();
         }
 
-        private void RequireDateTimePreloadValueAllowed(Guid questionId, IQuestionnaire questionnaire)
+        private static void RequireDateTimePreloadValueAllowed(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.DateTime);
         }
 
-        private void RequireDateTimeAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
+        private static void RequireDateTimeAnswerAllowed(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.DateTime);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.DateTime)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled();
         }
 
-        private void RequireFixedSingleOptionPreloadValueAllowed(Guid questionId, decimal selectedValue, IQuestionnaire questionnaire)
+        private static void RequireFixedSingleOptionPreloadValueAllowed(Identity questionIdentity, decimal selectedValue,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue);
         }
 
-        private void RequireFixedSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue, IQuestionnaire questionnaire, InterviewTree tree)
+        private void RequireFixedSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
                 .RequireQuestion(QuestionType.SingleOption)
-                .RequireOptionExists(selectedValue);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+                .RequireOptionExists(selectedValue)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled()
                 .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
         }
 
-        private void RequireLinkedToListSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue, IQuestionnaire questionnaire, InterviewTree tree)
+        private static void RequireLinkedToListSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.SingleOption);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.SingleOption)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled()
                 .RequireLinkedToListOptionIsAvailable(selectedValue);
         }
 
-        private void RequireLinkedToRosterSingleOptionAnswerAllowed(Identity questionIdentity, decimal[] selectedLinkedOption, IQuestionnaire questionnaire, InterviewTree tree)
+        private static void RequireLinkedToRosterSingleOptionAnswerAllowed(Identity questionIdentity, decimal[] selectedLinkedOption,
+            IQuestionnaire questionnaire, InterviewTree tree)
         {
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.SingleOption);
-
-            new InterviewTreeInvariants(questionIdentity, tree)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.SingleOption)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled()
                 .RequireLinkedOptionIsAvailable(selectedLinkedOption);
         }
 
-        private void CheckMultipleOptionQuestionInvariants(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree, bool isLinkedToList, bool applyStrongChecks = true)
+        private void CheckMultipleOptionQuestionInvariants(Identity questionIdentity, IReadOnlyCollection<int> selectedValues,
+            IQuestionnaire questionnaire, InterviewTree tree, bool isLinkedToList, bool applyStrongChecks = true)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
             questionInvariants.RequireQuestion(QuestionType.MultyOption);
 
@@ -290,7 +288,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 foreach (var selectedValue in selectedValues)
                 {
-                    treeInvariants.RequireLinkedToListOptionIsAvailable(selectedValue);
+                    questionInvariants.RequireLinkedToListOptionIsAvailable(selectedValue);
                 }
             }
             else
@@ -309,19 +307,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionInstanceExists();
                 questionInvariants.RequireMaxAnswersCountLimit(selectedValues.Count);
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionIsEnabled();
             }
         }
 
-        private void CheckYesNoQuestionInvariants(Identity questionIdentity, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void CheckYesNoQuestionInvariants(Identity questionIdentity, YesNoAnswer answer,
+            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
             int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
             var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
             questionInvariants.RequireQuestion(QuestionType.MultyOption);
             questionInvariants.RequireOptionsExist(selectedValues);
@@ -334,15 +332,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionIsEnabled();
             }
         }
 
-        private void CheckTextListInvariants(Identity questionIdentity, Tuple<decimal, string>[] answers, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void CheckTextListInvariants(Identity questionIdentity, Tuple<decimal, string>[] answers,
+            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
             questionInvariants.RequireQuestion(QuestionType.TextList);
 
@@ -352,8 +350,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionIsEnabled();
                 questionInvariants.RequireUniqueValues(answers);
                 questionInvariants.RequireNotEmptyTexts(answers);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionIdentity.Id);
@@ -361,31 +359,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckGpsCoordinatesInvariants(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void CheckGpsCoordinatesInvariants(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.GpsCoordinates);
+            questionInvariants.RequireQuestion(QuestionType.GpsCoordinates);
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionIsEnabled();
             }
         }
 
-        private void CheckQRBarcodeInvariants(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void CheckQRBarcodeInvariants(Identity questionIdentity,
+            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var treeInvariants = new InterviewTreeInvariants(questionIdentity, tree);
+            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
 
-            new InterviewQuestionInvariants(this.properties.Id, questionIdentity.Id, questionnaire)
-                .RequireQuestion(QuestionType.QRBarcode);
+            questionInvariants.RequireQuestion(QuestionType.QRBarcode);
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireQuestionInstanceExists();
-                treeInvariants.RequireQuestionIsEnabled();
+                questionInvariants.RequireQuestionInstanceExists();
+                questionInvariants.RequireQuestionIsEnabled();
             }
         }
     }

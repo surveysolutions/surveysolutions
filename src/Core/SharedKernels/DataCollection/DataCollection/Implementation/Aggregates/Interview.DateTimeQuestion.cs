@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.RequireDateTimeAnswerAllowed(questionIdentity, questionnaire, this.Tree);
+            RequireDateTimeAnswerAllowed(questionIdentity, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
