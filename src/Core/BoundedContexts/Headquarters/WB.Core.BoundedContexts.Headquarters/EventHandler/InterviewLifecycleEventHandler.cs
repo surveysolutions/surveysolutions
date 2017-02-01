@@ -27,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<YesNoQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler<LinkedOptionsChanged>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
         IEventHandler<StaticTextsDeclaredValid>,
@@ -154,5 +156,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+
+        public void Handle(IPublishedEvent<LinkedOptionsChanged> evnt) 
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
     }
 }
