@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.RequireNumericIntegerAnswerAllowed(questionIdentity, answer, questionnaire, this.Tree);
+            RequireNumericIntegerAnswerAllowed(questionIdentity, answer, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 

@@ -257,13 +257,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            
-            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
-                .RequireQuestion();
-
-            treeInvariants.RequireQuestionInstanceExists();
+            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
+                .RequireQuestion()
+                .RequireQuestionInstanceExists();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
@@ -274,13 +271,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            
-            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
-                .RequireQuestion();
-
-            treeInvariants.RequireQuestionInstanceExists();
+            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
+                .RequireQuestion()
+                .RequireQuestionInstanceExists();
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
@@ -291,13 +285,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            
-            var treeInvariants = new InterviewTreeInvariants(new Identity(questionId, rosterVector), this.Tree);
 
-            new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire)
-                .RequireQuestion();
-
-            treeInvariants.RequireQuestionInstanceExists();
+            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
+                .RequireQuestion()
+                .RequireQuestionInstanceExists();
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }

@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckYesNoQuestionInvariants(command.Question, YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), questionnaire, this.Tree);
+            CheckYesNoQuestionInvariants(command.Question, YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 

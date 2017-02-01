@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
 
             if (isLinkedToList)
-                this.RequireLinkedToListSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
+                RequireLinkedToListSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
             else
                 this.RequireFixedSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
 

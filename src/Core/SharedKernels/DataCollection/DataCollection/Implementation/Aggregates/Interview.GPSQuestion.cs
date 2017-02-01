@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var questionIdentity = new Identity(questionId, rosterVector);
 
-            this.CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, this.Tree);
+            CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, this.Tree);
           
             var changedInterviewTree = this.Tree.Clone();
 
