@@ -77,13 +77,12 @@
             const focusTo = jqEl.find(`#${this.searchBoxId}`)
             jqEl.on('shown.bs.dropdown', () => {
                 focusTo.focus()
+                this.loadOptions(this.searchTerm)
             })
 
             jqEl.on('hidden.bs.dropdown', () => {
-                focusTo.text('')
+                this.searchTerm = ""
             })
-
-            this.loadOptions(null)
         }
     }
 </script>
