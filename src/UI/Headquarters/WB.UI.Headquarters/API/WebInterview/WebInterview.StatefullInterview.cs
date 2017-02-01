@@ -326,7 +326,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                     var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
                     List<LinkedOption> options = question.AsLinked.Options.Select(x => new LinkedOption
                     {
-                        RosterVector = x,
+                        Value = x.ToString(),
+                        RosterVector = x.Select(Convert.ToInt32).ToArray(),
                         Title = callerInterview.GetLinkedOptionTitle(identity, x)
                     }).ToList();
 
