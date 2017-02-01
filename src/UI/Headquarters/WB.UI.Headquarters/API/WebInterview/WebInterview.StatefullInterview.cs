@@ -334,6 +334,19 @@ namespace WB.UI.Headquarters.API.WebInterview
                     singleLinkedOption.Options = options;
                     result = singleLinkedOption;
                 }
+                else if (question.IsMultiLinkedOption)
+                {
+                    var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
+                    List<LinkedOption> options = question.AsLinked.Options.Select(x => new LinkedOption
+                    {
+                        Value = x.ToString(),
+                        RosterVector = x.Select(Convert.ToInt32).ToArray(),
+                        Title = callerInterview.GetLinkedOptionTitle(identity, x)
+                    }).ToList();
+
+                    multiLinkedOption.Options = options;
+                    result = multiLinkedOption;
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -480,11 +493,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
+                    if (callerQuestionnaire.IsQuestionLinked(entityId) || callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                        return InterviewEntityType.LinkedMulti;
                     return callerQuestionnaire.IsQuestionYesNo(entityId)
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    if (callerQuestionnaire.IsQuestionLinked(entityId))
+                    if (callerQuestionnaire.IsQuestionLinked(entityId) || callerQuestionnaire.IsLinkedToListQuestion(entityId))
                         return InterviewEntityType.LinkedSingle;
                     return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) 
                         ? InterviewEntityType.Combobox

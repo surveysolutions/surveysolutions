@@ -12,6 +12,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Title { get; set; }
     }
 
+    public class InterviewLinkedMultiQuestion : LinkedCategoricalQuestion
+    {
+        public RosterVector[] Answer { get; set; }
+    }
+
     public class InterviewLinkedSingleQuestion : LinkedCategoricalQuestion
     {
         public RosterVector Answer { get; set; }
