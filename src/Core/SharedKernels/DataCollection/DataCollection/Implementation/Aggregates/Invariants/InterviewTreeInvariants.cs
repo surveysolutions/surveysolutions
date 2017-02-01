@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,39 +13,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
     {
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 
-        public InterviewTreeInvariants(InterviewTree interviewTree)
+        public InterviewTreeInvariants(Identity questionIdentity, InterviewTree interviewTree)
         {
+            this.QuestionIdentity = questionIdentity;
             this.InterviewTree = interviewTree;
         }
 
+        public Identity QuestionIdentity { get; }
         private InterviewTree InterviewTree { get; }
 
-        public InterviewTreeInvariants RequireQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
+        public InterviewTreeInvariants RequireQuestionInstanceExists()
         {
-            if (rosterVector == null)
+            if (this.QuestionIdentity.RosterVector == null)
                 throw new InterviewException(
                     $"Roster information for question is missing. " +
                     $"Roster vector cannot be null. " +
-                    $"Question ID: {questionId.FormatGuid()}. " +
+                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
 
-            var questions = this.InterviewTree.FindQuestions(questionId);
+            var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
             var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
 
-            if (!rosterVectors.Contains(rosterVector))
+            if (!rosterVectors.Contains(this.QuestionIdentity.RosterVector))
                 throw new InterviewException(
                     $"Roster information for question is incorrect. " +
-                    $"No questions found for roster vector {rosterVector}. " +
+                    $"No questions found for roster vector {this.QuestionIdentity.RosterVector}. " +
                     $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
-                    $"Question ID: {questionId.FormatGuid()}. " +
+                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
 
             return this;
         }
 
-        public void RequireQuestionIsEnabled(Identity questionIdentity)
+        public void RequireQuestionIsEnabled()
         {
-            var question = this.InterviewTree.GetQuestion(questionIdentity);
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (question.IsDisabled())
                 throw new InterviewException(
@@ -55,9 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireLinkedOptionIsAvailable(Identity linkedQuestionIdentity, RosterVector option)
+        public void RequireLinkedOptionIsAvailable(RosterVector option)
         {
-            var question = this.InterviewTree.GetQuestion(linkedQuestionIdentity);
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsLinked)
                 return;
@@ -70,9 +71,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireLinkedToListOptionIsAvailable(Identity linkedQuestionIdentity, decimal option)
+        public void RequireLinkedToListOptionIsAvailable(decimal option)
         {
-            var question = this.InterviewTree.GetQuestion(linkedQuestionIdentity);
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsLinkedToListQuestion)
                 return;
@@ -85,19 +86,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer, QuestionnaireIdentity questionnaireId, Translation translation) 
+        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
         {
-            var question = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
+            var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsCascading)
                 return;
 
             var answerOption = this.QuestionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
-                cascadingQuestionIdentity.Id, answer, translation);
+                this.QuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(
-                    $"Answer option has no parent value. Option value: {answer}, Question id: '{cascadingQuestionIdentity.Id}'.");
+                    $"Answer option has no parent value. Option value: {answer}, Question id: '{this.QuestionIdentity.Id}'.");
 
             int answerParentValue = answerOption.ParentValue.Value;
             var parentQuestion = question.AsCascading.GetCascadingParentQuestion();
