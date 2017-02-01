@@ -48,6 +48,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
 
+            this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
+               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiLinkedOption.GetAnswer().CheckedValues));
+
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiFixedOption.GetAnswer().CheckedValues));

@@ -72,6 +72,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, decimalAnswer));
         }
 
+        public void AnswerLinkedMultiOptionQuestion(string questionIdentity, int[][] answer)
+        {
+            Identity identity = Identity.Parse(questionIdentity);
+            decimal[][] decimalAnswer = answer.Select(x => x.Select(Convert.ToDecimal).ToArray()).ToArray();
+            ExecuteCommand(new AnswerMultipleOptionsLinkedQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
+                identity.Id, identity.RosterVector, DateTime.UtcNow, decimalAnswer));
+        }
+
         public void AnswerMultiOptionQuestion(int[] answer, string questionId)
         {
             Identity identity = Identity.Parse(questionId);

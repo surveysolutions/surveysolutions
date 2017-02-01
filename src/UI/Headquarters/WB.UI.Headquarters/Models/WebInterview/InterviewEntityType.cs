@@ -19,6 +19,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Multimedia,
         TextQuestion,
         Unsupported,
-        NavigationButton
+        NavigationButton,
+        LinkedMulti
     }
 }
