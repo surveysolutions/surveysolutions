@@ -54,9 +54,9 @@ export default {
         dispatch("fetch", { id: identity })
         apiCaller(api => api.answerTextListQuestion(identity, rows))
     },
-    answerLinkedSingleOptionQuestion({dispatch}, {identity, answer}) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerLinkedSingleOptionQuestion(identity, answer))
+    answerLinkedSingleOptionQuestion({dispatch}, {questionIdentity, answer}) {
+        dispatch("fetch", { id: questionIdentity })
+        apiCaller(api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
     removeAnswer({ dispatch }, questionId: string) {
         dispatch("fetch", { id: questionId })

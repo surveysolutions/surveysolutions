@@ -64,9 +64,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
-        public void AnswerLinkedSingleOptionQuestion(int[] answer, string questionId)
+        public void AnswerLinkedSingleOptionQuestion(string questionIdentity, int[] answer)
         {
-            Identity identity = Identity.Parse(questionId);
+            Identity identity = Identity.Parse(questionIdentity);
             decimal[] decimalAnswer = answer.Select(Convert.ToDecimal).ToArray();
             ExecuteCommand(new AnswerSingleOptionLinkedQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
                 identity.Id, identity.RosterVector, DateTime.UtcNow, decimalAnswer));
