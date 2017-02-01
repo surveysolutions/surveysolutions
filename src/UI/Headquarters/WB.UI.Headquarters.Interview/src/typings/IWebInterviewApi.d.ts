@@ -81,7 +81,9 @@ declare interface IWebInterviewApi {
     answerDoubleQuestion(questionIdentity: string, answer: number): void
     answerDateQuestion(questionIdentity: string, answer: Date): void
     answerLinkedSingleOptionQuestion(questionIdentity: string, answer: number[]): void
+    answerLinkedToListSingleQuestion(questionIdentity: string, answer: number): void
     answerLinkedMultiOptionQuestion(questionIdentity: string, answer: number[][]): void
+    answerLinkedToListMultiQuestion(questionIdentity: string, answer: number[]): void
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
     answerGpsQuestion(identity, answer: IGpsAnswer)
 

@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
@@ -46,7 +49,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 
              this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.IsSingleLinkedToList
+                   ? new RosterVector(Convert.ToDecimal(x.AsSingleLinkedToList.GetAnswer().SelectedValue).ToEnumerable()) 
+                   : x.AsSingleLinkedOption.GetAnswer().SelectedValue));
 
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
