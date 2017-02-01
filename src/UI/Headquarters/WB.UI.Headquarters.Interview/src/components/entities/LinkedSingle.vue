@@ -18,16 +18,25 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
 
+    let equals: (x: number[], y: number[])=>boolean = function (x: number[], y: number[]) : boolean {
+        if (x == null || y == null)
+            return false;
+        if (x.length!=y.length)
+            return false;
+        return x.every((element, index) => {  return element == y[index]; });
+    }
+
     export default {
         name: "LinkedSingle",
         computed: {
             answer: {
                 get() {
-                    return this.$me.answer
+                    const selectedOption = this.$me.options.find((option) => { return equals(option.rosterVector, this.$me.answer); });
+                    return selectedOption == null ? null: selectedOption.value;
                 },
                 set(value) {
                     const selectedOption = this.$me.options.find((option) => { return option.value == value; });
-                    this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionId: this.$me.id })
+                    this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionIdentity: this.$me.id })
                 }
             }
         },
