@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
-using WB.Core.SharedKernels.DataCollection;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
@@ -72,6 +71,18 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.AsTextList.GetAnswer().Rows));
+
+            this.CreateMap<GeoPosition, GpsAnswer>()
+                .ForMember(x => x.Latitude, opts => opts.MapFrom(x => x.Latitude))
+                .ForMember(x => x.Longitude, opts => opts.MapFrom(x => x.Longitude))
+                .ForMember(x => x.Accuracy, opts => opts.MapFrom(x => x.Accuracy))
+                .ForMember(x => x.Altitude, opts => opts.MapFrom(x => x.Altitude))
+                .ForMember(x => x.Timestamp, opts => opts.MapFrom(x => x.Timestamp.ToUnixTimeMilliseconds()));
+
+
+            this.CreateMap<InterviewTreeQuestion, InterviewGpsQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsGps.GetAnswer().Value));
 
             this.CreateMap<InterviewTreeStaticText, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));

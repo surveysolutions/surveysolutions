@@ -317,6 +317,10 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                     result = interviewYesNoQuestion;
                 }
+                else if (question.IsGps)
+                {
+                    result = this.autoMapper.Map<InterviewGpsQuestion>(question);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -459,7 +463,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.DateTime:
                     return InterviewEntityType.DateTime;
                 case QuestionType.GpsCoordinates:
-                    return InterviewEntityType.Unsupported; // InterviewEntityType.Gps;
+                    return InterviewEntityType.Gps;
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:

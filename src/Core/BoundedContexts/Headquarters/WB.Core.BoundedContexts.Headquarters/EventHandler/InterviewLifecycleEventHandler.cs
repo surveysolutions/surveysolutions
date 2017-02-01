@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<YesNoQuestionAnswered>,
+        IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
         IEventHandler<StaticTextsDeclaredValid>,
@@ -147,6 +148,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
 
         public void Handle(IPublishedEvent<YesNoQuestionAnswered> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
     }
 }

@@ -15,6 +15,7 @@ import CategoricalYesNo from "./CategoricalYesNo"
 import Combobox from "./Combobox"
 import DateTime from "./DateTime"
 import Double from "./Double"
+import Gps from "./Gps"
 import Group from "./Group"
 import Integer from "./Integer"
 import NavigationButton from "./NavigationButton"
@@ -24,6 +25,7 @@ import TextList from "./TextList"
 import TextQuestion from "./TextQuestion"
 import Unsupported from "./Unsupported"
 
+vue.component("Gps", Gps)
 vue.component("TextList", TextList)
 vue.component("DateTime", DateTime)
 vue.component("Integer", Integer)
