@@ -62,6 +62,14 @@ export default {
         dispatch("fetch", { id: questionIdentity })
         apiCaller(api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
+    answerLinkedToListMultiQuestion({dispatch}, {questionIdentity, answer}) {
+        dispatch("fetch", { id: questionIdentity })
+        apiCaller(api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
+    },
+    answerLinkedToListSingleQuestion({dispatch}, {questionIdentity, answer}) {
+        dispatch("fetch", { id: questionIdentity })
+        apiCaller(api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
+    },
     removeAnswer({ dispatch }, questionId: string) {
         dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))
