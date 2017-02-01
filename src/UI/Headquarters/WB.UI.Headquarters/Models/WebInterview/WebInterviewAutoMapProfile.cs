@@ -24,15 +24,38 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsText.GetAnswer()));
+
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewCascadingComboboxQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts =>
+                {
+                    opts.PreCondition(x => x.IsAnswered());
+                    opts.MapFrom(x => GetSingleFixedOptionAnswerAsDropdownItem(x));
+                })
+                .ForMember(x => x.IsDisabled, opts =>
+                {
+                    opts.Condition(x => x.AsCascading != null);
+                    opts.MapFrom(x => x.IsDisabled());
+                });
+
             this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
-                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts =>
+                {
+                    opts.PreCondition(x => x.IsAnswered());
+                    opts.MapFrom(x => GetSingleFixedOptionAnswerAsDropdownItem(x));
+                });
+
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiFixedOption.GetAnswer().CheckedValues));
+
             this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
+
             this.CreateMap<InterviewTreeQuestion, InterviewYesNoQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsYesNo.GetAnswer().CheckedOptions));
@@ -102,6 +125,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.HasChildrens, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any()))
                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+        }
+
+        private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
+        {
+            return new DropdownItem(question.AsSingleFixedOption.GetAnswer().SelectedValue, question.GetAnswerAsString());
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)
