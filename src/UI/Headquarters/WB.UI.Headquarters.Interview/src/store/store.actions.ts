@@ -63,9 +63,9 @@ export default {
         dispatch("fetch", { id: questionIdentity })
         apiCaller(api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
-    answerLinkedMiltiOptionQuestion({dispatch}, {questionIdentity, answer}) {
+    answerLinkedMultiOptionQuestion({dispatch}, {questionIdentity, answer}) {
         dispatch("fetch", { id: questionIdentity })
-        apiCaller(api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
+        apiCaller(api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
     },
     answerLinkedToListMultiQuestion({dispatch}, {questionIdentity, answer}) {
         dispatch("fetch", { id: questionIdentity })

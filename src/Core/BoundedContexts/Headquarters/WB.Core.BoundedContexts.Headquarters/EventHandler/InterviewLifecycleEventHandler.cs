@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<PictureQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<LinkedOptionsChanged>,
+        IEventHandler<LinkedToListOptionsChanged>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
         IEventHandler<StaticTextsDeclaredValid>,
@@ -217,6 +218,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<TranslationSwitched> evnt)
             => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
 
+        public void Handle(IPublishedEvent<LinkedToListOptionsChanged> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
 
         private void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {
