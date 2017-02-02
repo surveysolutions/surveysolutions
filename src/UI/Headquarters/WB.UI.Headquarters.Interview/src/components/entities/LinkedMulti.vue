@@ -52,6 +52,9 @@
         },
         directives: {
             disabledWhenUnchecked: {
+                bind: (el, binding) => {
+                    $(el).prop("disabled", binding.value && !el.checked)
+                },
                 update: (el, binding) => {
                     $(el).prop("disabled", binding.value && !el.checked)
                 }
