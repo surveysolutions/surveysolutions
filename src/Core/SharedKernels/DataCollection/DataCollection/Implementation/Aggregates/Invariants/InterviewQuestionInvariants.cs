@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public void RequireOptionsExist(IReadOnlyCollection<int> values)
+        public InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
             IEnumerable<decimal> availableValues = this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId);
 
@@ -124,15 +124,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             if (someValueIsNotOneOfAvailable)
                 throw new AnswerNotAcceptedException(
                     $"For question {this.FormatQuestionForException()} were provided selected values {JoinUsingCommas(values)} as answer. But only following values are allowed: {JoinUsingCommas(availableValues)}. {this.InfoForException}");
+
+            return this;
         }
 
-        public void RequireMaxAnswersCountLimit(int answersCount)
+        public InterviewQuestionInvariants RequireNotYesNoMultipleOptionsQuestion()
+        {
+            if (this.Questionnaire.IsQuestionYesNo(this.QuestionIdentity.Id))
+                throw new InterviewException(
+                    $"Question {this.FormatQuestionForException()} has Yes/No type, but answer is given for Multiple Options type. {this.InfoForException}");
+
+            return this;
+        }
+
+        public InterviewQuestionInvariants RequireMaxAnswersCountLimit(int answersCount)
         {
             int? maxSelectedOptions = this.Questionnaire.GetMaxSelectedAnswerOptions(this.QuestionId);
 
             if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} number of answers is greater than the maximum number of selected answers. {this.InfoForException}");
+                    $"For question {this.FormatQuestionForException()} number of answers {answersCount} is greater than the maximum number of selected answers {maxSelectedOptions}. {this.InfoForException}");
+
+            return this;
         }
 
         public InterviewQuestionInvariants RequireAllowedDecimalPlaces(double answer)
@@ -161,8 +174,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer, int maxRosterRowCount)
+        public InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer)
         {
+            int maxRosterRowCount = this.Questionnaire.IsQuestionIsRosterSizeForLongRoster(this.QuestionId)
+                ? this.Questionnaire.GetMaxLongRosterRowCount()
+                : this.Questionnaire.GetMaxRosterRowCount();
+
             if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
                 return this;
 
@@ -209,6 +226,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
+        public InterviewQuestionInvariants RequireLinkedOptionsAreAvailable(IEnumerable<decimal[]> options)
+        {
+            foreach (var option in options)
+            {
+                this.RequireLinkedOptionIsAvailable(option);
+            }
+
+            return this;
+        }
+
         public void RequireLinkedOptionIsAvailable(RosterVector option)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
@@ -220,6 +247,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
+
+        public InterviewQuestionInvariants RequireLinkedToListOptionsAreAvailable(IEnumerable<int> options)
+        {
+            foreach (var option in options)
+            {
+                this.RequireLinkedToListOptionIsAvailable(option);
+            }
+
+            return this;
+        }
+
 
         public InterviewQuestionInvariants RequireLinkedToListOptionIsAvailable(decimal option)
         {

@@ -39,17 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         new Tuple<decimal, string>(1.2m, "Answer 3"),
                     }));
 
-        It should_raise_InterviewException = () =>
-            exception.ShouldBeOfExactType<InterviewException>();
+        It should_raise_AnswerNotAcceptedException = () =>
+            exception.ShouldBeOfExactType<AnswerNotAcceptedException>();
 
-        It should_throw_exception_with_message_containting__answers__ = () =>
-            exception.Message.ToLower().ShouldContain("answers");
-
-        It should_throw_exception_with_message_containting__exceed__ = () =>
-            exception.Message.ToLower().ShouldContain("exceed");
-
-        It should_throw_exception_with_message_containting__limit__ = () =>
-            exception.Message.ToLower().ShouldContain("limit");
+        It should_throw_exception_with_message_containting_specific_words = () =>
+            exception.Message.ToLower().ToSeparateWords().ShouldContain("answers", "greater", "maximum");
 
         private static Exception exception;
         private static Interview interview;
