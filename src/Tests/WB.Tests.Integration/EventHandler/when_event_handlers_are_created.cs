@@ -111,7 +111,8 @@ namespace WB.Tests.Integration.EventHandler
             typeof (IRostrerStructureService),
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
-            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage), typeof(IWebInterviewNotificationService)
+            typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage),
+            typeof(IWebInterviewNotificationService), typeof(IStatefulInterviewRepository)
             
         };
 
