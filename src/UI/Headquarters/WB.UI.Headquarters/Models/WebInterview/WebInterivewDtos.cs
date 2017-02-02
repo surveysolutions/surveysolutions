@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class ChangeLanguageReuqest
+    public class ChangeLanguageRequest
     {
         public string Language { get; set; }
     }
