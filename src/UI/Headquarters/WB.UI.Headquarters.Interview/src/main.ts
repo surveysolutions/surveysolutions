@@ -9,6 +9,8 @@ Vue.use(Vuex)
 import * as poly from "smoothscroll-polyfill"
 poly.polyfill()
 
+import "./misc/htmlPoly"
+
 import "./components"
 import "./components/entities"
 import "./components/entities/parts"

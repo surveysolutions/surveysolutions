@@ -25,6 +25,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
@@ -43,6 +44,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IPlainInterviewFileStorage plainInterviewFileStorage,
             IWebInterviewConfigProvider webInterviewConfigProvider)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -51,6 +53,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 

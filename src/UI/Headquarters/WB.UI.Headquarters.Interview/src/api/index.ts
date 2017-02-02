@@ -1,7 +1,7 @@
 // main entry point to signalr api hub
 
 import * as jQuery from "jquery"
-import { signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
+import { imageUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
@@ -43,6 +43,21 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             store.dispatch("setAnswerAsNotSaved", { id, message })
         }
 
+        interviewProxy.server.answerPictureQuestion = (id, file) => {
+            const fd = new FormData()
+            fd.append("interviewId", queryString.interviewId)
+            fd.append("questionId", id)
+            fd.append("file", file)
+
+            return $.ajax({
+                url: imageUri,
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: "POST"
+            })
+        }
+
         resolve()
     })
 )
@@ -59,8 +74,9 @@ async function hubStarter() {
     // await wrap($.signalR.hub.start({ transport: "longPolling" }))
 }
 
-let connected = false
-export const queryString = {}
+export const queryString = {
+    interviewId: null
+}
 
 export async function getInstance() {
     await scriptIncludedPromise

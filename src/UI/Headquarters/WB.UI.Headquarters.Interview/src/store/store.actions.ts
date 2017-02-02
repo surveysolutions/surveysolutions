@@ -3,7 +3,6 @@ import * as map from "lodash/map"
 import * as Vue from "vue"
 import { apiCaller, apiStop } from "../api"
 import router from "./../router"
-
 import { batchedAction } from "./helpers"
 
 export default {
@@ -75,10 +74,16 @@ export default {
         dispatch("fetch", { id: questionIdentity })
         apiCaller(api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
     },
+    answerMultimediaQuestion({dispatch}, {id, file}) {
+        dispatch("fetch", { id })
+        apiCaller(api => api.answerPictureQuestion(id, file))
+    },
+
     removeAnswer({ dispatch }, questionId: string) {
         dispatch("fetch", { id: questionId })
         apiCaller(api => api.removeAnswer(questionId))
     },
+
     setAnswerAsNotSaved({ commit }, entity) {
         commit("SET_ANSWER_NOT_SAVED", entity)
     },
