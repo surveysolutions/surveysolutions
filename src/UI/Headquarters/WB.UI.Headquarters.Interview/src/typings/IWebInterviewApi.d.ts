@@ -73,9 +73,9 @@ declare interface IWebInterviewApi {
     getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
     getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
 
-    answerSingleOptionQuestion(answer: number, questionId: string)
-    answerMultiOptionQuestion(answer: number, questionId: string)
-    answerYesNoQuestion(questionId: string, answer: Object[])
+    answerSingleOptionQuestion(answer: number, questionId: string): void
+    answerMultiOptionQuestion(answer: number, questionId: string): void
+    answerYesNoQuestion(questionId: string, answer: Object[]): void
     answerTextQuestion(questionIdentity: string, text: string): void
     answerIntegerQuestion(questionIdentity: string, answer: number): void
     answerDoubleQuestion(questionIdentity: string, answer: number): void

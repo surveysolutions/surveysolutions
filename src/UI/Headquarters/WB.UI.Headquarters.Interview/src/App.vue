@@ -2,7 +2,8 @@
     <Layout>
         <Navbar slot="header" />
         <div class="row" slot>
-            <Sidebar />
+            <router-view name="sideBar">
+            </router-view>
             <section class="questionnaire" :class="{'details-interview': showSidebar}">
                 <router-view></router-view>
             </section>
