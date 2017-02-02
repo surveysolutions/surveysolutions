@@ -93,3 +93,7 @@ export async function apiCaller<T>(action: IServerHubCallback<T>, reportProgress
         store.dispatch("fetchProgress", -1)
     }
 }
+
+export function apiStop(): void {
+    $.connection.hub.stop()
+}

@@ -69,7 +69,7 @@ declare interface IDropdownItem {
 declare interface IPrefilledPageData {
     entities: IInterviewEntityWithType[]
     firstSectionId: string
-    hasAnyQestions: boolean
+    hasAnyQuestions: boolean
 }
 
 declare interface IWebInterviewApi {

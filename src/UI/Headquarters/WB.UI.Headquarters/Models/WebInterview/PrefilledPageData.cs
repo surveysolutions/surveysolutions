@@ -6,7 +6,7 @@
 
         public string FirstSectionId { get; set; }
 
-        public bool HasAnyQestions { get; set; }
+        public bool HasAnyQuestions { get; set; }
     }
 
     public class ButtonState : InterviewEntity
