@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 
 import { getInstance as hubProxy, queryString } from "../api"
 import Section from "../components/Section"
+import SideBar from "../components/Sidebar"
 import store from "../store"
 
 const router = new VueRouter({
@@ -13,7 +14,14 @@ const router = new VueRouter({
     mode: "history",
     routes: [
         { name: "prefilled", path: "/:interviewId/Cover", component: Section },
-        { name: "section", path: "/:interviewId/Section/:sectionId", component: Section }
+        {
+            name: "section",
+            path: "/:interviewId/Section/:sectionId",
+            components: {
+                default: Section,
+                sideBar: SideBar
+            }
+        }
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
