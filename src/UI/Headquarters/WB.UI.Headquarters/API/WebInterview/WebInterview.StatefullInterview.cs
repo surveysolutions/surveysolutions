@@ -60,8 +60,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             var statefulInterview = this.GetCallerInterview();
 
             var ids = statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
-
+            var questionarie = this.GetCallerQuestionnaire();
             var entities = ids
+                .Where(id => !questionarie.IsVariable(id.Id))
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
@@ -399,6 +400,10 @@ namespace WB.UI.Headquarters.API.WebInterview
                     multiLinkedOption.IsLinkedToList = true;
                     result = multiLinkedOption;
                 }
+                else if (question.IsMultimedia)
+                {
+                    result = Map<InterviewMultimediaQuestion>(question);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -543,7 +548,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.GpsCoordinates:
                     return InterviewEntityType.Gps;
                 case QuestionType.Multimedia:
-                    return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
+                    return InterviewEntityType.Multimedia; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
                         || callerQuestionnaire.IsLinkedToListQuestion(entityId)

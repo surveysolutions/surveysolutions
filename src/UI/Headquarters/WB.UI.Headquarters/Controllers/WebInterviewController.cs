@@ -1,6 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Recaptcha.Web;
 using Recaptcha.Web.Mvc;
@@ -11,8 +15,11 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
@@ -28,17 +35,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IWebInterviewConfigProvider configProvider;
         private readonly IUserViewFactory usersRepository;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+
 
         public WebInterviewController(ICommandService commandService, 
             IWebInterviewConfigProvider configProvider,
             IGlobalInfoProvider globalInfo, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IWebInterviewConfigProvider webInterviewConfigProvider,
             ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.usersRepository = usersRepository;
         }
 
@@ -117,6 +134,60 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();
         }
+
+        [HttpGet]
+        public ActionResult Image(string interviewId, string questionId, string filename)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+            
+            if(interview.Status != InterviewStatus.InterviewerAssigned && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null)
+            {
+                return this.FileNotFound();
+            }
+
+            var file = plainInterviewFileStorage.GetInterviewBinaryData(interview.Id, filename);
+            if (file == null || file.Length == 0)
+                return this.FileNotFound();
+
+            return this.File(file, "image/jpeg", filename);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var questionIdentity = Identity.Parse(questionId);
+            var question = interview.GetQuestion(questionIdentity);
+
+            if (interview.Status != InterviewStatus.InterviewerAssigned && question?.AsMultimedia != null)
+            {
+                return this.Json("fail");
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                await file.InputStream.CopyToAsync(ms);
+
+                var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
+                var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
+
+                this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
+                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+            }
+
+            return this.Json("ok");
+        }
+
+        private ActionResult FileNotFound()
+        {
+            return
+                   this.File(
+                       Assembly.GetExecutingAssembly()
+                           .GetManifestResourceStream("WB.UI.Headquarters.Content.img.no_image_found.jpg"),
+                       "image/jpeg", "no_image_found.jpg");
+        }
+
 
         protected override void OnException(ExceptionContext filterContext)
         {
