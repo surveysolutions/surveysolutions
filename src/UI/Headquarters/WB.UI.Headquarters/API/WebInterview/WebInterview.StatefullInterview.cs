@@ -340,64 +340,28 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = this.autoMapper.Map<InterviewGpsQuestion>(question);
                 }
-                else if (question.IsSingleLinkedOption)
+                else if (question.IsSingleLinkedOption || question.IsSingleLinkedToList)
                 {
                     var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
-                    List<LinkedOption> options = question.AsLinked.Options.Select(x => new LinkedOption
-                    {
-                        Value = x.ToString(),
-                        RosterVector = x.Select(Convert.ToInt32).ToArray(),
-                        Title = callerInterview.GetLinkedOptionTitle(identity, x)
-                    }).ToList();
+                    var options = question.IsSingleLinkedToList 
+                        ? GetLinkedOptionsForLinkedToListQuestion(callerInterview, identity, question.AsSingleLinkedToList.LinkedSourceId, question.AsSingleLinkedToList.Options) 
+                        : GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options);
 
-                    singleLinkedOption.Options = options;
+                    singleLinkedOption.IsLinkedToList = question.IsSingleLinkedToList;
+                    singleLinkedOption.Options = options.ToList();
                     result = singleLinkedOption;
                 }
-                else if (question.IsSingleLinkedToList)
-                {
-                    var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
-                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsSingleLinkedToList.LinkedSourceId, identity)?.AsTextList;
-                    List<LinkedOption> options = question.AsSingleLinkedToList.Options.Select(x => new LinkedOption
-                    {
-                        Value = x.ToString(),
-                        RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
-                        Title = listQuestion?.GetTitleByItemCode(x)
-                    }).ToList();
-
-                    singleLinkedOption.Options = options;
-                    singleLinkedOption.IsLinkedToList = true;
-                    result = singleLinkedOption;
-                }
-                else if (question.IsMultiLinkedOption)
+                else if (question.IsMultiLinkedOption || question.IsMultiLinkedToList)
                 {
                     var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
-                    List<LinkedOption> options = question.AsLinked.Options.Select(x => new LinkedOption
-                    {
-                        Value = x.ToString(),
-                        RosterVector = x.Select(Convert.ToInt32).ToArray(),
-                        Title = callerInterview.GetLinkedOptionTitle(identity, x)
-                    }).ToList();
+                    var options = question.IsMultiLinkedToList 
+                        ? GetLinkedOptionsForLinkedToListQuestion(callerInterview, identity, question.AsMultiLinkedToList.LinkedSourceId, question.AsMultiLinkedToList.Options) 
+                        : GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options);
 
+                    multiLinkedOption.IsLinkedToList = question.IsMultiLinkedToList;
                     multiLinkedOption.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                     multiLinkedOption.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                    multiLinkedOption.Options = options;
-                    result = multiLinkedOption;
-                }
-                else if (question.IsMultiLinkedToList)
-                {
-                    var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
-                    var listQuestion = callerInterview.FindQuestionInQuestionBranch(question.AsMultiLinkedToList.LinkedSourceId, identity)?.AsTextList;
-                    List<LinkedOption> options = question.AsMultiLinkedToList.Options.Select(x => new LinkedOption
-                    {
-                        Value = x.ToString(),
-                        RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
-                        Title = listQuestion?.GetTitleByItemCode(x)
-                    }).ToList();
-
-                    multiLinkedOption.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                    multiLinkedOption.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                    multiLinkedOption.Options = options;
-                    multiLinkedOption.IsLinkedToList = true;
+                    multiLinkedOption.Options = options.ToList();
                     result = multiLinkedOption;
                 }
                 else if (question.IsMultimedia)
@@ -530,6 +494,29 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             result.Instructions = callerQuestionnaire.GetQuestionInstruction(id.Id);
             result.HideInstructions = callerQuestionnaire.GetHideInstructions(id.Id);
+        }
+
+        private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
+            Identity identity, List<RosterVector> options)
+        {
+            return options.Select(x => new LinkedOption
+            {
+                Value = x.ToString(),
+                RosterVector = x.Select(Convert.ToInt32).ToArray(),
+                Title = callerInterview.GetLinkedOptionTitle(identity, x)
+            });
+        }
+
+        private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedToListQuestion(IStatefulInterview callerInterview,
+            Identity identity, Guid linkedSourceId, IReadOnlyCollection<decimal> options)
+        {
+            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity)?.AsTextList;
+            return options.Select(x => new LinkedOption
+            {
+                Value = x.ToString(),
+                RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
+                Title = listQuestion?.GetTitleByItemCode(x)
+            });
         }
 
         private InterviewEntityType GetEntityType(Guid entityId)
