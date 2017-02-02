@@ -24,6 +24,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         };
 
+        public LanguageInfo GetLanguageInfo() => new LanguageInfo
+        {
+            OriginalLanguageName = Headquarters.Resources.WebInterview.Original_Language,
+            Languages = this.GetCallerQuestionnaire().GetTranslationLanguages(),
+            CurrentLanguage = this.GetCallerInterview().Language
+        };
+
         public PrefilledPageData GetPrefilledEntities()
         {
             var interviewEntityWithTypes = this.GetCallerQuestionnaire()
