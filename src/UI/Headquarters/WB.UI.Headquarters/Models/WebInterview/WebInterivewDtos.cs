@@ -5,6 +5,17 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
+    public class ChangeLanguageReuqest
+    {
+        public string Language { get; set; }
+    }
+
+    public class LanguageInfo
+    {
+        public string OriginalLanguageName { get; set; }
+        public string CurrentLanguage { get; set; }
+        public IEnumerable<string> Languages { get; set; }
+    }
     public class LinkedOption
     {
         public string Value { get; set; }

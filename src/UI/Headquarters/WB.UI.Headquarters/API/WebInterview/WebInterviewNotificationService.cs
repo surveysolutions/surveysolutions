@@ -45,6 +45,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
         }
 
+        public void ReloadInterview(Guid interviewId)
+            => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
+
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
         {
             return ((IInterviewTreeNode) interview.GetQuestion(identity)

@@ -169,4 +169,7 @@
   <data name="Stopped" xml:space="preserve">
     <value>Web interview stopped</value>
   </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Original</value>
+  </data>
 </root>
