@@ -168,6 +168,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Id { get; set; }
         public string ParentId { get; set; }
         public string Title { get; set;}
+        public string RosterTitle { get; set; }
         public string State { get;set; }
         public bool Collapsed { get; set; }
         public bool HasChildrens { get; set; }
