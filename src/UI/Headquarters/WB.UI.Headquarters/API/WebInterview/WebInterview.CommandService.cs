@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
         
-        public void ChangeLanguage(ChangeLanguageReuqest request)
+        public void ChangeLanguage(ChangeLanguageRequest request)
             => this.commandService.Execute(new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
                 this.commandResponsibleId));
 
