@@ -1,9 +1,12 @@
 import * as forEach from "lodash/foreach"
+import * as moment from "moment"
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 
 export default {
     SET_ENTITIES_DETAILS(state, entities: IInterviewEntity[]) {
+        state.lastActivityTimestamp = moment()
+
         forEach(entities, entity => {
             if (entity != null) {
                 Vue.set(state.entityDetails, entity.id, entity)

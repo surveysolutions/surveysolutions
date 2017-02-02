@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
                 Entities = interviewEntityWithTypes,
-                HasAnyQestions = interviewEntityWithTypes.Length > 1
+                HasAnyQuestions = interviewEntityWithTypes.Length > 1
             };
 
             return result;

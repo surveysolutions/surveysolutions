@@ -1,7 +1,7 @@
 import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
 import * as Vue from "vue"
-import { apiCaller } from "../api"
+import { apiCaller, apiStop } from "../api"
 import router from "./../router"
 
 import { batchedAction } from "./helpers"
@@ -90,7 +90,7 @@ export default {
 
         if (isPrefilledSection) {
             const prefilledPageData: IPrefilledPageData = await apiCaller(api => api.getPrefilledEntities())
-            if (!prefilledPageData.hasAnyQestions) {
+            if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: "section",
                     params: {
@@ -142,8 +142,10 @@ export default {
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
     },
-
     changeLanguage({ commit }, language) {
         apiCaller(api => api.changeLanguage(language))
     },
+    stop(): void {
+        apiStop()
+    }
 }
