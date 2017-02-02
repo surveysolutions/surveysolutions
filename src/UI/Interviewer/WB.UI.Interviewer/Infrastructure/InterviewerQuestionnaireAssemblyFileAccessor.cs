@@ -175,13 +175,9 @@ namespace WB.UI.Interviewer.Infrastructure
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
-        {
-            return string.IsNullOrEmpty(this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion));
-        }
+            => !string.IsNullOrEmpty(this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion));
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
-        {
-            return $"assembly_{questionnaireId}_v{questionnaireVersion}.dll";
-        }
+            => $"assembly_{questionnaireId}_v{questionnaireVersion}.dll";
     }
 }
