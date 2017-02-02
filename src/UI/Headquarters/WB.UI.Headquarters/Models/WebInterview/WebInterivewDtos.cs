@@ -26,6 +26,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewLinkedMultiQuestion : LinkedCategoricalQuestion
     {
         public RosterVector[] Answer { get; set; }
+        public bool Ordered { get; set; }
+        public int? MaxSelectedAnswersCount { get; set; }
     }
 
     public class InterviewLinkedSingleQuestion : LinkedCategoricalQuestion

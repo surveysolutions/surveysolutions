@@ -377,6 +377,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                         Title = callerInterview.GetLinkedOptionTitle(identity, x)
                     }).ToList();
 
+                    multiLinkedOption.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                    multiLinkedOption.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     multiLinkedOption.Options = options;
                     result = multiLinkedOption;
                 }
@@ -391,6 +393,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                         Title = listQuestion?.GetTitleByItemCode(x)
                     }).ToList();
 
+                    multiLinkedOption.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                    multiLinkedOption.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     multiLinkedOption.Options = options;
                     multiLinkedOption.IsLinkedToList = true;
                     result = multiLinkedOption;
