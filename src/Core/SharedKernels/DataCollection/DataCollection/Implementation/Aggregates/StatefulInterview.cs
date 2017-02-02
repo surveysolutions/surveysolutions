@@ -321,6 +321,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
 
+        public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
+            => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);
+
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
             => this.Tree.GetQuestion(questionIdentity).Parents
                 .OfType<InterviewTreeRoster>()
