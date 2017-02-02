@@ -546,7 +546,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                         || callerQuestionnaire.IsLinkedToListQuestion(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId)
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) || callerQuestionnaire.IsQuestionCascading(entityId)
                         ? InterviewEntityType.Combobox
                         : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:
