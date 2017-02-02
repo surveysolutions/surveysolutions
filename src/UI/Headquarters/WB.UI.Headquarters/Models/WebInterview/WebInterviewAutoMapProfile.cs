@@ -89,7 +89,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.Altitude, opts => opts.MapFrom(x => x.Altitude))
                 .ForMember(x => x.Timestamp, opts => opts.MapFrom(x => x.Timestamp.ToUnixTimeMilliseconds()));
 
-
             this.CreateMap<InterviewTreeQuestion, InterviewGpsQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsGps.GetAnswer().Value));
@@ -146,6 +145,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
                     opts.MapFrom(x => (x as InterviewTreeRoster).RosterTitle);
                 })
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.AsMultimedia.GetAnswer().FileName}"));
         }
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)

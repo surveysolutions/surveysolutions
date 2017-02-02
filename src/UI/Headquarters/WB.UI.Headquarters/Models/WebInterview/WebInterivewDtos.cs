@@ -65,6 +65,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public DropdownItem Answer { get; set; }
     }
+
+    public class InterviewMultimediaQuestion : GenericQuestion
+    {
+        public string UploadUrl { get; set; }
+        public string Answer { get; set; }
+    }
     
     public class InterviewDateQuestion : GenericQuestion
     {

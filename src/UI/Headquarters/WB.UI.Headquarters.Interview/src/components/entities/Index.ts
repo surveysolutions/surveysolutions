@@ -20,6 +20,7 @@ import Group from "./Group"
 import Integer from "./Integer"
 import LinkedMulti from "./LinkedMulti"
 import LinkedSingle from "./LinkedSingle"
+import Multimedia from "./Multimedia"
 import NavigationButton from "./NavigationButton"
 import Question from "./Question"
 import StaticText from "./StaticText"
@@ -27,23 +28,24 @@ import TextList from "./TextList"
 import TextQuestion from "./TextQuestion"
 import Unsupported from "./Unsupported"
 
-vue.component("Gps", Gps)
-vue.component("TextList", TextList)
+vue.component("CategoricalMulti", CategoricalMulti)
+vue.component("CategoricalSingle", CategoricalSingle)
+vue.component("CategoricalYesNo", CategoricalYesNo)
+vue.component("Combobox", Combobox)
 vue.component("DateTime", DateTime)
-vue.component("Integer", Integer)
 vue.component("Double", Double)
-vue.component("TextQuestion", TextQuestion)
+vue.component("Gps", Gps)
+vue.component("Group", Group)
+vue.component("Integer", Integer)
 vue.component("LinkedMulti", LinkedMulti)
 vue.component("LinkedSingle", LinkedSingle)
-vue.component("CategoricalYesNo", CategoricalYesNo)
-vue.component("CategoricalSingle", CategoricalSingle)
-vue.component("Combobox", Combobox)
-vue.component("CategoricalMulti", CategoricalMulti)
-vue.component("wb-question", Question)
-vue.component("StaticText", StaticText)
-vue.component("Group", Group)
+vue.component("Multimedia", Multimedia)
 vue.component("NavigationButton", NavigationButton)
+vue.component("StaticText", StaticText)
+vue.component("TextList", TextList)
+vue.component("TextQuestion", TextQuestion)
 vue.component("Unsupported", Unsupported)
+vue.component("wb-question", Question)
 
 export const GroupStatus = {
     Completed: 1,

@@ -96,6 +96,7 @@ declare interface IWebInterviewApi {
     answerLinkedMultiOptionQuestion(questionIdentity: string, answer: number[][]): void
     answerLinkedToListMultiQuestion(questionIdentity: string, answer: number[]): void
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
+    answerPictureQuestion(id: string, file: File): void
     answerGpsQuestion(identity, answer: IGpsAnswer)
 
     removeAnswer(questionId: string): void
