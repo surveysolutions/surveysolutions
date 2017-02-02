@@ -228,7 +228,6 @@
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
-    <Compile Include="EventHandler\WebInterviewFilteredOptionsRefreshDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
