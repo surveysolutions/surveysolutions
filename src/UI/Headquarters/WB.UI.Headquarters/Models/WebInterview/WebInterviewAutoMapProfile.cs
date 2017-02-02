@@ -58,9 +58,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
 
-            this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
-                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
-
             this.CreateMap<InterviewTreeQuestion, InterviewYesNoQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsYesNo.GetAnswer().CheckedOptions));
