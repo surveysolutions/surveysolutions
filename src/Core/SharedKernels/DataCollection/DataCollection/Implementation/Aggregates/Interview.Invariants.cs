@@ -52,9 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             CheckYesNoQuestionInvariants(questionIdentity, (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: false);
                         }
                         else
-                        {
-                            this.CheckMultipleOptionQuestionInvariants(questionIdentity, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, tree, isLinkedToList: false, applyStrongChecks: false);
-                        }
+                            RequireFixedMultipleOptionsPreloadValueAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
                     case QuestionType.QRBarcode:
                         CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
@@ -112,9 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: true);
                         }
                         else
-                        {
-                            this.CheckMultipleOptionQuestionInvariants(questionIdentity, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, tree, isLinkedToList: false, applyStrongChecks: true);
-                        }
+                            RequireFixedMultipleOptionsAnswerAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
                     case QuestionType.QRBarcode:
                         CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
@@ -131,30 +127,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
                 }
             }
-        }
-
-        private static void CheckLinkedMultiOptionQuestionInvariants(Identity questionIdentity, decimal[][] linkedQuestionSelectedOptions,
-            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
-        {
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
-
-            questionInvariants.RequireQuestion(QuestionType.MultyOption);
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireQuestionIsEnabled();
-            }
-
-            if (!linkedQuestionSelectedOptions.Any())
-                return;
-
-            foreach (var selectedRosterVector in linkedQuestionSelectedOptions)
-            {
-                questionInvariants.RequireLinkedOptionIsAvailable(selectedRosterVector);
-            }
-
-            questionInvariants.RequireMaxAnswersCountLimit(linkedQuestionSelectedOptions.Length);
         }
 
         private static void RequireTextPreloadValueAllowed(Identity questionIdentity,
@@ -180,11 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestion(QuestionType.Numeric)
                 .RequireNumericIntegerQuestion()
                 .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
-                    answer,
-                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionIdentity.Id)
-                        ? questionnaire.GetMaxLongRosterRowCount()
-                        : questionnaire.GetMaxRosterRowCount());
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
         }
 
         private static void RequireNumericIntegerAnswerAllowed(Identity questionIdentity, int answer,
@@ -194,11 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestion(QuestionType.Numeric)
                 .RequireNumericIntegerQuestion()
                 .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(
-                    answer,
-                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionIdentity.Id)
-                        ? questionnaire.GetMaxLongRosterRowCount()
-                        : questionnaire.GetMaxRosterRowCount())
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
                 .RequireQuestionInstanceExists()
                 .RequireQuestionIsEnabled();
         }
@@ -277,40 +241,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireLinkedOptionIsAvailable(selectedLinkedOption);
         }
 
-        private void CheckMultipleOptionQuestionInvariants(Identity questionIdentity, IReadOnlyCollection<int> selectedValues,
-            IQuestionnaire questionnaire, InterviewTree tree, bool isLinkedToList, bool applyStrongChecks = true)
+        private static void RequireFixedMultipleOptionsPreloadValueAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireMaxAnswersCountLimit(selectedValues.Count);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.MultyOption);
+        private static void RequireFixedMultipleOptionsAnswerAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireQuestionInstanceExists()
+                .RequireMaxAnswersCountLimit(selectedValues.Count)
+                .RequireQuestionIsEnabled();
+        }
 
-            if (isLinkedToList)
-            {
-                foreach (var selectedValue in selectedValues)
-                {
-                    questionInvariants.RequireLinkedToListOptionIsAvailable(selectedValue);
-                }
-            }
-            else
-            {
-                questionInvariants.RequireOptionsExist(selectedValues);
-            }
+        private static void RequireLinkedToListMultipleOptionsAnswerAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireLinkedToListOptionsAreAvailable(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireQuestionInstanceExists()
+                .RequireMaxAnswersCountLimit(selectedValues.Count)
+                .RequireQuestionIsEnabled();
+        }
 
-            if (questionnaire.IsQuestionYesNo(questionIdentity.Id))
-            {
-                throw new InterviewException($"Question {questionIdentity.Id} has Yes/No type, but command is sent to Multiopions type. questionnaireId: {this.QuestionnaireId}, interviewId {this.EventSourceId}");
-            }
-
-            questionInvariants.RequireRosterSizeAnswerNotNegative(selectedValues.Count);
-            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
-            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireMaxAnswersCountLimit(selectedValues.Count);
-                questionInvariants.RequireQuestionIsEnabled();
-            }
+        private static void RequireLinkedToRosterMultipleOptionsAnswerAllowed(Identity questionIdentity, decimal[][] selectedLinkedOptions, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedOptionsAreAvailable(selectedLinkedOptions)
+                .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
         }
 
         private static void CheckYesNoQuestionInvariants(Identity questionIdentity, YesNoAnswer answer,
@@ -325,8 +300,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionInvariants.RequireOptionsExist(selectedValues);
 
             questionInvariants.RequireRosterSizeAnswerNotNegative(yesAnswersCount);
-            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
-            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount);
+            questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
 
             questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
 
@@ -345,8 +320,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionInvariants.RequireQuestion(QuestionType.TextList);
 
             questionInvariants.RequireRosterSizeAnswerNotNegative(answers.Length);
-            var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
-            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length);
+            questionInvariants.RequireMaxAnswersCountLimit(answers.Length);
 
             if (applyStrongChecks)
             {

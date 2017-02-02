@@ -20,7 +20,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
 
-            this.CheckMultipleOptionQuestionInvariants(questionIdentity, selectedValues, questionnaire, this.Tree, isLinkedToList);
+            if (isLinkedToList)
+                RequireLinkedToListMultipleOptionsAnswerAllowed(questionIdentity, selectedValues, questionnaire, this.Tree);
+            else
+                RequireFixedMultipleOptionsAnswerAllowed(questionIdentity, selectedValues, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 
