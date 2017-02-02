@@ -1,3 +1,8 @@
+declare interface ILanguageInfo {
+    currentLanguage: string
+    languages: string[]
+}
+
 declare interface IQuestionnaireInfo {
     title: string;
 }
@@ -94,4 +99,6 @@ declare interface IWebInterviewApi {
     answerGpsQuestion(identity, answer: IGpsAnswer)
 
     removeAnswer(questionId: string): void
+    getLanguageInfo(): ILanguageInfo
+    changeLanguage(language: string): void
 }

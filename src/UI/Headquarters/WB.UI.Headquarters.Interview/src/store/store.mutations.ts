@@ -25,5 +25,9 @@ export default {
     SET_BREADCRUMPS(state, crumps) {
         Vue.set(state, "breadcrumbs", crumps)
     },
-
+    SET_LANGUAGE_INFO(state, languageInfo) {
+        Vue.set(state, "originalLanguageName", languageInfo.originalLanguageName)
+        Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
+        Vue.set(state, "languages", languageInfo.languages)
+    },
 }

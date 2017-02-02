@@ -12,6 +12,11 @@ export default {
         commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
     },
 
+    async getLanguageInfo({ commit }) {
+        const languageInfo = await apiCaller<ILanguageInfo>(api => api.getLanguageInfo())
+        commit("SET_LANGUAGE_INFO", languageInfo)
+    },
+
     fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
@@ -104,6 +109,10 @@ export default {
         }
     }, 200),
 
+    // called by server side. reload interview
+    reloadInterview({ state, dispatch }) {
+        location.reload(true)
+    },
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions: string[]) {
         let needSectionUpdate = false
@@ -132,5 +141,9 @@ export default {
 
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
-    }
+    },
+
+    changeLanguage({ commit }, language) {
+        apiCaller(api => api.changeLanguage(language))
+    },
 }
