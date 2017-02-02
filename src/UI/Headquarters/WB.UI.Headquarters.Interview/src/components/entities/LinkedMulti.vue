@@ -42,10 +42,11 @@
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
             }
+
         },
         methods: {
             getAnswerOrder(answerValue){
-                var answerIndex = this.$me.answer.indexOf(answerValue)
+                var answerIndex = this.answer.indexOf(answerValue)
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             }
         },
