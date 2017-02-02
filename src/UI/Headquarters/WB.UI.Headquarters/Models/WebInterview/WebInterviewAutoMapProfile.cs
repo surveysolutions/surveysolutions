@@ -50,7 +50,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiLinkedOption.GetAnswer().CheckedValues));
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.IsMultiLinkedToList 
+                   ? x.AsMultiLinkedToList.GetAnswer().CheckedValues.Select(s => new RosterVector(Convert.ToDecimal(s).ToEnumerable())).ToArray()
+                   : x.AsMultiLinkedOption.GetAnswer().CheckedValues));
 
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
