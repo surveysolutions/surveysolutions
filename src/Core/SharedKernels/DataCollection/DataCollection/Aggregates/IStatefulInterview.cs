@@ -137,5 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
         
         IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
+
+        IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
     }
 }
