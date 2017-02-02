@@ -1,5 +1,14 @@
 ﻿namespace WB.UI.Headquarters.Models.WebInterview
 {
+    public class PrefilledPageData
+    {
+        public InterviewEntityWithType[] Entities { get; set; }
+
+        public string FirstSectionId { get; set; }
+
+        public bool HasAnyQestions { get; set; }
+    }
+
     public class ButtonState : InterviewEntity
     {
         public SimpleGroupStatus Status { get; set; }

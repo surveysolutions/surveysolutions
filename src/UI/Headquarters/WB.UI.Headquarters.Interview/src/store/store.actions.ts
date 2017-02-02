@@ -79,12 +79,29 @@ export default {
     },
 
     fetchSectionEntities: debounce(async ({ commit }) => {
-        const id = (router.currentRoute.params as any).sectionId
-        const section = id == null
-            ? await apiCaller(api => api.getPrefilledEntities())
-            : await apiCaller(api => api.getSectionEntities(id))
+        const routeParams = (router.currentRoute.params as any)
+        const id = routeParams.sectionId
+        const isPrefilledSection = id === undefined
 
-        commit("SET_SECTION_DATA", section)
+        if (isPrefilledSection) {
+            const prefilledPageData: IPrefilledPageData = await apiCaller(api => api.getPrefilledEntities())
+            if (!prefilledPageData.hasAnyQestions) {
+                const loc = {
+                    name: "section",
+                    params: {
+                        interviewId: routeParams.interviewId,
+                        sectionId: prefilledPageData.firstSectionId
+                    }
+                }
+
+                router.replace(loc)
+            } else {
+                commit("SET_SECTION_DATA", prefilledPageData.entities)
+            }
+        } else {
+            const section: IInterviewEntityWithType[] = await apiCaller(api => api.getSectionEntities(id))
+            commit("SET_SECTION_DATA", section)
+        }
     }, 200),
 
     // called by server side. refresh
