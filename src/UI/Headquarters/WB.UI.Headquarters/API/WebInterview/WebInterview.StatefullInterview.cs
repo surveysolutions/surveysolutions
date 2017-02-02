@@ -24,9 +24,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         };
 
-        public InterviewEntityWithType[] GetPrefilledEntities()
+        public PrefilledPageData GetPrefilledEntities()
         {
-            return this.GetCallerQuestionnaire()
+            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
@@ -35,6 +35,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
+            var result = new PrefilledPageData
+            {
+                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                Entities = interviewEntityWithTypes,
+                HasAnyQestions = interviewEntityWithTypes.Length > 1
+            };
+
+            return result;
         }
 
         public InterviewEntityWithType[] GetSectionEntities(string sectionId)
@@ -238,7 +246,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                     if (questionnaire.IsQuestionFilteredCombobox(identity.Id) || question.IsCascading)
                     {
                         result = this.Map<InterviewFilteredQuestion>(question);
-                    } else {
+                    }
+                    else
+                    {
                         result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
                             res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
@@ -524,19 +534,19 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Unsupported; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
-                    if (callerQuestionnaire.IsQuestionLinked(entityId) 
-                        || callerQuestionnaire.IsLinkedToListQuestion(entityId) 
+                    if (callerQuestionnaire.IsQuestionLinked(entityId)
+                        || callerQuestionnaire.IsLinkedToListQuestion(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedMulti;
                     return callerQuestionnaire.IsQuestionYesNo(entityId)
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
-                    if (callerQuestionnaire.IsQuestionLinked(entityId) 
+                    if (callerQuestionnaire.IsQuestionLinked(entityId)
                         || callerQuestionnaire.IsLinkedToListQuestion(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) 
+                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId)
                         ? InterviewEntityType.Combobox
                         : InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:

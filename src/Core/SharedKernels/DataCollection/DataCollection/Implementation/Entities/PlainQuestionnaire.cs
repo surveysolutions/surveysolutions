@@ -1560,5 +1560,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
         }
+
+        public Guid GetFirstSectionId()
+        {
+            return this.GetAllSections().First();
+        }
     }
 }

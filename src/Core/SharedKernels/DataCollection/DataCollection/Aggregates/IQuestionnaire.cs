@@ -251,5 +251,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetVariableName(Guid variableId);
         bool HasVariable(Guid entityId);
         bool HasStaticText(Guid entityId);
+        Guid GetFirstSectionId();
     }
 }

@@ -61,10 +61,16 @@ declare interface IDropdownItem {
     title: string
 }
 
+declare interface IPrefilledPageData {
+    entities: IInterviewEntityWithType[]
+    firstSectionId: string
+    hasAnyQestions: boolean
+}
+
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
 
-    getPrefilledEntities(): IInterviewEntityWithType[]
+    getPrefilledEntities(): IPrefilledPageData
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntityDetails(id: string): IInterviewEntity
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
