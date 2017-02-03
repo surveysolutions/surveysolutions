@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
             var statefulInterview = this.GetCallerInterview();
-            return statefulInterview.IsEnabled(Identity.Parse(id))
+            return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
         public PrefilledPageData GetPrefilledEntities()
