@@ -48,9 +48,22 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             fd.append("interviewId", queryString.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
+            store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
                 url: imageUploadUri,
+                xhr() {
+                    let xhr = $.ajaxSettings.xhr()
+                    xhr.upload.onprogress = (e) => {
+                        store.dispatch("uploadProgress", {
+                            id,
+                            now: e.loaded,
+                            total: e.total
+                        })
+                        // console.log(Math.floor(e.loaded / e.total * 100) + "%")
+                    }
+                    return xhr
+                },
                 data: fd,
                 processData: false,
                 contentType: false,

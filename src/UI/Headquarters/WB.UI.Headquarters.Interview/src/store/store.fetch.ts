@@ -25,7 +25,11 @@ const fetch = {
         sectionRequireScroll({commit}, scroll) {
             commit("SET_SCROLL_TARGET", scroll)
         },
-
+        uploadProgress({ commit, rootState }, {id, now, total}) {
+            commit("SET_UPLOAD_PROGRESS", {
+                entity: rootState.entityDetails[id], now, total
+            })
+        },
         scroll({commit, state}) {
             if (state.scroll == null) {
                 return
@@ -44,6 +48,11 @@ const fetch = {
         }
     },
     mutations: {
+        SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
+            Vue.set(entity, "fetchState", {})
+            Vue.set(entity.fetchState, "uploaded", now)
+            Vue.set(entity.fetchState, "total", total)
+        },
         SET_FETCH(state, {entityDetails, id, ids, done}) {
             if (id && entityDetails[id]) {
                 Vue.set(entityDetails[id], "fetching", !done)
