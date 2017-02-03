@@ -4,7 +4,7 @@ import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
-import { getInstance as hubProxy, queryString } from "../api"
+import { apiCaller, getInstance as hubProxy, queryString } from "../api"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import store from "../store"
@@ -30,14 +30,24 @@ const router = new VueRouter({
     }
 })
 
-router.afterEach((to, from) => {
-    // tslint:disable-next-line:no-string-literal
+// tslint:disable:no-string-literal
+router.beforeEach(async (to, from, next) => {
     queryString["interviewId"] = to.params["interviewId"]
 
     hubProxy().then((proxy) => {
-        // tslint:disable-next-line:no-string-literal
         proxy.state.sectionId = to.params["sectionId"]
     })
+
+    if (to.name === "section") {
+        const isEnabled = await apiCaller(api => api.isEnabled(to.params["sectionId"]))
+        if (!isEnabled) {
+            next(false)
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
 })
 
 export default router

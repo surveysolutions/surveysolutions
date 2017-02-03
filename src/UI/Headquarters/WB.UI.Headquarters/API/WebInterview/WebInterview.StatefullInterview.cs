@@ -31,6 +31,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             CurrentLanguage = this.GetCallerInterview().Language
         };
 
+        public bool IsEnabled(string id)
+        {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+            var statefulInterview = this.GetCallerInterview();
+            return statefulInterview.IsEnabled(Identity.Parse(id))
+        }
+
         public PrefilledPageData GetPrefilledEntities()
         {
             var interviewEntityWithTypes = this.GetCallerQuestionnaire()
