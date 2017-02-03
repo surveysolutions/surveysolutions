@@ -72,10 +72,16 @@ declare interface IPrefilledPageData {
     hasAnyQuestions: boolean
 }
 
+declare interface IEnabling {
+    enabled: boolean
+    redirectTo: string
+}
+
 declare interface IWebInterviewApi {
     questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
 
     getPrefilledEntities(): IPrefilledPageData
+    isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntityDetails(id: string): IInterviewEntity
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
