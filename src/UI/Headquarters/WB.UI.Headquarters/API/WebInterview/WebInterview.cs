@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
@@ -7,11 +6,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -57,15 +53,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
-        public object QuestionnaireDetails(string questionnaireId)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            return new
-            {
-                questionnaireBrowseItem.Title
-            };
-        }
 
         public void FillExceptionData(Dictionary<string, string> data)
         {

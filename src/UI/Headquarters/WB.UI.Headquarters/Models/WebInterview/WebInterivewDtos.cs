@@ -10,12 +10,18 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Language { get; set; }
     }
 
+    public class QuestionnaireInfo
+    {
+        public string Title { get; set; }
+    }
+
     public class LanguageInfo
     {
         public string OriginalLanguageName { get; set; }
         public string CurrentLanguage { get; set; }
         public IEnumerable<string> Languages { get; set; }
     }
+
     public class LinkedOption
     {
         public string Value { get; set; }
