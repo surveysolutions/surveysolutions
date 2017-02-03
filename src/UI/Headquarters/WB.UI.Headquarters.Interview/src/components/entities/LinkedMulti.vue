@@ -17,20 +17,22 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
-    import * as _ from "lodash"
+
+    import * as map from "lodash/map"
+    import * as find from "lodash/find"
 
     export default {
         name: 'LinkedMulti',
         computed: {
             answer: {
                 get() {
-                    return _.map(this.$me.answer, (x) => { return _.find(this.$me.options, { 'rosterVector': x }).value; })
+                    return map(this.$me.answer, (x) => { return find(this.$me.options, { 'rosterVector': x }).value; })
                 },
                 set(value) {
-                    const selectedOptions = _.map(value, (x) => { return _.find(this.$me.options, { 'value': x }).rosterVector; });
+                    const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector; });
 
                     if (this.$me.isLinkedToList){
-                        this.$store.dispatch("answerLinkedToListMultiQuestion", { answer: _.map(selectedOptions, (x) => { return x[0]; }), questionIdentity: this.$me.id })
+                        this.$store.dispatch("answerLinkedToListMultiQuestion", { answer: map(selectedOptions, (x) => { return x[0]; }), questionIdentity: this.$me.id })
                     }
                     else{
                         this.$store.dispatch("answerLinkedMultiOptionQuestion", { answer: selectedOptions, questionIdentity: this.$me.id })
