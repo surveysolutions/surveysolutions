@@ -7,7 +7,7 @@
                         <img :src="imageSrc" alt="custom photo" class="zoomImg" @click="showModal(true)">
                         <div class="modal-img" :style="modalView" @click="showModal(false)">
                             <span class="close-zoomming-img">×</span>
-                            <img class="modal-img-content" :src="imageSrc" alt="">
+                            <img class="modal-img-content" :src="imageSrcFullSize" alt="">
                             <span class="caption"></span>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from 'jquery'
-    import { imageUri } from "src/config"
+    import { imageGetBase } from "src/config"
 
     export default {
         name: 'picture-question',
@@ -43,16 +43,22 @@
             },
             imageSrc() {
                 if (this.$me.isAnswered) {
-                    return imageUri + this.$me.answer
+                    return imageGetBase + this.$me.answer
+                } else {
+                    return '' // this.imageData
+                }
+            },
+            imageSrcFullSize() {
+                if (this.$me.isAnswered && this.modal) {
+                    return imageGetBase + this.$me.answer + "&fullSize=true"
                 } else {
                     return '' // this.imageData
                 }
             }
         },
         methods: {
-            showModal(show){
+            showModal(show) {
                 this.modal = show
-                console.log(show)
             },
             answerRemoved() {
                 this.$refs.uploader.type = ''
@@ -67,25 +73,10 @@
                 this.createImage(files[0]);
             },
             createImage(file) {
-
                 this.$store.dispatch('answerMultimediaQuestion', {
                     id: this.id,
                     file: this.$refs.uploader.files[0]
                 })
-
-                // var reader = new FileReader();
-
-
-                // reader.onload = (e) => {
-                //     this.imageData = (e.target as any).result
-
-                // };
-
-                // if (file) {
-                //     reader.readAsDataURL(file)
-                // } else {
-                //     this.imageData = null
-                // }
             }
         }
     }

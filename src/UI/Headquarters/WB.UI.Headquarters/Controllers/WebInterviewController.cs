@@ -83,15 +83,6 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private ActionResult FileNotFound()
-        {
-            return
-                this.File(
-                    Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream("WB.UI.Headquarters.Content.img.no_image_found.jpg"),
-                    "image/jpeg", "no_image_found.jpg");
-        }
-
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -144,22 +135,6 @@ Exception details:<br />
             };
         }
 
-        [HttpGet]
-        public ActionResult Image(string interviewId, string questionId, string filename)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
-
-            if (interview.Status != InterviewStatus.InterviewerAssigned &&
-                interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null)
-                return this.FileNotFound();
-
-            var file = this.plainInterviewFileStorage.GetInterviewBinaryData(interview.Id, filename);
-            if (file == null || file.Length == 0)
-                return this.FileNotFound();
-
-            return this.File(file, "image/jpeg", filename);
-        }
-
         [HttpPost]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
@@ -168,15 +143,15 @@ Exception details:<br />
             var question = interview.GetQuestion(questionIdentity);
 
             if (interview.Status != InterviewStatus.InterviewerAssigned && question?.AsMultimedia != null)
+            {
                 return this.Json("fail");
+            }
 
             using (var ms = new MemoryStream())
             {
                 await file.InputStream.CopyToAsync(ms);
 
-                var filename =
-                    $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime
-                        .UtcNow.GetHashCode()}.jpg";
+                var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
                 var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
 
                 this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
