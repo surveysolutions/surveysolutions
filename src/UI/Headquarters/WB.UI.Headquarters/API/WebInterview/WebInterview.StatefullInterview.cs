@@ -5,11 +5,13 @@ using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
 using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
+using QuestionnaireInfo = WB.UI.Headquarters.Models.WebInterview.QuestionnaireInfo;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -30,6 +32,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             Languages = this.GetCallerQuestionnaire().GetTranslationLanguages(),
             CurrentLanguage = this.GetCallerInterview().Language
         };
+
+        public QuestionnaireInfo GetQuestionnaireDetails()
+        {
+            return new QuestionnaireInfo
+            {
+                Title = this.GetCallerQuestionnaire().Title
+            };
+        }
 
         public bool IsEnabled(string id)
         {
