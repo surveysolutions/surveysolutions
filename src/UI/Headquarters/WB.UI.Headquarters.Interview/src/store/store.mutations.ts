@@ -33,7 +33,7 @@ export default {
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
-    SET_QUESTIONNAIRE_INFO(state, questionnaireInfo){
+    SET_QUESTIONNAIRE_INFO(state, questionnaireInfo) {
         Vue.set(state, "questionnaireTitle", questionnaireInfo.title)
     }
 }

@@ -1,5 +1,6 @@
 import { getLocationHash } from "../store/store.fetch"
 
+// Validation, Title, RemoveAnswer, Instruction, Attachment
 export const entityPartial = {
     computed: {
         $me() {
@@ -62,6 +63,7 @@ export function detailsMixin(fetchMethod: string, defaults) {
     }
 }
 
+// Questions
 export const entityDetails = detailsMixin("fetchEntity", {
     isAnswered: false,
     validity: {
