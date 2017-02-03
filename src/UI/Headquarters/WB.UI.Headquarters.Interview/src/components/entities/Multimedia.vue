@@ -5,7 +5,7 @@
                 <div class="field answered" v-if="imageSrc || $me.uploadingImage">
                     <div class="image-zoom-box image-wrapper">
                         <img :src="imageSrc" alt="custom photo" class="zoomImg" @click="showModal(true)" v-if="!uploadingImageVisible">
-                        <img :src="$me.uploadingImage" alt="custom photo" class="zoomImg" v-if="uploadingImageVisible" >
+                        <img :src="$me.uploadingImage" alt="custom photo" class="zoomImg" style="cursor: auto" v-if="uploadingImageVisible" >
                         <div class="modal-img" :style="modalView" @click="showModal(false)">
                             <span class="close-zoomming-img">×</span>
                             <img class="modal-img-content" :src="imageSrcFullSize" alt="">
