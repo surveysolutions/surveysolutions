@@ -13,10 +13,8 @@
                     </div>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
-                <form method="post" enctype="multipart/form-data" class="action-btn-holder photo-question">
-                    <input name="file" ref="uploader" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire">Tap
-                    to take a photo</button>
-                </form>
+                <input name="file" ref="uploader" v-show="false" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!$me.isAnswered" @click="$refs.uploader.click()">Tap to take a photo</button>
             </div>
         </div>
     </wb-question>
