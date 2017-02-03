@@ -4,9 +4,9 @@
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation v-if="!noValidation"/>
+            <wb-validation v-if="!noValidation" />
         </div>
-        <wb-progress :visible="isFetchInProgress" />
+        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
 <script lang="ts">
@@ -18,6 +18,18 @@
         computed: {
             id() {
                 return this.question.id
+            },
+            valuenow() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.uploaded
+                }
+                return 100
+            },
+            valuemax() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.total
+                }
+                return 100
             },
             hash() {
                 return getLocationHash(this.question.id)
@@ -39,4 +51,5 @@
             }
         }
     }
+
 </script>
