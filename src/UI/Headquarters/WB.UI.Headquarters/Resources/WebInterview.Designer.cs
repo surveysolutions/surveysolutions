@@ -187,6 +187,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        public static string Resume {
+            get {
+                return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
+        /// </summary>
+        public static string Resume_InvitationSmallText {
+            get {
+                return ResourceManager.GetString("Resume_InvitationSmallText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue interview in the following survey: {0}.
+        /// </summary>
+        public static string Resume_InvitationText {
+            get {
+                return ResourceManager.GetString("Resume_InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello and Welcome to the Survey Solutions Web Survey.
+        /// </summary>
+        public static string Resume_WelcomeText {
+            get {
+                return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start interview.
         /// </summary>
         public static string Start {
