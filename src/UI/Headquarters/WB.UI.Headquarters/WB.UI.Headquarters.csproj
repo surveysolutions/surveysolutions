@@ -1060,6 +1060,7 @@
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
+    <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
@@ -1708,7 +1709,9 @@
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\IInterviewImportService.cs" />
+    <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\InterviewImportError.cs" />
     <Compile Include="Services\InterviewImportFileDescription.cs" />

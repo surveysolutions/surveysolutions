@@ -1,7 +1,7 @@
 // main entry point to signalr api hub
 
 import * as jQuery from "jquery"
-import { imageUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
+import { imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
@@ -50,7 +50,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             fd.append("file", file)
 
             return $.ajax({
-                url: imageUri,
+                url: imageUploadUri,
                 data: fd,
                 processData: false,
                 contentType: false,
@@ -92,11 +92,29 @@ interface IServerHubCallback<T> {
     (n: IWebInterviewApi): T
 }
 
-// tslint:disable-next-line:max-line-length
-// TODO: Handle connection lifetime - https://www.asp.net/signalr/overview/guide-to-the-api/hubs-api-guide-javascript-client#connectionlifetime
-export async function apiCaller<T>(action: IServerHubCallback<T>, reportProgress: string = "") {
-    // action return jQuery promise
-    // wrap will wrap jq promise into awaitable promise
+export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallback<T>) {
+    if (id) {
+        store.dispatch("fetch", { id })
+    }
+    const hub = await getInterviewHub()
+
+    store.dispatch("fetchProgress", 1)
+
+    try {
+        return await wrap(action(hub))
+    } catch (err) {
+        if (id) {
+            store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
+            store.dispatch("fetch", { id, done: true })
+        } else {
+            store.dispatch("UNHANDLED_ERROR", err)
+        }
+    } finally {
+        store.dispatch("fetchProgress", -1)
+    }
+}
+
+export async function apiCaller<T>(action: IServerHubCallback<T>) {
     const hub = await getInterviewHub()
 
     store.dispatch("fetchProgress", 1)

@@ -87,6 +87,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
 
             this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
+            this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
         }
 
         protected virtual void RegisterEventHandlers()
