@@ -5,6 +5,7 @@ import { virtualPath } from "./../config"
 Vue.use(VueRouter)
 
 import { apiCaller, getInstance as hubProxy, queryString } from "../api"
+import Complete from "../components/Complete"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import store from "../store"
@@ -21,7 +22,8 @@ const router = new VueRouter({
                 default: Section,
                 sideBar: SideBar
             }
-        }
+        },
+        { name: "complete", path: "/:interviewId/complete", component: Complete },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {

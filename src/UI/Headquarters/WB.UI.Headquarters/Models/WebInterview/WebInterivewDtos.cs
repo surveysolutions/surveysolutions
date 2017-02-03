@@ -226,4 +226,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class StubEntity : GenericQuestion
     {
     }
+
+    public class CompleteInfo
+    {
+        public int AnsweredCount { get; set; }
+
+        public int UnansweredCount { get; set; }
+
+        public int ErrorsCount { get; set; }
+    }
 }
