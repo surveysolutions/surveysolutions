@@ -1,0 +1,58 @@
+﻿@using WB.UI.Shared.Web.Extensions
+@using Recaptcha.Web.Mvc;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
+
+    <!-- cssLibs:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
+    <!-- endinject -->
+    <!-- cssApp:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- endinject -->
+
+    <title>@WebInterview.StartPageTitle</title>
+</head>
+<body>
+    <main>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
+    <script type="text/javascript">
+        $("<img/>")
+            .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+            .attr("src", $("img#placeholder").attr("src"));
+
+        $.fn.preventDoubleSubmission = function () {
+            $(this).on('submit', function (e) {
+                var $form = $(this);
+
+                if ($form.data('submitted') === true) {
+                    e.preventDefault();
+                } else {
+                    $form.data('submitted', true);
+                }
+            });
+
+            // Keep chainability
+            return this;
+        };
+        $(function () {
+            $('form').preventDoubleSubmission();
+        });
+    </script>
+</body>
+</html>
