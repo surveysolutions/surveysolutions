@@ -494,6 +494,23 @@ namespace WB.UI.Headquarters.API.WebInterview
             return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title)).ToArray();
         }
 
+        public CompleteInfo GetCompleteInfo()
+        {
+            var interview = this.GetCallerInterview();
+
+            var questionsCount = interview.CountActiveQuestionsInInterview();
+            var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
+            var invalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+
+            var completeInfo = new CompleteInfo
+            {
+                AnsweredCount = answeredQuestionsCount,
+                ErrorsCount = invalidAnswersCount,
+                UnansweredCount = questionsCount - answeredQuestionsCount
+            };
+            return completeInfo;
+        }
+
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();

@@ -129,6 +129,11 @@ export default {
         commit("SET_BREADCRUMPS", crumps)
     }, 200),
 
+    fetchCompleteInfo: debounce(async ({ commit }) => {
+        const completeInfo = await apiCaller(api => api.getCompleteInfo())
+        commit("SET_COMPLETE_INFO", completeInfo)
+    }, 200),
+
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
     },
