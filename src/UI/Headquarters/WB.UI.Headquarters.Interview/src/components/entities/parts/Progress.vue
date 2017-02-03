@@ -13,7 +13,7 @@
             valuenow: { type: Number, default: 100 },
             valuemax: { type: Number, default: 100 },
             visible: { type: Boolean, default: false },
-            delay: { type: Number, default: 100 } // 100 ms default delay
+            delay: { type: Number, default: 150 } // 100 ms default delay
         },
         watch: {
             visible(to: Boolean, from: Boolean) {
@@ -37,7 +37,7 @@
         },
         computed: {
             progress() {
-                return Math.round((this.valuemax / this.valuenow) * 100)
+                return Math.round((this.valuenow / this.valuemax) * 100)
             },
             style() {
                 return {
