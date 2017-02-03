@@ -1,0 +1,53 @@
+.start-web-interview{
+	.two-columns-form{
+		font-size: 16px;
+		line-height: 18px;
+		p{
+			margin-bottom: 20px;
+		}
+		.additional-info-block{
+			font-size: 15px;
+			line-height: 17px;
+			max-width: 350px;
+			margin-bottom: 40px;
+		}
+		.form-actions{
+			margin-top: 20px;
+		}
+		 .left-column{
+		 	text-align: right;
+		 	.default-logo{
+		 		display: inline-block;
+		 		height: 180px;
+		 		width: 100%;
+		 		background-size: auto 180px !important;
+		 		background-position: 100% 0;
+		 		margin-bottom: 20px;
+		 	}
+		 	.additional-info-block{
+		 		color: $gray-text;
+		 		max-width: 100%;
+		 		a{
+		 			color: inherit;
+		 		}
+		 	}
+		 }
+	}
+}
+@media (max-width: $screen-sm-min){
+	.start-web-interview{
+		.left-column{
+	    	display: none;
+	    }
+	    .right-column .centered-box-table{
+	    	text-align: left;
+	    	h2, p, .form-actions{
+	    		max-width: 350px;
+	    	}
+	    }
+	    .additional-info-block, h2, p, .form-actions{
+	    	margin-left: auto;
+	    	margin-right: auto;
+	    }
+	}
+}
