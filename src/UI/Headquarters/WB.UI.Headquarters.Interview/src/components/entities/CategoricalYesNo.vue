@@ -29,6 +29,8 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
+    import { multiSelectDirectives } from "components/directives"
+
     import * as $ from "jquery"
     import modal from "../Modal"
 
@@ -112,16 +114,6 @@
                 })
             }
         },
-        directives: {
-            disabledWhenUnchecked: {
-                bind: (el, binding) => {
-                    $(el).prop("disabled", binding.value && !el.checked)
-                },
-                update: (el, binding) => {
-                    $(el).prop("disabled", binding.value && !el.checked)
-                }
-            }
-        },
-        mixins: [entityDetails]
+        mixins: [entityDetails, multiSelectDirectives]
     }
 </script>
