@@ -77,6 +77,17 @@ declare interface IEnabling {
     redirectTo: string
 }
 
+declare interface IYesNoOption {
+    value: number
+    yes: boolean
+}
+
+declare interface ICompleteInfo {
+    answeredCount: number
+    unansweredCount: number
+    errorsCount: number
+}
+
 declare interface IWebInterviewApi {
     getQuestionnaireDetails(): IQuestionnaireInfo
 
@@ -87,12 +98,13 @@ declare interface IWebInterviewApi {
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
     getBreadcrumbs(): IBreadcrumpInfo
     getSidebarState(): ISidebarPanel[]
+    getCompleteInfo(): ICompleteInfo
     getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
     getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
 
     answerSingleOptionQuestion(answer: number, questionId: string): void
     answerMultiOptionQuestion(answer: number, questionId: string): void
-    answerYesNoQuestion(questionId: string, answer: Object[]): void
+    answerYesNoQuestion(questionId: string, answer: IYesNoOption[]): void
     answerTextQuestion(questionIdentity: string, text: string): void
     answerIntegerQuestion(questionIdentity: string, answer: number): void
     answerDoubleQuestion(questionIdentity: string, answer: number): void
