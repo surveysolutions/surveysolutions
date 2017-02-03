@@ -11,17 +11,12 @@
                         <span class="icon-bar bottom-menu"></span>
                     </button>
                 <a class="navbar-brand  rotate-brand" href="#">
+                    <div class="brand-name">Web interview #23-44-32-12</div>
                 </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#" title="Web interview #23-44-32-12">Web interview #23-44-32-12</a></li>
-                    <li><a href="#" title="Restart">Restart</a></li>
-                    <li>
-                        <router-link :to="{name: 'prefilled'}">List of pre-filled questions</router-link>
-                    </li>
-                </ul>
+                <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret"></span></a>
@@ -35,7 +30,6 @@
                         </ul>
                     </li>
                     <li><a href="#" title="Help">Help</a></li>
-
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -48,6 +42,7 @@
         name: 'navbar',
         beforeMount() {
             this.$store.dispatch("getLanguageInfo")
+            this.$store.dispatch("loadQuestionnaire")
         },
         computed: {
             canChangeLanguage() {
@@ -55,6 +50,9 @@
             },
             currentLanguage(){
                 return this.$store.state.currentLanguage || this.$store.state.originalLanguageName
+            },
+            questionnaireTitle(){
+                return this.$store.state.questionnaireTitle || ""
             }
         },
         methods: {

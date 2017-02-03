@@ -78,7 +78,7 @@ declare interface IEnabling {
 }
 
 declare interface IWebInterviewApi {
-    questionnaireDetails(questionnaireId: string): IQuestionnaireInfo
+    getQuestionnaireDetails(): IQuestionnaireInfo
 
     getPrefilledEntities(): IPrefilledPageData
     isEnabled(id: string): boolean
