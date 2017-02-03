@@ -22,7 +22,8 @@
     import * as $ from "jquery"
 
     import { apiCaller } from "src/api"
-    import * as _ from "lodash"
+    import * as escape from "lodash/escape"
+    import * as escapeRegExp from "lodash/escapeRegExp"
 
     export default {
         name: 'wb-typeahead',
@@ -59,9 +60,9 @@
                 this.$emit('input', value)
             },
             highlight(title: string, searchTerm: string) {
-                const encodedTitle = _.escape(title)
+                const encodedTitle = escape(title)
                 if (searchTerm) {
-                    const safeSearchTerm = _.escape(_.escapeRegExp(searchTerm))
+                    const safeSearchTerm = escape(escapeRegExp(searchTerm))
 
                     var iQuery = new RegExp(safeSearchTerm, "ig")
                     return encodedTitle.replace(iQuery, (matchedTxt, a, b) => {
