@@ -36,4 +36,7 @@ export default {
     SET_QUESTIONNAIRE_INFO(state, questionnaireInfo) {
         Vue.set(state, "questionnaireTitle", questionnaireInfo.title)
     }
+    SET_COMPLETE_INFO(state, completeInfo) {
+        Vue.set(state, "completeInfo", completeInfo)
+    },
 }

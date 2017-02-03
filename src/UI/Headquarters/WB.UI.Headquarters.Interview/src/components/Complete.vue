@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section complete-section">
+    <div class="unit-section complete-section" v-if="hasCompleteInfo">
         <div class="unit-title">
             <h3>Finish questionnaire</h3>
         </div>
@@ -18,18 +18,18 @@
                 </ul>
                 <div class="question-status">
                     <ul class="list-inline clearfix">
-                        <li class="answered has-value">2632
+                        <li class="answered" v-bind:class="{'has-value' : hasAnsweredQuestions }">{{ answeredQuestionsCountString }}
                             <span>Answered</span>
                         </li>
-                        <li class="unanswered">No
+                        <li class="unanswered" v-bind:class="{'has-value' : hasUnansweredQuestions }">{{ unansweredQuestionsCountString }}
                             <span>Unanswered</span>
                         </li>
-                        <li class="errors has-value">2
+                        <li class="errors" v-bind:class="{'has-value' : hasInvalidQuestions }">{{ invalidQuestionsCountString }}
                             <span>Error(s)</span>
                         </li>
                     </ul>
-                    <p class="gray-uppercase">Time spent: 04 hours 22 minutes</p>
-                    <p class="gray-uppercase">Data size: 4312KB</p>
+                    <!--p class="gray-uppercase">Time spent: 04 hours 22 minutes</p>
+                    <p class="gray-uppercase">Data size: 4312KB</p-->
                 </div>
             </div>
         </div>
@@ -89,29 +89,39 @@
     import * as debounce from "lodash/debounce"
 
     export default {
-        name: 'section-view',
+        name: 'complete-view',
         beforeMount() {
-            this.loadSection()
-        },
-        watch: {
-            $route(to, from) {
-                this.loadSection()
-            }
-        },
-        data: () => {
-            return {
-                // scrolls current section view when all fetch actions are done
-                scroll: debounce(function () {
-                    this.$store.dispatch("scroll")
-                }, 300)
-            }
+            this.loadComplete()
         },
         computed: {
-
+            completeInfo() {
+                return this.$store.state.completeInfo;
+            },
+            hasCompleteInfo() {
+                return this.$store.state.completeInfo != undefined
+            },
+            hasAnsweredQuestions() {
+                return this.$store.state.completeInfo.answeredCount > 0
+            },
+            answeredQuestionsCountString() {
+                return this.hasAnsweredQuestions ? this.$store.state.completeInfo.answeredCount : "No";
+            },
+            hasUnansweredQuestions() {
+                return this.$store.state.completeInfo.unansweredCount > 0
+            },
+            unansweredQuestionsCountString() {
+                return this.hasUnansweredQuestions ? this.$store.state.completeInfo.unansweredCount : "No";
+            },
+            hasInvalidQuestions() {
+                return this.$store.state.completeInfo.errorsCount > 0
+            },
+            invalidQuestionsCountString() {
+                return this.hasInvalidQuestions ? this.$store.state.completeInfo.errorsCount : "No";
+            }
         },
         methods: {
-            loadSection() {
-                //this.$store.dispatch("fetchSectionEntities")
+            loadComplete() {
+                this.$store.dispatch("fetchCompleteInfo")
             }
         }
     }
