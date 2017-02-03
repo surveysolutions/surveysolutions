@@ -75,7 +75,7 @@ a.disabled{
 	@include size(42px, 32px);
 	cursor: pointer;
 	z-index: 3;
-	top: calc(50% - 16px);
+	top: calc(50% - 18px);
 	display: block;
 	@include transition(all, 0.2s);
 	&:before, &:after{
