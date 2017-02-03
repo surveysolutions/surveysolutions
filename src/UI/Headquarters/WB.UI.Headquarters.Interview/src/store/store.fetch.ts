@@ -9,10 +9,11 @@ const fetch = {
         scroll: null
     },
     actions: {
-        fetch({ commit, rootState }, {id, done}) {
+        fetch({ commit, rootState }, {id, ids, done}) {
+
             commit("SET_FETCH", {
                 entityDetails: rootState.entityDetails,
-                id,
+                id, ids,
                 done: done || false
             })
         },
@@ -43,9 +44,17 @@ const fetch = {
         }
     },
     mutations: {
-        SET_FETCH(state, {entityDetails, id, done}) {
-            if (entityDetails[id]) {
+        SET_FETCH(state, {entityDetails, id, ids, done}) {
+            if (id && entityDetails[id]) {
                 Vue.set(entityDetails[id], "fetching", !done)
+            }
+
+            if (ids) {
+                ids.forEach(element => {
+                    if (entityDetails[element]) {
+                        Vue.set(entityDetails[element], "fetching", !done)
+                    }
+                })
             }
         },
         SET_FETCH_IN_PROGRESS(state, amount) {

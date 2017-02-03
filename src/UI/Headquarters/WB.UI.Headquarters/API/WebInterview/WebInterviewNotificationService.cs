@@ -45,8 +45,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
         }
 
-        public void ReloadInterview(Guid interviewId)
-            => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
+        public void ReloadInterview(Guid interviewId) => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
+
+        public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+            var questionIdentity = Identity.Parse(questionId);
+
+            var clientGroupIdentity = GetClientGroupIdentity(questionIdentity, interview);
+
+            this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
+        }
 
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
         {

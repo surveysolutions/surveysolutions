@@ -1,14 +1,14 @@
 import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
 import * as Vue from "vue"
-import { apiCaller, apiStop } from "../api"
+import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import router from "./../router"
 import { batchedAction } from "./helpers"
 
 export default {
     async loadQuestionnaire({ commit }, questionnaireId) {
-        const questionnaireInfo = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
-        commit("SET_QUESTIONNAIRE_INFO", questionnaireInfo)
+        const info = await apiCaller<IQuestionnaireInfo>(api => api.questionnaireDetails(questionnaireId))
+        commit("SET_QUESTIONNAIRE_INFO", info)
     },
 
     async getLanguageInfo({ commit }) {
@@ -22,70 +22,55 @@ export default {
         commit("SET_ENTITIES_DETAILS", details)
     }, "fetch", /* limit */ 100),
 
-    answerSingleOptionQuestion({ dispatch }, answerInfo) {
-        dispatch("fetch", { id: answerInfo.questionId })
-        apiCaller(api => api.answerSingleOptionQuestion(answerInfo.answer, answerInfo.questionId))
+    answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
+        apiCallerAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
     answerTextQuestion({ dispatch }, { identity, text }) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerTextQuestion(identity, text))
+        apiCallerAndFetch(identity, api => api.answerTextQuestion(identity, text))
     },
     answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
-        dispatch("fetch", { id: questionId })
-        apiCaller(api => api.answerMultiOptionQuestion(answer, questionId))
+        apiCallerAndFetch(questionId, api => api.answerMultiOptionQuestion(answer, questionId))
     },
     answerYesNoQuestion({ dispatch }, { questionId, answer }) {
-        dispatch("fetch", { id: questionId })
-        apiCaller(api => api.answerYesNoQuestion(questionId, answer))
+        apiCallerAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
     },
     answerIntegerQuestion({ dispatch }, { identity, answer }) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerIntegerQuestion(identity, answer))
+        apiCallerAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
     },
     answerDoubleQuestion({ dispatch }, { identity, answer }) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerDoubleQuestion(identity, answer))
+        apiCallerAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
     },
     answerGpsQuestion({ dispatch }, { identity, answer }) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerGpsQuestion(identity, answer))
+        apiCallerAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
     },
     answerDateQuestion({ dispatch }, { identity, date }) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerDateQuestion(identity, date))
+        apiCallerAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
     answerTextListQuestion({dispatch}, {identity, rows}) {
-        dispatch("fetch", { id: identity })
-        apiCaller(api => api.answerTextListQuestion(identity, rows))
+        apiCallerAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
     },
     answerLinkedSingleOptionQuestion({dispatch}, {questionIdentity, answer}) {
-        dispatch("fetch", { id: questionIdentity })
-        apiCaller(api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
+        apiCallerAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
     answerLinkedMultiOptionQuestion({dispatch}, {questionIdentity, answer}) {
-        dispatch("fetch", { id: questionIdentity })
-        apiCaller(api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
+        apiCallerAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
     },
     answerLinkedToListMultiQuestion({dispatch}, {questionIdentity, answer}) {
-        dispatch("fetch", { id: questionIdentity })
-        apiCaller(api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
+        apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
     },
     answerLinkedToListSingleQuestion({dispatch}, {questionIdentity, answer}) {
-        dispatch("fetch", { id: questionIdentity })
-        apiCaller(api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
+        apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
     },
     answerMultimediaQuestion({dispatch}, {id, file}) {
-        dispatch("fetch", { id })
-        apiCaller(api => api.answerPictureQuestion(id, file))
+        apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
 
     removeAnswer({ dispatch }, questionId: string) {
-        dispatch("fetch", { id: questionId })
-        apiCaller(api => api.removeAnswer(questionId))
+        apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
     },
 
-    setAnswerAsNotSaved({ commit }, entity) {
-        commit("SET_ANSWER_NOT_SAVED", entity)
+    setAnswerAsNotSaved({ commit }, { id, message }) {
+        commit("SET_ANSWER_NOT_SAVED", { id, message })
     },
 
     fetchSectionEntities: debounce(async ({ commit }) => {
