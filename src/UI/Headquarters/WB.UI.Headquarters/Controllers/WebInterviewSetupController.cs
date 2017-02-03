@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
-    [WebInterviewEnabled]
+    [WebInterviewFeatureEnabled]
     public class WebInterviewSetupController : BaseController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

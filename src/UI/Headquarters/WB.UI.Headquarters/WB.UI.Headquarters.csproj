@@ -1008,6 +1008,8 @@
     <Content Include="Views\WebInterviewSetup\Start.cshtml" />
     <Content Include="Views\WebInterviewSetup\Started.cshtml" />
     <Content Include="Views\WebInterview\Start.cshtml" />
+    <Content Include="Views\WebInterview\Resume.cshtml" />
+    <Content Include="Views\WebInterview\_WebInterviewLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1475,7 +1477,8 @@
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Filters\WebInterviewEnabledAttribute.cs" />
+    <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
+    <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
     <Compile Include="FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />

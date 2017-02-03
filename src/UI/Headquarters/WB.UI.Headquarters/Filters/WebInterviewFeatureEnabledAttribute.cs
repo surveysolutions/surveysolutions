@@ -3,7 +3,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Filters
 {
-    public class WebInterviewEnabledAttribute : ActionFilterAttribute
+    public class WebInterviewFeatureEnabledAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
