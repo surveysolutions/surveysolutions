@@ -3,19 +3,22 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group" v-for="option in $me.options">
-                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :value="option.value" v-model="answer"
                         v-disabledWhenUnchecked="allAnswersGiven">
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
                     <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
+                <div v-if="noOptions">Options will be available after answering referenced question</div>
             </div>
         </div>
     </wb-question>
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
+    import { multiSelectDirectives } from "components/directives"
+
     import * as $ from "jquery"
 
     import * as map from "lodash/map"
@@ -43,8 +46,10 @@
             },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+            },
+            noOptions() {
+                return this.$me.options == null || this.$me.options.length == 0
             }
-
         },
         methods: {
             getAnswerOrder(answerValue){
@@ -52,16 +57,6 @@
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             }
         },
-        directives: {
-            disabledWhenUnchecked: {
-                bind: (el, binding) => {
-                    $(el).prop("disabled", binding.value && !el.checked)
-                },
-                update: (el, binding) => {
-                    $(el).prop("disabled", binding.value && !el.checked)
-                }
-            }
-        },
-        mixins: [entityDetails]
+        mixins: [entityDetails, multiSelectDirectives]
     }
 </script>
