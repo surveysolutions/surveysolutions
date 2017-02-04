@@ -56,7 +56,7 @@ try {
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
 	
-	$webpackStats = "$ProjectHeadquarters\InterviewApp\stats.html"
+	$webpackStats = "src\UI\Headquarters\WB.UI.Headquarters\InterviewApp\stats.html"
 	MoveArtifacts $webpackStats -folder "BuildStats"
 	Remove-Item $webpackStats
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
