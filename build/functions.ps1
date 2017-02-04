@@ -40,6 +40,7 @@ function CleanBinAndObjFolders() {
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
 
+
 function BuildWebInterviewApp($targetLocation){
     $action = 'Building WebInterview app'
     Write-Host "##teamcity[blockOpened name='$action']"
@@ -306,7 +307,11 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
 	$zipfile = $filename + ".zip"
 	$cmdfile = $filename + ".deploy.cmd"
 
-	$artifactsFolder = "Artifacts"
+	MoveArtifacts $zipfile,$cmdfile $folder
+}
+
+function MoveArtifacts([string[]] $items, $folder) {
+    $artifactsFolder = "Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		If (Test-Path "$artifactsFolder\$folder"){
 			Remove-Item "$artifactsFolder\$folder" -Force -Recurse
@@ -317,8 +322,9 @@ function AddArtifacts($Project, $BuildConfiguration, $folder) {
 	}
 	New-Item -ItemType directory -Path "$artifactsFolder\$folder"
 
-	Copy-Item "$zipfile" "$artifactsFolder\$folder"
-	Copy-Item "$cmdfile" "$artifactsFolder\$folder"
+    foreach($file in $items) {
+	    Copy-Item "$file" "$artifactsFolder\$folder"
+	}
 }
 
 function BuildWebPackage($Project, $BuildConfiguration) {

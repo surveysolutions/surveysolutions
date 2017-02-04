@@ -55,8 +55,13 @@ try {
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
+	
+	$webpackStats = "$ProjectHeadquarters\InterviewApp\stats.html"
+	MoveArtifacts $webpackStats -folder "BuildStats"
+	Remove-Item $webpackStats
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
 	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+	
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }
