@@ -1,67 +1,65 @@
 var path = require('path')
-var config = require('./config')
 var utils = require('./utils')
+var config = require('./config').current()
+var vueLoaderConfig = require('./vue-loader.conf')
+
 var projectRoot = path.resolve(__dirname, '../')
 
-var env = process.env.NODE_ENV
-// check env & config/index.js to decide whether to enable CSS source maps for the
-// various preprocessor loaders added to vue-loader at the end of this file
-var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
-var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
-var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
-
-var currentConfig = config.current();
+function resolve(dir) {
+    return path.join(__dirname, '..', dir)
+}
 
 module.exports = {
     entry: {
         app: './src/main.ts'
     },
     output: {
-        path: config.build.assetsRoot,
-        publicPath: currentConfig.assetsPublicPath, // process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
-        filename: '[name].js'
+        path: config.assetsRoot,
+        filename: '[name].js',
+        publicPath: config.assetsPublicPath
     },
     resolve: {
-        extensions: ['', '.js', '.ts', '.vue', '.json'],
-        fallback: [path.join(__dirname, '../node_modules')],
+        extensions: ['.js', '.ts', '.vue', '.json'],
+        modules: [
+            resolve('src'),
+            resolve('node_modules')
+        ],
         alias: {
             'vue$': 'vue/dist/vue.common.js',
-            'src': path.resolve(__dirname, '../src'),
-            'assets': path.resolve(__dirname, '../src/assets'),
-            'components': path.resolve(__dirname, '../src/components')
+            'src': resolve('src'),
+            'assets': resolve('src/assets'),
+            'components': resolve('src/components')
         }
     },
-    resolveLoader: {
-        fallback: [path.join(__dirname, '../node_modules')]
-    },
     module: {
-        preLoaders: [
+        rules: [
             {
                 test: /\.ts$/,
-                loader: 'tslint-loader'
-            }
-        ],
-        loaders: [
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
+                loader: 'tslint-loader',
+                enforce: "pre",
+                options: {
+                    appendTsSuffixTo: [/\.vue$/]
+                }
             },
             {
                 test: /\.ts$/,
                 loader: 'ts-loader',
                 include: projectRoot,
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/]
+                }
             },
             {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: vueLoaderConfig
+            },          
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
                 query: {
                     limit: 10000,
-                    publicPath: currentConfig.assetsRelativePath,
                     name: utils.assetsPath('img/[name].[ext]')
                 }
             },
@@ -70,29 +68,9 @@ module.exports = {
                 loader: 'url-loader',
                 query: {
                     limit: 10000,
-                    publicPath: currentConfig.assetsRelativePath,
                     name: utils.assetsPath('fonts/[name].[ext]')
                 }
-            },
-            {
-                test: /\.s[a|c]ss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
             }
         ]
-    },
-    sassLoader: {
-        sourceMap: true
-    },
-    vue: {
-        esModule: true,
-        loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-        postcss: [
-            require('autoprefixer')({
-                browsers: ['last 2 versions']
-            })
-        ]
-    },
-    ts: {
-        appendTsSuffixTo: [/\.vue$/]
     }
-}
+};
