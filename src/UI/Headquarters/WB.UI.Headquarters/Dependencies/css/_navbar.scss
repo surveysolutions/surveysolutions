@@ -158,9 +158,8 @@
 	font-family: "RobotoBold";
 	font-size: 18px;
 	line-height: 50px;
-	&:hover, &:focus, &:active{
+	&:hover, &:focus{
 		color: white;
-		text-decoration: none;
 	}
 }
 @media (max-width: $screen-md-min) {	
