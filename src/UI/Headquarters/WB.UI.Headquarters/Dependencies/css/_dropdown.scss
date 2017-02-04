@@ -52,7 +52,7 @@
 		}
 	}
 	.dropdown-menu{
-		z-index: 2;
+		z-index: 1;
 		left: auto;
 		right: 35px;
 		top: 10px;
@@ -67,7 +67,4 @@
 	  	@include scale(1, 1);
 	  	@extend %visibility-visible;
 	}
-}
-.dropdown-backdrop{
-	z-index: 1;
 }
