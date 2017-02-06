@@ -54,11 +54,12 @@ module.exports = {
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: vueLoaderConfig
-            },          
+            },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 loader: 'url-loader',
-                query: {
+                options:{
+                    publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('img/[name].[ext]')
                 }
@@ -66,7 +67,8 @@ module.exports = {
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: 'url-loader',
-                query: {
+                options:{
+                    publicPath: config.assetsRelativePath,
                     limit: 10000,
                     name: utils.assetsPath('fonts/[name].[ext]')
                 }

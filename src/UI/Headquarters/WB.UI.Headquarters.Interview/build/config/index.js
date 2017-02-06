@@ -29,7 +29,8 @@ const config = {
         assetsRelativePath: "/Headquarters/Dependencies/",
         proxyTable: {},
         cssSourceMap: false,
-        template: '_IndexTemplate.cshtml'
+        template: '_IndexTemplate.cshtml',
+        verbose: true
     },
 
     designer: {
