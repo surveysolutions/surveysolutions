@@ -1074,6 +1074,7 @@
     <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
     <Compile Include="API\WebInterview\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\SignalrErrorHandler.cs" />
+    <Compile Include="API\WebInterview\WebInterviewNinjectModule.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
