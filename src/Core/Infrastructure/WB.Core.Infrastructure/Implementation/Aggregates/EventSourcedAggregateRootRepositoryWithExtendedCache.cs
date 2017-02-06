@@ -53,6 +53,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             lock (lockObject)
             {
+                if (this.cache.FirstOrDefault() == aggregateRoot) return;
+
                 this.cache = ImmutableList.CreateRange(
                     Enumerable
                         .Concat(
