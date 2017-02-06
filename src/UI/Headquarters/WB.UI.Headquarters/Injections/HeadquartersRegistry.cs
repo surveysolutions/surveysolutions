@@ -27,7 +27,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -41,7 +40,6 @@ using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
@@ -83,7 +81,6 @@ namespace WB.UI.Headquarters.Injections
             
             this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
-            this.Kernel.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
             this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
 
             this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
