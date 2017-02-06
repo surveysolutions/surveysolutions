@@ -29,7 +29,6 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import { multiSelectDirectives } from "components/directives"
 
     import * as $ from "jquery"
     import modal from "../Modal"
@@ -115,6 +114,6 @@
                 })
             }
         },
-        mixins: [entityDetails, multiSelectDirectives]
+        mixins: [entityDetails]
     }
 </script>

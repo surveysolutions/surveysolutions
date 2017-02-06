@@ -17,7 +17,6 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import { multiSelectDirectives } from "components/directives"
 
     import * as $ from "jquery"
 
@@ -57,6 +56,6 @@
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             }
         },
-        mixins: [entityDetails, multiSelectDirectives]
+        mixins: [entityDetails]
     }
 </script>
