@@ -258,6 +258,19 @@ Exception details:<br />
             return Redirect(returnUrl);
         }
 
+        [WebInterviewAuthorize]
+        public ActionResult Complete(string id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            if (webInterviewConfig.UseCaptcha && TempData[CapchaCompletedKey] == null)
+            {
+                var returlUrl = Url.Action("Complete", routeValues: new { id });
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
+            }
+
+            return View("Index");
+        }
 
         [HttpPost]
         [ActionName("Resume")]
