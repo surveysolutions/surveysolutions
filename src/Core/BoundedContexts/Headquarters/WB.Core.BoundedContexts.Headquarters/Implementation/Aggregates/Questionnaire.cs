@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private static readonly Regex InvalidTitleRegex = new Regex(@"^[\w \-\(\)\\/]*$", RegexOptions.Compiled);
 
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
         public Questionnaire(
             IQuestionnaireStorage questionnaireStorage, 
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
             IFileSystemAccessor fileSystemAccessor, 
