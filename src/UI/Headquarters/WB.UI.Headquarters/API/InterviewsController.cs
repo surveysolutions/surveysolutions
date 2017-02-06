@@ -171,6 +171,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var executor = this.globalInfoProvider.GetCurrentUser();
             return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, executor.Id, request.Comment));
         }
+
+        [HttpPost]
+        [Route("delete")]
+        public HttpResponseMessage Delete(StatusChangeApiModel request)
+        {
+            this.ThrowIfInterviewDoesnotExist(request.Id);
+
+            var executor = this.globalInfoProvider.GetCurrentUser();
+            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, executor.Id));
+        }
+
+
+        [HttpPost]
+        [Route("assignsupervisor")]
+        public HttpResponseMessage PostAssignSupervisor(AssignChangeApiModel request)
+        {
+            this.ThrowIfInterviewDoesnotExist(request.Id);
+
+            var userInfo = this.userViewFactory.Load(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value) : new UserViewInputModel(request.ResponsibleName, null));
+
+            if (userInfo == null)
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
+
+            if (!userInfo.Roles.Contains(UserRoles.Supervisor))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
+
+            var executor = this.globalInfoProvider.GetCurrentUser();
+            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, executor.Id, userInfo.PublicKey));
+        }
+
+        //AssignSupervisorCommand
         #endregion
 
         private HttpResponseMessage TryExecuteCommand(ICommand command)
