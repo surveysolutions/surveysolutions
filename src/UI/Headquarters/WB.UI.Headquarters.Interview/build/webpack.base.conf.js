@@ -19,7 +19,7 @@ module.exports = {
         publicPath: config.assetsPublicPath
     },
     resolve: {
-        extensions: ['.js', '.ts', '.vue', '.json'],
+        extensions: ['.js', '.ts', '.tsx', '.vue', '.json'],
         modules: [
             resolve('src'),
             resolve('node_modules')
@@ -34,7 +34,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.(ts|tsx)$/,
                 loader: 'tslint-loader',
                 enforce: "pre",
                 options: {
@@ -42,7 +42,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.ts$/,
+                test: /\.(ts|tsx)$/,
                 loader: 'ts-loader',
                 include: projectRoot,
                 exclude: /node_modules/,
