@@ -16,7 +16,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                <p class="navbar-text">{{questionnaireTitle}}</p>
+                <p class="navbar-text"  v-bind:style="{ width: questionnaireTitleWidth + '%' }">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret"></span></a>
@@ -38,11 +38,24 @@
     </nav>
 </template>
 <script lang="ts">
+    import * as $ from "jquery"
+
     export default {
         name: 'navbar',
+        data: function() {
+            return {
+                questionnaireTitleWidth: 40,
+            }
+        },
         beforeMount() {
             this.$store.dispatch("getLanguageInfo")
             this.$store.dispatch("loadQuestionnaire")
+        },
+         mounted() {
+            this.$nextTick(function() {
+                window.addEventListener('resize', this.calcQuestionnaireTitleWidth);
+                this.calcQuestionnaireTitleWidth()
+            })
         },
         computed: {
             canChangeLanguage() {
@@ -56,6 +69,15 @@
             }
         },
         methods: {
+            calcQuestionnaireTitleWidth() {
+                var navbar = $(".navbar .container-fluid").width();
+                var brand = $(".navbar .navbar-brand").outerWidth();
+                var menu_width = 0;
+                $(".navbar .navbar-nav").each(function(e){
+                    menu_width+= $(this).outerWidth()
+                });
+                this.questionnaireTitleWidth = 100*(navbar - brand - menu_width - 15)/navbar;
+            },
             changeLanguage(language) {
                 this.$store.dispatch("changeLanguage", { language: language })
             }
