@@ -33,12 +33,11 @@
                 </div>
             </div>
         </div>
-        <div class="wrapper-info">
+        <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
             <h4 class="gray-uppercase">Questions with errors:</h4>
-            <ul class="list-unstyled marked-questions">
-                <li><a href="#">How much quantity in total did your hoesehold consume in the past 7 days?</a></li>
-                <li><a href="#">What is your relations status?</a></li>
+            <ul class="list-unstyled marked-questions" v-for="entitiy in completeInfo.entitiesWithError">
+                <li><a href="#">{{ entitiy.title }}}</a></li>
             </ul>
             </div>
         </div>
@@ -56,7 +55,7 @@
 
             </div>
         </div>
-        <div class="wrapper-info">
+        <!--div class="wrapper-info">
             <div class="container-info">
                 <h4 class="gray-uppercase">Supervisor's note:</h4>
                 <p><b>Lorem ipsum dolor sit amet, pro ne dicta saepe albucius, habemus fabellas luptatum eam in. Eam eu delectus accusata theophrastus, quaeque gubergren assentior id mel, sed ad feugiat repudiandae mediocritatem. Saepe quaerendum te sit, no appellantur suscipiantur sea, clita noluisse in est. Persius denique appellantur nam eu. Epicurei invenire sit no, his aeterno expetenda no, vix eu erant lucilius.</b></p>
@@ -66,27 +65,27 @@
                     <li><a href="#">What is your relations status?</a></li>
                 </ul>
             </div>
-        </div>
+        </div-->
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="#" class="btn btn-lg btn-success">Finish</a>
+                <a href="#" class="btn btn-lg btn-success" @click="completeInterview">Finish</a>
                 <p class="gray-uppercase">After you finish this questionnaire it will become read only and will be uploaded to hq during your next synchronization</p>
             </div>
         </div>
-        <div class="wrapper-info">
+        <!--div class="wrapper-info">
             <div class="container-info">
                 <p class="gray-uppercase">this questionnaire is complete, it is in read-only mode. you can access chapters from top-right menu</p>
                 <a href="#" class="btn btn-lg btn-success">view</a>
                 <p class="gray-uppercase">if you need to change some data you need to reinitialize it</p>
                 <a href="#" class="btn btn-lg btn-primary">reinitialize</a>
             </div>
-        </div>
+        </div-->
     </div>
 </template>
 
 <script lang="ts">
     import * as Vue from 'vue'
-    import * as debounce from "lodash/debounce"
+    import * as $ from "jquery"
 
     export default {
         name: 'complete-view',
@@ -124,7 +123,7 @@
                 this.$store.dispatch("fetchCompleteInfo")
             },
             completeInterview() {
-                const comment = "comment";
+                const comment = $('#comment-for-supervisor').val();
                 this.$store.dispatch('completeInterview', { comment: comment });
             }
         }

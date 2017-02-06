@@ -20,6 +20,10 @@ namespace WB.UI.Headquarters
                 defaults: new { controller = @"WebInterview", action = @"Cover" },
                 constraints: new { id = new GuidRouteConstraint() });
 
+            routes.MapRoute(@"WebInterview.Complete", @"WebInterview/{id}/Complete",
+                defaults: new { controller = @"WebInterview", action = @"Complete" },
+                constraints: new { id = new GuidRouteConstraint() });
+
             routes.MapRoute(@"Default", @"{controller}/{action}/{id}",
                 new { controller = @"Account", action = @"Index", id = UrlParameter.Optional });
         }
