@@ -132,9 +132,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(this.GetCallerInterview().Id, commandResponsibleId, identity, DateTime.UtcNow));
         }
 
-        public void CompleteInterview(string comment)
+        public void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
-            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.commandResponsibleId, comment, DateTime.UtcNow);
+            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.commandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
             this.commandService.Execute(command);
         }
     }
