@@ -122,6 +122,10 @@
         methods: {
             loadComplete() {
                 this.$store.dispatch("fetchCompleteInfo")
+            },
+            completeInterview() {
+                const comment = "comment";
+                this.$store.dispatch('completeInterview', { comment: comment });
             }
         }
     }

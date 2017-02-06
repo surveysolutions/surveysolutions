@@ -134,6 +134,10 @@ export default {
         commit("SET_COMPLETE_INFO", completeInfo)
     }, 200),
 
+    completeInterview({ commit }, comment) {
+        apiCaller(api => api.completeInterview(comment))
+    },
+
     cleanUpEntity({ commit }, id) {
         commit("CLEAR_ENTITY", id)
     },

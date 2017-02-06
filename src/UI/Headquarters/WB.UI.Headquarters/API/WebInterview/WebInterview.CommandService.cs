@@ -26,7 +26,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.Clients.Caller.markAnswerAsNotSaved(command.QuestionId.FormatGuid(), e.Message);
             }
         }
-        
+
+       
         public void ChangeLanguage(ChangeLanguageRequest request)
             => this.commandService.Execute(new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
                 this.commandResponsibleId));
@@ -129,6 +130,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             Identity identity = Identity.Parse(questionId);
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(this.GetCallerInterview().Id, commandResponsibleId, identity, DateTime.UtcNow));
+        }
+
+        public void CompleteInterview(string comment)
+        {
+            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.commandResponsibleId, comment, DateTime.UtcNow);
+            this.commandService.Execute(command);
         }
     }
 }

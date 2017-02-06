@@ -501,12 +501,27 @@ namespace WB.UI.Headquarters.API.WebInterview
             var questionsCount = interview.CountActiveQuestionsInInterview();
             var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
             var invalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+            Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
+            var invalidEntities = invalidEntityIds.Select(identity =>
+            {
+                var question = interview.GetQuestion(identity);
+                var titleText = question.Title.Text ?? "";
+                var parentId = question.IsPrefilled ? "prefilled" : question.Parent.Identity.ToString();
+                return new EntityWithError()
+                {
+                    Id = identity.ToString(),
+                    ParentId = parentId,
+                    Title = titleText
+                };
+            }).ToArray();
 
             var completeInfo = new CompleteInfo
             {
                 AnsweredCount = answeredQuestionsCount,
                 ErrorsCount = invalidAnswersCount,
-                UnansweredCount = questionsCount - answeredQuestionsCount
+                UnansweredCount = questionsCount - answeredQuestionsCount,
+
+                EntitiesWithError = invalidEntities
             };
             return completeInfo;
         }

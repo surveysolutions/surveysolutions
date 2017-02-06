@@ -234,5 +234,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public int UnansweredCount { get; set; }
 
         public int ErrorsCount { get; set; }
+
+        public EntityWithError[] EntitiesWithError { get;set; }
+    }
+
+    public class EntityWithError
+    {
+        public string Id { get; set; }
+        public string ParentId { get; set; }
+        public string Title { get; set; }
     }
 }
