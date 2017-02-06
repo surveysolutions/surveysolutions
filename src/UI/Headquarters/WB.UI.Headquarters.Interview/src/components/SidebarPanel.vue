@@ -45,7 +45,7 @@
                 return this.panel.collapsed
             },
             hasChild() {
-                return this.panel.hasChildrens
+                return this.panel.hasChildren
             },
             childPanels() {
                 return this.$store.state.sidebar.panels[this.panel.id] || []
@@ -77,7 +77,7 @@
                 this.$store.dispatch("fetchSidebar", this.panel.id)
             },
             update() {
-                if (this.panel.hasChildrens && !this.panel.collapsed) {
+                if (this.panel.hasChildren && !this.panel.collapsed) {
                     this.fetchChild()
                 }
             },
