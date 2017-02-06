@@ -2,12 +2,13 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [ControlPanelAccess]
     public class ControlPanelController : BaseController
     {
         readonly ISettingsProvider settingsProvider;
