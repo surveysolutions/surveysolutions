@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
@@ -172,7 +173,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+            var textListIdentity = new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, textListIdentity);
+            this.RefreshLinkedToListQuestions(evnt.EventSourceId, textListIdentity);
             this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
@@ -220,6 +223,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<LinkedToListOptionsChanged> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
+
+
+        private void RefreshLinkedToListQuestions(Guid interviewId, Identity listIdentity)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            Guid[] listQuestionIds = questionnaire.GetLinkedToSourceQuestions(listIdentity.Id).ToArray();
+            if (!listQuestionIds.Any())
+                return;
+            
+            foreach (var listQuestionId in listQuestionIds)
+            {
+                var questionsToRefresh = interview.FindQuestionsFromSameOrDeeperLevel(listQuestionId, listIdentity);
+                this.webInterviewNotificationService.RefreshEntities(interviewId, questionsToRefresh.ToArray());
+            }
+        }
 
         private void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {

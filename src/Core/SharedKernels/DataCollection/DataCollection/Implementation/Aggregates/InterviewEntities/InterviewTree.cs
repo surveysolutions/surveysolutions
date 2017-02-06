@@ -439,6 +439,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return null;
         }
 
+        public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
+        {
+            var rosterVectorLength = questionIdentity.RosterVector.Length;
+            return this.FindEntity(entityId)
+                .Select(x => x.Identity)
+                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(questionIdentity.RosterVector));
+        }
+
         public void ReplaceSubstitutions()
         {
             foreach (var interviewTreeNode in this.nodesCache.Values)
