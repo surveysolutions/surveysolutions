@@ -68,3 +68,6 @@
 	  	@extend %visibility-visible;
 	}
 }
+.dropdown-backdrop{
+	z-index: 1;
+}
