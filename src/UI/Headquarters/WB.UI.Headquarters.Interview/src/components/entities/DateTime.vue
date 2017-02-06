@@ -5,7 +5,7 @@
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <Flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
-                        <wb-remove-answer />
+                        <wb-remove-answer/>
                     </div>
                 </div>
                 <div v-else>
@@ -18,9 +18,9 @@
                             Record current time
                         </button>
                     </div>
-                <div>
-            </div>
-        </div>
+                    <div>
+                    </div>
+                </div>
     </wb-question>
 </template>
 <script lang="ts">
@@ -45,22 +45,24 @@
         computed: {
             answer() {
                 if (this.$me && this.$me.answer) {
-                    return moment(this.$me.answer).format(this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
+                    const result = moment(this.$me.answer).format(this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
+                    return result
                 }
                 return ""
             }
         },
         methods: {
-            answerDate(answer) {
-                if(!this.$me.isTimestamp){
+            answerDate(answer: string) {
+                if (!this.$me.isTimestamp) {
                     const oldAnswer = moment(this.$me.answer)
-                    const newAnswer = moment(answer)
+                    const typedAnswer = moment(answer)
+                    const newAnswer = moment.utc([typedAnswer.year(), typedAnswer.month(), typedAnswer.date()])
 
-                    if (!oldAnswer.isSame(newAnswer)) {
+                    if (!oldAnswer.isSame(answer)) {
                         this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: newAnswer })
                     }
                 }
-                else{
+                else {
                     this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: moment() })
                 }
             }
@@ -69,4 +71,5 @@
             "Flatpickr": VueFlatpickr
         }
     }
+
 </script>
