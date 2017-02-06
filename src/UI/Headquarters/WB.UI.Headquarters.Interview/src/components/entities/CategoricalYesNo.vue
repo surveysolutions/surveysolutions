@@ -33,6 +33,7 @@
 
     import * as $ from "jquery"
     import modal from "../Modal"
+    import * as findIndex from "lodash/findIndex"
 
     export default {
         name: 'CategoricalYesNo',
@@ -63,7 +64,7 @@
             },
             getAnswerOrder(optionValue){
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
-                const answerIndex = yesAnswers.findIndex(x => x.value == optionValue)
+                const answerIndex = findIndex(yesAnswers, function(x) { return x.value == optionValue })
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             },
             isYesChecked(optionValue) {
@@ -76,7 +77,7 @@
             },
             sendAnswer(optionValue, answerValue) {
                 const previousAnswer = this.$me.answer;
-                const isChangedAnswerOnOption = previousAnswer.findIndex(x => x.value == optionValue && x.yes == answerValue) < 0;
+                const isChangedAnswerOnOption = findIndex(previousAnswer, function(x) { return x.value == optionValue && x.yes == answerValue}) < 0;
                 if (!isChangedAnswerOnOption)
                     return;
 
