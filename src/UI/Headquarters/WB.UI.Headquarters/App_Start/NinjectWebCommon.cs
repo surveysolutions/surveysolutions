@@ -7,11 +7,8 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using System.Web.Routing;
 using AutoMapper;
 using Main.DenormalizerStorage;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Ninject;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -25,7 +22,6 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -69,7 +65,6 @@ using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
-using Microsoft.AspNet.SignalR.Hubs;
 using WB.Infrastructure.Native;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -218,7 +213,8 @@ namespace WB.UI.Headquarters
                     interviewDataExportSettings,
                     sampleImportSettings,
                     synchronizationSettings,
-                    interviewCountLimit));
+                    interviewCountLimit),
+                new WebInterviewNinjectModule());
 
             kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -227,8 +223,6 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
-            RegisterSignalR(kernel);
             CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
@@ -272,22 +266,6 @@ namespace WB.UI.Headquarters
             }));
 
             return kernel;
-        }
-
-        private static void RegisterSignalR(IKernel kernel)
-        {
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
-            var pipiline = GlobalHost.DependencyResolver.Resolve<IHubPipeline>();
-
-            pipiline.AddModule(new SignalrErrorHandler());
-            pipiline.AddModule(new PlainSignalRTransactionManager());
-            pipiline.AddModule(new WebInterviewAllowedModule());
-            pipiline.AddModule(new WebInterviewStateManager());
-             
-            kernel.Bind<IHubContext>()
-                .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
-                .InSingletonScope()
-                .Named("WebInterview");
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
