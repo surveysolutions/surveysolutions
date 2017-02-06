@@ -167,6 +167,7 @@
     <Compile Include="Filters\AbstractMaintenanceFilter.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
+    <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
     <Compile Include="Filters\PlainApiTransactionFilter.cs" />
     <Compile Include="Filters\PlainTransactionFilter.cs" />
     <Compile Include="Filters\PreventDoubleSubmitAttribute.cs" />
