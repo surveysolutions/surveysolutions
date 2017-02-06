@@ -82,10 +82,17 @@ declare interface IYesNoOption {
     yes: boolean
 }
 
+declare interface IEntityWithError {
+    id: string
+    parentId: string
+    title: string
+}
+
 declare interface ICompleteInfo {
     answeredCount: number
     unansweredCount: number
     errorsCount: number
+    entitiesWithError: IEntityWithError[]
 }
 
 declare interface IWebInterviewApi {
@@ -120,4 +127,5 @@ declare interface IWebInterviewApi {
     removeAnswer(questionId: string): void
     getLanguageInfo(): ILanguageInfo
     changeLanguage(language: string): void
+    completeInterview(comment: string): void
 }
