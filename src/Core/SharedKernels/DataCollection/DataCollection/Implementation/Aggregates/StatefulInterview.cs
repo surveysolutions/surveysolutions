@@ -316,6 +316,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
+        public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
+            => this.Tree.FindQuestionsFromSameOrDeeperLevel(entityId, questionIdentity);
+
         public bool IsQuestionPrefilled(Identity entityIdentity)
         {
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
