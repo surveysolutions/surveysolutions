@@ -15,12 +15,15 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IHubContext webInterviewHubContext;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage,
             [Ninject.Named("WebInterview")] IHubContext webInterviewHubContext)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewHubContext = webInterviewHubContext;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public void RefreshEntities(Guid interviewId, params Identity[] entities)
@@ -52,9 +55,53 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interview = this.statefulInterviewRepository.Get(interviewId);
             var questionIdentity = Identity.Parse(questionId);
 
-            var clientGroupIdentity = GetClientGroupIdentity(questionIdentity, interview);
+            var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
 
             this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
+        }
+
+        public void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
+            if (questionnarie != null)
+            {
+                List<Tuple<string,Identity>> entitiesToRefresh = new List<Tuple<string, Identity>>();
+
+                foreach (var entity in entities)
+                {
+                    var parent = questionnarie.GetParentById(entity.Id);
+                    var parentVector = entity.RosterVector;
+                    var childIdentity = entity;
+
+                    while (parent!= null && parent.PublicKey != interview.QuestionnaireIdentity.QuestionnaireId)
+                    {
+                        parentVector = parentVector.Shrink(entity.RosterVector.Length - 1);
+                        var parentIdentity = new Identity(parent.PublicKey, parentVector);
+
+                        string parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity.ToString(), interview.Id.FormatGuid());
+                        entitiesToRefresh.Add(new Tuple<string, Identity>(parentIdentityAsString, childIdentity));
+
+                        childIdentity = parentIdentity;
+                        parent = questionnarie.GetParentById(parent.PublicKey);
+                    }
+                }
+
+                foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
+                {
+                    if (questionsGroupedByParent.Key == null)
+                    {
+                        continue;
+                    }
+
+                    var clients = webInterviewHubContext.Clients;
+                    var group = clients.Group(questionsGroupedByParent.Key);
+
+                    group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
+                }
+
+                webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+            }
         }
 
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
