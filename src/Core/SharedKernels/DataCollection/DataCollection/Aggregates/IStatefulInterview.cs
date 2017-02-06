@@ -132,6 +132,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 
+        IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity);
+
         bool IsQuestionPrefilled(Identity entityIdentity);
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);

@@ -3,7 +3,7 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group" v-for="option in $me.options">
-                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :value="option.value" v-model="answer"
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
                         v-disabledWhenUnchecked="allAnswersGiven">
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}

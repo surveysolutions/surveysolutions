@@ -1472,16 +1472,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException($"Question with id '{questionId}' is not a roster size question.");
         }
 
-        private IComposite GetGroupOrQuestionOrThrow(Guid groupOrQuestionId)
-        {
-            var groupOrQuestion = (IComposite)this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
-
-            if (groupOrQuestion == null)
-                throw new QuestionnaireException($"Group or question with id '{groupOrQuestionId}' is not found.");
-
-            return groupOrQuestion;
-        }
-
         private IGroup GetGroupOrThrow(Guid groupId, string customExceptionMessage = null)
         {
             IGroup group = this.GetGroup(groupId);
@@ -1564,6 +1554,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid GetFirstSectionId()
         {
             return this.GetAllSections().First();
+        }
+
+        public IEnumerable<Guid> GetLinkedToSourceQuestions(Guid linkedSourceQuestionId)
+        {
+            return this.AllQuestions.Where(
+                    x => x.LinkedToQuestionId.HasValue && x.LinkedToQuestionId == linkedSourceQuestionId)
+                    .Select(x => x.PublicKey);
         }
     }
 }
