@@ -37,7 +37,7 @@
             setInterval(() => {
                 if (!this.shown) {
                     const minutesAfterLastAction = moment().diff(this.$store.state.lastActivityTimestamp, "minutes")
-                    if (minutesAfterLastAction > 15) {
+                    if (Math.abs(minutesAfterLastAction) > 15) {
                         this.show()
                     }
                 }
