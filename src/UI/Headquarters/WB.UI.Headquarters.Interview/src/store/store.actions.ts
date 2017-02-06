@@ -134,7 +134,7 @@ export default {
         commit("SET_COMPLETE_INFO", completeInfo)
     }, 200),
 
-    completeInterview({ commit }, comment: string) {
+    completeInterview({ dispatch }, comment: string) {
         apiCaller(api => api.completeInterview(comment))
     },
 

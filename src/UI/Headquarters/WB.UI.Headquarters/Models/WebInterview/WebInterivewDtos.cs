@@ -244,4 +244,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string ParentId { get; set; }
         public string Title { get; set; }
     }
+
+    public class CompleteInterviewRequest
+    {
+        public string Comment { get; set; }
+    }
 }
