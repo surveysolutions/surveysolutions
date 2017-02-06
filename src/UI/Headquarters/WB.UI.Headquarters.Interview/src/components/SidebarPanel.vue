@@ -1,5 +1,5 @@
 <template>
-    <div class="panel panel-default">
+    <div class="panel panel-default" :data-id="this.panel.id">
         <div class="panel-heading" role="tab">
             <h3 class="panel-title" :class="titleCss">
                 <button class="btn btn-link btn-plus" v-if="hasChild" :class="{collapsed: isCollapsed}" type="button" @click="toggle"><span></span></button>
