@@ -158,9 +158,31 @@
 	font-family: "RobotoBold";
 	font-size: 18px;
 	line-height: 50px;
-	&:hover, &:focus{
+	white-space: nowrap;
+    max-width: 55%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	&:hover, &:focus, &:active{
 		color: white;
+		text-decoration: none;
 	}
+}
+.navbar-text{
+	font-family: "RobotoBold";
+	font-size: 18px;
+	line-height: 20px;
+	white-space: nowrap;
+	padding: 24px 9px;
+	margin-bottom: 0;
+	margin-top: 0;
+    width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	display: block;
+	box-sizing: border-box;
+}
+.navbar-inverse .navbar-text{
+	color: $white;
 }
 @media (max-width: $screen-md-min) {	
 	.navbar{
@@ -169,15 +191,14 @@
 			width: 100%;
 		    padding: 0 ($margin-container-md-screen - 15px) 0 $margin-container-md-screen;
 		}
+		.navbar-text{
+				display: none;
+			}
 		.navbar-header{
 			margin: 0;
 			padding-top: 5px;
 			.active-page{
 				display: inline-block;
-				white-space: nowrap;
-			    max-width: 55%;
-			    overflow: hidden;
-			    text-overflow: ellipsis;
 			}
 			.navbar-brand{
 				padding: 15px 0 15px 30px;
