@@ -137,7 +137,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
                 .ForMember(x => x.State, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
-                .ForMember(x => x.HasChildrens, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled())))
+                .ForMember(x => x.HasChildren, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled())))
                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
                 .ForMember(x => x.RosterTitle, opts =>
                 {

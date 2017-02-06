@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string RosterTitle { get; set; }
         public string State { get;set; }
         public bool Collapsed { get; set; }
-        public bool HasChildrens { get; set; }
+        public bool HasChildren { get; set; }
         public Validity Validity { get; set; } = new Validity();
     }
 
