@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<RosterInstancesRemoved> @event)
-            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
+            => this.webInterviewNotificationService.RefreshRemovedEntities(@event.EventSourceId,
                 @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<RosterInstancesTitleChanged> @event)
