@@ -70,7 +70,7 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
 
-            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<TesterQuestionnaireAssemblyFileAccessor>().InSingletonScope()
+            this.Bind<IQuestionnaireAssemblyAccessor>().To<TesterQuestionnaireAssemblyAccessor>().InSingletonScope()
                 .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
         }
     }

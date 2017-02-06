@@ -24,13 +24,13 @@ namespace WB.UI.Headquarters.API.Interviewer
     public class QuestionnairesControllerBase : ApiController
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
         private readonly ISerializer serializer;
 
         public QuestionnairesControllerBase(
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
             IQuestionnaireStorage questionnaireStorage, 

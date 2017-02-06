@@ -6,12 +6,12 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
-    [Subject(typeof(QuestionnaireAssemblyFileAccessor))]
+    [Subject(typeof(QuestionnaireAssemblyAccessor))]
     class QuestionnaireAssemblyFileAccessorTestsContext
     {
-        protected static QuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
+        protected static QuestionnaireAssemblyAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
         {
-            return new QuestionnaireAssemblyFileAccessor(assemblyService ?? CreateIAssemblyService().Object);
+            return new QuestionnaireAssemblyAccessor(assemblyService ?? CreateIAssemblyService().Object);
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

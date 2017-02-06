@@ -107,7 +107,7 @@ namespace WB.Tests.Integration.EventHandler
        private static Type[] typesToExclude =
        {
             typeof (ILogger), typeof(IPlainKeyValueStorage<QuestionnaireQuestionsInfo>), 
-            typeof (IQuestionnaireStorage), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
+            typeof (IQuestionnaireStorage), typeof (IQuestionnaireAssemblyAccessor), typeof (IExportViewFactory),
             typeof (IRostrerStructureService),
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),

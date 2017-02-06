@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
         It should_data_of_returned_file_be_equal_to_expected = () =>
             result.ShouldEqual(expected);
 
-        private static QuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private static QuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private static readonly Mock<IAssemblyService> AssemblyServiceMock = CreateIAssemblyService();
         private static Guid questionnaireId = Guid.Parse("33332222111100000000111122223333");
         private static long version = 3;
