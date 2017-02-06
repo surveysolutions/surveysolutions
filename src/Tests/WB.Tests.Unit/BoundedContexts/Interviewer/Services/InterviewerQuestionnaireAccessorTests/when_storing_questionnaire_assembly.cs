@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 
         private static readonly byte[] bytesOfQuestionnaireAssembly = new byte[0];
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IQuestionnaireAssemblyFileAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyFileAccessor>();
+        private static readonly Mock<IQuestionnaireAssemblyAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyAccessor>();
         private static InterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
     }
 }

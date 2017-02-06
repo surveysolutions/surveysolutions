@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
-    public class InterviewerQuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    public class InterviewerQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private class BackwardCompatibleQuestionnaireAssemblyFileAccessor
         {
@@ -62,7 +62,7 @@ namespace WB.UI.Interviewer.Infrastructure
         private readonly string pathToStore;
         private readonly BackwardCompatibleQuestionnaireAssemblyFileAccessor backwardCompatibleAccessor;
 
-        public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor,
+        public InterviewerQuestionnaireAssemblyAccessor(IFileSystemAccessor fileSystemAccessor,
             ILogger logger, 
             string pathToAssembliesDirectory)
         {

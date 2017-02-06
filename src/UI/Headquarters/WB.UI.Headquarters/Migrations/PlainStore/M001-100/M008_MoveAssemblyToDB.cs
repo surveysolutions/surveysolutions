@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Collections.Generic;
+using FluentMigrator;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native;
@@ -62,7 +63,56 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
 
         public override void Down()
         {
-            
+            var settings = ServiceLocator.Current.GetInstance<LegacyAssemblySettings>();
+            var fileSystemAccessor = ServiceLocator.Current.GetInstance<IFileSystemAccessor>();
+
+            var pathToSave = fileSystemAccessor.CombinePath(settings.FolderPath, settings.AssembliesDirectoryName);
+
+            List<string> assemblies = new List<string>();
+
+            Execute.WithConnection((con, trans) =>
+            {
+                var dbCommand = con.CreateCommand();
+                dbCommand.CommandText = $"select id from plainstore.\"{assemblyinfosTableName}\"";
+                using (var reader = dbCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        assemblies.Add(reader[0] as string);
+                    }
+                }
+
+                foreach (var assemblyId in assemblies)
+                {
+                    var shareDataCommand = con.CreateCommand();
+                    shareDataCommand.CommandText = @"select a.id as assemblyName, a.content as content from plainstore.assemblyinfos a where id = :assemblyId)";
+
+                    var dbDataParameter = shareDataCommand.CreateParameter();
+                    dbDataParameter.ParameterName = "assemblyId";
+                    dbDataParameter.Value = assemblyId;
+                    shareDataCommand.Parameters.Add(dbDataParameter);
+
+                    using (var reader = shareDataCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var assemblyName = reader["assemblyName"] as string;
+                            var content = reader["content"] as byte[];
+
+                            fileSystemAccessor.WriteAllBytes(fileSystemAccessor.CombinePath(pathToSave, assemblyName), content);
+                        }
+                    }
+                }
+                
+            });
+
+            Execute.WithConnection((con, trans) =>
+            {
+                var dbCommand = con.CreateCommand();
+                dbCommand.CommandText = $"delete from plainstore.\"{assemblyinfosTableName}\"";
+
+                dbCommand.ExecuteNonQuery();
+            });
         }
     }
 }

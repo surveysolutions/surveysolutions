@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 {
-    public interface IQuestionnaireAssemblyFileAccessor
+    public interface IQuestionnaireAssemblyAccessor
     {
         Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion);
 

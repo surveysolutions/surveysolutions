@@ -8,13 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
-    public class TesterQuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    public class TesterQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string assemblyStorageDirectory;
 
-        public TesterQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
+        public TesterQuestionnaireAssemblyAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.assemblyStorageDirectory = assemblyStorageDirectory;

@@ -70,6 +70,7 @@ using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Infrastructure.Native;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -120,8 +121,7 @@ namespace WB.UI.Headquarters
                 useBackgroundJobForProcessingPackages: WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false));
 
             var basePath = appDataDirectory;
-            //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
-
+            
             var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
@@ -132,8 +132,7 @@ namespace WB.UI.Headquarters
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
-                },
-                BasePath = basePath
+                }
             };
 
             var cacheSettings = new ReadSideCacheSettings(
@@ -155,7 +154,6 @@ namespace WB.UI.Headquarters
                 new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
                 new HeadquartersRegistry(),
                 new PostgresKeyValueModule(cacheSettings),
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
                     WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
                     "readside",
@@ -201,7 +199,15 @@ namespace WB.UI.Headquarters
             var sampleImportSettings = new SampleImportSettings(
                 WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
+            //for assembly relocation during migration
+            kernel.Bind<LegacyAssemblySettings>().ToConstant(new LegacyAssemblySettings()
+            {
+                FolderPath = basePath,
+                AssembliesDirectoryName = "QuestionnaireAssemblies"
+            });
+
             kernel.Load(
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 eventStoreModule,
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new HeadquartersBoundedContextModule(basePath,

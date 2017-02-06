@@ -13,14 +13,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
     [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
-        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor)
         {
             return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, ServiceLocator.Current.GetInstance<IFileSystemAccessor>(), new InterviewExpressionStateUpgrader());
         }
 
-        protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
+        protected static Mock<IQuestionnaireAssemblyAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
         {
-            var result = new Mock<IQuestionnaireAssemblyFileAccessor>();
+            var result = new Mock<IQuestionnaireAssemblyAccessor>();
             
             result.Setup(x => x.IsQuestionnaireAssemblyExists(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(true);
             result.Setup(x => x.LoadAssembly(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(Assembly.LoadFrom(path));

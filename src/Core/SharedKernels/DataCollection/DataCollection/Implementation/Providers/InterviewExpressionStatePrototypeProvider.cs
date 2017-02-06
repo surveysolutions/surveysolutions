@@ -17,12 +17,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
     {
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
 
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
         public InterviewExpressionStatePrototypeProvider(
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IFileSystemAccessor fileSystemAccessor, 
             IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {

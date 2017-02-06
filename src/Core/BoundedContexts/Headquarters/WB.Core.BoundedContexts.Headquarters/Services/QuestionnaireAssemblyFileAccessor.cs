@@ -10,14 +10,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
-    internal class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    internal class QuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private readonly IAssemblyService assemblyService;
         private readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
 
-        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyFileAccessor>();
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyAccessor>();
 
-        public QuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService)
+        public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService)
         {
             this.assemblyService = assemblyService;
         }
