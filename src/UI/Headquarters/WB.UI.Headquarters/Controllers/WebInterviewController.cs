@@ -28,6 +28,7 @@ using WB.UI.Headquarters.Resources;
 namespace WB.UI.Headquarters.Controllers
 {
     [WebInterviewFeatureEnabled]
+    [BrowsersRestriction]
     public class WebInterviewController : BaseController
     {
         private readonly ICommandService commandService;
@@ -275,5 +276,9 @@ Exception details:<br />
             return this.Redirect(returnUrl);
         }
 
+        public ActionResult OutdatedBrowser()
+        {
+            return View();
+        }
     }
 }
