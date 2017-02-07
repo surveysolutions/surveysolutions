@@ -185,4 +185,13 @@
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
   </data>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+    <value>The link has expired</value>
+  </data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+    <value>The information on that interview has been recorded. No further actions are required</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>Interview not found</value>
+  </data>
 </root>
