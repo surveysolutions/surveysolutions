@@ -407,7 +407,7 @@
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Services\QuestionnaireAssemblyAlreadyExistsException.cs" />
-    <Compile Include="Services\QuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Services\QuestionnaireAssemblyAccessor.cs" />
     <Compile Include="Services\QuestionnaireImportResult.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Services\WebInterview\IWebInterviewNotificationService.cs" />
