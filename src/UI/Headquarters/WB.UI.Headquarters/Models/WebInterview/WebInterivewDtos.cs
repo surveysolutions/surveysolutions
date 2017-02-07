@@ -10,9 +10,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Language { get; set; }
     }
 
-    public class QuestionnaireInfo
+    public class InterviewInfo
     {
-        public string Title { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public string InterviewId { get; set; }
     }
 
     public class LanguageInfo
