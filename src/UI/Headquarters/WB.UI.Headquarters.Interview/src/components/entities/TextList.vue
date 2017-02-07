@@ -8,7 +8,7 @@
                         <button type="submit" class="btn btn-link btn-clear" v-on:click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>
-                <div class="form-group" v-if="$me.rows == undefined || $me.maxAnswersCount > $me.rows.length">
+                <div class="form-group" v-if="$me.rows == undefined || $me.maxAnswersCount == null || $me.maxAnswersCount > $me.rows.length">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" @blur="addRow" @keyup.enter="addRow"/>
                     </div>
