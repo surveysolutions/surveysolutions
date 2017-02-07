@@ -300,12 +300,11 @@
     .filters{
         padding-top: 105px;
         width: $filter-small-width;
-        padding-left: 12px;
         .bootstrap-select.btn-group{
-            width: 100% !important;   
+            width: calc(100% + 10px) !important;   
         } 
         .input-group{
-            width: 100%;
+            width: calc(100% + 10px);
         }
         .open > .dropdown-menu{
             width: 100%;    
