@@ -3,8 +3,9 @@ declare interface ILanguageInfo {
     languages: string[]
 }
 
-declare interface IQuestionnaireInfo {
-    title: string;
+declare interface IInterviewInfo {
+    questionnaireTitle: string;
+    interviwId : string;
 }
 
 declare interface IInterviewEntityWithType {
@@ -96,7 +97,7 @@ declare interface ICompleteInfo {
 }
 
 declare interface IWebInterviewApi {
-    getQuestionnaireDetails(): IQuestionnaireInfo
+    getInterviewDetails(): IInterviewInfo
 
     getPrefilledEntities(): IPrefilledPageData
     isEnabled(id: string): boolean

@@ -12,13 +12,11 @@ namespace WB.UI.Headquarters
 
             routes.MapRoute(@"WebInterview.Start", @"WebInterview/Start/{id}", new { controller = @"WebInterview", action = @"Start" });
             routes.MapRoute(@"WebInterview.Resume", @"WebInterview/{id}/Section/{sectionId}", 
-                defaults: new { controller = @"WebInterview", action = @"Section" }, 
-                constraints: new { id = new GuidRouteConstraint() });
+                defaults: new { controller = @"WebInterview", action = @"Section" });
             routes.MapRoute(@"WebInterview.ImageAnswering", @"WebInterview/image", new { controller = @"WebInterview", action = @"Image" });
 
             routes.MapRoute(@"WebInterview", @"WebInterview/{id}/Cover",
-                defaults: new { controller = @"WebInterview", action = @"Cover" },
-                constraints: new { id = new GuidRouteConstraint() });
+                defaults: new { controller = @"WebInterview", action = @"Cover" });
 
             routes.MapRoute(@"WebInterview.Complete", @"WebInterview/{id}/Complete",
                 defaults: new { controller = @"WebInterview", action = @"Complete" },
