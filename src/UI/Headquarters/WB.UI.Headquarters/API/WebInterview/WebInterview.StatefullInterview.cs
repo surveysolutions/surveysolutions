@@ -181,9 +181,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                     metRosters++;
                     var itemRosterVector = group.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
+                    var treeGroup = statefulInterview.GetGroup(itemIdentity);
                     var breadCrumb = new Breadcrumb
                     {
-                        Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
+                        Title = treeGroup.Title.Text,
+                        RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
                         Target = itemIdentity.ToString()
                     };
 
@@ -197,6 +199,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 else
                 {
                     var itemIdentity = new Identity(parentId, group.RosterVector.Shrink(metRosters));
+                    
                     var breadCrumb = new Breadcrumb
                     {
                         Title = statefulInterview.GetGroup(itemIdentity).Title.Text,
@@ -217,9 +220,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                 breadCrumbs.Last().ScrollTo = sectionId;
             }
 
+            var currentTreeGroup = statefulInterview.GetGroup(group);
             return new BreadcrumbInfo
             {
-                Title = statefulInterview.GetGroup(group).Title.Text,
+                Title = currentTreeGroup.Title.Text,
+                RosterTitle = (currentTreeGroup as InterviewTreeRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = CalculateSimpleStatus(group, statefulInterview).ToString()
             };
