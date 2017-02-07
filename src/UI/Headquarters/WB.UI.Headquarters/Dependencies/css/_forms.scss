@@ -183,7 +183,7 @@ input.double-checkbox-white{
 	width: 315px; 
 	.form-control{
 		border-color: $gray_form;
-/* 		box-shadow: none; */
+		border-right: none;
 		input {
 			ul{
 				width: 100%;
@@ -194,17 +194,12 @@ input.double-checkbox-white{
 	}
 	.input-group-btn .btn{
 		height: $input-height-base;
-		border-color: $gray-form;
+		border-color: darken($gray-form, 11%);
 		span{
 			$cross-height: 16px;
 			@include cancel($cross-height);
 			padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)/2 0;
 		}
-	}
-}
-.filters{
-	.input-group{
-		width: 295px;
 	}
 }
 .bootstrap-select.btn-group{

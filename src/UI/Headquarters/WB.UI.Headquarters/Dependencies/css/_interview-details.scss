@@ -28,40 +28,6 @@
 	background-position: 0 100%; 
 	padding: 15px 0;
 }
-.flag{
-	font-size: 14px;
-	line-height: 24px;
-  	color: $gray_form;
-  	display: block;
-  	font-weight: bold;
-  	padding-left: 35px;
-  	position: relative;
-  	&:before{
-  		@extend .button-flag;
-  		content: "";
-  		@include absolute(0, null, null, 0);
-  	}
-	&.flagged{
-		color: $gray-text;
-		&:before{
-            background-position: 1px 0;
-        }
-	}
-	&:hover, &:focus{
-		color: $gray_light;
-		text-decoration: none;
-		&:before{
-			background-position: -56px 0;
-		}
-	}
-	&.flagged:hover, &.flagged:focus{
-		color: $gray-text;
-		text-decoration: none;
-		&:before{
-			background-position: -18px 0;
-		}
-	}	
-}
 .bootstrap-select .dropdown-menu > li > a.flagged{
 	padding-left: 35px;
 	&:before{
@@ -125,6 +91,16 @@ label.inactive{
 			}
 		}
 	}	
+}
+.complete-link{
+	display: block;
+	color: $green;
+	font: 16px/18px "RobotoMedium";
+	padding: 15px 20px 15px 60px;
+	border-bottom: 1px solid rgb(221, 221, 221);
+	&:hover{
+		background-color: #ebebeb;
+	}
 }
 .unit-section{
 	position: relative;
@@ -700,11 +676,20 @@ label.inactive{
 			.foldback-button{
 	            top: 75px;
 	        }
+	        .preset-filters-container, .filters-container{
+				padding-left: 20px;
+				padding-right: 15px;
+			}
 		}
 	}
 	.content{
 		width: $content-width-small;
 		left: 12px;
+	}
+	.complete-link{
+		padding-left: 40px;
+		font-size: 14px;
+    	line-height: 16px;
 	}
 	.details-interview{
 		&.questionnaire{
@@ -843,9 +828,12 @@ label.inactive{
 				@include width-questionnaire($content-width-small);
 			}
 			.unit-title{
-				padding-left: 50px;
+				padding-left: 60px;
 			}
 			 
+		}
+		.question{
+			padding-left: 50px;
 		}
 		&.fullscreen-hidden-content{	
 			.content{
@@ -855,10 +843,16 @@ label.inactive{
 			.questionnaire.details-interview{
 				@include width-questionnaire($filter-small-width);
 			}
+			.question{
+				padding-left: 50px;
+			}
 			.filters{
 				left: 0;
 				overflow: auto;
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				.foldback-button{
+					top: 65px;
+				} 
 			}
 		}
 		&.fullscreen-hidden-filters{
@@ -867,19 +861,22 @@ label.inactive{
 				left: 0;
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 				@include visible-foldback-button();
+				.foldback-button{
+					top: 65px;
+				} 
 			}
 			.questionnaire{
 				&.details-interview{
 					@include width-questionnaire($filter-small-width);
 				}
 				.question{
-					padding-left: 40px;
+					padding-left: 50px;
 				}
 				.action-container{
 					padding-left: 50px;
 				}
 				.unit-title{
-					padding-left: 50px;
+					padding-left: 60px;
 				} 
 				.button-flag{
 					left: -20px;
@@ -900,7 +897,7 @@ label.inactive{
 					padding-left: 50px;
 				}
 				.foldback-button{
-		            top: 75px;
+		            top: 65px;
 		        }
 			}
 			.questionnaire{
@@ -908,7 +905,7 @@ label.inactive{
 					@include width-questionnaire($content-width-small);
 				}
 				.question{
-					padding-left: 40px;
+					padding-left: 50px;
 				}
 				.action-container{
 					padding-left: 50px;
@@ -916,6 +913,9 @@ label.inactive{
 				.button-flag{
 					left: -20px;
 				}
+				.unit-title{
+					padding-left: 60px;
+				} 
 			}
 			.filters{
 				box-shadow: none;
@@ -956,7 +956,9 @@ label.inactive{
 			.foldback-button{
 				top: 120px;
 			} 
-			
+		}
+		.complete-link{
+			padding-left: 60px;
 		}
 		.filters{
 			.foldback-button{
@@ -1008,6 +1010,15 @@ label.inactive{
 	        margin-right: 0;
 	    }
 	}
+	.footer.footer-adaptive-content.footer-adaptive-filters{
+		padding-left: 0;
+	}
+	.footer.footer-adaptive-content{
+		padding-left: 0;
+	}
+	.footer.footer-adaptive-filters{
+		padding-left: 0;
+	}
 }
 @media only screen and (max-width: 615px){
 	.web-interview{
@@ -1049,14 +1060,22 @@ label.inactive{
 		.aside-menu{
 			right: 20px;
 		}
+		.action-container{
+			padding-left: 50px;
+			a{
+				max-width: 265px;
+			}
+		} 
 	}
 	.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: 0;
+		padding-left: 0;
 	}
 	.footer.footer-adaptive-content{
-		display: none;
+		display: block;
+		padding-left: 0;
 	}
 	.footer.footer-adaptive-filters{
-		display: none;
+		display: block;
+		padding-left: 0;
 	}
 }

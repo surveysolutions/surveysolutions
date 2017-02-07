@@ -73,7 +73,7 @@
 					color: $blue;
 				}
 				&.unanswered{
-					color: $gray_form;
+					color: $gray_text;
 				}
 				&.errors{
 					color: $red_error;
@@ -110,12 +110,12 @@
 		width: auto;
 		padding: 15px;
 	}
-	.wrapper-info{
+	.web-interview .wrapper-info{
 		padding-left: 45px;
 	}
 }
 @media (max-width: $screen-xs-min){
-	.wrapper-info{
+	.web-interview .wrapper-info{
 		padding: 20px 10px 20px 35px;
 	}
 	.web-interview.first-last-chapter .questionnaire .unit-title{
