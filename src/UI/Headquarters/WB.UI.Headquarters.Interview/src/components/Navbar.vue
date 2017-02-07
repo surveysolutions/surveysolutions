@@ -48,7 +48,9 @@
             }
         },
         beforeMount() {
-            this.$store.dispatch("getLanguageInfo")
+            this.$store.dispatch("getLanguageInfo").then(response => {
+                this.calcQuestionnaireTitleWidth()
+            })
             this.$store.dispatch("loadQuestionnaire")
         },
          mounted() {
@@ -76,7 +78,7 @@
                 $(".navbar .navbar-nav").each(function(e){
                     menu_width+= $(this).outerWidth()
                 });
-                this.questionnaireTitleWidth = 100*(navbar - brand - menu_width - 15)/navbar;
+                this.questionnaireTitleWidth = 100*(navbar - brand - menu_width - 15)/navbar - 1;
             },
             changeLanguage(language) {
                 this.$store.dispatch("changeLanguage", { language: language })
