@@ -2,7 +2,7 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 115px 5px 50px 5px;
+	padding: 100px 5px 50px 5px;
 	margin-left: 12px;
 	.input-group, .btn-group.bootstrap-select{
 		margin-left: -10px !important;
