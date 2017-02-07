@@ -87,35 +87,35 @@
                     @if (!Context.User.Identity.IsObserver())
                     {
                         <text>
-                    items["addNew"] = {
-                        name: "@Dashboard.NewInterview",
-                        callback: addNewInterview
-                    };
-                    items["batchUpload"] = {
-                        name: "@Dashboard.BatchUpload",
-                        callback: interviewsBatchUpload
-                    };
-                    </text>
+                        items["addNew"] = {
+                            name: "@Dashboard.NewInterview",
+                            callback: addNewInterview
+                        };
+                        items["batchUpload"] = {
+                            name: "@Dashboard.BatchUpload",
+                            callback: interviewsBatchUpload
+                        };
+                        </text>
                     }
 
 
                     @if (User.IsInRole("Administrator"))
                     {
                         <text>
-                    items["sep1"] = "---------";
-                    </text>
+                        items["sep1"] = "---------";
+                        </text>
                     }
                 }
-                @if (LegacyOptions.WebInterviewEnabled)
+                @if (LegacyOptions.WebInterviewEnabled && !Context.User.Identity.IsObserver())
                 {
                     <text>
-                if (!selectedRow.isDisabled && selectedRow.allowCensusMode) {
-                    items["webSetup"] = {
-                        name: "@Dashboard.WebInterviewSetup",
-                        callback: webInterviewSetup
+                    if (!selectedRow.isDisabled && selectedRow.allowCensusMode) {
+                        items["webSetup"] = {
+                            name: "@Dashboard.WebInterviewSetup",
+                            callback: webInterviewSetup
+                        }
                     }
-                }
-                </text>
+                    </text>
                 }
 
 
