@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -36,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider configProvider;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IStatefullWebInterviewFactory statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
@@ -62,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers
             IGlobalInfoProvider globalInfo,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            IStatefulInterviewRepository statefulInterviewRepository,
+            IStatefullWebInterviewFactory statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
@@ -296,7 +295,6 @@ Exception details:<br />
             RememberCapchaFilled(id);
             return this.Redirect(returnUrl);
         }
-
         public ActionResult OutdatedBrowser()
         {
             return View();

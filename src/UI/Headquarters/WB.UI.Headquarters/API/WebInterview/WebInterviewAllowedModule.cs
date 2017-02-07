@@ -1,6 +1,6 @@
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
@@ -19,6 +19,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         private IWebInterviewConfigProvider configProvider =>
             ServiceLocator.Current.GetInstance<IWebInterviewConfigProvider>();
 
+        private IStatefullWebInterviewFactory statefullWebInterviewFactory =>
+            ServiceLocator.Current.GetInstance<IStatefullWebInterviewFactory>();
+
         private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage => 
             ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
 
@@ -30,11 +33,11 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override bool OnBeforeConnect(IHub hub)
         {
-            var interviewId = hub.Context.QueryString.Get(@"interviewId");
-
             QuestionnaireIdentity questionnaireIdentity = null;
             bool interviewIsCompleted = this.readTransactionManager.ExecuteInQueryTransaction(() =>
             {
+                var interviewId = this.statefullWebInterviewFactory.GetInterviewIdByHumanId(hub.Context.QueryString.Get(@"interviewId"));
+
                 var questionnaire = this.interviewReferences.GetById(interviewId);
                 questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.QuestionnaireVersion);
 

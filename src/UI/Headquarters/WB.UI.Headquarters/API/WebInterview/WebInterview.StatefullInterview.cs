@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.UI.Headquarters.Models.WebInterview;
 using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
-using QuestionnaireInfo = WB.UI.Headquarters.Models.WebInterview.QuestionnaireInfo;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -32,11 +31,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             CurrentLanguage = this.GetCallerInterview().Language
         };
 
-        public QuestionnaireInfo GetQuestionnaireDetails()
+        public InterviewInfo GetInterviewDetails()
         {
-            return new QuestionnaireInfo
+            return new InterviewInfo
             {
-                Title = this.GetCallerQuestionnaire().Title
+                QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
+                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(this.CallerInterviewId)
             };
         }
 

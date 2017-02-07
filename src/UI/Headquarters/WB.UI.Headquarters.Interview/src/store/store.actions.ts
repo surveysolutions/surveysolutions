@@ -6,9 +6,9 @@ import router from "./../router"
 import { batchedAction } from "./helpers"
 
 export default {
-    async loadQuestionnaire({ commit }) {
-        const info = await apiCaller<IQuestionnaireInfo>(api => api.getQuestionnaireDetails())
-        commit("SET_QUESTIONNAIRE_INFO", info)
+    async loadInterview({ commit }) {
+        const info = await apiCaller<IInterviewInfo>(api => api.getInterviewDetails())
+        commit("SET_INTERVIEW_INFO", info)
     },
 
     async getLanguageInfo({ commit }) {
