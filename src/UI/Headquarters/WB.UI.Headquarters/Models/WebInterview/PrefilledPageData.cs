@@ -26,11 +26,13 @@
         public Breadcrumb[] Breadcrumbs { get; set; }
         public string Status { get; set; }
         public string Title { get; set; }
+        public string RosterTitle { get; set; }
     }
 
     public class Breadcrumb
     {
         public string Title { set; get; }
+        public string RosterTitle { get; set; }
         public string Target { get; set; }
         public string ScrollTo { get; set; }
     }
