@@ -76,14 +76,6 @@ namespace WB.UI.Headquarters.Controllers
             return interviewId.FormatGuid();
         }
 
-        private void PreserveCaptchaFilledKey()
-        {
-            if (this.TempData.ContainsKey(CapchaCompletedKey))
-            {
-                this.TempData[CapchaCompletedKey] = this.TempData[CapchaCompletedKey];
-            }
-        }
-
         private ResumeWebInterview GetResumeModel(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -176,7 +168,6 @@ Exception details:<br />
             var targetSectionIsEnabled = interview.IsEnabled(Identity.Parse(sectionId));
             if (!targetSectionIsEnabled)
             {
-                this.PreserveCaptchaFilledKey();
                 return this.RedirectToFirstSection(id, interview);
             }
 
