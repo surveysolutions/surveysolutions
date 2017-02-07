@@ -1,0 +1,20 @@
+﻿# for localhost http://localhost/headquarters
+baseUri: https://superhq-dev.mysurvey.solutions 
+
+# should not be protected by spam filter (captcha)
+questionarieId: c9805a29d40e4939af33cf3dd6b1a969$21
+
+# max random delay for answering per each bot in ms
+answerDelay: 15000
+
+workersCount: 150
+
+# max random delay for creating interview in ms
+createInterviewDelay: 30000
+
+# answers - arguments order can be seen from application or devs
+answers:
+- ['answerSingleOptionQuestion', '1', 'eb8d67cdb968a79dcb009708b1132b94']
+- ['answerSingleOptionQuestion', '2', 'eb8d67cdb968a79dcb009708b1132b94']
+- ['answerSingleOptionQuestion', '1', '8e7d17c35c4f56cd37d8b7fcceedae7f']
+- ['answerSingleOptionQuestion', '2', '8e7d17c35c4f56cd37d8b7fcceedae7f']

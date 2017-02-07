@@ -80,3 +80,4 @@ src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets
 src/UI/Headquarters/WB.UI.Headquarters.Interview/test/unit/coverage/
 src/UI/Headquarters/WB.UI.Headquarters.Interview/npm-debug.log*
 .designTime
+.tools/
