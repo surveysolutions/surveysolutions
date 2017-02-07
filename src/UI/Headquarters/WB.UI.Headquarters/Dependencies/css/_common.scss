@@ -435,16 +435,81 @@ table{
 	width: 100%;
 	text-align: center;
 	color: $state-warning-text;
+	margin: 0;
+	border-radius: 0;
 	.panel-heading{
 		padding: 5px;
+		background-color: $highlight-color;
 	}
-	& + .container-fluid{
+	& + main {
 		margin-top: 30px;
-		.filters, .content{
-			padding-top: 145px;
+		.container-fluid{
+			
+			.filters{
+				padding-top: 130px;
+			}
+			.content{
+				padding-top: 100px;
+			}
+			.foldback-button{
+				top: $indent-foldback-button-hd + 30px;
+			}
+			.questionnaire{
+		    	.unit-title.is_stuck{
+			        top: 100px !important;
+			    }
+		    }
 		}
-		.content{
-			padding-top: 100px;
+	}
+	& + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button{
+	 	top: 155px;
+	}
+}
+@media (max-width: $screen-md-min){
+	.view-mood{
+		top: 60px;
+		& + main {
+			.container-fluid{
+				margin-top: 30px;
+				.filters{
+					padding-top: 125px;
+				}
+				.content{
+					padding-top: 90px;
+				}
+				.foldback-button{
+					top: $indent-foldback-button + 30px;
+				}
+				.questionnaire{
+			    	.unit-title.is_stuck{
+				        top: 90px !important;
+				    }
+			    }
+			}
+		}
+		& + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button,
+		& + .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button,
+		& + .web-interview-for-supervisor.fullscreen-hidden-content .filters .foldback-button{
+		 	top: $indent-foldback-button + 30px;
+		}
+	}
+}
+@media (max-width: $screen-sm-min){
+	.view-mood{
+		& + main {
+			.container-fluid{
+				.content{
+					.foldback-button{
+						top: 145px;
+					}
+					.humburger-foldback-button{
+						top: $indent-foldback-button + 30px;
+					}
+				}
+			}
+		}
+		& + .web-interview.fullscreen-hidden-content .content .foldback-button{
+			top: $indent-foldback-button + 30px;
 		}
 	}
 }

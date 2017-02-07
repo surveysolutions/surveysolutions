@@ -6544,7 +6544,7 @@ a.disabled {
     float: left;
     width: 22.5px;
     height: 33.75px;
-    margin-right: 15px; }
+    margin-right: 10px; }
   .btn-back span {
     display: table-cell;
     vertical-align: middle; }
@@ -6603,7 +6603,8 @@ a.disabled {
     .navbar .navbar-header .navbar-brand:hover, .navbar .navbar-header .navbar-brand:focus {
       font-family: "RobotoBold"; }
     .navbar .navbar-header .navbar-brand .brand-name {
-      padding: 8px 10px 8px 30px; }
+      padding: 8px 10px 8px 30px;
+      font-family: "RobotoBold"; }
       .navbar .navbar-header .navbar-brand .brand-name::after {
         display: block;
         font-family: "RobotoBold";
@@ -7410,7 +7411,7 @@ input.double-checkbox-white {
             background-color: #3ca21a; }
       .structured-content .panel-default > .panel-heading .active, .structured-content .panel-default > .panel-heading:hover, .structured-content .panel-default > .panel-heading:focus {
         background-color: #ebebeb; }
-    .structured-content .panel-default .in {
+    .structured-content .panel-default .current {
       background-color: #f3f3f3; }
   .structured-content .panel-body {
     padding: 0; }
@@ -7660,7 +7661,7 @@ span.image-zoom-box, span.image-option {
 .filters {
   width: 360px;
   border-right: 3px solid #ececec;
-  padding: 115px 5px 50px 5px;
+  padding: 100px 5px 50px 5px;
   margin-left: 12px; }
   .filters .input-group, .filters .btn-group.bootstrap-select {
     margin-left: -10px !important; }
@@ -8322,15 +8323,50 @@ table tr th .census-icon, table tr td .census-icon {
   z-index: 20;
   width: 100%;
   text-align: center;
-  color: #8a6d3b; }
+  color: #8a6d3b;
+  margin: 0;
+  border-radius: 0; }
   .view-mood .panel-heading {
-    padding: 5px; }
-  .view-mood + .container-fluid {
+    padding: 5px;
+    background-color: #ff8; }
+  .view-mood + main {
     margin-top: 30px; }
-    .view-mood + .container-fluid .filters, .view-mood + .container-fluid .content {
-      padding-top: 145px; }
-    .view-mood + .container-fluid .content {
+    .view-mood + main .container-fluid .filters {
+      padding-top: 130px; }
+    .view-mood + main .container-fluid .content {
       padding-top: 100px; }
+    .view-mood + main .container-fluid .foldback-button {
+      top: 105px; }
+    .view-mood + main .container-fluid .questionnaire .unit-title.is_stuck {
+      top: 100px !important; }
+  .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+    top: 155px; }
+
+@media (max-width: 1210px) {
+  .view-mood {
+    top: 60px; }
+    .view-mood + main .container-fluid {
+      margin-top: 30px; }
+      .view-mood + main .container-fluid .filters {
+        padding-top: 125px; }
+      .view-mood + main .container-fluid .content {
+        padding-top: 90px; }
+      .view-mood + main .container-fluid .foldback-button {
+        top: 95px; }
+      .view-mood + main .container-fluid .questionnaire .unit-title.is_stuck {
+        top: 90px !important; }
+    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button,
+    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button,
+    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-content .filters .foldback-button {
+      top: 95px; } }
+
+@media (max-width: 880px) {
+  .view-mood + main .container-fluid .content .foldback-button {
+    top: 145px; }
+  .view-mood + main .container-fluid .content .humburger-foldback-button {
+    top: 95px; }
+  .view-mood + .web-interview.fullscreen-hidden-content .content .foldback-button {
+    top: 95px; } }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
@@ -9310,7 +9346,12 @@ label.inactive {
   padding: 15px 20px 15px 60px;
   border-bottom: 1px solid #dddddd; }
   .complete-link:hover {
-    background-color: #ebebeb; }
+    background-color: #ebebeb;
+    color: #3ca21a;
+    text-decoration: none; }
+
+.router-link-active {
+  background-color: #ebebeb; }
 
 .unit-section {
   position: relative; }
@@ -9416,7 +9457,7 @@ label.inactive {
     display: block; }
   .information-block p {
     width: 90%;
-    word-break: break-all;
+    word-break: break-word;
     font-style: italic; }
     .information-block p p:last-of-type {
       margin-bottom: 10px; }
@@ -9424,6 +9465,9 @@ label.inactive {
     color: #ed45aa; }
   .information-block.instruction {
     color: #2a81cb; }
+    .information-block.instruction p {
+      /* white-space: pre-wrap; */
+      white-space: pre; }
   .information-block.text-danger {
     color: #e74924; }
   .information-block.roster-section-info {
@@ -9542,7 +9586,7 @@ label.inactive {
   .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a, .question-editor .preset-filters-container .export-queue, .preset-filters-container .question-editor .export-queue {
     padding: 0 10px;
     margin: 0 0 10px;
-    word-break: break-all;
+    word-break: break-word;
     position: relative; }
     .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
       left: -25px; }
@@ -9554,6 +9598,10 @@ label.inactive {
       border-color: #f6d6d0; }
   .question-editor.has-error .form-control:focus {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+  .question-editor .question-unit .radio, .question-editor .question-unit .form-group {
+    border-color: transparent; }
+  .question-editor.answered .question-unit .radio, .question-editor.answered .question-unit .form-group {
+    border-color: #dbdfe2; }
 
 .question-editor .options-group {
   padding: 10px;
@@ -9723,7 +9771,7 @@ label.inactive {
   line-height: 14px;
   margin-bottom: 10px;
   padding-right: 38px;
-  word-break: break-all;
+  word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word; }
 
