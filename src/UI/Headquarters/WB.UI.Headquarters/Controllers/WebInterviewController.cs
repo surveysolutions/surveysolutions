@@ -40,6 +40,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
+        private bool CapchaVerificationNeeded => this.Session[CapchaCompletedKey] == null;
+
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
             IGlobalInfoProvider globalInfo,
@@ -172,7 +174,7 @@ Exception details:<br />
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && TempData[CapchaCompletedKey] == null)
+            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeeded)
             {
                 var returnUrl = Url.Action("Section", routeValues: new { id, sectionId });
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl = returnUrl });
@@ -216,7 +218,7 @@ Exception details:<br />
             }
 
             var interviewId = this.CreateInterview(questionnaireIdentity);
-            TempData[CapchaCompletedKey] = true;
+            Session[CapchaCompletedKey] = true;
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
         }
 
@@ -225,7 +227,7 @@ Exception details:<br />
         {
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && TempData[CapchaCompletedKey] == null)
+            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeeded)
             {
                 var returlUrl = Url.Action("Cover", routeValues: new { id });
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
@@ -245,7 +247,7 @@ Exception details:<br />
                 return this.View("Resume", model);
             }
 
-            TempData[CapchaCompletedKey] = true;
+            Session[CapchaCompletedKey] = true;
             return Redirect(returnUrl);
         }
 
@@ -254,7 +256,7 @@ Exception details:<br />
         {
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-            if (webInterviewConfig.UseCaptcha && TempData[CapchaCompletedKey] == null)
+            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeeded)
             {
                 var returlUrl = Url.Action("Complete", routeValues: new { id });
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
@@ -276,7 +278,7 @@ Exception details:<br />
                 return this.View(model);
             }
 
-            TempData[CapchaCompletedKey] = true;
+            Session[CapchaCompletedKey] = true;
             return this.Redirect(returnUrl);
         }
 
