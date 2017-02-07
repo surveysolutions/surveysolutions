@@ -182,7 +182,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return TryExecuteCommand(new DeleteInterviewCommand(request.Id, executor.Id));
         }
 
-
         [HttpPost]
         [Route("assignsupervisor")]
         public HttpResponseMessage PostAssignSupervisor(AssignChangeApiModel request)
@@ -201,7 +200,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return TryExecuteCommand(new AssignSupervisorCommand(request.Id, executor.Id, userInfo.PublicKey));
         }
 
-        //AssignSupervisorCommand
         #endregion
 
         private HttpResponseMessage TryExecuteCommand(ICommand command)
