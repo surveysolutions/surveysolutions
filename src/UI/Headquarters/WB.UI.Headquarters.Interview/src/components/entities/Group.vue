@@ -41,9 +41,9 @@
             },
             btnStatusClass() {
                 return [{
-                    'btn-success': this.$me.validity.isValid && this.isCompleted,
-                    'btn-primary': !this.isCompleted || (this.isCompleted && !this.$me.validity.isValid),
-                    'btn-danger': !this.$me.validity.isValid && !this.isCompleted,
+                    'btn-success': this.$me.validity.isValid && this.isCompleted,                    
+                    'btn-danger': !this.$me.validity.isValid,
+                    'btn-primary': !this.isCompleted ,
                     'disabled': this.$me.isDisabled
                 }]
             },
