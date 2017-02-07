@@ -21,7 +21,6 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [ControlPanelAccess]
-    [ObserverNotAllowedApi]
     [NoTransaction]
     public class ControlPanelApiController : ApiController
     {
