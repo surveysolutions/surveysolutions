@@ -100,7 +100,12 @@ label.inactive{
 	border-bottom: 1px solid rgb(221, 221, 221);
 	&:hover{
 		background-color: #ebebeb;
+		color: $green;
+		text-decoration: none;
 	}
+}
+.router-link-active{
+	background-color: #ebebeb;
 }
 .unit-section{
 	position: relative;
@@ -196,7 +201,7 @@ label.inactive{
 	}
 	p{
 		width: 90%;
-		word-break: break-all;
+		word-break: break-word;
 		font-style: italic;
 		p:last-of-type{
 			margin-bottom: 10px;
@@ -208,7 +213,8 @@ label.inactive{
 	}
 	&.instruction{
 		color: $blue;
-        p{
+		p{
+            /* white-space: pre-wrap; */
             white-space: pre;
         }
 	}
@@ -349,7 +355,7 @@ label.inactive{
 	h5{
 		padding: 0 10px;
 		margin: 0 0 10px;
-		word-break: break-all;
+		word-break: break-word;
 		position: relative;
 		&:before{left: -25px;}
 	}
@@ -367,7 +373,20 @@ label.inactive{
 	&.has-error .form-control:focus{
 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 	}
+	.question-unit{
+		.radio, .form-group{
+			border-color: transparent;
+		}
+	}
+	&.answered{
+		.question-unit{
+			.radio, .form-group{
+				border-color: $gray-form;
+			}
+		}
+	}
 }
+
 .question-editor{
 	.options-group{
 		padding: 10px;
@@ -596,7 +615,7 @@ label.inactive{
 			line-height: 14px;
 			margin-bottom: 10px;
 			padding-right: 38px;
-			word-break: break-all;
+			word-break: break-word;
             word-wrap: break-word;
             overflow-wrap: break-word;
 		}
@@ -624,7 +643,7 @@ label.inactive{
 		left: -$content-width;
 		box-shadow: none;
 		.humburger-foldback-button{
-			top: 65px;
+			top: $indent-foldback-button;
 			left: auto;
 			right: 20px;
 			background-color: $gray_light;
@@ -677,7 +696,7 @@ label.inactive{
 		.filters{
 			padding-top: 115px;
 			.foldback-button{
-	            top: 75px;
+	            top: $indent-foldback-button-hd;
 	        }
 	        .preset-filters-container, .filters-container{
 				padding-left: 20px;
@@ -823,7 +842,7 @@ label.inactive{
 		.content{
 			left: 12px;
 			.foldback-button{
-				top: 65px;
+				top: $indent-foldback-button;
 			} 
 		}
 		.questionnaire{
@@ -854,7 +873,7 @@ label.inactive{
 				overflow: auto;
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 				.foldback-button{
-					top: 65px;
+					top: $indent-foldback-button;
 				} 
 			}
 		}
@@ -865,7 +884,7 @@ label.inactive{
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 				@include visible-foldback-button();
 				.foldback-button{
-					top: 65px;
+					top: $indent-foldback-button;
 				} 
 			}
 			.questionnaire{
@@ -900,7 +919,7 @@ label.inactive{
 					padding-left: 50px;
 				}
 				.foldback-button{
-		            top: 65px;
+		            top: $indent-foldback-button;
 		        }
 			}
 			.questionnaire{
@@ -965,7 +984,7 @@ label.inactive{
 		}
 		.filters{
 			.foldback-button{
-				top: 65px;
+				top: $indent-foldback-button;
 			} 
 		}
 		&.fullscreen-hidden-filters{
@@ -988,7 +1007,7 @@ label.inactive{
 				border: none;
 				@include visible-foldback-button();
 				.foldback-button{
-			   		top: 65px;
+			   		top: $indent-foldback-button;
 			   	}
 			   	.humburger-foldback-button{
 					display: block;
@@ -1000,7 +1019,7 @@ label.inactive{
 				left: 0;
 				display: block;
 				.foldback-button{
-			   		top: 65px;
+			   		top: $indent-foldback-button;
 			   	}
 			}
 		}
