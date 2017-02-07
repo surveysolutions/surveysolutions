@@ -145,8 +145,13 @@
         padding-right: 25px !important;
         position: relative;
         cursor: pointer;
-        &.sorting_disabled:after{
-            display: none !important;
+        &.sorting_disabled{
+            &.sorting_desc, &.sorting_asc{
+                color: $gray_light;
+            }
+            &:after{
+                display: none !important;
+            }
         }
         &:focus, &:hover, &:active:focus{
             outline: none;
