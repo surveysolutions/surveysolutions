@@ -1,6 +1,6 @@
 <template>
     <div class="action-container" v-if="$me">
-        <a class="btn btn-lg" :class="css" @click="navigate">{{ $me.title}}</a>
+        <a class="btn btn-lg" :class="css" @click="navigate"><span>{{ $me.title}}</span></a>
     </div>
 </template>
 <script lang="ts">
