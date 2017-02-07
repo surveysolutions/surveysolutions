@@ -30,8 +30,8 @@
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
             <h4 class="gray-uppercase">Questions with errors:</h4>
-            <ul class="list-unstyled marked-questions" v-for="entitiy in completeInfo.entitiesWithError">
-                <li><a href="#" @click="navigate(entity)">{{ entitiy.title }}}</a></li>
+            <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
+                <li><a href="#" @click="navigate(entity)">{{ entity.title }}</a></li>
             </ul>
             </div>
         </div>
