@@ -26,7 +26,6 @@ using WB.UI.Shared.Web.Settings;
 namespace WB.UI.Headquarters.Controllers
 {
     [ControlPanelAccess]
-    [ObserverNotAllowed]
     public class ControlPanelController : BaseController
     {
         private readonly IUserViewFactory userViewFactory;
