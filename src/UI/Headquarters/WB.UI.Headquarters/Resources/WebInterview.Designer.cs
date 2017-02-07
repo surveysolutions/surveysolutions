@@ -61,6 +61,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The link has expired.
+        /// </summary>
+        public static string Error_InterviewExpired {
+            get {
+                return ResourceManager.GetString("Error_InterviewExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information on that interview has been recorded. No further actions are required.
+        /// </summary>
+        public static string Error_NoActionsNeeded {
+            get {
+                return ResourceManager.GetString("Error_NoActionsNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview not found.
+        /// </summary>
+        public static string Error_NotFound {
+            get {
+                return ResourceManager.GetString("Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
