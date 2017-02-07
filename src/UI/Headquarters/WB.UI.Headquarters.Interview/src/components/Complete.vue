@@ -31,7 +31,9 @@
             <div class="container-info">
             <h4 class="gray-uppercase">Questions with errors:</h4>
             <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
-                <li><a href="#" @click="navigate(entity)">{{ entity.title }}</a></li>
+                <li>
+                    <router-link :to="navigateTo(entity)">{{entity.title}}</router-link>
+                </li>
             </ul>
             </div>
         </div>
@@ -44,8 +46,6 @@
                         <span></span>
                     </button>
                 </div>
-
-
             </div>
         </div>
         <div class="wrapper-info">
@@ -100,16 +100,14 @@
                 const comment = $('#comment-for-supervisor').val();
                 this.$store.dispatch('completeInterview', { comment: comment });
             },
-            navigate(entityWithError) {
-                const navigateToEntity = {
+            navigateTo(entityWithError) {
+                return {
                     name: 'section',
                     params: {
                         sectionId: entityWithError.parentId,
                         interviewId: this.$route.params.interviewId
                     }
                 }
-                this.$store.dispatch("sectionRequireScroll", { id: entityWithError.id })
-                this.$router.push(navigateToEntity)
             }
         }
     }
