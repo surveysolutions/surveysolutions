@@ -23,7 +23,14 @@ const router = new VueRouter({
                 sideBar: SideBar
             }
         },
-        { name: "complete", path: "/:interviewId/complete", component: Complete },
+        {
+            name: "complete",
+            path: "/:interviewId/complete",
+            components: {
+                default: Complete,
+                sideBar: SideBar
+            }
+        },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {

@@ -1,4 +1,5 @@
 <template>
+    <section class="questionnaire  details-interview">
     <div class="unit-section complete-section" v-if="hasCompleteInfo">
         <div class="unit-title">
             <h3>Finish questionnaire</h3>
@@ -11,11 +12,11 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <h4 class="gray-uppercase">Questions status:</h4>
-                <ul  class="list-unstyled value-is-absent">
+                <!--ul  class="list-unstyled value-is-absent">
                     <li>Interview not started,</li>
                     <li>no questions are answered,</li>
                     <li>no data collected</li>
-                </ul>
+                </ul-->
                 <div class="question-status">
                     <ul class="list-inline clearfix">
                         <li class="answered" v-bind:class="{'has-value' : hasAnsweredQuestions }">{{ answeredQuestionsCountString }}
@@ -37,13 +38,13 @@
             <div class="container-info">
             <h4 class="gray-uppercase">Questions with errors:</h4>
             <ul class="list-unstyled marked-questions" v-for="entitiy in completeInfo.entitiesWithError">
-                <li><a href="#">{{ entitiy.title }}}</a></li>
+                <li><a href="#" @click="navigate(entity)">{{ entitiy.title }}}</a></li>
             </ul>
             </div>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <p class="gray-uppercase">No notes for supervisor</p>
+                <!--p class="gray-uppercase">No notes for supervisor</p-->
                 <label class="gray-uppercase" for="comment-for-supervisor">Note for supervisor</label>
                 <div class="field">
                     <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Tap to enter text"></textarea>
@@ -68,8 +69,8 @@
         </div-->
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="#" class="btn btn-lg btn-success" @click="completeInterview">Finish</a>
-                <p class="gray-uppercase">After you finish this questionnaire it will become read only and will be uploaded to hq during your next synchronization</p>
+                <a href="#" class="btn btn-lg btn-success" @click="completeInterview">Complete</a>
+                <!--p class="gray-uppercase">After you finish this questionnaire it will become read only and will be uploaded to hq during your next synchronization</p-->
             </div>
         </div>
         <!--div class="wrapper-info">
@@ -81,6 +82,7 @@
             </div>
         </div-->
     </div>
+    </section>
 </template>
 
 <script lang="ts">
@@ -125,6 +127,17 @@
             completeInterview() {
                 const comment = $('#comment-for-supervisor').val();
                 this.$store.dispatch('completeInterview', { comment: comment });
+            },
+            navigate(entityWithError) {
+                const navigateToEntity = {
+                    name: 'section',
+                    params: {
+                        sectionId: entityWithError.parentId,
+                        interviewId: this.$route.params.interviewId
+                    }
+                }
+                this.$store.dispatch("sectionRequireScroll", { id: entityWithError.id })
+                this.$router.push(navigateToEntity)
             }
         }
     }
