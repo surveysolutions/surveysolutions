@@ -277,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh page.
+        /// </summary>
+        public static string RefreshPage {
+            get {
+                return ResourceManager.GetString("RefreshPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resume.
         /// </summary>
         public static string Resume {
@@ -309,6 +318,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Resume_WelcomeText {
             get {
                 return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is under heavy load. We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
+        /// </summary>
+        public static string ServerUnderLoad {
+            get {
+                return ResourceManager.GetString("ServerUnderLoad", resourceCulture);
             }
         }
         

@@ -7,7 +7,7 @@
     <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
         <div class="centered-box-table">
             <div class="centered-box-table-cell">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" />
+                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" alt="company-logo" />
                 <div class="default-logo"></div>
             </div>
         </div>
@@ -18,19 +18,22 @@
                 @WebInterview.WelcomeText
             </h1>
             <h3>
-                @string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle)
+                @(string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle))
             </h3>
             <p>
                 @WebInterview.InvitationSmallText
             </p>
+            @if (Model.ServerUnderLoad)
+            {                    
+                <p><strong>@Html.Raw(WebInterview.ServerUnderLoad)</strong></p>
+            }
             @using (Html.BeginForm())
             {
                 <div class="form-group">
                     @Html.AntiForgeryToken()
                 </div>
-                if (Model.UseCaptcha)
+                if (Model.UseCaptcha && !Model.ServerUnderLoad)
                 {
-
                     if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
                     {
                         <div class="form-group has-error">
@@ -41,13 +44,16 @@
                             </p>
                         </div>
                     }
-
                     <div class="form-group">
                         @Html.Recaptcha()
                     </div>
                 }
                 <div class="form-actions">
-                    <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
+                    @if (Model.ServerUnderLoad) {
+                        <button class="btn btn-success btn-lg" onClick="window.location.reload(); return false">@WebInterview.RefreshPage</button>
+                    } else {
+                        <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
+                    }
                 </div>
             }
         </div>
