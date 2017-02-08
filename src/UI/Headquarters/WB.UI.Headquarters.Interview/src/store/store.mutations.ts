@@ -40,4 +40,7 @@ export default {
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, "completeInfo", completeInfo)
     },
+    SET_INTERVIEW_STATUS(state, interviewState) {
+        Vue.set(state, "interviewState", interviewState)
+    }
 }

@@ -109,6 +109,7 @@ declare interface IWebInterviewApi {
     getCompleteInfo(): ICompleteInfo
     getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
     getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
+    getInterviewStatus(): string
 
     answerSingleOptionQuestion(answer: number, questionId: string): void
     answerMultiOptionQuestion(answer: number, questionId: string): void
