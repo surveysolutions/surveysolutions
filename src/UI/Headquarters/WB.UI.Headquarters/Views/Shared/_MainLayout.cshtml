@@ -2,6 +2,7 @@
 @using Microsoft.Practices.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @using WB.UI.Headquarters.Resources
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
@@ -58,43 +59,53 @@
     @RenderSection("scripts", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <div class="container-fluid ">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <a href="javascript:void(0);" class="active-page">@Html.ActivePage()</a>
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar top-menu"></span>
-                            <span class="icon-bar mid-menu"></span>
-                            <span class="icon-bar bottom-menu"></span>
-                        </button>
-                        <a class="navbar-brand rotate-brand" href="@Url.Action("Index", "Account")"></a>
-                    </div>
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="navbar">
-                        @if (User.IsInRole(UserRoles.Administrator.ToString()))
-                        {
-                            @Html.Partial("AdminMainMenu")
-                        }
-                        else if (User.IsInRole(UserRoles.Headquarter.ToString()))
-                        {
-                            @Html.Partial("HeadquartersMainMenu")
-                        }
-                        else if (User.IsInRole(UserRoles.Observer.ToString()))
-                        {
-                            @Html.Partial("ObserverMainMenu")
-                        }
-                        else
-                        {
-                            @Html.Partial("SupervisorMainMenu")
-                        }
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
-    </header>
-    @RenderBody()
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid ">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="active-page">@Html.ActivePage()</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar top-menu"></span>
+                    <span class="icon-bar mid-menu"></span>
+                    <span class="icon-bar bottom-menu"></span>
+                </button>
+                <a class="navbar-brand rotate-brand" href="@Url.Action("Index", "Account")"></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar">
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    @Html.Partial("AdminMainMenu")
+                }
+                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                {
+                    @Html.Partial("HeadquartersMainMenu")
+                }
+                else if (User.IsInRole(UserRoles.Observer.ToString()))
+                {
+                    @Html.Partial("ObserverMainMenu")
+                }
+                else
+                {
+                    @Html.Partial("SupervisorMainMenu")
+                }
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>
+    
+    @if (User.Identity.IsObserver())
+    {
+        <div class="panel panel-warning view-mood">
+            <div class="panel-heading">
+                @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
+            </div>
+        </div>
+    }
+
+@RenderBody()
     
     <footer class="footer">
         <div class="container-fluid">
