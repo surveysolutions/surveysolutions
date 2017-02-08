@@ -110,8 +110,8 @@ export default {
     },
     // called by server side. navigate to finish page
     finishInterview({ state, dispatch }) {
-        router.push({ name: "finish" })
-        dispatch("reloadInterview", null)
+        const routeParams = (router.currentRoute.params as any)
+        location.replace(router.resolve({ name: "finish", params: {interviewId: routeParams.interviewId} }).href)
     },
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions: string[]) {
