@@ -29,12 +29,12 @@
             }
         },
         methods: {
+            blur(evnt) {
+                $(evnt.target).blur();
+            },
             markAnswerAsNotSavedWithMessage(message) {
                 const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
-            blur(evnt) {
-                $(evnt.target).blur();
             },
             answerIntegerQuestion(evnt) {
 
