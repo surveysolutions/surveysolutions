@@ -31,6 +31,10 @@ const router = new VueRouter({
                 sideBar: SideBar
             }
         },
+        {
+            name: "finish",
+            path: "/finish/:interviewId"
+        }
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {

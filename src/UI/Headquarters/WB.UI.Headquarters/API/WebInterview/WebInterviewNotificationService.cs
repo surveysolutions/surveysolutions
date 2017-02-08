@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
+        public void FinishInterview(Guid interviewId) => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).finishInterview();
 
         public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
         {

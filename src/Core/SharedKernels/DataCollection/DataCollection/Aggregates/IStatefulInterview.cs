@@ -10,6 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public interface IStatefulInterview
     {
+        DateTime? StartedDate { get; }
+        DateTime? CompletedDate { get; }
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
