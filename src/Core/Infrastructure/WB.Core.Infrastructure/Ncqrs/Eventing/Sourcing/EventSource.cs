@@ -149,8 +149,7 @@ namespace Ncqrs.Eventing.Sourcing
                 _currentVersion = _initialVersion;
             }
         
-            Interlocked.Increment(ref _currentVersion);
-            return _currentVersion;
+            return Interlocked.Increment(ref _currentVersion);
         }
 
         private void ApplyEventFromHistory(CommittedEvent evnt)

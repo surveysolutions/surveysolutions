@@ -293,8 +293,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
 
-            Interlocked.Increment(ref lastUsedGlobalSequence);
-            return lastUsedGlobalSequence;
+            return Interlocked.Increment(ref lastUsedGlobalSequence);
         }
 
         private void FillLastUsedSequenceInEventStore()
