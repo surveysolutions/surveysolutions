@@ -5,8 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
 using Prometheus;
+using WB.UI.Headquarters.API.WebInterview.Services;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     [Localizable(false)]
     public class WebInterviewConnectionsCounter : HubPipelineModule

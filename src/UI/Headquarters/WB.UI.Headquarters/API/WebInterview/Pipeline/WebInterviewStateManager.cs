@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     public class WebInterviewStateManager : HubPipelineModule
     {

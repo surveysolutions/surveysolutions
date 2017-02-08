@@ -1084,19 +1084,19 @@
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
-    <Compile Include="API\WebInterview\ConnectionLimiter.cs" />
+    <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
-    <Compile Include="API\WebInterview\PlainSignalRTransactionManager.cs" />
-    <Compile Include="API\WebInterview\SignalrErrorHandler.cs" />
-    <Compile Include="API\WebInterview\WebInterviewConnectionsCounter.cs" />
+    <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\SignalrErrorHandler.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
     <Compile Include="API\WebInterview\WebInterviewNinjectModule.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
-    <Compile Include="API\WebInterview\WebInterviewAllowedModule.cs" />
-    <Compile Include="API\WebInterview\WebInterviewNotificationService.cs" />
-    <Compile Include="API\WebInterview\WebInterviewStateManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewAllowedModule.cs" />
+    <Compile Include="API\WebInterview\Services\WebInterviewNotificationService.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

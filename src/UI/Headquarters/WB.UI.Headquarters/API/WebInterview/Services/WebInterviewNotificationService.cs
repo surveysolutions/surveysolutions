@@ -5,11 +5,11 @@ using Microsoft.AspNet.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class WebInterviewNotificationService : IWebInterviewNotificationService
     {
@@ -39,13 +39,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                     continue;
                 }
 
-                var clients = webInterviewHubContext.Clients;
+                var clients = this.webInterviewHubContext.Clients;
                 var group = clients.Group(questionsGroupedByParent.Key);
 
                 group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
             }
 
-            webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+            this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
         }
 
         public void ReloadInterview(Guid interviewId) => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
@@ -95,13 +95,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                         continue;
                     }
 
-                    var clients = webInterviewHubContext.Clients;
+                    var clients = this.webInterviewHubContext.Clients;
                     var group = clients.Group(questionsGroupedByParent.Key);
 
                     group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
                 }
 
-                webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+                this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
             }
         }
 
