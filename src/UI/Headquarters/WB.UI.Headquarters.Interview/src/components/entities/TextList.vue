@@ -4,13 +4,13 @@
             <div class="options-group">
                 <div class="form-group" v-for="(row, index) in $me.rows">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" @keyup.enter="blur" @blur="updateRow($event, row)"/>
+                        <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" v-blurOnEnterKey @blur="updateRow($event, row)"/>
                         <button type="submit" class="btn btn-link btn-clear" v-on:click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" @blur="addRow" @keyup.enter="addRow"/>
+                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
             </div>
@@ -40,9 +40,6 @@
             }
         },
         methods: {
-            blur(evnt) {
-                $(evnt.target).blur();
-            },
             markAnswerAsNotSavedWithMessage(message) {
                 const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })

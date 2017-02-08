@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @keyup.enter="blur" @blur="answerIntegerQuestion"
+                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" v-blurOnEnterKey @blur="answerIntegerQuestion"
                             v-numericFormatting="{aSep: formattingChar, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
@@ -29,9 +29,6 @@
             }
         },
         methods: {
-            blur(evnt) {
-                $(evnt.target).blur();
-            },
             markAnswerAsNotSavedWithMessage(message) {
                 const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
