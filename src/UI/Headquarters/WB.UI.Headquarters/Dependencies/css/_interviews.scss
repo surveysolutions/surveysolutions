@@ -1,0 +1,9 @@
+.prefield-column, .spent-time, .templete{
+	display: none;
+
+}
+td, th{
+		&.visible{
+			display: table-cell;
+	}
+}
