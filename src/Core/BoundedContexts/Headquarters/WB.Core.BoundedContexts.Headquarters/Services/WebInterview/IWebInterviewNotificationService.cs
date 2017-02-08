@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
         void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage);
 
         void RefreshRemovedEntities(Guid interviewId, params Identity[] questions);
+        void FinishInterview(Guid interviewId);
     }
 }

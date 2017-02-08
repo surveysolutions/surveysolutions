@@ -103,6 +103,11 @@ export default {
     reloadInterview({ state, dispatch }) {
         location.reload(true)
     },
+    // called by server side. navigate to finish page
+    finishInterview({ state, dispatch }) {
+        router.push({ name: "finish" })
+        dispatch("reloadInterview", null)
+    },
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions: string[]) {
         let needSectionUpdate = false

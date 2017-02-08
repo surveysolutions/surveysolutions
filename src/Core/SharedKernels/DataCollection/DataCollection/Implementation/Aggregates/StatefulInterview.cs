@@ -168,7 +168,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         private InterviewTree sourceInterview;
-        
+
+        public DateTime? StartedDate => this.properties.StartedDate;
+        public DateTime? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
         public Guid Id => this.EventSourceId;
         public string InterviewerCompleteComment { get; private set; }

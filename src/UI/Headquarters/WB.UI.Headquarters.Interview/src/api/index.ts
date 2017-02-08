@@ -30,6 +30,10 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             store.dispatch("reloadInterview")
         }
 
+        interviewProxy.client.finishInterview = () => {
+            store.dispatch("finishInterview")
+        }
+
         interviewProxy.client.refreshEntities = (questions) => {
             store.dispatch("refreshEntities", questions)
         }

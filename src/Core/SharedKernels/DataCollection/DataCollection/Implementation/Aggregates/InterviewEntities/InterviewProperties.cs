@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsReceivedByInterviewer { get; set; }
         public bool WasCompleted { get; set; }
         public bool IsHardDeleted { get; set; }
+        public DateTime? StartedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
 
         private Guid? supervisorId;
         public Guid? SupervisorId
