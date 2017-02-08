@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
             var passedInterviews = this.Session[CapchaCompletedKey] as List<string>;
-            return (passedInterviews?.Contains(interviewId)).GetValueOrDefault();
+            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
         private void RememberCapchaFilled(string interviewId)
