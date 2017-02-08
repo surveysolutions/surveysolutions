@@ -3,6 +3,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
+using WB.UI.Headquarters.API.WebInterview.Pipeline;
+using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {

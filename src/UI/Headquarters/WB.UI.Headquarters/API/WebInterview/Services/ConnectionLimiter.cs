@@ -3,7 +3,7 @@ using System.Web.WebPages;
 using Prometheus.Advanced;
 using WB.UI.Shared.Web.Configuration;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     internal class ConnectionLimiter: IConnectionLimiter
     {
