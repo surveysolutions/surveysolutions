@@ -209,6 +209,12 @@
   <data name="Resume" xml:space="preserve">
     <value>Resume</value>
   </data>
+  <data name="OrStartInterview" xml:space="preserve">
+    <value>Or you can start a new interview</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+    <value>You have started an interview</value>
+  </data>
   <data name="Resume_InvitationSmallText" xml:space="preserve">
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>

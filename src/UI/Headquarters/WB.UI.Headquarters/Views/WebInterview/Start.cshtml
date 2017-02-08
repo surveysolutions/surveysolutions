@@ -48,12 +48,27 @@
                         @Html.Recaptcha()
                     </div>
                 }
+
+                if (Model.HasPreviousStartedInterview && !Model.ServerUnderLoad)
+                {
+                    <p>
+                        @WebInterview.HasPreviousStartedInterview
+                    </p>
+                    <div class="form-actions">
+                        <button class="btn btn-success btn-lg" name="resume" value="true">@WebInterview.Resume</button>
+                    </div>
+                    <p>
+                        <br />
+                        @WebInterview.OrStartInterview
+                    </p>
+                }
+
                 <div class="form-actions">
                     @if (Model.ServerUnderLoad) {
                         <button class="btn btn-success btn-lg" onClick="window.location.reload(); return false">@WebInterview.RefreshPage</button>
                     } else {
                         <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
-                    }
+                    }                
                 </div>
             }
         </div>
