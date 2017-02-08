@@ -20,7 +20,7 @@ namespace WB.WebInterview.Stress
         {
             if (args.Length == 0 && !File.Exists("config.yml"))
             {
-                Console.WriteLine("Usage .exe {configuration}.yml.");
+                Console.WriteLine($"Sample usage {System.Diagnostics.Process.GetCurrentProcess().ProcessName}.exe config.yml.");
                 Console.WriteLine("");
                 Console.WriteLine("Sample config:");
 
@@ -43,15 +43,20 @@ namespace WB.WebInterview.Stress
 
             if (File.Exists(file))
             {
+                var cts = new CancellationTokenSource();
                 var config = new Deserializer().Deserialize<Configuration>(File.OpenText(file));
                 var factory = new WorkerFactory(config);
                 var list = new List<Task>();
 
                 for (int i = 0; i < config.workersCount; i++)
                 {
-                    var worker = factory.Create();
-                    list.Add(worker.Start());
+                    var worker = factory.Create(cts.Token);
+                    list.Add(worker.StartAsync());
                 }
+
+                Console.ReadLine();
+                Console.WriteLine("Cancelling work");
+                cts.Cancel();
 
                 Task.WaitAll(list.ToArray());
             }
@@ -61,6 +66,7 @@ namespace WB.WebInterview.Stress
         {
             public string baseUri { get; set; }
             public int workersCount { get; set; }
+            public long restartWorkersIn { get; set; } = 30000;
             public string questionarieId { get; set; }
             public int answerDelay { get; set; } = 1000;
             public int createInterviewDelay { get; set; } = 30000;
@@ -77,9 +83,9 @@ namespace WB.WebInterview.Stress
                 _config = config;
             }
 
-            public Worker Create()
+            public Worker Create(CancellationToken ctsToken)
             {
-                var worker = new Worker(_config.baseUri, _config.questionarieId, CancellationToken.None);
+                var worker = new Worker(_config.baseUri, _config.questionarieId, ctsToken);
                 worker.SetDelay(_config.answerDelay, _config.createInterviewDelay);
 
                 foreach (var answer in _config.answers)
@@ -123,55 +129,72 @@ namespace WB.WebInterview.Stress
                 _createInterviewDelay = createInterviewDelay;
             }
 
-            public async Task Start()
+            public async Task StartAsync()
             {
-                while (!await CreateInterview()) ;
+                while (!await CreateInterviewAsync()) ;
                 if (_interviewId == "Start") return;
-                await Work();
+
+                while (!_cancellationToken.IsCancellationRequested)
+                {
+                    await WorkAsync();
+                    await QueryAsync();
+                }
             }
 
-            static Random _rnd = new Random();
+            static readonly Random _rnd = new Random();
 
-            private void Log(string message, Stopwatch sw = null)
+            private void Log(string message)
             {
-                Console.WriteLine($"#{_workerId, -3} [{_interviewId ?? ""}]: {message}." + (sw == null ? "" : $"({sw.ElapsedMilliseconds} ms)"), "Worker");
+                Console.WriteLine($"#{_workerId, -3} [{_interviewId ?? ""}]: {message}." + (sw == null || !sw.IsRunning ? "" : $"({sw.ElapsedMilliseconds} ms)"), "Worker");
             }
 
-            private async Task Work()
+            private async Task WorkAsync()
             {
                 var client = new HubConnection($"{_baseUri}/signalr/hubs", $"interviewId={_interviewId}");
-                var proxy = client.CreateHubProxy("interview");
+                this._proxy = client.CreateHubProxy("interview");
 
-                var sw = new Stopwatch();
                 while (client.State != ConnectionState.Connected)
                 {
                     try
                     {
-                        await Task.Delay(this._createInterviewDelay);
+                        await Task.Delay(this._createInterviewDelay, _cancellationToken);
 
                         sw.Restart();
                         Log("Starting connection to Hub");
                         await client.Start(new WebSocketTransport());
-                        Log("Connected", sw);
+                        Log("Connected");
                     }
                     catch (Exception e)
                     {
-                        Log("Error connecting to hub. Retry. " + e.Message, sw);
+                        Log($"Error connecting to hub. Retry. {e.Message}");
                     }
                 }
+            }
 
-                while (!_cancellationToken.IsCancellationRequested)
+            private readonly Stopwatch sw = new Stopwatch(); 
+
+            private async Task QueryAsync()
+            {
+                try
                 {
-                    await Task.Delay(_rnd.Next(_answeringDelay), _cancellationToken);
-                    var answer = _rnd.Next(10000).ToString();
-                    sw.Restart();
-                    await InvokeRandomCommand(proxy, sw);
+                    while (!_cancellationToken.IsCancellationRequested)
+                    {
+                        await Task.Delay(_rnd.Next(_answeringDelay), _cancellationToken);
+                        sw.Restart();
+                        if (!await InvokeRandomCommandAsync()) return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log($"Got exception: {e.Message}");
+                    throw;
                 }
             }
 
             Tuple<string, string[]> _lastCommand = null;
+            private IHubProxy _proxy;
 
-            private async Task InvokeRandomCommand(IHubProxy proxy, Stopwatch sw)
+            private async Task<bool> InvokeRandomCommandAsync()
             {
                 Tuple<string, string[]> command;
 
@@ -183,18 +206,20 @@ namespace WB.WebInterview.Stress
                 _lastCommand = command;
                 try
                 {
-                    await proxy.Invoke(command.Item1, command.Item2);
-                    Log($"Invoked, {command.Item1} ({string.Join(", ", command.Item2)})", sw);
+                    await _proxy.Invoke(command.Item1, command.Item2);
+                    Log($"Invoked, {command.Item1} ({string.Join(", ", command.Item2)})");
+                    return true;
                 }
                 catch (Exception e)
                 {
-                    Log($"Cannot invoke, {command.Item1} ({string.Join(", ", command.Item2)}): {e.Message}", sw);
+                    Log($"Cannot invoke, {command.Item1} ({string.Join(", ", command.Item2)}): {e.Message}");
+                    return false;
                 }
             }
 
-            private async Task<bool> CreateInterview()
+            private async Task<bool> CreateInterviewAsync()
             {
-                await Task.Delay(_rnd.Next(_createInterviewDelay));
+                await Task.Delay(_rnd.Next(_createInterviewDelay), _cancellationToken);
 
                 var sw = new Stopwatch();
                 sw.Start();
@@ -213,18 +238,18 @@ namespace WB.WebInterview.Stress
                         new FormUrlEncodedContent(new KeyValuePair<string, string>[]
                         {
                             new KeyValuePair<string, string>("__RequestVerificationToken", forgeryToken)
-                        }));
+                        }), _cancellationToken);
 
                     var interviewLocation = response.RequestMessage.RequestUri.AbsoluteUri;
                     _interviewId = GetInterviewId(interviewLocation, "webinterview/start/") ??
                                    GetInterviewId(interviewLocation, "webinterview/");
 
-                    Log("Done create interview.", sw);
+                    Log("Done create interview.");
                     return true;
                 }
                 catch (Exception e)
                 {
-                    Log("Cannot create interview: " + e.Message, sw);
+                    Log($"Cannot create interview: {e.Message}");
                     return false;
                 }
             }
