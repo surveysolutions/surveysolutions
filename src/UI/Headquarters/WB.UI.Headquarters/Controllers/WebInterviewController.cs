@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Controllers
             WebInterviewConfig webInterviewConfig)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            var previousStartedInterviewId = this.Request.Cookies["webinterview_" + questionnaireIdentity.ToString()]?.Value;
+            var previousStartedInterviewId = this.Request.Cookies[GetCookieNameForStartedWEbInterview(questionnaireIdentity)]?.Value;
 
             var model = new StartWebInterview();
             model.QuestionnaireTitle = questionnaireBrowseItem.Title;
@@ -241,11 +241,11 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var interviewId = resume
-                ? this.Request.Cookies["webinterview_" + questionnaireIdentity]?.Value
+                ? this.Request.Cookies[GetCookieNameForStartedWEbInterview(questionnaireIdentity)]?.Value
                 : this.CreateInterview(questionnaireIdentity);
 
             RememberCapchaFilled(interviewId);
-            Response.Cookies.Add(new HttpCookie("webinterview_" + questionnaireIdentity, interviewId));
+            Response.Cookies.Add(new HttpCookie(GetCookieNameForStartedWEbInterview(questionnaireIdentity), interviewId));
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
         }
 
@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
 
-            this.Response.Cookies.Add(new HttpCookie("webinterview_" + interview.QuestionnaireIdentity, string.Empty));
+            this.Response.Cookies.Add(new HttpCookie(GetCookieNameForStartedWEbInterview(interview.QuestionnaireIdentity), string.Empty));
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -370,6 +370,11 @@ Exception details:<br />
                 ViewName = @"~/Views/WebInterview/Error.cshtml",
                 ViewData = new ViewDataDictionary(new WebInterviewError { Message = exception.Message})
             };
+        }
+
+        private string GetCookieNameForStartedWEbInterview(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return "webinterview_" + questionnaireIdentity;
         }
     }
 }
