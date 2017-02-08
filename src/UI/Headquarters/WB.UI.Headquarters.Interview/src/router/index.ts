@@ -25,7 +25,7 @@ const router = new VueRouter({
         },
         {
             name: "complete",
-            path: "/:interviewId/complete",
+            path: "/:interviewId/Complete",
             components: {
                 default: Complete,
                 sideBar: SideBar
@@ -33,7 +33,7 @@ const router = new VueRouter({
         },
         {
             name: "finish",
-            path: "/finish/:interviewId"
+            path: "/Finish/:interviewId"
         }
     ],
     scrollBehavior(to, from, savedPosition) {
