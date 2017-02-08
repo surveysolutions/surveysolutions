@@ -214,9 +214,8 @@ label.inactive{
 	&.instruction{
 		color: $blue;
 		p{
-            /* white-space: pre-wrap; */
-            white-space: pre;
-        }
+			white-space: pre-wrap;
+		}
 	}
 	&.text-danger{
 		color: $red_error;
