@@ -132,6 +132,7 @@ export default {
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
         dispatch("fetchSidebar")
+        dispatch("fetchInterviewStatus")
     }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit }) => {
@@ -142,6 +143,11 @@ export default {
     fetchCompleteInfo: debounce(async ({ commit }) => {
         const completeInfo = await apiCaller(api => api.getCompleteInfo())
         commit("SET_COMPLETE_INFO", completeInfo)
+    }, 200),
+
+    fetchInterviewStatus: debounce(async ({ commit }) => {
+        const interviewState = await apiCaller(api => api.getInterviewStatus())
+        commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
     completeInterview({ dispatch }, comment: string) {
