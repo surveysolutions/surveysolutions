@@ -11,15 +11,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository
     {
-        private const int CacheSize = 100;
+        private readonly int cacheSize;
+
         private static readonly object lockObject = new object();
 
         private ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
 
-        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
-            : base(eventStore, snapshotStore, repository) { }
-
-
+        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, int cacheSize = 100)
+            : base(eventStore, snapshotStore, repository)
+        {
+            this.cacheSize = cacheSize;
+        }
+        
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
             => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
@@ -60,7 +63,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                         .Concat(
                             aggregateRoot.ToEnumerable(),
                             cache.Except(aggregate => aggregate.EventSourceId == aggregateRoot.EventSourceId))
-                        .Take(CacheSize));
+                        .Take(cacheSize));
             }
         }
     }

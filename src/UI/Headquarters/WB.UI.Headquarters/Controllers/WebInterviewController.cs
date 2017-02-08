@@ -21,12 +21,13 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
-using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using Filter = NLog.Filters.Filter;
+using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -42,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
+        private readonly IConnectionLimiter connectionLimiter;
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -68,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             IStatefullWebInterviewFactory statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
+            IConnectionLimiter connectionLimiter,
             ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
         {
@@ -78,6 +81,7 @@ namespace WB.UI.Headquarters.Controllers
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.imageProcessingService = imageProcessingService;
+            this.connectionLimiter = connectionLimiter;
             this.usersRepository = usersRepository;
         }
 
@@ -201,7 +205,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
 
             var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
-
+            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
             return this.View(model);
         }
 
@@ -214,6 +218,13 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
             if (!webInterviewConfig.Started)
                 return this.HttpNotFound();
+
+            if (!this.connectionLimiter.CanConnect())
+            {
+                var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
+                model.ServerUnderLoad = true;
+                return this.View(model);
+            }
 
             if (webInterviewConfig.UseCaptcha)
             {
