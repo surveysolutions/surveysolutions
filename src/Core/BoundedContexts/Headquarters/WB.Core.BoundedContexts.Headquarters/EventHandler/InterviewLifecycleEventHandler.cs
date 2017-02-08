@@ -48,7 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<GroupsEnabled>,
         IEventHandler<GroupsDisabled>,
         IEventHandler<TranslationSwitched>,
-        IEventHandler<InterviewCompleted>
+        IEventHandler<InterviewCompleted>,
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>
     {
         public override object[] Writers => new object[0];
 
@@ -268,5 +270,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             return false;
         }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
     }
 }
