@@ -9846,7 +9846,7 @@ label.inactive {
   .information-block.instruction {
     color: #2a81cb; }
     .information-block.instruction p {
-      white-space: pre; }
+      white-space: pre-wrap; }
   .information-block.text-danger {
     color: #e74924; }
   .information-block.roster-section-info {
