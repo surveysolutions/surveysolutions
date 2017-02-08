@@ -6,7 +6,7 @@
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter answer ' + userFriendlyMask" :value="$me.answer"
                             @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered">
-                        <wb-remove-answer />
+                            <wb-remove-answer />
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
         },
         directives: {
             mask: {
-                update: (el, binding) => {
+                bind(el, binding, vnode) {
                     if (binding.value) {
                         const input = $(el)
                         input.mask(binding.value, {
@@ -68,4 +68,5 @@
             }
         }
     }
+
 </script>
