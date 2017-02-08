@@ -40,7 +40,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= {minVersion} ORDER BY eventsequence";
+                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence";
+                    command.Parameters.AddWithValue("minVersion", minVersion);
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
 
                     using (IDataReader npgsqlDataReader = command.ExecuteReader())
@@ -173,7 +174,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 conn.Open();
 
                 var npgsqlCommand = conn.CreateCommand();
-                npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
+                npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
+                npgsqlCommand.Parameters.AddWithValue("processed", processed);
 
                 using (var reader = npgsqlCommand.ExecuteReader())
                 {
@@ -206,7 +209,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 while (processed < eventsCountAfterPosition)
                 {
                     var npgsqlCommand = connection.CreateCommand();
-                    npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > {globalSequence} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                    npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
+                    npgsqlCommand.Parameters.AddWithValue("globalSequence", globalSequence);
+                    npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
+                    npgsqlCommand.Parameters.AddWithValue("processed", processed);
 
                     List<CommittedEvent> events = new List<CommittedEvent>();
 
