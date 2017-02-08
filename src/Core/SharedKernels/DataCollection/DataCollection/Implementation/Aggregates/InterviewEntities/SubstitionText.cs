@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -60,7 +61,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var rosterTitle = string.IsNullOrEmpty(roster?.RosterTitle) 
                     ? this.substitutionService.DefaultSubstitutionText 
                     : roster.RosterTitle;
-                textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, substitution.Name, rosterTitle);
+                textWithReplacedSubstitutions = 
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
+                        substitution.Name, 
+                        WebUtility.HtmlEncode(rosterTitle));
             }
 
             foreach (var substitution in this.substitutionVariables.ByVariables)
@@ -71,7 +75,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     ? this.substitutionService.DefaultSubstitutionText
                     : variableValueAsString;
 
-                textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, substitution.Name, variableValueAsString);
+                textWithReplacedSubstitutions = 
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
+                        substitution.Name,
+                        WebUtility.HtmlEncode(variableValueAsString));
             }
 
             foreach (var substitution in this.substitutionVariables.ByQuestions)
@@ -82,7 +89,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     ? this.substitutionService.DefaultSubstitutionText
                     : answerString;
 
-                textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, substitution.Name, answerString);
+                textWithReplacedSubstitutions = 
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
+                        substitution.Name, 
+                        WebUtility.HtmlEncode(answerString));
             }
 
             this.Text = textWithReplacedSubstitutions;

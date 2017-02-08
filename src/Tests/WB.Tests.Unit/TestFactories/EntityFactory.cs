@@ -1318,11 +1318,12 @@ namespace WB.Tests.Unit.TestFactories
             return question;
         }
 
-        private SubstitionText SubstitionText(Identity identity, string title)
+        public SubstitionText SubstitionText(Identity identity, 
+            string title,
+            SubstitutionVariables variables = null)
         {
-            return new SubstitionText(identity, title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
-
 
         public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
         {
