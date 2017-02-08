@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string QuestionnaireTitle { get; set; }
         public string InterviewId { get; set; }
+        public string FirstSectionId { get; set; }
     }
 
     public class LanguageInfo

@@ -10,9 +10,9 @@
                         <span class="icon-bar mid-menu"></span>
                         <span class="icon-bar bottom-menu"></span>
                     </button>
-                <a class="navbar-brand  rotate-brand" href="#">
-                    <div class="brand-name">Web interview #{{$store.state.interviewId}}</div>
-                </a>
+                    <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand">
+                        <div class="brand-name">Web interview #{{$store.state.interviewId}}</div>
+                    </router-link>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
@@ -55,6 +55,9 @@
             },
             questionnaireTitle(){
                 return this.$store.state.questionnaireTitle || ""
+            },
+            toFirstSection(){
+                return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
             }
         },
         methods: {
