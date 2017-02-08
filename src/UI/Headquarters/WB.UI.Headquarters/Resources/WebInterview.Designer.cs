@@ -61,6 +61,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This interview has been completed.
+        /// </summary>
+        public static string CompletionText {
+            get {
+                return ResourceManager.GetString("CompletionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Web Survey.
+        /// </summary>
+        public static string FinishText {
+            get {
+                return ResourceManager.GetString("FinishText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In progress.
+        /// </summary>
+        public static string InProgressText {
+            get {
+                return ResourceManager.GetString("InProgressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The link has expired.
         /// </summary>
         public static string Error_InterviewExpired {
@@ -178,6 +205,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview completion date: {0}.
+        /// </summary>
+        public static string InterviewCompletionDateFormatText {
+            get {
+                return ResourceManager.GetString("InterviewCompletionDateFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview ID: {0}.
+        /// </summary>
+        public static string InterviewIdFormatText {
+            get {
+                return ResourceManager.GetString("InterviewIdFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview start date: {0}.
+        /// </summary>
+        public static string InterviewStartDateFormatText {
+            get {
+                return ResourceManager.GetString("InterviewStartDateFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
         /// </summary>
         public static string InvitationSmallText {
@@ -192,6 +246,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InvitationText {
             get {
                 return ResourceManager.GetString("InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        public static string NotStartedText {
+            get {
+                return ResourceManager.GetString("NotStartedText", resourceCulture);
             }
         }
         
@@ -273,6 +336,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Stopped {
             get {
                 return ResourceManager.GetString("Stopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey: &quot;{0}&quot;.
+        /// </summary>
+        public static string SurveyFormatText {
+            get {
+                return ResourceManager.GetString("SurveyFormatText", resourceCulture);
             }
         }
         

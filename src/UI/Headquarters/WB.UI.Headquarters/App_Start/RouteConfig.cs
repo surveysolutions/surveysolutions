@@ -11,6 +11,7 @@ namespace WB.UI.Headquarters
             routes.IgnoreRoute(@"{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(@"WebInterview.Start", @"WebInterview/Start/{id}", new { controller = @"WebInterview", action = @"Start" });
+            routes.MapRoute(@"WebInterview.Finish", @"WebInterview/Finish/{id}", new { controller = @"WebInterview", action = @"Finish" });
             routes.MapRoute(@"WebInterview.Resume", @"WebInterview/{id}/Section/{sectionId}", 
                 defaults: new { controller = @"WebInterview", action = @"Section" });
             routes.MapRoute(@"WebInterview.ImageAnswering", @"WebInterview/image", new { controller = @"WebInterview", action = @"Image" });

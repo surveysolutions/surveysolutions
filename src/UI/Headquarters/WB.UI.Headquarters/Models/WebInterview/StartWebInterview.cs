@@ -17,6 +17,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool UseCaptcha { get; set; }
     }
 
+    public class FinishWebInterview
+    {
+        public string QuestionnaireTitle { get; set; }
+        public string InterviewId { get; set; }
+        public DateTime? StartedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
+    }
+
     public class WebInterviewError
     {
         public string Message { get; set; }

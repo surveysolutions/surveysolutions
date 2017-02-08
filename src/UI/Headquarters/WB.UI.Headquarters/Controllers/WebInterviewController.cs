@@ -116,6 +116,19 @@ namespace WB.UI.Headquarters.Controllers
             return model;
         }
 
+        private FinishWebInterview GetFinishModel(IStatefulInterview interview)
+        {
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
+
+            return new FinishWebInterview
+            {
+                QuestionnaireTitle = questionnaireBrowseItem.Title,
+                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interview.Id.FormatGuid()),
+                StartedDate = interview.StartedDate,
+                CompletedDate = interview.CompletedDate
+            };
+        }
+
         private RedirectToRouteResult RedirectToFirstSection(string id, IStatefulInterview interview)
         {
             return this.RedirectToAction("Section",
@@ -225,6 +238,21 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return View("Index");
+        }
+        
+        public ActionResult Finish(string id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
+
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
+            {
+                var returlUrl = Url.Action("Finish", routeValues: new { id });
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
+            }
+
+            return View(this.GetFinishModel(interview));
         }
 
         [WebInterviewAuthorize]

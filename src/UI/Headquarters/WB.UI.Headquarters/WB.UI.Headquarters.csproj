@@ -1016,6 +1016,7 @@
     <Content Include="Views\WebInterview\Resume.cshtml" />
     <Content Include="Views\WebInterview\_WebInterviewLayout.cshtml" />
     <Content Include="Views\WebInterview\OutdatedBrowser.cshtml" />
+    <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">

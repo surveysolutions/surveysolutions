@@ -862,5 +862,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     parentRoster.ActualizeChildren();
             }
         }
+
+        private void SetStartDateOnFirstAnswerSet(Identity questionIdentity, DateTime answerDate)
+        {
+            if (this.properties.StartedDate.HasValue) return;
+
+            var question = this.Tree.GetQuestion(questionIdentity);
+            if (question == null) return;
+
+            if (question.IsPrefilled) return;
+            if (!question.IsInterviewer) return;
+
+            this.properties.StartedDate = answerDate;
+        }
     }
 }

@@ -157,6 +157,34 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
   </data>
+  <data name="FinishText" xml:space="preserve">
+    <value>Survey Solutions Web Survey</value>
+  </data>
+  <data name="CompletionText" xml:space="preserve">
+    <value>This interview has been completed</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Not started</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Survey: "{0}"</value>
+    <comment>{0} - name of the questionnaire without version</comment>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+    <value>Interview ID: {0}</value>
+    <comment>{0} - human interview id</comment>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+    <value>Interview start date: {0}</value>
+    <comment>{0} - start date of interview</comment>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+    <value>Interview completion date: {0}</value>
+    <comment>{0} - completion date of interview</comment>
+  </data>
   <data name="Start" xml:space="preserve">
     <value>Start interview</value>
   </data>

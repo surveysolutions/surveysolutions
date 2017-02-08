@@ -47,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<RosterInstancesTitleChanged>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<GroupsDisabled>,
-        IEventHandler<TranslationSwitched>
+        IEventHandler<TranslationSwitched>,
+        IEventHandler<InterviewCompleted>
     {
         public override object[] Writers => new object[0];
 
@@ -220,6 +221,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<TranslationSwitched> evnt)
             => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
+            => this.webInterviewNotificationService.FinishInterview(evnt.EventSourceId);
 
         public void Handle(IPublishedEvent<LinkedToListOptionsChanged> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
