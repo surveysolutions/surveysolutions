@@ -28,7 +28,7 @@
         }
         @include transition(all, 0.2s);
         td{
-            word-break: break-all;
+            /* word-break: break-all; */
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
@@ -116,6 +116,13 @@
     }
     &> tbody > tr:nth-of-type(odd){
         background-color: #edeff0;
+        &.selected{
+            td.without-break{
+                &:before{
+                    @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
+                }
+            }
+        }
         td.without-break{
             &:before{
                 @include gradient-horizontal(transparent, #edeff0, 0%, 70%);
