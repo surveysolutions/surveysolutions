@@ -1,6 +1,5 @@
 import "es6-promise/auto"
 
-import * as moment from "moment"
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 
