@@ -48,6 +48,19 @@ namespace WB.UI.Headquarters.API.WebInterview
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
+        public string GetInterviewStatus()
+        {
+            var statefulInterview = this.GetCallerInterview();
+
+            if (statefulInterview.CountInvalidEntitiesInInterview() > 0)
+                return SimpleGroupStatus.Invalid.ToString();
+
+            if (statefulInterview.CountActiveQuestionsInInterview() == statefulInterview.CountActiveAnsweredQuestionsInInterview())
+                return SimpleGroupStatus.Completed.ToString();
+
+            return SimpleGroupStatus.Other.ToString();
+        }
+
         public PrefilledPageData GetPrefilledEntities()
         {
             var interviewEntityWithTypes = this.GetCallerQuestionnaire()
