@@ -164,8 +164,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
-                    IEnumerable<Identity> questionsToListen = this.interview.GetChildQuestions(eventArgs.TargetGroup);
-                    this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+                    var questionsToListen = this.interview.GetChildQuestions(eventArgs.TargetGroup).ToArray();
+                    this.answerNotifier.Init(this.interviewId, questionsToListen);
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                     break;
             }
