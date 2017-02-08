@@ -70,24 +70,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Solutions Web Survey.
-        /// </summary>
-        public static string FinishText {
-            get {
-                return ResourceManager.GetString("FinishText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to In progress.
-        /// </summary>
-        public static string InProgressText {
-            get {
-                return ResourceManager.GetString("InProgressText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The link has expired.
         /// </summary>
         public static string Error_InterviewExpired {
@@ -111,6 +93,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string Error_NotFound {
             get {
                 return ResourceManager.GetString("Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Web Survey.
+        /// </summary>
+        public static string FinishText {
+            get {
+                return ResourceManager.GetString("FinishText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have started an interview.
+        /// </summary>
+        public static string HasPreviousStartedInterview {
+            get {
+                return ResourceManager.GetString("HasPreviousStartedInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In progress.
+        /// </summary>
+        public static string InProgressText {
+            get {
+                return ResourceManager.GetString("InProgressText", resourceCulture);
             }
         }
         
@@ -264,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Original_Language {
             get {
                 return ResourceManager.GetString("Original_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or you can start a new interview.
+        /// </summary>
+        public static string OrStartInterview {
+            get {
+                return ResourceManager.GetString("OrStartInterview", resourceCulture);
             }
         }
         

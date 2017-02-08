@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -16,6 +17,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public bool UseCaptcha { get; set; }
         public bool ServerUnderLoad { get; set; } = false;
+        public bool HasPreviousStartedInterview { get; set; }
     }
 
     public class FinishWebInterview
