@@ -102,14 +102,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
                             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
-                        var nextSequnce = this.GetNextSequnce();
+                        var nextSequence = this.GetNextSequence();
 
                         writer.StartRow();
                         writer.Write(@event.EventIdentifier, NpgsqlDbType.Uuid);
                         writer.Write(@event.Origin, NpgsqlDbType.Text);
                         writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
                         writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
-                        writer.Write(nextSequnce, NpgsqlDbType.Integer);
+                        writer.Write(nextSequence, NpgsqlDbType.Integer);
                         writer.Write(eventString, NpgsqlDbType.Json);
                         writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
                         writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
@@ -120,7 +120,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                             @event.EventSourceId,
                             @event.EventSequence,
                             @event.EventTimeStamp,
-                            nextSequnce,
+                            nextSequence,
                             @event.Payload);
                         result.Add(committedEvent);
                     }
@@ -286,7 +286,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return commitedEvent;
         }
 
-        private long GetNextSequnce()
+        private long GetNextSequence()
         {
             if (lastUsedGlobalSequence == -1)
             {
