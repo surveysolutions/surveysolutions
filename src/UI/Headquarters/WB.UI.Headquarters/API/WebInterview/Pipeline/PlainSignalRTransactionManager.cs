@@ -3,7 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     public class PlainSignalRTransactionManager : HubPipelineModule
     {
