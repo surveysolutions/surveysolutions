@@ -67,7 +67,7 @@
                     @if (Model.ServerUnderLoad) {
                         <button class="btn btn-success btn-lg" onClick="window.location.reload(); return false">@WebInterview.RefreshPage</button>
                     } else {
-                        <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
+                        <button class="btn btn-success btn-lg" type="submit" name="resume" value="false">@WebInterview.Start</button>
                     }                
                 </div>
             }
