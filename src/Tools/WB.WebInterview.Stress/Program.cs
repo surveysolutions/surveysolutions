@@ -147,6 +147,8 @@ namespace WB.WebInterview.Stress
                 {
                     try
                     {
+                        await Task.Delay(this._createInterviewDelay);
+
                         sw.Restart();
                         Log("Starting connection to Hub");
                         await client.Start(new WebSocketTransport());
