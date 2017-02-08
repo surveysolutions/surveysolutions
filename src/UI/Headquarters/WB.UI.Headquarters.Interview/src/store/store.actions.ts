@@ -1,6 +1,7 @@
 import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
 import * as Vue from "vue"
+
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import router from "./../router"
 import { batchedAction } from "./helpers"
@@ -19,7 +20,11 @@ export default {
     fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
-        commit("SET_ENTITIES_DETAILS", details)
+        commit("SET_ENTITIES_DETAILS", {
+                entities: details,
+                lastActivityTimestamp: new Date()
+            }
+        )
     }, "fetch", /* limit */ 100),
 
     answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
