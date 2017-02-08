@@ -117,10 +117,12 @@ namespace WB.UI.Headquarters.Controllers
             WebInterviewConfig webInterviewConfig)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            var previousStartedInterviewId = this.Request.Cookies["webinterview_" + questionnaireIdentity.ToString()]?.Value;
 
             var model = new StartWebInterview();
             model.QuestionnaireTitle = questionnaireBrowseItem.Title;
             model.UseCaptcha = webInterviewConfig.UseCaptcha;
+            model.HasPreviousStartedInterview = !previousStartedInterviewId.IsNullOrEmpty();
             return model;
         }
 
@@ -212,7 +214,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> StartPost(string id)
+        public async Task<ActionResult> StartPost(string id, bool resume)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
@@ -238,8 +240,12 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            var interviewId = this.CreateInterview(questionnaireIdentity);
+            var interviewId = resume
+                ? this.Request.Cookies["webinterview_" + questionnaireIdentity]?.Value
+                : this.CreateInterview(questionnaireIdentity);
+
             RememberCapchaFilled(interviewId);
+            Response.Cookies.Add(new HttpCookie("webinterview_" + questionnaireIdentity, interviewId));
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
         }
 
@@ -261,6 +267,8 @@ namespace WB.UI.Headquarters.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
+
+            this.Response.Cookies.Add(new HttpCookie("webinterview_" + interview.QuestionnaireIdentity, string.Empty));
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
