@@ -121,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
             WebInterviewConfig webInterviewConfig)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            var previousStartedInterviewId = this.Request.Cookies[GetCookieNameForStartedWEbInterview(questionnaireIdentity)]?.Value;
+            var previousStartedInterviewId = this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value;
 
             var model = new StartWebInterview();
             model.QuestionnaireTitle = questionnaireBrowseItem.Title;
@@ -251,11 +251,11 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var interviewId = resume
-                ? this.Request.Cookies[GetCookieNameForStartedWEbInterview(questionnaireIdentity)]?.Value
+                ? this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value
                 : this.CreateInterview(questionnaireIdentity);
 
             RememberCapchaFilled(interviewId);
-            Response.Cookies.Add(new HttpCookie(GetCookieNameForStartedWEbInterview(questionnaireIdentity), interviewId));
+            Response.Cookies.Add(new HttpCookie(this.GetCookieNameForStartedWebInterview(questionnaireIdentity), interviewId));
             return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
         }
 
@@ -278,7 +278,7 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
 
-            this.Response.Cookies.Add(new HttpCookie(GetCookieNameForStartedWEbInterview(interview.QuestionnaireIdentity), string.Empty));
+            this.Response.Cookies.Add(new HttpCookie(this.GetCookieNameForStartedWebInterview(interview.QuestionnaireIdentity), string.Empty));
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -382,7 +382,7 @@ Exception details:<br />
             };
         }
 
-        private string GetCookieNameForStartedWEbInterview(QuestionnaireIdentity questionnaireIdentity)
+        private string GetCookieNameForStartedWebInterview(QuestionnaireIdentity questionnaireIdentity)
         {
             return "webinterview_" + questionnaireIdentity;
         }
