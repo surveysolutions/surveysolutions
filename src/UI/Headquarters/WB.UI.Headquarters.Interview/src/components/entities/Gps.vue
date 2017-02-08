@@ -42,6 +42,11 @@
     export default {
         name: "Gps",
         mixins: [entityDetails],
+        data() {
+            return {
+                isInProgress: false
+            }
+        },
         computed: {
             googleMapPosition() {
                 return 'https://maps.googleapis.com/maps/api/staticmap?center=' + this.$me.answer.latitude + ',' + this.$me.answer.longitude
@@ -58,37 +63,63 @@
                 this.$store.dispatch("removeAnswer", this.id)
             },
             answerGpsQuestion() {
-                if (!('geolocation' in navigator))
-                {
+                if (!('geolocation' in navigator)) {
                     this.markAnswerAsNotSavedWithMessage('Your browser does not support receiving Geolocation')
                     return
                 }
 
+                if (this.isInProgress) return
+
+                this.isInProgress = true
                 this.$store.dispatch("fetchProgress", 1)
-                
-                var gl = navigator.geolocation
+
                 var viewModel = this
-                gl.getCurrentPosition(
-                    function (position) {
-                        viewModel.$store.dispatch('answerGpsQuestion', {
-                            identity: viewModel.$me.id,
-                            answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
-                        })
-                    },
-                    function (error) {
-                        viewModel.markAnswerAsNotSavedWithMessage(error.message)
-                        viewModel.$store.dispatch("fetchProgress", -1)
-                    },
+                navigator.geolocation.getCurrentPosition(
+                    function (position) { viewModel.onPositionDetermined(position, viewModel) },
+                    function (error) { viewModel.onPositionDeterminationFailed(error, viewModel) },
                     {
                         enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
+                        timeout: 30000,
+                        maximumAge: 60000
                     })
             },
-            a: async function(){
+            onPositionDetermined(position, viewModel) {
+                viewModel.$store.dispatch('answerGpsQuestion', {
+                    identity: viewModel.$me.id,
+                    answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
+                })
+                viewModel.isInProgress = false
+            },
+            onPositionDeterminationFailed(error, viewModel) {
+                var message = "";
+                // Check for known errors
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = "This website does not have permission to use " +
+                            "the Geolocation API"
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = "The current position could not be determined.";
+                        break
+                    case error.TIMEOUT:
+                        message = "The current position could not be determined " +
+                            "within the specified timeout period."
+                        break
+                }
+                // If it is an unknown error, build a message that includes
+                // information that helps identify the situation so that
+                // the error handler can be updated.
+                if (message == "") {
+                    var strErrorCode = error.code.toString();
+                    message = "The position could not be determined due to " +
+                        "an unknown error (Code: " + strErrorCode + ")."
+                }
 
+                viewModel.markAnswerAsNotSavedWithMessage(error.message)
+                viewModel.$store.dispatch("fetchProgress", -1)
+                viewModel.isInProgress = false
             }
-
         }
     }
+
 </script>
