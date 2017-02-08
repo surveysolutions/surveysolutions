@@ -39,11 +39,17 @@
         },
         methods: {
             navigate() {
-                if (this.isParentButton) {
-                    this.$store.dispatch("sectionRequireScroll", { id: this.$route.params.sectionId })
+                if (this.$me.type == ButtonType.Complete) {
+                    this.$router.push({ name: "complete" })
                 }
-                this.$router.push(this.to)
+                else {
+                    if (this.isParentButton) {
+                        this.$store.dispatch("sectionRequireScroll", { id: this.$route.params.sectionId })
+                    }
+                    this.$router.push(this.to)
+                }
             }
         }
     }
+
 </script>
