@@ -2,11 +2,11 @@
     <section class="questionnaire  details-interview">
     <div class="unit-section complete-section" v-if="hasCompleteInfo">
         <div class="unit-title">
-            <h3>Finish questionnaire</h3>
+            <h3>Finish interview</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2>You are about to complete this questionnaire</h2>
+                <h2>You are about to complete this interview</h2>
             </div>
         </div>
         <div class="wrapper-info">
