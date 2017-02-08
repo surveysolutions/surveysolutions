@@ -25,6 +25,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services;
 using Filter = NLog.Filters.Filter;
 
 namespace WB.UI.Headquarters.Controllers
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IStatefullWebInterviewFactory statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IImageProcessingService imageProcessingService;
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -65,6 +67,7 @@ namespace WB.UI.Headquarters.Controllers
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IStatefullWebInterviewFactory statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
+            IImageProcessingService imageProcessingService,
             ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
         {
@@ -74,6 +77,7 @@ namespace WB.UI.Headquarters.Controllers
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.imageProcessingService = imageProcessingService;
             this.usersRepository = usersRepository;
         }
 
@@ -154,6 +158,8 @@ namespace WB.UI.Headquarters.Controllers
             using (var ms = new MemoryStream())
             {
                 await file.InputStream.CopyToAsync(ms);
+
+                this.imageProcessingService.ValidateImage(ms.ToArray());
 
                 var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
                 var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
