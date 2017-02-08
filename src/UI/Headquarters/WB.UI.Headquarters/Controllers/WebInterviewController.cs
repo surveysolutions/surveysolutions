@@ -204,7 +204,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
             if (!webInterviewConfig.Started)
-                return this.HttpNotFound();
+                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
@@ -219,7 +219,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
             if (!webInterviewConfig.Started)
-                return this.HttpNotFound();
+                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
