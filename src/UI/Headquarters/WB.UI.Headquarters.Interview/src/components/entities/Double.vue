@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @blur="answerDoubleQuestion"
+                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @keyup.enter="blur" @blur="answerDoubleQuestion"
                             v-numericFormatting="{aSep: formattingChar, mDec: countOfDecimalPlaces, vMin: '-999999999999999', vMax: '999999999999999', aPad: false }">
                         <wb-remove-answer />
                     </div>
@@ -29,6 +29,9 @@
             }
         },
         methods: {
+            blur(evnt) {
+                $(evnt.target).blur();
+            },
             markAnswerAsNotSavedWithMessage(message) {
                 const id = this.id
                 this.$store.dispatch("setAnswerAsNotSaved", { id, message })
