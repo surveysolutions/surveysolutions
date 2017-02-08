@@ -509,30 +509,15 @@ namespace WB.UI.Headquarters.API.WebInterview
             Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
             var invalidEntities = invalidEntityIds.Select(identity =>
             {
-                var question = interview.GetQuestion(identity);
-                if (question != null)
+                var titleText = interview.GetTitleText(identity);
+                var parentId = interview.IsQuestionPrefilled(identity) ? "prefilled" : interview.GetParentGroup(identity).ToString();
+                return new EntityWithError
                 {
-                    var titleText = question.Title.Text ?? "";
-                    var parentId = question.IsPrefilled ? "prefilled" : question.Parent.Identity.ToString();
-                    return new EntityWithError
-                    {
-                        Id = identity.ToString(),
-                        ParentId = parentId,
-                        Title = titleText
-                    };
-                }
-                var staticText = interview.GetStaticText(identity);
-                if (staticText != null)
-                {
-                    return new EntityWithError
-                    {
-                        Id = identity.ToString(),
-                        ParentId = staticText.Parent.Identity.ToString(),
-                        Title = staticText.Title.ToString()
-                    };
-                }
+                    Id = identity.ToString(),
+                    ParentId = parentId,
+                    Title = titleText
+                };
 
-                return null;
             }).ToArray();
 
             var completeInfo = new CompleteInfo
