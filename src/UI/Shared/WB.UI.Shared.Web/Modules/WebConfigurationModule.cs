@@ -1,5 +1,7 @@
-﻿using System.Web.Configuration;
+﻿using System;
+using System.Web.Configuration;
 using Ninject.Modules;
+using WB.Core.Infrastructure.Aggregates;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Modules
@@ -14,6 +16,10 @@ namespace WB.UI.Shared.Web.Modules
             Bind<IConfigurationManager>()
                 .ToConstant(new ConfigurationManager(appSettings: WebConfigurationManager.AppSettings,
                     membershipSettings: membershipSettings));
+
+            Bind(typeof(int)).ToMethod(context => 
+                    Convert.ToInt32(WebConfigurationManager.AppSettings["MaxCachedAggregateRoots"]))
+                .WhenInjectedInto<IEventSourcedAggregateRootRepository>();
         }
     }
 }

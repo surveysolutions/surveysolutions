@@ -20,6 +20,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             pipiline.AddModule(new WebInterviewConnectionsCounter());
 
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
+            this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
+
             this.Bind<IHubContext>()
                 .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
                 .InSingletonScope()
