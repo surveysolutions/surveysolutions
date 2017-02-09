@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -268,6 +269,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             return ids.Select(GetEntityDetails).ToArray();
         }
 
+        private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
+
         public InterviewEntity GetEntityDetails(string id)
         {
             if (id == "NavigationButton")
@@ -406,7 +409,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
-                this.PutHideIfDisabled(result, identity);
+                this.ApplyDisablement(result, identity);
 
                 return result;
             }
@@ -424,7 +427,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     result.AttachmentContent = attachment.ContentId;
                 }
 
-                this.PutHideIfDisabled(result, identity);
+                this.ApplyDisablement(result, identity);
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
 
                 return result;
@@ -436,8 +439,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var result = new InterviewGroupOrRosterInstance { Id = id };
                 result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@group);
 
-                this.PutHideIfDisabled(result, identity);
-
+                this.ApplyDisablement(result, identity);
                 return result;
             }
 
@@ -447,8 +449,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var result = new InterviewGroupOrRosterInstance { Id = id };
                 result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@roster);
 
-                this.PutHideIfDisabled(result, identity);
-
+                this.ApplyDisablement(result, identity);
                 return result;
             }
 
@@ -549,8 +550,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             validity.Messages = callerInterview.GetFailedValidationMessages(identity).ToArray();
         }
 
-        private void PutHideIfDisabled(InterviewEntity result, Identity identity)
+        private void ApplyDisablement(InterviewEntity result, Identity identity)
         {
+            if (result.IsDisabled)
+            {
+                result.Title = HtmlRemovalRegex.Replace(result.Title, string.Empty);
+            }
+
             result.HideIfDisabled = this.GetCallerQuestionnaire().ShouldBeHiddenIfDisabled(identity.Id);
         }
 

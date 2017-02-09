@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
-        private static readonly Regex HtmlRemovalRegex = new Regex("<.*?>");
+        private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern);
 
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
