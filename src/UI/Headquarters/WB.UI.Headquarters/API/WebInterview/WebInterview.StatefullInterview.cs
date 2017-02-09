@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return new InterviewInfo
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
-                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(this.CallerInterviewId),
+                HumanId = this.statefulInterviewRepository.GetHumanInterviewId(this.CallerInterviewId),
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid()
             };
         }
@@ -461,12 +461,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
+        public bool HasPrefilledQuestions()
+        {
+            return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any();
+        }
+
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = this.CallerSectionid;
             var interview = this.GetCallerInterview();
             Sidebar result = new Sidebar();
-
             HashSet<Identity> visibleSections = new HashSet<Identity>();
 
             if (sectionId != null)
@@ -525,12 +529,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             var invalidEntities = invalidEntityIds.Select(identity =>
             {
                 var titleText = interview.GetTitleText(identity);
-                var parentId = interview.IsQuestionPrefilled(identity) ? "prefilled" : interview.GetParentGroup(identity).ToString();
+                var isPrefilled = interview.IsQuestionPrefilled(identity);
+                var parentId = interview.GetParentGroup(identity).ToString();
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
                     ParentId = parentId,
-                    Title = titleText
+                    Title = titleText,
+                    IsPrefilled = isPrefilled
                 };
 
             }).ToArray();
