@@ -34,7 +34,7 @@ export default {
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
         Vue.set(state, "questionnaireTitle", interviewInfo.questionnaireTitle)
-        Vue.set(state, "interviewId", interviewInfo.interviewId)
+        Vue.set(state, "humanId", interviewInfo.humanId)
         Vue.set(state, "firstSectionId", interviewInfo.firstSectionId)
     },
     SET_COMPLETE_INFO(state, completeInfo) {
@@ -42,5 +42,8 @@ export default {
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, "interviewState", interviewState)
+    },
+    SET_HAS_PREFILLED_QUESTIONS(state, hasPrefilledQuestions) {
+        state.hasPrefilledQuestions = hasPrefilledQuestions
     }
 }

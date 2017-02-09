@@ -191,9 +191,7 @@
                             if (e.target !== this)
                                 return;
                             $(this).toggleClass("active");
-
-                            if (this.hasClass("active"))
-                                $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+                            $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
 
                             $(".column-questionnaire-title").toggleClass("padding-left-slide");
                         });

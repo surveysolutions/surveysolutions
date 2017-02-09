@@ -12,6 +12,7 @@ const store = new Vuex.Store(safeStore({
     modules: { fetch, sidebar },
     state: {
         lastActivityTimestamp: moment(),
+        hasPrefilledQuestions: false,
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {

@@ -39,11 +39,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         public string GetHumanInterviewId(string interviewId)
         {
             var humanId = this.interviewSummaryRepository.GetById(interviewId)?.HumanId;
+            if (humanId == null) return interviewId;
 
-            return humanId == null
-                ? interviewId
-                : Regex.Replace(humanId.ToString(), ".{2}", $"$0{humanIdDelimiter}")
-                    .TrimEnd(humanIdDelimiter.ToCharArray());
+            var sHumanId = humanId.ToString();
+            var humanIdLength = 10;
+
+            if (sHumanId.Length < humanIdLength)
+                sHumanId = sHumanId.PadLeft(humanIdLength, '0');
+
+            return $"{sHumanId.Substring(0, 2)}-{sHumanId.Substring(2, 2)}-{sHumanId.Substring(4, 2)}-{sHumanId.Substring(6, 2)}-{sHumanId.Substring(8, 2)}";
         }
     }
 }

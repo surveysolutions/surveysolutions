@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewInfo
     {
         public string QuestionnaireTitle { get; set; }
-        public string InterviewId { get; set; }
+        public string HumanId { get; set; }
         public string FirstSectionId { get; set; }
     }
 
@@ -197,8 +197,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.Groups = new List<SidebarPanel>();
         }
 
-        public bool HasPrefilledQuestions { get; set; }
-
         public List<SidebarPanel> Groups { get; set; }
     }
 
@@ -258,6 +256,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Id { get; set; }
         public string ParentId { get; set; }
         public string Title { get; set; }
+        public bool IsPrefilled { get; set; }
     }
 
     public class CompleteInterviewRequest
