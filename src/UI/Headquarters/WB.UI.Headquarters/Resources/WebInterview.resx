@@ -240,4 +240,7 @@
   <data name="PictureQuestionNotAPicture" xml:space="preserve">
     <value>Only image files are accepted</value>
   </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+    <value>Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue</value>
+  </data>
 </root>

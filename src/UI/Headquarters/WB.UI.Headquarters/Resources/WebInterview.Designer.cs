@@ -79,6 +79,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue.
+        /// </summary>
+        public static string Error_CookiesTurnedOff {
+            get {
+                return ResourceManager.GetString("Error_CookiesTurnedOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The link has expired.
         /// </summary>
         public static string Error_InterviewExpired {
