@@ -107,7 +107,7 @@
                 this.$store.dispatch('completeInterview', { comment: this.comment });
             },
             navigateTo(entityWithError) {
-                if(entityWithError.parentId == "prefilled"){
+                if(entityWithError.isPrefilled){
                     return {
                         name: 'prefilled',
                         params: {
