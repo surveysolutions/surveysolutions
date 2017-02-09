@@ -1,7 +1,7 @@
 <template>
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
-            <SidebarPanel :panel="coverBtn"></SidebarPanel>
+            <SidebarPanel :panel="coverBtn" v-if="showCover"></SidebarPanel>
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
             </SidebarPanel>
             <SidebarPanel :panel="completeBtn"></SidebarPanel>
@@ -40,6 +40,9 @@
             }
         },
         computed: {
+            showCover() {
+                return this.$store.state.hasPrefilledQuestions
+            },
             sections() {
                 return this.$store.getters.rootSections
             },
