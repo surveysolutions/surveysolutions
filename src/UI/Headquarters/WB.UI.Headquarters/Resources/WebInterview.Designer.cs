@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discard and Start new.
+        /// </summary>
+        public static string DiscardAndStart {
+            get {
+                return ResourceManager.GetString("DiscardAndStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The link has expired.
         /// </summary>
         public static string Error_InterviewExpired {
