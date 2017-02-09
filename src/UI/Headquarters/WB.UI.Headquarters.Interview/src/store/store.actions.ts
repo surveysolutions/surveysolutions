@@ -10,6 +10,8 @@ export default {
     async loadInterview({ commit }) {
         const info = await apiCaller<IInterviewInfo>(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
+        const flag = await apiCaller(api => api.hasPrefilledQuestions())
+        commit("SET_HAS_PREFILLED_QUESTIONS", flag)
     },
 
     async getLanguageInfo({ commit }) {
@@ -21,10 +23,9 @@ export default {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
-                entities: details,
-                lastActivityTimestamp: new Date()
-            }
-        )
+            entities: details,
+            lastActivityTimestamp: new Date()
+        })
     }, "fetch", /* limit */ 100),
 
     answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
@@ -111,7 +112,7 @@ export default {
     // called by server side. navigate to finish page
     finishInterview({ state, dispatch }) {
         const routeParams = (router.currentRoute.params as any)
-        location.replace(router.resolve({ name: "finish", params: {interviewId: routeParams.interviewId} }).href)
+        location.replace(router.resolve({ name: "finish", params: { interviewId: routeParams.interviewId } }).href)
     },
     // called by server side. refresh
     refreshEntities({ state, dispatch }, questions: string[]) {

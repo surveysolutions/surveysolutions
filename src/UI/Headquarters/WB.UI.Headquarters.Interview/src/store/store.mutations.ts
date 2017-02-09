@@ -42,5 +42,8 @@ export default {
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, "interviewState", interviewState)
+    },
+    SET_HAS_PREFILLED_QUESTIONS(state, hasPrefilledQuestions) {
+        state.hasPrefilledQuestions = hasPrefilledQuestions
     }
 }

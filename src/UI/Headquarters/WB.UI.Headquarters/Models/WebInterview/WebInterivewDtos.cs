@@ -197,8 +197,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.Groups = new List<SidebarPanel>();
         }
 
-        public bool HasPrefilledQuestions { get; set; }
-
         public List<SidebarPanel> Groups { get; set; }
     }
 
