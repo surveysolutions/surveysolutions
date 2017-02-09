@@ -26,7 +26,6 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.Clients.Caller.markAnswerAsNotSaved(command.QuestionId.FormatGuid(), e.Message);
             }
         }
-
        
         public void ChangeLanguage(ChangeLanguageRequest request)
             => this.commandService.Execute(new SwitchTranslation(this.GetCallerInterview().Id, request.Language,

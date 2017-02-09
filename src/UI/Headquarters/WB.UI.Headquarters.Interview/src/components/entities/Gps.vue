@@ -55,10 +55,6 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
             removeAnswer() {
                 this.$store.dispatch("removeAnswer", this.id)
             },

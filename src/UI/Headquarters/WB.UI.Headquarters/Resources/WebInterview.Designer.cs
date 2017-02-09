@@ -286,6 +286,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only image files are accepted.
+        /// </summary>
+        public static string PictureQuestionNotAPicture {
+            get {
+                return ResourceManager.GetString("PictureQuestionNotAPicture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please fill in captcha.
         /// </summary>
         public static string PleaseFillCaptcha {
