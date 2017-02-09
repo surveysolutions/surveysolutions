@@ -90,6 +90,7 @@
 
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
                 target.val(undefined)
+                target.focus()
             }
         }
     }
