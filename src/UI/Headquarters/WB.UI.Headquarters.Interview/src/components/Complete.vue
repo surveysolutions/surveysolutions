@@ -40,7 +40,7 @@
             <div class="container-info">
                 <label class="gray-uppercase" for="comment-for-supervisor">Note for supervisor</label>
                 <div class="field">
-                    <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Tap to enter text"></textarea>
+                    <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Tap to enter text" v-model="comment"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
@@ -57,46 +57,54 @@
 
 <script lang="ts">
     import * as Vue from 'vue'
-    import * as $ from "jquery"
 
     export default {
         name: 'complete-view',
         beforeMount() {
-            this.loadComplete()
+            this.fetchCompleteInfo()
+        },
+        watch: {
+            $route(to, from) {
+                this.fetchCompleteInfo()
+            }
         },
         computed: {
             completeInfo() {
                 return this.$store.state.completeInfo;
             },
             hasCompleteInfo() {
-                return this.$store.state.completeInfo != undefined
+                return this.completeInfo != undefined
             },
             hasAnsweredQuestions() {
-                return this.$store.state.completeInfo.answeredCount > 0
+                return this.completeInfo.answeredCount > 0
             },
             answeredQuestionsCountString() {
-                return this.hasAnsweredQuestions ? this.$store.state.completeInfo.answeredCount : "No";
+                return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : "No";
             },
             hasUnansweredQuestions() {
-                return this.$store.state.completeInfo.unansweredCount > 0
+                return this.completeInfo.unansweredCount > 0
             },
             unansweredQuestionsCountString() {
-                return this.hasUnansweredQuestions ? this.$store.state.completeInfo.unansweredCount : "No";
+                return this.hasUnansweredQuestions ? this.completeInfo.unansweredCount : "No";
             },
             hasInvalidQuestions() {
-                return this.$store.state.completeInfo.errorsCount > 0
+                return this.completeInfo.errorsCount > 0
             },
             invalidQuestionsCountString() {
-                return this.hasInvalidQuestions ? this.$store.state.completeInfo.errorsCount : "No";
+                return this.hasInvalidQuestions ? this.completeInfo.errorsCount : "No";
+            },
+        },
+        data () {
+            return {
+                comment: ''
             }
         },
         methods: {
-            loadComplete() {
+            fetchCompleteInfo() {
                 this.$store.dispatch("fetchCompleteInfo")
             },
             completeInterview() {
-                const comment = $('#comment-for-supervisor').val();
-                this.$store.dispatch('completeInterview', { comment: comment });
+                this.$store.dispatch('completeInterview', { comment: this.comment });
             },
             navigateTo(entityWithError) {
                 return {
