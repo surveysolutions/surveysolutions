@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section complete-section" v-if="hasCompleteInfo">
+    <div class="unit-section complete-section first-last-chapter" v-if="hasCompleteInfo">
         <div class="unit-title">
             <h3>Complete interview</h3>
         </div>
@@ -107,6 +107,15 @@
                 this.$store.dispatch('completeInterview', { comment: this.comment });
             },
             navigateTo(entityWithError) {
+                if(entityWithError.parentId == "prefilled"){
+                    return {
+                        name: 'prefilled',
+                        params: {
+                            interviewId: this.$route.params.interviewId
+                        }
+                    }
+                }
+
                 return {
                     name: 'section',
                     params: {
