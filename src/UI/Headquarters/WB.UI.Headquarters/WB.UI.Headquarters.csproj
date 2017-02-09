@@ -720,6 +720,8 @@
     <Content Include="Dependencies\css\_team-and-roles.scss" />
     <Content Include="Dependencies\css\_reports.scss" />
     <Content Include="Dependencies\css\_survey-setup.scss" />
+    <EmbeddedResource Include="Migrations\ReadSide\M001-100\add-human-interview-id.sql" />
+    <EmbeddedResource Include="Migrations\ReadSide\M001-100\remove-human-interview-id.sql" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
