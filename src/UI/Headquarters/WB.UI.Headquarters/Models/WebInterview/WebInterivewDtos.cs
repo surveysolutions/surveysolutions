@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewInfo
     {
         public string QuestionnaireTitle { get; set; }
-        public string InterviewId { get; set; }
+        public string HumanId { get; set; }
         public string FirstSectionId { get; set; }
     }
 
