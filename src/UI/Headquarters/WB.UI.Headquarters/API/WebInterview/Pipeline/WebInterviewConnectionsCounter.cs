@@ -51,6 +51,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             var interviewId = InterviewId(hub);
             var list = ConnectedToInterview(interviewId);
             list.Remove(hub.Context.ConnectionId);
+            if (!list.Any())
+            {
+                ConcurrentHashSet<string> removedList;
+                this.connectedClients.TryRemove(interviewId, out removedList);
+            }
             CalculateConnected();
             base.OnAfterDisconnect(hub, stopCalled);
         }
@@ -58,6 +63,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         private void CalculateConnected()
         {
             var count = this.connectedClients.Count(l => l.Value.Any());
+            
             this.currentConnectionsCount.Set(count);
         }
 
