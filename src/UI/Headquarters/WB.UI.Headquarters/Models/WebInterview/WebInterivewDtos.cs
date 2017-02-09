@@ -183,6 +183,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
     public class InterviewGroupOrRosterInstance : InterviewEntity
     {
+        public bool IsRoster { set; get; }
         public string RosterTitle { get; set; }
         public string Status { get; set; }
         public string StatisticsByAnswersAndSubsections { get; set; }
@@ -211,6 +212,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool HasChildren { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public bool Current { get; set; }
+        public bool IsRoster { get; set; }
     }
 
     public enum GroupStatus

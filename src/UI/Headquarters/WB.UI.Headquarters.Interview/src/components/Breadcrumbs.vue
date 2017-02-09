@@ -2,10 +2,10 @@
     <div class="unit-title" v-if="showBreadcrumbs">
         <ol class="breadcrumb">
             <li v-for="breadcrumb in entities" :key="breadcrumb.target">
-                 <a href="javascript:void(0)" @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.rosterTitle != null"> - <i>{{breadcrumb.rosterTitle}}</i></span> </a>
+                 <a href="javascript:void(0)" @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
             </li>
         </ol>
-        <h3>{{info.title}} <span v-if="info.rosterTitle != null"> - <i>{{info.rosterTitle}}</i></span></h3>
+        <h3>{{info.title}} <span v-if="info.isRoster"> - <i>{{getRosterTitle(info.rosterTitle)}}</i></span></h3>
     </div>
 </template>
 <script lang="ts">
@@ -29,7 +29,7 @@
             entities() {
                 if (!this.info) return {}
                 return this.info.breadcrumbs
-            }
+            }            
         },
         methods: {
             navigate(breadcrumb) {
@@ -46,6 +46,9 @@
             },
             fetchBreadcrumbs() {
                 this.$store.dispatch("fetchBreadcrumbs")
+            },
+            getRosterTitle(title){
+                return title ? title : "[...]"            
             }
         }
     }

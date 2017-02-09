@@ -201,7 +201,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                     {
                         Title = treeGroup.Title.Text,
                         RosterTitle = (treeGroup as InterviewTreeRoster)?.RosterTitle,
-                        Target = itemIdentity.ToString()
+                        Target = itemIdentity.ToString(),
+                        IsRoster = true
                     };
 
                     if (breadCrumbs.Any())
@@ -236,12 +237,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
 
             var currentTreeGroup = statefulInterview.GetGroup(group);
+            var currentTreeGroupAsRoster = currentTreeGroup as InterviewTreeRoster;
             return new BreadcrumbInfo
             {
                 Title = currentTreeGroup.Title.Text,
-                RosterTitle = (currentTreeGroup as InterviewTreeRoster)?.RosterTitle,
+                RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
-                Status = CalculateSimpleStatus(group, statefulInterview).ToString()
+                Status = CalculateSimpleStatus(group, statefulInterview).ToString(),
+                IsRoster = currentTreeGroupAsRoster != null
             };
         }
 
