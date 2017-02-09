@@ -461,11 +461,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        public List<SidebarPanel> GetSidebarChildSectionsOf(string[] parentIds)
+        public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = this.CallerSectionid;
             var interview = this.GetCallerInterview();
-            var result = new List<SidebarPanel>();
+            Sidebar result = new Sidebar();
 
             HashSet<Identity> visibleSections = new HashSet<Identity>();
 
@@ -484,7 +484,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, opts => SidebarMapOptions(opts, visibleSections));
-                    result.Add(sidebar);
+                    result.Groups.Add(sidebar);
                 }
             }
 

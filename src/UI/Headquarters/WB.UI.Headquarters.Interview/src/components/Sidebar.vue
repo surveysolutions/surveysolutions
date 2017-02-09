@@ -1,15 +1,10 @@
 <template>
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
+            <SidebarPanel :panel="coverBtn"></SidebarPanel>
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
             </SidebarPanel>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title group" :class="completeClass">
-                        <router-link :to="toComplete">Complete</router-link>
-                    </h3>
-                </div>
-            </div>
+            <SidebarPanel :panel="completeBtn"></SidebarPanel>
         </div>
     </aside>
 </template>
@@ -20,6 +15,30 @@
     export default {
         name: 'sidebar',
         components: { SidebarPanel },
+        data() {
+            return {
+                completeBtn: {
+                    collapsed: true,
+                    title: "Complete",
+                    to: {
+                        name: 'complete'
+                    },
+                    validity: {
+                        isValid: true
+                    }
+                },
+                coverBtn: {
+                    collapsed: true,
+                    title: "Cover",
+                    to: {
+                        name: 'prefilled'
+                    },
+                    validity: {
+                        isValid: true
+                    }
+                }
+            }
+        },
         computed: {
             sections() {
                 return this.$store.getters.rootSections
@@ -28,9 +47,9 @@
                 return this.$route.params.sectionId
             },
             toComplete() {
-                return { name: 'complete', params: { } }
+                return { name: 'complete', params: {} }
             },
-            interviewState(){
+            interviewState() {
                 return this.$store.state.interviewState
             },
             completeClass() {
@@ -47,12 +66,12 @@
         },
         beforeMount() {
             this.fetchSidebar(),
-            this.fetchInterviewStatus()
+                this.fetchInterviewStatus()
         },
         watch: {
             $route(from, to) {
                 this.fetchSidebar(),
-                this.fetchInterviewStatus()
+                    this.fetchInterviewStatus()
             }
         },
         methods: {
@@ -64,4 +83,5 @@
             }
         }
     }
+
 </script>

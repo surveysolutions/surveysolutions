@@ -6,8 +6,14 @@ import { apiCaller } from "../api"
 import { safeStore } from "../errors"
 import { batchedAction } from "./helpers"
 
+declare interface ISidebarState {
+    hasPrefilledQuestions: boolean,
+    panels: ISidebarPanel[]
+}
+
 export default safeStore({
     state: {
+        hasPrefilledQuestions: false,
         panels: {
             // organized by parentId, that way it easier to search and request data
             // sectionId1: [sectiondata1, sectiondata2, sectiondata3], root: [section1, section2], ... etc
@@ -16,12 +22,12 @@ export default safeStore({
 
     actions: {
 
-        fetchSidebar: batchedAction (async ({ commit }, ids) => {
-            const children = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
-            commit("SET_SIDEBAR_STATE", children)
+        fetchSidebar: batchedAction(async ({ commit }, ids) => {
+            const sideBar = await apiCaller<ISidebar>(api => api.getSidebarChildSectionsOf(ids))
+            commit("SET_SIDEBAR_STATE", sideBar)
         }, null, null),
 
-        toggleSidebar ({ commit, dispatch, state }, { panel, collapsed }) {
+        toggleSidebar({ commit, dispatch, state }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
             if (collapsed === false) {
@@ -31,24 +37,23 @@ export default safeStore({
     },
 
     mutations: {
-        SET_SIDEBAR_STATE (state, childs) {
-            const byParentId = groupBy(childs, "parentId")
-
+        SET_SIDEBAR_STATE(state: ISidebarState, sideBar: ISidebar) {
+            state.hasPrefilledQuestions = sideBar.hasPrefilledQuestions
+            const byParentId = groupBy(sideBar.groups, "parentId")
             forEach(byParentId, (panels, id) => {
-                // groupBy will set id == "null" if parentId of panel is null
                 Vue.set(state.panels, id, panels)
             })
         },
-        SET_SIDEBAR_TOGGLE (state, {panel, collapsed}) {
-            Vue.set(panel, "collapsed", collapsed)
+        SET_SIDEBAR_TOGGLE(state: ISidebarState, {panel, collapsed}) {
+            panel.collapsed = collapsed
         }
     },
 
     getters: {
-        hasSidebarData (state, getters) {
+        hasSidebarData(state: ISidebarState, getters) {
             return getters.rootSections.length > 0
         },
-        rootSections (state) {
+        rootSections(state: ISidebarState) {
             if (state.panels["null"]) {
                 return state.panels["null"]
             }
