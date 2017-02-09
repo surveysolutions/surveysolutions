@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
+using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 
 namespace WB.WebInterview.Stress
@@ -89,10 +90,26 @@ namespace WB.WebInterview.Stress
                 worker.SetDelay(_config.answerDelay, _config.createInterviewDelay, _config.restartWorkersIn);
 
                 foreach (var answer in _config.answers)
-                    worker.AddAnswer(answer[0], answer.Skip(1).ToArray());
+                {
+                    if (answer.Length == 1)
+                    {
+                        var command = JsonConvert.DeserializeObject<SignalrCommand>(answer[0]);
+                        worker.AddAnswer(command.M, command.A);
+                    }
+                    else
+                    {
+                        worker.AddAnswer(answer[0], answer.Skip(1).ToArray());
+                    }
+                }
 
                 return worker;
             }
+        }
+
+        public class SignalrCommand
+        {
+            public string M { get; set; }
+            public string[] A { get; set; }
         }
 
         [Localizable(false)]
@@ -159,9 +176,10 @@ namespace WB.WebInterview.Stress
 
             private void Log(string message)
             {
+                string ms = sw == null || !sw.IsRunning ? "" : $"({sw.ElapsedMilliseconds} ms)";
+
                 Console.WriteLine(
-                    $"#{_workerId,-3} [{_interviewId ?? ""}]: {message}." +
-                    (sw == null || !sw.IsRunning ? "" : $"({sw.ElapsedMilliseconds} ms)"), "Worker");
+                    $"#{_workerId,-3} [{_interviewId ?? ""}]: {ms}{message}.", "Worker");
             }
 
             private async Task WorkAsync()

@@ -3,19 +3,22 @@
 baseUri: http://localhost/headquarters
 
 # should not be protected by spam filter (captcha)
-questionarieId: a43e9bcdc4da41c2bec49f8d684ac252$16
+questionarieId: f2588cca1ca041169d94806dff67b6f3$1
 
 # max random delay for answering per each bot in ms
-answerDelay: 5
-restartWorkersIn: 5000
-workersCount: 1
+answerDelay: 100
+restartWorkersIn: 200000
+workersCount: 3
 
 # max random delay for creating interview in ms
-createInterviewDelay: 5000
+createInterviewDelay: 400
 
 # answers - arguments order can be seen from application or devs
+# Just copy paste it from CHrom dev tools websockets frames list - there is Copy message command on right button
 answers:
-- ['answerTextQuestion', '81a45b78bdc80562e092cbeb70175dee', 'test']
-- ['answerTextQuestion', '81a45b78bdc80562e092cbeb70175dee', 'asdfasdfasdf']
-- ['answerSingleOptionQuestion', '1', '108827b67d06861f0ba1c135192d3f35']
-- ['answerSingleOptionQuestion', '2', '108827b67d06861f0ba1c135192d3f35']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["20c6db7c6a07cb28d34a3ff0744571d9",60],"I":8,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["067f58a96713ccadcc62ed0f582bc223",59],"I":17,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["2d4176bdd132eca28d2ce96bda9625f5",58],"I":26,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["20c6db7c6a07cb28d34a3ff0744571d9",1],"I":8,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["067f58a96713ccadcc62ed0f582bc223",2],"I":17,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
+- ['{"H":"interview","M":"AnswerIntegerQuestion","A":["2d4176bdd132eca28d2ce96bda9625f5",3],"I":26,"S":{"sectionId":"82cfb772e53f4158b2e1f9163e5cdfdc"}}']
