@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return new InterviewInfo
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
-                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(this.CallerInterviewId),
+                HumanId = this.statefulInterviewRepository.GetHumanInterviewId(this.CallerInterviewId),
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid()
             };
         }
