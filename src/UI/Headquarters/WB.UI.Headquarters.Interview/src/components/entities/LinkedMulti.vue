@@ -18,8 +18,6 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
 
-    import * as $ from "jquery"
-
     import * as map from "lodash/map"
     import * as find from "lodash/find"
 

@@ -5,6 +5,7 @@
 @include placeholder {
     font-weight: normal !important;
     font-style: italic;
+    color: $gray_light;
 }
 input.wb-checkbox{
     display: none;
@@ -144,32 +145,32 @@ input.double-checkbox-white{
             color:  $gray_text;
             font-weight: bold;
         }
-       	& + label .tick {background-position: -324px 0px;}
+       	& + label .tick {background-position: -324px 2px;}
 
 	    & + label:hover .tick,
 	  	& + label:focus .tick{
-	    	background-position: -365px 0px;
+	    	background-position: -365px 2px;
 	  	}
 	  	&:checked + label .tick {
-	    	background-position: -406px 0px;
+	    	background-position: -406px 2px;
 	  	}
 	  	&:checked + label:hover .tick,
 	  	&:checked + label:focus .tick {
-	    	background-position: -447px 0px;
+	    	background-position: -447px 2px;
 	  	}
 	  	&:disabled + label .tick {
-	    	background-position: -570px 0px;
+	    	background-position: -570px 2px;
 	  	}
 	  	&:disabled + label:hover .tick,
 	  	&:disabled + label:focus .tick{
-	    	background-position: -611px 0px;
+	    	background-position: -611px 2px;
 	  	}
 	  	&:checked:disabled + label .tick{
-	    	background-position: -488px 0px;
+	    	background-position: -488px 2px;
 	  	}
 	  	&:checked:disabled + label:hover .tick,
 	  	&:checked:disabled + label:focus .tick{
-	    	background-position: -529px 0px;
+	    	background-position: -529px 2px;
 	  	}
     }
 }
