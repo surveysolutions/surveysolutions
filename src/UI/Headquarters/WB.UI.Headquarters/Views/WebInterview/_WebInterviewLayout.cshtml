@@ -24,6 +24,10 @@
 <body>
     <main>
         <div class="container-fluid">
+            @if (!Request.Browser.Cookies)
+            {
+                <div class="alert alert-danger text-center no-cookies">@WebInterview.Error_CookiesTurnedOff</div>
+            }
             @RenderBody()
         </div>
     </main>
@@ -35,6 +39,7 @@
         $("<img/>")
             .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
             .attr("src", $("img#placeholder").attr("src"));
+
 
         $.fn.preventDoubleSubmission = function () {
             $(this).on('submit', function (e) {
@@ -53,6 +58,10 @@
         $(function () {
             $('form').preventDoubleSubmission();
         });
+
+        if (!navigator.cookieEnabled) {
+            $('body').addClass("no-cookies");
+        }
     </script>
 </body>
 </html>

@@ -350,11 +350,20 @@ namespace WB.UI.Headquarters.Controllers
 
         protected override void OnException(ExceptionContext filterContext)
         {
+            if (filterContext.Exception is HttpAntiForgeryException)
+            {
+                this.HandleInterviewAccessError(filterContext, WebInterview.Error_CookiesTurnedOff);
+                return;
+            }
+
             var interviewAccessException = filterContext.Exception as WebInterviewAccessException;
             if (interviewAccessException != null)
-                this.HandleInterviewAccessError(interviewAccessException, filterContext);
-            else
-                this.HandleInDebugMode(filterContext);
+            {
+                this.HandleInterviewAccessError(filterContext, interviewAccessException.Message);
+                return;
+            }
+            
+            this.HandleInDebugMode(filterContext);
         }
 
 
@@ -379,13 +388,13 @@ Exception details:<br />
         }
 
 
-        private void HandleInterviewAccessError(WebInterviewAccessException exception, ExceptionContext filterContext)
+        private void HandleInterviewAccessError(ExceptionContext filterContext, string message)
         {
             filterContext.ExceptionHandled = true;
             filterContext.Result = new ViewResult
             {
                 ViewName = @"~/Views/WebInterview/Error.cshtml",
-                ViewData = new ViewDataDictionary(new WebInterviewError { Message = exception.Message })
+                ViewData = new ViewDataDictionary(new WebInterviewError { Message = message })
             };
         }
 
