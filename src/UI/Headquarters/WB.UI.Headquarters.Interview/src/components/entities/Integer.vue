@@ -29,10 +29,6 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
             answerIntegerQuestion(evnt) {
 
                 const answerString = $(evnt.target).autoNumeric('get')

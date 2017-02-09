@@ -52,6 +52,9 @@ export function detailsMixin(fetchMethod: string, defaults) {
             this.$store.dispatch("cleanUpEntity", this.id)
         },
         methods: {
+            markAnswerAsNotSavedWithMessage(message) {
+                this.$store.dispatch("setAnswerAsNotSaved", { id: this.id, message })
+            },
             fetch(id) {
                 this.$store.dispatch({
                     type: fetchMethod,

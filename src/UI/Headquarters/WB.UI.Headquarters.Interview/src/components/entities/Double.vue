@@ -29,10 +29,6 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
             answerDoubleQuestion(evnt) {
 
                 const answerString = $(evnt.target).autoNumeric('get');
@@ -41,7 +37,6 @@
                     this.markAnswerAsNotSavedWithMessage('Entered value is bigger. Allow only 15 digits')
                     return
                 }
-
 
                 const answer = answerString != undefined && answerString != ''
                                 ? parseFloat(answerString)

@@ -40,10 +40,6 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
             confirmAndRemoveRow(index) {
                 if (!this.$me.isRosterSize) {
                     this.removeRow(index)

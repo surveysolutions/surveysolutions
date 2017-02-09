@@ -37,7 +37,7 @@
 
                 if (answer) {
                     if (this.$me.mask && !target.data("maskCompleted")) {
-                        this.$store.dispatch("setAnswerAsNotSaved", { id: this.$me.id, message: "Please, fill in all the required values" })
+                        this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")
                     }
                     else {
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
