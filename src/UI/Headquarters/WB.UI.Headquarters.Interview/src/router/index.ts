@@ -17,7 +17,10 @@ const router = new VueRouter({
         {
             name: "prefilled",
             path: "/:interviewId/Cover",
-            component: Section
+            components: {
+                default: Section,
+                sideBar: SideBar
+            }
         },
         {
             name: "section",

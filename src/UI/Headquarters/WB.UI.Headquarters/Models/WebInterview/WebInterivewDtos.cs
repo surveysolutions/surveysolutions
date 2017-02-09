@@ -190,6 +190,18 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public Validity Validity { get; set; } = new Validity();
     }
 
+    public class Sidebar
+    {
+        public Sidebar()
+        {
+            this.Groups = new List<SidebarPanel>();
+        }
+
+        public bool HasPrefilledQuestions { get; set; }
+
+        public List<SidebarPanel> Groups { get; set; }
+    }
+
     public class SidebarPanel
     {
         public string Id { get; set; }
