@@ -105,6 +105,7 @@ declare interface IWebInterviewApi {
     getInterviewDetails(): IInterviewInfo
 
     getPrefilledEntities(): IPrefilledPageData
+    hasPrefilledQuestions(): boolean
     isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
     getEntityDetails(id: string): IInterviewEntity
