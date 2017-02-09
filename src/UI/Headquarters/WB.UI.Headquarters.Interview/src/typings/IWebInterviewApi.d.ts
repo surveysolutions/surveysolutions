@@ -40,6 +40,11 @@ declare interface IValidity {
 
 }
 
+declare interface ISidebar{
+    hasPrefilledQuestions: boolean
+    groups: ISidebarPanel[]
+}
+
 declare interface ISidebarPanel {
     id: string
     parentId: string
@@ -108,7 +113,7 @@ declare interface IWebInterviewApi {
     getSidebarState(): ISidebarPanel[]
     getCompleteInfo(): ICompleteInfo
     getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
-    getSidebarChildSectionsOf(ids: string[]): ISidebarPanel[]
+    getSidebarChildSectionsOf(ids: string[]): ISidebar
     getInterviewStatus(): string
 
     answerSingleOptionQuestion(answer: number, questionId: string): void

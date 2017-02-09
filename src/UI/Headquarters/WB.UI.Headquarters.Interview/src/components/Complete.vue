@@ -1,5 +1,4 @@
 <template>
-    <section class="questionnaire  details-interview">
     <div class="unit-section complete-section" v-if="hasCompleteInfo">
         <div class="unit-title">
             <h3>Complete interview</h3>
@@ -29,12 +28,12 @@
         </div>
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
-            <h4 class="gray-uppercase">Questions with errors:</h4>
-            <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
-                <li>
-                    <router-link :to="navigateTo(entity)">{{entity.title}}</router-link>
-                </li>
-            </ul>
+                <h4 class="gray-uppercase">Questions with errors:</h4>
+                <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
+                    <li>
+                        <router-link :to="navigateTo(entity)">{{entity.title}}</router-link>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="wrapper-info">
@@ -54,7 +53,6 @@
             </div>
         </div>
     </div>
-    </section>
 </template>
 
 <script lang="ts">
@@ -111,4 +109,5 @@
             }
         }
     }
+
 </script>

@@ -39,6 +39,10 @@
                 return this.panel.title + (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` : "")
             },
             to() {
+                if (this.panel.to) {
+                    return this.panel.to
+                }
+
                 return { name: 'section', params: { sectionId: this.panel.id } }
             },
             isCollapsed() {
@@ -51,6 +55,10 @@
                 return this.$store.state.sidebar.panels[this.panel.id] || []
             },
             isActive() {
+                if (this.panel.to) {
+                    return this.$route.name === this.panel.to.name
+                }
+
                 return this.currentPanel == this.panel.id
             },
             titleCss() {
@@ -90,4 +98,5 @@
             }
         }
     }
+
 </script>
