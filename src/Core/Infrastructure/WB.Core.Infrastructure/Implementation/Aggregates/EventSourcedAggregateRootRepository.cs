@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class EventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
+    public class EventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
