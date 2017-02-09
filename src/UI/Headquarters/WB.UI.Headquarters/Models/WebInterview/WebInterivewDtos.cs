@@ -200,6 +200,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool Collapsed { get; set; }
         public bool HasChildren { get; set; }
         public Validity Validity { get; set; } = new Validity();
+        public bool Current { get; set; }
     }
 
     public enum GroupStatus

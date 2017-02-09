@@ -55,6 +55,7 @@
             },
             titleCss() {
                 return [{
+                    current: this.panel.current,
                     active: this.isActive,
                     complete: this.panel.state === "Completed" && this.panel.validity.isValid,
                     "has-error": !this.panel.validity.isValid

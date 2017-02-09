@@ -461,14 +461,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
-        {
-            opts.AfterMap((g, sidebarPanel) =>
-            {
-                sidebarPanel.Collapsed = !shownLookup.Contains(g.Identity);
-            });
-        }
-
         public List<SidebarPanel> GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = this.CallerSectionid;
@@ -497,6 +489,15 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
 
             return result;
+        }
+
+        private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
+        {
+            opts.AfterMap((g, sidebarPanel) =>
+            {
+                sidebarPanel.Collapsed = !shownLookup.Contains(g.Identity);
+                sidebarPanel.Current = shownLookup.Contains(g.Identity);
+            });
         }
 
         public DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
