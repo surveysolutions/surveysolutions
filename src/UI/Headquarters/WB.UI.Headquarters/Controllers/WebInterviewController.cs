@@ -10,6 +10,7 @@ using Recaptcha.Web;
 using Recaptcha.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -44,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
+        private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
@@ -71,6 +73,7 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
+            IWebInterviewNotificationService webInterviewNotificationService,
             ILogger logger, IUserViewFactory usersRepository)
             : base(commandService, globalInfo, logger)
         {
@@ -82,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.imageProcessingService = imageProcessingService;
             this.connectionLimiter = connectionLimiter;
+            this.webInterviewNotificationService = webInterviewNotificationService;
             this.usersRepository = usersRepository;
         }
 
@@ -160,21 +164,27 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.Json("fail");
             }
-
-            using (var ms = new MemoryStream())
+            try
             {
-                await file.InputStream.CopyToAsync(ms);
+                using (var ms = new MemoryStream())
+                {
+                    await file.InputStream.CopyToAsync(ms);
 
-                this.imageProcessingService.ValidateImage(ms.ToArray());
+                    this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
-                var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
+                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
+                    var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
 
-                this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
-                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+                    this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
+                    this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
+                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+                }
             }
-
+            catch (Exception e)
+            {
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, e.Message);
+                throw;
+            }
             return this.Json("ok");
         }
 
@@ -262,7 +272,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return View("Index");
         }
-        
+
         public ActionResult Finish(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);
@@ -368,7 +378,7 @@ Exception details:<br />
             filterContext.Result = new ViewResult
             {
                 ViewName = @"~/Views/WebInterview/Error.cshtml",
-                ViewData = new ViewDataDictionary(new WebInterviewError { Message = exception.Message})
+                ViewData = new ViewDataDictionary(new WebInterviewError { Message = exception.Message })
             };
         }
 
