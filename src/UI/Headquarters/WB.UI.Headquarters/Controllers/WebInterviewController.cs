@@ -121,12 +121,19 @@ namespace WB.UI.Headquarters.Controllers
             WebInterviewConfig webInterviewConfig)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+
+            bool hasPreviousStartedInterview = false;
             var previousStartedInterviewId = this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value;
+            if (!previousStartedInterviewId.IsNullOrEmpty())
+            {
+                var interview = this.statefulInterviewRepository.Get(previousStartedInterviewId);
+                hasPreviousStartedInterview = interview != null && !interview.IsCompleted && interview.Status != InterviewStatus.Deleted;
+            }
 
             var model = new StartWebInterview();
             model.QuestionnaireTitle = questionnaireBrowseItem.Title;
             model.UseCaptcha = webInterviewConfig.UseCaptcha;
-            model.HasPreviousStartedInterview = !previousStartedInterviewId.IsNullOrEmpty();
+            model.HasPreviousStartedInterview = hasPreviousStartedInterview;
             return model;
         }
 
