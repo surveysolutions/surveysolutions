@@ -1,18 +1,18 @@
 <template>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" v-init="">
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a href="#" class="active-page">Web interview #{{$store.state.interviewId}}</a>
+                <router-link class="active-page" active-class="active-page" :to="toFirstSection">Web interview #{{$store.state.interviewId}}</router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar top-menu"></span>
-                        <span class="icon-bar mid-menu"></span>
-                        <span class="icon-bar bottom-menu"></span>
-                    </button>
-                    <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand">
-                        <div class="brand-name">Web interview #{{$store.state.interviewId}}</div>
-                    </router-link>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar top-menu"></span>
+                    <span class="icon-bar mid-menu"></span>
+                    <span class="icon-bar bottom-menu"></span>
+                </button>
+                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand">
+                    <div class="brand-name">Web interview #{{$store.state.interviewId}}</div>
+                </router-link>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
@@ -29,7 +29,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#" title="Help">Help</a></li>
+                    <li><a href="http://docs.mysurvey.solutions/web-interview" title="Help">Help</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -63,6 +63,20 @@
         methods: {
             changeLanguage(language) {
                 this.$store.dispatch("changeLanguage", { language: language })
+            }
+        },
+        directives:{
+            init: {
+                inserted(el, binding, vnode) {
+                    $(".navbar-toggle").click(function () {
+                        $(".navbar-collapse").fadeToggle();
+                        $(".navbar-collapse").animate({height: '100%'}, 0);
+                        $(".top-menu").toggleClass("top-animate");
+                        $(".mid-menu").toggleClass("mid-animate");
+                        $(".bottom-menu").toggleClass("bottom-animate");
+                        $("main").toggleClass("hidden");
+                    });
+                }
             }
         }
     }
