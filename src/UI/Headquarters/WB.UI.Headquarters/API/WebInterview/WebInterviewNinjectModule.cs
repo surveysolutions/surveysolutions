@@ -3,6 +3,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -23,6 +25,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
+            this.Rebind<IEventSourcedAggregateRootRepository>().To<EventSourcedAggregateRootRepositoryWithWebCache>();
 
             this.Bind<IHubContext>()
                 .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
