@@ -1,5 +1,6 @@
 <template>
     <div class="progress question-progress" v-if="isVisible">
+        <button class="section-blocker" disabled="disabled"></button>
         <div class="progress-bar progress-bar-striped active" role="progressbar" :style="style">
             <span class="sr-only">{{progress}}% Complete</span>
         </div>
