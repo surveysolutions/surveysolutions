@@ -17,8 +17,8 @@ export default safeStore({
     actions: {
 
         fetchSidebar: batchedAction (async ({ commit }, ids) => {
-            const childs = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
-            commit("SET_SIDEBAR_STATE", childs)
+            const children = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
+            commit("SET_SIDEBAR_STATE", children)
         }, null, null),
 
         toggleSidebar ({ commit, dispatch, state }, { panel, collapsed }) {

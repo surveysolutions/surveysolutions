@@ -462,7 +462,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
         {
-            opts.AfterMap((InterviewTreeGroup g, SidebarPanel sidebarPanel) =>
+            opts.AfterMap((g, sidebarPanel) =>
             {
                 sidebarPanel.Collapsed = !shownLookup.Contains(g.Identity);
             });
@@ -471,25 +471,24 @@ namespace WB.UI.Headquarters.API.WebInterview
         public List<SidebarPanel> GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = this.CallerSectionid;
-            if (sectionId == null)
-            {
-                return null;
-            }
-
             var interview = this.GetCallerInterview();
-            var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
-            var shownPanels = currentOpenSection.Parents.Union(new[] { currentOpenSection });
-            var visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
-
             var result = new List<SidebarPanel>();
 
+            HashSet<Identity> visibleSections = new HashSet<Identity>();
+
+            if (sectionId != null)
+            {
+                var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
+                var shownPanels = currentOpenSection.Parents.Union(new[] {currentOpenSection});
+                visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
+            }
             foreach (var parentId in parentIds)
             {
-                var childs = parentId == null
+                var children = parentId == null
                     ? interview.GetEnabledSections()
                     : interview.GetGroup(Identity.Parse(parentId))?.Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                foreach (var child in childs ?? Array.Empty<InterviewTreeGroup>())
+                foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, opts => SidebarMapOptions(opts, visibleSections));
                     result.Add(sidebar);
