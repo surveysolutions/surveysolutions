@@ -28,10 +28,16 @@ a{
 html {
   position: relative;
   min-height: 100%;
+  height: 100%;
 	body {
+		&.gray-background{
+			background-color: #f8f8f8;
+		}
+		min-height: 100%;
+		position: relative;
 		color: $gray_text; 
 		min-width: 400px;
-		margin-bottom: 100px;
+		padding-bottom: 100px;
 		font-family: Arial, sans-serif;
 		font-size: 16px;
 		line-height: 18px;
@@ -42,7 +48,8 @@ html {
 		.footer {
 			position: absolute;
 			bottom: 0;
-			@include size(100%, 60px);
+			@include size(100%, 100px);
+			padding-top: 40px;
 			text-align: left;
 			color: $gray_light;
 			@include font(12px, 16px);
@@ -512,4 +519,7 @@ table{
 			top: $indent-foldback-button + 30px;
 		}
 	}
+}
+.position-relative{
+	position: relative;
 }

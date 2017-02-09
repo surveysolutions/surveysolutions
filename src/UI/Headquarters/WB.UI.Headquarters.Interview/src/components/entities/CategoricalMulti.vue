@@ -1,6 +1,7 @@
 <template>
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'">
-        <div class="question-unit">
+        <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
+        <div class="question-unit" >
             <div class="options-group">
                 <div class="form-group" v-for="option in $me.options">
                     <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
@@ -16,8 +17,6 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-
-    import * as $ from "jquery"
     import modal from "../Modal"
 
     export default {
