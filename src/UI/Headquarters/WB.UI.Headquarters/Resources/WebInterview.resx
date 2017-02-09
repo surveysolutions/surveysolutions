@@ -209,6 +209,9 @@
   <data name="Resume" xml:space="preserve">
     <value>Resume</value>
   </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+    <value>Discard and Start new</value>
+  </data>
   <data name="OrStartInterview" xml:space="preserve">
     <value>Or you can start a new interview</value>
   </data>
