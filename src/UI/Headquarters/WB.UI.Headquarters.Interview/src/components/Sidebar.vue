@@ -2,15 +2,15 @@
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
-            </SidebarPanel> 
+            </SidebarPanel>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title group" :class="completeClass">
                         <router-link :to="toComplete">Complete</router-link>
                     </h3>
                 </div>
-            </div>           
-        </div>              
+            </div>
+        </div>
     </aside>
 </template>
 <script lang="ts">
@@ -32,13 +32,13 @@
             },
             interviewState(){
                 return this.$store.state.interviewState
-            },            
-            completeClass() {                
+            },
+            completeClass() {
                 if (this.interviewState) {
                     return [
                         {
                             'complete': this.interviewState == "Completed",
-                            'has-error': this.interviewState == "Invalid"                           
+                            'has-error': this.interviewState == "Invalid"
                         }
                     ]
                 }
@@ -57,9 +57,7 @@
         },
         methods: {
             fetchSidebar() {
-                if (this.currentPanel) {
-                    Vue.nextTick(() => this.$store.dispatch("fetchSidebar", null))
-                }
+                Vue.nextTick(() => this.$store.dispatch("fetchSidebar", null))
             },
             fetchInterviewStatus() {
                 this.$store.dispatch("fetchInterviewStatus")

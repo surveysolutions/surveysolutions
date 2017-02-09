@@ -14,7 +14,11 @@ const router = new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
-        { name: "prefilled", path: "/:interviewId/Cover", component: Section },
+        {
+            name: "prefilled",
+            path: "/:interviewId/Cover",
+            component: Section
+        },
         {
             name: "section",
             path: "/:interviewId/Section/:sectionId",
