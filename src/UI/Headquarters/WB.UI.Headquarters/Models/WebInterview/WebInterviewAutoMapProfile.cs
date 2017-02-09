@@ -120,7 +120,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster));
 
             this.CreateMap<InterviewTreeGroup, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => !HasQuestionsWithInvalidAnswers(x)));
@@ -131,7 +132,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
-                .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
+                .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => true));
 
             this.CreateMap<InterviewTreeGroup, SidebarPanel>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
@@ -144,7 +146,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
                     opts.Condition(x => x is InterviewTreeRoster);
                     opts.MapFrom(x => (x as InterviewTreeRoster).RosterTitle);
                 })
-                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x));
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster)); 
 
             this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()

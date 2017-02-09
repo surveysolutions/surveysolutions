@@ -2,7 +2,7 @@
     <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true">
         <div class="options-group">
                 <router-link :to="navigateTo" class="btn btn-roster-section" :class="btnStatusClass">
-                    {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
+                    {{this.$me.title}}<span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
                 </router-link>
          </div>
          <div class="information-block roster-section-info" v-if="!$me.isDisabled">
@@ -26,6 +26,9 @@
                         interviewId: this.$route.params.interviewId
                     }
                 }
+            },
+            rosterTitle(){
+                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"            
             },
             isNotStarted() {
                 return this.$me.status == "NotStarted"
