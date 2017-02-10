@@ -362,7 +362,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     result = this.autoMapper.Map<InterviewTextListQuestion>(question);
                     var typedResult = (InterviewTextListQuestion)result;
                     var callerQuestionnaire = questionnaire;
-                    typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                    typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id) ?? 200;
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                 }
                 else if (question.IsYesNo)
