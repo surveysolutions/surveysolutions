@@ -418,16 +418,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent?.Identity;
+            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent?.Identity;
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
-            => this.Tree.GetGroup(groupIdentity).Children
+            => this.GetAllChildrenOrEmptyList(groupIdentity)
                 .OfType<InterviewTreeQuestion>()
                 .Select(question => question.Identity);
 
+        private IEnumerable<IInterviewTreeNode> GetAllChildrenOrEmptyList(Identity groupIdentity)
+            => this.Tree.GetGroup(groupIdentity)?.Children ?? new List<IInterviewTreeNode>();
+
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
-            => this.Tree.GetGroup(parentIdentity)
-                .Children
+            => this.GetAllChildrenOrEmptyList(parentIdentity)
                 .Where(roster => roster.Identity.Id == rosterId)
                 .Select(roster => roster.Identity)
                 .ToList();
