@@ -30,7 +30,7 @@
                     return find(this.$me.options, { 'rosterVector': this.$me.answer }).value;
                 },
                 set(value) {
-                    const selectedOption = this.$me.options.find((option) => { return option.value == value; });
+                    const selectedOption = find(this.$me.options, { 'value': value });
                     if (this.$me.isLinkedToList){
                         this.$store.dispatch("answerLinkedToListSingleQuestion", { answer: value[0], questionIdentity: this.$me.id })
                     } else {
