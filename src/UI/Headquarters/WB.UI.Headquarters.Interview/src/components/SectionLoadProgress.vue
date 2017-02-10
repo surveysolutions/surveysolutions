@@ -1,6 +1,6 @@
 <template>
-    <div v-if="show">
-        <p class="text-warning">Loading...</p>
+    <div v-if="show" class="loading">
+        <div>Loading, please wait</div>
     </div>
 </template>
 <script lang="ts">

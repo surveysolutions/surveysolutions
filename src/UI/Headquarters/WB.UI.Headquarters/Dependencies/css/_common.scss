@@ -418,3 +418,13 @@ table{
 	display: inline-block;
 	vertical-align: middle;
 }
+.loading{
+    @extend %loading-indicator;
+    position: fixed;
+    top: 70px;
+}
+@media (max-width: $screen-md-min){
+	.loading{
+		top: 60px;
+	}
+}

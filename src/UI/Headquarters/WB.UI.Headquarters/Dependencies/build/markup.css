@@ -5841,6 +5841,25 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   font-weight: bold;
   margin-bottom: 20px; }
 
+.dataTables_processing, .loading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1); }
+  .dataTables_processing div, .loading div {
+    background-color: white;
+    padding: 30px 40px;
+    display: inline-block;
+    font: 24px/26px "RobotoLight";
+    margin-top: 10px;
+    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #a6a8a9; }
+
 .table {
   color: #3f3f3f;
   width: 100% !important;
@@ -6139,21 +6158,6 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .dataTables_wrapper .dataTables_paginate > .paginate_button {
     float: left;
     padding: 5px 12px; }
-
-.dataTables_processing {
-  position: absolute;
-  z-index: 100;
-  width: 100%;
-  text-align: center;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.1); }
-  .dataTables_processing div {
-    background-color: white;
-    padding: 30px 40px;
-    display: inline-block;
-    font: 24px/26px "RobotoLight";
-    margin-top: 10px;
-    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1); }
 
 .dataTables_scroll {
   overflow-x: auto; }
@@ -7012,22 +7016,22 @@ a.disabled {
 ::-webkit-input-placeholder {
   font-weight: normal !important;
   font-style: italic;
-  color: #a6a8a9; }
+  color: #a6a8a9 !important; }
 
 :-moz-placeholder {
   font-weight: normal !important;
   font-style: italic;
-  color: #a6a8a9; }
+  color: #a6a8a9 !important; }
 
 ::-moz-placeholder {
   font-weight: normal !important;
   font-style: italic;
-  color: #a6a8a9; }
+  color: #a6a8a9 !important; }
 
 :-ms-input-placeholder {
   font-weight: normal !important;
   font-style: italic;
-  color: #a6a8a9; }
+  color: #a6a8a9 !important; }
 
 input.wb-checkbox {
   display: none; }
@@ -8504,6 +8508,14 @@ table tr th .census-icon, table tr td .census-icon {
   display: inline-block;
   vertical-align: middle; }
 
+.loading {
+  position: fixed;
+  top: 70px; }
+
+@media (max-width: 1210px) {
+  .loading {
+    top: 60px; } }
+
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
   display: flex; }
@@ -9599,6 +9611,7 @@ label.inactive {
   .comments-block .comment .form-inline .form-control {
     width: 360px;
     height: 40px;
+    padding: 10px 12px;
     z-index: 0;
     color: #a6a8a9; }
 
@@ -9734,16 +9747,16 @@ label.inactive {
       display: block;
       font-size: 14px;
       line-height: 18px;
-      padding: 11px 38px 11px 45px;
+      padding: 10px 38px 10px 40px;
       margin: 0; }
       .question-editor .options-group .radio label .tick, .question-editor .options-group .form-group label .tick, .question-editor .options-group .form-input label .tick {
         position: absolute;
-        left: 15px; }
+        left: 10px; }
   .question-editor .options-group .form-group label {
     cursor: pointer; }
   .question-editor .options-group .field .dropdown-toggle {
     height: 40px;
-    padding: 11px 38px 11px 15px; }
+    padding: 10px 38px 10px 10px; }
     .question-editor .options-group .field .dropdown-toggle span {
       position: static;
       font: 14px/18px Arial, sans-serif;
@@ -9768,7 +9781,7 @@ label.inactive {
   position: relative; }
   .field .field-to-fill, .question-editor .options-group .field .dropdown-toggle {
     width: 100%;
-    padding: 11px 15px;
+    padding: 10px 12px;
     border: none;
     font-size: 14px;
     line-height: 18px;
@@ -9845,7 +9858,7 @@ label.inactive {
   display: inline-block;
   float: left; }
   .yes-no-question .question-unit .options-group .radio .field label:first-of-type {
-    padding-left: 15px; }
+    padding-left: 10px; }
   .yes-no-question .question-unit .options-group .radio .field label .tick {
     position: relative;
     left: 0;
