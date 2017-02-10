@@ -17,16 +17,6 @@
         components: { SidebarPanel },
         data() {
             return {
-                completeBtn: {
-                    collapsed: true,
-                    title: "Complete",
-                    to: {
-                        name: 'complete'
-                    },
-                    validity: {
-                        isValid: true
-                    }
-                },
                 coverBtn: {
                     collapsed: true,
                     title: "Cover",
@@ -48,24 +38,23 @@
             },
             currentPanel() {
                 return this.$route.params.sectionId
-            },
-            toComplete() {
-                return { name: 'complete', params: {} }
-            },
+            },            
             interviewState() {
                 return this.$store.state.interviewState
-            },
-            completeClass() {
-                if (this.interviewState) {
-                    return [
-                        {
-                            'complete': this.interviewState == "Completed",
-                            'has-error': this.interviewState == "Invalid"
-                        }
-                    ]
-                }
-                return []
-            }
+            },            
+            completeBtn(){
+                return {
+                    collapsed: true,
+                    title: "Complete",
+                    to: {
+                        name: 'complete'
+                    },
+                    state: this.interviewState,
+                    validity: {
+                        isValid: !(this.interviewState == "Invalid")
+                    } 
+             }
+        }
         },
         beforeMount() {
             this.fetchSidebar(),
