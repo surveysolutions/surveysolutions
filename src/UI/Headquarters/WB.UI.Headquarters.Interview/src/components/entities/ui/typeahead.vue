@@ -11,7 +11,10 @@
             <li v-for="option in options" :key="option.value">
                 <a href="javascript:void(0);" @click="selectOption(option.value)" v-html="highlight(option.title, searchTerm)"></a>
             </li>
-            <li v-if="options.length === 0">
+            <li v-if="isLoading">
+                <a>Loading...</a>
+            </li>
+            <li v-if="!isLoading && options.length === 0">
                 <a>No results found</a>
             </li>
         </ul>
@@ -45,7 +48,8 @@
         data() {
             return {
                 searchTerm: '',
-                options: []
+                options: [],
+                isLoading: false
             }
         },
         methods: {
@@ -53,7 +57,9 @@
                 this.loadOptions(e.target.value)
             },
             async loadOptions(filter: string) {
+                this.isLoading = true
                 const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
+                this.isLoading = false
                 this.options = options
             },
             selectOption(value: string) {
