@@ -1,7 +1,9 @@
+using System;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
+using Prometheus.Advanced;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Infrastructure.Native.Storage;
@@ -26,6 +28,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
             this.Rebind<IEventSourcedAggregateRootRepository>().To<EventSourcedAggregateRootRepositoryWithWebCache>();
+
+            DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]
+            {
+                new DotNetStatsCollector ()
+            });
 
             this.Bind<IHubContext>()
                 .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
