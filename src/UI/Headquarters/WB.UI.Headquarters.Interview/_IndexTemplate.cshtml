@@ -21,7 +21,7 @@
         global: INTERVIEW_APP_CONFIG = {
             "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
             "imageUploadUri": '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = "WebInterview", Action = "Image"})',
-            "imageGetBase" :  '@Url.Content("~/api/WebInterviewResources/Image")',
+            "imageGetBase" :  '@Url.Content("~/api/WebInterviewResources")',
             "signalrPath": '@Url.Content("~/signalr/hubs")',
             "verboseLogging": <%= htmlWebpackPlugin.options.verboseLogging %>
         }
