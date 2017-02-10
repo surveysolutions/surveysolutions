@@ -2,7 +2,7 @@
 </template>
 <script lang="ts">
     import * as bootbox from "bootbox"
-    import * as moment from "moment"
+    import moment from "../misc/moment"
 
     export default {
         data: () => {
@@ -33,10 +33,12 @@
                 }
             }
         },
-        created() {
+        async created() {
+            const momentInstance = await moment
+
             setInterval(() => {
                 if (!this.shown) {
-                    const minutesAfterLastAction = moment().diff(this.$store.state.lastActivityTimestamp, "minutes")
+                    const minutesAfterLastAction = momentInstance().diff(this.$store.state.lastActivityTimestamp, "minutes")
                     if (Math.abs(minutesAfterLastAction) > 15) {
                         this.show()
                     }

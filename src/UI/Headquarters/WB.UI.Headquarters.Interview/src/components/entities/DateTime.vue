@@ -26,14 +26,23 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import VueFlatpickr from "vue-flatpickr"
-    import * as moment from "moment"
+    import momentPromise from "../../misc/moment"
     import 'vue-flatpickr/theme/flatpickr.min.css'
+
+    let moment = null
 
     export default {
         name: "DateTime",
         mixins: [entityDetails],
         data() {
+
+            momentPromise.then(value => {
+                moment = value
+                this.momentLoading = false
+            })
+
             return {
+                momentLoading: true,
                 pickerOpts: {
                     dateFormat: "Y-m-d",
                     onChange: (selectedDate) => {
@@ -43,8 +52,8 @@
             }
         },
         computed: {
-            answer() {
-                if (this.$me && this.$me.answer) {
+             answer() {
+                if (!this.momentLoading && this.$me && this.$me.answer) {
                     const result = moment(this.$me.answer).format(this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
                     return result
                 }
@@ -52,18 +61,19 @@
             }
         },
         methods: {
-            answerDate(answer: string) {
+            async answerDate(answer: string) {
+                const _moment = await momentPromise
                 if (!this.$me.isTimestamp) {
-                    const oldAnswer = moment(this.$me.answer)
-                    const typedAnswer = moment(answer)
-                    const newAnswer = moment.utc([typedAnswer.year(), typedAnswer.month(), typedAnswer.date()])
+                    const oldAnswer =  _moment(this.$me.answer)
+                    const typedAnswer =  _moment(answer)
+                    const newAnswer =  _moment.utc([typedAnswer.year(), typedAnswer.month(), typedAnswer.date()])
 
                     if (!oldAnswer.isSame(answer)) {
                         this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: newAnswer })
                     }
                 }
                 else {
-                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: moment() })
+                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date:  _moment() })
                 }
             }
         },
