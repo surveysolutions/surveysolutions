@@ -1,0 +1,126 @@
+body > .ui-pnotify
+{
+    z-index: 100050;
+}
+.ui-pnotify-modal-overlay, .modal-backdrop{
+    background-color: rgba(0,0,0,.2);
+}
+.ui-pnotify, .modal-content{
+ 	background: #fff;
+ 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
+	border-radius: 0;
+  	.alert{
+   		font-family: "RobotoMedium";
+        margin: 0;
+        border-top: none !important;
+  		padding: 20px;
+        &.alert-warning{
+            border-top: 10px solid $blue;
+            color: $blue;
+        }
+        &.alert-success{
+            border-top: 10px solid $green;
+            color: $green;
+        }
+        &.alert-info{
+            border-top: 10px solid $blue;
+            color: $blue;
+        }
+        &.alert-danger{
+            border-top: 10px solid $red;
+            color: $red;
+        }
+    	.ui-pnotify-title{
+     		font: 16px/18px "RobotoMedium";
+    	}
+    	.ui-pnotify-text{
+     		font-size: 14px;
+     		line-height: 16px;
+     		color: $gray_text;
+    	}
+    	.ui-pnotify-action-bar{
+			margin-top: 20px !important;
+			text-align: left !important;
+			.btn{
+				border-color: transparent;
+				color: $blue;
+				padding: 0;
+				margin-right: 20px;
+				&:last-of-type{
+					margin-right: 0;
+				}
+				&:hover, &:focus, &:active{
+					background-color: transparent;
+					text-decoration: underline;
+				}
+			}
+		}
+		.ui-pnotify-closer span{
+    		@include cancel(16px);
+    	}
+  	}
+    &.loading-indicator{
+        border-radius: 0;
+        .ui-pnotify-container{
+            border-radius: 0;
+            box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
+        }
+        .ui-pnotify-container.alert{
+            padding: 30px 40px;
+            border-top: none;
+        }
+        .ui-pnotify-title{
+     		font: 24px/26px "RobotoLight";
+            padding: 0;
+            margin: 0;
+    	}
+    }
+    &.centered-modal{
+        position: fixed;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
+}
+.modal-content{
+	padding: 20px;
+    padding-left: 25px;
+	.modal-header{
+		border: none;
+		padding: 0;
+		margin-bottom: 25px;
+        h3{
+            font-size: 16px;
+            line-height: 18px;
+        }
+		.close{
+			position: relative;
+			@include opacity(0.5);
+			span{
+				@include cancel(20px);
+			}
+		}
+	}
+	.modal-body{
+		padding: 0;
+        ul li {
+            margin-bottom: 5px;
+            label{
+                font: 14px/16px "RobotoRegular";
+                font-weight: normal;
+            }
+            input {
+                &:checked + label{
+                    color: $gray_text;
+                }
+                & + label{
+                    color: $gray_light;
+                }
+            }
+        }
+	}
+}
+.modal-dropdown{
+    width: 315px;
+}

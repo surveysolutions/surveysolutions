@@ -25,6 +25,32 @@
                     @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
                 }
             }
+            input.checkbox-filter{
+                & ~ label .tick{
+                    background-position: -43px 0;
+                }
+                & ~ label:hover .tick,
+                & ~ label:focus .tick{
+                    background-position: -43px -36px;
+                }
+                &:checked ~ label .tick {
+                    background-position: -43px -72px;
+                }
+                &:checked ~ label:hover .tick,
+                &:checked ~ label:focus .tick {
+                    background-position: -43px -108px;
+                }
+                &:disabled ~ label .tick,
+                &:checked:disabled ~ label .tick {
+                    background-position: -43px -144px;
+                }
+                &:disabled ~ label:hover .tick,
+                &:checked:disabled ~ label:hover .tick,
+                &:disabled ~ label:focus .tick,
+                &:checked:disabled ~ label:focus .tick {
+                    background-position: -43px -180px;
+                }
+            }
         }
         @include transition(all, 0.2s);
         td{
@@ -397,6 +423,7 @@
     }
     .dataTables_scrollBody{
         th{
+            border-top: none !important;
             *{display: none;}
             &:after{
                 display: none !important;
