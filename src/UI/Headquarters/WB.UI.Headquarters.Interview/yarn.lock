@@ -3676,9 +3676,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-flatpickr@^2.2.9:
-  version "2.2.9"
-  resolved "https://registry.yarnpkg.com/vue-flatpickr/-/vue-flatpickr-2.2.9.tgz#7487ad94defb2e006bd38a2289f4d5dfd02a48bd"
+vue-flatpickr@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vue-flatpickr/-/vue-flatpickr-2.3.0.tgz#4dfe48eea391b9ddcba48adcc4967493fa5769de"
   dependencies:
     flatpickr "^2.3.0-3"
 

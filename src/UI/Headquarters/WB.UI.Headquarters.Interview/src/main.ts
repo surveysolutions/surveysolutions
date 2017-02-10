@@ -1,5 +1,13 @@
 import "es6-promise/auto"
 
+import { basePath } from "./config"
+declare const process: any
+declare let __webpack_public_path__: any
+
+if (process.env.NODE_ENV === "production") {
+    __webpack_public_path__ = basePath
+}
+
 import * as Vue from "vue"
 import * as Vuex from "vuex"
 
