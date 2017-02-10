@@ -5,7 +5,7 @@
 @include placeholder {
     font-weight: normal !important;
     font-style: italic;
-    color: $gray_light;
+    color: $gray_light !important;
 }
 input.wb-checkbox{
     display: none;

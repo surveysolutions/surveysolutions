@@ -398,20 +398,7 @@
     }
 }
 .dataTables_processing{
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-    text-align: center;
-    height: 100%;
-    background: rgba(0,0,0, 0.1);
-    div{
-        background-color: white;
-        padding: 30px 40px;
-        display: inline-block;
-        font: 24px/26px "RobotoLight";
-        margin-top: 10px;
-        box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
-    }
+    @extend %loading-indicator;
 }
 .dataTables_scroll{
     overflow-x: auto;
