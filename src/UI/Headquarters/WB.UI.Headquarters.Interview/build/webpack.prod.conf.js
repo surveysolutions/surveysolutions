@@ -19,7 +19,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     output: {
         path: config.assetsRoot,
         filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+        chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
     },
     plugins: [
         // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -64,12 +64,16 @@ var webpackConfig = merge(baseWebpackConfig, {
                 )
             }
         }),
-        // extract webpack runtime and module manifest to its own file in order to
-        // prevent vendor hash from being updated whenever app bundle is updated
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
-        })
+        // new webpack.DllPlugin({
+		// 	path: path.join(__dirname, "js", "[name]-manifest.json"),
+		// 	name: "[name]_[hash]"
+		// })
+        // // extract webpack runtime and module manifest to its own file in order to
+        // // prevent vendor hash from being updated whenever app bundle is updated
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'manifest',
+        //     chunks: ['vendor']
+        // })
     ]
 })
 

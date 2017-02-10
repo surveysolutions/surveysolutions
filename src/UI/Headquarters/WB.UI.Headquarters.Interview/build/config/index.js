@@ -25,7 +25,7 @@ const config = {
         index: path.resolve(projectPath, 'Views/WebInterview/Index.cshtml'),
         assetsRoot: path.resolve(projectPath, 'InterviewApp'),
         assetsSubDirectory: '',
-        assetsPublicPath: '~/InterviewApp/',
+        assetsPublicPath: '/headquarters/interviewapp/',
         assetsRelativePath: "/Headquarters/Dependencies/",
         proxyTable: {},
         cssSourceMap: false,
