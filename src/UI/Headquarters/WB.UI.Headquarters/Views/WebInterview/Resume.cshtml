@@ -3,53 +3,43 @@
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
-<div class="row two-columns-form">
-    <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
-        <div class="centered-box-table">
-            <div class="centered-box-table-cell">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" />
-                <div class="default-logo"></div>
-            </div>
-        </div>
+
+<div class="centered-box-table">
+    <h2>@WebInterview.Resume_WelcomeText</h2>
+    <p><b>@string.Format(WebInterview.Resume_InvitationText, Model.QuestionnaireTitle)</b></p>
+
+    <div class="additional-info-block">
+        @WebInterview.Resume_InvitationSmallText
+        <ul class="list-unstyled">
+            <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
+            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)</li>
+        </ul>
     </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 right-column">
-        <div class="centered-box-table">
-            <h1>
-                @WebInterview.Resume_WelcomeText
-            </h1>
-            <h3>
-                @string.Format(WebInterview.Resume_InvitationText, Model.QuestionnaireTitle)
-            </h3>
-            <p>
-                @WebInterview.Resume_InvitationSmallText
-            </p>
-            @using (Html.BeginForm())
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+        if (Model.UseCaptcha)
+        {
+
+            if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
             {
-                <div class="form-group">
-                    @Html.AntiForgeryToken()
-                </div>
-                if (Model.UseCaptcha)
-                {
-
-                    if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
-                    {
-                        <div class="form-group has-error">
-                            <p>
-                                <span class="help-block">
-                                    @Html.ValidationMessage("InvalidCaptcha")
-                                </span>
-                            </p>
-                        </div>
-                    }
-
-                    <div class="form-group">
-                        @Html.Recaptcha()
-                    </div>
-                }
-                <div class="form-actions">
-                    <button class="btn btn-success btn-lg" type="submit">@WebInterview.Resume</button>
+                <div class="form-group has-error">
+                    <p>
+                        <span class="help-block">
+                            @Html.ValidationMessage("InvalidCaptcha")
+                        </span>
+                    </p>
                 </div>
             }
+
+            <div class="form-group">
+                @Html.Recaptcha()
+            </div>
+        }
+        <div class="form-actions">
+            <button class="btn btn-success btn-lg" type="submit">@WebInterview.Resume</button>
         </div>
-    </div>
+    }
 </div>

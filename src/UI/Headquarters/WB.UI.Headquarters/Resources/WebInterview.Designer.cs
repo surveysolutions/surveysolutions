@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Discard and Start new.
+        ///   Looks up a localized string similar to Restart.
         /// </summary>
         public static string DiscardAndStart {
             get {
@@ -115,11 +115,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Solutions Web Survey.
+        ///   Looks up a localized string similar to This interview has been completed.
         /// </summary>
-        public static string FinishText {
+        public static string FinishInterviewText {
             get {
-                return ResourceManager.GetString("FinishText", resourceCulture);
+                return ResourceManager.GetString("FinishInterviewText", resourceCulture);
             }
         }
         
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resume.
+        ///   Looks up a localized string similar to Resume interview.
         /// </summary>
         public static string Resume {
             get {
@@ -385,6 +385,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This interview has not been completed.
+        /// </summary>
+        public static string StartedInterviewText {
+            get {
+                return ResourceManager.GetString("StartedInterviewText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web Survey.
         /// </summary>
         public static string StartPageTitle {
@@ -408,6 +417,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveyFormatText {
             get {
                 return ResourceManager.GetString("SurveyFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Web Survey.
+        /// </summary>
+        public static string WebSurvey {
+            get {
+                return ResourceManager.GetString("WebSurvey", resourceCulture);
             }
         }
         

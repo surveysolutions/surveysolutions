@@ -163,7 +163,7 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
   </data>
-  <data name="FinishText" xml:space="preserve">
+  <data name="WebSurvey" xml:space="preserve">
     <value>Survey Solutions Web Survey</value>
   </data>
   <data name="CompletionText" xml:space="preserve">
@@ -174,6 +174,12 @@
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Not started</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>This interview has been completed</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+    <value>This interview has not been completed</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>Survey: "{0}"</value>
@@ -207,10 +213,10 @@
     <value>Original</value>
   </data>
   <data name="Resume" xml:space="preserve">
-    <value>Resume</value>
+    <value>Resume interview</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
-    <value>Discard and Start new</value>
+    <value>Restart</value>
   </data>
   <data name="OrStartInterview" xml:space="preserve">
     <value>Or you can start a new interview</value>

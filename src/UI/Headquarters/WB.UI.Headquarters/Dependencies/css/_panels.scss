@@ -18,5 +18,13 @@
 	}
 	.panel-body{
 		padding: 10px;
+		.btn{
+			margin-right: 15px;
+		}
 	}
+}
+@media (max-width: $screen-xs-min){
+	.panel-table label{
+		margin-bottom: 20px !important;
+	}	
 }
