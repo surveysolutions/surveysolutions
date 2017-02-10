@@ -3,84 +3,80 @@
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
-<div class="row two-columns-form">
-    <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
-        <div class="centered-box-table">
-            <div class="centered-box-table-cell">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" alt="company-logo" />
-                <div class="default-logo"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 right-column">
-        <div class="centered-box-table">
-            <h1>
-                @WebInterview.WelcomeText
-            </h1>
-            <h3>
-                @(string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle))
-            </h3>
-            <p>
-                @WebInterview.InvitationSmallText
-            </p>
-            @if (Model.ServerUnderLoad)
-            {                    
-                <p><strong>@Html.Raw(WebInterview.ServerUnderLoad)</strong></p>
-            }
-            @using (Html.BeginForm())
-            {
-                <div class="form-group">
-                    @Html.AntiForgeryToken()
-                </div>
-                if (Model.UseCaptcha && !Model.ServerUnderLoad)
-                {
-                    if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
-                    {
-                        <div class="form-group has-error">
-                            <p>
-                                <span class="help-block">
-                                    @Html.ValidationMessage("InvalidCaptcha")
-                                </span>
-                            </p>
-                        </div>
-                    }
-                    <div class="form-group">
-                        @Html.Recaptcha()
-                    </div>
-                }
+@if (Model.IsStarted)
+{
+    <h2>@WebInterview.WebSurvey</h2>
+    <p>
+        <ul class="list-unstyled">
+            <li><strong>@WebInterview.FinishInterviewText</strong></li>
+            <li><strong>@string.Format(WebInterview.SurveyFormatText, Model.QuestionnaireTitle)</strong></li>
+        </ul>
+    </p>
+}
+else
+{
+    <h2>@WebInterview.WelcomeText</h2>
+    <p><b>@(string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle))</b></p>
+}
 
-                if (Model.ServerUnderLoad)
-                {
-                    <div class="form-actions">
-                        <button class="btn btn-success btn-lg" onClick="window.location.reload();return false">@WebInterview.RefreshPage</button>
-                    </div>
-                }
-                else
-                {
-                    if (Model.HasPreviousStartedInterview)
-                    {
-                        <p>
-                            @WebInterview.HasPreviousStartedInterview
-                        </p>
-                        <div class="form-actions">
-                            <button class="btn btn-success btn-lg" name="resume" value="true">@WebInterview.Resume</button>
-                        </div>
-                        <p>
-                            <br/>
-                            @WebInterview.OrStartInterview
-                        </p>
-                        <div class="form-actions">
-                            <button class="btn btn-default" type="submit" name="resume" value="false">@WebInterview.DiscardAndStart</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="form-actions">
-                            <button class="btn btn-success btn-lg" type="submit" name="resume" value="false">@WebInterview.Start</button>
-                        </div>
-                    }
-                }
-            }
-        </div>
-    </div>
+<div class="additional-info-block">
+    @WebInterview.Resume_InvitationSmallText
+    @if (Model.IsStarted)
+    {
+        <ul class="list-unstyled">
+            <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
+            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)</li>
+        </ul>
+    }
 </div>
+@if (Model.ServerUnderLoad)
+{
+    <p><strong>@Html.Raw(WebInterview.ServerUnderLoad)</strong></p>
+}
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.AntiForgeryToken()
+    </div>
+    if (Model.UseCaptcha && !Model.ServerUnderLoad)
+    {
+        if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
+        {
+            <div class="form-group has-error">
+                <p>
+                    <span class="help-block">
+                        @Html.ValidationMessage("InvalidCaptcha")
+                    </span>
+                </p>
+            </div>
+        }
+        <div class="form-group">
+            @Html.Recaptcha()
+        </div>
+    }
+
+    if (Model.ServerUnderLoad)
+    {
+        <div class="form-actions">
+            <button class="btn btn-success btn-lg" onClick="window.location.reload();return false">@WebInterview.RefreshPage</button>
+        </div>
+    }
+    else
+    {
+        if (Model.HasPreviousStartedInterview)
+        {
+            <div class="form-actions">
+                <button class="btn btn-success btn-lg" name="resume" value="true">@WebInterview.Resume</button>
+                <button type="submit" class="btn btn-link">@WebInterview.DiscardAndStart</button>
+            </div>
+                <p>@WebInterview.OrStartInterview</p>
+                <div class="form-actions"><button type="submit" class="btn btn-link btn-looks-like-link">@WebInterview.Start</button></div>
+        }
+        else
+        {
+            <div class="form-actions">
+                <button class="btn btn-success btn-lg" type="submit" name="resume" value="false">@WebInterview.Start</button>
+            </div>
+        }
+    }
+}

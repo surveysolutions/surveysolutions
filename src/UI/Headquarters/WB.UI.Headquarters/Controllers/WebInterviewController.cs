@@ -111,10 +111,13 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
 
-            var model = new ResumeWebInterview();
-            model.QuestionnaireTitle = questionnaireBrowseItem.Title;
-            model.UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha;
-            return model;
+            return new ResumeWebInterview
+            {
+                QuestionnaireTitle = questionnaireBrowseItem.Title,
+                UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha,
+                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interview.Id.FormatGuid()),
+                StartedDate = interview.StartedDate
+            };
         }
 
         private StartWebInterview GetStartModel(QuestionnaireIdentity questionnaireIdentity,
@@ -129,12 +132,23 @@ namespace WB.UI.Headquarters.Controllers
                 var interview = this.statefulInterviewRepository.Get(previousStartedInterviewId);
                 hasPreviousStartedInterview = interview != null && !interview.IsCompleted && interview.Status != InterviewStatus.Deleted;
             }
+            
+            var view =  new StartWebInterview
+            {
+                QuestionnaireTitle = questionnaireBrowseItem.Title,
+                UseCaptcha = webInterviewConfig.UseCaptcha,
+                HasPreviousStartedInterview = hasPreviousStartedInterview
+            };
 
-            var model = new StartWebInterview();
-            model.QuestionnaireTitle = questionnaireBrowseItem.Title;
-            model.UseCaptcha = webInterviewConfig.UseCaptcha;
-            model.HasPreviousStartedInterview = hasPreviousStartedInterview;
-            return model;
+            var interviewId = this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value;
+            if (!string.IsNullOrEmpty(interviewId))
+            {
+                view.IsStarted = true;
+                view.InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interviewId);
+                view.StartedDate = this.statefulInterviewRepository.Get(interviewId).StartedDate;
+            }
+
+            return view;
         }
 
         private FinishWebInterview GetFinishModel(IStatefulInterview interview)

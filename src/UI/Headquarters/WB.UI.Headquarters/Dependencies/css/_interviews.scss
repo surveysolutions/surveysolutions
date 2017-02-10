@@ -1,9 +1,80 @@
-.prefield-column, .spent-time, .templete{
+.prefield-column, .spent-time, .template, .accepted-hq, .census, .number-rejected{
 	display: none;
 
 }
 td, th{
 		&.visible{
 			display: table-cell;
+	}
+}
+
+.table-wrapper{
+	position: relative;
+	.wrapper-modal-dropdown{
+	    @include absolute(-20px, 0);
+	   /*  z-index: 2; */
+	   .modal-dialog{
+	   		@include absolute(-30px, 0);
+	   }
+	   .modal.in{
+	   		position: absolute;
+	   		overflow: visible;
+	   }
+	}
+}
+.table-with-scroll{
+	overflow-x: auto;
+}
+tr:last-child{
+	td.prefield-column{
+		border-bottom: 2px solid $blue !important;
+	}
+}
+th, td{
+	&.prefield-column{
+		border-color: $gray-form !important;
+		&.enumeration-area{
+			border-left: 2px solid $blue !important;
+		}
+		&.deelling-address{
+			border-right: 2px solid $blue !important;
+		}
+	}
+}
+th.prefield-column{
+	text-transform: none;
+	color: $blue;
+	border-top: 2px solid $blue !important;
+}
+
+.interview-id{
+	min-width: 240px !important;
+	overflow: hidden;
+	.show-prefield-btn{
+		text-transform: none;
+		float: right;
+	}
+}
+.flags .flag{
+	color: $gray_text;
+	&:before{
+        background-position: 1px 0;
+    }
+    &:hover, &:focus, &:active{
+    	&:before{
+			background-position: -18px 0;
+		}
+    }
+}
+.errors{
+	color: $red_error;
+}
+td.enumerator span{
+	color: $gray_text !important;
+}
+.table tbody tr td.not-synced-assign{
+	font-style: italic;
+	a{
+		color: $gray_light;
 	}
 }

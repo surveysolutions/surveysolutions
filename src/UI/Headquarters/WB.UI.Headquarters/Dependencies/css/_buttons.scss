@@ -12,13 +12,11 @@
 		@include stripe-gradient(#d7d7d7, $gray_light);
 		&:hover, &:focus{
 			border-color: $gray-super-light;
+			outline: none;
 		}
 	}
-	&:hover{
-		/* outline: none;  */
-	}
 	&:focus{
-		outline: 1px auto $blue;
+		/* outline: 1px auto $blue; */
 	}
 }
 a.disabled{
@@ -168,7 +166,7 @@ a.disabled{
 	border-color: $red_error;
 	padding-top: 8px;
 	padding-bottom: 8px;
-	background-color: transparent;
+	background-color: #fff;
 	color: $red_error;
 	&:focus,
 	&.focus,
@@ -197,7 +195,7 @@ a.disabled{
 }
 .btn-plus{
 	@include cancel(14px);
-	opacity: 1;
+	@include opacity(1);
 		&:before, &:after{
 			@include transition(all, 0.2s);
 	        @include rotate(0deg);
@@ -270,5 +268,41 @@ a.disabled{
 	letter-spacing: normal;
 	&:hover, &:focus, &:active{
 		text-decoration: underline;
+	}
+}
+.btn-strips{
+	border-radius: 0;
+	background-color: transparent;
+	@include square(16px);
+	position: relative;
+	span{
+		display: block;
+		height: 100%;
+		width: 2px;
+		background-color: $blue;
+		position: absolute;
+		top: 0;
+		left: calc(50% - 1px);
+	}
+	&:before, &:after{
+		content: "";
+		display: block;
+		@include absolute(0, 0);
+		height: 100%;
+		width: 2px;
+		background-color: $blue;
+	}
+	&:after{
+		right: auto;
+		left: 0;
+	}
+	span, &:before, &:after{
+		@include opacity(0.5);
+		@include transition(all, 0.2s);
+	}
+	&:hover, &:focus, &:active{
+		span, &:before, &:after{
+		@include opacity(1);
+		}
 	}
 }

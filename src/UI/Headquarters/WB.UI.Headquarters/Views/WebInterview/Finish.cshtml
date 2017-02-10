@@ -2,27 +2,17 @@
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
-<div class="row two-columns-form">
-    <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
-        <div class="centered-box-table">
-            <div class="centered-box-table-cell">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" />
-                <div class="default-logo"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 right-column">
-        <div class="centered-box-table">
-            <h1>@WebInterview.FinishText</h1>
-
-
-            <h3>@WebInterview.CompletionText<br>@string.Format(WebInterview.SurveyFormatText, Model.QuestionnaireTitle)</h3>
-
-            <p>
-                @string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)<br>
-                @string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)<br>
-                @string.Format(WebInterview.InterviewCompletionDateFormatText, Model.CompletedDate.HasValue ? Model.CompletedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.InProgressText)
-            </p>
-        </div>
-    </div>
+<h2>@WebInterview.WebSurvey</h2>
+<p>
+    <ul class="list-unstyled">
+        <li><strong>@WebInterview.FinishInterviewText</strong></li>
+        <li><strong>@string.Format(WebInterview.SurveyFormatText, Model.QuestionnaireTitle)</strong></li>
+    </ul>
+</p>
+<div class="additional-info-block">
+    <ul class="list-unstyled">
+        <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
+        <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)</li>
+        <li>@string.Format(WebInterview.InterviewCompletionDateFormatText, Model.CompletedDate.HasValue ? Model.CompletedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.InProgressText)</li>
+    </ul>
 </div>
