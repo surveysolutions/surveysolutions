@@ -138,10 +138,32 @@ export default {
     },
 
     refreshSectionState: debounce(({ dispatch }) => {
+        dispatch("fetchSectionEnabledStatus")
         dispatch("fetchBreadcrumbs")
         dispatch("fetchEntity", { id: "NavigationButton", source: "server" })
         dispatch("fetchSidebar")
         dispatch("fetchInterviewStatus")
+    }, 200),
+
+    fetchSectionEnabledStatus:  debounce(async ({ commit }) => {
+        const routeParams = (router.currentRoute.params as any)
+        const currecntSectionId = routeParams.sectionId
+        const isPrefilledSection = currecntSectionId === undefined
+
+        if (!isPrefilledSection) {
+            const isEnabled = await apiCaller(api => api.isEnabled(currecntSectionId))
+            if (!isEnabled) {
+                const firstSectionId = await apiCaller(api => api.getFirstSectionId())
+                const firstSectionLocation = {
+                    name: "section",
+                    params: {
+                        interviewId: routeParams.interviewId,
+                        sectionId: firstSectionId
+                    }
+                }
+                router.replace(firstSectionLocation)
+            }
+        }
     }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit }) => {
