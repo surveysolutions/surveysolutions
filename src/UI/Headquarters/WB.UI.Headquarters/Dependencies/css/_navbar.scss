@@ -10,6 +10,7 @@
 		position: relative;
 		margin-left: 0;
 		@extend %font-header;
+		font-family: "RobotoBold";
 		&:hover, &:focus{
 			font-family: "RobotoBold";
 		}
