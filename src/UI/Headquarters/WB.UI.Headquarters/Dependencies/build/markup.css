@@ -5809,8 +5809,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   background: transparent url("../img/questionnaire-sprite.png") no-repeat;
   vertical-align: middle;
   background-size: 629px 18px;
-  background-position: 4px 0px;
-  margin-right: 10px; }
+  background-position: 4px 2px;
+  margin-right: 12px; }
   @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
     input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       /* on retina, use image that's scaled by 2 */
@@ -7037,22 +7037,22 @@ input.wb-checkbox {
   display: none; }
   input.wb-checkbox ~ label:hover .tick,
   input.wb-checkbox ~ label:focus .tick {
-    background-position: -37px 0px; }
+    background-position: -37px 2px; }
   input.wb-checkbox:checked ~ label .tick {
-    background-position: -78px 0px; }
+    background-position: -78px 2px; }
   input.wb-checkbox:checked ~ label:hover .tick,
   input.wb-checkbox:checked ~ label:focus .tick {
-    background-position: -119px 0px; }
+    background-position: -119px 2px; }
   input.wb-checkbox:disabled ~ label .tick {
-    background-position: -160px 0px; }
+    background-position: -160px 2px; }
   input.wb-checkbox:disabled ~ label:hover .tick,
   input.wb-checkbox:disabled ~ label:focus .tick {
-    background-position: -201px 0px; }
+    background-position: -201px 2px; }
   input.wb-checkbox:checked:disabled ~ label .tick {
-    background-position: -242px 0px; }
+    background-position: -242px 2px; }
   input.wb-checkbox:checked:disabled ~ label:hover .tick,
   input.wb-checkbox:checked:disabled ~ label:focus .tick {
-    background-position: -283px 0px; }
+    background-position: -283px 2px; }
 
 input.checkbox-filter {
   display: none; }
@@ -7159,25 +7159,25 @@ input.double-checkbox-white {
       color: #3f3f3f;
       font-weight: bold; }
     .radio input.wb-radio + label .tick {
-      background-position: -324px 2px; }
+      background-position: -326px 2px; }
     .radio input.wb-radio + label:hover .tick,
     .radio input.wb-radio + label:focus .tick {
-      background-position: -365px 2px; }
+      background-position: -367px 2px; }
     .radio input.wb-radio:checked + label .tick {
-      background-position: -406px 2px; }
+      background-position: -408px 2px; }
     .radio input.wb-radio:checked + label:hover .tick,
     .radio input.wb-radio:checked + label:focus .tick {
-      background-position: -447px 2px; }
+      background-position: -449px 2px; }
     .radio input.wb-radio:disabled + label .tick {
-      background-position: -570px 2px; }
+      background-position: -572px 2px; }
     .radio input.wb-radio:disabled + label:hover .tick,
     .radio input.wb-radio:disabled + label:focus .tick {
-      background-position: -611px 2px; }
+      background-position: -613px 2px; }
     .radio input.wb-radio:checked:disabled + label .tick {
-      background-position: -488px 2px; }
+      background-position: -490px 2px; }
     .radio input.wb-radio:checked:disabled + label:hover .tick,
     .radio input.wb-radio:checked:disabled + label:focus .tick {
-      background-position: -529px 2px; }
+      background-position: -531px 2px; }
 
 .control-label {
   font-size: 14px;
@@ -8510,11 +8510,18 @@ table tr th .census-icon, table tr td .census-icon {
 
 .loading {
   position: fixed;
-  top: 70px; }
+  top: 15px;
+  z-index: 2000; }
 
-@media (max-width: 1210px) {
-  .loading {
-    top: 60px; } }
+.toast .container-fluid {
+  padding: 0; }
+  .toast .container-fluid h1 {
+    font: 24px/26px "RobotoLight";
+    color: #fff;
+    margin: 10px 0; }
+  .toast .container-fluid h2 {
+    font: 18px/20px "RobotoLight";
+    margin-bottom: 10px; }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
@@ -9513,11 +9520,11 @@ label.inactive {
   width: calc(100% - 570px); }
 
 .questionnaire {
-  /* .radio {
+  /*  .radio {
 		.wb-radio{
 			@include focus-for-inputs();
 			&:focus + label .tick:before{
-				right: -5px;
+				right: -4px;
 	    		border-radius: 100%;
 			}
 		}
@@ -9659,6 +9666,8 @@ label.inactive {
     margin: 0;
     color: #a6a8a9;
     z-index: 1; }
+    .question.disabled-question h5 + .btn-link, .question.disabled-question .preset-filters-container a + .btn-link, .preset-filters-container .question.disabled-question a + .btn-link, .question.disabled-question .preset-filters-container .export-queue + .btn-link, .preset-filters-container .question.disabled-question .export-queue + .btn-link {
+      display: none; }
   .question.disabled-question .question-editor .button-flag, .question.disabled-question .question-editor .flag:before {
     z-index: 0; }
   .question.disabled-question .question-unit, .question.disabled-question .information-block {
@@ -9719,6 +9728,8 @@ label.inactive {
     position: relative; }
     .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
       left: -25px; }
+    .question-editor h5 + .btn-link, .question-editor .preset-filters-container a + .btn-link, .preset-filters-container .question-editor a + .btn-link, .question-editor .preset-filters-container .export-queue + .btn-link, .preset-filters-container .question-editor .export-queue + .btn-link {
+      font: 10px/12px "TrebuchetMSBold"; }
   .question-editor.answered .question-unit .options-group {
     background-color: transparent; }
   .question-editor.has-error .question-unit .options-group {
@@ -9747,16 +9758,24 @@ label.inactive {
       display: block;
       font-size: 14px;
       line-height: 18px;
-      padding: 10px 38px 10px 40px;
+      padding: 11px 38px 11px 40px;
       margin: 0; }
       .question-editor .options-group .radio label .tick, .question-editor .options-group .form-group label .tick, .question-editor .options-group .form-input label .tick {
         position: absolute;
-        left: 10px; }
+        left: 12px; }
   .question-editor .options-group .form-group label {
     cursor: pointer; }
+    .question-editor .options-group .form-group label .tick {
+      left: 10px; }
+  .question-editor .options-group .form-group .wb-checkbox + label {
+    color: #a6a8a9;
+    font-weight: normal; }
+  .question-editor .options-group .form-group .wb-checkbox:checked + label {
+    color: #3f3f3f;
+    font-weight: bold; }
   .question-editor .options-group .field .dropdown-toggle {
     height: 40px;
-    padding: 10px 38px 10px 10px; }
+    padding: 11px 38px 11px 10px; }
     .question-editor .options-group .field .dropdown-toggle span {
       position: static;
       font: 14px/18px Arial, sans-serif;
@@ -9781,7 +9800,7 @@ label.inactive {
   position: relative; }
   .field .field-to-fill, .question-editor .options-group .field .dropdown-toggle {
     width: 100%;
-    padding: 10px 12px;
+    padding: 11px 12px;
     border: none;
     font-size: 14px;
     line-height: 18px;
@@ -9854,11 +9873,11 @@ label.inactive {
 
 .yes-no-question .question-unit .options-group .radio .field label {
   padding-left: 0;
-  padding-right: 5px;
+  padding-right: 0;
   display: inline-block;
   float: left; }
   .yes-no-question .question-unit .options-group .radio .field label:first-of-type {
-    padding-left: 10px; }
+    padding-left: 12px; }
   .yes-no-question .question-unit .options-group .radio .field label .tick {
     position: relative;
     left: 0;
@@ -9869,7 +9888,7 @@ label.inactive {
   color: #a6a8a9;
   font-size: 18px;
   line-height: 20px;
-  padding: 10px 5px;
+  padding: 10px 7px;
   font-weight: normal; }
 
 .yes-no-question .question-unit .options-group .radio .field > span {
@@ -10335,6 +10354,9 @@ label.inactive {
     margin-bottom: 40px; }
     .start-web-interview .two-columns-form .additional-info-block:last-child {
       margin-bottom: 0; }
+  .start-web-interview .two-columns-form .g-recaptcha {
+    max-width: 350px;
+    margin: 0 auto; }
   .start-web-interview .two-columns-form .form-actions {
     margin-top: 20px;
     margin-bottom: 20px; }
@@ -10376,7 +10398,9 @@ body.no-cookies div.no-cookies {
       max-width: 350px; }
   .start-web-interview .additional-info-block, .start-web-interview h2, .start-web-interview p, .start-web-interview .form-actions {
     margin-left: auto;
-    margin-right: auto; } }
+    margin-right: auto; }
+  div.no-cookies {
+    margin: 10px 20px; } }
 
 .main-information {
   margin-left: 297px;

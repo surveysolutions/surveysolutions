@@ -248,8 +248,8 @@
         background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
         background-size: 629px 18px;
-        background-position: 4px 0px;
-        margin-right: 10px;
+        background-position: 4px 2px;
+        margin-right: 12px;
         @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 629px, 18px);
     }
 }
