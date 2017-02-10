@@ -1,10 +1,11 @@
 <template>
-    <div class="question static-text" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]">
+    <div class="question static-text" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)"
+        :class="[{'hidden-question': $me.isDisabled}]">
         <div class="question-editor">
             <div :class="[{'text-danger': !$me.validity.isValid}]">
                 <wb-title />
             </div>
-            <wb-attachment />
+            <wb-attachment :contentId="$me.attachmentContent" customCssClass="static-text-image" v-if="$me.attachmentContent" />
             <wb-validation />
         </div>
     </div>

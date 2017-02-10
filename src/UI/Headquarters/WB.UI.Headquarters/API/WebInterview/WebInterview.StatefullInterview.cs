@@ -420,27 +420,28 @@ namespace WB.UI.Headquarters.API.WebInterview
             InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
             if (staticText != null)
             {
-                InterviewStaticText result = new InterviewStaticText() { Id = id };
-                result = this.autoMapper.Map<InterviewStaticText>(staticText);
-
-                var callerQuestionnaire = questionnaire;
-                var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
-                if (attachment != null)
+                InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText, map =>
                 {
-                    result.AttachmentContent = attachment.ContentId;
-                }
+                    map.AfterMap((text, interviewStaticText) =>
+                    {
+                        var callerQuestionnaire = questionnaire;
+                        var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
+                        if (attachment != null)
+                        {
+                            interviewStaticText.AttachmentContent = attachment.ContentId;
+                        }
+                    });
+                });
 
                 this.ApplyDisablement(result, identity);
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
-
                 return result;
             }
 
             InterviewTreeGroup @group = callerInterview.GetGroup(identity);
             if (@group != null)
             {
-                var result = new InterviewGroupOrRosterInstance { Id = id };
-                result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@group);
+                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@group);
 
                 this.ApplyDisablement(result, identity);
                 return result;
@@ -449,8 +450,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             InterviewTreeRoster @roster = callerInterview.GetRoster(identity);
             if (@roster != null)
             {
-                var result = new InterviewGroupOrRosterInstance { Id = id };
-                result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@roster);
+                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@roster);
 
                 this.ApplyDisablement(result, identity);
                 return result;

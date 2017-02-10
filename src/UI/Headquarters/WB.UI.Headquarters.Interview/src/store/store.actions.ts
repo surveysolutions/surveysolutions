@@ -19,7 +19,7 @@ export default {
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
-    fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
+    fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
@@ -52,22 +52,22 @@ export default {
     answerDateQuestion({ dispatch }, { identity, date }) {
         apiCallerAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
-    answerTextListQuestion({dispatch}, {identity, rows}) {
+    answerTextListQuestion({ dispatch }, { identity, rows }) {
         apiCallerAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
     },
-    answerLinkedSingleOptionQuestion({dispatch}, {questionIdentity, answer}) {
+    answerLinkedSingleOptionQuestion({ dispatch }, { questionIdentity, answer }) {
         apiCallerAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
-    answerLinkedMultiOptionQuestion({dispatch}, {questionIdentity, answer}) {
+    answerLinkedMultiOptionQuestion({ dispatch }, { questionIdentity, answer }) {
         apiCallerAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
     },
-    answerLinkedToListMultiQuestion({dispatch}, {questionIdentity, answer}) {
+    answerLinkedToListMultiQuestion({ dispatch }, { questionIdentity, answer }) {
         apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
     },
-    answerLinkedToListSingleQuestion({dispatch}, {questionIdentity, answer}) {
+    answerLinkedToListSingleQuestion({ dispatch }, { questionIdentity, answer }) {
         apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
     },
-    answerMultimediaQuestion({dispatch}, {id, file}) {
+    answerMultimediaQuestion({ dispatch }, { id, file }) {
         apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
 
@@ -77,6 +77,10 @@ export default {
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
         commit("SET_ANSWER_NOT_SAVED", { id, message })
+    },
+
+    clearAnswerValidity({ commit }, { id }) {
+        commit("CLEAR_ANSWER_VALIDITY", { id })
     },
 
     fetchSectionEntities: debounce(async ({ commit }) => {

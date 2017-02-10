@@ -1,18 +1,66 @@
 <template>
-    <div class="image-zoom-box static-text-image" v-if="$me.attachmentContent != null"> 
-        <img :src="'../../../api/Attachments/Content/' + $me.attachmentContent + '?maxSize=435'" alt="static-text-image" class="zoomImg"> 
-            <div class="modal-img">
-                <span class="close-zoomming-img">×</span>
-                <img class="modal-img-content" src="" alt="">
-                <span class="caption"></span>
-            </div>
+    <div class="image-zoom-box image-wrapper" :class="customCssClass">
+        <img :src="imageThumb" alt="custom photo" class="zoomImg"
+            @click="showModal(true)" :style="previewStyle">
+        <div class="modal-img" :style="modalView" @click="showModal(false)">
+            <span class="close-zoomming-img">×</span>
+            <img class="modal-img-content" :src="imageFull" alt="">
+            <span class="caption"></span>
+        </div>
     </div>
 </template>
 <script lang="ts">
-    import { entityPartial } from "components/mixins"
+    import { imageGetBase } from "src/config"
 
     export default {
-        mixins: [entityPartial],
+        data() {
+            return {
+                modal: false
+            }
+        },
+        props: {
+            filename: {type: String},
+            contentId: {type: String},
+            thumb: { type: String }, // optional
+            image: { type: String },
+            customCssClass:{}
+        },
+        computed: {
+            imageThumb() {
+                if(this.thumb) return this.thumb;
+                if(this.filename) return `${imageGetBase}/Image/${this.filename}`
+                if(this.contentId) return `${imageGetBase}/Content?contentId=${this.contentId}`
+                return null
+            },
+            isPreview(){
+                return this.imageThumb != null && this.imageThumb.lastIndexOf('data:image/') == 0
+            },
+            imageFull() {
+                if(this.image) return this.image
+                if(!this.isPreview && this.imageThumb) return `${this.imageThumb}&fullSize`
+                return null
+            },
+            previewStyle() {
+                if(this.isPreview){
+                    return {
+                        cursor: "auto"
+                    };
+                }
+
+                return {}
+            },
+            modalView() {
+                return {
+                    display: this.modal ? 'block' : 'none'
+                }
+            }
+        },
+        methods: {
+            showModal(show) {
+                this.modal = show
+            },
+        },
         name: "wb-attachment"
     }
+
 </script>
