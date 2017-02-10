@@ -27,6 +27,10 @@ namespace WB.UI.Headquarters.Filters
             IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
             if (interview != null)
             {
+                if (interview.IsDeleted)
+                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewNotFound,
+                        Resources.WebInterview.Error_NotFound);
+
                 if (interview.Status != InterviewStatus.InterviewerAssigned)
                 {
                     throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.NoActionsNeeded,

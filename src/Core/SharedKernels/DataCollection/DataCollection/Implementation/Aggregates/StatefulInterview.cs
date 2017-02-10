@@ -172,6 +172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public DateTime? StartedDate => this.properties.StartedDate;
         public DateTime? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
+        public bool IsDeleted => this.properties.IsHardDeleted || this.Status == InterviewStatus.Deleted;
+
         public Guid Id => this.EventSourceId;
         public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
