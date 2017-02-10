@@ -69,7 +69,7 @@
 
                 if (item.text == text) return
 
-                if (text == '') {
+                if (!text || !text.trim()) {
                     this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
                     return
                 }
@@ -80,7 +80,7 @@
                 const target = $(evnt.target)
                 let text: string = target.val()
 
-                if (text == '') return
+                if (!text || !text.trim()) return
 
                 let newRowValue: number = 1
                 if (this.$me.rows != undefined && this.$me.rows.length > 0)
