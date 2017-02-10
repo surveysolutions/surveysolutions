@@ -421,10 +421,20 @@ table{
 .loading{
     @extend %loading-indicator;
     position: fixed;
-    top: 70px;
+    top: 15px;
+    z-index: 2000;
 }
-@media (max-width: $screen-md-min){
-	.loading{
-		top: 60px;
+.toast{
+	.container-fluid{
+		padding: 0;
+		h1{
+			font: 24px/26px "RobotoLight";
+			color: #fff;
+			margin: 10px 0;
+		}
+		h2{
+			font: 18px/20px "RobotoLight";
+			margin-bottom: 10px;
+		}
 	}
 }

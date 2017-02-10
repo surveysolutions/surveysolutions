@@ -14,6 +14,10 @@
 				margin-bottom: 0;
 			}
 		}
+		.g-recaptcha{
+			max-width: 350px;
+			margin: 0 auto;
+		}
 		.form-actions{
 			margin-top: 20px;
 			margin-bottom: 20px;
@@ -71,4 +75,7 @@ body.no-cookies{
 	    	margin-right: auto;
 	    }
 	}
+	div.no-cookies{
+    	margin: 10px 20px;
+    }
 }
