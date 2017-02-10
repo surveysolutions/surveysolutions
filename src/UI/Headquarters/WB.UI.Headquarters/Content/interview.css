@@ -52,3 +52,14 @@ visibility: visible !important;
 #groups-menu>li.active>a {
     color: white;
 }
+
+.geo-nav {
+    display: inline-block;
+}
+
+.geo-nav .icon-maps {
+    display: block;
+    width: 64px;
+    height: 64px;
+    background: url('../Content/img/maps.png') no-repeat center;
+}
