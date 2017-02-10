@@ -4,12 +4,12 @@
             <span data-bind="label" v-if="value === null" class="gray-text">Click to answer</span>
             <span data-bind="label" v-else>{{value.title}}</span>
         </button>
-        <ul class="dropdown-menu" role="menu">
+        <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
             <li>
-                <input type="text" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" v-model="searchTerm" />
+                <input type="text" ref="searchBox" :id="searchBoxId" placeholder="Search" @input="updateOptionsList" @keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
             </li>
             <li v-for="option in options" :key="option.value">
-                <a href="javascript:void(0);" @click="selectOption(option.value)" v-html="highlight(option.title, searchTerm)"></a>
+                <a href="javascript:void(0);" @click="selectOption(option.value)" v-html="highlight(option.title, searchTerm)" @keydown.up="onOptionUpKey"></a>
             </li>
             <li v-if="isLoading">
                 <a>Loading...</a>
@@ -53,6 +53,18 @@
             }
         },
         methods: {
+            onSearchBoxDownKey(event) {
+                const $firstOptionAnchor = $(this.$refs.dropdownMenu).find('a').first();
+                $firstOptionAnchor.focus()
+            },
+            onOptionUpKey(event) {
+                const isFirstOption = $(event.target).parent().index() === 1;
+
+                if (isFirstOption) {
+                    this.$refs.searchBox.focus()
+                    event.stopPropagation()
+                }
+            },
             updateOptionsList(e) {
                 this.loadOptions(e.target.value)
             },
