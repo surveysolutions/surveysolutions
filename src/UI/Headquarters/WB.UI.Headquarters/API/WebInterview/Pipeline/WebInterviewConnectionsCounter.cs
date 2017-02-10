@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -72,20 +73,27 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
         {
             var connId = context.Hub.Context.ConnectionId;
+            var key = $"{connId}|{Guid.NewGuid()}";
+            context.Hub.Context.Request.Environment["server.reques.Id"] = key;
+            
             this.messagesTotal.Labels("incoming").Inc();
 
-            while (!this._timeMetric.TryAdd(connId, Stopwatch.StartNew())) { }
+            this._timeMetric.TryAdd(key, Stopwatch.StartNew());
 
             return base.OnBeforeIncoming(context);
         }
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            var connId = context.Hub.Context.ConnectionId;
-            Stopwatch sw;
-            if (this._timeMetric.TryRemove(connId, out sw))
+            var requestIdentifier = context.Hub.Context.Request.Environment["server.reques.Id"] as string;
+
+            if (requestIdentifier != null)
             {
-                this.messageProcessTime.Labels("incoming").Set(sw.Elapsed.TotalSeconds);
+                Stopwatch sw;
+                if (this._timeMetric.TryRemove(requestIdentifier, out sw))
+                {
+                    this.messageProcessTime.Labels("incoming").Set(sw.Elapsed.TotalSeconds);
+                }
             }
 
             return base.OnAfterIncoming(result, context);
