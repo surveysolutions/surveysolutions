@@ -64,7 +64,6 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
                             now: e.loaded,
                             total: e.total
                         })
-                        // console.log(Math.floor(e.loaded / e.total * 100) + "%")
                     }
                     return xhr
                 },
