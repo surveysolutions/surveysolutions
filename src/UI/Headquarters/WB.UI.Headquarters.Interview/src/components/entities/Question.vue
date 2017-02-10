@@ -1,5 +1,7 @@
 <template>
     <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
+        <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
+
         <div class="question-editor" :class="questionEditorClass">
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
