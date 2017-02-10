@@ -499,11 +499,8 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\libs-1aeedd1273.min.js" />
-    <Content Include="Dependencies\build\libs-79233c88d3.min.css" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
-    <Content Include="Dependencies\build\markup-534011361e.min.css" />
     <Content Include="Dependencies\build\markup.css" />
     <Content Include="Dependencies\css\markup.css">
       <DependentUpon>markup.scss</DependentUpon>
