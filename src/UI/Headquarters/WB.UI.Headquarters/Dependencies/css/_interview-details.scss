@@ -247,6 +247,7 @@ label.inactive{
 				@extend %form;
 				width: 360px;
 				height: 40px;
+				padding: 10px 12px;
 				z-index: 0;
 				color: $gray_light;
 			}
@@ -413,10 +414,10 @@ label.inactive{
 				display: block;
 				font-size: 14px;
 				line-height: 18px;
-				padding: 11px 38px 11px 45px;
+				padding: 10px 38px 10px 40px;
 				margin: 0;
 				.tick{
-					@include absolute(null, null, null, 15px);
+					@include absolute(null, null, null, 10px);
 				}
 			}
 		}
@@ -429,7 +430,7 @@ label.inactive{
 			.dropdown-toggle {
 				@extend .field-to-fill;
 				height: 40px;
-				padding: 11px 38px 11px 15px;
+				padding: 10px 38px 10px 10px;
 				span{
 					position: static;
 					font: 14px/18px Arial, sans-serif;
@@ -466,7 +467,7 @@ label.inactive{
 	position: relative;
 	.field-to-fill{
 		width: 100%;
-		padding: 11px 15px;
+		padding: 10px 12px;
 		border: none;
 		font-size: 14px;
 		line-height: 18px;
@@ -564,7 +565,7 @@ label.inactive{
 			float: left;
 
 			&:first-of-type{
-				padding-left: 15px;
+				padding-left: 10px;
 			}
 			.tick{
 				position: relative;
