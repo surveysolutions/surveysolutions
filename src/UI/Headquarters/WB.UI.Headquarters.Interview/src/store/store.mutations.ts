@@ -5,12 +5,15 @@ import * as Vuex from "vuex"
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
         state.lastActivityTimestamp = lastActivityTimestamp
-
         forEach(entities, entity => {
             if (entity != null) {
+                state.loadedEntitiesCount++
                 Vue.set(state.entityDetails, entity.id, entity)
             }
         })
+    },
+    RESET_LOADED_ENTITIES_COUNT(state) {
+        state.loadedEntitiesCount = 0
     },
     SET_SECTION_DATA(state, sectionData: IInterviewEntityWithType[]) {
         state.entities = sectionData

@@ -52,6 +52,7 @@ const router = new VueRouter({
 
 // tslint:disable:no-string-literal
 router.beforeEach(async (to, from, next) => {
+    store.dispatch("onBeforeNavigate")
     queryString["interviewId"] = to.params["interviewId"]
 
     hubProxy().then((proxy) => {

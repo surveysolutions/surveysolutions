@@ -1,5 +1,7 @@
 <template>
+
     <div class="unit-section" :class="sectionClass">
+        <SectionLoadingProgress />
         <Breadcrumbs />
         <component v-for="entity in entities" :key="entity.identity" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
     </div>
@@ -8,6 +10,7 @@
 <script lang="ts">
     import * as Vue from 'vue'
     import * as debounce from "lodash/debounce"
+    import SectionProgress from "./SectionLoadProgress"
 
     export default {
         name: 'section-view',
@@ -61,6 +64,9 @@
             loadSection() {
                 this.$store.dispatch("fetchSectionEntities")
             }
+        },
+        components: {
+            SectionLoadingProgress: SectionProgress
         }
     }
 </script>
