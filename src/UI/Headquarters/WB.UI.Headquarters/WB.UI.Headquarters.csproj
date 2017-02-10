@@ -499,7 +499,12 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\**\*.*" />
+    <Content Include="Dependencies\build\libs-1aeedd1273.min.js" />
+    <Content Include="Dependencies\build\libs-79233c88d3.min.css" />
+    <Content Include="Dependencies\build\libs.css" />
+    <Content Include="Dependencies\build\libs.js" />
+    <Content Include="Dependencies\build\markup-534011361e.min.css" />
+    <Content Include="Dependencies\build\markup.css" />
     <Content Include="Dependencies\css\markup.css">
       <DependentUpon>markup.scss</DependentUpon>
     </Content>
@@ -717,11 +722,16 @@
     <Content Include="Dependencies\css\_zoomimg.scss" />
     <Content Include="Dependencies\css\_panels.scss" />
     <Content Include="Dependencies\css\common-markup.scss" />
-    <Content Include="Dependencies\css\_team-and-roles.scss" />
-    <Content Include="Dependencies\css\_reports.scss" />
     <Content Include="Dependencies\css\_survey-setup.scss" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\add-human-interview-id.sql" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\remove-human-interview-id.sql" />
+    <Content Include="Dependencies\css\_web-interview-first-last-chapter.scss" />
+    <Content Include="Dependencies\css\_web-interview-start.scss" />
+    <Content Include="Dependencies\css\_bootstrap-mvc-validation.scss" />
+    <Content Include="Dependencies\css\_interviews.scss" />
+    <Content Include="Dependencies\css\_main-information.scss" />
+    <Content Include="Dependencies\css\_modal.scss" />
+    <Content Include="Dependencies\css\markup-detalica.scss" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
