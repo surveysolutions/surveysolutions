@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -364,6 +365,31 @@ namespace WB.UI.Headquarters.Controllers
 
         protected override void OnException(ExceptionContext filterContext)
         {
+            var interviewException = filterContext.Exception.GetSelfOrInnerAs<InterviewException>();
+            if (interviewException != null)
+            {
+                string errorMessage = "";
+                switch (interviewException.ExceptionType)
+                {
+                    case InterviewDomainExceptionType.InterviewLimitReached:
+                        errorMessage = WebInterview.ServerUnderLoad;
+                        break;
+
+                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
+                    case InterviewDomainExceptionType.InterviewHardDeleted:
+                        errorMessage = WebInterview.Error_InterviewExpired;
+                        break;
+                    case InterviewDomainExceptionType.OtherUserIsResponsible:
+                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
+                        errorMessage = WebInterview.Error_NoActionsNeeded;
+                        break;
+                        
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                this.HandleInterviewAccessError(filterContext, errorMessage);
+                return;
+            }
             if (filterContext.Exception is HttpAntiForgeryException)
             {
                 this.HandleInterviewAccessError(filterContext, WebInterview.Error_CookiesTurnedOff);
@@ -376,7 +402,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.HandleInterviewAccessError(filterContext, interviewAccessException.Message);
                 return;
             }
-            
+
             this.HandleInDebugMode(filterContext);
         }
 
@@ -407,8 +433,7 @@ Exception details:<br />
             filterContext.ExceptionHandled = true;
             filterContext.Result = new ViewResult
             {
-                ViewName = @"~/Views/WebInterview/Error.cshtml",
-                ViewData = new ViewDataDictionary(new WebInterviewError { Message = message })
+                ViewName = @"~/Views/WebInterview/Error.cshtml", ViewData = new ViewDataDictionary(new WebInterviewError {Message = message})
             };
         }
 

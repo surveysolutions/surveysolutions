@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
-
+        bool IsDeleted { get; }
         Guid Id { get; }
         string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }

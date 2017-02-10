@@ -4,23 +4,9 @@
     Layout = "_WebInterviewLayout.cshtml";
     Response.StatusCode = 404;
 }
-<div class="row two-columns-form">
-    <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
-        <div class="centered-box-table">
-            <div class="centered-box-table-cell">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" />
-                <div class="default-logo"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 right-column">
-        <div class="centered-box-table">
-            <h1>
-                @WebInterview.WelcomeText
-            </h1>
-            <h3>
-                @Model.Message
-            </h3>
-        </div>
-    </div>
-</div>
+<h1>
+    @WebInterview.WelcomeText
+</h1>
+<h3>
+    @Model.Message
+</h3>
