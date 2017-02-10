@@ -6684,7 +6684,8 @@ a.disabled {
     padding: 0 45px 0 45px; }
   .navbar .navbar-header .navbar-brand {
     position: relative;
-    margin-left: 0; }
+    margin-left: 0;
+    font-family: "RobotoBold"; }
     .navbar .navbar-header .navbar-brand:hover, .navbar .navbar-header .navbar-brand:focus {
       font-family: "RobotoBold"; }
     .navbar .navbar-header .navbar-brand .brand-name {
