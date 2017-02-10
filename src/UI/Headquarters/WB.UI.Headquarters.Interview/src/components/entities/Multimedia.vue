@@ -16,7 +16,7 @@
                 </div>
                 <input name="file" ref="uploader" v-show="false" accept="image/*" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire"
                 />
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">Tap to take a photo</button>
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">Tap to upload a photo</button>
             </div>
         </div>
     </wb-question>
