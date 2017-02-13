@@ -12,7 +12,6 @@ import * as vue from "vue"
 import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
 import CategoricalYesNo from "./CategoricalYesNo"
-import Combobox from "./Combobox"
 import DateTime from "./DateTime"
 import Double from "./Double"
 import Gps from "./Gps"
@@ -31,7 +30,6 @@ import Unsupported from "./Unsupported"
 vue.component("CategoricalMulti", CategoricalMulti)
 vue.component("CategoricalSingle", CategoricalSingle)
 vue.component("CategoricalYesNo", CategoricalYesNo)
-vue.component("Combobox", Combobox)
 vue.component("DateTime", DateTime)
 vue.component("Double", Double)
 vue.component("Gps", Gps)
@@ -46,6 +44,19 @@ vue.component("TextList", TextList)
 vue.component("TextQuestion", TextQuestion)
 vue.component("Unsupported", Unsupported)
 vue.component("wb-question", Question)
+
+vue.component("Combobox", (resolve, reject) => {
+     require.ensure(["./Combobox"], r => {
+        resolve(require("./Combobox").default)
+    }, "libs")
+})
+
+vue.component("vue-flatpickr", (resolve, reject) => {
+     require.ensure(["vue-flatpickr"], r => {
+        const flatpick = require("vue-flatpickr")
+        resolve(flatpick.default)
+    }, "libs")
+})
 
 export const GroupStatus = {
     Completed: 1,
