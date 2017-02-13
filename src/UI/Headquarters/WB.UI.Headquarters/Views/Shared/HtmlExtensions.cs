@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
@@ -30,6 +32,35 @@ namespace ASP
         public static string QuestionnaireName(this HtmlHelper html, string name, long version)
         {
             return string.Format(Pages.QuestionnaireNameFormat, name, version);
+        }
+
+        public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression)
+        {
+            string expressionText = ExpressionHelper.GetExpressionText(expression);
+
+            string htmlFieldPrefix = htmlHelper.ViewData.TemplateInfo.HtmlFieldPrefix;
+
+            string fullyQualifiedName;
+
+            if (htmlFieldPrefix.Length > 0)
+            {
+                fullyQualifiedName = string.Join(".", htmlFieldPrefix, expressionText);
+            }
+            else
+            {
+                fullyQualifiedName = expressionText;
+            }
+
+            bool isValid = htmlHelper.ViewData.ModelState.IsValidField(fullyQualifiedName);
+
+            if (!isValid)
+            {
+                return MvcHtmlString.Create("has-error");
+            }
+
+            return MvcHtmlString.Empty;
         }
 
         private static string GetMenuItemTitle(MenuItem page)
