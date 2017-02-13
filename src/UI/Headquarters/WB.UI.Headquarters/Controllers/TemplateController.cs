@@ -2,8 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using FluentMigrator.Infrastructure;
-using Flurl.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -63,14 +61,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
       
-        public async Task<ActionResult> ImportMode(Guid id, string questionnaireTitle)
+        public async Task<ActionResult> ImportMode(Guid id)
         {
             if (this.designerUserCredentials == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            var model = await this.GetImportModel(id, questionnaireTitle);
+            var model = await this.GetImportModel(id);
             return View(model);
         }
 
@@ -90,12 +88,12 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Index", "SurveySetup");
             }
 
-            var model = await GetImportModel(id, name);
+            var model = await this.GetImportModel(id);
             model.ErrorMessage = result.ImportError;
             return this.View(model);
         }
 
-        private async Task<ImportModeModel> GetImportModel(Guid id, string questionnaireTitle)
+        private async Task<ImportModeModel> GetImportModel(Guid id)
         {
             ImportModeModel model = new ImportModeModel();
             try
@@ -112,8 +110,7 @@ namespace WB.UI.Headquarters.Controllers
                 switch (e.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound,
-                            string.IsNullOrWhiteSpace(questionnaireTitle) ? string.Empty : $"\"{questionnaireTitle}\"");
+                        model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound);
                         break;
                     case HttpStatusCode.Forbidden:
                         model.ErrorMessage = e.Message;
