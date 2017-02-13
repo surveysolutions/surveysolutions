@@ -166,11 +166,11 @@ label.inactive{
 			font: 16px/18px "RobotoMedium";
 		}
 	}
-	.section-with-error>.unit-title{
-		background-color: $red_error;
-	}
 	.complete-section>.unit-title{
 		background-color: $green;
+	}
+	.section-with-error>.unit-title{
+		background-color: $red_error;
 	}
 }
 .question{
@@ -267,6 +267,7 @@ label.inactive{
 		background-color: transparent;
 	}
 }
+.question-editor.roster-section-block.has-error.answered,
 .roster-section-block.answered {
 	@extend %border-color;
 	.roster-section-info{

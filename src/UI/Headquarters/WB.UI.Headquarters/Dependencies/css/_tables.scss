@@ -1,7 +1,8 @@
 .table{
     color: $gray-text;
     width: 100% !important;
-    font: 16px/18px "RobotoRegular";
+    // font: 16px/18px "RobotoRegular";
+    font: 14px/16px Arial, sans-serif; 
     tr{
         .without-break{
             white-space: nowrap;
@@ -95,8 +96,8 @@
                 border-bottom: none;
                 border-top: none;
                 &.date{
-                    font: 13px/15px "TrebuchetMS";
-                    font-style: italic;
+                    font: 14px/16px "TrebuchetMS";
+                    // font-style: italic;
                 }
                 &.parameters{
                     font-family: "TrebuchetMSBold";
@@ -106,6 +107,10 @@
                         text-transform: none; 
                     }
                 } 
+                &.title-row{
+                    font-size: 18px;
+                    line-height: 20px;
+                }
                 padding: 15px;
                 vertical-align: middle;
                 height: 35px;

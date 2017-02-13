@@ -54,7 +54,9 @@
                 return ['roster-section-block', {
                     'started': this.$me.validity.isValid && this.isStarted,
                     'has-error': !this.$me.validity.isValid,
-                    '': this.$me.validity.isValid && !this.isCompleted,
+                    '': this.$me.validity.isValid && !this.isCompleted                    
+                },
+                {
                     'answered': this.isCompleted
                 }]
             }

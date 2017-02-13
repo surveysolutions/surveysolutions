@@ -23,8 +23,8 @@
 		border: none;
 	}
 }
-.web-interview .first-last-chapter{
-	&.questionnaire{
+.web-interview {
+	.first-last-chapter{
 		background: none;
 		h2{
 			margin: 10px 0;
@@ -117,7 +117,7 @@
 	.web-interview .wrapper-info{
 		padding: 20px 10px 20px 35px;
 	}
-	.web-interview .first-last-chapter.questionnaire .unit-title{
+	.web-interview .questionnaire .first-last-chapter .unit-title{
 		padding-left: 35px;
 	}
 }
