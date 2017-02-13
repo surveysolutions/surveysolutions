@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section complete-section first-last-chapter" v-if="hasCompleteInfo">
+    <div class="unit-section complete-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions }">
         <div class="unit-title">
             <h3>Complete interview</h3>
         </div>
@@ -31,7 +31,7 @@
                 <h4 class="gray-uppercase">Questions with errors:</h4>
                 <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
                     <li>
-                        <router-link :to="navigateTo(entity)">{{entity.title}}</router-link>
+                        <a href="#" @click="navigateTo(entity)">{{ entity.title }}</a>
                     </li>
                 </ul>
             </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="#" class="btn btn-lg btn-success" @click="completeInterview">Complete</a>
+                <a href="#" class="btn btn-lg btn-success" v-bind:class="{'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
             </div>
         </div>
     </div>
@@ -108,21 +108,20 @@
             },
             navigateTo(entityWithError) {
                 if(entityWithError.isPrefilled){
-                    return {
-                        name: 'prefilled',
-                        params: {
-                            interviewId: this.$route.params.interviewId
-                        }
-                    }
+                    this.$router.push({ name: "prefilled" })
+                    return;
                 }
 
-                return {
+                const navigateToEntity = {
                     name: 'section',
                     params: {
                         sectionId: entityWithError.parentId,
                         interviewId: this.$route.params.interviewId
                     }
                 }
+
+                this.$store.dispatch("sectionRequireScroll", { id: entityWithError.id })
+                this.$router.push(navigateToEntity)
             }
         }
     }
