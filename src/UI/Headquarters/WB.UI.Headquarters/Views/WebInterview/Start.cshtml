@@ -3,31 +3,12 @@
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
-@if (Model.IsStarted)
-{
-    <h2>@WebInterview.WebSurvey</h2>
-    <p>
-        <ul class="list-unstyled">
-            <li><strong>@WebInterview.FinishInterviewText</strong></li>
-            <li><strong>@string.Format(WebInterview.SurveyFormatText, Model.QuestionnaireTitle)</strong></li>
-        </ul>
-    </p>
-}
-else
-{
-    <h2>@WebInterview.WelcomeText</h2>
-    <p><b>@(string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle))</b></p>
-}
+
+<h2>@WebInterview.WelcomeText</h2>
+<p><b>@(string.Format(WebInterview.InvitationText, Model.QuestionnaireTitle))</b></p>
 
 <div class="additional-info-block">
     @WebInterview.Resume_InvitationSmallText
-    @if (Model.IsStarted)
-    {
-        <ul class="list-unstyled">
-            <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
-            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)</li>
-        </ul>
-    }
 </div>
 @if (Model.ServerUnderLoad)
 {
@@ -63,20 +44,8 @@ else
     }
     else
     {
-        if (Model.HasPreviousStartedInterview)
-        {
-            <div class="form-actions">
-                <button class="btn btn-success btn-lg" name="resume" value="true">@WebInterview.Resume</button>
-                <button type="submit" class="btn btn-link">@WebInterview.DiscardAndStart</button>
-            </div>
-                <p>@WebInterview.OrStartInterview</p>
-                <div class="form-actions"><button type="submit" class="btn btn-link btn-looks-like-link">@WebInterview.Start</button></div>
-        }
-        else
-        {
-            <div class="form-actions">
-                <button class="btn btn-success btn-lg" type="submit" name="resume" value="false">@WebInterview.Start</button>
-            </div>
-        }
+        <div class="form-actions">
+            <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
+        </div>
     }
 }
