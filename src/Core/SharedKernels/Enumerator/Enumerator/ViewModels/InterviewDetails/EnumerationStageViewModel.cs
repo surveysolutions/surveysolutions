@@ -5,10 +5,12 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -18,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
+        ILiteEventHandler<GroupsDisabled>,
         IDisposable
     {
         private CompositeCollection<ICompositeEntity> items;
@@ -34,14 +37,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
+        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
 
         private NavigationState navigationState;
 
-        IStatefulInterview interview;
         string interviewId;
+        Identity groupId;
 
         public DynamicTextViewModel Name { get; }
 
@@ -51,12 +56,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
-            ICompositeCollectionInflationService compositeCollectionInflationService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            ILiteEventRegistry liteEventRegistry,
+            ICommandService commandService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.interviewRepository = interviewRepository;
             this.userInterfaceStateService = userInterfaceStateService;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.liteEventRegistry = liteEventRegistry;
+            this.commandService = commandService;
 
             this.Name = dynamicTextViewModel;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
@@ -68,12 +77,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.navigationState != null) throw new InvalidOperationException("ViewModel already initialized");
 
             this.interviewId = interviewId;
-            this.interview = this.interviewRepository.Get(interviewId);
+            this.groupId = groupId;
 
             this.navigationState = navigationState;
             this.Items = new CompositeCollection<ICompositeEntity>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
+            liteEventRegistry.Subscribe(this, interviewId);
         }
 
         private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
@@ -140,10 +150,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         public void Dispose()
         {
+            this.liteEventRegistry.Unsubscribe(this);
             this.InterviewEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
             this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
 
             this.Name.Dispose();
+        }
+
+        public async void Handle(GroupsDisabled @event)
+        {
+            if (@event.Groups.Any(id => id == groupId))
+            {
+                var interview = this.interviewRepository.Get(this.interviewId);
+                var firstSection = interview.GetEnabledSections().First();
+
+                await this.commandService.WaitPendingCommandsAsync();
+
+                this.navigationState.NavigateTo(new NavigationIdentity()
+                {
+                    TargetScreen = ScreenType.Group,
+                    TargetGroup = firstSection.Identity
+                });
+            }
         }
     }
 }
