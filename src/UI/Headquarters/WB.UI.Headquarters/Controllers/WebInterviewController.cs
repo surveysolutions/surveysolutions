@@ -278,7 +278,8 @@ namespace WB.UI.Headquarters.Controllers
 
             RememberCapchaFilled(interviewId);
             Response.Cookies.Add(new HttpCookie(this.GetCookieNameForStartedWebInterview(questionnaireIdentity), interviewId));
-            return this.Redirect("~/WebInterview/" + interviewId + "/Cover");
+
+            return this.RedirectToAction(nameof(Cover), new {id = interviewId});
         }
 
         [WebInterviewAuthorize]
@@ -288,7 +289,7 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
-                var returlUrl = Url.Action("Cover", routeValues: new { id });
+                var returlUrl = Url.Action(nameof(Cover), routeValues: new { id });
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
             }
 
