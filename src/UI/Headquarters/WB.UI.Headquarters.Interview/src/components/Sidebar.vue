@@ -1,10 +1,10 @@
 <template>
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <div class="panel-group structured-content">
-            <SidebarPanel :panel="coverBtn" v-if="showCover"></SidebarPanel>
+            <SidebarPanel :panel="coverSection" v-if="showCover"></SidebarPanel>
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
             </SidebarPanel>
-            <SidebarPanel :panel="completeBtn"></SidebarPanel>
+            <SidebarPanel :panel="completeSection"></SidebarPanel>
         </div>
     </aside>
 </template>
@@ -17,7 +17,7 @@
         components: { SidebarPanel },
         data() {
             return {
-                coverBtn: {
+                coverSection: {
                     collapsed: true,
                     title: "Cover",
                     to: {
@@ -42,7 +42,7 @@
             interviewState() {
                 return this.$store.state.interviewState
             },            
-            completeBtn(){
+            completeSection(){
                 return {
                     collapsed: true,
                     title: "Complete",
