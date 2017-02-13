@@ -13,11 +13,8 @@
 </template>
 
 <script lang="ts">
-    import IdleTimeout from "./components/IdleTimeout"
-
     export default {
-        name: 'app',
-        components: { IdleTimeout }
+        name: 'app'
     }
 </script>
 
