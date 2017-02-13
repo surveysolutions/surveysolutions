@@ -60,7 +60,7 @@
             },
             createImage(file) {
                 if (file.size > imageFileSizeLimit) {
-                    this.markAnswerAsNotSavedWithMessage("Image is to big to upload. Please choose image with less then 30Mb size")
+                    this.markAnswerAsNotSavedWithMessage("Image is too big to upload. Please, choose an image less than 30 Mb")
                     return
                 }
 
