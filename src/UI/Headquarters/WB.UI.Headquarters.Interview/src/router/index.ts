@@ -23,6 +23,14 @@ const router = new VueRouter({
             }
         },
         {
+            name: "cover",
+            path: "/Cover/:interviewId",
+            components: {
+                default: Section,
+                sideBar: SideBar
+            }
+        },
+        {
             name: "section",
             path: "/:interviewId/Section/:sectionId",
             components: {
