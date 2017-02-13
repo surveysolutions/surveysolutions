@@ -19,10 +19,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public bool UseCaptcha { get; set; }
         public bool ServerUnderLoad { get; set; } = false;
-        public bool HasPreviousStartedInterview { get; set; }
-        public bool IsStarted { get; set; }
-        public string InterviewId { get; set; }
-        public DateTime? StartedDate { get; set; }
     }
 
     public class FinishWebInterview
