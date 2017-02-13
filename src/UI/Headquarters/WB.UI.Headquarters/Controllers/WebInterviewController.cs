@@ -126,28 +126,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
-            bool hasPreviousStartedInterview = false;
-            var previousStartedInterviewId = this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value;
-            if (!previousStartedInterviewId.IsNullOrEmpty())
-            {
-                var interview = this.statefulInterviewRepository.Get(previousStartedInterviewId);
-                hasPreviousStartedInterview = interview != null && !interview.IsCompleted && interview.Status != InterviewStatus.Deleted;
-            }
-            
             var view =  new StartWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
-                HasPreviousStartedInterview = hasPreviousStartedInterview
             };
-
-            var interviewId = this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value;
-            if (!string.IsNullOrEmpty(interviewId))
-            {
-                view.IsStarted = true;
-                view.InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interviewId);
-                view.StartedDate = this.statefulInterviewRepository.Get(interviewId).StartedDate;
-            }
 
             return view;
         }
@@ -246,7 +229,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> StartPost(string id, bool resume)
+        public async Task<ActionResult> StartPost(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
@@ -272,12 +255,9 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            var interviewId = resume
-                ? this.Request.Cookies[this.GetCookieNameForStartedWebInterview(questionnaireIdentity)]?.Value
-                : this.CreateInterview(questionnaireIdentity);
+            var interviewId = this.CreateInterview(questionnaireIdentity);
 
             RememberCapchaFilled(interviewId);
-            Response.Cookies.Add(new HttpCookie(this.GetCookieNameForStartedWebInterview(questionnaireIdentity), interviewId));
 
             return this.RedirectToAction(nameof(Cover), new {id = interviewId});
         }
@@ -300,8 +280,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
-
-            this.Response.Cookies.Add(new HttpCookie(this.GetCookieNameForStartedWebInterview(interview.QuestionnaireIdentity), string.Empty));
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -436,11 +414,6 @@ Exception details:<br />
             {
                 ViewName = @"~/Views/WebInterview/Error.cshtml", ViewData = new ViewDataDictionary(new WebInterviewError {Message = message})
             };
-        }
-
-        private string GetCookieNameForStartedWebInterview(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return "webinterview_" + questionnaireIdentity;
         }
     }
 }
