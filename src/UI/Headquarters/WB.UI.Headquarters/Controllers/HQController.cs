@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -70,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
             QuestionnaireBrowseItem questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
 
             if (questionnaireBrowseItem == null)
@@ -85,6 +87,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
@@ -97,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (QuestionnaireException exception)
             {
-                this.Error(exception.Message);
+                this.ModelState.AddModelError<CloneQuestionnaireModel>(x => x.NewTitle, exception.Message);
                 return this.View(model);
             }
             catch (Exception exception)
@@ -112,7 +115,7 @@ namespace WB.UI.Headquarters.Controllers
                     ? string.Format(HQ.QuestionnaireClonedFormat, model.OriginalTitle)
                     : string.Format(HQ.QuestionnaireClonedAndRenamedFormat, model.OriginalTitle, model.NewTitle));
 
-            return this.RedirectToAction(nameof(this.Index));
+            return this.RedirectToAction("Index", "SurveySetup");
         }
 
         public ActionResult TakeNew(Guid id, long? version)
