@@ -166,11 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 await this.commandService.WaitPendingCommandsAsync();
 
-                this.navigationState.NavigateTo(new NavigationIdentity()
-                {
-                    TargetScreen = ScreenType.Group,
-                    TargetGroup = firstSection.Identity
-                });
+                this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
             }
         }
     }

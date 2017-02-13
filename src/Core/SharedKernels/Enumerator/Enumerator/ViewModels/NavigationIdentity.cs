@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public Identity AnchoredElementIdentity { get; set; }
 
-        public NavigationIdentity() { }
+        private NavigationIdentity() { }
 
         public static NavigationIdentity CreateForPrefieldScreen()
         {

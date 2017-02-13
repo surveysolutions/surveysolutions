@@ -506,12 +506,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
-        public string GetFirstSectionId()
-        {
-            var statefulInterview = this.GetCallerInterview();
-            return statefulInterview.GetEnabledSections().First().Identity.ToString();
-        }
-
         private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
         {
             opts.AfterMap((g, sidebarPanel) =>

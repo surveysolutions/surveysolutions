@@ -6,6 +6,7 @@ declare interface ILanguageInfo {
 declare interface IInterviewInfo {
     questionnaireTitle: string;
     humanId : string;
+    firstSectionId: string
 }
 
 declare interface IInterviewEntityWithType {
@@ -116,7 +117,6 @@ declare interface IWebInterviewApi {
     getTopFilteredOptionsForQuestion(id: string, filter: string, count: number): IDropdownItem[]
     getSidebarChildSectionsOf(ids: string[]): ISidebar
     getInterviewStatus(): string
-    getFirstSectionId(): string
 
     answerSingleOptionQuestion(answer: number, questionId: string): void
     answerMultiOptionQuestion(answer: number, questionId: string): void
