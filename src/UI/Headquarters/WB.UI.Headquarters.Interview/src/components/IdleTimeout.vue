@@ -2,7 +2,7 @@
 </template>
 <script lang="ts">
     import * as bootbox from "bootbox"
-    import moment from "../misc/moment"
+    import * as diffInMinutes from "date-fns/difference_in_minutes"
 
     export default {
         data: () => {
@@ -33,12 +33,10 @@
                 }
             }
         },
-        async created() {
-            const momentInstance = await moment
-
+        created() {
             setInterval(() => {
                 if (!this.shown) {
-                    const minutesAfterLastAction = momentInstance().diff(this.$store.state.lastActivityTimestamp, "minutes")
+                    const minutesAfterLastAction = diffInMinutes(new Date(), this.$store.state.lastActivityTimestamp)
                     if (Math.abs(minutesAfterLastAction) > 15) {
                         this.show()
                     }

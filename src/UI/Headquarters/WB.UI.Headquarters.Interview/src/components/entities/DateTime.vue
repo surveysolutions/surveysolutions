@@ -26,23 +26,17 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import VueFlatpickr from "vue-flatpickr"
-    import momentPromise from "../../misc/moment"
     import 'vue-flatpickr/theme/flatpickr.min.css'
+    import * as format from "date-fns/format"
+    import * as isSame from "date-fns/is_equal"
 
-    let moment = null
+    const parseUTC = date => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 
     export default {
         name: "DateTime",
         mixins: [entityDetails],
         data() {
-
-            momentPromise.then(value => {
-                moment = value
-                this.momentLoading = false
-            })
-
             return {
-                momentLoading: true,
                 pickerOpts: {
                     dateFormat: "Y-m-d",
                     onChange: (selectedDate) => {
@@ -52,28 +46,25 @@
             }
         },
         computed: {
-             answer() {
-                if (!this.momentLoading && this.$me && this.$me.answer) {
-                    const result = moment(this.$me.answer).format(this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
+            answer() {
+                if (this.$me && this.$me.answer) {
+                    const result = format(this.$me.answer, this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
                     return result
                 }
                 return ""
             }
         },
         methods: {
-            async answerDate(answer: string) {
-                const _moment = await momentPromise
+            answerDate(answer: string) {
                 if (!this.$me.isTimestamp) {
-                    const oldAnswer =  _moment(this.$me.answer)
-                    const typedAnswer =  _moment(answer)
-                    const newAnswer =  _moment.utc([typedAnswer.year(), typedAnswer.month(), typedAnswer.date()])
+                    if (!isSame(this.$me.answer, answer)) {
+                        const dateAnswer = parseUTC(answer)
 
-                    if (!oldAnswer.isSame(answer)) {
-                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: newAnswer })
+                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
                     }
                 }
                 else {
-                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date:  _moment() })
+                    this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date() })
                 }
             }
         },
