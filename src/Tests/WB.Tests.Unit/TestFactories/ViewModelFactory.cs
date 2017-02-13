@@ -64,7 +64,9 @@ namespace WB.Tests.Unit.TestFactories
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),
-                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>());
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
+                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<ICommandService>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
