@@ -46,7 +46,9 @@ th.prefield-column{
 	color: $blue;
 	border-top: 2px solid $blue !important;
 }
-
+td.prefield-column{
+	font-style: italic;
+}
 .interview-id{
 	min-width: 240px !important;
 	overflow: hidden;
@@ -71,10 +73,31 @@ th.prefield-column{
 }
 td.enumerator span{
 	color: $gray_text !important;
+	&:before{
+		display: inline-block;
+		content:"";
+		margin-right: 10px;
+		@include size(11px, 14px);
+		background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;
+		@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);
+		background-size: 11px 14px;
+
+	}
 }
 .table tbody tr td.not-synced-assign{
 	font-style: italic;
 	a{
 		color: $gray_light;
 	}
+}
+.comment-icon{
+	display: block;
+    @include size(25px, 23px); 
+	background: transparent url("#{$assetsPath}/img/comments-icon-1x.png") no-repeat;
+    @include image-2x("#{$assetsPath}/img/comments-icon-2x.png", 32px, 64px);
+    background-size: 32px 64px;
+    background-position: -4px -40px; 
+    &.responded{
+    	background-position: -4px -4px; 
+    }
 }
