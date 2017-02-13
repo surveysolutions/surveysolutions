@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class LinkedOption
     {
         public string Value { get; set; }
-        public int[] RosterVector { get; set; }
+        public RosterVector RosterVector { get; set; }
         public string Title { get; set; }
     }
 
@@ -125,8 +125,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class LinkedCategoricalQuestion : GenericQuestion
     {
         public List<LinkedOption> Options { get; set; }
-
-        public bool IsLinkedToList { get; set; } = false;
     }
 
     public class CategoricalQuestion: GenericQuestion

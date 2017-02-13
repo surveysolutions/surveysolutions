@@ -16,7 +16,7 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer'],
         computed: {
             id() {
                 return this.question.id
@@ -47,7 +47,7 @@
             },
             questionEditorClass() {
                 return [{
-                    answered: this.question.isAnswered,
+                    answered: this.question.isAnswered && !this.noAnswer,
                     'has-error': !this.question.validity.isValid
                 }, this.questionCssClassName]
             }

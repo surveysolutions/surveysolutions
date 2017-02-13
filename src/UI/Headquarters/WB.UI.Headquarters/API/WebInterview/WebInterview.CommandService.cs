@@ -66,33 +66,17 @@ namespace WB.UI.Headquarters.API.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
-        public void AnswerLinkedSingleOptionQuestion(string questionIdentity, int[] answer)
+        public void AnswerLinkedSingleOptionQuestion(string questionIdentity, decimal[] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
-            decimal[] decimalAnswer = answer.Select(Convert.ToDecimal).ToArray();
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
-                identity.Id, identity.RosterVector, DateTime.UtcNow, decimalAnswer));
-        }
-
-        public void AnswerLinkedToListSingleQuestion(string questionIdentity, int answer)
-        {
-            Identity identity = Identity.Parse(questionIdentity);
-            this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
-        public void AnswerLinkedMultiOptionQuestion(string questionIdentity, int[][] answer)
+        public void AnswerLinkedMultiOptionQuestion(string questionIdentity, decimal[][] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
-            decimal[][] decimalAnswer = answer.Select(x => x.Select(Convert.ToDecimal).ToArray()).ToArray();
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
-                identity.Id, identity.RosterVector, DateTime.UtcNow, decimalAnswer));
-        }
-
-        public void AnswerLinkedToListMultiQuestion(string questionIdentity, int[] answer)
-        {
-            Identity identity = Identity.Parse(questionIdentity);
-            this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 

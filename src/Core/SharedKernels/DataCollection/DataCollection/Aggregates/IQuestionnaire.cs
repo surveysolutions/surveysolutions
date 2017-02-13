@@ -42,6 +42,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid[] GetQuestionsLinkedToQuestion();
 
+        Guid[] GetLinkedToListQuestions();
+
         Guid GetQuestionIdByVariable(string variable);
 
         Guid GetVariableIdByVariableName(string variableName);
