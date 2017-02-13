@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <Flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
+                        <vue-flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter answer" />
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -25,7 +25,6 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import VueFlatpickr from "vue-flatpickr"
     import 'vue-flatpickr/theme/flatpickr.min.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
@@ -67,9 +66,6 @@
                     this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date() })
                 }
             }
-        },
-        components: {
-            "Flatpickr": VueFlatpickr
         }
     }
 
