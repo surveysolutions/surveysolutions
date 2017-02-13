@@ -32,7 +32,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
+                    x.IsLinkedToListQuestion
+                        ? x.AsSingleLinkedToList.GetAnswer().SelectedValue
+                        : x.AsSingleFixedOption.GetAnswer().SelectedValue));
             
             this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
@@ -41,22 +44,21 @@ namespace WB.UI.Headquarters.Models.WebInterview
                     opts.PreCondition(x => x.IsAnswered());
                     opts.MapFrom(x => GetSingleFixedOptionAnswerAsDropdownItem(x));
                 });
-                
-             this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
-               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.IsSingleLinkedToList
-                   ? new RosterVector(Convert.ToDecimal(x.AsSingleLinkedToList.GetAnswer().SelectedValue).ToEnumerable()) 
-                   : x.AsSingleLinkedOption.GetAnswer().SelectedValue));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
 
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
-               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.IsMultiLinkedToList 
-                   ? x.AsMultiLinkedToList.GetAnswer().CheckedValues.Select(s => new RosterVector(Convert.ToDecimal(s).ToEnumerable())).ToArray()
-                   : x.AsMultiLinkedOption.GetAnswer().CheckedValues));
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiLinkedOption.GetAnswer().CheckedValues));
 
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
-               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiFixedOption.GetAnswer().CheckedValues));
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
+                    x.IsLinkedToListQuestion
+                        ? x.AsMultiLinkedToList.GetAnswer().CheckedValues
+                        : x.AsMultiFixedOption.GetAnswer().CheckedValues));
 
             this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
 

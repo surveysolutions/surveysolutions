@@ -2,7 +2,7 @@
     <wb-question :question="$me" questionCssClassName="single-select-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="radio"  v-for="option in $me.options">
+                <div class="radio" v-for="option in $me.options">
                     <div class="field">
                         <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
                         <label :for="$me.id + '_' + option.value">
@@ -31,11 +31,7 @@
                 },
                 set(value) {
                     const selectedOption = find(this.$me.options, { 'value': value });
-                    if (this.$me.isLinkedToList){
-                        this.$store.dispatch("answerLinkedToListSingleQuestion", { answer: value[0], questionIdentity: this.$me.id })
-                    } else {
-                        this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionIdentity: this.$me.id })
-                    }
+                    this.$store.dispatch("answerLinkedSingleOptionQuestion", { answer: selectedOption.rosterVector, questionIdentity: this.$me.id })
                 }
             },
             noOptions() {
@@ -44,4 +40,5 @@
         },
         mixins: [entityDetails]
     }
+
 </script>

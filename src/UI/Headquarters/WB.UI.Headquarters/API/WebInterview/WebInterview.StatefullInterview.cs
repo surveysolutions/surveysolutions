@@ -304,6 +304,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                         });
                     }
                 }
+                else if(question.IsSingleLinkedToList)
+                {
+                    result = this.Map<InterviewSingleOptionQuestion>(question, res =>
+                    {
+                        res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
+                            question.AsSingleLinkedToList.LinkedSourceId).ToList();
+                    });
+                }
                 else if (question.IsText)
                 {
                     InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
@@ -353,6 +361,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                     typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                     typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
                 }
+                else if (question.IsMultiLinkedToList)
+                {
+                    result = this.Map<InterviewMutliOptionQuestion>(question, res =>
+                    {
+                        res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
+                            question.AsMultiLinkedToList.LinkedSourceId).ToList();
+                    });
+                }
                 else if (question.IsDateTime)
                 {
                     result = this.autoMapper.Map<InterviewDateQuestion>(question);
@@ -381,29 +397,21 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = this.autoMapper.Map<InterviewGpsQuestion>(question);
                 }
-                else if (question.IsSingleLinkedOption || question.IsSingleLinkedToList)
+                else if (question.IsSingleLinkedOption)
                 {
-                    var singleLinkedOption = this.autoMapper.Map<InterviewLinkedSingleQuestion>(question);
-                    var options = question.IsSingleLinkedToList 
-                        ? GetLinkedOptionsForLinkedToListQuestion(callerInterview, identity, question.AsSingleLinkedToList.LinkedSourceId, question.AsSingleLinkedToList.Options) 
-                        : GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options);
-
-                    singleLinkedOption.IsLinkedToList = question.IsSingleLinkedToList;
-                    singleLinkedOption.Options = options.ToList();
-                    result = singleLinkedOption;
+                    result = this.Map<InterviewLinkedSingleQuestion>(question, res =>
+                    {
+                       res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                    });
                 }
-                else if (question.IsMultiLinkedOption || question.IsMultiLinkedToList)
+                else if (question.IsMultiLinkedOption)
                 {
-                    var multiLinkedOption = this.autoMapper.Map<InterviewLinkedMultiQuestion>(question);
-                    var options = question.IsMultiLinkedToList 
-                        ? GetLinkedOptionsForLinkedToListQuestion(callerInterview, identity, question.AsMultiLinkedToList.LinkedSourceId, question.AsMultiLinkedToList.Options) 
-                        : GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options);
-
-                    multiLinkedOption.IsLinkedToList = question.IsMultiLinkedToList;
-                    multiLinkedOption.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                    multiLinkedOption.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                    multiLinkedOption.Options = options.ToList();
-                    result = multiLinkedOption;
+                    result = this.Map<InterviewLinkedMultiQuestion>(question, res =>
+                    {
+                        res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                        res.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                        res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                    });
                 }
                 else if (question.IsMultimedia)
                 {
@@ -585,26 +593,26 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
-            Identity identity, List<RosterVector> options)
+            Identity identity, List<RosterVector> options) => options.Select(x => new LinkedOption
         {
-            return options.Select(x => new LinkedOption
-            {
-                Value = x.ToString(),
-                RosterVector = x.Select(Convert.ToInt32).ToArray(),
-                Title = callerInterview.GetLinkedOptionTitle(identity, x)
-            });
-        }
+            Value = x.ToString(),
+            RosterVector = x,
+            Title = callerInterview.GetLinkedOptionTitle(identity, x)
+        });
 
-        private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedToListQuestion(IStatefulInterview callerInterview,
-            Identity identity, Guid linkedSourceId, IReadOnlyCollection<decimal> options)
+        private static IEnumerable<CategoricalOption> GetOptionsLinkedToListQuestion(IStatefulInterview callerInterview,
+            Identity identity, Guid linkedSourceId)
         {
-            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity)?.AsTextList;
-            return options.Select(x => new LinkedOption
+            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity);
+
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+                return new List<CategoricalOption>();
+
+            return new List<CategoricalOption>(listQuestion.AsTextList.GetAnswer().Rows.Select(x => new CategoricalOption
             {
-                Value = x.ToString(),
-                RosterVector = Convert.ToInt32(x).ToEnumerable().ToArray(),
-                Title = listQuestion?.GetTitleByItemCode(x)
-            });
+                Value = (int)x.Value,
+                Title = x.Text
+            }));
         }
 
         private InterviewEntityType GetEntityType(Guid entityId)
@@ -625,16 +633,18 @@ namespace WB.UI.Headquarters.API.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Multimedia; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
+                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                        return InterviewEntityType.CategoricalMulti;
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
-                        || callerQuestionnaire.IsLinkedToListQuestion(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedMulti;
                     return callerQuestionnaire.IsQuestionYesNo(entityId)
                         ? InterviewEntityType.CategoricalYesNo
                         : InterviewEntityType.CategoricalMulti;
                 case QuestionType.SingleOption:
+                    if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
+                        return InterviewEntityType.CategoricalSingle;
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
-                        || callerQuestionnaire.IsLinkedToListQuestion(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
                     return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) || callerQuestionnaire.IsQuestionCascading(entityId)
