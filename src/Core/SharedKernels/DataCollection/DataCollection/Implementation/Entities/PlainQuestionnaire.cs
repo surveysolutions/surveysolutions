@@ -285,6 +285,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
+        public Guid[] GetLinkedToListQuestions() => this.QuestionCache.Values
+            .Where(x => x.LinkedToQuestionId.HasValue && this.IsLinkedToListQuestion(x.PublicKey))
+            .Select(x => x.PublicKey)
+            .ToArray();
+
         public Guid GetQuestionIdByVariable(string variable)
         {
             return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;

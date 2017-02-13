@@ -80,11 +80,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            this.RefreshLinkedToListQuestions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            this.RefreshLinkedToListQuestions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<StaticTextsDisabled> evnt)
@@ -178,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var textListIdentity = new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector);
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, textListIdentity);
-            this.RefreshLinkedToListQuestions(evnt.EventSourceId, textListIdentity);
+            this.RefreshLinkedToListQuestions(evnt.EventSourceId);
             this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
@@ -231,19 +233,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
 
 
-        private void RefreshLinkedToListQuestions(Guid interviewId, Identity listIdentity)
+        private void RefreshLinkedToListQuestions(Guid interviewId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            Guid[] listQuestionIds = questionnaire.GetLinkedToSourceQuestions(listIdentity.Id).ToArray();
-            if (!listQuestionIds.Any())
-                return;
-            
-            foreach (var listQuestionId in listQuestionIds)
+            foreach (var linkedToListQuestion in questionnaire.GetLinkedToListQuestions())
             {
-                var questionsToRefresh = interview.FindQuestionsFromSameOrDeeperLevel(listQuestionId, listIdentity);
-                this.webInterviewNotificationService.RefreshEntities(interviewId, questionsToRefresh.ToArray());
+                var identities = interview.GetAllIdentitiesForEntityId(linkedToListQuestion).ToArray();
+                this.webInterviewNotificationService.RefreshEntities(interviewId, identities);
             }
         }
 
