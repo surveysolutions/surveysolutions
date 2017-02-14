@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-section complete-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions }">
+    <div class="unit-section first-last-chapter" v-if="hasCompleteInfo" v-bind:class="{'section-with-error' : hasInvalidQuestions, 'complete-section' : isAllAnswered  }" >
         <div class="unit-title">
             <h3>Complete interview</h3>
         </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <a href="#" class="btn btn-lg btn-success" v-bind:class="{'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
+                <a href="#" class="btn btn-lg" v-bind:class="{ 'btn-success': isAllAnswered, 'btn-primary' : hasUnansweredQuestions, 'btn-danger' : hasInvalidQuestions }" @click="completeInterview">Complete</a>
             </div>
         </div>
     </div>
@@ -77,6 +77,9 @@
             },
             hasAnsweredQuestions() {
                 return this.completeInfo.answeredCount > 0
+            },
+            isAllAnswered() {
+                return this.completeInfo.unansweredCount == 0 && this.completeInfo.errorsCount == 0
             },
             answeredQuestionsCountString() {
                 return this.hasAnsweredQuestions ? this.completeInfo.answeredCount : "No";
