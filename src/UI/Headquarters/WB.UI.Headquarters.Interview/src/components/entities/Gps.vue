@@ -70,23 +70,24 @@
                 this.$store.dispatch("fetchProgress", 1)
 
                 var viewModel = this
+                var questionId = this.$me.id
                 navigator.geolocation.getCurrentPosition(
-                    function (position) { viewModel.onPositionDetermined(position, viewModel) },
-                    function (error) { viewModel.onPositionDeterminationFailed(error, viewModel) },
+                    function (position) { viewModel.onPositionDetermined(position, questionId) },
+                    function (error) { viewModel.onPositionDeterminationFailed(error) },
                     {
                         enableHighAccuracy: true,
                         timeout: 30000,
                         maximumAge: 60000
                     })
             },
-            onPositionDetermined(position, viewModel) {
-                viewModel.$store.dispatch('answerGpsQuestion', {
-                    identity: viewModel.$me.id,
+            onPositionDetermined(position, questionId) {
+                this.$store.dispatch('answerGpsQuestion', {
+                    identity: questionId,
                     answer: new GpsAnswer(position.coords.latitude, position.coords.longitude, position.coords.accuracy, position.coords.altitude, position.timestamp)
                 })
-                viewModel.isInProgress = false
+                this.isInProgress = false
             },
-            onPositionDeterminationFailed(error, viewModel) {
+            onPositionDeterminationFailed(error) {
                 var message = "";
                 // Check for known errors
                 switch (error.code) {
@@ -111,9 +112,9 @@
                         "an unknown error (Code: " + strErrorCode + ")."
                 }
 
-                viewModel.markAnswerAsNotSavedWithMessage(error.message)
-                viewModel.$store.dispatch("fetchProgress", -1)
-                viewModel.isInProgress = false
+                this.markAnswerAsNotSavedWithMessage(error.message)
+                this.$store.dispatch("fetchProgress", -1)
+                this.isInProgress = false
             }
         }
     }
