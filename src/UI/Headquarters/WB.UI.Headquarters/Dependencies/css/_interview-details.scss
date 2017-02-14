@@ -298,7 +298,6 @@ label.inactive{
   	@extend %visibility-hidden;
 }
 .question.disabled-question{
-	min-height: 65px;
 	&:after{
 		@extend %visibility-visible;
 	}

@@ -52,6 +52,13 @@
                     background-position: -43px -180px;
                 }
             }
+            &:hover, &:focus, &:active{
+                td.without-break{
+                    &:before{
+                        @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
+                    }
+                }
+            }
         }
         @include transition(all, 0.2s);
         td{
@@ -259,7 +266,7 @@
         tr{
             &:hover, &:focus{
                 background-color: $blue-super-light;
-                color: #000;
+                // color: #000;
                 a{
                     color: #000;
                 }
@@ -277,7 +284,7 @@
         td, th{
             &.checkbox-cell{
                 min-width: 40px !important;
-                max-width: 40px !important;
+                width: 40px !important;
                 text-align: center;
                 padding: 0;
             }
@@ -303,6 +310,9 @@
             } 
         }  
     }
+}
+.table-with-scroll{
+	overflow-x: auto;
 }
 .dataTables_wrapper{
     position: relative;
