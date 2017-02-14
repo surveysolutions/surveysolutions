@@ -4,15 +4,17 @@ import * as Vue from "vue"
 
 Vue.directive("numericFormatting", {
     bind: (el, binding) => {
-        $(el).autoNumeric("init")
+        let defaults = {
+                aSep: "",
+                aPad: false
+        }
+        let settings = $.extend( {}, defaults, binding.value )
+        $(el).autoNumeric("init", settings)
     },
     update: (el, binding) => {
         if (binding.value) {
             let defaults = {
                 aSep: "",
-                // mDec: 0,
-                // vMin: -2147483648,
-                // vMax: 2147483647,
                 aPad: false
             }
             let settings = $.extend( {}, defaults, binding.value )
