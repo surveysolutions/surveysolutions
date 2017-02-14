@@ -29,7 +29,7 @@
     "typescript": "^2.1.6",
     "vue": "^2.1.10",
     "vue-flatpickr": "^2.3.0",
-    "vue-router": "^2.2.0",
+    "vue-router": "^2.2.1",
     "vuex": "^2.1.2"
   },
   "devDependencies": {
@@ -65,7 +65,7 @@
     "vue-template-compiler": "^2.1.10",
     "vue-ts-loader": "0.0.3",
     "webpack": "^2.2.1",
-    "webpack-bundle-analyzer": "^2.2.3",
+    "webpack-bundle-analyzer": "^2.3.0",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1",
