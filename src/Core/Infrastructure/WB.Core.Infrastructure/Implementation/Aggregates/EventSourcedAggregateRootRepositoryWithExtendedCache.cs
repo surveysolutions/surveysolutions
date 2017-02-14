@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository
+    internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
         private readonly int cacheSize;
 
@@ -64,6 +64,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                             aggregateRoot.ToEnumerable(),
                             cache.Except(aggregate => aggregate.EventSourceId == aggregateRoot.EventSourceId))
                         .Take(cacheSize));
+            }
+        }
+
+        public void Evict(Guid aggregateId)
+        {
+            lock (lockObject)
+            {
+                this.cache = ImmutableList.CreateRange(
+                    Enumerable
+                        .Concat(
+                            this.cache,
+                            cache.Except(aggregate => aggregate.EventSourceId == aggregateId)));
             }
         }
     }
