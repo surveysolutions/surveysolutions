@@ -21,7 +21,7 @@
     </div>
 </template>
 <script lang="ts">
-    import "bootstrap"
+
     import * as $ from "jquery"
 
     import { apiCaller } from "src/api"
