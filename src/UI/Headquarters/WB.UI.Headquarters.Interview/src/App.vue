@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+    import "toastr/build/toastr.css"
     export default {
         name: 'app'
     }
