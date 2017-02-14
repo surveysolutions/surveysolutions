@@ -34,7 +34,7 @@ namespace WB.Infrastructure.Native.Storage
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            var cachedAggregate = System.Web.HttpContext.Current.Cache.Get(aggregateId.ToString()) as IEventSourcedAggregateRoot;
+            var cachedAggregate = Cache.Get(aggregateId.ToString()) as IEventSourcedAggregateRoot;
 
             if (cachedAggregate == null) return null;
 
@@ -44,9 +44,13 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
+        private static Cache Cache => System.Web.HttpContext.Current == null
+            ? System.Web.HttpRuntime.Cache
+            : System.Web.HttpContext.Current.Cache;
+
         private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
         {
-            System.Web.HttpContext.Current.Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot,null,Cache .NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
         }
     }
 }
