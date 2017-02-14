@@ -107,7 +107,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         private string GetFolderNameForTemplate(Guid questionnaireId)
         {
-            return String.Format("dir-{0}", questionnaireId);
+            return $"dir-{questionnaireId}";
         }
 
         public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
@@ -121,7 +121,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            throw new NotImplementedException();
+            var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            return this.fileSystemAccessor.IsFileExists(assemblyPath);
         }
     }
 }
