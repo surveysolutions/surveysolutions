@@ -112,6 +112,11 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
 
+            if (questionnaireBrowseItem.IsDeleted)
+            {
+                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            }
+
             return new ResumeWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
@@ -131,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
-            var view =  new StartWebInterview
+            var view = new StartWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
@@ -143,6 +148,11 @@ namespace WB.UI.Headquarters.Controllers
         private FinishWebInterview GetFinishModel(IStatefulInterview interview)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
+
+            if (questionnaireBrowseItem.IsDeleted)
+            {
+                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            }
 
             return new FinishWebInterview
             {
@@ -164,12 +174,13 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [WebInterviewAuthorize]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
-
+            
             if (interview.Status != InterviewStatus.InterviewerAssigned && question?.AsMultimedia != null)
             {
                 return this.Json("fail");
@@ -264,7 +275,7 @@ namespace WB.UI.Headquarters.Controllers
 
             RememberCapchaFilled(interviewId);
 
-            return this.RedirectToAction(nameof(Cover), new {id = interviewId});
+            return this.RedirectToAction(nameof(Cover), new { id = interviewId });
         }
 
         [WebInterviewAuthorize]
@@ -367,7 +378,7 @@ namespace WB.UI.Headquarters.Controllers
                     case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
                         errorMessage = WebInterview.Error_NoActionsNeeded;
                         break;
-                        
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -417,7 +428,8 @@ Exception details:<br />
             filterContext.ExceptionHandled = true;
             filterContext.Result = new ViewResult
             {
-                ViewName = @"~/Views/WebInterview/Error.cshtml", ViewData = new ViewDataDictionary(new WebInterviewError {Message = message})
+                ViewName = @"~/Views/WebInterview/Error.cshtml",
+                ViewData = new ViewDataDictionary(new WebInterviewError { Message = message })
             };
         }
     }

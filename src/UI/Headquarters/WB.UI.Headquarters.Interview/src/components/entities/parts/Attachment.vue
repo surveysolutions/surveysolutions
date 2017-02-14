@@ -21,6 +21,7 @@
         props: {
             filename: {type: String},
             contentId: {type: String},
+            interviewId: {type: String},
             thumb: { type: String }, // optional
             image: { type: String },
             customCssClass:{}
@@ -29,7 +30,7 @@
             imageThumb() {
                 if(this.thumb) return this.thumb;
                 if(this.filename) return `${imageGetBase}/Image/${this.filename}`
-                if(this.contentId) return `${imageGetBase}/Content?contentId=${this.contentId}`
+                if(this.contentId) return `${imageGetBase}/Content?interviewId=${this.interviewId}&contentId=${this.contentId}`
                 return null
             },
             isPreview(){

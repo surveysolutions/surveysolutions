@@ -5,7 +5,7 @@
             <div :class="[{'text-danger': !$me.validity.isValid}]">
                 <wb-title />
             </div>
-            <wb-attachment :contentId="$me.attachmentContent" customCssClass="static-text-image" v-if="$me.attachmentContent" />
+            <wb-attachment :contentId="$me.attachmentContent" :interviewId="interviewId" customCssClass="static-text-image" v-if="$me.attachmentContent" />
             <wb-validation />
         </div>
     </div>
