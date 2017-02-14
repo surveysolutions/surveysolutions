@@ -539,7 +539,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             Identity[] invalidEntityIds = interview.GetInvalidEntitiesInInterview().Take(30).ToArray();
             var invalidEntities = invalidEntityIds.Select(identity =>
             {
-                var titleText = interview.GetTitleText(identity);
+                var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
                 var parentId = interview.GetParentGroup(identity).ToString();
                 return new EntityWithError
