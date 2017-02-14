@@ -39,8 +39,15 @@ namespace WB.UI.Headquarters.API.Resources
         }
 
         [HttpGet]
-        public HttpResponseMessage Content([FromUri] string contentId)
+        public HttpResponseMessage Content([FromUri] string interviewId, [FromUri] string contentId)
         {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview.IsDeleted)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+
             var attachment = attachmentStorage.GetById(contentId);
             if (attachment == null)
             {
@@ -60,6 +67,11 @@ namespace WB.UI.Headquarters.API.Resources
         public HttpResponseMessage Image([FromUri]string interviewId, [FromUri]string questionId, [FromUri]string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview.IsDeleted)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
 
             if (interview.Status != InterviewStatus.InterviewerAssigned && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null)
             {

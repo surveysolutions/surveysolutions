@@ -36,6 +36,9 @@ export function detailsMixin(fetchMethod: string, defaults) {
             },
             hash() {
                 return getLocationHash(this.id)
+            },
+            interviewId() {
+                return this.$route.params.interviewId
             }
         },
         props: ["id"],
