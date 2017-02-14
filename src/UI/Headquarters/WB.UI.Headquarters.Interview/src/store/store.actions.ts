@@ -145,7 +145,7 @@ export default {
         dispatch("fetchInterviewStatus")
     }, 200),
 
-    fetchSectionEnabledStatus:  debounce(async ({ commit }) => {
+    fetchSectionEnabledStatus:  debounce(async ({ state }) => {
         const routeParams = (router.currentRoute.params as any)
         const currentSectionId = routeParams.sectionId
         const isPrefilledSection = currentSectionId === undefined
@@ -153,8 +153,7 @@ export default {
         if (!isPrefilledSection) {
             const isEnabled = await apiCaller(api => api.isEnabled(currentSectionId))
             if (!isEnabled) {
-                const interviewDetails = await apiCaller(api => api.getInterviewDetails())
-                const firstSectionId = interviewDetails.firstSectionId
+                const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
                     name: "section",
                     params: {
