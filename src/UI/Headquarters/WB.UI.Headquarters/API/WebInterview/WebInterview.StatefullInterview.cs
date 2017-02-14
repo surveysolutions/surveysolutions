@@ -49,17 +49,22 @@ namespace WB.UI.Headquarters.API.WebInterview
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        public string GetInterviewStatus()
+        private SimpleGroupStatus GetInterviewSimpleStatus()
         {
             var statefulInterview = this.GetCallerInterview();
 
             if (statefulInterview.CountInvalidEntitiesInInterview() > 0)
-                return SimpleGroupStatus.Invalid.ToString();
+                return SimpleGroupStatus.Invalid;
 
-            if (statefulInterview.CountActiveQuestionsInInterview() == statefulInterview.CountActiveAnsweredQuestionsInInterview())
-                return SimpleGroupStatus.Completed.ToString();
+            return (statefulInterview.CountActiveQuestionsInInterview() == statefulInterview.CountActiveAnsweredQuestionsInInterview())
+                ? SimpleGroupStatus.Completed 
+                : SimpleGroupStatus.Other;
+        }
 
-            return SimpleGroupStatus.Other.ToString();
+
+        public string GetInterviewStatus()
+        {
+            return GetInterviewSimpleStatus().ToString();
         }
 
         public PrefilledPageData GetPrefilledEntities()
@@ -154,7 +159,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     Id = id,
                     Title = "Complete interview",
-                    Status = SimpleGroupStatus.Other,
+                    Status = GetInterviewSimpleStatus(),
                     Target = sectionIdentity.ToString(),
                     Type = ButtonType.Complete
                 };
