@@ -28,7 +28,7 @@
         </div>
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{isShowCountErrorsComment ? 'First ' + completeInfo.entitiesWithError.length + ' entities with errors:' : 'Questions with errors:'}}</h4>
+                <h4 class="gray-uppercase">{{doesShowErrorsCommentWithCount ? 'First ' + completeInfo.entitiesWithError.length + ' entities with errors:' : 'Questions with errors:'}}</h4>
                 <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
                     <li>
                         <a href="#" @click="navigateTo(entity)">{{ entity.title }}</a>
@@ -96,7 +96,7 @@
             invalidQuestionsCountString() {
                 return this.hasInvalidQuestions ? this.completeInfo.errorsCount : "No";
             },
-            isShowCountErrorsComment() {
+            doesShowErrorsCommentWithCount() {
                 return this.completeInfo.entitiesWithError.length < this.completeInfo.errorsCount
             }
         },
