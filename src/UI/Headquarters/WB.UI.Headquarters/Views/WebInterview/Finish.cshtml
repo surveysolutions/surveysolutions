@@ -14,8 +14,8 @@
         <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
         @if (Model.StartedDate.HasValue)
         {
-            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm"))</li>
+            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.Value.ToLocalTime().ToString(@"MMM dd yyyy, hh:mm"))</li>
         }
-        <li>@string.Format(WebInterview.InterviewCompletionDateFormatText, Model.CompletedDate.HasValue ? Model.CompletedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.InProgressText)</li>
+        <li>@string.Format(WebInterview.InterviewCompletionDateFormatText, Model.CompletedDate.HasValue ? Model.CompletedDate.Value.ToLocalTime().ToString(@"MMM dd yyyy, hh:mm") : WebInterview.InProgressText)</li>
     </ul>
 </div>
