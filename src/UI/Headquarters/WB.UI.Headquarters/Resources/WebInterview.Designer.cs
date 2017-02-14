@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have been invited to take part in the following survey: {0}.
+        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;{0}&quot;.
         /// </summary>
         public static string InvitationText {
             get {
@@ -349,7 +349,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can continue interview in the following survey: {0}.
+        ///   Looks up a localized string similar to You can continue interview in the following survey: &quot;{0}&quot;.
         /// </summary>
         public static string Resume_InvitationText {
             get {

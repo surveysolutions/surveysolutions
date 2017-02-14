@@ -157,7 +157,7 @@
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>You have been invited to take part in the following survey: {0}</value>
+    <value>You have been invited to take part in the following survey: "{0}"</value>
     <comment>{0} - name of the questionnaire without version</comment>
   </data>
   <data name="WelcomeText" xml:space="preserve">
@@ -228,7 +228,7 @@
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>You can continue interview in the following survey: {0}</value>
+    <value>You can continue interview in the following survey: "{0}"</value>
     <comment>{0} - name of the questionnaire without version</comment>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
