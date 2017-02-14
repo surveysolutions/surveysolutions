@@ -85,13 +85,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
-            this.RefreshLinkedToListQuestions(evnt.EventSourceId, evnt.Payload.Questions);
         }
 
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
-            this.RefreshLinkedToListQuestions(evnt.EventSourceId, evnt.Payload.Questions);
         }
 
         public void Handle(IPublishedEvent<StaticTextsDisabled> evnt)
