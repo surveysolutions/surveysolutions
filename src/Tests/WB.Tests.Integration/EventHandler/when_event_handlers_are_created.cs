@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -112,7 +113,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
             typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage),
-            typeof(IWebInterviewNotificationService), typeof(IStatefulInterviewRepository)
+            typeof(IWebInterviewNotificationService), typeof(IStatefulInterviewRepository), typeof(IAggregateRootCacheCleaner)
             
         };
 
