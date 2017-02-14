@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -163,14 +164,12 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        private RedirectToRouteResult RedirectToFirstSection(string id, IStatefulInterview interview)
+        private RedirectResult RedirectToFirstSection(string id, IStatefulInterview interview)
         {
-            return this.RedirectToAction("Section",
-                new
-                {
-                    id,
-                    sectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString()
-                });
+            var sectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
+            var uri = GenerateUrl(@"Section", id, sectionId);
+
+            return Redirect(uri);
         }
 
         [HttpPost]
@@ -223,11 +222,16 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
-                var returnUrl = Url.Action("Section", routeValues: new { id, sectionId });
-                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl = returnUrl });
+                var returnUrl = GenerateUrl(@"Section", id, sectionId);
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
             return this.View("Index");
+        }
+
+        public string GenerateUrl(string action, string interviewId, string sectionId = null)
+        {
+            return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
         }
 
         public ActionResult Start(string id)
@@ -275,7 +279,7 @@ namespace WB.UI.Headquarters.Controllers
 
             RememberCapchaFilled(interviewId);
 
-            return this.RedirectToAction(nameof(Cover), new { id = interviewId });
+            return this.Redirect(GenerateUrl("Cover", interviewId));
         }
 
         [WebInterviewAuthorize]
@@ -300,8 +304,8 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
-                var returlUrl = Url.Action("Finish", routeValues: new { id });
-                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
+                var returnUrl = GenerateUrl(@"Finish", id);
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
             return View(this.GetFinishModel(interview));
@@ -319,6 +323,12 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             RememberCapchaFilled(id);
+
+            if (returnUrl == null)
+            {
+                return Redirect(GenerateUrl(@"Cover", id));
+            }
+
             return Redirect(returnUrl);
         }
 
@@ -329,8 +339,8 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
-                var returlUrl = Url.Action("Complete", routeValues: new { id });
-                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
+                var returnUrl = GenerateUrl(@"Complete", id);
+                return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
             return View("Index");
@@ -341,7 +351,19 @@ namespace WB.UI.Headquarters.Controllers
         [WebInterviewAuthorize]
         public async Task<ActionResult> ResumePost(string id, string returnUrl)
         {
-            var verifyResult = await this.GetRecaptchaVerificationHelper().VerifyRecaptchaResponseTaskAsync();
+            var captchaHelper = this.GetRecaptchaVerificationHelper();
+          
+            RecaptchaVerificationResult verifyResult;
+
+            try
+            {
+                verifyResult = await captchaHelper.VerifyRecaptchaResponseTaskAsync();
+            }
+            catch
+            {
+                verifyResult = RecaptchaVerificationResult.UnknownError;
+            }
+
             if (verifyResult != RecaptchaVerificationResult.Success)
             {
                 var model = this.GetResumeModel(id);
@@ -350,6 +372,12 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             RememberCapchaFilled(id);
+
+            if (returnUrl == null)
+            {
+                return Redirect(GenerateUrl(@"Cover", id));
+            }
+
             return this.Redirect(returnUrl);
         }
 
