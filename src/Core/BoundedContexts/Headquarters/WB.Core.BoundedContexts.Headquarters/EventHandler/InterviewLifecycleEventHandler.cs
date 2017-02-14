@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.statefulInterviewRepository = statefulInterviewRepository;
