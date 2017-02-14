@@ -64,6 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions); }
         }
 
+        IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
+
         public bool HasOptions => this.Options.Any();
 
         public MultiOptionLinkedToListQuestionQuestionViewModel(
@@ -126,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             List<MultiOptionQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered ?
-                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder ?? 0).ToList() :
+                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder ?? 0).ToList() :
                 this.Options.Where(x => x.Checked).ToList();
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
@@ -323,5 +325,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Value = Convert.ToInt32(optionValue.Value),
                 QuestionState = this.questionState
             };
+
+        public int? GetNextAnswerSortOrder()
+        {
+            return this.Options?.Max(x => x.CheckedOrder);
+        }
     }
 }
