@@ -1,13 +1,3 @@
-.prefield-column, .spent-time, .template, .accepted-hq, .census, .number-rejected{
-	display: none;
-
-}
-td, th{
-		&.visible{
-			display: table-cell;
-	}
-}
-
 .table-wrapper{
 	position: relative;
 	.wrapper-modal-dropdown{
@@ -22,29 +12,39 @@ td, th{
 	   }
 	}
 }
-.table-with-scroll{
-	overflow-x: auto;
-}
-tr:last-child{
-	td.prefield-column{
-		border-bottom: 2px solid $blue !important;
+.table-with-prefilled-column{
+	.prefield-column, .spent-time, .template, .accepted-hq, .census, .number-rejected{
+		display: none;
+
 	}
-}
-th, td{
-	&.prefield-column{
-		border-color: $gray-form !important;
-		&.enumeration-area{
-			border-left: 2px solid $blue !important;
+	td, th{
+		&.visible{
+			display: table-cell;
 		}
-		&.deelling-address{
-			border-right: 2px solid $blue !important;
+		&.prefield-column{
+			border-color: $gray-form !important;
+			&.enumeration-area{
+				border-left: 2px solid $blue !important;
+			}
+			&.deelling-address{
+				border-right: 2px solid $blue !important;
+			}
 		}
+	}
+	tr:last-child{
+		td.prefield-column{
+			border-bottom: 2px solid $blue !important;
+		}
+	}
+	th.prefield-column{
+		border-top: 2px solid $blue !important;
 	}
 }
 th.prefield-column{
+	font: 12px/14px "TrebuchetMS";
 	text-transform: none;
+	font-weight: normal;
 	color: $blue;
-	border-top: 2px solid $blue !important;
 }
 td.prefield-column{
 	font-style: italic;
@@ -68,26 +68,42 @@ td.prefield-column{
 		}
     }
 }
-.errors{
+td.errors{
 	color: $red_error;
 }
-td.enumerator span{
-	color: $gray_text !important;
+.table tbody tr td span.interviewer{
+	font-size: 14px;
+	line-height: 16px;
+	font-weight: normal;
+	color: $gray_text;
 	&:before{
 		display: inline-block;
 		content:"";
-		margin-right: 10px;
+		position: relative;
+		top: 2px; 
+		margin-right: 3px;
 		@include size(11px, 14px);
 		background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;
 		@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);
 		background-size: 11px 14px;
-
 	}
 }
-.table tbody tr td.not-synced-assign{
-	font-style: italic;
-	a{
-		color: $gray_light;
+.table-wrapper .table td.enumerator{
+	padding-top: 10px;
+	padding-bottom: 10px;	
+}
+.table tbody tr {
+	&:hover, &:focus, &:active{
+		td.not-synced-assign
+			a{
+				color: $gray_text;
+			}
+	}
+	td.not-synced-assign{
+		font-style: italic;
+		a{
+			color: $gray_light;
+		}
 	}
 }
 .comment-icon{
@@ -100,4 +116,73 @@ td.enumerator span{
     &.responded{
     	background-position: -4px -4px; 
     }
+}
+.supervisor{
+	color: $gray-text !important;
+	font-weight: normal;
+	&:before{
+		display: inline-block;
+		content:"";
+		position: relative;
+		top: 2px; 
+		margin-right: 3px;
+		@include size(11px, 14px);
+		background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
+		@include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);
+		background-size: 11px 14px;
+	}
+}
+.enumerator{
+	.interviewer, .supervisor{
+		&:before{
+			margin-right: 10px;
+		}
+	}
+}
+.modal{
+	%hover{
+		color: $gray-text;
+		&:hover, &:focus, &:active{
+			color: $blue;
+			text-decoration: none;
+		}
+	}
+	.template, .tetle-row{
+		font-size: 16px;
+		line-height: 18px;
+	}
+	.title-row{
+		font-size: 16px;
+		line-height: 18px;
+		margin-right: 10px; 
+		@extend %hover;
+	}
+	.interviewer{
+		margin-left: 10px;
+		@extend %hover;
+	}
+	td, th{
+		padding: 10px;
+		&:first-child{
+			min-width: 160px;
+		}
+	}
+	th{
+		border-top: none !important;
+	}
+}
+.statuses{
+	table{
+		tr:last-child td{
+		font-weight: bold !important;
+		}
+		td{
+			.comment{
+				padding-top: 10px;
+				h4{
+					margin-bottom: 5px;
+				}
+			}
+		}
+	}
 }

@@ -7,19 +7,23 @@
 	background-color: $table-selected;
 	z-index: 5;
 	border-radius: 0;
+	padding: 0 30px;
 	label{
 		font-size: 16px;
 		line-height: 18px;
 		color: #fff;
-		padding-right: 40px;
+		padding-right: 45px;
 		.tick{
-			margin-right: 15px;
+			margin-right: 20px;
 		}
 	}
 	.panel-body{
 		padding: 10px;
 		.btn{
-			margin-right: 15px;
+			margin-right: 10px;
+			&.btn-link{
+				padding: 0;
+			}
 		}
 	}
 }

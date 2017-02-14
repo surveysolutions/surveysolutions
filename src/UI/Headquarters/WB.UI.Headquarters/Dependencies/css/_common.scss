@@ -272,6 +272,9 @@ table{
 		}
 	}
 }
+.table tbody tr td span.census-icon{
+	color: #fff;
+}
 .census-icon{
 	text-transform: capitalize;
 	display: inline-block;
@@ -282,6 +285,9 @@ table{
     font: 13px/13px Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
+	&:hover, &:focus, &:active{
+    	color: #fff !important;		
+	}
 }
 .flag{
 	font-size: 14px;
