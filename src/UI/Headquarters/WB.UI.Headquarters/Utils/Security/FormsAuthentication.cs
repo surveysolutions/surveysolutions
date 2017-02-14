@@ -69,6 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
         public void SignOut()
         {
             System.Web.Security.FormsAuthentication.SignOut();
+            HttpContext.Current.Session.Abandon();
         }
 
         #endregion
