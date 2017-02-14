@@ -79,6 +79,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Infrastructure.Native.Storage;
 
 
 namespace WB.Core.BoundedContexts.Headquarters

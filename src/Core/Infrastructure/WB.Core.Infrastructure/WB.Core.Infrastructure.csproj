@@ -72,6 +72,7 @@
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
     <Compile Include="CommandBus\Implementation\SequentialCommandService.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithExtendedCache.cs" />
+    <Compile Include="Implementation\Aggregates\IAggregateRootCacheCleaner.cs" />
     <Compile Include="Implementation\Aggregates\PlainAggregateRootRepository.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />

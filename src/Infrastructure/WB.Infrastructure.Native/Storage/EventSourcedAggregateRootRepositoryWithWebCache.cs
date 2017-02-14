@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Infrastructure.Native.Storage
 {
-    public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository
+    public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
             : base(eventStore, snapshotStore, repository)
@@ -48,9 +48,11 @@ namespace WB.Infrastructure.Native.Storage
             ? System.Web.HttpRuntime.Cache
             : System.Web.HttpContext.Current.Cache;
 
-        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
+        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot) => Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+
+        public void Evict(Guid aggregateId)
         {
-            Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            Cache.Remove(aggregateId.ToString());
         }
     }
 }

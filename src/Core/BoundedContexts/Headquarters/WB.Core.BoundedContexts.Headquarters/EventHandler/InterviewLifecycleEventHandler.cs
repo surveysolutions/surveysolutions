@@ -7,11 +7,13 @@ using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -56,14 +58,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
         public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository,
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
             this.questionnaireRepository = questionnaireRepository;
         }
 
@@ -270,9 +275,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
-            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        {
+            this.aggregateRootCacheCleaner?.Evict(evnt.EventSourceId);
+            this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
-            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        {
+            this.aggregateRootCacheCleaner?.Evict(evnt.EventSourceId);
+            this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        }
     }
 }
