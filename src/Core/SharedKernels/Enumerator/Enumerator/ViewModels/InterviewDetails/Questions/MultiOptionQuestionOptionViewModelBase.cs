@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -31,7 +32,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.@checked == value) return;
                 this.@checked = value;
-                this.CheckedTimeStamp = value ? DateTime.Now : DateTime.MinValue;
+                if (value)
+                {
+                    this.CheckedOrder = this.QuestionViewModel.Options.Max(x => x.CheckedOrder) + 1;
+                }
 
                 this.RaisePropertyChanged();
             }
@@ -47,8 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.RaisePropertyChanged();
             }
         }
-
-        public DateTime CheckedTimeStamp { get; private set; }
 
         public IMvxCommand CheckAnswerCommand
         {
