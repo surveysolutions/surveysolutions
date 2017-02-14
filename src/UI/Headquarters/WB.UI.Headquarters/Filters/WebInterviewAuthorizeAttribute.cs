@@ -28,8 +28,8 @@ namespace WB.UI.Headquarters.Filters
             if (interview != null)
             {
                 if (interview.IsDeleted)
-                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewNotFound,
-                        Resources.WebInterview.Error_NotFound);
+                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired,
+                        Resources.WebInterview.Error_InterviewExpired);
 
                 if (interview.Status != InterviewStatus.InterviewerAssigned)
                 {

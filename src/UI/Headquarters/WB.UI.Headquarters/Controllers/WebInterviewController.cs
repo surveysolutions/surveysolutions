@@ -126,6 +126,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
+            if (questionnaireBrowseItem.IsDeleted)
+            {
+                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            }
+
             var view =  new StartWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
