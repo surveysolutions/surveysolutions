@@ -3,14 +3,14 @@
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <router-link class="active-page" active-class="active-page" :to="toFirstSection">Web interview #{{humanId}}</router-link>
+                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">Web interview #{{humanId}}</router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar top-menu"></span>
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>
                 </button>
-                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand">
+                <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId">
                         <div class="brand-name">Web interview #{{humanId}}</div>
                 </router-link>
             </div>

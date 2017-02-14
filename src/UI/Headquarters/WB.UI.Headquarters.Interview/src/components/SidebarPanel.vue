@@ -3,7 +3,7 @@
         <div class="panel-heading" role="tab">
             <h3 class="panel-title" :class="titleCss">
                 <button class="btn btn-link btn-plus" v-if="hasChild" :class="{collapsed: isCollapsed}" type="button" @click="toggle"><span></span></button>
-                <router-link :to="to">{{title}}</router-link>
+                <router-link :to="to" v-if="this.panel">{{title}}</router-link>
             </h3>
         </div>
         <div class="panel-collapse collapse" :class="{in: !isCollapsed}" role="tabpanel" v-if="hasChild && !isCollapsed">
