@@ -16,7 +16,9 @@ const connectionStore = {
     },
     actions: {
         connectionSlow() {
-            toastr.warning("Network connection is slow")
+            toastr.warning("Network connection is slow", {
+                preventDuplicates: true
+            })
         },
         tryingToReconnect({commit}, isReconnecting: boolean) {
             commit("IS_RECONNECTING", isReconnecting)
