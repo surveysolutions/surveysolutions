@@ -159,13 +159,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (selectedOptionIndex >= 0)
                 {
-                    option.CheckedOrder = selectedOptionIndex + 1;
                     option.Checked = true;
+                    option.CheckedOrder = selectedOptionIndex + 1;
                 }
                 else
                 {
-                    option.CheckedOrder = null;
                     option.Checked = false;
+                    option.CheckedOrder = null;
                 }
             }
         }
