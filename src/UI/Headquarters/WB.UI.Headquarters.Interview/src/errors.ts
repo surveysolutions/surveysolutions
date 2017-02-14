@@ -1,5 +1,4 @@
 import * as toastr from "toastr"
-import "toastr/build/toastr.css"
 import * as Vue from "vue"
 import { verboseMode } from "./config"
 

@@ -18,12 +18,7 @@ const wrap = (jqueryPromise) => {
 
 const scriptIncludedPromise = new Promise<any>(resolve =>
     $script(signalrPath, () => {
-        // All client-side subscriptions should be registered in this method
-
         // $.connection.hub.logging = true
-        // tslint:disable-next-line:no-empty
-        $.connection.hub.error((error) => { })
-
         const interviewProxy = $.connection.interview
 
         interviewProxy.client.reloadInterview = () => {
@@ -88,6 +83,21 @@ async function hubStarter() {
     // { transport: supportedTransports }
     await wrap($.signalR.hub.start())
     // await wrap($.signalR.hub.start({ transport: "longPolling" }))
+    $.connection.hub.connectionSlow(() => {
+        store.dispatch("connectionSlow")
+    })
+
+    $.connection.hub.reconnecting(() => {
+        store.dispatch("tryingToReconnect", true)
+    })
+
+    $.connection.hub.reconnected(() => {
+        store.dispatch("tryingToReconnect", false)
+    })
+
+    $.connection.hub.disconnected(() => {
+        store.dispatch("disconnected")
+    })
 }
 
 export const queryString = {
@@ -119,6 +129,7 @@ export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallbac
     try {
         return await wrap(action(hub))
     } catch (err) {
+        console.error(err)
         if (id) {
             store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
             store.dispatch("fetch", { id, done: true })
