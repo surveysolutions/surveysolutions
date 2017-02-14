@@ -421,6 +421,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_roster_size_question_and_other_question_is_linked_to_triggered_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_disable_source_of_linked_to_list_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss.cs" />

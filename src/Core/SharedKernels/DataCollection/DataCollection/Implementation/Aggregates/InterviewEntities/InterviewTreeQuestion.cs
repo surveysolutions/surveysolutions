@@ -296,26 +296,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
-        public void CalculateLinkedToListOptions(bool resetAnswerOnOptionChange = true)
+        public void CalculateLinkedToListOptions()
         {
             if (!this.IsLinkedToListQuestion) return;
             InterviewTreeLinkedToListQuestion linkedToListQuestion = this.AsLinkedToList;
 
-            var refListQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
-            var options = refListQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
+            var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
+           
+            var options = (refQuestion?.IsDisabled() ?? false)
+                ? new decimal[0]
+                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
 
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
-            if(resetAnswerOnOptionChange)
-            {
-                var optionsAreIdentical = previousOptions.SequenceEqual(options);
-                if (optionsAreIdentical) return;
 
-                if (this.IsMultiLinkedToList)
-                    this.AsMultiLinkedToList.RemoveAnswer();
-                else
-                    this.AsSingleLinkedToList.RemoveAnswer();
-            }
+            var optionsAreIdentical = previousOptions.SequenceEqual(options);
+            if (optionsAreIdentical) return;
+
+            if (this.IsMultiLinkedToList)
+                this.AsMultiLinkedToList.RemoveAnswer();
+            else
+                this.AsSingleLinkedToList.RemoveAnswer();
         }
 
 
