@@ -66,6 +66,8 @@ using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 using WB.Infrastructure.Native;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
@@ -156,6 +158,8 @@ namespace WB.UI.Headquarters
                     cacheSettings,
                     mappingAssemblies)
             );
+            
+            kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 

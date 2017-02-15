@@ -10,10 +10,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -282,13 +280,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            this.aggregateRootCacheCleaner?.Evict(evnt.EventSourceId);
+            this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            this.aggregateRootCacheCleaner?.Evict(evnt.EventSourceId);
+            this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
         }
     }

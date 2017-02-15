@@ -1,13 +1,10 @@
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
