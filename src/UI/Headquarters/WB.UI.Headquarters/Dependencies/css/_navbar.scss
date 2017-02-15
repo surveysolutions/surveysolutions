@@ -3,7 +3,7 @@
 	.container, .container-fluid{
 		padding: 0 ($margin-container/2) 0 ($margin-container/2);
 	}
-	min-width: 400px;
+	min-width: 360px;
 	min-height: 70px;
 	margin-bottom: 0;
 	.navbar-header .navbar-brand{
@@ -333,7 +333,7 @@
 	.navbar{
 		.navbar-header{
 			.active-page{
-			    max-width: 35%;
+			    max-width: 30%;
 			}
 		}
 	}

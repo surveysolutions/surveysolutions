@@ -72,10 +72,17 @@ td.errors{
 	color: $red_error;
 }
 .table tbody tr td span.interviewer{
+	color: $gray_text;
+}
+.interviewer{
 	font-size: 14px;
 	line-height: 16px;
 	font-weight: normal;
 	color: $gray_text;
+	&:hover, &:focus, &:active{
+		color: $blue;
+		text-decoration: none;
+	}
 	&:before{
 		display: inline-block;
 		content:"";
@@ -182,6 +189,40 @@ td.errors{
 				h4{
 					margin-bottom: 5px;
 				}
+			}
+		}
+	}
+}
+.screen-small-resolution{
+		display: none;
+}
+@media (max-width: $screen-sm-min){
+	.interviews-large-screen{
+		display: none;
+	}
+	.screen-small-resolution{
+		padding-left: 15px;
+		display: block;
+		font: 14px/16px Arial, sans-serif;
+		.header-unit{
+			position: relative;
+			margin-bottom: 20px;
+			label{
+				.title-row{
+					font-weight: normal;
+					font-size: 18px;
+					line-height: 20px;
+					display: block;
+					margin-bottom: 5px;
+				}
+			}
+			.comment-icon{
+				@include absolute(0, 10%);
+			}
+		}
+		ul{
+			li{
+				margin-bottom: 10px;
 			}
 		}
 	}
