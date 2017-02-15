@@ -72,7 +72,7 @@
                 this.isLoading = true
                 const options = await apiCaller(api => api.getTopFilteredOptionsForQuestion(this.questionId, filter, 30))
                 this.isLoading = false
-                this.options = options ? options : []
+                this.options = options || []
             },
             selectOption(value: string) {
                 this.$emit('input', value)
