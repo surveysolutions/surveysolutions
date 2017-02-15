@@ -107,17 +107,17 @@
 @media only screen and (max-width: 615px){
 	.question-status ul li{
 		width: auto;
-		padding: 15px;
+		padding: 10px;
 	}
-	.web-interview .wrapper-info{
-		padding-left: 45px;
-	}
-}
-@media (max-width: $screen-xs-min){
-	.web-interview .wrapper-info{
-		padding: 20px 10px 20px 35px;
-	}
-	.web-interview .questionnaire .first-last-chapter .unit-title{
-		padding-left: 35px;
+	.web-interview {
+		.first-last-chapter .unit-title{
+			padding-left: 35px;
+			.humburger-foldback-button{
+				top: 10px;
+			}
+		}
+		.wrapper-info{
+			padding: 20px 10px 20px 20px;
+		}
 	}
 }
