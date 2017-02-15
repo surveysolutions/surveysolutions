@@ -173,10 +173,15 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [WebInterviewAuthorize]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview.IsDeleted)
+            {
+                return this.HttpNotFound();
+            }
+
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
             
