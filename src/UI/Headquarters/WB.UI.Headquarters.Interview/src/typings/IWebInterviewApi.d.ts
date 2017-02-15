@@ -132,7 +132,8 @@ declare interface IWebInterviewApi {
     answerTextListQuestion(questionIdentity: string, rows: ITextListAnswerRow[]): void
     answerPictureQuestion(id: string, file: File): void
     answerGpsQuestion(identity, answer: IGpsAnswer)
-
+    answerQRBarcodeQuestion(questionIdentity: string, text: string): void
+    
     removeAnswer(questionId: string): void
     getLanguageInfo(): ILanguageInfo
     changeLanguage(language: string): void
