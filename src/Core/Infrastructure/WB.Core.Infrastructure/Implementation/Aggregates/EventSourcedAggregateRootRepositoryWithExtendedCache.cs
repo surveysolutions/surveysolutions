@@ -71,11 +71,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             lock (lockObject)
             {
-                this.cache = ImmutableList.CreateRange(
-                    Enumerable
-                        .Concat(
-                            this.cache,
-                            cache.Except(aggregate => aggregate.EventSourceId == aggregateId)));
+                this.cache = ImmutableList.CreateRange(cache.Except(aggregate => aggregate.EventSourceId == aggregateId));
             }
         }
     }
