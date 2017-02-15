@@ -12,7 +12,7 @@
                     <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">Tap to record GPS</button>
+                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">Record GPS</button>
                 </div>
             </div>
         </div>

@@ -40,7 +40,7 @@
             <div class="container-info">
                 <label class="gray-uppercase" for="comment-for-supervisor">Note for supervisor</label>
                 <div class="field">
-                    <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Tap to enter text" v-model="comment"></textarea>
+                    <textarea class="field-to-fill" id="comment-for-supervisor" placeholder="Enter text" v-model="comment"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
