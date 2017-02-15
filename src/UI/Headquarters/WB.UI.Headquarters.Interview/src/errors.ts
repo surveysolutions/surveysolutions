@@ -8,7 +8,11 @@ Vue.config.errorHandler = (error, vm) => {
 }
 
 function toastErr(err, message) {
-    toastr.error("Error", message, {
+    if (verboseMode) {
+        console.error(message, err)
+    }
+
+    toastr.error(message, "Error", {
         preventDuplicates: true
     })
 }
