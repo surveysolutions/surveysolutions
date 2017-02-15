@@ -421,6 +421,11 @@ namespace WB.UI.Headquarters.API.WebInterview
                 {
                     result = Map<InterviewMultimediaQuestion>(question);
                 }
+                else if (question.IsQRBarcode)
+                {
+                    InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
+                    result = this.autoMapper.Map<InterviewBarcodeQuestion>(barcodeQuestion);
+                }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
@@ -656,6 +661,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                     return InterviewEntityType.TextQuestion;
                 case QuestionType.TextList:
                     return InterviewEntityType.TextList;
+                case QuestionType.QRBarcode:
+                    return InterviewEntityType.QRBarcode;
                 default:
                     return InterviewEntityType.Unsupported;
             }

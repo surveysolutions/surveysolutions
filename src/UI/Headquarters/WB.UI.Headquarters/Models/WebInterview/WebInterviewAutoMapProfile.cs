@@ -30,6 +30,10 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsText.GetAnswer()));
 
+            this.CreateMap<InterviewTreeQuestion, InterviewBarcodeQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsQRBarcode.GetAnswer()));
+
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x =>

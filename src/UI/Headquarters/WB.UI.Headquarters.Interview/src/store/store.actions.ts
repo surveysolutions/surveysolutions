@@ -74,7 +74,9 @@ export default {
     answerMultimediaQuestion({ dispatch }, { id, file }) {
         apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
-
+    answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
+        apiCallerAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
+    },
     removeAnswer({ dispatch }, questionId: string) {
         apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
     },
