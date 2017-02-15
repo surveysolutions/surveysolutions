@@ -145,7 +145,7 @@ export default {
         dispatch("fetchInterviewStatus")
     }, 200),
 
-    fetchSectionEnabledStatus:  debounce(async ({ state }) => {
+    fetchSectionEnabledStatus: debounce(async ({ state }) => {
         const routeParams = (router.currentRoute.params as any)
         const currentSectionId = routeParams.sectionId
         const isPrefilledSection = currentSectionId === undefined
@@ -193,5 +193,8 @@ export default {
     },
     stop(): void {
         apiStop()
+    },
+    toggleSidebarPanel({commit, state}): void {
+        commit("SET_SIDEBAR_HIDDEN", !state.sidebarHidden)
     }
 }
