@@ -721,8 +721,6 @@
     <Content Include="Dependencies\css\_panels.scss" />
     <Content Include="Dependencies\css\common-markup.scss" />
     <Content Include="Dependencies\css\_survey-setup.scss" />
-    <EmbeddedResource Include="Migrations\ReadSide\M001-100\add-human-interview-id.sql" />
-    <EmbeddedResource Include="Migrations\ReadSide\M001-100\remove-human-interview-id.sql" />
     <Content Include="Dependencies\css\_web-interview-first-last-chapter.scss" />
     <Content Include="Dependencies\css\_web-interview-start.scss" />
     <Content Include="Dependencies\css\_bootstrap-mvc-validation.scss" />
@@ -1533,7 +1531,6 @@
     <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewHumanId.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M008_MoveAssemblyToDB.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M007_AddAssembly.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddMinInterviewerVersion.cs" />

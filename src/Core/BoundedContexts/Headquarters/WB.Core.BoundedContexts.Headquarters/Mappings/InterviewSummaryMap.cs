@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Status, pm => pm.Column(cm => cm.Index("InterviewSummaries_Status")));
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
-            Property(x => x.HumanId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(false);
