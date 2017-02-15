@@ -1,10 +1,10 @@
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
@@ -13,9 +13,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         private IWebInterviewConfigProvider configProvider =>
             ServiceLocator.Current.GetInstance<IWebInterviewConfigProvider>();
 
-        private IStatefullWebInterviewFactory statefullWebInterviewFactory =>
-            ServiceLocator.Current.GetInstance<IStatefullWebInterviewFactory>();
-        
+        private IStatefulInterviewRepository statefullInterviewRepository =>
+            ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
+
         private IPlainTransactionManager transactionManager
           => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             QuestionnaireIdentity questionnaireIdentity = null;
             bool interviewAcceptAnswers = this.readTransactionManager.ExecuteInQueryTransaction(() =>
             {
-                var interview = this.statefullWebInterviewFactory.Get(hub.Context.QueryString.Get(@"interviewId"));
+                var interview = this.statefullInterviewRepository.Get(hub.Context.QueryString.Get(@"interviewId"));
                 questionnaireIdentity = interview?.QuestionnaireIdentity;
                 return interview?.AcceptsInterviewerAnswers() ?? false;
             });
