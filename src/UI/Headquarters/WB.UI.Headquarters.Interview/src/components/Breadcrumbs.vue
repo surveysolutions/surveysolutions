@@ -1,6 +1,6 @@
 <template>
     <div class="unit-title" v-if="showBreadcrumbs">
-        <div class="humburger-foldback-button" id="hide-content" @click="toggleSidebarPanel">
+        <div class="humburger-foldback-button" @click="toggleSidebarPanel">
             <span></span>
         </div>
         <ol class="breadcrumb">
