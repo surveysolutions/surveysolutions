@@ -1,4 +1,19 @@
-﻿# Link to web interview start page. It should be not protected by captcha
+﻿Web Interview stress tool
+================================
+
+Usage
+-----
+
+By default tool will read `config.yml` from same folder as `.exe`, or configuration file
+can be provided as first argument.
+
+Config.yml
+----------
+
+Sample config file:
+
+```yml
+# Link to web interview start page. It should be not protected by captcha
 startUri: https://superhq-dev.mysurvey.solutions/WebInterview/Start/ddb717c84a09420c9001dfb099038f1b$1
 
 ## Worker delays specify max amount of time for random generator beetween 0 and delay in ms
@@ -15,3 +30,13 @@ createInterviewDelay: 1000
 
 # how much workers should spam server in parallel
 workersCount: 50
+```
+
+Caveats
+-------
+
+Initial start can be quite long, while workers read questionarie
+
+
+
+
