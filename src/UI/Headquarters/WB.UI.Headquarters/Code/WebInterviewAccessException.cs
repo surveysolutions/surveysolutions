@@ -4,18 +4,18 @@ namespace WB.UI.Headquarters.Code
 {
     public class WebInterviewAccessException : Exception
     {
-        public WebInterviewAccessException(ExceptionReason reason, string message) : base(message)
+        public WebInterviewAccessException(InterviewAccessExceptionReason reason, string message) : base(message)
         {
             this.Reason = reason;
         }
 
-        public ExceptionReason Reason { get; set; }
+        public InterviewAccessExceptionReason Reason { get; set; }
+    }
 
-        public enum ExceptionReason
-        {
-            InterviewNotFound = 1,
-            InterviewExpired,
-            NoActionsNeeded
-        }
+    public enum InterviewAccessExceptionReason
+    {
+        InterviewNotFound = 1,
+        InterviewExpired,
+        NoActionsNeeded
     }
 }

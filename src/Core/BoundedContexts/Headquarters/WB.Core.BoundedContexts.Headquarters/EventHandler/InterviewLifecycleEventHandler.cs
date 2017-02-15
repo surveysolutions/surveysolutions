@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<TranslationSwitched>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewHardDeleted>
+        IEventHandler<InterviewHardDeleted>,
+        IEventHandler<InterviewerAssigned>
     {
         public override object[] Writers => new object[0];
 
@@ -225,6 +226,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
 
         public void Handle(IPublishedEvent<TranslationSwitched> evnt)
+            => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
             => this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
