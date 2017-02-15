@@ -53,5 +53,8 @@ export default {
     },
     SET_HAS_PREFILLED_QUESTIONS(state, hasPrefilledQuestions) {
         state.hasPrefilledQuestions = hasPrefilledQuestions
+    },
+    SET_SIDEBAR_HIDDEN(state, sidebarHidden: boolean) {
+        state.sidebarHidden = sidebarHidden
     }
 }
