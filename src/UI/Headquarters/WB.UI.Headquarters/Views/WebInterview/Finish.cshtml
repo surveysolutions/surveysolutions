@@ -11,7 +11,6 @@
 </p>
 <div class="additional-info-block">
     <ul class="list-unstyled">
-        <li>@string.Format(WebInterview.InterviewIdFormatText, Model.InterviewId)</li>
         @if (Model.StartedDate.HasValue)
         {
             <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.Value.ToLocalTime().ToString(@"MMM dd yyyy, hh:mm"))</li>
