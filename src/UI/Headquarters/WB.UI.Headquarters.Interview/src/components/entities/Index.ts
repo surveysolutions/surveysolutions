@@ -22,6 +22,7 @@ import LinkedMulti from "./LinkedMulti"
 import LinkedSingle from "./LinkedSingle"
 import Multimedia from "./Multimedia"
 import NavigationButton from "./NavigationButton"
+import QRBarcode from "./QRBarcode"
 import Question from "./Question"
 import StaticText from "./StaticText"
 import TextList from "./TextList"
@@ -40,6 +41,7 @@ vue.component("LinkedMulti", LinkedMulti)
 vue.component("LinkedSingle", LinkedSingle)
 vue.component("Multimedia", Multimedia)
 vue.component("NavigationButton", NavigationButton)
+vue.component("QRBarcode", QRBarcode)
 vue.component("StaticText", StaticText)
 vue.component("TextList", TextList)
 vue.component("TextQuestion", TextQuestion)

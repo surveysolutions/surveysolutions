@@ -107,6 +107,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(this.GetCallerInterview().Id, this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
+        public void AnswerQRBarcodeQuestion(string questionIdenty, string text)
+        {
+            var identity = Identity.Parse(questionIdenty);
+            this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(this.GetCallerInterview().Id,
+                this.commandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, text));
+        }
+
         public void RemoveAnswer(string questionId)
         {
             Identity identity = Identity.Parse(questionId);

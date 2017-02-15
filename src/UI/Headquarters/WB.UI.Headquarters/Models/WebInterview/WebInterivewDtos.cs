@@ -91,6 +91,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public GpsAnswer Answer { get; set; }
     }
 
+    public class InterviewBarcodeQuestion : GenericQuestion
+    {
+        public string Answer { get; set; }
+    }
+
     public class GpsAnswer
     {
         public double Longitude { get; set; }
