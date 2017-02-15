@@ -437,6 +437,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
+
+            if (IsSingleLinkedOption || IsMultiLinkedOption)
+            {
+                var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
+                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                options = Tree.GetAllNodesInEnumeratorOrder()
+                    .Where(node => node.Identity.Id == linkedLinkedSourceId)
+                    .Select(node => node.Identity.RosterVector)
+                    .Where(rosterVector => optionsHashSet.Contains(rosterVector))
+                    .ToArray();
+            }
+
             this.AsLinked.SetOptions(options);
 
             if (!removeAnswer) return;
