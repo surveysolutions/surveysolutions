@@ -10,8 +10,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     public class PlainPostgresTransactionManager : IPlainPostgresTransactionManager, IPlainSessionProvider, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
-        private ITransaction transaction;
-        private ISession session;
+        private Lazy<SessionHandle> lazySession;
 
         public PlainPostgresTransactionManager([Named(PostgresPlainStorageModule.SessionFactoryName)]ISessionFactory sessionFactory)
         {
@@ -20,59 +19,72 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void BeginTransaction()
         {
-            if (this.session != null)
+            if (this.lazySession != null)
             {
                 throw new InvalidOperationException("Session/Transaction already started for this instance");
             }
 
-            this.session = this.sessionFactory.OpenSession();
-            this.transaction = this.session.BeginTransaction(IsolationLevel.ReadCommitted);
+            this.lazySession = new Lazy<SessionHandle>(() =>
+            {
+                var session = this.sessionFactory.OpenSession();
+                var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
+
+                return new SessionHandle(session, transaction);
+            });
         }
 
         public void CommitTransaction()
         {
-            if (this.transaction == null)
+            if (this.lazySession == null)
             {
                 throw new InvalidOperationException("Trying to commit transaction without beginning it");
             }
 
-            this.transaction.Commit();
-            this.transaction = null;
-            this.session.Close();
-            this.session = null;
+            if (this.lazySession.IsValueCreated)
+            {
+                this.lazySession.Value.Transaction.Commit();
+                this.lazySession.Value.Session.Close();
+            }
+
+            this.lazySession = null;
         }
+
 
         public void RollbackTransaction()
         {
-            if (this.transaction == null)
+            if (this.lazySession == null)
             {
                 throw new InvalidOperationException("Trying to rollback transaction without beginning it");
             }
 
-            this.transaction.Rollback();
-            this.transaction = null;
-            this.session.Close();
-            this.session = null;
+            if (this.lazySession.IsValueCreated)
+            {
+                this.lazySession.Value.Transaction.Rollback();
+                this.lazySession.Value.Session.Close();
+            }
+
+            this.lazySession = null;
         }
 
-        public bool IsTransactionStarted => this.transaction != null;
+        public bool IsTransactionStarted => this.lazySession != null;
 
         public void Dispose()
         {
-            if (this.session != null)
+            if (this.lazySession?.IsValueCreated == true)
             {
-                this.session.Dispose();
-                this.session = null;
+                this.lazySession.Value.Dispose();
+                this.lazySession = null;
             }
         }
 
         public ISession GetSession()
         {
-            if (this.session == null)
+            if (this.lazySession == null)
             {
                 throw new InvalidOperationException("Trying to get session instance without starting a transaction first. Call BeginTransaction before getting session instance");
             }
-            return this.session;
+
+            return this.lazySession.Value.Session;
         }
     }
 }
