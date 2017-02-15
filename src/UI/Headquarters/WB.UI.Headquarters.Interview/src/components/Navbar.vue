@@ -19,7 +19,7 @@
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-bind:title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.originalLanguageName">
                                 <a href="javascript:void(0)" @click="changeLanguage()">{{ $store.state.originalLanguageName }}</a>
@@ -47,7 +47,7 @@
             this.$store.dispatch("loadInterview")
         },
         updated(){
-            document.title = `${this.questionnaireTitle} | Web Interview #${this.humanId}` 
+            document.title = `${this.questionnaireTitle} | Web Interview #${this.humanId}`
         },
         computed: {
             canChangeLanguage() {
