@@ -8,8 +8,9 @@ Vue.config.errorHandler = (error, vm) => {
 }
 
 function toastErr(err, message) {
-    toastr.error(message)
-    console.error(message, err)
+    toastr.error("Error", message, {
+        preventDuplicates: true
+    })
 }
 
 function wrap(name, method, section) {
