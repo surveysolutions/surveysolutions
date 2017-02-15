@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new ResumeWebInterview
@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             var view = new StartWebInterview
@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new FinishWebInterview
@@ -235,7 +235,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {

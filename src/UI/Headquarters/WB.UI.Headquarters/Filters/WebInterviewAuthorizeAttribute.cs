@@ -1,14 +1,12 @@
-﻿using System.Net;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -31,25 +29,26 @@ namespace WB.UI.Headquarters.Filters
             if (interviewSummary != null)
             {
                 if (interviewSummary.IsDeleted)
-                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired,
-                        Resources.WebInterview.Error_InterviewExpired);
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
                 if (interviewSummary.Status != InterviewStatus.InterviewerAssigned)
                 {
-                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.NoActionsNeeded,
-                        Resources.WebInterview.Error_NoActionsNeeded);
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
                 }
 
                 var webInterviewConfig = this.webInterviewConfigProvider.Get(new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
                 if (!webInterviewConfig.Started)
                 {
-                    throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewExpired,
-                        Resources.WebInterview.Error_InterviewExpired);
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                }
+
+                if (webInterviewConfig.ResponsibleId != interviewSummary.ResponsibleId)
+                {
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
                 }
             }
             else
-                throw new WebInterviewAccessException(WebInterviewAccessException.ExceptionReason.InterviewNotFound,
-                    Resources.WebInterview.Error_NotFound);
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, WebInterview.Error_NotFound);
         }
     }
 }
