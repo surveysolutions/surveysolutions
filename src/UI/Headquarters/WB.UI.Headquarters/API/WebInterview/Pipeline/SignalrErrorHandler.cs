@@ -6,6 +6,7 @@ using Elmah;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
@@ -35,7 +36,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             this.logger.Error(message, exceptionContext.Error);
 
-            ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception(message, exceptionContext.Error)));
+            if (!(exceptionContext.Error is WebInterviewAccessException))
+                ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception(message, exceptionContext.Error)));
 
             base.OnIncomingError(exceptionContext, invokerContext);
         }
