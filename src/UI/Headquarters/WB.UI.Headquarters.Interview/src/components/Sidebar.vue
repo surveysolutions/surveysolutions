@@ -1,5 +1,8 @@
 <template>
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
+        <div class="humburger-foldback-button" @click="toggleSidebarPanel">
+            <span></span>
+        </div>
         <div class="panel-group structured-content">
             <SidebarPanel :panel="coverSection" v-if="showCover"></SidebarPanel>
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
@@ -38,11 +41,11 @@
             },
             currentPanel() {
                 return this.$route.params.sectionId
-            },            
+            },
             interviewState() {
                 return this.$store.state.interviewState
-            },            
-            completeSection(){
+            },
+            completeSection() {
                 return {
                     collapsed: true,
                     title: "Complete",
@@ -52,9 +55,9 @@
                     state: this.interviewState,
                     validity: {
                         isValid: !(this.interviewState == "Invalid")
-                    } 
-             }
-        }
+                    }
+                }
+            }
         },
         beforeMount() {
             this.fetchSidebar(),
@@ -72,6 +75,9 @@
             },
             fetchInterviewStatus() {
                 this.$store.dispatch("fetchInterviewStatus")
+            },
+            toggleSidebarPanel() {
+                this.$store.dispatch("toggleSidebarPanel")
             }
         }
     }
