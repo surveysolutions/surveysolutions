@@ -10,7 +10,7 @@
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Tap to enter new item" v-blurOnEnterKey @blur="addRow"/>
+                        <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter new item" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
             </div>
