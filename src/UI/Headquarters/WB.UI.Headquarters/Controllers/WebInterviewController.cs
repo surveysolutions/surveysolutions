@@ -285,8 +285,8 @@ namespace WB.UI.Headquarters.Controllers
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
-                var returlUrl = Url.Action(nameof(Cover), routeValues: new { id });
-                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returlUrl });
+                var returnUrl = GenerateUrl(nameof(Cover), id);
+                return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
             return View("Index");
