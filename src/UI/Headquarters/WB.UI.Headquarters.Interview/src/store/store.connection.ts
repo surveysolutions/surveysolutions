@@ -16,7 +16,7 @@ const connectionStore = {
     },
     actions: {
         connectionSlow() {
-            toastr.warning("Network connection is slow", {
+            toastr.warning("Network", "Network connection is slow", {
                 preventDuplicates: true
             })
         },
