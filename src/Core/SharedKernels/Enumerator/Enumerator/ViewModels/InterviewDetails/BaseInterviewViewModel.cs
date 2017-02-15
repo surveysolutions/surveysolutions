@@ -50,6 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IJsonAllTypesSerializer jsonSerializer;
+        private readonly IEnumeratorSettings enumeratorSettings;
 
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -66,7 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer,
-            VibrationViewModel vibrationViewModel)
+            VibrationViewModel vibrationViewModel,
+            IEnumeratorSettings enumeratorSettings)
             : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -79,6 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.jsonSerializer = jsonSerializer;
+            this.enumeratorSettings = enumeratorSettings;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
@@ -134,6 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
 
+            this.IsVariablesShowed = this.enumeratorSettings.ShowVariables;
             this.IsSuccessfullyLoaded = true;
         }
 
@@ -253,6 +257,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public InterviewStageViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
+
+        public bool IsVariablesShowed { get; private set; }
 
         private string currentLanguage;
         public override string CurrentLanguage => this.currentLanguage;
