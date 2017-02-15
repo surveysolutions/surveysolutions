@@ -3,7 +3,7 @@
         <header>
             <slot name="header"></slot>
         </header>
-        <main class="web-interview hold-transition" :class="{'fullscreen-hidden-content': sidebarHidden}">
+        <main class="web-interview" :class="{'fullscreen-hidden-content': sidebarHidden}">
             <div class="container-fluid">
                 <slot></slot>
             </div>
