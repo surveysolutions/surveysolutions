@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
-using NHibernate.Persister.Entity;
 using Ninject;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -20,9 +18,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public void BeginTransaction()
         {
             if (this.lazySession != null)
-            {
                 throw new InvalidOperationException("Session/Transaction already started for this instance");
-            }
 
             this.lazySession = new Lazy<SessionHandle>(() =>
             {
@@ -36,9 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public void CommitTransaction()
         {
             if (this.lazySession == null)
-            {
                 throw new InvalidOperationException("Trying to commit transaction without beginning it");
-            }
 
             if (this.lazySession.IsValueCreated)
             {
@@ -53,9 +47,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public void RollbackTransaction()
         {
             if (this.lazySession == null)
-            {
                 throw new InvalidOperationException("Trying to rollback transaction without beginning it");
-            }
 
             if (this.lazySession.IsValueCreated)
             {
@@ -73,16 +65,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (this.lazySession?.IsValueCreated == true)
             {
                 this.lazySession.Value.Dispose();
-                this.lazySession = null;
             }
+
+            this.lazySession = null;
         }
 
         public ISession GetSession()
         {
             if (this.lazySession == null)
-            {
                 throw new InvalidOperationException("Trying to get session instance without starting a transaction first. Call BeginTransaction before getting session instance");
-            }
 
             return this.lazySession.Value.Session;
         }
