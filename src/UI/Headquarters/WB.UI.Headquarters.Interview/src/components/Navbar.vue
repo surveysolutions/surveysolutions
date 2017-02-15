@@ -3,7 +3,7 @@
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">Web interview #{{humanId}}</router-link>
+                <router-link class="active-page" active-class="active-page" :to="toFirstSection" v-if="$store.state.firstSectionId">Web interview</router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar top-menu"></span>
@@ -11,7 +11,7 @@
                     <span class="icon-bar bottom-menu"></span>
                 </button>
                 <router-link class="navbar-brand rotate-brand" :to="toFirstSection" active-class="rotate-brand" v-if="$store.state.firstSectionId">
-                        <div class="brand-name">Web interview #{{humanId}}</div>
+                        <div class="brand-name">Web interview</div>
                 </router-link>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -47,7 +47,7 @@
             this.$store.dispatch("loadInterview")
         },
         updated(){
-            document.title = `${this.questionnaireTitle} | Web Interview #${this.humanId}`
+            document.title = `${this.questionnaireTitle} | Web Interview`
         },
         computed: {
             canChangeLanguage() {
@@ -61,9 +61,6 @@
             },
             toFirstSection(){
                 return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
-            },
-            humanId(){
-               return this.$store.state.humanId
             }
         },
         methods: {

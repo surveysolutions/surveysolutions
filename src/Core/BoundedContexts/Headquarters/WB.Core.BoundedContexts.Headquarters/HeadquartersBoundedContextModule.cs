@@ -380,8 +380,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
-
-            this.Bind<IStatefullWebInterviewFactory>().To<StatefullWebInterviewFactory>();
         }
     }
 }

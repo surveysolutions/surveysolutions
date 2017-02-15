@@ -43,8 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 base.InterviewId = value;
             }
         }
-
-        public virtual int HumanId { get; set; }
+        
         public virtual string SummaryId { get; set; }
         public virtual string QuestionnaireTitle { get; set; }
         public virtual string ResponsibleName { get; set; }

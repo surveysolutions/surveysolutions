@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider configProvider;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IStatefullWebInterviewFactory statefulInterviewRepository;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers
             IGlobalInfoProvider globalInfo,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            IStatefullWebInterviewFactory statefulInterviewRepository,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
@@ -120,7 +120,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha,
-                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interview.Id.FormatGuid()),
                 StartedDate = interview.StartedDate
             };
         }
@@ -156,7 +155,6 @@ namespace WB.UI.Headquarters.Controllers
             return new FinishWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
-                InterviewId = this.statefulInterviewRepository.GetHumanInterviewId(interview.Id.FormatGuid()),
                 StartedDate = interview.StartedDate,
                 CompletedDate = interview.CompletedDate
             };
