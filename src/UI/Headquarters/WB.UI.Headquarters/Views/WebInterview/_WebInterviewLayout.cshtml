@@ -84,6 +84,10 @@
         });
     }
 
+    if (!navigator.cookieEnabled) {
+        document.getElementsByTagName('body')[0].className += " no-cookies";
+    }
+
     function onLogoError(source) {
         source.parentElement.className += " no-logo";
     }
