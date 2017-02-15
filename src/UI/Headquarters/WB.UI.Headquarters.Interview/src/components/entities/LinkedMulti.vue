@@ -20,13 +20,14 @@
 
     import * as map from "lodash/map"
     import * as find from "lodash/find"
+    import * as isEqual from "lodash/isequal"
 
     export default {
         name: 'LinkedMulti',
         computed: {
             answer: {
                 get() {
-                    return map(this.$me.answer, (x) => { return find(this.$me.options, { 'rosterVector': x }).value; })
+                    return map(this.$me.answer, (x) => { return find(this.$me.options, (a) => { return isEqual(a.rosterVector, x) }).value; })
                 },
                 set(value) {
                     const selectedOptions = map(value, (x) => { return find(this.$me.options, { 'value': x }).rosterVector; });

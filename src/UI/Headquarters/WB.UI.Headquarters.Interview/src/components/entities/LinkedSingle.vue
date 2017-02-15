@@ -19,6 +19,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as find from "lodash/find"
+    import * as isEqual from "lodash/isequal"
 
     export default {
         name: "LinkedSingle",
@@ -27,7 +28,7 @@
                 get() {
                     if (this.$me.options == null || this.$me.answer == null)
                         return;
-                    return find(this.$me.options, { 'rosterVector': this.$me.answer }).value;
+                    return find(this.$me.options, (a) => { return isEqual(a.rosterVector, this.$me.answer) }).value;
                 },
                 set(value) {
                     const selectedOption = find(this.$me.options, { 'value': value });
