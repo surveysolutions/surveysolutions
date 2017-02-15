@@ -273,12 +273,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
         {
-            return ids.Select(GetEntityDetails).ToArray();
+            var callerInterview = this.GetCallerInterview();
+            return ids.Select(id => GetEntityDetails(id, callerInterview)).ToArray();
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
-        public InterviewEntity GetEntityDetails(string id)
+        private InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview)
         {
             if (id == "NavigationButton")
             {
@@ -286,8 +287,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
 
             var identity = Identity.Parse(id);
-            var callerInterview = this.GetCallerInterview();
-
+            
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
             var questionnaire = this.GetCallerQuestionnaire();
             if (question != null)
@@ -499,7 +499,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var shownPanels = currentOpenSection.Parents.Union(new[] {currentOpenSection});
                 visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
             }
-            foreach (var parentId in parentIds)
+            foreach (var parentId in parentIds.Distinct())
             {
                 var children = parentId == null
                     ? interview.GetEnabledSections()

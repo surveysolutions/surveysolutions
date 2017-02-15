@@ -109,7 +109,6 @@ declare interface IWebInterviewApi {
     hasPrefilledQuestions(): boolean
     isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]
-    getEntityDetails(id: string): IInterviewEntity
     getEntitiesDetails(ids: string[]): IInterviewEntity[]
     getBreadcrumbs(): IBreadcrumpInfo
     getSidebarState(): ISidebarPanel[]
