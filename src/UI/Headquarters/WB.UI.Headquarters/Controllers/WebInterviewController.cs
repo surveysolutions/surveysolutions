@@ -22,8 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -177,15 +175,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            if (interview.IsDeleted)
-            {
-                return this.HttpNotFound();
-            }
-
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
             
-            if (interview.Status != InterviewStatus.InterviewerAssigned && question?.AsMultimedia != null)
+            if (!interview.AcceptsInterviewerAnswers() && question?.AsMultimedia != null)
             {
                 return this.Json("fail");
             }

@@ -12,6 +12,7 @@ using System.Web.SessionState;
 using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
+using Prometheus;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -62,10 +63,14 @@ namespace WB.UI.Headquarters
             filters.Add(new ApiMaintenanceFilter());
         }
 
+        private static readonly Counter ExceptionsLogged = Prometheus.Metrics.CreateCounter(@"exceptions_raised", @"Total exceptions raised");
+        
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
             if (lastError.IsHttpNotFound()) return;
+
+            ExceptionsLogged.Inc();
 
             this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
