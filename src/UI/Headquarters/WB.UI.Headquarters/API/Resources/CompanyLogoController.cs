@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return response;
             }
 
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return Request.CreateResponse(HttpStatusCode.NotFound);
         }
 
         private string GetEtagValue(byte[] bytes)

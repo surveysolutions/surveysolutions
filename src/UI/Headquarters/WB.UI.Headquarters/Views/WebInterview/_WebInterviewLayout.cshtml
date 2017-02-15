@@ -19,56 +19,7 @@
     <!-- cssApp:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
-    <!-- jsLibs:js -->
-    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
-    <!-- endinject -->
     <title>@WebInterview.StartPageTitle</title>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(".right-column .centered-box-table-cell").hide();
-            var a = $(".right-column .centered-box-table-cell").length;
-            var array = $(".right-column .centered-box-table-cell");
-            var i = 0;
-            $(".right-column").find(array[i]).show();
-            $("#next-screen").click(function () {
-                if (i < a - 1) {
-                    i++;
-                    $(".right-column .centered-box-table-cell").hide();
-                    $(".right-column").find(array[i]).show();
-
-                } else {
-                    $(".right-column .centered-box-table-cell").hide();
-                    $(".right-column").find(array[0]).show();
-                    i = 0;
-                };
-            });
-            $("<img/>")
-                .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
-                .attr("src", $("img#placeholder").attr("src"));
-        });
-
-        $.fn.preventDoubleSubmission = function () {
-            $(this).on('submit', function (e) {
-                var $form = $(this);
-
-                if ($form.data('submitted') === true) {
-                    e.preventDefault();
-                } else {
-                    $form.data('submitted', true);
-                }
-            });
-
-            // Keep chainability
-            return this;
-        };
-        $(function () {
-            $('form').preventDoubleSubmission();
-        });
-
-        if (!navigator.cookieEnabled) {
-            $('body').addClass("no-cookies");
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -91,7 +42,7 @@
                 <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
-                            <img src="#" id="placeholder" alt="survey management" />
+                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" onerror="onLogoError(this)" id="placeholder" alt="survey management" />
                             <div class="default-logo"></div>
                             <p class="additional-info-block">Powered by <a href="http://support.mysurvey.solutions" target="_blank">Survey Solutions</a></p>
                         </div>
@@ -119,5 +70,23 @@
             </div>
         </div>
     </footer>
+<script type="text/javascript">
+    var allForms = document.getElementsByTagName("form");
+    for (var i = 0; i < allForms.length; i++) {
+        allForms[i].addEventListener("submit", function (evnt) {
+            var allButtonsInForm = evnt.target.getElementsByTagName("button");
+            for (var index = 0; index < allButtonsInForm.length; index++) {
+                var btn = allButtonsInForm[index];
+                if (btn.type === 'submit') {
+                    btn.disabled = true;
+                }
+            }
+        });
+    }
+
+    function onLogoError(source) {
+        source.parentElement.className += " no-logo";
+    }
+</script>
 </body>
 </html>
