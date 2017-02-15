@@ -12,7 +12,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    public class PostgresEventStore : IStreamableEventStore
+    public class PostgresEventStore  : IStreamableEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
         private static long lastUsedGlobalSequence = -1;
@@ -34,31 +34,46 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            int processed = 0;
+            IEnumerable<CommittedEvent> batch;
+            do
+            {
+                batch = this.ReadBatch(id, minVersion, processed).ToList();
+                foreach (var @event in batch)
+                {
+                    processed++;
+                    yield return @event;
+                }
+            } while (batch.Any());
+        }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
+
+        private IEnumerable<CommittedEvent> ReadBatch(Guid id, int minVersion, int processed)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence";
-                    command.Parameters.AddWithValue("minVersion", minVersion);
+                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence LIMIT :batchSize OFFSET :processed";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
+                    command.Parameters.AddWithValue("minVersion", minVersion);
+                    command.Parameters.AddWithValue("batchSize", BatchSize);
+                    command.Parameters.AddWithValue("processed", processed);
 
-                    using (IDataReader npgsqlDataReader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
-                        while (npgsqlDataReader.Read())
+                        while (reader.Read())
                         {
-                            var commitedEvent = this.ReadSingleEvent(npgsqlDataReader);
-
-                            yield return commitedEvent;
+                            yield return this.ReadSingleEvent(reader);
                         }
                     }
                 }
             }
         }
-
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-            => this.Read(id, minVersion);
 
         public int? GetLastEventSequence(Guid id)
         {
