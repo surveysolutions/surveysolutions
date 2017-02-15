@@ -534,5 +534,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 commentTime: commentDto.Date,
                 comment: commentDto.Text,
                 questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
+
+        public bool AcceptsInterviewerAnswers()
+        {
+            return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
+        }
     }
 }
