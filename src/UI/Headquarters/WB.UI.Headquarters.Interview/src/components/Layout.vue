@@ -3,18 +3,24 @@
         <header>
             <slot name="header"></slot>
         </header>
-        <main class="web-interview hold-transition">
+        <main class="web-interview hold-transition" :class="{'fullscreen-hidden-content': sidebarHidden}">
             <div class="container-fluid">
                 <slot></slot>
             </div>
         </main>
-        <footer>
+        <footer :class="{'footer-adaptive-content': sidebarHidden}">
             <slot name="footer"></slot>
         </footer>
     </div>
 </template>
 <script lang="ts">
     export default {
-        name: 'wb-layout'
+        name: 'wb-layout',
+        computed: {
+            sidebarHidden() {
+                return this.$store.state.sidebarHidden
+            }
+        }
     }
+
 </script>
