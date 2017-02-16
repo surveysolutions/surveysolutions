@@ -1,5 +1,5 @@
 <template>
-    <div class="unit-title" v-if="showBreadcrumbs">
+    <div class="unit-title break-line" v-if="showBreadcrumbs">
         <div class="humburger-foldback-button" @click="toggleSidebarPanel">
             <span></span>
         </div>
