@@ -11,11 +11,12 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
-        private static readonly NamedLocker locker = new NamedLocker();
+        private readonly IAggregateLock aggregateLock;
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
+            this.aggregateLock = aggregateLock;
         }
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -23,24 +24,23 @@ namespace WB.Infrastructure.Native.Storage
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregateRoot = this.GetFromCache(aggregateId);
+            return aggregateLock.RunWithLock(aggregateId.FormatGuid(),
+            () => {
+                var aggregateRoot = this.GetFromCache(aggregateId) ??
+                    base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
-            if (aggregateRoot == null)
-            {
-                aggregateRoot = locker.RunWithLock(aggregateId.FormatGuid(), () => base.GetLatest(aggregateType, aggregateId, progress, cancellationToken));
-            }
+                if (aggregateRoot != null)
+                {
+                    this.PutToTopOfCache(aggregateRoot);
+                }
 
-            if (aggregateRoot != null)
-            {
-                this.PutToTopOfCache(aggregateRoot);
-            }
-
-            return aggregateRoot;
+                return aggregateRoot;
+            });
         }
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            var cachedAggregate = Cache.Get(aggregateId.ToString()) as IEventSourcedAggregateRoot;
+            var cachedAggregate = Cache.Get(aggregateId.FormatGuid()) as IEventSourcedAggregateRoot;
 
             if (cachedAggregate == null) return null;
 
@@ -54,11 +54,11 @@ namespace WB.Infrastructure.Native.Storage
             ? System.Web.HttpRuntime.Cache
             : System.Web.HttpContext.Current.Cache;
 
-        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot) => Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot) => Cache.Insert(aggregateRoot.EventSourceId.FormatGuid(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
 
         public void Evict(Guid aggregateId)
         {
-            Cache.Remove(aggregateId.ToString());
+            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () => Cache.Remove(aggregateId.ToString()));
         }
     }
 }
