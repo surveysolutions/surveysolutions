@@ -163,8 +163,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<RosterInstancesTitleChanged> @event)
-            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
-                @event.Payload.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToArray());
+        {
+            var rosterIdentities = @event.Payload.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToArray();
+            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, rosterIdentities);
+            this.RefreshLinkedToRosterQuestions(@event.EventSourceId, rosterIdentities);
+        }
 
         public void Handle(IPublishedEvent<GroupsEnabled> @event)
             => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
@@ -236,7 +239,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<LinkedToListOptionsChanged> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
-        
+
+        private void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            var rosterIds = rosterIdentities.Select(x => x.Id).ToHashSet();
+
+            var linkedToRosterQuestionIds = rosterIds.SelectMany(x => questionnaire.GetLinkedToSourceEntity(x));
+
+            foreach (var linkedToRosterQuestionId in linkedToRosterQuestionIds)
+            {
+                this.webInterviewNotificationService.RefreshEntities(interviewId, interview.GetAllIdentitiesForEntityId(linkedToRosterQuestionId).ToArray());
+            }
+        }
+
         private void RefreshLinkedToListQuestions(Guid interviewId, Identity[] questionIdentities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
@@ -246,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 if(interview.GetTextListQuestion(questionIdentity) == null) continue;
                 
-                Guid[] listQuestionIds = questionnaire.GetLinkedToSourceQuestions(questionIdentity.Id).ToArray();
+                Guid[] listQuestionIds = questionnaire.GetLinkedToSourceEntity(questionIdentity.Id).ToArray();
                 if (!listQuestionIds.Any())
                     return;
 

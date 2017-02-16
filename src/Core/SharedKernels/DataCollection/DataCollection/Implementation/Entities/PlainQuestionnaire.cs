@@ -1556,10 +1556,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetAllSections().First();
         }
 
-        public IEnumerable<Guid> GetLinkedToSourceQuestions(Guid linkedSourceQuestionId)
+        public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
         {
             return this.AllQuestions.Where(
-                    x => x.LinkedToQuestionId.HasValue && x.LinkedToQuestionId == linkedSourceQuestionId)
+                    x => (x.LinkedToQuestionId.HasValue && x.LinkedToQuestionId == linkedSourceEntityId)
+                      || (x.LinkedToRosterId.HasValue && x.LinkedToRosterId == linkedSourceEntityId))
                     .Select(x => x.PublicKey);
         }
     }

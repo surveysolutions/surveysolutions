@@ -1,7 +1,7 @@
 <template>
     <wb-question :question="$me" questionCssClassName="single-select-question">
         <div class="question-unit">
-            <div class="options-group">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="radio" v-for="option in $me.options">
                     <div class="field">
                         <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
@@ -11,7 +11,7 @@
                         <wb-remove-answer />
                     </div>
                 </div>
-                <div v-if="noOptions">Options will be available after answering referenced question</div>
+                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
             </div>
         </div>
     </wb-question>
