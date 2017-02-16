@@ -55,7 +55,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public void Evict(Guid aggregateId)
         {
-            Cache.Remove(aggregateId.ToString());
+            locker.RunWithLock(aggregateId.FormatGuid(), () => Cache.Remove(aggregateId.ToString()));
         }
     }
 }
