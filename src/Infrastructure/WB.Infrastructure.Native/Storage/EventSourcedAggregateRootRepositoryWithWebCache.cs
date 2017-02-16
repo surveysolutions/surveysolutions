@@ -23,12 +23,9 @@ namespace WB.Infrastructure.Native.Storage
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregateRoot = this.GetFromCache(aggregateId);
-
-            if (aggregateRoot == null)
-            {
-                aggregateRoot = locker.RunWithLock(aggregateId.FormatGuid(), () => base.GetLatest(aggregateType, aggregateId, progress, cancellationToken));
-            }
+            IEventSourcedAggregateRoot aggregateRoot = 
+                locker.RunWithLock(aggregateId.FormatGuid(),
+                        () => this.GetFromCache(aggregateId) ?? base.GetLatest(aggregateType, aggregateId, progress, cancellationToken));
 
             if (aggregateRoot != null)
             {
