@@ -24,7 +24,8 @@
             "imageGetBase" :  '@Url.Content("~/api/WebInterviewResources")',
             "signalrPath": '@Url.Content("~/signalr/hubs")',
             "verboseLogging": <%= htmlWebpackPlugin.options.verboseLogging %>,
-            "basePath": '@Url.Content("~/InterviewApp")/'
+            "assetsPath": '@Url.Content("~/InterviewApp")/',
+            "appVersion": '@(Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())'
         }
     </script>
 <div id="app"></div>

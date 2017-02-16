@@ -1,9 +1,37 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     public class WebInterviewStateManager : HubPipelineModule
     {
+        private readonly IProductVersion productVersion;
+
+        public WebInterviewStateManager(IProductVersion productVersion)
+        {
+            this.productVersion = productVersion;
+        }
+
+        protected override bool OnBeforeConnect(IHub hub)
+        {
+            this.ReloadIfOlderVersion(hub);
+            return base.OnBeforeConnect(hub);
+        }
+
+        protected override bool OnBeforeReconnect(IHub hub)
+        {
+            this.ReloadIfOlderVersion(hub);
+            return base.OnBeforeReconnect(hub);
+        }
+
+        private void ReloadIfOlderVersion(IHub hub)
+        {
+            if (this.productVersion.ToString() != hub.Context.QueryString[@"appVersion"])
+            {
+                hub.Clients.Caller.reloadInterview();
+            }
+        }
+
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
             var interviewId = context.Hub.Context.QueryString[@"interviewId"];

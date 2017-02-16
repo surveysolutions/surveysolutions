@@ -1,7 +1,7 @@
 // main entry point to signalr api hub
 
 import * as jQuery from "jquery"
-import { imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
+import { appVersion, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "./../config"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import * as $script from "scriptjs"
 import "signalr"
@@ -101,7 +101,8 @@ async function hubStarter() {
 }
 
 export const queryString = {
-    interviewId: null
+    interviewId: null,
+    appVersion
 }
 
 export async function getInstance() {
