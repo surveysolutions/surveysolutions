@@ -305,7 +305,7 @@ label.inactive{
 		margin: 0;
 		color: $gray_light;
 		// z-index: 1;
-		& + .btn-link{
+		& + .instructions-wrap{
 			display: none;
 		}
 	}
@@ -715,6 +715,13 @@ label.inactive{
 			@include width-questionnaire(($filter-width + $content-width));
 		}
 	}
+}
+.options-not-available{
+	font: 13px/15px Arial, sans-serif;
+    font-weight: bold;
+    padding: 5px;
+    font-style: italic;
+    color: $gray_light;
 }
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
