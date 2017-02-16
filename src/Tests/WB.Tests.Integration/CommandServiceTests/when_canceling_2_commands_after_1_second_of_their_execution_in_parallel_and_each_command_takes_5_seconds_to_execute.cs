@@ -64,9 +64,9 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
             catch (AggregateException) { }
         };
-
-        It should_execute_all_2_commands = () =>
-            executedCommands.ShouldContainOnly("first", "second");
+        
+        It should_execute_only_first_command = () =>
+            executedCommands.ShouldContainOnly("first");
 
         private static List<string> executedCommands = new List<string>();
         private static CommandService commandService;
