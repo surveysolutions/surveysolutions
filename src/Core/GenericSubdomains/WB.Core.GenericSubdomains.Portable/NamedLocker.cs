@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -18,6 +19,12 @@ namespace WB.Core.GenericSubdomains.Portable
         public object GetLock(string name)
         {
             return this.locks.GetOrAdd(name, s => new object());
+        }
+
+        public TResult RunWithLock<TResult>(string name, Func<TResult> body)
+        {
+            lock (this.locks.GetOrAdd(name, s => new object()))
+                return body();
         }
     }
 }
