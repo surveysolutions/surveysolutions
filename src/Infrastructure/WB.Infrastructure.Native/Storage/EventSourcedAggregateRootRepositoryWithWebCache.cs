@@ -40,7 +40,7 @@ namespace WB.Infrastructure.Native.Storage
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            var cachedAggregate = Cache.Get(aggregateId.ToString()) as IEventSourcedAggregateRoot;
+            var cachedAggregate = Cache.Get(aggregateId.FormatGuid()) as IEventSourcedAggregateRoot;
 
             if (cachedAggregate == null) return null;
 
@@ -54,7 +54,7 @@ namespace WB.Infrastructure.Native.Storage
             ? System.Web.HttpRuntime.Cache
             : System.Web.HttpContext.Current.Cache;
 
-        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot) => Cache.Insert(aggregateRoot.EventSourceId.ToString(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot) => Cache.Insert(aggregateRoot.EventSourceId.FormatGuid(), aggregateRoot, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
 
         public void Evict(Guid aggregateId)
         {
