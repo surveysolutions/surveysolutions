@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web.Caching;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
@@ -10,6 +11,8 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
+        private static readonly NamedLocker locker = new NamedLocker();
+
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
             : base(eventStore, snapshotStore, repository)
         {
@@ -20,9 +23,12 @@ namespace WB.Infrastructure.Native.Storage
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregateRoot
-                = this.GetFromCache(aggregateId)
-                ?? base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+            IEventSourcedAggregateRoot aggregateRoot = this.GetFromCache(aggregateId);
+
+            if (aggregateRoot == null)
+            {
+                aggregateRoot = locker.RunWithLock(aggregateId.FormatGuid(), () => base.GetLatest(aggregateType, aggregateId, progress, cancellationToken));
+            }
 
             if (aggregateRoot != null)
             {
