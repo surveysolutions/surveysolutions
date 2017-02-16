@@ -73,6 +73,12 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             if (IsFinishing)
             {
+                var messenger = Mvx.Resolve<IMvxMessenger>();
+                messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
+                messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
+
+                this.ViewModel.Sections.Dispose();
+
                 this.Dispose();
             }
         }
@@ -80,17 +86,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         private void OnSectionChange(SectionChangeMessage msg)
         {
             Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers(); }, null);
-        }
-
-        protected override void OnStop()
-        {
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
-
-            this.ViewModel.Sections.Dispose();
-
-            base.OnStop();
         }
 
         protected override void OnPostCreate(Bundle savedInstanceState)
