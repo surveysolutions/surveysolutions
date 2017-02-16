@@ -35,10 +35,11 @@ namespace WB.WebInterview.Stress
             var config = new Deserializer().Deserialize<Configuration>(File.OpenText(file));
             var list = new List<Task>();
             var apiMaster = new ApiMaster();
+            var share = new HashSet<string>();
 
             for (var i = 0; i < config.workersCount; i++)
             {
-                var worker = new Worker(config, apiMaster, cts.Token);
+                var worker = new Worker(config, apiMaster, share, cts.Token);
                 list.Add(worker.StartAsync());
             }
 
