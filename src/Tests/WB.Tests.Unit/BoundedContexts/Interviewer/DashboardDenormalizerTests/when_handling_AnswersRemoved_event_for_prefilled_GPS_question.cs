@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
