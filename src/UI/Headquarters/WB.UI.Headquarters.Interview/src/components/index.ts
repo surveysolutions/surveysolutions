@@ -10,8 +10,6 @@ vue.component("Navbar", Navbar)
 vue.component("Sidebar", Sidebar)
 vue.component("Breadcrumbs", Breadcrumbs)
 
-declare const require: any
-
 vue.component("idle-timeout", (resolve, reject) => {
      require.ensure(["./IdleTimeout"], r => {
         resolve(require("./IdleTimeout").default)

@@ -3,8 +3,8 @@ import * as map from "lodash/map"
 import * as Vue from "vue"
 
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
+import { batchedAction } from "../helpers"
 import router from "./../router"
-import { batchedAction } from "./helpers"
 
 export default {
     onBeforeNavigate({commit}) {

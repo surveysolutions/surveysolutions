@@ -1,4 +1,4 @@
-import * as indexOf from "lodash.indexOf"
+import indexOf from "lodash/indexOf"
 
 import * as Vue from "vue"
 

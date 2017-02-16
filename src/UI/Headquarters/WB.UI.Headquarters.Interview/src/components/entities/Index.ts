@@ -1,5 +1,3 @@
-declare const require: any
-
 // tslint:disable-next-line:ordered-imports
 import * as jQuery from "jquery"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
@@ -13,6 +11,7 @@ import * as vue from "vue"
 import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
 import CategoricalYesNo from "./CategoricalYesNo"
+import Combobox from "./Combobox"
 import DateTime from "./DateTime"
 import Double from "./Double"
 import Gps from "./Gps"
@@ -47,10 +46,11 @@ vue.component("TextList", TextList)
 vue.component("TextQuestion", TextQuestion)
 vue.component("Unsupported", Unsupported)
 vue.component("wb-question", Question)
+vue.component("Combobox", Combobox)
 
-vue.component("Combobox", (resolve, reject) => {
-     require.ensure(["./Combobox"], r => {
-        resolve(require("./Combobox").default)
+vue.component("wb-typeahead", (resolve, reject) => {
+     require.ensure(["./ui/typeahead"], r => {
+        resolve(require("./ui/typeahead").default)
     }, "libs")
 })
 

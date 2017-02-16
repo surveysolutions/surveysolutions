@@ -14,7 +14,6 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import wbTypeahead from "./ui/typeahead"
 
     export default {
         name: 'ComboboxQuestion',
@@ -36,7 +35,6 @@
             answerComboboxQuestion(newValue) {
                  this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
             }
-        },
-        components: { wbTypeahead }
+        }
     }
 </script>
