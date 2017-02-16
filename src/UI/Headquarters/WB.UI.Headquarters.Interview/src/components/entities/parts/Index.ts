@@ -1,6 +1,5 @@
 import * as vue from "vue"
 
-import Attachment from "./Attachment"
 import Instructions from "./Instructions"
 import Progress from "./Progress"
 import RemoveAnswer from "./RemoveAnswer"
@@ -11,5 +10,10 @@ vue.component("wb-instructions", Instructions)
 vue.component("wb-title", Title)
 vue.component("wb-validation", Validation)
 vue.component("wb-remove-answer", RemoveAnswer)
-vue.component("wb-attachment", Attachment)
 vue.component("wb-progress", Progress)
+
+vue.component("wb-attachment", (resolve, reject) => {
+     require.ensure(["./Attachment"], r => {
+        resolve(require("./Attachment").default)
+    }, "libs")
+})

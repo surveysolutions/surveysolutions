@@ -4,7 +4,7 @@ import * as groupBy from "lodash/groupby"
 import * as Vue from "vue"
 import { apiCaller } from "../api"
 import { safeStore } from "../errors"
-import { batchedAction } from "./helpers"
+import { batchedAction } from "../helpers"
 
 declare interface ISidebarState {
     panels: ISidebarPanel[]
