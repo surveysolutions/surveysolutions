@@ -437,18 +437,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
-
-            if (IsSingleLinkedOption || IsMultiLinkedOption)
-            {
-                var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
-                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
-                options = Tree.GetAllNodesInEnumeratorOrder()
-                    .Where(node => node.Identity.Id == linkedLinkedSourceId)
-                    .Select(node => node.Identity.RosterVector)
-                    .Where(rosterVector => optionsHashSet.Contains(rosterVector))
-                    .ToArray();
-            }
-
+            options = this.GetOptionsInCorrectOrder(options);
             this.AsLinked.SetOptions(options);
 
             if (!removeAnswer) return;
@@ -460,6 +449,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsMultiLinkedOption.RemoveAnswer();
             else
                 this.AsSingleLinkedOption.RemoveAnswer();
+        }
+
+        private RosterVector[] GetOptionsInCorrectOrder(RosterVector[] options)
+        {
+            if (this.IsSingleLinkedOption || this.IsMultiLinkedOption)
+            {
+                var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
+                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                return this.Tree.GetAllNodesInEnumeratorOrder()
+                    .Where(node => node.Identity.Id == linkedLinkedSourceId)
+                    .Select(node => node.Identity.RosterVector)
+                    .Where(rosterVector => optionsHashSet.Contains(rosterVector))
+                    .ToArray();
+            }
+            return options;
         }
 
         public void RemoveAnswer()
