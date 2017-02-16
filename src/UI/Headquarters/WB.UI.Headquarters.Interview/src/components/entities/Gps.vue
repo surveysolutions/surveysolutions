@@ -69,11 +69,9 @@
                 this.isInProgress = true
                 this.$store.dispatch("fetchProgress", 1)
 
-                var viewModel = this
-                var questionId = this.$me.id
                 navigator.geolocation.getCurrentPosition(
-                    function (position) { viewModel.onPositionDetermined(position, questionId) },
-                    function (error) { viewModel.onPositionDeterminationFailed(error) },
+                    (position) => { this.onPositionDetermined(position, this.$me.id) },
+                    (error) => { this.onPositionDeterminationFailed(error) },
                     {
                         enableHighAccuracy: true,
                         timeout: 30000,
