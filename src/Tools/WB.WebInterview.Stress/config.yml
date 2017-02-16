@@ -1,17 +1,20 @@
 ﻿# Link to web interview start page. It should be not protected by captcha
-startUri: https://superhq-dev.mysurvey.solutions/WebInterview/Start/ddb717c84a09420c9001dfb099038f1b$1
-
+# startUri: https://superhq-dev.mysurvey.solutions/WebInterview/Start/ddb717c84a09420c9001dfb099038f1b$1
+# startUri: http://localhost/headquarters/WebInterview/Start/06e2f3d98d0242c2a026615dca7a09b8$1
+startUri: http://localhost/headquarters/WebInterview/Start/a43e9bcdc4da41c2bec49f8d684ac252$13
 ## Worker delays specify max amount of time for random generator beetween 0 and delay in ms
 
 # Specify how much time worker should wait while answering next question
-answerDelay: 1500
+answerDelay: 50
 
 # Spefic how much time worker should work with single interview before starting new
-restartWorkersIn: 200000
+restartWorkersIn: 5000
 
 # max random delay before creating new interview, 
 # usefull to make it around 30-40 seconds, so that server is not hammered with create interview tasks
 createInterviewDelay: 1000
 
 # how much workers should spam server in parallel
-workersCount: 50
+workersCount: 8
+
+shareInterviewPropability: 0.5

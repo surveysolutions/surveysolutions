@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace WB.WebInterview.Stress
         private static readonly Random Rnd = new Random();
         private readonly Configuration _config;
         private readonly ApiMaster _apiMaster;
+        private readonly HashSet<string> _sharedInterviews;
         private readonly CancellationToken _cancellationToken;
         
         public string WorkerId { get; }
@@ -33,10 +35,11 @@ namespace WB.WebInterview.Stress
         private string _interviewLocation;
         private int? _inDelay;
 
-        public Worker(Configuration configuration, ApiMaster apiMaster, CancellationToken cancellationToken = default(CancellationToken))
+        public Worker(Configuration configuration, ApiMaster apiMaster, HashSet<string> sharedInterviews, CancellationToken cancellationToken = default(CancellationToken))
         {
             _config = configuration;
             _apiMaster = apiMaster;
+            _sharedInterviews = sharedInterviews;
             _cancellationToken = cancellationToken;
             WorkerId = Interlocked.Increment(ref _workerCounter).ToString();
         }
@@ -52,10 +55,23 @@ namespace WB.WebInterview.Stress
             {
                 _liveTime = Rnd.Next(_config.restartWorkersIn);
 
-                while (!await CreateInterviewAsync())
+                if (_sharedInterviews.Any() && Rnd.NextDouble() < _config.shareInterviewPropability)
                 {
-                    Log("Cannot create interview");
-                };
+                    lock (_sharedInterviews)
+                    {
+                        this.InterviewId = _sharedInterviews.Skip(Rnd.Next(0, _sharedInterviews.Count)).First();
+                        Log($"Reusing other interview. #{this.InterviewId}");
+                    }
+                }
+                else
+                {
+                    while (!await CreateInterviewAsync())
+                    {
+                        Log("Cannot create interview");
+                    }
+
+                    _sharedInterviews.Add(this.InterviewId);
+                }
 
                 await WorkAsync().ConfigureAwait(false);
 
@@ -63,6 +79,8 @@ namespace WB.WebInterview.Stress
 
                 _restartWatcher.Restart();
                 await QueryAsync().ConfigureAwait(false);
+
+                _sharedInterviews.Remove(this.InterviewId);
                 _client.Stop();
                 _client.Dispose();
             }
