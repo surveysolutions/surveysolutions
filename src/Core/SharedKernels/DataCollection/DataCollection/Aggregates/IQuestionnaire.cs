@@ -252,6 +252,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasVariable(Guid entityId);
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
-        IEnumerable<Guid> GetLinkedToSourceQuestions(Guid linkedSourceQuestionId);
+        IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
     }
 }
