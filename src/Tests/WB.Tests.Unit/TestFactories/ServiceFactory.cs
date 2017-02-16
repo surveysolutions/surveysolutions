@@ -60,8 +60,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.SharedKernels.DataCollection;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -82,7 +80,8 @@ namespace WB.Tests.Unit.TestFactories
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
-                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>());
+                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
+                new AggregateLock());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();

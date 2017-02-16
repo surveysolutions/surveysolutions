@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain
@@ -64,6 +63,7 @@ namespace Ncqrs.Domain
 
         public void MarkChangesAsCommitted()
         {
+            this.AcceptChanges();
             this.changes.Clear();
         }
     }
