@@ -355,6 +355,7 @@
     <Content Include="Content\identity\favicon-hq-72x72.png" />
     <Content Include="Content\identity\favicon-hq-76x76.png" />
     <Content Include="Content\identity\favicon-hq.png" />
+    <Content Include="Content\img\maps.png" />
     <Content Include="Content\interview.css" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\jquery.pnotify.default.css" />
@@ -543,6 +544,7 @@
     <Content Include="Dependencies\img\identity\favicon-hq.png" />
     <Content Include="Dependencies\img\logo-retina.png" />
     <Content Include="Dependencies\img\logo.png" />
+    <Content Include="Dependencies\img\maps.png" />
     <Content Include="Dependencies\img\pretty-checkable-sprites.png" />
     <Content Include="Dependencies\img\questionnaire-sprite.png" />
     <Content Include="Dependencies\img\questionnaire-sprite2k.png" />
