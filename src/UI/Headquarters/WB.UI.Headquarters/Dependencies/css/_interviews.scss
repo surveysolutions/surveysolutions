@@ -201,7 +201,7 @@ td.errors{
 		display: none;
 	}
 	.screen-small-resolution{
-		padding-left: 15px;
+		padding: 15px;
 		display: block;
 		font: 14px/16px Arial, sans-serif;
 		.row-unit{
@@ -273,6 +273,9 @@ td.errors{
 	}
 }
 @media (max-width: $screen-xs-min){
+	.modal-dialog{
+		width: 100%;
+	}
 	.screen-small-resolution{
 		.table-min-wrapper{
 			flex-direction: column;
