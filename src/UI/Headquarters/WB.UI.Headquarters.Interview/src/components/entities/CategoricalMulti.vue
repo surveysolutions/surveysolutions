@@ -2,7 +2,7 @@
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'" :noAnswer="noOptions">
         <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
         <div class="question-unit">
-            <div class="options-group">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="form-group" v-for="option in $me.options">
                     <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
                         v-disabledWhenUnchecked="allAnswersGiven">
@@ -11,7 +11,7 @@
                     </label>
                         <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
-                <div v-if="noOptions">Options will be available after answering referenced question</div>
+                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
             </div>
         </div>
     </wb-question>
