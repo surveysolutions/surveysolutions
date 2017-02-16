@@ -446,6 +446,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.QuestionTupleArrayUpdateMap[questionId].Invoke(null);
             if (this.QuestionDecimal2DArrayUpdateMap.ContainsKey(questionId))
                 this.QuestionDecimal2DArrayUpdateMap[questionId].Invoke(null);
+            if (this.QuestionYesNoAnswerUpdateMap.ContainsKey(questionId))
+                this.QuestionYesNoAnswerUpdateMap[questionId].Invoke(null);
         }
 
         protected void Validate(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)

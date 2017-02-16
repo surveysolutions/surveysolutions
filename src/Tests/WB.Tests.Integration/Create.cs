@@ -356,6 +356,43 @@ namespace WB.Tests.Integration
             return multyOptionsQuestion;
         }
 
+        public static MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
+            string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId = null,
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
+            params int[] answers)
+            => new MultyOptionsQuestion("Question MO")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = "mo_question",
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                AreAnswersOrdered = areAnswersOrdered,
+                MaxAllowedAnswers = maxAllowedAnswers,
+                QuestionType = QuestionType.MultyOption,
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
+                YesNoView = isYesNo,
+                Answers = textAnswers?.ToList() ?? answers.Select(a => Answer(a.ToString(), a)).ToList(),
+                Properties = new QuestionProperties(false, false)
+                {
+                    OptionsFilterExpression = optionsFilterExpression
+                }
+            };
+
+        public static MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false,
+            int? maxAnswersCount = null, string variable = null)
+        {
+            var yesNo = MultipleOptionsQuestion(
+                isYesNo: true,
+                questionId: questionId,
+                answers: answers ?? new int[] { },
+                areAnswersOrdered: ordered,
+                maxAllowedAnswers: maxAnswersCount);
+            yesNo.StataExportCaption = variable;
+            return yesNo;
+        }
+
         public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
             string validationExpression = null)
         {
@@ -852,6 +889,17 @@ namespace WB.Tests.Integration
             public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid questionId, RosterVector rosterVector, params AnsweredYesNoOption[] answers)
                 => new AnswerYesNoQuestion(Guid.NewGuid(), Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answers);
 
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
+                Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
+                DateTime? answerTime = null)
+                => new AnswerYesNoQuestion(
+                    interviewId: Guid.NewGuid(),
+                    userId: userId ?? Guid.NewGuid(),
+                    questionId: questionId ?? Guid.NewGuid(),
+                    rosterVector: rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    answerTime: answerTime ?? DateTime.UtcNow,
+                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] { });
+
             public static AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestion(
                 Guid? questionId = null,
                 RosterVector rosterVector = null,
@@ -860,7 +908,7 @@ namespace WB.Tests.Integration
                     Guid.NewGuid(),
                     Guid.NewGuid(),
                     questionId ?? Guid.NewGuid(),
-                    rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                     DateTime.UtcNow,
                     answer ?? 42);
         }
