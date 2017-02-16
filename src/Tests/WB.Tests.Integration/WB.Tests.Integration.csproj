@@ -407,6 +407,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_regex.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_yesno_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_gps_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
