@@ -1,6 +1,6 @@
 <template>
     <div class="question static-text" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)"
-        :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
+        :class="[{'disabled-question': $me.isDisabled}]" :id="hash">
         <div class="question-editor">
             <div :class="[{'text-danger': !$me.validity.isValid}]">
                 <wb-title />
