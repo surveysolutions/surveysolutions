@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Ncqrs.Eventing.Storage;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -103,7 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (Exception exception)
             {
-                this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview).WaitWithoutException();
+                await this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
                 this.logger.Error($"Failed to load interview {this.interviewId}", exception);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
