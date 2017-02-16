@@ -11,11 +11,12 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
-        private static readonly NamedLocker locker = new NamedLocker();
+        private readonly IAggregateLock aggregateLock;
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
+            this.aggregateLock = aggregateLock;
         }
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
@@ -23,16 +24,18 @@ namespace WB.Infrastructure.Native.Storage
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregateRoot = 
-                locker.RunWithLock(aggregateId.FormatGuid(),
-                        () => this.GetFromCache(aggregateId) ?? base.GetLatest(aggregateType, aggregateId, progress, cancellationToken));
+            return aggregateLock.RunWithLock(aggregateId.FormatGuid(),
+            () => {
+                var aggregateRoot = this.GetFromCache(aggregateId) ??
+                    base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
-            if (aggregateRoot != null)
-            {
-                this.PutToTopOfCache(aggregateRoot);
-            }
+                if (aggregateRoot != null)
+                {
+                    this.PutToTopOfCache(aggregateRoot);
+                }
 
-            return aggregateRoot;
+                return aggregateRoot;
+            });
         }
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
@@ -55,7 +58,7 @@ namespace WB.Infrastructure.Native.Storage
 
         public void Evict(Guid aggregateId)
         {
-            locker.RunWithLock(aggregateId.FormatGuid(), () => Cache.Remove(aggregateId.ToString()));
+            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () => Cache.Remove(aggregateId.ToString()));
         }
     }
 }

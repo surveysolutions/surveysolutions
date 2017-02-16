@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 

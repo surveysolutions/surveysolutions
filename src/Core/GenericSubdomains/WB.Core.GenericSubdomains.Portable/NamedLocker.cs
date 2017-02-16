@@ -26,5 +26,13 @@ namespace WB.Core.GenericSubdomains.Portable
             lock (this.locks.GetOrAdd(name, s => new object()))
                 return body();
         }
+
+        public void RunWithLock(string name, Action body)
+        {
+            lock (this.locks.GetOrAdd(name, s => new object()))
+            {
+                body();
+            }
+        }
     }
 }
