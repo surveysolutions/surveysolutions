@@ -75,27 +75,6 @@ td.errors{
 .table tbody tr td span.interviewer{
 	color: $gray_text;
 }
-.interviewer{
-	font-size: 14px;
-	line-height: 16px;
-	font-weight: normal;
-	color: $gray_text;
-	&:hover, &:focus, &:active{
-		color: $blue;
-		text-decoration: none;
-	}
-	&:before{
-		display: inline-block;
-		content:"";
-		position: relative;
-		top: 2px; 
-		margin-right: 3px;
-		@include size(11px, 14px);
-		background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;
-		@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);
-		background-size: 11px 14px;
-	}
-}
 .table-wrapper .table td.enumerator{
 	padding-top: 10px;
 	padding-bottom: 10px;	
@@ -125,21 +104,6 @@ td.errors{
     	background-position: -4px -4px; 
     }
 }
-.supervisor{
-	color: $gray-text !important;
-	font-weight: normal;
-	&:before{
-		display: inline-block;
-		content:"";
-		position: relative;
-		top: 2px; 
-		margin-right: 3px;
-		@include size(11px, 14px);
-		background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
-		@include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);
-		background-size: 11px 14px;
-	}
-}
 .enumerator{
 	.interviewer, .supervisor{
 		&:before{
@@ -147,50 +111,10 @@ td.errors{
 		}
 	}
 }
-.modal{
-	%hover{
-		color: $gray-text;
-		&:hover, &:focus, &:active{
-			color: $blue;
-			text-decoration: none;
-		}
-	}
-	.template, .tetle-row{
-		font-size: 16px;
-		line-height: 18px;
-	}
-	.title-row{
-		font-size: 16px;
-		line-height: 18px;
-		margin-right: 10px; 
-		@extend %hover;
-	}
-	.interviewer{
-		margin-left: 10px;
-		@extend %hover;
-	}
-	td, th{
-		padding: 10px;
-		&:first-child{
-			min-width: 160px;
-		}
-	}
-	th{
-		border-top: none !important;
-	}
-}
 .statuses{
 	table{
 		tr:last-child td{
 		font-weight: bold !important;
-		}
-		td{
-			.comment{
-				padding-top: 10px;
-				h4{
-					margin-bottom: 5px;
-				}
-			}
 		}
 	}
 }
