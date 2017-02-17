@@ -50,6 +50,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         }
 
         [Localizable(false)]
-        public static string GetConnectedClientSectionKey(string sectionId, string interviewId) => $"{sectionId ?? "PrefilledSection" }x{interviewId}";
+        public static string GetConnectedClientSectionKey(string sectionId, string interviewId) => $"{sectionId}x{interviewId}";
+
+        [Localizable(false)]
+        public static string GetConnectedClientPrefilledSectionKey(string interviewId) => $"PrefilledSectionx{interviewId}";
     }
 }

@@ -202,7 +202,7 @@ h5{
 	}
 }
 .alerts{
-	margin-top: 20px;
+	margin: 20px 0;
 	.alert{
 		margin: 0;
 		padding: 15px;
@@ -448,7 +448,5 @@ table{
 	}
 }
 .break-line{
-	white-space: pre-line;
-	word-wrap: break-word;
-    overflow-wrap: break-word;
+	word-break: break-all;
 }

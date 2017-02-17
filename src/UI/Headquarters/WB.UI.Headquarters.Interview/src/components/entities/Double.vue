@@ -30,7 +30,6 @@
         },
         methods: {
             answerDoubleQuestion(evnt) {
-
                 const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g,"").length > 15)
                 {

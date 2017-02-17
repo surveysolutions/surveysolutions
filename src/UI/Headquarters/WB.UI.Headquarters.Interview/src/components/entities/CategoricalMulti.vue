@@ -18,7 +18,7 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import modal from "../Modal"
+    import modal from "../../modal"
 
     export default {
         name: 'CategoricalMulti',
@@ -44,7 +44,7 @@
 
                     const confirmMessage = 'Are you sure you want to remove related roster?';
 
-                    modal.methods.confirm(confirmMessage, result => {
+                    modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
                             return;
