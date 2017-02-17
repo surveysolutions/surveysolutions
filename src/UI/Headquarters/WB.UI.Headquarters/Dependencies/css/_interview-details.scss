@@ -308,9 +308,9 @@ label.inactive{
 		margin: 0;
 		color: $gray_light;
 		// z-index: 1;
-		& + .instructions-wrap{
-			display: none;
-		}
+	}
+	.instructions-wrapper{
+		display: none;
 	}
 	.question-editor .button-flag{
 		z-index: 0;
@@ -372,9 +372,9 @@ label.inactive{
 		margin: 0 0 10px;
 		position: relative;
 		&:before{left: -25px;}
-		& + .btn-link{
-			font: 10px/12px "TrebuchetMSBold";
-		}
+	}
+	.instructions-wrapper .btn-link{
+		font: 10px/12px "TrebuchetMSBold";
 	}
 	&.answered .question-unit{
 		.options-group{
@@ -662,6 +662,9 @@ label.inactive{
 }
 .content .humburger-foldback-button{
 	display: none;
+}
+.web-interview .content .questionnaire-content div button.btn-history{
+	margin-right: 10px;
 }
 .fullscreen-hidden-content{
 	.content{
