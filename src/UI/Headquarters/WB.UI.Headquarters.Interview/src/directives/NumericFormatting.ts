@@ -1,6 +1,6 @@
-import "autoNumeric"
 import * as $ from "jquery"
 import * as Vue from "vue"
+import numerics from "../numerics"
 
 Vue.directive("numericFormatting", {
     bind: (el, binding) => {
@@ -9,7 +9,7 @@ Vue.directive("numericFormatting", {
                 aPad: false
         }
         let settings = $.extend( {}, defaults, binding.value )
-        $(el).autoNumeric("init", settings)
+        numerics().init(el, settings)// $(el).autoNumeric("init", settings)
     },
     update: (el, binding) => {
         if (binding.value) {
@@ -18,10 +18,11 @@ Vue.directive("numericFormatting", {
                 aPad: false
             }
             let settings = $.extend( {}, defaults, binding.value )
-            $(el).autoNumeric("update", settings)
+            numerics().update(el, settings) // $(el).autoNumeric("update", settings)
         }
     },
     unbind: (el) => {
-        $(el).autoNumeric("destroy")
+        numerics().destroy(el)
+        // $(el).autoNumeric("destroy")
     }
 })
