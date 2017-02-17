@@ -448,7 +448,5 @@ table{
 	}
 }
 .break-line{
-	white-space: pre-line;
-	word-wrap: break-word;
-    overflow-wrap: break-word;
+	word-break: break-all;
 }
