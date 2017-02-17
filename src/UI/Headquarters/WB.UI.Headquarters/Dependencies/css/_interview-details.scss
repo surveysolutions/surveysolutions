@@ -5,6 +5,10 @@
 		padding-left: 15px;
 		padding-right: 15px;
 	}
+	& *{
+		word-wrap: break-word;
+    	overflow-wrap: break-word;
+	}
 }
 .filters-container {
 	.flagged-questions{
@@ -210,7 +214,6 @@ label.inactive{
 	}
 	p{
 		width: 90%;
-		word-break: break-word;
 		font-style: italic;
 		p:last-of-type{
 			margin-bottom: 10px;
@@ -367,7 +370,6 @@ label.inactive{
 	h5{
 		padding: 0 10px;
 		margin: 0 0 10px;
-		word-break: break-word;
 		position: relative;
 		&:before{left: -25px;}
 		& + .btn-link{
@@ -641,9 +643,6 @@ label.inactive{
 			line-height: 14px;
 			margin-bottom: 10px;
 			padding-right: 38px;
-			word-break: break-word;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
 		}
 	}
 }
