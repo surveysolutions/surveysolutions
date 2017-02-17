@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview completion date: {0}.
+        ///   Looks up a localized string similar to Interview completion date: .
         /// </summary>
         public static string InterviewCompletionDateFormatText {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview start date: {0}.
+        ///   Looks up a localized string similar to Interview start date: .
         /// </summary>
         public static string InterviewStartDateFormatText {
             get {
