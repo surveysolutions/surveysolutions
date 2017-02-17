@@ -307,37 +307,38 @@
                     if (event.dest.nodesScope !== event.source.nodesScope || event.dest.index !== event.source.index) {
                         if ($scope.isQuestion(movedItem)) {
                             questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function () {
-                                    $rootScope.$emit('questionMoved', movedItem.itemId);
-                                })
-                                .error(function () {
-                                    putItem(movedItem, me.draggedFrom, event.source.index);
-                                });
+                                .then(
+                                    function () {
+                                        $rootScope.$emit('questionMoved', movedItem.itemId);
+                                    },
+                                    function () {
+                                        putItem(movedItem, me.draggedFrom, event.source.index);
+                                    });
                         } else if ($scope.isStaticText(movedItem)) {
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function () {
+                                .then(function () {
                                     $rootScope.$emit('staticTextMoved', movedItem.itemId);
-                                })
-                                .error(function () {
+                                },
+                                function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                             
                         }
                         else if ($scope.isVariable(movedItem)) {
                             questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function () {
+                                .then(function () {
                                     $rootScope.$emit('variableMoved', movedItem.itemId);
-                                })
-                                .error(function () {
+                                },
+                                function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         }
                         else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function () {
+                                .then(function () {
                                     $rootScope.$emit('groupMoved', movedItem.itemId);
-                                })
-                                .error(function () {
+                                },
+                                function () {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         }
@@ -352,7 +353,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function () {
+                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).then(function () {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('questionDeleted', itemIdToDelete);
@@ -368,7 +369,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).success(function () {
+                        commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).then(function () {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('varibleDeleted', itemIdToDelete);
@@ -380,7 +381,7 @@
 
             var deleteGroupPermanently = function (itemIdToDelete) {
                 commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                    .success(function () {
+                    .then(function () {
                         var publishDelete = function (deleted) {
                             var children = deleted.items || [];
                             $rootScope.$emit(getItemType(deleted) + 'Deleted', deleted.itemId);
@@ -405,12 +406,13 @@
                     if (confirmResult === 'ok') {
 
                         questionnaireService.getAllBrokenGroupDependencies($state.params.questionnaireId, itemIdToDelete)
-                            .success(function (result) {
-                                if (result.length === 0) {
+                            .then(function (result) {
+                                var data = result.data;
+                                if (data.length === 0) {
                                     deleteGroupPermanently(itemIdToDelete);
                                 } else {
 
-                                    var links = _.reduce(result, function (result, item) {
+                                    var links = _.reduce(data, function (result, item) {
                                         return result + '<a href=#' + $state.params.questionnaireId +
                                             "/chapter/" + item.chapterId + "/question/" + item.id + '>' + item.title.substring(0, 30) + '</a>';
                                     }, "");
@@ -444,8 +446,8 @@
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
-                            .success(function (result) {
-                                if (result.IsSuccess) {
+                            .then(function (result) {
+                                if (result.data.IsSuccess) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
                                     $rootScope.$emit('staticTextDeleted');
@@ -473,7 +475,7 @@
                     moveCommand = questionnaireService.moveQuestion;
                 }
 
-                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function () {
+                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).then(function () {
                     questionnaireService.removeItemWithId($scope.items, itemToMoveId);
                     $scope.resetSelection();
                 });
@@ -503,8 +505,7 @@
                 var emptyQuestion = utilityService.createEmptyQuestion(parent);
 
                 commandService.addQuestion($state.params.questionnaireId, parent.itemId, emptyQuestion.itemId)
-                    .success(function (result) {
-                        if (!result.IsSuccess) return;
+                    .then(function () {
                         parent.items.push(emptyQuestion);
                         emitAddedItemState("question", emptyQuestion.itemId);
                     });
@@ -513,7 +514,7 @@
             $scope.addGroup = function (parent) {
                 var emptyGroup = utilityService.createEmptyGroup(parent);
                 commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId)
-                    .success(function () {
+                    .then(function () {
                         parent.items.push(emptyGroup);
                         emitAddedItemState("group", emptyGroup.itemId);
                     });
@@ -522,7 +523,7 @@
             $scope.addRoster = function (parent) {
                 var emptyRoster = utilityService.createEmptyRoster(parent);
                 commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId)
-                    .success(function () {
+                    .then(function () {
                         parent.items.push(emptyRoster);
                         emitAddedItemState("roster", emptyRoster.itemId);
                     });
@@ -532,7 +533,7 @@
                 var emptyStaticText = utilityService.createEmptyStaticText(parent);
 
                 commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId)
-                    .success(function () {
+                    .then(function () {
                         parent.items.push(emptyStaticText);
                         emitAddedItemState("statictext", emptyStaticText.itemId);
                     });
@@ -542,7 +543,7 @@
                 var emptyVariable = utilityService.createEmptyVariable(parent);
 
                 commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId)
-                    .success(function() {
+                    .then(function() {
                         parent.items.push(emptyVariable);
                         emitAddedItemState("variable", emptyVariable.itemId);
                     });
@@ -555,7 +556,7 @@
                 var emptyVariable = utilityService.createEmptyVariable(parent);
 
                 commandService.addVariable($state.params.questionnaireId, emptyVariable, parent.itemId, index)
-                    .success(function() {
+                    .then(function() {
                         parent.items.splice(index, 0, emptyVariable);
                         emitAddedItemState("variable", emptyVariable.itemId);
                     });
@@ -567,8 +568,8 @@
                 var emptyQuestion = utilityService.createEmptyQuestion(parent);
 
                 commandService.addQuestion($state.params.questionnaireId, parent.itemId, emptyQuestion.itemId, index)
-                    .success(function (result) {
-                        if (!result.IsSuccess) return;
+                    .then(function (result) {
+                        if (!result.data.IsSuccess) return;
                         parent.items.splice(index, 0, emptyQuestion);
                         emitAddedItemState("question", emptyQuestion.itemId);
                     });
@@ -582,7 +583,7 @@
                 var emptyGroup = utilityService.createEmptyGroup(parent);
 
                 commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId, index)
-                    .success(function () {
+                    .then(function () {
                         parent.items.splice(index, 0, emptyGroup);
                         emitAddedItemState("group", emptyGroup.itemId);
                     });
@@ -596,7 +597,7 @@
                 var emptyRoster = utilityService.createEmptyRoster(parent);
 
                 commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId, index)
-                    .success(function () {
+                    .then(function () {
                         parent.items.splice(index, 0, emptyRoster);
                         emitAddedItemState("roster", emptyRoster.itemId);
                     });
@@ -610,7 +611,7 @@
                 var emptyStaticText = utilityService.createEmptyStaticText(parent);
 
                 commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId, index)
-                    .success(function () {
+                    .then(function () {
                         parent.items.splice(index, 0, emptyStaticText);
                         emitAddedItemState("statictext", emptyStaticText.itemId);
                     });
@@ -624,7 +625,7 @@
                 
                 var newId = utilityService.guid();
 
-                commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+                commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, itemToCopy.questionnaireId, itemToCopy.itemId, newId).then(function () {
 
                     $scope.refreshTree();
 
@@ -643,7 +644,7 @@
                 var idToPasteAfter = item.itemId || $state.params.itemId;
                 var newId = utilityService.guid();
 
-                commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+                commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId).then(function () {
 
                     $scope.refreshTree();
 
@@ -669,10 +670,11 @@
 
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
-                    .success(function (result) {
-                        $scope.items = result.chapter.items;
-                        $scope.currentChapter = result.chapter;
-                        $rootScope.updateVariableNames(result.variableNames);
+                    .then(function (result) {
+                        var data = result.data;
+                        $scope.items = data.chapter.items;
+                        $scope.currentChapter = data.chapter;
+                        $rootScope.updateVariableNames(data.variableNames);
                         connectTree();
                     });
             };

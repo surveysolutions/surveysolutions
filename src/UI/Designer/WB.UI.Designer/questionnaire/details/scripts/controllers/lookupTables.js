@@ -18,7 +18,7 @@
             $scope.lookupTables = [];
 
             var dataBind = function (lookupTable, lookupTableDto) {
-                lookupTable.initialLookupTable = angular.copy(lookupTableDto);
+                lookupTable.initialLookupTable = _.clone(lookupTableDto);
 
                 lookupTable.itemId = lookupTableDto.itemId;
                 lookupTable.name = lookupTableDto.name;
@@ -54,7 +54,7 @@
                     itemId: newId
                 };
 
-                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).success(function () {
+                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).then(function () {
                     var lookupTables = {};
                     dataBind(lookupTables, newLookupTables);
                     $scope.lookupTables.push(lookupTables);
@@ -73,17 +73,17 @@
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
-                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
-                    lookupTable.initialLookupTable = angular.copy(lookupTable);
+                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function() {
+                    lookupTable.initialLookupTable = _.clone(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
-                }).error(function() {
+                }).catch(function() {
                     lookupTable.itemId = lookupTable.oldItemId;
                 });
             };
 
             $scope.cancel = function(lookupTable) {
-                var temp = angular.copy(lookupTable.initialLookupTable);
+                var temp = _.clone(lookupTable.initialLookupTable);
                 dataBind(lookupTable, temp);
                 lookupTable.form.$setPristine();
             };
@@ -95,7 +95,7 @@
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteLookupTable($state.params.questionnaireId, lookupTable.itemId).success(function() {
+                        commandService.deleteLookupTable($state.params.questionnaireId, lookupTable.itemId).then(function() {
                             $scope.lookupTables.splice(index, 1);
                         });
                     }

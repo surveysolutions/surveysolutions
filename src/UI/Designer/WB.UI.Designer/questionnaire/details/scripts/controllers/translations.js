@@ -21,7 +21,7 @@
             $scope.translations = [];
 
             var dataBind = function (translation, translationDto) {
-                translation.initialTranslation = angular.copy(translationDto);
+                translation.initialTranslation = _.clone(translationDto);
 
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
@@ -79,8 +79,8 @@
                 var translation = { translationId: utilityService.guid() };
 
                 $scope.fileSelected(translation, file, function () {
-                    commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
-                        translation.initialTranslation = angular.copy(translation);
+                    commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
+                        translation.initialTranslation = _.clone(translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
@@ -126,9 +126,10 @@
             }
 
             $scope.saveTranslation = function (translation) {
-                commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
-                    translation.initialTranslation = angular.copy(translation);
-                }).then(translation.form.$setPristine());
+                commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
+                    translation.initialTranslation = _.clone(translation);
+                    translation.form.$setPristine();
+                });
             };
 
 
@@ -142,7 +143,7 @@
             });
 
             $scope.cancel = function (translation) {
-                var temp = angular.copy(translation.initialTranslation);
+                var temp = _.clone(translation.initialTranslation);
                 dataBind(translation, temp);
                 translation.form.$setPristine();
             };
@@ -154,7 +155,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteTranslation($state.params.questionnaireId, translation.translationId).success(function () {
+                        commandService.deleteTranslation($state.params.questionnaireId, translation.translationId).then(function () {
                             $scope.translations.splice(index, 1);
                         });
                     }

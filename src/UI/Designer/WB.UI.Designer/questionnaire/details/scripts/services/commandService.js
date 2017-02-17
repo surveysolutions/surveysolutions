@@ -19,9 +19,9 @@
                             "command": JSON.stringify(command)
                         },
                         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-                    }).success(function() {
+                    }).then(function() {
                          blockUI.stop();
-                    }).error(function() {
+                    }).catch(function() {
                         blockUI.stop();
                     });
                 }
@@ -48,9 +48,9 @@
                     return Upload.upload({
                         url: urlBase + '/attachment',
                         data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName,  "command": JSON.stringify(command) }
-                    }).success(function () {
+                    }).then(function () {
                         blockUI.stop();
-                    }).error(function () {
+                    }, function () {
                         blockUI.stop();
                     });
                 };
@@ -77,9 +77,9 @@
                     return Upload.upload({
                         url: urlBase + '/UpdateLookupTable',
                         data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
-                    }).success(function () {
+                    }).then(function () {
                         blockUI.stop();
-                    }).error(function () {
+                    }).catch(function () {
                         blockUI.stop();
                     });
                 };
@@ -113,15 +113,15 @@
                     return Upload.upload({
                         url: urlBase + '/translation',
                         data: { file: _.isNull(translation.file) ? "" : translation.file, "command": JSON.stringify(command) }
-                    }).success(function (response) {
+                    }).then(function (response) {
                         blockUI.stop();
 
                         if (!_.isNull(translation.file))
-                            notificationService.notice(response);
+                            notificationService.notice(response.data);
 
                         translation.file = null;
 
-                    }).error(function () {
+                    }).catch(function () {
                         blockUI.stop();
                     });
                 };
