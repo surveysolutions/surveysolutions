@@ -28,10 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Create.ListQuestion(id: listQuestionId, variable: "list"),
                         Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
                         Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
-                        Create.TextQuestion(id: questionWithConditionUsingSingleLinked, variable: "txt", 
-                                            enablementCondition: "lnkSgl == 0"),
-                        Create.TextQuestion(id: questionWithConditionUsingMultiLinked, variable: "txt1",
-                                            enablementCondition: "lnkMul.Contains(0)")
+                        Create.TextQuestion(id: questionWithConditionUsingSingleLinked, variable: "txt", enablementCondition: "lnkSgl == 0"),
+                        Create.TextQuestion(id: questionWithConditionUsingMultiLinked, variable: "txt1", enablementCondition: "lnkMul.Contains(0)")
                    });
 
                var interview = SetupInterview(questionnaireDocument);
