@@ -49,9 +49,10 @@
 
             $scope.loadStaticText = function () {
                 questionnaireService.getStaticTextDetailsById($state.params.questionnaireId, $state.params.itemId)
-                    .success(function (result) {
-                        $scope.initialStaticText = angular.copy(result);
-                        dataBind(result);
+                    .then(function (result) {
+                        var data = result.data;
+                        $scope.initialStaticText = angular.copy(data);
+                        dataBind(data);
                         utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
 
                         var focusId = null;
@@ -86,7 +87,7 @@
             };
 
             $scope.saveStaticText = function (callback) {
-                commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
+                commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).then(function () {
                     $scope.initialStaticText = angular.copy($scope.activeStaticText);
                     $rootScope.$emit('staticTextUpdated', {
                         itemId: $scope.activeStaticText.itemId,

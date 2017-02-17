@@ -122,7 +122,7 @@
                 var attachment = { attachmentId: utilityService.guid() };
 
                 $scope.fileSelected(attachment, file, function() {
-                    commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).success(function () {
+                    commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
                         attachment.initialAttachment = angular.copy(attachment);
                         $scope.attachments.push(attachment);
                         setTimeout(function () { utilityService.focus("focusAttachment" + attachment.attachmentId); }, 500);
@@ -178,7 +178,7 @@
                 // each time we modify attachment, we give it new id to make revert to version works correctly
                 var newAttachmentId = utilityService.guid();
 
-                commandService.updateAttachment($state.params.questionnaireId, newAttachmentId, attachment).success(function () {
+                commandService.updateAttachment($state.params.questionnaireId, newAttachmentId, attachment).then(function () {
                     // only if request didn't fail, we update id of attachment with new value to not loose connection with content id.
                     attachment.attachmentId = newAttachmentId;
                     attachment.initialAttachment = angular.copy(attachment);
@@ -209,7 +209,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteAttachment($state.params.questionnaireId, attachment.attachmentId).success(function () {
+                        commandService.deleteAttachment($state.params.questionnaireId, attachment.attachmentId).then(function () {
                             $scope.attachments.splice(index, 1);
                         });
                     }
