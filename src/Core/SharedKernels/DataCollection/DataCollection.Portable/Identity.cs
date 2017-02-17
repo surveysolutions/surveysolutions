@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.Equals((Identity) obj);
         }
 
-        public bool Equals(Guid id, RosterVector rosterVector) => this.Equals(new Identity(id, rosterVector));
+        public bool Equals(Guid id, RosterVector rosterVector) => id == this.Id && this.RosterVector.Identical(rosterVector);
 
         public static bool operator ==(Identity a, Identity b)
         {
