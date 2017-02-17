@@ -26,6 +26,11 @@
 
                     this.visible = this.to
                 }
+            },
+            '$store.state.connection.isDisconnected' (to: Boolean, from: Boolean) {
+                if (to) {
+                    this.visible = false
+                }
             }
         },
         computed: {
