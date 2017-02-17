@@ -23,12 +23,13 @@
 
             $scope.invite = function() {
                 var request = shareService.findUserByEmail($scope.viewModel.shareWith);
-                request.success(function(data) {
+                request.then(function(result) {
+                    var data = result.data;
                     $scope.viewModel.doesUserExist = data.doesUserExist;
 
                     if (data.doesUserExist) {
                         var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
-                        shareRequest.success(function() {
+                        shareRequest.then(function() {
                             if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
                                 $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
                             }
@@ -42,7 +43,7 @@
 
             $scope.updateTitle = function() {
                 var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.isPublic);
-                updateRequest.success(function () {
+                updateRequest.then(function () {
                     $scope.questionnaire.title = $scope.questionnaire.editedTitle;
                     $modalInstance.dismiss();
                 });
@@ -51,7 +52,7 @@
             $scope.revokeAccess = function(personInfo) {
                 var revokeRequest = shareService.revokeAccess(personInfo.email, $scope.questionnaire.questionnaireId);
 
-                revokeRequest.success(function() {
+                revokeRequest.then(function () {
                     $scope.questionnaire.sharedPersons = _.without($scope.questionnaire.sharedPersons,
                         _.findWhere($scope.questionnaire.sharedPersons, { email: personInfo.email }));
                 });
@@ -59,7 +60,7 @@
 
             $scope.togglePublicity = function() {
                 var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, !$scope.questionnaire.isPublic);
-                updateRequest.success(function() {
+                updateRequest.then(function () {
                     $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
                 });
             };
