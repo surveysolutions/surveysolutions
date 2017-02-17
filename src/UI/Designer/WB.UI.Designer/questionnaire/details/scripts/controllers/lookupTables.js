@@ -18,7 +18,7 @@
             $scope.lookupTables = [];
 
             var dataBind = function (lookupTable, lookupTableDto) {
-                lookupTable.initialLookupTable = angular.copy(lookupTableDto);
+                lookupTable.initialLookupTable = _.clone(lookupTableDto);
 
                 lookupTable.itemId = lookupTableDto.itemId;
                 lookupTable.name = lookupTableDto.name;
@@ -74,7 +74,7 @@
             }
             $scope.saveLookupTable = function (lookupTable) {
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function() {
-                    lookupTable.initialLookupTable = angular.copy(lookupTable);
+                    lookupTable.initialLookupTable = _.clone(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
                 }).catch(function() {
@@ -83,7 +83,7 @@
             };
 
             $scope.cancel = function(lookupTable) {
-                var temp = angular.copy(lookupTable.initialLookupTable);
+                var temp = _.clone(lookupTable.initialLookupTable);
                 dataBind(lookupTable, temp);
                 lookupTable.form.$setPristine();
             };

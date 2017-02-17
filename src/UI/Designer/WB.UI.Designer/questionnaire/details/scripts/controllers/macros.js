@@ -17,7 +17,7 @@
             $scope.macros = [];
 
             var dataBind = function (macro, macroDto) {
-                macro.initialMacro = angular.copy(macroDto);
+                macro.initialMacro = _.clone(macroDto);
 
                 macro.itemId = macroDto.itemId;
                 macro.name = macroDto.name;
@@ -32,7 +32,7 @@
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
                     var macro = {};
-                    if (!_.any($scope.macros, function( elem ) {return elem.itemId === macroDto.itemId;})) {
+                    if (!_.any($scope.macros, function (elem) { return elem.itemId === macroDto.itemId; })) {
                         dataBind(macro, macroDto);
                         $scope.macros.push(macro);
                     }
@@ -61,13 +61,13 @@
 
             $scope.saveMacro = function (macro) {
                 commandService.updateMacro($state.params.questionnaireId, macro).then(function () {
-                    macro.initialMacro = angular.copy(macro);
+                    dataBind(macro, _.clone(macro));
                     macro.form.$setPristine();
                 });
             };
 
             $scope.cancel = function (macro) {
-                var temp = angular.copy(macro.initialMacro);
+                var temp = macro.initialMacro;
                 dataBind(macro, temp);
                 macro.form.$setPristine();
             };
@@ -160,7 +160,7 @@
                 $scope.loadMacros();
             });
 
-            $scope.$on('verifing', function (scope, params) {
+            $scope.$on('verifing', function () {
                 for (var i = 0; i < $scope.macros.length; i++) {
                     var macro = $scope.macros[i];
                     if (macro.form.$dirty) {

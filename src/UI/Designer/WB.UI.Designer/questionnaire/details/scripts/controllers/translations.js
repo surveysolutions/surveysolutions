@@ -21,7 +21,7 @@
             $scope.translations = [];
 
             var dataBind = function (translation, translationDto) {
-                translation.initialTranslation = angular.copy(translationDto);
+                translation.initialTranslation = _.clone(translationDto);
 
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
@@ -80,7 +80,7 @@
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                        translation.initialTranslation = angular.copy(translation);
+                        translation.initialTranslation = _.clone(translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
@@ -127,8 +127,9 @@
 
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                    translation.initialTranslation = angular.copy(translation);
-                }).then(translation.form.$setPristine());
+                    translation.initialTranslation = _.clone(translation);
+                    translation.form.$setPristine();
+                });
             };
 
 
@@ -142,7 +143,7 @@
             });
 
             $scope.cancel = function (translation) {
-                var temp = angular.copy(translation.initialTranslation);
+                var temp = _.clone(translation.initialTranslation);
                 dataBind(translation, temp);
                 translation.form.$setPristine();
             };
