@@ -8726,7 +8726,7 @@ table tr th .census-icon, table tr td .census-icon {
   display: flex; }
 
 .two-columns-form {
-  width: 100%;
+  width: 810px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -8734,7 +8734,7 @@ table tr th .census-icon, table tr td .census-icon {
   margin-bottom: 0;
   transform: translate(-50%, -50%); }
   .two-columns-form .left-column {
-    padding: 10px 3% 10px 8%;
+    padding: 10px 40px 10px 0px;
     text-align: center; }
     .two-columns-form .left-column img {
       margin-bottom: 25px; }
@@ -8751,7 +8751,7 @@ table tr th .census-icon, table tr td .census-icon {
           text-decoration: none;
           box-shadow: none; }
   .two-columns-form .right-column {
-    padding: 10px 8% 10px 3%;
+    padding: 10px 0 10px 40px;
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .alert-danger p {
     color: #e74924; }
@@ -8817,7 +8817,7 @@ table tr th .census-icon, table tr td .census-icon {
   .login main {
     height: 100%; }
 
-@media (max-height: 800px) {
+@media (max-width: 800px) {
   .two-columns-form {
     margin-top: 30px;
     width: auto;
@@ -9035,7 +9035,7 @@ main .flex-row {
   display: flex; }
 
 .two-columns-form {
-  width: 100%;
+  width: 810px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9043,7 +9043,7 @@ main .flex-row {
   margin-bottom: 0;
   transform: translate(-50%, -50%); }
   .two-columns-form .left-column {
-    padding: 10px 3% 10px 8%;
+    padding: 10px 40px 10px 0px;
     text-align: center; }
     .two-columns-form .left-column img {
       margin-bottom: 25px; }
@@ -9060,7 +9060,7 @@ main .flex-row {
           text-decoration: none;
           box-shadow: none; }
   .two-columns-form .right-column {
-    padding: 10px 8% 10px 3%;
+    padding: 10px 0 10px 40px;
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .alert-danger p {
     color: #e74924; }
@@ -9126,7 +9126,7 @@ main .flex-row {
   .login main {
     height: 100%; }
 
-@media (max-height: 800px) {
+@media (max-width: 800px) {
   .two-columns-form {
     margin-top: 30px;
     width: auto;
@@ -10624,6 +10624,10 @@ div.no-cookies {
 
 body.no-cookies div.no-cookies {
   display: block; }
+
+@media (max-width: 1210px) {
+  div.no-cookies {
+    margin: 25px 20px; } }
 
 @media (max-width: 880px) {
   .start-web-interview .left-column {
