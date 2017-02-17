@@ -18,7 +18,7 @@
         name: 'wb-layout',
         computed: {
             sidebarHidden() {
-                return this.$store.state.sidebarHidden
+                return this.$store.state.sidebar.sidebarHidden
             }
         }
     }

@@ -7,7 +7,8 @@ import { safeStore } from "../errors"
 import { batchedAction } from "../helpers"
 
 declare interface ISidebarState {
-    panels: ISidebarPanel[]
+    panels: ISidebarPanel[],
+    sidebarHidden: Boolean
 }
 
 export default safeStore({
@@ -15,7 +16,8 @@ export default safeStore({
         panels: {
             // organized by parentId, that way it easier to search and request data
             // sectionId1: [sectiondata1, sectiondata2, sectiondata3], root: [section1, section2], ... etc
-        }
+        },
+        sidebarHidden: false
     },
 
     actions: {
@@ -31,6 +33,9 @@ export default safeStore({
             if (collapsed === false) {
                 dispatch("fetchSidebar", panel.id)
             }
+        },
+        toggleSidebarPanel({ commit, state }, newState = null): void {
+            commit("SET_SIDEBAR_HIDDEN", newState == null ? !state.sidebarHidden : newState)
         }
     },
 
@@ -41,8 +46,11 @@ export default safeStore({
                 Vue.set(state.panels, id, panels)
             })
         },
-        SET_SIDEBAR_TOGGLE(state: ISidebarState, {panel, collapsed}) {
+        SET_SIDEBAR_TOGGLE(state: ISidebarState, { panel, collapsed }) {
             panel.collapsed = collapsed
+        },
+        SET_SIDEBAR_HIDDEN(state, sidebarHidden: boolean) {
+            state.sidebarHidden = sidebarHidden
         }
     },
 
