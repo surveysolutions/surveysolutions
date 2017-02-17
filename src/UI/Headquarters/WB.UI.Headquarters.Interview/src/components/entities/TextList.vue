@@ -20,7 +20,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
-    import modal from "../Modal"
+    import modal from "../../modal"
 
     class TextListAnswerRow implements ITextListAnswerRow {
         value: number
@@ -46,7 +46,7 @@
                     return
                 }
 
-                modal.methods.confirm('Are you sure you want to remove related roster?', result => {
+                modal.confirm('Are you sure you want to remove related roster?', result => {
                     if (result) {
                         this.removeRow(index)
                         return;

@@ -18,7 +18,7 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
-    import modal from "../Modal"
+    import modal from "../../modal"
 
     export default {
         name: 'Integer',
@@ -30,7 +30,6 @@
         },
         methods: {
             answerIntegerQuestion(evnt) {
-
                 const answerString = $(evnt.target).autoNumeric('get')
                 const answer = answerString != undefined && answerString != ''
                                 ? parseInt(answerString)
@@ -78,7 +77,7 @@
                 const amountOfRostersToRemove = previousAnswer - answer;
                 const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
-                modal.methods.confirm(confirmMessage,  result => {
+                modal.confirm(confirmMessage,  result => {
                     if (result) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
@@ -103,7 +102,7 @@
                 var amountOfRostersToRemove = this.$me.answer;
                 var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
-                modal.methods.confirm(confirmMessage, result => {
+                modal.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
                     } else {

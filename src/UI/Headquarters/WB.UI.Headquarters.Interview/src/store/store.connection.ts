@@ -1,8 +1,8 @@
-import * as bootbox from "bootbox"
 import * as toastr from "toastr"
 import * as Vue from "vue"
 import { Store } from "vuex"
 import { apiStop } from "../api"
+import modal from "../modal"
 
 declare interface IConnectionState {
     isReconnecting: boolean,
@@ -27,7 +27,7 @@ const connectionStore = {
             if (state.isReconnecting && !state.isDisconnected) {
                 commit("IS_DISCONNECTED", true)
                 apiStop()
-                bootbox.alert({
+                modal.alert({
                     title: "Disconnected",
                     message: "<p>Connection to server is lost.</p>" +
                     "<p>Please reload the page to restore connection and continue this interview.</p>",
