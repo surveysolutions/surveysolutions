@@ -13,8 +13,11 @@
     <ul class="list-unstyled">
         @if (Model.StartedDate.HasValue)
         {
-            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.Value.ToLocalTime().ToString(@"MMM dd yyyy, hh:mm"))</li>
+            <li>@WebInterview.InterviewStartDateFormatText <time datetime="@Model.StartedDate.Value.ToString("o")"></time></li>
         }
-        <li>@string.Format(WebInterview.InterviewCompletionDateFormatText, Model.CompletedDate.HasValue ? Model.CompletedDate.Value.ToLocalTime().ToString(@"MMM dd yyyy, hh:mm") : WebInterview.InProgressText)</li>
+        @if (Model.CompletedDate.HasValue)
+        {
+            <li>@WebInterview.InterviewCompletionDateFormatText <time datetime="@Model.CompletedDate.Value.ToString("o")"></time></li>
+        }
     </ul>
 </div>
