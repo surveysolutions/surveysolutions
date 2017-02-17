@@ -195,8 +195,5 @@ export default {
     },
     stop(): void {
         apiStop()
-    },
-    toggleSidebarPanel({commit, state}): void {
-        commit("SET_SIDEBAR_HIDDEN", !state.sidebarHidden)
     }
 }
