@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("KP-8238")]
     internal class when_option_that_question_is_linked_to_in_condition_is_removed : in_standalone_app_domain
     {
         Because of = () =>
