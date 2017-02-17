@@ -54,7 +54,7 @@
                     itemId: newId
                 };
 
-                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).success(function () {
+                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).then(function () {
                     var lookupTables = {};
                     dataBind(lookupTables, newLookupTables);
                     $scope.lookupTables.push(lookupTables);
@@ -73,11 +73,11 @@
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
-                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
+                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
-                }).error(function() {
+                }).catch(function() {
                     lookupTable.itemId = lookupTable.oldItemId;
                 });
             };
@@ -95,7 +95,7 @@
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteLookupTable($state.params.questionnaireId, lookupTable.itemId).success(function() {
+                        commandService.deleteLookupTable($state.params.questionnaireId, lookupTable.itemId).then(function() {
                             $scope.lookupTables.splice(index, 1);
                         });
                     }

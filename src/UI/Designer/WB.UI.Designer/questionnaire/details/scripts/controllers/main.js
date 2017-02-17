@@ -137,9 +137,10 @@ angular.module('designerApp')
                 $rootScope.$broadcast("verifing", {});
 
                 setTimeout(function() {
-                    verificationService.verify($state.params.questionnaireId).success(function(result) {
-                        $scope.verificationStatus.errors = result.errors;
-                        $scope.verificationStatus.warnings = result.warnings;
+                    verificationService.verify($state.params.questionnaireId).then(function(result) {
+                        var data = result.data;
+                        $scope.verificationStatus.errors = data.errors;
+                        $scope.verificationStatus.warnings = data.warnings;
                         $scope.verificationStatus.time = new Date();
                         $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
 
@@ -474,10 +475,10 @@ angular.module('designerApp')
                 });
 
             var getQuestionnaire = function () {
-                questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
-                    $scope.questionnaire = result;
-                    if (!$state.params.chapterId && result.chapters.length > 0) {
-                        var defaultChapter = _.first(result.chapters);
+                questionnaireService.getQuestionnaireById($state.params.questionnaireId).then(function (result) {
+                    $scope.questionnaire = result.data;
+                    if (!$state.params.chapterId && result.data.chapters.length > 0) {
+                        var defaultChapter = _.first(result.data.chapters);
                         var itemId = defaultChapter.itemId;
                         $scope.currentChapter = defaultChapter;
                         $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
@@ -487,8 +488,8 @@ angular.module('designerApp')
                 });
             };
 
-            userService.getCurrentUserName().success(function(result) {
-                $scope.currentUserName = result;
+            userService.getCurrentUserName().then(function(result) {
+                $scope.currentUserName = result.data;
             });
 
             getQuestionnaire();

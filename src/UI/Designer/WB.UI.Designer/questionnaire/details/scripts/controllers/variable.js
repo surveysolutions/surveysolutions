@@ -32,7 +32,7 @@
 
             $scope.saveVariable = function(callback) {
                 if ($scope.variableForm.$valid) {
-                    commandService.updateVariable($state.params.questionnaireId, $scope.activeVariable).success(function () {
+                    commandService.updateVariable($state.params.questionnaireId, $scope.activeVariable).then(function () {
                         $scope.initialVariable = angular.copy($scope.activeVariable);
                         $rootScope.$emit('variableUpdated', {
                             itemId: $scope.activeVariable.itemId,
@@ -71,9 +71,10 @@
 
             var loadVariable = function() {
                 questionnaireService.getVariableDetailsById($state.params.questionnaireId, $state.params.itemId)
-                    .success(function(result) {
-                        $scope.initialVariable = angular.copy(result);
-                        bindVariable(result);
+                    .then(function(result) {
+                        var data = result.data;
+                        $scope.initialVariable = angular.copy(data);
+                        bindVariable(data);
 
                         var focusId = null;
                         switch ($state.params.property) {

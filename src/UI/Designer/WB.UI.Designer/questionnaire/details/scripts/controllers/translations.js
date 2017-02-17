@@ -79,7 +79,7 @@
                 var translation = { translationId: utilityService.guid() };
 
                 $scope.fileSelected(translation, file, function () {
-                    commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
+                    commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
                         translation.initialTranslation = angular.copy(translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
@@ -126,7 +126,7 @@
             }
 
             $scope.saveTranslation = function (translation) {
-                commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
+                commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
                     translation.initialTranslation = angular.copy(translation);
                 }).then(translation.form.$setPristine());
             };
@@ -154,7 +154,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteTranslation($state.params.questionnaireId, translation.translationId).success(function () {
+                        commandService.deleteTranslation($state.params.questionnaireId, translation.translationId).then(function () {
                             $scope.translations.splice(index, 1);
                         });
                     }

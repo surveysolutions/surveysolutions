@@ -52,7 +52,7 @@
                     itemId: newId
                 };
 
-                commandService.addMacro($state.params.questionnaireId, newMacros).success(function () {
+                commandService.addMacro($state.params.questionnaireId, newMacros).then(function () {
                     var macros = {};
                     dataBind(macros, newMacros);
                     $scope.macros.push(macros);
@@ -60,7 +60,7 @@
             };
 
             $scope.saveMacro = function (macro) {
-                commandService.updateMacro($state.params.questionnaireId, macro).success(function () {
+                commandService.updateMacro($state.params.questionnaireId, macro).then(function () {
                     macro.initialMacro = angular.copy(macro);
                     macro.form.$setPristine();
                 });
@@ -79,7 +79,7 @@
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
+                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).then(function () {
                             $scope.macros.splice(index, 1);
                         });
                     }
