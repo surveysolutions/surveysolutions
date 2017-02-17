@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("KP-8238")]
     internal class when_option_that_question_is_linked_to_in_condition_is_removed : in_standalone_app_domain
     {
         Because of = () =>
@@ -29,10 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Create.ListQuestion(id: listQuestionId, variable: "list"),
                         Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
                         Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
-                        Create.TextQuestion(id: questionWithConditionUsingSingleLinked, variable: "txt", 
-                                            enablementCondition: "lnkSgl == 0"),
-                        Create.TextQuestion(id: questionWithConditionUsingMultiLinked, variable: "txt1",
-                                            enablementCondition: "lnkMul.Contains(0)")
+                        Create.TextQuestion(id: questionWithConditionUsingSingleLinked, variable: "txt", enablementCondition: "lnkSgl == 0"),
+                        Create.TextQuestion(id: questionWithConditionUsingMultiLinked, variable: "txt1", enablementCondition: "lnkMul.Contains(0)")
                    });
 
                var interview = SetupInterview(questionnaireDocument);

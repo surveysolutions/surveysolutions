@@ -245,13 +245,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            var rosterIds = rosterIdentities.Select(x => x.Id).ToHashSet();
+            var rosterIds = rosterIdentities.Select(x => x.Id).Distinct();
 
             var linkedToRosterQuestionIds = rosterIds.SelectMany(x => questionnaire.GetLinkedToSourceEntity(x));
 
             foreach (var linkedToRosterQuestionId in linkedToRosterQuestionIds)
             {
-                this.webInterviewNotificationService.RefreshEntities(interviewId, interview.GetAllIdentitiesForEntityId(linkedToRosterQuestionId).ToArray());
+                var identitiesToRefresh = interview.GetAllIdentitiesForEntityId(linkedToRosterQuestionId).ToArray();
+                this.webInterviewNotificationService.RefreshEntities(interviewId, identitiesToRefresh);
             }
         }
 
