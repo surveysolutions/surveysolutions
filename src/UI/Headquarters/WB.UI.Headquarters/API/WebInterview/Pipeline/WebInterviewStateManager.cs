@@ -39,7 +39,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             if (interviewId != null)
             {
-                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, WebInterview.GetConnectedClientSectionKey(sectionId, interviewId));
+                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, 
+                    sectionId == null 
+                    ? WebInterview.GetConnectedClientPrefilledSectionKey(interviewId) 
+                    : WebInterview.GetConnectedClientSectionKey(sectionId, interviewId));
+
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
             }
 
