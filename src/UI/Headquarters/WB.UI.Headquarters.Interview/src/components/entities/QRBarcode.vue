@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <input autocomplete="off" type="text" class="field-to-fill" placeholder="Enter answer" :value="$me.answer"
-                            v-blurOnEnterKey @blur="answerQRBarcodeQuestion"> 
+                            v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>
                 </div>
@@ -19,14 +19,19 @@
 
     export default {
         name: 'QRBarcode',
-        mixins: [entityDetails],        
+        mixins: [entityDetails],
         methods: {
             answerQRBarcodeQuestion(evnt) {
                 const target = $(evnt.target)
                 let answer: string = target.val()
-                
+
+                if (!answer || !answer.trim()) {
+                    this.markAnswerAsNotSavedWithMessage("Empty value cannot be saved")
+                    return
+                }
+
                 if (answer) {
-                        this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })                    
+                    this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
                 }
             }
         }
