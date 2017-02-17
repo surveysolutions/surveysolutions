@@ -70,7 +70,7 @@
                 this.$store.dispatch("fetchProgress", 1)
 
                 navigator.geolocation.getCurrentPosition(
-                    (position) => { this.onPositionDetermined(position, this.$me.id) },
+                    (position) => { this.onPositionDetermined(position, this.id) },
                     (error) => { this.onPositionDeterminationFailed(error) },
                     {
                         enableHighAccuracy: true,
