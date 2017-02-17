@@ -181,7 +181,7 @@
                 commandService.updateAttachment($state.params.questionnaireId, newAttachmentId, attachment).then(function () {
                     // only if request didn't fail, we update id of attachment with new value to not loose connection with content id.
                     attachment.attachmentId = newAttachmentId;
-                    attachment.initialAttachment = angular.copy(attachment);
+                    attachment.initialAttachment = _.clone(attachment);
                     attachment.form.$setPristine();
                 });
             };
@@ -197,7 +197,7 @@
             });
 
             $scope.cancel = function (attachment) {
-                var temp = angular.copy(attachment.initialAttachment);
+                var temp = _.clone(attachment.initialAttachment);
                 dataBind(attachment, temp);
                 attachment.form.$setPristine();
             };
