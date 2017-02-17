@@ -11,7 +11,10 @@
     <div class="additional-info-block">
         @WebInterview.Resume_InvitationSmallText
         <ul class="list-unstyled">
-            <li>@string.Format(WebInterview.InterviewStartDateFormatText, Model.StartedDate.HasValue ? Model.StartedDate.Value.ToString(@"MMM dd yyyy, hh:mm") : WebInterview.NotStartedText)</li>
+            @if (Model.StartedDate.HasValue)
+            {
+                <li>@WebInterview.InterviewStartDateFormatText: <time datetime="@Model.StartedDate.Value.ToString("o")"></time></li>
+            }
         </ul>
     </div>
     @using (Html.BeginForm())
