@@ -11,7 +11,7 @@
             return {
                 visible: false,
                 timerId: null,
-                delay: 300
+                delay: 100
             }
         },
         watch: {

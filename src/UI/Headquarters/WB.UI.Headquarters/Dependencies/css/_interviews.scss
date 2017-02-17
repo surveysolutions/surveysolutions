@@ -1,7 +1,8 @@
 .table-wrapper{
 	position: relative;
+	padding-top: 20px;
 	.wrapper-modal-dropdown{
-	    @include absolute(-20px, 0);
+	    @include absolute(0, 0);
 	   /*  z-index: 2; */
 	   .modal-dialog{
 	   		@include absolute(-30px, 0);
@@ -257,7 +258,11 @@ td.errors{
 					.table-td{
 						@extend %table-min-parametrs;
 						padding: 10px 20px;
+						line-height: 24px;
 						background-color: #edeff0;
+						.flag{
+							padding-left: 25px;
+						}
 						&.table-header{
 							padding-left: 0;
 							color: $gray_light;
@@ -273,9 +278,6 @@ td.errors{
 	}
 }
 @media (max-width: $screen-xs-min){
-	.modal-dialog{
-		width: 100%;
-	}
 	.screen-small-resolution{
 		.table-min-wrapper{
 			flex-direction: column;

@@ -34,19 +34,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             foreach (var identity in entities)
             {
-                var parent = this.CheckAndGetParentIdentity(identity, interview);
-                entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent?.ToString(), interview.Id.FormatGuid()), identity));
-
-                if (parent != null)
+                if (IsQuestionPrefield(identity, interview))
+                    entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
+                else
                 {
-                    while (parent != null)
+                    var curreentEntity = identity;
+                    while (curreentEntity != null)
                     {
-                        var newEntity = parent;
-                        parent = this.CheckAndGetParentIdentity(newEntity, interview);
+                        var parent = this.GetParentIdentity(curreentEntity, interview);
                         if (parent != null)
-                            entitiesToRefresh.Add(
-                                Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent?.ToString(),
-                                        interview.Id.FormatGuid()), newEntity));
+                            entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent?.ToString(), interview.Id.FormatGuid()), curreentEntity));
+                        curreentEntity = parent;
                     }
                 }
             }
@@ -124,29 +122,25 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        private Identity CheckAndGetParentIdentity(Identity identity, IStatefulInterview interview)
+        private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
         {
-            Identity sectionKey;
-
-            if (interview.GetQuestion(identity)?.IsPrefilled ?? false)
-            {
-                sectionKey = null;
-            }
-            else
-            {
-                sectionKey = ((IInterviewTreeNode)interview.GetQuestion(identity)
+            return ((IInterviewTreeNode)interview.GetQuestion(identity)
                     ?? (IInterviewTreeNode)interview.GetStaticText(identity)
                     ?? (IInterviewTreeNode)interview.GetRoster(identity)
                     ?? (IInterviewTreeNode)interview.GetGroup(identity))?.Parent?.Identity;
-            }
+        }
 
-            return sectionKey;
+
+        private bool IsQuestionPrefield(Identity identity, IStatefulInterview interview)
+        {
+            return interview.GetQuestion(identity)?.IsPrefilled ?? false;
         }
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            var sectionKey = CheckAndGetParentIdentity(identity, interview)?.ToString();
-            return WebInterview.GetConnectedClientSectionKey(sectionKey, interview.Id.FormatGuid());
+            return this.IsQuestionPrefield(identity, interview) 
+                ? WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()) 
+                : WebInterview.GetConnectedClientSectionKey(this.GetParentIdentity(identity, interview).ToString(), interview.Id.FormatGuid());
         }
         
     }

@@ -7,15 +7,19 @@
             <section class="questionnaire details-interview">
                 <router-view></router-view>
             </section>
-            <idle-timeout></idle-timeout>
         </div>
     </Layout>
 </template>
 
 <script lang="ts">
     import "toastr/build/toastr.css"
+    import idle from "./IdleTimeout"
+
     export default {
-        name: 'app'
+        name: 'app',
+        created() {
+            idle.start()
+        }
     }
 </script>
 
