@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "jquery": "^3.1.1",
-    "ace-builds": "^1.2.5",
+    "ace-builds": "^1.2.6",
     "angular": "^1.6.2",
     "angular-animate": "^1.6.2",
     "angular-block-ui": "0.2.2",
