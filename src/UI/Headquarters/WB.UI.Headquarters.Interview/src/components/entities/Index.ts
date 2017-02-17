@@ -2,7 +2,6 @@
 import * as jQuery from "jquery"
 const $ = (window as any).$ = (window as any).jQuery = jQuery
 import "bootstrap-sass/assets/javascripts/bootstrap/dropdown"
-import "bootstrap-sass/assets/javascripts/bootstrap/modal"
 
 import "jquery-mask-plugin"
 
@@ -32,6 +31,7 @@ import Unsupported from "./Unsupported"
 vue.component("CategoricalMulti", CategoricalMulti)
 vue.component("CategoricalSingle", CategoricalSingle)
 vue.component("CategoricalYesNo", CategoricalYesNo)
+vue.component("Combobox", Combobox)
 vue.component("DateTime", DateTime)
 vue.component("Double", Double)
 vue.component("Gps", Gps)
@@ -48,7 +48,6 @@ vue.component("TextQuestion", TextQuestion)
 vue.component("Unsupported", Unsupported)
 vue.component("wb-question", Question)
 vue.component("wb-humburger", Humburger)
-vue.component("Combobox", Combobox)
 
 vue.component("wb-typeahead", (resolve, reject) => {
      require.ensure(["./ui/typeahead"], r => {
