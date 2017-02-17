@@ -19,6 +19,7 @@
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
     import modal from "../../modal"
+    import numerics from "../../numerics"
 
     export default {
         name: 'Integer',
@@ -29,8 +30,8 @@
             }
         },
         methods: {
-            answerIntegerQuestion(evnt) {
-                const answerString = $(evnt.target).autoNumeric('get')
+            async answerIntegerQuestion(evnt) {
+                const answerString = await numerics().get($(evnt.target))
                 const answer = answerString != undefined && answerString != ''
                                 ? parseInt(answerString)
                                 : null
