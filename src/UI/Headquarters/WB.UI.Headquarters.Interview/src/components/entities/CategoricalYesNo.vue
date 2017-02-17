@@ -31,7 +31,7 @@
     import { entityDetails } from "components/mixins"
 
     import * as $ from "jquery"
-    import modal from "../Modal"
+    import modal from "../../modal"
     import * as findIndex from "lodash/findIndex"
 
     export default {
@@ -103,7 +103,7 @@
 
                 const confirmMessage = 'Are you sure you want to remove related roster?';
 
-                modal.methods.confirm(confirmMessage,  result => {
+                modal.confirm(confirmMessage,  result => {
                     if (result) {
                         this.$store.dispatch("answerYesNoQuestion", { questionId: this.$me.id, answer: newAnswer })
                         return;

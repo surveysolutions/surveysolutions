@@ -306,3 +306,32 @@ a.disabled{
 		}
 	}
 }
+.btn-history{
+	background-color: #fff;
+	@include square(36px);
+	border-color: $gray_light;
+	border-width: 2px;
+	border-radius: 100%;
+	padding: 0;
+	position: relative;
+	&:after{
+		@include absolute(5px, 9px);
+		content: "";
+		display: block;
+		width: 15px;
+		height: 10px;
+		@include rotate(45deg);
+		border-bottom: 2px solid $gray_light;
+		border-right: 2px solid $gray_light;
+	}
+	&:active{
+		&:after{
+			@include rotate(90deg);
+			right: 5px;
+		}
+	}
+	&:hover, &:focus, &:active{
+		background-color: darken(#fff, 10%);
+	    border-color: darken($gray_light, 10%);
+	}
+}
