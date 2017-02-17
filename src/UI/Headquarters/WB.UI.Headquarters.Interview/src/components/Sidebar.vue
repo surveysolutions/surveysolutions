@@ -1,8 +1,6 @@
 <template>
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
-        <div class="humburger-foldback-button" @click="toggleSidebarPanel">
-            <span></span>
-        </div>
+        <wb-humburger id="sidebarHamburger" />
         <div class="panel-group structured-content">
             <SidebarPanel :panel="coverSection" v-if="showCover"></SidebarPanel>
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
@@ -75,9 +73,6 @@
             },
             fetchInterviewStatus() {
                 this.$store.dispatch("fetchInterviewStatus")
-            },
-            toggleSidebarPanel() {
-                this.$store.dispatch("toggleSidebarPanel")
             }
         }
     }
