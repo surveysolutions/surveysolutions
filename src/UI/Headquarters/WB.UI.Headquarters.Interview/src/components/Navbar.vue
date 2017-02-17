@@ -39,6 +39,7 @@
 </template>
 <script lang="ts">
     import * as $ from "jquery"
+    import modal from "modal"
 
     export default {
         name: 'navbar',
@@ -65,7 +66,14 @@
         },
         methods: {
             changeLanguage(language) {
+
                 this.$store.dispatch("changeLanguage", { language: language })
+
+                modal.dialog({
+                    message: "<p>Switching language. Please wait...</p>", 
+                    
+                    closeButton: false              
+                })
             }
         },
         directives:{

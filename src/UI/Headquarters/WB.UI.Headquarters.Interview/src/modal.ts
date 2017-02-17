@@ -13,5 +13,8 @@ export default {
     },
     alert(options) {
         modal(box => box.alert(options))
+    },
+    dialog(options) {
+        modal(box => box.dialog(options))
     }
 }
