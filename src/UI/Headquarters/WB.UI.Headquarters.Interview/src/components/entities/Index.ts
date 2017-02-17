@@ -26,6 +26,7 @@ import Question from "./Question"
 import StaticText from "./StaticText"
 import TextList from "./TextList"
 import TextQuestion from "./TextQuestion"
+import Humburger from "./ui/humburger"
 import Unsupported from "./Unsupported"
 
 vue.component("CategoricalMulti", CategoricalMulti)
@@ -46,6 +47,7 @@ vue.component("TextList", TextList)
 vue.component("TextQuestion", TextQuestion)
 vue.component("Unsupported", Unsupported)
 vue.component("wb-question", Question)
+vue.component("wb-humburger", Humburger)
 vue.component("Combobox", Combobox)
 
 vue.component("wb-typeahead", (resolve, reject) => {
