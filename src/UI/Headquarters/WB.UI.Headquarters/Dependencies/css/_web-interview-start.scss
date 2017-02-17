@@ -58,6 +58,11 @@ body.no-cookies{
 		display: block;
 	}
 }
+@media (max-width: $screen-md-min){
+	div.no-cookies{
+    	margin: 25px 20px;
+    }
+}
 @media (max-width: $screen-sm-min){
 	.start-web-interview{
 		.left-column{
