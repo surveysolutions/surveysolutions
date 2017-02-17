@@ -69,6 +69,13 @@ router.beforeEach(async (to, from, next) => {
     } else {
         next()
     }
+
+    const hamburger = document.getElementById("sidebarHamburger")
+
+    // check for button visibility.
+    if (hamburger && hamburger.offsetParent != null) {
+        store.dispatch("toggleSidebarPanel", false /* close sidebar panel */)
+    }
 })
 
 export default router
