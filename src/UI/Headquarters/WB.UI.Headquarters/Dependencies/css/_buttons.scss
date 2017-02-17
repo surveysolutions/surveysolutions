@@ -306,3 +306,8 @@ a.disabled{
 		}
 	}
 }
+.btn-history{
+	background: none;
+	@include square(36px);
+	
+}

@@ -97,8 +97,14 @@ body > .ui-pnotify
 }
 .modal {
   text-align: center;
+  padding-right: 0 !important;
 }
-
+@media screen and (max-width: 680px){
+    .modal-dialog{
+		width: calc(100% - 40px) !important;
+        margin: 20px; 
+	}
+}
 @media screen and (min-width: $screen-sm-min){ 
   .modal:before {
     display: inline-block;
@@ -180,7 +186,26 @@ body > .ui-pnotify
 }
 .context-menu{
  	@extend %modal-window;
+    width: 280px;
     padding: 15px 10px;
+    h3{
+        font: 14px/16px "RobotoBold";
+        margin-bottom: 20px;
+        margin-left: 10px;
+    }
+    li{
+        a{
+            padding: 10px;
+            &:hover, &:focus, &:active{
+                background-color: #eff4f8;
+            }
+        }
+        span{
+            display: inline-block;
+            padding: 10px;
+            color: $gray_light;
+        }
+    }
 }
 @media (max-width: $screen-sm-min){
     .ui-pnotify{
