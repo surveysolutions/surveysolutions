@@ -35,6 +35,11 @@
                 const target = $(evnt.target)
                 let answer: string = target.val()
 
+                if (!answer || !answer.trim()) {
+                    this.markAnswerAsNotSavedWithMessage("Empty value cannot be saved")
+                    return
+                }
+
                 if (answer) {
                     if (this.$me.mask && !target.data("maskCompleted")) {
                         this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")

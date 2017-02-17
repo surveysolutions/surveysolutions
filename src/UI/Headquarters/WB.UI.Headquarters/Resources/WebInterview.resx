@@ -190,12 +190,10 @@
     <comment>{0} - human interview id</comment>
   </data>
   <data name="InterviewStartDateFormatText" xml:space="preserve">
-    <value>Interview start date: {0}</value>
-    <comment>{0} - start date of interview</comment>
+    <value>Interview start date: </value>
   </data>
   <data name="InterviewCompletionDateFormatText" xml:space="preserve">
-    <value>Interview completion date: {0}</value>
-    <comment>{0} - completion date of interview</comment>
+    <value>Interview completion date: </value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start interview</value>
