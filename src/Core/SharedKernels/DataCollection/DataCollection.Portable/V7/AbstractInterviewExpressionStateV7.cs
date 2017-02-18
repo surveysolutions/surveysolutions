@@ -80,26 +80,25 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            if (!HasParentScropeRosterId(rosterId))
-            {
-                return;
-            }
+            if (!HasParentScropeRosterId(rosterId)) return;
 
-            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             Guid[] rosterScopeIds = GetParentRosterScopeIds(rosterId);
-            var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
-            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
-
-            if (this.InterviewScopes.ContainsKey(rosterStringKey))
-            {
-                return;
-            }
 
             var rosterParentIdentityKey = outerRosterVector.Length == 0
                 ? Util.GetRosterKey(new[] { GetQuestionnaireId() }, new decimal[0])
                 : Util.GetRosterKey(rosterScopeIds.Shrink(), outerRosterVector);
 
-            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
+            var rosterParentStringKey = Util.GetRosterStringKey(rosterParentIdentityKey);
+
+            if (!this.InterviewScopes.ContainsKey(rosterParentStringKey)) return;
+
+            var parent = this.InterviewScopes[rosterParentStringKey];
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
+            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            if (this.InterviewScopes.ContainsKey(rosterStringKey)) return;
 
             var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
             rosterLevel.SetInterviewProperties(this.InterviewProperties);
