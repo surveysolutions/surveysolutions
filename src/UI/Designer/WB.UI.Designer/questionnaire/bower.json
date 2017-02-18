@@ -81,6 +81,12 @@
         "dist/pnotify.mobile.js",
         "dist/pnotify.nonblock.js"
       ]
+    },
+    "perfect-scrollbar": {
+      "main": [
+        "css/perfect-scrollbar.css",
+        "js/perfect-scrollbar.jquery.js"
+      ]
     }
   }
 }
