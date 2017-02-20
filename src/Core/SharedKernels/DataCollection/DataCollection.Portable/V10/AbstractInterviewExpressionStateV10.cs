@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             IExpressionExecutableV10 linkedQuestionRosterScope, 
             RosterVector linkedQuestionRosterVector)
         {
-            var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id).ToArray();
+            Identity[] linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey();
 
             var scopesWithSourceQuestionsFiltereByLocation = this.InterviewScopes
                 .Values
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 {
                     var rosterKey = x.GetRosterKey();
                     return this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-                        rosterKey.Select(k => k.Id).ToArray(),
+                        rosterKey,
                         rosterKey.Last().RosterVector,
                         linkedQuestionRosterScopeIds,
                         linkedQuestionRosterVector);
@@ -243,10 +243,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         }
 
         private bool DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-            Guid[] sourceRosterScopeIds, RosterVector sourceRosterVector, 
-            Guid[] linkedRosterScopeIds, RosterVector linkedRosterVector)
+            Identity[] sourceRosterScopeIds, RosterVector sourceRosterVector, 
+            Identity[] linkedRosterScopeIds, RosterVector linkedRosterVector)
         {
-            var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
+            var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.Select(x => x.Id).SequenceEqual(sourceRosterScopeIds.Select(x => x.Id));
             if (areLinkedAndSourceQuestionsOnSameLevel)
                 return true;
 
@@ -277,15 +277,15 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return true;
         }
 
-        private List<Guid> GetCommonParentRosterScopeIds(Guid[] rosterScopeIds1, Guid[] rosterScopeIds2)
+        private List<Guid> GetCommonParentRosterScopeIds(Identity[] rosterScopeIds1, Identity[] rosterScopeIds2)
         {
             var commonPart = new List<Guid>();
             var minLength = Math.Min(rosterScopeIds1.Length, rosterScopeIds2.Length);
             for (int i = 0; i < minLength; i++)
             {
-                if (rosterScopeIds1[i] == rosterScopeIds2[i])
+                if (rosterScopeIds1[i].Id == rosterScopeIds2[i].Id)
                 {
-                    commonPart.Add(rosterScopeIds1[i]);
+                    commonPart.Add(rosterScopeIds1[i].Id);
                 }
                 else
                 {
