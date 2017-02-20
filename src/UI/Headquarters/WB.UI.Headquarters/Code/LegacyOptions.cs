@@ -1,52 +1,14 @@
 ﻿using System.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Code
 {
     public static class LegacyOptions
     {
-        public static int InterviewDetailsDataSchedulerSynchronizationInterval
-        {
-            get
-            {
-                return
-                    int.Parse(
-                        WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.SynchronizationInterval"]);
-            }
-        }
+        public static int InterviewDetailsDataSchedulerSynchronizationInterval => 
+            WebConfigurationManager.AppSettings.GetInt("InterviewDetailsDataScheduler.SynchronizationInterval", 10);
 
-        public static bool WebInterviewEnabled
-        {
-            get
-            {
-                string setting = WebConfigurationManager.AppSettings["WebInterviewEnabled"];
-                bool parsedSetting;
-                bool.TryParse(setting, out parsedSetting);
-                return parsedSetting;
-            }
-        }
-
-        public static string SynchronizationIncomingCapiPackagesWithErrorsDirectory
-        {
-            get
-            {
-                return WebConfigurationManager.AppSettings["Synchronization.IncomingCapiPackagesWithErrorsDirectory"];
-            }
-        }
-
-        public static string SynchronizationIncomingCapiPackageFileNameExtension
-        {
-            get
-            {
-                return WebConfigurationManager.AppSettings["Synchronization.IncomingCapiPackageFileNameExtension"];
-            }
-        }
-
-        public static string IncomingUnprocessedPackageFileNameExtension
-        {
-            get
-            {
-                return WebConfigurationManager.AppSettings["Synchronization.IncomingUnprocessedPackageFileNameExtension"];
-            }
-        }
+        public static bool WebInterviewEnabled => 
+            WebConfigurationManager.AppSettings.GetBool("WebInterviewEnabled", false);
     }
 }
