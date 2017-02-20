@@ -21,6 +21,7 @@ namespace WB.UI.Interviewer.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly IPermissions permissions;
+        private readonly IInterviewerSettings interviewerSettings;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -28,13 +29,15 @@ namespace WB.UI.Interviewer.Services
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             string privateStorage, 
-            IPermissions permissions)
+            IPermissions permissions,
+            IInterviewerSettings interviewerSettings)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.privateStorage = privateStorage;
             this.permissions = permissions;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public async Task<string> BackupAsync()
@@ -50,12 +53,14 @@ namespace WB.UI.Interviewer.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
+            this.CreateTableInfoFile();
+
             await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
-            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;")
+            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;tablet.info$;")
                                .ConfigureAwait(false);
 
             this.Cleanup();
@@ -198,6 +203,13 @@ namespace WB.UI.Interviewer.Services
                     File.Move(tempBackupFile, destFileName);
                 }
             }
+        }
+
+        private void CreateTableInfoFile()
+        {
+            var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "tablet.info");
+            var deviceTechnicalInformation = this.interviewerSettings.GetDeviceTechnicalInformation();
+            this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
         }
     }
 }
