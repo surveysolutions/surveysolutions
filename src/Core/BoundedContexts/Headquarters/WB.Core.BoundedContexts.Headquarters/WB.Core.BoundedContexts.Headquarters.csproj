@@ -306,7 +306,6 @@
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
-    <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\AssemblyInfoMap.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
