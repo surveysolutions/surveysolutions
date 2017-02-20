@@ -264,6 +264,9 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
                 "~/Scripts/pages/export-settings.js"
                 ));
+
+            bundles.Add(new ScriptBundle("~/js/new-ui.js").Include(
+                "~/Scripts/new-ui.js"));
         }
     }
 }

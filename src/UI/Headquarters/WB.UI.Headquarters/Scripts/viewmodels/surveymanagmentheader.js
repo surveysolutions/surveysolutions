@@ -14,7 +14,7 @@
             headers: requestHeaders,
             dataType: 'json'
         }).success(function (data) {
-            self.holder.find('.sync-queue-size').text(data);
+            self.holder.find('#sync-queue-size').text(data);
             if (data > 0) {
                 self.holder.fadeIn();
             } else {

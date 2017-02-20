@@ -141,8 +141,6 @@
             $('#wrapper').css('margin-top', navigationHeight + 'px');
             $('#umbrella').css('top', navigationHeight + 'px');
         };
-        var $updateIncomingPackagesQueueApiUrl =
-            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})';
         $(document)
             .ready(function () {
                 setMinHeight();
@@ -151,10 +149,9 @@
                         setMinHeight();
                     });
 
-                if (window.input.settings.config.syncQueueEnabled) {
-                    new Supervisor.VM.SurveyManagmentHeader($updateIncomingPackagesQueueApiUrl,
-                        "#IncomingPackagesQueueIndicator")
-                    .load();
+                if (window.input.settings.config.syncQueue.enabled) {
+                    new Supervisor.VM.SurveyManagmentHeader(window.input.settings.config.syncQueue.lengthUrl,
+                        "#IncomingPackagesQueueIndicator").load();
                 }
 
                 @if (User.Identity.IsObserver())
