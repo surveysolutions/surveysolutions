@@ -223,16 +223,20 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
             var scopesWithSourceQuestionsFiltereByLocation = this.InterviewScopes
                 .Values
-                .Where(x => this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-                    x.GetRosterKey().Select(k => k.Id).ToArray(),
-                    x.GetRosterKey().Last().RosterVector,
-                    linkedQuestionRosterScopeIds, 
-                    linkedQuestionRosterVector));
+                .Where(x =>
+                {
+                    var rosterKey = x.GetRosterKey();
+                    return this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+                        rosterKey.Select(k => k.Id).ToArray(),
+                        rosterKey.Last().RosterVector,
+                        linkedQuestionRosterScopeIds,
+                        linkedQuestionRosterVector);
+                });
 
             var filterResults = scopesWithSourceQuestionsFiltereByLocation
                 .Select(scope => scope.ExecuteLinkedQuestionFilter(linkedQuestionRosterScope, linkedQuestionId))
                 .Where(x => x?.Enabled ?? false)
-                .Select(x => new RosterVector(x.RosterKey.Last().RosterVector))
+                .Select(x => x.RosterKey.Last().RosterVector)
                 .ToArray();
 
             return filterResults;
@@ -247,23 +251,23 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 return true;
 
             var commonParentRosterScopeIds = this.GetCommonParentRosterScopeIds(linkedRosterScopeIds, sourceRosterScopeIds);
-            var hasLinkedAndSourceQuestionsCommonParents = commonParentRosterScopeIds.Length != 0;
+            var hasLinkedAndSourceQuestionsCommonParents = commonParentRosterScopeIds.Count != 0;
             if (!hasLinkedAndSourceQuestionsCommonParents)
                 return true;
 
-            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonParentRosterScopeIds.Length;
+            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonParentRosterScopeIds.Count;
             if (isSourceQuestionDeeperThanLinkedQuestion)
             {
-                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length).ToArray();
+                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Count);
                 if (!linkedRosterVector.SequenceEqual(sourceParentRosterVector))
                     return false;
             }
 
-            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonParentRosterScopeIds.Length;
+            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonParentRosterScopeIds.Count;
             if (isLinkedQuestionDeeperThanSourceQuestion)
             {
-                var linkedParentRosterVector = linkedRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
-                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
+                var linkedParentRosterVector = linkedRosterVector.Take(commonParentRosterScopeIds.Count - 1);
+                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Count - 1);
 
                 var doesScopesHasTheSameParent = !sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
                 if (doesScopesHasTheSameParent)
@@ -273,10 +277,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return true;
         }
 
-        private Guid[] GetCommonParentRosterScopeIds(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
+        private List<Guid> GetCommonParentRosterScopeIds(Guid[] rosterScopeIds1, Guid[] rosterScopeIds2)
         {
             var commonPart = new List<Guid>();
-            var minLength = Math.Min(rosterScopeIds1.Count, rosterScopeIds2.Count);
+            var minLength = Math.Min(rosterScopeIds1.Length, rosterScopeIds2.Length);
             for (int i = 0; i < minLength; i++)
             {
                 if (rosterScopeIds1[i] == rosterScopeIds2[i])
@@ -288,7 +292,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                     break;
                 }
             }
-            return commonPart.ToArray();
+            return commonPart;
         }
 
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();
