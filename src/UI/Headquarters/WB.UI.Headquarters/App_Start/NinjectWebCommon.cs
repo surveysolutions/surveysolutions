@@ -108,15 +108,7 @@ namespace WB.UI.Headquarters
                 appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
-
-            var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
-                incomingCapiPackagesWithErrorsDirectoryName:
-                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
-                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension,
-                incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
-                origin: Constants.SupervisorSynchronizationOrigin,
-                retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
-                retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+            var synchronizationSettings = new SyncSettings(origin: Constants.SupervisorSynchronizationOrigin,
                 useBackgroundJobForProcessingPackages: useBackgroundJobForProcessingPackages);
 
             var basePath = appDataDirectory;

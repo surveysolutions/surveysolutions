@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Kernel.Load(new QuartzNinjectModule());
 
-            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesService>();
+            this.Bind<IInterviewPackagesService>().To<InterviewPackagesService>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
