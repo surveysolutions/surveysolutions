@@ -95,8 +95,9 @@ namespace WB.UI.Headquarters
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             Global.Initialize(); // pinging global.asax to perform it's part of static initialization
 
+            var useBackgroundJobForProcessingPackages = WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false);
             var interviewDetailsDataLoaderSettings =
-                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
+                new SyncPackagesProcessorBackgroundJobSetting(useBackgroundJobForProcessingPackages,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     synchronizationBatchCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
                     synchronizationParallelExecutorsCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount", @default: 1));
@@ -107,6 +108,7 @@ namespace WB.UI.Headquarters
                 appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
+
             var synchronizationSettings = new SyncSettings(appDataDirectory: appDataDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
@@ -115,7 +117,7 @@ namespace WB.UI.Headquarters
                 origin: Constants.SupervisorSynchronizationOrigin,
                 retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
                 retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
-                useBackgroundJobForProcessingPackages: WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false));
+                useBackgroundJobForProcessingPackages: useBackgroundJobForProcessingPackages);
 
             var basePath = appDataDirectory;
             

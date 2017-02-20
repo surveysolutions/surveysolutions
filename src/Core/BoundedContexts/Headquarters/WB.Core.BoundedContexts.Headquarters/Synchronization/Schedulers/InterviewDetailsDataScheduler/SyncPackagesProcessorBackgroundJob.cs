@@ -15,11 +15,11 @@ using WB.Infrastructure.Native.Threading;
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     [DisallowConcurrentExecution]
-    internal class InterviewDetailsBackgroundJob : IJob
+    internal class SyncPackagesProcessorBackgroundJob : IJob
     {
-        ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewDetailsBackgroundJob>();
+        ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SyncPackagesProcessorBackgroundJob>();
         IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
-        InterviewDetailsDataLoaderSettings interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<InterviewDetailsDataLoaderSettings>();
+        SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
         IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
