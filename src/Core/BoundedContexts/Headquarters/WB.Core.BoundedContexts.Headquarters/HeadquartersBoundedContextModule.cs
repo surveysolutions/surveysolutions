@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     public class HeadquartersBoundedContextModule : NinjectModule
     {
         private readonly string currentFolderPath;
-        private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly SyncSettings syncSettings;
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
             ReadSideSettings readSideSettings,
             UserPreloadingSettings userPreloadingSettings,
             ExportSettings exportSettings,
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.sampleImportSettings = sampleImportSettings;
             this.currentFolderPath = currentFolderPath;
-            this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
+            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
             this.readSideSettings = readSideSettings;
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
-            this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
+            this.Bind<SyncPackagesProcessorBackgroundJobSetting>().ToConstant(this.syncPackagesProcessorBackgroundJobSetting);
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);

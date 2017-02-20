@@ -774,6 +774,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\new-ui.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\exportdata.js" />
@@ -1040,6 +1041,7 @@
     <Content Include="Views\WebInterview\OutdatedBrowser.cshtml" />
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
+    <Content Include="Views\Shared\QueueIndicator.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

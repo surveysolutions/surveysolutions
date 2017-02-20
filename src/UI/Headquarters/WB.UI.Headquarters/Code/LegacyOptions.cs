@@ -4,11 +4,6 @@ namespace WB.UI.Headquarters.Code
 {
     public static class LegacyOptions
     {
-        public static bool SchedulerEnabled
-        {
-            get { return bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]); }
-        }
-
         public static int InterviewDetailsDataSchedulerSynchronizationInterval
         {
             get

@@ -1,6 +1,4 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Filters
-@using WB.UI.Headquarters.Resources
-@if (ViewBag.ShowInterviewLimitIndicator)
+﻿@if (ViewBag.ShowInterviewLimitIndicator)
 {
     <li class='dropdown active @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "open" : "")'>
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style='background: @(ViewBag.PayAttentionOnInterviewLimitIndicator ? "red" : "#ffa500")'>
@@ -8,16 +6,16 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a href="#"><b>@LimitsIndicator.YouAreInTestingMode</b></a>
+                <a href="javascript:void(0);"><b>@LimitsIndicator.YouAreInTestingMode</b></a>
             </li>
             <li>
                 @if (ViewBag.InterviewsCountAllowedToCreateUntilLimitReached >= 0)
                 {
-                    <a href="#">@string.Format(@LimitsIndicator.InterviewsLeftFormat, ViewBag.InterviewsCountAllowedToCreateUntilLimitReached)</a>
+                    <a href="javascript:void(0);">@string.Format(@LimitsIndicator.InterviewsLeftFormat, ViewBag.InterviewsCountAllowedToCreateUntilLimitReached)</a>
                 }
                 else
                 {
-                    <a href="#">@string.Format(@LimitsIndicator.YouHaveExceededYourLimitFormat, ViewBag.MaxAllowedInterviewsCount)</a>
+                    <a href="javascript:void(0);">@string.Format(@LimitsIndicator.YouHaveExceededYourLimitFormat, ViewBag.MaxAllowedInterviewsCount)</a>
                 }
             </li>
         </ul>
