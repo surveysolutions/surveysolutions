@@ -2,6 +2,8 @@
 using System.Linq;
 using Android.App;
 using Android.Content;
+using Android.OS;
+using Plugin.DeviceInfo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -10,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
+using Environment = System.Environment;
 
 namespace WB.UI.Interviewer.Settings
 {
@@ -92,8 +95,12 @@ namespace WB.UI.Interviewer.Settings
             return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
                    $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
                    $"User:{GetUserInformation()} {Environment.NewLine}" +
+                   $"Device model:{this.GetDeviceModel()} {Environment.NewLine}" +
+                   $"Device type:{this.GetDeviceType()} {Environment.NewLine}" +
+                   $"Android version:{GetAndroidVersion()} {Environment.NewLine}" +
                    $"DeviceId:{this.GetDeviceId()} {Environment.NewLine}" +
-                   $"RAM:{GetRAMInformation()}% {Environment.NewLine}" +
+                   $"RAM:{GetRAMInformation()} {Environment.NewLine}" +
+                   $"Disk:{GetDiskInformation()} {Environment.NewLine}" +
                    $"DBSize:{GetDataBaseSize()} {Environment.NewLine}" +
                    $"Endpoint:{this.Endpoint}{Environment.NewLine}" +
                    $"AcceptUnsignedSslCertificate:{this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
@@ -104,6 +111,20 @@ namespace WB.UI.Interviewer.Settings
                    $"EventChunkSize:{this.EventChunkSize} {Environment.NewLine}" +
                    $"VibrateOnError:{this.VibrateOnError} {Environment.NewLine}" +
                    $"InterviewsList:{interviewIds}";
+        }
+
+        private string GetDeviceModel()
+        {
+            return CrossDeviceInfo.Current.Model;
+        }
+        private string GetDeviceType()
+        {
+            return CrossDeviceInfo.Current.Idiom.ToString();
+        }
+
+        private string GetAndroidVersion()
+        {
+            return Android.OS.Build.VERSION.Release;
         }
 
         public void SetEventChunkSize(int eventChunkSize)
@@ -201,11 +222,22 @@ namespace WB.UI.Interviewer.Settings
 
             ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
             activityManager.GetMemoryInfo(mi);
-            return
-                $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int) (((double) (100*mi.AvailMem))/mi.TotalMem)}";
+            return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int) (((double) (100*mi.AvailMem))/mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
         }
 
-        private string GetDataBaseSize() => FileSizeUtils.SizeSuffix(
-            this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
+        private string GetDiskInformation()
+        {
+            string path = global::Android.OS.Environment.DataDirectory.Path;
+            StatFs stat = new StatFs(path);
+            long blockSize = stat.BlockSizeLong;
+            long availableBlocks = stat.AvailableBlocksLong;
+            long totalBlocks = stat.BlockCountLong;
+            var availableInternalMemorySize = (availableBlocks*blockSize);
+            var totalInternalMemorySize = totalBlocks* blockSize;
+            return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {(int) (((double) (100* availableInternalMemorySize))/ totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
+        }
+
+        private string GetDataBaseSize() => 
+            FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
     }
 }
