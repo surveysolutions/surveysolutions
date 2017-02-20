@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -32,12 +33,28 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
         public Type EventBaseType { get; set; }
-        public String MethodNameRegexPattern { get; set; }
+        private readonly Regex MethodNamePattern = new Regex("^(on|On|ON)+|Apply$", RegexOptions.CultureInvariant);
+
+        private static ConcurrentDictionary<MethodInfo, ParameterInfo[]> _parametersCache = new ConcurrentDictionary<MethodInfo, ParameterInfo[]>();
 
         public ConventionBasedEventHandlerMappingStrategy()
         {
-            MethodNameRegexPattern = "^(on|On|ON)+|Apply$";
-            EventBaseType = typeof (Object);
+            EventBaseType = typeof(Object);
+        }
+
+        static ParameterInfo[] EmptyParameters = new ParameterInfo[0];
+
+        private ParameterInfo[] GetParameters(MethodInfo method)
+        {
+            return _parametersCache.GetOrAdd(method, m =>
+            {
+                var res = m.GetParameters();
+                if(res.Length == 0)
+                {
+                    return EmptyParameters;
+                }
+                return res;
+            });
         }
 
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
@@ -48,22 +65,22 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
             var methodsToMatch = targetType.GetMethods();
 
             var matchedMethods = from method in methodsToMatch
-                                 let parameters = method.GetParameters()
+                                 let parameters = GetParameters(method)
                                  where
-                                     // Get only methods where the name matches.
-                                    Regex.IsMatch(method.Name, MethodNameRegexPattern, RegexOptions.CultureInvariant) &&
-                                     // Get only methods that have 1 parameter.
+                                    // Get only methods where the name matches.
+                                    MethodNamePattern.IsMatch(method.Name) &&
+                                    // Get only methods that have 1 parameter.
                                     parameters.Length == 1 &&
-                                     // Get only methods where the first parameter is an event.
+                                    // Get only methods where the first parameter is an event.
                                     EventBaseType.GetTypeInfo().IsAssignableFrom(parameters[0].ParameterType.GetTypeInfo())
-                                     // Get only methods that are not marked with the no event handler attribute.
+                                 // Get only methods that are not marked with the no event handler attribute.
                                  select
-                                    new { MethodInfo = method, FirstParameter = method.GetParameters()[0] };
+                                    new { MethodInfo = method, FirstParameter = GetParameters(method)[0] };
 
             foreach (var method in matchedMethods)
             {
                 var methodCopy = method.MethodInfo;
-                Type firstParameterType = methodCopy.GetParameters().First().ParameterType;
+                Type firstParameterType = GetParameters(methodCopy).First().ParameterType;
 
                 Action<object> invokeAction = (e) => methodCopy.Invoke(target, new[] { e });
 
@@ -81,10 +98,10 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
             foreach (var method in methodsToMatch)
             {
-                var parameters = method.GetParameters();
+                var parameters = GetParameters(method);
 
                 if (// Get only methods where the name matches.
-                    Regex.IsMatch(method.Name, MethodNameRegexPattern, RegexOptions.CultureInvariant) &&
+                    MethodNamePattern.IsMatch(method.Name) &&
                     // Get only methods that have 1 parameter.
                     parameters.Length == 1 &&
                     // Get only methods where the first parameter is equal to event.
