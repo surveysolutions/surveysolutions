@@ -722,7 +722,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
+        protected void UpdateLinkedQuestions(InterviewTree interviewTree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
         {
             bool expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
             if (expressionStateSupportLinkedOptionsCalculation)
@@ -731,20 +731,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (KeyValuePair<Identity, RosterVector[]> linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
-                    InterviewTreeQuestion linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
+                    InterviewTreeQuestion linkedQuestion = interviewTree.GetQuestion(linkedQuestionWithOptions.Key);
                     linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value, removeAnswersIfOptionsSetChanged);
                 }
 
                 // backward compatibility with old assemblies
-                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(tree, processLinkedQuestionFilters);
+                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(interviewTree, processLinkedQuestionFilters);
             }
             else
             {
                 // backward compatibility if assembly cannot process linked questions
-                CalculateLinkedOptionsOnTree(tree);
+                CalculateLinkedOptionsOnTree(interviewTree);
             }
 
-            CalculateLinkedToListOptionsOnTree(tree);
+            CalculateLinkedToListOptionsOnTree(interviewTree);
         }
 
         [Obsolete("v 5.10, release 01 jul 16")]
