@@ -219,30 +219,34 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             IExpressionExecutableV10 linkedQuestionRosterScope, 
             RosterVector linkedQuestionRosterVector)
         {
-            var linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey().Select(x => x.Id).ToArray();
+            Identity[] linkedQuestionRosterScopeIds = linkedQuestionRosterScope.GetRosterKey();
 
             var scopesWithSourceQuestionsFiltereByLocation = this.InterviewScopes
                 .Values
-                .Where(x => this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-                    x.GetRosterKey().Select(k => k.Id).ToArray(),
-                    x.GetRosterKey().Last().RosterVector,
-                    linkedQuestionRosterScopeIds, 
-                    linkedQuestionRosterVector));
+                .Where(x =>
+                {
+                    var rosterKey = x.GetRosterKey();
+                    return this.DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
+                        rosterKey,
+                        rosterKey.Last().RosterVector,
+                        linkedQuestionRosterScopeIds,
+                        linkedQuestionRosterVector);
+                });
 
             var filterResults = scopesWithSourceQuestionsFiltereByLocation
                 .Select(scope => scope.ExecuteLinkedQuestionFilter(linkedQuestionRosterScope, linkedQuestionId))
                 .Where(x => x?.Enabled ?? false)
-                .Select(x => new RosterVector(x.RosterKey.Last().RosterVector))
+                .Select(x => x.RosterKey.Last().RosterVector)
                 .ToArray();
 
             return filterResults;
         }
 
         private bool DoesScopeWithSourceQuestionCorrespondToLinkedQuestion(
-            Guid[] sourceRosterScopeIds, RosterVector sourceRosterVector, 
-            Guid[] linkedRosterScopeIds, RosterVector linkedRosterVector)
+            Identity[] sourceRosterScopeIds, RosterVector sourceRosterVector, 
+            Identity[] linkedRosterScopeIds, RosterVector linkedRosterVector)
         {
-            var areLinkedAndSourceQuestionsOnSameLevel = linkedRosterScopeIds.SequenceEqual(sourceRosterScopeIds);
+            var areLinkedAndSourceQuestionsOnSameLevel = SequenceEqualByIdentityId(linkedRosterScopeIds, sourceRosterScopeIds);
             if (areLinkedAndSourceQuestionsOnSameLevel)
             {
                 if (sourceRosterVector.Length == linkedRosterVector.Length && linkedRosterVector.Length > 0)
@@ -260,24 +264,24 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 }
             }
 
-            var commonParentRosterScopeIds = this.GetCommonParentRosterScopeIds(linkedRosterScopeIds, sourceRosterScopeIds);
-            var hasLinkedAndSourceQuestionsCommonParents = commonParentRosterScopeIds.Length != 0;
+            int commonRosterLevel = this.GetCommonRosterLevel(linkedRosterScopeIds, sourceRosterScopeIds);
+            var hasLinkedAndSourceQuestionsCommonParents = commonRosterLevel != 0;
             if (!hasLinkedAndSourceQuestionsCommonParents)
                 return true;
 
-            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonParentRosterScopeIds.Length;
+            var isSourceQuestionDeeperThanLinkedQuestion = linkedRosterScopeIds.Length == commonRosterLevel;
             if (isSourceQuestionDeeperThanLinkedQuestion)
             {
-                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length).ToArray();
+                var sourceParentRosterVector = sourceRosterVector.Take(commonRosterLevel);
                 if (!linkedRosterVector.SequenceEqual(sourceParentRosterVector))
                     return false;
             }
 
-            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonParentRosterScopeIds.Length;
+            var isLinkedQuestionDeeperThanSourceQuestion = sourceRosterScopeIds.Length == commonRosterLevel;
             if (isLinkedQuestionDeeperThanSourceQuestion)
             {
-                var linkedParentRosterVector = linkedRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
-                var sourceParentRosterVector = sourceRosterVector.Take(commonParentRosterScopeIds.Length - 1).ToArray();
+                var linkedParentRosterVector = linkedRosterVector.Take(commonRosterLevel - 1);
+                var sourceParentRosterVector = sourceRosterVector.Take(commonRosterLevel - 1);
 
                 var doesScopesHasTheSameParent = !sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
                 if (doesScopesHasTheSameParent)
@@ -287,22 +291,40 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             return true;
         }
 
-        private Guid[] GetCommonParentRosterScopeIds(IReadOnlyList<Guid> rosterScopeIds1, IReadOnlyList<Guid> rosterScopeIds2)
+        private static bool SequenceEqualByIdentityId(Identity[] source, Identity[] target)
         {
-            var commonPart = new List<Guid>();
-            var minLength = Math.Min(rosterScopeIds1.Count, rosterScopeIds2.Count);
+            if (source.Length == target.Length)
+            {
+                for (var i = 0; i < source.Length; i++)
+                {
+                    if (target[i].Id != source[i].Id)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private int GetCommonRosterLevel(Identity[] rosterScopeIds1, Identity[] rosterScopeIds2)
+        {
+            int commonRosterLevel = 0;
+            var minLength = Math.Min(rosterScopeIds1.Length, rosterScopeIds2.Length);
             for (int i = 0; i < minLength; i++)
             {
-                if (rosterScopeIds1[i] == rosterScopeIds2[i])
+                if (rosterScopeIds1[i].Id == rosterScopeIds2[i].Id)
                 {
-                    commonPart.Add(rosterScopeIds1[i]);
+                    commonRosterLevel++;
                 }
                 else
                 {
                     break;
                 }
             }
-            return commonPart.ToArray();
+            return commonRosterLevel;
         }
 
         IInterviewExpressionStateV10 IInterviewExpressionStateV10.Clone() => (IInterviewExpressionStateV10) this.Clone();
