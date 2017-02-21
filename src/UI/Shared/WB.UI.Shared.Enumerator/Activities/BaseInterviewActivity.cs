@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
@@ -92,6 +93,11 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnPostCreate(savedInstanceState);
             this.drawerToggle.SyncState();
+        }
+
+        public override void OnLowMemory()
+        {
+            GC.Collect(GC.MaxGeneration);
         }
     }
 }
