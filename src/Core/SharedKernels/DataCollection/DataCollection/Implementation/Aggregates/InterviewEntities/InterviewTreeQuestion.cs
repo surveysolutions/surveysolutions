@@ -437,12 +437,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
-            var orderedOptions = this.GetOptionsInCorrectOrder(options);
+            options = this.GetOptionsInCorrectOrder(options);
             this.AsLinked.SetOptions(options);
 
             if (!removeAnswer) return;
 
-            var optionsAreIdentical = previousOptions.SequenceEqual(orderedOptions);
+            var optionsAreIdentical = previousOptions.SequenceEqual(options);
             if (optionsAreIdentical) return;
 
             if (this.IsMultiLinkedOption)
@@ -451,7 +451,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsSingleLinkedOption.RemoveAnswer();
         }
 
-        private IEnumerable<RosterVector> GetOptionsInCorrectOrder(RosterVector[] options)
+        private RosterVector[] GetOptionsInCorrectOrder(RosterVector[] options)
         {
             if (this.IsSingleLinkedOption || this.IsMultiLinkedOption)
             {
@@ -460,7 +460,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return this.Tree.GetAllNodesInEnumeratorOrder()
                     .Where(node => node.Identity.Id == linkedLinkedSourceId)
                     .Select(node => node.Identity.RosterVector)
-                    .Where(rosterVector => optionsHashSet.Contains(rosterVector));
+                    .Where(rosterVector => optionsHashSet.Contains(rosterVector))
+                    .ToArray();
             }
             return options;
         }
