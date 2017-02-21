@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers" #>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,13 +72,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 	public static class IdOf
 	{
-		public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireStructure.Id #>"); 
+	// >>>>>>> 
+		public static readonly Guid @__questionnaire = <#= QuestionnaireStructure.Id.AsBytesString() #>; 
 		//questions
 <#
 		foreach (var q in QuestionnaireStructure.AllQuestions) 
 		{
 #>
-		public static readonly Guid <#= q.IdName#> = Guid.Parse("<#= q.Id #>");
+		public static readonly Guid <#= q.IdName#> = <#= q.Id.AsBytesString() #>;
 <# 
 		}
 #>
@@ -86,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var v in QuestionnaireStructure.AllVariables) 
 		{
 #>
-		public static readonly Guid <#= v.IdName#> = Guid.Parse("<#= v.Id #>");
+		public static readonly Guid <#= v.IdName#> = <#= v.Id.AsBytesString() #>;
 <# 
 		}
 #>
@@ -95,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var staticText in QuestionnaireStructure.AllStaticTexts) 
 		{
 #>
-		public static readonly Guid <#=staticText.IdName#> = Guid.Parse("<#=staticText.Id#>");
+		public static readonly Guid <#=staticText.IdName#> = <#= staticText.Id.AsBytesString() #>;
 <# 
 		}
 #>
@@ -104,7 +106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var g in QuestionnaireStructure.AllGroups) 
 		{
 #>
-		public static readonly Guid <#= g.IdName#> = Guid.Parse("<#= g.Id #>");
+		public static readonly Guid <#= g.IdName#> = <#= g.Id.AsBytesString() #>;
 <# 
 		}
 #>
@@ -113,7 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var r in QuestionnaireStructure.AllRosters) 
 		{
 #>
-		public static readonly Guid <#= r.IdName#> = Guid.Parse("<#= r.Id #>");
+		public static readonly Guid <#= r.IdName#> = <#= r.Id.AsBytesString() #>;
 <# 
 		}
 #>
@@ -123,7 +125,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var r in QuestionnaireStructure.AllRosters)
 		{
 #>
-		public static readonly Guid[] <#= r.RosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
+		public static readonly Guid[] <#= r.RosterScopeName#> = new[] {
+			<#=String.Join(", \r\n\t\t\t", r.RosterScope.Select(g => g.AsBytesString()).ToArray()) #>
+		};
 <# 
 		}
 #>
@@ -134,12 +138,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			foreach (var dependency in QuestionnaireStructure.ConditionalDependencies)
 			{
 #>
-			{Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+			{ <#= dependency.Key.AsBytesString() #>, new Guid[]{
 <#
 			foreach (var dependencyValue in dependency.Value)
 			{
 #>
-				Guid.Parse("<#= dependencyValue #>"),
+				<#= dependencyValue.AsBytesString() #>,
 <# 
 			}
 #>
@@ -155,12 +159,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			foreach (var dependency in QuestionnaireStructure.StructuralDependencies) 
 			{
 #>
-			{ Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+			{ <#= dependency.Key.AsBytesString() #>, new Guid[]{
 <#
 			foreach (var d in dependency.Value)
 			{
 #>
-				Guid.Parse("<#= d #>"),
+				<#= d.AsBytesString() #>,
 <# 
 			}
 #>
