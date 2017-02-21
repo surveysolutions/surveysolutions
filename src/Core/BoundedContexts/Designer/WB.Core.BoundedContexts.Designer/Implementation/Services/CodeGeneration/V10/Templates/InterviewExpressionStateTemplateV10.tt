@@ -72,7 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 	public static class IdOf
 	{
-	// >>>>>>> 
 		public static readonly Guid @__questionnaire = <#= QuestionnaireStructure.Id.AsBytesString() #>; 
 		//questions
 <#
