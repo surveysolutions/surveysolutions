@@ -299,8 +299,14 @@
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
+    </Compile>
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
     <Compile Include="ValueObjects\RosterScope.cs" />
@@ -323,11 +329,6 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\LinkedFilterMethodTemplateV10.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
-      <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\OptionsFilterMethodTemplateV10.cs">
       <AutoGen>True</AutoGen>
