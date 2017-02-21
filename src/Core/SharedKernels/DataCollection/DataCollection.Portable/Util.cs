@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -24,23 +25,20 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-                StringBuilder builder = new StringBuilder();
-
+            using (var builder = Pool.StringBuilder.Object)
+            {
                 foreach (var scopeId in scopeIds)
                 {
-                    builder.Append("$");
-
-                    builder.Append(scopeId.Id);
+                    builder.Value.Append($"${scopeId.Id}");
 
                     foreach (var coordinate in scopeId.RosterVector.Coordinates)
                     {
-                        builder.Append("-");
-
-                        builder.Append(Convert.ToInt32(coordinate));
+                        builder.Value.Append("-" + Convert.ToInt32(coordinate));
                     }
                 }
 
-                return builder.ToString();
+                return builder.Value.ToString();
+            }        
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
