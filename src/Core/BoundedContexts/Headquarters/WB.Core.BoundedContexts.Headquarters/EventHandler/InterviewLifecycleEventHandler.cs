@@ -1,11 +1,6 @@
-using System;
 using System.Linq;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
@@ -56,29 +51,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public override object[] Writers => new object[0];
 
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
-        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public InterviewLifecycleEventHandler(IWebInterviewNotificationService webInterviewNotificationService,
-            IStatefulInterviewRepository statefulInterviewRepository,
-            IQuestionnaireStorage questionnaireRepository,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.statefulInterviewRepository = statefulInterviewRepository;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
-            this.questionnaireRepository = questionnaireRepository;
         }
 
-        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> @event)
+        public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Questions);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
         }
 
-        public void Handle(IPublishedEvent<AnswersDeclaredValid> @event)
+        public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Questions);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
         }
 
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
@@ -104,37 +93,37 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)        
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
         
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt)
@@ -144,85 +133,85 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
         }
 
-        public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> @event)
+        public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.GetFailedValidationConditionsDictionary().Keys.ToArray());
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.GetFailedValidationConditionsDictionary().Keys.ToArray());
         }
 
-        public void Handle(IPublishedEvent<StaticTextsDeclaredValid> @event)
+        public void Handle(IPublishedEvent<StaticTextsDeclaredValid> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.StaticTexts);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
         }
 
-        public void Handle(IPublishedEvent<RosterInstancesAdded> @event)
-            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId,
-                @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+        public void Handle(IPublishedEvent<RosterInstancesAdded> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId,
+                evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
-        public void Handle(IPublishedEvent<RosterInstancesRemoved> @event)
-            => this.webInterviewNotificationService.RefreshRemovedEntities(@event.EventSourceId,
-                @event.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+        public void Handle(IPublishedEvent<RosterInstancesRemoved> evnt)
+            => this.webInterviewNotificationService.RefreshRemovedEntities(evnt.EventSourceId,
+                evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
-        public void Handle(IPublishedEvent<RosterInstancesTitleChanged> @event)
+        public void Handle(IPublishedEvent<RosterInstancesTitleChanged> evnt)
         {
-            var rosterIdentities = @event.Payload.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToArray();
-            this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, rosterIdentities);
-            this.RefreshLinkedToRosterQuestions(@event.EventSourceId, rosterIdentities);
+            var rosterIdentities = evnt.Payload.ChangedInstances.Select(x => x.RosterInstance.GetIdentity()).ToArray();
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, rosterIdentities);
+            this.webInterviewNotificationService.RefreshLinkedToRosterQuestions(evnt.EventSourceId, rosterIdentities);
         }
 
-        public void Handle(IPublishedEvent<GroupsEnabled> @event)
-            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
+        public void Handle(IPublishedEvent<GroupsEnabled> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Groups);
 
-        public void Handle(IPublishedEvent<GroupsDisabled> @event)
-            => this.webInterviewNotificationService.RefreshEntities(@event.EventSourceId, @event.Payload.Groups);
+        public void Handle(IPublishedEvent<GroupsDisabled> evnt)
+            => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Groups);
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
         {
             var textListIdentity = new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector);
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, textListIdentity);
-            this.RefreshLinkedToListQuestions(evnt.EventSourceId, new[] {textListIdentity});
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshLinkedToListQuestions(evnt.EventSourceId, new[] {textListIdentity});
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<YesNoQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
-            this.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<LinkedOptionsChanged> evnt) 
@@ -239,68 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<LinkedToListOptionsChanged> evnt)
             => this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.ChangedLinkedQuestions.Select(x => x.QuestionId).ToArray());
-
-        private void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-            var rosterIds = rosterIdentities.Select(x => x.Id).Distinct();
-
-            var linkedToRosterQuestionIds = rosterIds.SelectMany(x => questionnaire.GetLinkedToSourceEntity(x));
-
-            foreach (var linkedToRosterQuestionId in linkedToRosterQuestionIds)
-            {
-                var identitiesToRefresh = interview.GetAllIdentitiesForEntityId(linkedToRosterQuestionId).ToArray();
-                this.webInterviewNotificationService.RefreshEntities(interviewId, identitiesToRefresh);
-            }
-        }
-
-        private void RefreshLinkedToListQuestions(Guid interviewId, Identity[] questionIdentities)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-            foreach (var questionIdentity in questionIdentities)
-            {
-                if(interview.GetTextListQuestion(questionIdentity) == null) continue;
-                
-                Guid[] listQuestionIds = questionnaire.GetLinkedToSourceEntity(questionIdentity.Id).ToArray();
-                if (!listQuestionIds.Any())
-                    return;
-
-                foreach (var listQuestionId in listQuestionIds)
-                {
-                    var questionsToRefresh = interview.FindQuestionsFromSameOrDeeperLevel(listQuestionId, questionIdentity);
-                    this.webInterviewNotificationService.RefreshEntities(interviewId, questionsToRefresh.ToArray());
-                }
-            }
-        }
-
-        private void RefreshEntitiesWithFilteredOptions(Guid interviewId)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-            var document = this.questionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
-
-            var entityIds = document.Find<IComposite>(IsSupportFilterOptionCondition)
-                .Select(e => e.PublicKey).ToHashSet();
-
-            foreach (var entityId in entityIds)
-            {
-                var identities = interview.GetAllIdentitiesForEntityId(entityId).ToArray();
-                this.webInterviewNotificationService.RefreshEntities(interviewId, identities);
-            }
-        }
-
-        private bool IsSupportFilterOptionCondition(IComposite documentEntity)
-        {
-            var question = documentEntity as IQuestion;
-            if (question != null && !question.Properties.OptionsFilterExpression.IsNullOrWhiteSpace())
-                return true;
-
-            return false;
-        }
-
+        
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);

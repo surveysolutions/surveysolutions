@@ -8,8 +8,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
         void RefreshEntities(Guid interviewId, params Identity[] questions);
         void ReloadInterview(Guid interviewId);
         void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage);
-
         void RefreshRemovedEntities(Guid interviewId, params Identity[] questions);
         void FinishInterview(Guid interviewId);
+        void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities);
+        void RefreshEntitiesWithFilteredOptions(Guid interviewId);
+        void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities);
     }
 }
