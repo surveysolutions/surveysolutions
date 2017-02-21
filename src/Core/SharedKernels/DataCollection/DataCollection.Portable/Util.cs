@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public static T[] Shrink<T>(this IEnumerable<T> vector)
         {
             var enumerable = vector as T[] ?? vector.ToArray();
-            return enumerable.Take(enumerable.Count() - 1).ToArray();
+            return enumerable.Take(enumerable.Length - 1).ToArray();
         }
 
         public static decimal[] EmptyRosterVector = new decimal[0];
@@ -29,11 +29,13 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 foreach (var scopeId in scopeIds)
                 {
-                    builder.Value.Append($"${scopeId.Id}");
+                    builder.Value.Append("$");
+                    builder.Value.Append(scopeId.Id);
 
                     foreach (var coordinate in scopeId.RosterVector.Coordinates)
                     {
-                        builder.Value.Append("-" + Convert.ToInt32(coordinate));
+                        builder.Value.Append("-");
+                        builder.Value.Append(Convert.ToInt32(coordinate));
                     }
                 }
 
@@ -48,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetSiblingsKey(Identity[] rosterKey)
         {
-            var parentRosterKey = rosterKey.Shrink();//.Select(x => new Identity(x.Id, x.RosterVector.Shrink())).ToArray();
+            var parentRosterKey = rosterKey.Shrink();
             return GetSiblingsKey(parentRosterKey, rosterKey.Last().Id);
         }
 
