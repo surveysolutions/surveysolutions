@@ -53,14 +53,14 @@ namespace WB.UI.Interviewer.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            this.CreateTableInfoFile();
+            this.CreateDeviceInfoFile();
 
             await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
-            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;tablet.info$;")
+            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;device.info$;")
                                .ConfigureAwait(false);
 
             this.Cleanup();
@@ -205,9 +205,9 @@ namespace WB.UI.Interviewer.Services
             }
         }
 
-        private void CreateTableInfoFile()
+        private void CreateDeviceInfoFile()
         {
-            var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "tablet.info");
+            var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
             var deviceTechnicalInformation = this.interviewerSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
         }

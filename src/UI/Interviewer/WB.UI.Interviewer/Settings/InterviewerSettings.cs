@@ -113,19 +113,11 @@ namespace WB.UI.Interviewer.Settings
                    $"InterviewsList:{interviewIds}";
         }
 
-        private string GetDeviceModel()
-        {
-            return CrossDeviceInfo.Current.Model;
-        }
-        private string GetDeviceType()
-        {
-            return CrossDeviceInfo.Current.Idiom.ToString();
-        }
+        private string GetDeviceModel() => CrossDeviceInfo.Current.Model;
 
-        private string GetAndroidVersion()
-        {
-            return Android.OS.Build.VERSION.Release;
-        }
+        private string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
+
+        private string GetAndroidVersion() => Android.OS.Build.VERSION.Release;
 
         public void SetEventChunkSize(int eventChunkSize)
         {
