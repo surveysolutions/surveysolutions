@@ -33,7 +33,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             {
                 ParallelDeflateThreshold = -1,
                 AlternateEncoding = System.Text.Encoding.UTF8,
-                AlternateEncodingUsage = ZipOption.Always
+                AlternateEncodingUsage = ZipOption.Always,
+                UseZip64WhenSaving = Zip64Option.AsNecessary
             })
             {
                 if (password != null)
