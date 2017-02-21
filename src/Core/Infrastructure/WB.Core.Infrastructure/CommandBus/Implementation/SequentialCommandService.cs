@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
@@ -52,6 +53,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                     this.RemoveFromTopOfQueue(commandDescriptor);
 
                     base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
+
+                    GC.Collect(1);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(0);
                 }
             }
         }
