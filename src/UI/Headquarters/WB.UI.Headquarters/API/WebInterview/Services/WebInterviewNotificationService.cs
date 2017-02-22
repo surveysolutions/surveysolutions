@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Ninject;
 using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -32,13 +31,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public void RefreshEntities(Guid interviewId, params Identity[] questions)
+        public virtual void RefreshEntities(Guid interviewId, params Identity[] questions)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
 
             var entitiesToRefresh = new List<Tuple<string, Identity>>();
 
             foreach (var identity in questions)
+            {
                 if (this.IsQuestionPrefield(identity, interview))
                 {
                     entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
@@ -50,21 +55,20 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     {
                         var parent = this.GetParentIdentity(curreentEntity, interview);
                         if (parent != null)
-                            entitiesToRefresh.Add(
-                                Tuple.Create(
-                                    WebInterview.GetConnectedClientSectionKey(parent?.ToString(),
-                                        interview.Id.FormatGuid()), curreentEntity));
+                        {
+                            entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), curreentEntity));
+                        }
                         curreentEntity = parent;
                     }
                 }
+            }
 
             foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
             {
                 if (questionsGroupedByParent.Key == null)
                     continue;
 
-                var clients = this.webInterviewHubContext.Clients;
-                var group = clients.Group(questionsGroupedByParent.Key);
+                var group = this.webInterviewHubContext.Clients.Group(questionsGroupedByParent.Key);
 
                 group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).Distinct().ToArray());
             }
@@ -81,6 +85,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            if (interview == null)
+            {
+                return;
+            }
+            
             var questionIdentity = Identity.Parse(questionId);
 
             var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
@@ -88,9 +98,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
         }
 
-        public void RefreshRemovedEntities(Guid interviewId, params Identity[] questions)
+        public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] questions)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
+
             var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
             if (questionnarie != null)
             {
@@ -161,9 +177,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             return false;
         }
 
-        public void RefreshEntitiesWithFilteredOptions(Guid interviewId)
+        public virtual void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
+
             var document = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
 
             var entityIds = document.Find<IComposite>(this.IsSupportFilterOptionCondition)
@@ -176,13 +198,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        public void RefreshLinkedToListQuestions(Guid interviewId, Identity[] questionIdentities)
+        public virtual void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
+
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity,
                 interview.Language);
 
-            foreach (var questionIdentity in questionIdentities)
+            foreach (var questionIdentity in identities)
             {
                 if (interview.GetTextListQuestion(questionIdentity) == null) continue;
 
@@ -199,9 +227,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        public void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities)
+        public virtual void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+
+            if (interview == null)
+            {
+                return;
+            }
+
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity,
                 interview.Language);
 
