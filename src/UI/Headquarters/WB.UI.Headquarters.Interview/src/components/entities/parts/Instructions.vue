@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$me.instructions" class="instructions-wrapper">
+    <div v-if="$me.instructions && !$me.isDisabled" class="instructions-wrapper">
         <div class="information-block instruction" v-if="!$me.hideInstructions || shown">
             <h6>Instruction</h6>
             <p>{{$me.instructions}}</p>
