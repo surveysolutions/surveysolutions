@@ -630,6 +630,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogTests.cs" />
     <Compile Include="SyncAsyncRunner.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
+    <Compile Include="TestFactories\ControllerFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator.cs" />
@@ -958,7 +959,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewerQuestionnairesControllerTests\when_getting_questionnaire_and_interviewer_content_version_is_less_then_in_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
@@ -1613,10 +1613,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_marking_interview_as_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_posting_image_by_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v2\when_posting_sync_package.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v1\InterviewsApiV1ControllerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v1\when_posting_image_by_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v1\when_marking_interview_as_received.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\v1\when_getting_interviews.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_getting_questionnaire_attachments.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getstatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
@@ -1676,7 +1672,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Compile Include="TestFactories\ControllerFactory.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.Translations.Tests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.Synchronization.Tests.cs" />
   </ItemGroup>
