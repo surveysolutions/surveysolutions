@@ -40,7 +40,9 @@ namespace WB.Core.SharedKernels.DataCollection
                     }
                 }
 
-                return builder.ToString();
+                builder.Append("|");
+
+            return builder.ToString();
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
