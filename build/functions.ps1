@@ -43,6 +43,7 @@ function CleanBinAndObjFolders() {
 
 function BuildWebInterviewApp($targetLocation){
     $action = 'Building WebInterview app'
+    
     Write-Host "##teamcity[blockOpened name='$action']"
     Write-Host "##teamcity[progressStart '$action']"
 
@@ -50,20 +51,19 @@ function BuildWebInterviewApp($targetLocation){
     Push-Location -Path $targetLocation
 
     try{
-        Write-Host $installCommand
-
-        &yarn install | Write-Host
+        
+        &yarn | Write-Host
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
             return $wasBuildSuccessfull
         }
         
-        &npm run build
+        &npm run build | Write-Host
 
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm build']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to execute npm run build']"
             return $wasBuildSuccessfull
         }
     } finally {
