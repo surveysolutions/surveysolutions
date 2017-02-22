@@ -4,9 +4,7 @@
             <h6>Instruction</h6>
             <p>{{$me.instructions}}</p>
         </div>
-        <div v-else>
-            <button type="button" class="btn btn-link" @click="show">Show instruction</button>
-        </div>
+        <button v-else type="button" class="btn btn-link" @click="show">Show instruction</button>
     </div>
 </template>
 <script lang="ts">

@@ -2,7 +2,7 @@
     display: flex;
 }
 .two-columns-form{
-    width: 100%;
+    width: 810px;
     position: absolute;
     top: 50%;
     left:50%;
@@ -11,7 +11,7 @@
     @include translate(-50%,-50%);
   
     .left-column{
-        padding: 10px 3% 10px 8%;
+        padding: 10px 40px 10px 0px;
         text-align: center;
         img{
             margin-bottom: 25px;
@@ -31,7 +31,7 @@
         }
     }
     .right-column{
-        padding: 10px 8% 10px 3%;
+        padding: 10px 0 10px 40px;
         border-left: 2px solid $gray_form;
     }
     .log-in{
@@ -112,7 +112,7 @@
         height: 100%;
     }
 }
-@media (max-height: 800px){
+@media (max-width: 800px){
     .two-columns-form{
         margin-top: 30px;
         width: auto;
