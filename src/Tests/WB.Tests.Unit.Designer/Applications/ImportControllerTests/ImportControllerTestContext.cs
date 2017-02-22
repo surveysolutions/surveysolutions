@@ -3,16 +3,13 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Designer.Api;
 using WB.UI.Designer.Api.Headquarters;
-using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
-    [Subject(typeof(ImportController))]
+    [Subject(typeof(ImportV2Controller))]
     internal class ImportControllerTestContext
     {
         protected static ImportV2Controller CreateImportController(

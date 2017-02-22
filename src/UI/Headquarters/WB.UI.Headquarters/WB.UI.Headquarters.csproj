@@ -1076,11 +1076,6 @@
     <Compile Include="API\Interviewer\InterviewsControllerBase.cs" />
     <Compile Include="API\Interviewer\QuestionnairesControllerBase.cs" />
     <Compile Include="API\Interviewer\UsersControllerBase.cs" />
-    <Compile Include="API\Interviewer\v1\DevicesApiV1Controller.cs" />
-    <Compile Include="API\Interviewer\v1\InterviewerApiV1Controller.cs" />
-    <Compile Include="API\Interviewer\v1\InterviewsApiV1Controller.cs" />
-    <Compile Include="API\Interviewer\v1\QuestionnairesApiV1Controller.cs" />
-    <Compile Include="API\Interviewer\v1\UsersApiV1Controller.cs" />
     <Compile Include="API\Interviewer\v2\AttachmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\DevicesApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\InterviewerApiV2Controller.cs" />
@@ -1469,9 +1464,6 @@
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
-    <Compile Include="Code\ProtobufJsonFormatter.cs" />
-    <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
-    <Compile Include="Code\ProtoBufSerializer.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
