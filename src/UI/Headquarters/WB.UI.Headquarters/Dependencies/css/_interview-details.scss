@@ -725,6 +725,46 @@ label.inactive{
     font-style: italic;
     color: $gray_light;
 }
+.details-interview{
+	.wrapper-info{
+		h3{
+			margin-bottom: 20px;
+		}
+		.history{
+			td:first-child, th:first-child{
+				min-width: 120px;
+			}
+			tr:first-of-type{
+				background-color: #ebebeb;
+				border-radius: 5px;
+				td{
+					font-weight: bold;
+				}
+			}
+			margin-left: -10px;
+			margin-right: -10px;
+			td{
+				padding: 10px;
+			}
+		}
+	}
+}
+.container-info{
+	dl{
+		font-size: 14px;
+		line-height: 16px;
+		dd{
+			margin-bottom: 5px;
+		}
+		dt{
+			margin-bottom: 30px;
+			a{
+				color: $gray_text;
+			}
+		} 
+			
+	}
+}
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
 		@include tight-filters-aside();
