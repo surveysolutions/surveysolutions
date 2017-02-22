@@ -39,6 +39,8 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
         }
 
         interviewProxy.client.markAnswerAsNotSaved = (id: string, message: string) => {
+            store.dispatch("fetchProgress", -1)
+            store.dispatch("fetch", { id, done: true })
             store.dispatch("setAnswerAsNotSaved", { id, message })
         }
 
