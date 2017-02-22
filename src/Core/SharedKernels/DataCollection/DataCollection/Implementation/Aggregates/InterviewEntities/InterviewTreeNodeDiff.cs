@@ -219,9 +219,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
+        public bool ChangedNodeBecameValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
 
-        public bool IsInvalid => !this.IsValid;
+        public bool ChangedNodeBecameInvalid => this.SourceNode == null
+            ? !this.ChangedNode.IsValid
+            : this.SourceNode.IsValid && !this.ChangedNode.IsValid;
 
         public bool IsTitleChanged
         {
