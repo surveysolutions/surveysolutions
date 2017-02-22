@@ -16,7 +16,7 @@
                 variableLabel: 'A text up to 80 characters that will be attached to the exported variable',
                 conditionExpression: 'A logical expression that activates(deactivates) the current item depending on the answers on the other questions.',
                 validationExpression: 'A logical expression that validates an answer to the current question. Might include values of other questions.',
-                validationMessage: 'Error message is shown when an answer to the current question fails a validation condition.',
+                validationMessage: 'Error message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.',
                 sourceQuestion: 'Source question (answer generates number of rows)',
                 expression: 'A logical expression that is calculated depending on the answers on the other questions.',
                 fixedTitles: 'Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.',
