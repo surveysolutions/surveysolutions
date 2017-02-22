@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsQuestionValid(diff as InterviewTreeQuestionDiff) ||
                     IsQuestionInalid(diff as InterviewTreeQuestionDiff) ||
                     IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
-                    IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
+                    IsStaticTextInvalid(diff as InterviewTreeStaticTextDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
                     IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
@@ -200,10 +200,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => diffByQuestion != null && diffByQuestion.IsInvalid;
 
         private static bool IsStaticTextValid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsValid;
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
 
-        private static bool IsStaticTextInalid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsInvalid;
+        private static bool IsStaticTextInvalid(InterviewTreeStaticTextDiff diffByQuestion)
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
 
         private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.IsAnswerChanged;

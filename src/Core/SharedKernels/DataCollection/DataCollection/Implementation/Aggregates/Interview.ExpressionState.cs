@@ -50,8 +50,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
                 .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
-            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
+            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid).Select(x => x.ChangedNode)
                 .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
             if (validQuestionIdentities.Any()) expressionState.DeclareAnswersValid(validQuestionIdentities);
