@@ -6688,6 +6688,33 @@ a.disabled {
     opacity: 1;
     filter: alpha(opacity=100); }
 
+.btn-history {
+  background-color: #fff;
+  width: 36px;
+  height: 36px;
+  border-color: #a6a8a9;
+  border-width: 2px;
+  border-radius: 100%;
+  padding: 0;
+  position: relative; }
+  .btn-history:after {
+    position: absolute;
+    top: 5px;
+    right: 9px;
+    content: "";
+    display: block;
+    width: 15px;
+    height: 10px;
+    transform: rotate(45deg);
+    border-bottom: 2px solid #a6a8a9;
+    border-right: 2px solid #a6a8a9; }
+  .btn-history:active:after {
+    transform: rotate(90deg);
+    right: 5px; }
+  .btn-history:hover, .btn-history:focus, .btn-history:active {
+    background-color: #e6e6e6;
+    border-color: #8c8f90; }
+
 .navbar {
   min-width: 360px;
   min-height: 70px;
@@ -7754,7 +7781,8 @@ span.image-zoom-box, span.image-option {
     font-size: 16px;
     line-height: 18px;
     color: #fff;
-    padding-right: 45px; }
+    padding-right: 45px;
+    margin-bottom: 10px !important; }
     .panel-table label .tick {
       margin-right: 20px; }
   .panel-table .panel-body {
@@ -7764,9 +7792,21 @@ span.image-zoom-box, span.image-option {
       .panel-table .panel-body .btn.btn-link {
         padding: 0; }
 
-@media (max-width: 481px) {
-  .panel-table label {
-    margin-bottom: 20px !important; } }
+@media (max-width: 880px) {
+  .panel-table {
+    padding: 0 10px; }
+    .panel-table label {
+      font-size: 12px;
+      line-height: 14px;
+      padding-right: 10px; }
+      .panel-table label .tick {
+        margin-right: 10px; }
+    .panel-table .panel-body .btn {
+      margin-bottom: 10px;
+      padding: 5px;
+      font-size: 10px; }
+      .panel-table .panel-body .btn:last-of-type {
+        margin-bottom: 0; } }
 
 .filters {
   width: 360px;
@@ -8096,7 +8136,13 @@ body > .ui-pnotify {
     margin: 0; }
 
 .modal {
-  text-align: center; }
+  text-align: center;
+  padding-right: 0 !important; }
+
+@media screen and (max-width: 680px) {
+  .modal-dialog {
+    width: calc(100% - 40px) !important;
+    margin: 20px; } }
 
 @media screen and (min-width: 880px) {
   .modal:before {
@@ -8185,7 +8231,20 @@ body > .ui-pnotify {
   overflow-y: visible; }
 
 .context-menu {
+  width: 280px;
   padding: 15px 10px; }
+  .context-menu h3 {
+    font: 14px/16px "RobotoBold";
+    margin-bottom: 20px;
+    margin-left: 10px; }
+  .context-menu li a {
+    padding: 10px; }
+    .context-menu li a:hover, .context-menu li a:focus, .context-menu li a:active {
+      background-color: #eff4f8; }
+  .context-menu li span {
+    display: inline-block;
+    padding: 10px;
+    color: #a6a8a9; }
 
 @media (max-width: 880px) {
   .ui-pnotify {
@@ -8391,7 +8450,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
     margin: 10px 0; }
 
 .alerts {
-  margin-top: 20px; }
+  margin: 20px 0; }
   .alerts .alert {
     margin: 0;
     padding: 15px;
@@ -8592,10 +8651,8 @@ table tr th .census-icon, table tr td .census-icon {
     font: 18px/20px "RobotoLight";
     margin-bottom: 10px; }
 
-.dotted {
-  background-image: -webkit-repeating-radial-gradient(center center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 100%);
-  background-image: repeating-radial-gradient(center center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 100%);
-  background-size: 3px 3px; }
+.break-line {
+  word-break: break-all; }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
@@ -9498,6 +9555,9 @@ main .flex-row {
   .web-interview .container, .web-interview .container-fluid {
     padding-left: 15px;
     padding-right: 15px; }
+  .web-interview * {
+    word-wrap: break-word;
+    overflow-wrap: break-word; }
 
 .filters-container .flagged-questions, .filters-container .reset-filters {
   padding-top: 0; }
@@ -9669,7 +9729,6 @@ label.inactive {
     display: block; }
   .information-block p {
     width: 90%;
-    word-break: break-word;
     font-style: italic; }
     .information-block p p:last-of-type {
       margin-bottom: 10px; }
@@ -9802,7 +9861,6 @@ label.inactive {
   .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a, .question-editor .preset-filters-container .export-queue, .preset-filters-container .question-editor .export-queue {
     padding: 0 10px;
     margin: 0 0 10px;
-    word-break: break-word;
     position: relative; }
     .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
       left: -25px; }
@@ -9996,10 +10054,7 @@ label.inactive {
   font-size: 12px;
   line-height: 14px;
   margin-bottom: 10px;
-  padding-right: 38px;
-  word-break: break-word;
-  word-wrap: break-word;
-  overflow-wrap: break-word; }
+  padding-right: 38px; }
 
 .img-single-select-question label {
   overflow: hidden; }
@@ -10668,10 +10723,11 @@ body.no-cookies div.no-cookies {
     padding: 20px 10px 20px 20px; } }
 
 .table-wrapper {
-  position: relative; }
+  position: relative;
+  padding-top: 20px; }
   .table-wrapper .wrapper-modal-dropdown {
     position: absolute;
-    top: -20px;
+    top: 0;
     right: 0;
     /*  z-index: 2; */ }
     .table-wrapper .wrapper-modal-dropdown .modal-dialog {
@@ -10844,7 +10900,7 @@ td.errors {
   .interviews-large-screen {
     display: none; }
   .screen-small-resolution {
-    padding-left: 15px;
+    padding: 15px;
     display: block;
     font: 14px/16px Arial, sans-serif; }
     .screen-small-resolution .row-unit {
@@ -10892,7 +10948,10 @@ td.errors {
         display: flex; }
         .screen-small-resolution .table-min-wrapper .table-min .table-row .table-td {
           padding: 10px 20px;
+          line-height: 24px;
           background-color: #edeff0; }
+          .screen-small-resolution .table-min-wrapper .table-min .table-row .table-td .flag {
+            padding-left: 25px; }
           .screen-small-resolution .table-min-wrapper .table-min .table-row .table-td.table-header {
             padding-left: 0;
             color: #a6a8a9;
