@@ -647,5 +647,23 @@
         }
     }
 }
-
+.history{
+    td{
+        .comment{
+            padding-top: 10px;
+            h4{
+                margin-bottom: 5px;
+            }
+            p:last-of-type{
+                margin: 0;
+            }
+        }
+    }
+    td, th{
+        padding: 10px;
+        &:first-child{
+            min-width: 160px;
+        }
+    }
+  }
 

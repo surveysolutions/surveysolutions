@@ -52,7 +52,6 @@ const router = new VueRouter({
 
 // tslint:disable:no-string-literal
 router.beforeEach(async (to, from, next) => {
-    store.dispatch("onBeforeNavigate")
     queryString["interviewId"] = to.params["interviewId"]
 
     hubProxy().then((proxy) => {
@@ -63,12 +62,16 @@ router.beforeEach(async (to, from, next) => {
         const isEnabled = await apiCaller(api => api.isEnabled(to.params["sectionId"]))
         if (!isEnabled) {
             next(false)
+            return
         } else {
             next()
         }
     } else {
         next()
     }
+
+    // navigation could be canceled
+    store.dispatch("onBeforeNavigate")
 
     const hamburger = document.getElementById("sidebarHamburger")
 

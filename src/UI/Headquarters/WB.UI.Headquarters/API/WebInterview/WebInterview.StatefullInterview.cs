@@ -242,9 +242,15 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var currentTreeGroup = statefulInterview.GetGroup(group);
             var currentTreeGroupAsRoster = currentTreeGroup as InterviewTreeRoster;
+
+            if (currentTreeGroup == null)
+            {
+                webInterviewNotificationService.ReloadInterview(Guid.Parse(this.CallerInterviewId));
+            }
+
             return new BreadcrumbInfo
             {
-                Title = currentTreeGroup.Title.Text,
+                Title = currentTreeGroup?.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
                 Status = CalculateSimpleStatus(group, statefulInterview).ToString(),
@@ -496,8 +502,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (sectionId != null)
             {
                 var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
-                var shownPanels = currentOpenSection.Parents.Union(new[] {currentOpenSection});
-                visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
+                
+                //roster instance could be removed
+                if (currentOpenSection != null)
+                {
+                    var shownPanels = currentOpenSection.Parents.Union(new[] {currentOpenSection});
+                    visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
+                }
             }
             foreach (var parentId in parentIds.Distinct())
             {
