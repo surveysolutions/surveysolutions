@@ -200,10 +200,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => diffByQuestion != null && diffByQuestion.IsInvalid;
 
         private static bool IsStaticTextValid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsValid;
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
 
         private static bool IsStaticTextInalid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsInvalid;
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
 
         private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.IsAnswerChanged;
