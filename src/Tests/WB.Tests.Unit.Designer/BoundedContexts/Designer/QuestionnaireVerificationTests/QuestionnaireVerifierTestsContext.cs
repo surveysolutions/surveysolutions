@@ -281,6 +281,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             return new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
                     Create.CodeGenerator(),
+                    Create.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
         }
 
