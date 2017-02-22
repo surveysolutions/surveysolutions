@@ -308,9 +308,9 @@ label.inactive{
 		margin: 0;
 		color: $gray_light;
 		// z-index: 1;
-		& + .instructions-wrap{
-			display: none;
-		}
+	}
+	.instructions-wrapper{
+		display: none;
 	}
 	.question-editor .button-flag{
 		z-index: 0;
@@ -372,9 +372,9 @@ label.inactive{
 		margin: 0 0 10px;
 		position: relative;
 		&:before{left: -25px;}
-		& + .btn-link{
-			font: 10px/12px "TrebuchetMSBold";
-		}
+	}
+	.instructions-wrapper .btn-link{
+		font: 10px/12px "TrebuchetMSBold";
 	}
 	&.answered .question-unit{
 		.options-group{
@@ -663,6 +663,9 @@ label.inactive{
 .content .humburger-foldback-button{
 	display: none;
 }
+.web-interview .content .questionnaire-content div button.btn-history{
+	margin-right: 10px;
+}
 .fullscreen-hidden-content{
 	.content{
 		left: -$content-width;
@@ -721,6 +724,46 @@ label.inactive{
     padding: 5px;
     font-style: italic;
     color: $gray_light;
+}
+.details-interview{
+	.wrapper-info{
+		h3{
+			margin-bottom: 20px;
+		}
+		.history{
+			td:first-child, th:first-child{
+				min-width: 120px;
+			}
+			tr:first-of-type{
+				background-color: #ebebeb;
+				border-radius: 5px;
+				td{
+					font-weight: bold;
+				}
+			}
+			margin-left: -10px;
+			margin-right: -10px;
+			td{
+				padding: 10px;
+			}
+		}
+	}
+}
+.container-info{
+	dl{
+		font-size: 14px;
+		line-height: 16px;
+		dd{
+			margin-bottom: 5px;
+		}
+		dt{
+			margin-bottom: 30px;
+			a{
+				color: $gray_text;
+			}
+		} 
+			
+	}
 }
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
