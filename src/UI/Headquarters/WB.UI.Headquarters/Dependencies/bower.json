@@ -8,7 +8,6 @@
     "survey",
     "managment"
   ],
-  "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
