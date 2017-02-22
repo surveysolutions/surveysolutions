@@ -221,9 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
 
-        public bool IsInvalid => this.SourceNode == null
-            ? !this.ChangedNode.IsValid
-            : this.SourceNode.IsValid && !this.ChangedNode.IsValid;
+        public bool IsInvalid => !this.IsValid;
 
         public bool IsTitleChanged
         {
@@ -245,6 +243,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.IsNodeAdded && !changedMessages.Any()) return false;
                 var sourceMessages = this.SourceNode?.ValidationMessages.Select(x => x.Text).ToArray() ?? new string[0];
                 return !changedMessages.SequenceEqual(sourceMessages);
+            }
+        }
+
+        public bool IsFailedValidationIndexChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var targetChangedValidations = this.ChangedNode.FailedValidations;
+                if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
+
+                var sourceMessages = this.SourceNode?.FailedValidations ?? new List<FailedValidationCondition>();
+                return !targetChangedValidations.SequenceEqual(sourceMessages);
             }
         }
     }
