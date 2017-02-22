@@ -4,8 +4,8 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter answer ' + userFriendlyMask" :value="$me.answer"
-                            v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered">
+                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
+                            v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered" title="Enter text">
                             <wb-remove-answer />
                     </div>
                 </div>
