@@ -299,7 +299,18 @@
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModel.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModelsFactory.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\CodeGeneratorV2.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGeneratorV2.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.cs">
+      <DependentUpon>InterviewExpressionProcessorV11.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
@@ -733,6 +744,10 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionProcessorV11.cs</LastGenOutput>
+    </None>
     <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
@@ -831,6 +846,8 @@
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplateV10.cs</LastGenOutput>
+      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
+&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
     </None>
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -839,6 +856,8 @@
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RosterScopeTemplateV10.cs</LastGenOutput>
+      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
+&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
     </None>
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

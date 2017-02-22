@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class CodeGenerator : ICodeGenerator
     {
-        public const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        public const string InterviewExpressionStatePrefix = "InterviewExpressionProcessor";
         public const string PrivateFieldsPrefix = "@__";
         public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
         public const string QuestionnaireScope = "@__questionnaire_scope";

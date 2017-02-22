@@ -22,6 +22,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
@@ -85,6 +86,11 @@ namespace WB.Tests.Integration
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
                 new FileSystemIOAccessor(), 
                 GetCompilerSettingsStub());
+        }
+
+        public static CodeGeneratorV2 CodeGeneratorV2()
+        {
+            return new CodeGeneratorV2(new CodeGenerationModelsFactory());
         }
 
         private static ICompilerSettings GetCompilerSettingsStub()
