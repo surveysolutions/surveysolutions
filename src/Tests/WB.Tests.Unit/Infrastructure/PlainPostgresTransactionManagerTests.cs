@@ -5,8 +5,8 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Unit.Infrastructure
 {
-    [TestOf(typeof(PlainPostgresTransactionManager))]
     [TestFixture]
+    [TestOf(typeof(PlainPostgresTransactionManager))]
     internal class PlainPostgresTransactionManagerTests
     {
         [Test]
@@ -70,6 +70,21 @@ namespace WB.Tests.Unit.Infrastructure
             // act
             transactionManager.BeginTransaction();
             transactionManager.RollbackTransaction();
+
+            // assert
+            sessionFactoryMock.Verify(factory => factory.OpenSession(), Times.Never);
+        }
+
+        [Test]
+        public void When_commiting_started_transaction_without_getting_session_Then_does_not_open_session()
+        {
+            // arrange
+            var sessionFactoryMock = new Mock<ISessionFactory>();
+            var transactionManager = Create.Service.PlainPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
+
+            // act
+            transactionManager.BeginTransaction();
+            transactionManager.CommitTransaction();
 
             // assert
             sessionFactoryMock.Verify(factory => factory.OpenSession(), Times.Never);
