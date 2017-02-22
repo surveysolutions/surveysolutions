@@ -28,6 +28,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -324,5 +325,8 @@ namespace WB.Tests.Unit.TestFactories
             return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
                 featuredQuestions ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
         }
+
+        public PlainPostgresTransactionManager PlainPostgresTransactionManager(ISessionFactory sessionFactory = null)
+            => new PlainPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
     }
 }
