@@ -159,8 +159,6 @@ namespace WB.UI.Headquarters.Injections
         {
             base.Load();
 
-            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
-
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 

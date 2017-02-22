@@ -1,18 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
-using WB.UI.Headquarters.API.Formatters;
 using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Shared.Web.Filters;
 
@@ -25,25 +20,6 @@ namespace WB.UI.Headquarters
             #pragma warning disable 4014
 
             config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
-
-            config.TypedRoute("api/interviewer/v1", c => c.Action<InterviewerApiV1Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v1/latestversion", c => c.Action<InterviewerApiV1Controller>(x => x.GetLatestVersion()));
-            config.TypedRoute("api/interviewer/v1/tabletInfo", c => c.Action<InterviewerApiV1Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
-            config.TypedRoute("api/interviewer/v1/devices/current/{id}/{version}", c => c.Action<DevicesApiV1Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV1Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/users/current", c => c.Action<UsersApiV1Controller>(x => x.Current()));
-            config.TypedRoute("api/interviewer/v1/users/hasdevice", c => c.Action<UsersApiV1Controller>(x => x.HasDevice()));
-            config.TypedRoute("api/interviewer/v1/questionnaires/census", c => c.Action<QuestionnairesApiV1Controller>(x => x.Census()));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}", c => c.Action<QuestionnairesApiV1Controller>(x => x.Get11(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/{contentVersion:long}", c => c.Action<QuestionnairesApiV1Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly", c => c.Action<QuestionnairesApiV1Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v1/interviews/{id:guid}", c => c.Action<InterviewsApiV1Controller>(x => x.Details(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v1/interviews/{id:guid}/logstate", c => c.Action<InterviewsApiV1Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v1/interviews/{id:guid}", c => c.Action<InterviewsApiV1Controller>(x => x.Post(Param.Any<Guid>(), Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v1/interviews/{id:guid}/image", c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
 
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));

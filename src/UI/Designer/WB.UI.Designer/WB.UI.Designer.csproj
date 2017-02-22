@@ -273,7 +273,6 @@
     <Compile Include="Api\Designer\UsersController.cs" />
     <Compile Include="Api\Headquarters\HQAttachmentController.cs" />
     <Compile Include="Api\Headquarters\HQTranslationsController.cs" />
-    <Compile Include="Api\Headquarters\ImportController.cs" />
     <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
     <Compile Include="Api\Headquarters\HQQuestionnairesController.cs" />
     <Compile Include="Api\Headquarters\HQUserController.cs" />
