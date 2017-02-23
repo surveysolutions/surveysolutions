@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.result.IsValid) return false;
                 var changedMessages = this.result.ValidationMessages.Select(x => x.Text).ToArray();
                 if (this.IsNodeAdded && !changedMessages.Any()) return false;
-                var sourceMessages = (this.source?.ValidationMessages).Select(x => x.Text).ToArray() ?? new string[0];
+                var validationMessages = this.source?.ValidationMessages;
+                var sourceMessages = validationMessages?.Select(x => x.Text) ?? new string[0];
                 return !changedMessages.SequenceEqual(sourceMessages);
             }
         }
