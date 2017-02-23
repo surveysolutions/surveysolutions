@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             timeSpent.TotalMilliseconds.ShouldBeGreaterThan(3000);
 
         private static SequentialCommandService commandService;
-        private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static TimeSpan timeSpent;
     }
 }
