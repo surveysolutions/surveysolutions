@@ -145,6 +145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void SetValidationMessages(SubstitionText[] validationMessages)
         {
+            if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;
             foreach (var validationMessage in validationMessages)
             {
