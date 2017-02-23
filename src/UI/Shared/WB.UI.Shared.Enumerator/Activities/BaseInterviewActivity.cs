@@ -97,6 +97,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnLowMemory()
         {
+            base.OnLowMemory();
             GC.Collect(GC.MaxGeneration);
         }
     }
