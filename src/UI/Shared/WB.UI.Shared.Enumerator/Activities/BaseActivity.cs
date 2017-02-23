@@ -8,6 +8,7 @@ using Plugin.CurrentActivity;
 using Plugin.Permissions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -58,37 +59,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             try
             {
                 Mvx.Error(message + System.Environment.NewLine);
-                Mvx.Error($"RAM: {this.GetRAMInformation()} {System.Environment.NewLine}");
-                Mvx.Error($"Disk: {this.GetDiskInformation()} {System.Environment.NewLine}");
+                Mvx.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");
+                Mvx.Error($"Disk: {AndroidInformationUtils.GetDiskInformation()} {System.Environment.NewLine}");
             }
             catch
             {
                 // ignore if we can get info about RAM and Disk
             }
         }
-
-        private string GetRAMInformation()
-        {
-            ActivityManager activityManager = Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
-            if (activityManager == null)
-                return "UNKNOWN";
-
-            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            activityManager.GetMemoryInfo(mi);
-            return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int)(((double)(100 * mi.AvailMem)) / mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
-        }
-
-        private string GetDiskInformation()
-        {
-            string path = global::Android.OS.Environment.DataDirectory.Path;
-            StatFs stat = new StatFs(path);
-            long blockSize = stat.BlockSizeLong;
-            long availableBlocks = stat.AvailableBlocksLong;
-            long totalBlocks = stat.BlockCountLong;
-            var availableInternalMemorySize = (availableBlocks * blockSize);
-            var totalInternalMemorySize = totalBlocks * blockSize;
-            return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {(int)(((double)(100 * availableInternalMemorySize)) / totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
-        }
-
     }
 }

@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Utils;
 using Environment = System.Environment;
 
 namespace WB.UI.Interviewer.Settings
@@ -207,27 +208,10 @@ namespace WB.UI.Interviewer.Settings
         }
 
         private string GetRAMInformation()
-        {
-            ActivityManager activityManager = Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
-            if (activityManager == null)
-                return "UNKNOWN";
-
-            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            activityManager.GetMemoryInfo(mi);
-            return $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int) (((double) (100*mi.AvailMem))/mi.TotalMem)}% ({FileSizeUtils.SizeSuffix(mi.AvailMem)})";
-        }
+            => AndroidInformationUtils.GetRAMInformation();
 
         private string GetDiskInformation()
-        {
-            string path = global::Android.OS.Environment.DataDirectory.Path;
-            StatFs stat = new StatFs(path);
-            long blockSize = stat.BlockSizeLong;
-            long availableBlocks = stat.AvailableBlocksLong;
-            long totalBlocks = stat.BlockCountLong;
-            var availableInternalMemorySize = (availableBlocks*blockSize);
-            var totalInternalMemorySize = totalBlocks* blockSize;
-            return $"{FileSizeUtils.SizeSuffix(totalInternalMemorySize)} total, avaliable {(int) (((double) (100* availableInternalMemorySize))/ totalInternalMemorySize)}% ({FileSizeUtils.SizeSuffix(availableInternalMemorySize)})";
-        }
+            => AndroidInformationUtils.GetDiskInformation();
 
         private string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
