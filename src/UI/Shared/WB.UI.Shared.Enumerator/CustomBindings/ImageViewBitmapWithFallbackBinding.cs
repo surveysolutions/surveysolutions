@@ -24,9 +24,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 // Calculate inSampleSize
                 BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
-                using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
-                {
-                }
+                BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions).Dispose(); // To determine actual image size
                 int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
 
                 var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize, InPurgeable = true };
