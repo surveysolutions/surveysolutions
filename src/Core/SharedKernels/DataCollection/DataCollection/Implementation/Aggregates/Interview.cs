@@ -670,7 +670,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.ReplaceSubstitutions();
         }
 
-
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
             => variableValueChanges?.ChangedVariableValues.ForEach(x => tree.GetVariable(x.Key).SetValue(x.Value));
 
@@ -743,7 +742,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // backward compatibility if assembly cannot process linked questions
                 CalculateLinkedOptionsOnTree(interviewTree);
             }
-
+            
             CalculateLinkedToListOptionsOnTree(interviewTree);
         }
 
@@ -815,6 +814,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 tree.RemoveNode(removedRosterIdentity);
             }
+
+            tree.ActualizeNodesInOrderCache();
         }
 
         private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)
