@@ -73,8 +73,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly ISubstitionTextFactory substitionTextFactory;
 
-        public Interview(IQuestionnaireStorage questionnaireRepository, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
+        public Interview(IQuestionnaireStorage questionnaireRepository,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitionTextFactory substitionTextFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -237,7 +237,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         $"Interview ID: {this.EventSourceId.FormatGuid()}. " +
                         $"Questionnaire ID: {this.QuestionnaireIdentity}.");
             }
-            
+
             var targetQuestionnaire = this.GetQuestionnaireOrThrow(command.Language);
 
             var changedInterviewTree = this.Tree.Clone();
@@ -669,7 +669,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.ReplaceSubstitutions();
         }
 
-
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
             => variableValueChanges?.ChangedVariableValues.ForEach(x => tree.GetVariable(x.Key).SetValue(x.Value));
 
@@ -721,29 +720,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
+        protected void UpdateLinkedQuestions(InterviewTree interviewTree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
         {
             var expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
             if (expressionStateSupportLinkedOptionsCalculation)
             {
                 var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-               
+
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
-                    var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
+                    var linkedQuestion = interviewTree.GetQuestion(linkedQuestionWithOptions.Key);
                     linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value, removeAnswersIfOptionsSetChanged);
                 }
 
                 // backward compatibility with old assemblies
-                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(tree, processLinkedQuestionFilters);
+                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(interviewTree, processLinkedQuestionFilters);
             }
             else
             {
                 // backward compatibility if assembly cannot process linked questions
-                CalculateLinkedOptionsOnTree(tree);
+                CalculateLinkedOptionsOnTree(interviewTree);
             }
-
-            CalculateLinkedToListOptionsOnTree(tree);
+            
+            CalculateLinkedToListOptionsOnTree(interviewTree);
         }
 
         [Obsolete("v 5.10, release 01 jul 16")]
@@ -799,6 +798,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 tree.RemoveNode(removedRosterIdentity);
             }
+
+            tree.ActualizeNodesInOrderCache();
         }
 
         private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)
