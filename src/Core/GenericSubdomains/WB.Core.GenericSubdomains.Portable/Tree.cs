@@ -33,6 +33,33 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
 
+        public static IEnumerable<T> TreeToEnumerableDeepFirst<T>(this T root, Func<T, IEnumerable<T>> getChildren)
+        {
+            return new[] { root }.TreeToEnumerableDeepFirst(getChildren);
+        }
+        
+        public static IEnumerable<T> TreeToEnumerableDeepFirst<T>(this IEnumerable<T> tree, Func<T, IEnumerable<T>> getChildren)
+        {
+            var itemsQueue = new Stack<T>(tree);
+
+            while (itemsQueue.Count > 0)
+            {
+                T currentItem = itemsQueue.Pop();
+
+                yield return currentItem;
+
+                IEnumerable<T> childItems = getChildren(currentItem);
+
+                if (childItems != null)
+                {
+                    foreach (T childItem in childItems.Reverse())
+                    {
+                        itemsQueue.Push(childItem);
+                    }
+                }
+            }
+        }
+        
         public static IEnumerable<T> UnwrapReferences<T>(this T startItem, Func<T, T> getReferencedItem) where T : class
         {
             T referencedItem = startItem;
