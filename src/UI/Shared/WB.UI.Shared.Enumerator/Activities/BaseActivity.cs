@@ -43,20 +43,27 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnLowMemory()
         {
-            this.TryWriteMemoryInformationToLog();
+            this.TryWriteMemoryInformationToLog("LowMemory natification");
             base.OnLowMemory();
         }
 
-        private void TryWriteMemoryInformationToLog()
+        protected override void OnDestroy()
+        {
+            TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
+            base.OnDestroy();
+        }
+
+        private void TryWriteMemoryInformationToLog(string message)
         {
             try
             {
-                Mvx.Error($"LowMemory natification:" + System.Environment.NewLine);
+                Mvx.Error(message + System.Environment.NewLine);
                 Mvx.Error($"RAM: {this.GetRAMInformation()} {System.Environment.NewLine}");
                 Mvx.Error($"Disk: {this.GetDiskInformation()} {System.Environment.NewLine}");
             }
             catch
             {
+                // ignore if we can get info about RAM and Disk
             }
         }
 
