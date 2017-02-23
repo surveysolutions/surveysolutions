@@ -89,7 +89,6 @@
     <Compile Include="Monads.cs" />
     <Compile Include="NamedLocker.cs" />
     <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="ObjectPool.cs" />
     <Compile Include="OrderDirection.cs" />
     <Compile Include="OrderRequestItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
