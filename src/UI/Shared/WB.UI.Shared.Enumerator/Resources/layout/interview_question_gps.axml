@@ -19,7 +19,7 @@
       </TableRow>
       <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
         <TextView style="@style/Interview_Question_RecordedAnswer"
-          local:MvxBind="Text Format('{0}, {1}', Answer.Longitude, Answer.Latitude)" />
+          local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude)" />
         <include layout="@layout/interview_question__remove_button_recorded" />
       </TableRow>
       <TableRow>
