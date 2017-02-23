@@ -25,24 +25,22 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-            using (var builder = Pool.StringBuilder.Object)
+            StringBuilder builder = new StringBuilder();
+            foreach (var scopeId in scopeIds)
             {
-                foreach (var scopeId in scopeIds)
+                builder.Append("$");
+                builder.Append(scopeId.Id);
+
+                foreach (var coordinate in scopeId.RosterVector.Coordinates)
                 {
-                    builder.Value.Append("$");
-                    builder.Value.Append(scopeId.Id);
+                    builder.Append("-");
 
-                    foreach (var coordinate in scopeId.RosterVector.Coordinates)
-                    {
-                        builder.Value.Append("-");
-                        builder.Value.Append(Convert.ToInt32(coordinate));
-                    }
+                    builder.Append(Convert.ToInt32(coordinate));
                 }
+            }
 
-                builder.Value.Append("|");
-
-                return builder.Value.ToString();
-            }        
+            builder.Append("|");
+            return builder.ToString();
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
