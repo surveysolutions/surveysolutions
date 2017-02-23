@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.GenericSubdomains
             var breadthFirst = tree.TreeToEnumerable(n => n.Childrens).Select(n => n.Id).ToArray();
             Assert.That(breadthFirst.SequenceEqual(new long[] { 1, 11, 12, 111, 121, 122 }));
 
-            var newDepthFirstStack = tree.TreeToEnumerableDeepFirst(n => n.Childrens).Select(n => n.Id).ToArray();
+            var newDepthFirstStack = tree.TreeToEnumerableDepthFirst(n => n.Childrens).Select(n => n.Id).ToArray();
             Assert.That(newDepthFirstStack.SequenceEqual(new long[] { 1, 11, 111, 12, 121, 122 }));
         }
     }
