@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable
+    public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public InterviewTreeQuestion(Identity identity, 
             SubstitionText title, 
