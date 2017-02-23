@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var prefilledQuestions = new List<PrefilledQuestionView>();
             var featuredQuestions = questionnaireDocumentView.Children
-                                                             .TreeToEnumerable(x => x.Children)
+                                                             .TreeToEnumerableDepthFirst(x => x.Children)
                                                              .OfType<IQuestion>()
                                                              .Where(q => q.Featured).ToList();
 
