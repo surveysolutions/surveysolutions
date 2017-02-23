@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> FindInGroup<T>(Guid groupId)
         {
             var group = Find<IGroup>(groupId);
-            return group.TreeToEnumerable<IComposite>(x => x.Children).Where(x => x.PublicKey!=groupId && x is T).Cast<T>();
+            return group.TreeToEnumerableDepthFirst<IComposite>(x => x.Children).Where(x => x.PublicKey!=groupId && x is T).Cast<T>();
         }
 
         public Guid[] GetParentGroupsIds(IComposite entity)
