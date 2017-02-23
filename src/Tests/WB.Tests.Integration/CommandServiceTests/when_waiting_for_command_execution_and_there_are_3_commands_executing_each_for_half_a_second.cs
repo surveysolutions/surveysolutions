@@ -58,6 +58,6 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static readonly List<string> log = new List<string>();
         private static CommandService commandService;
-        private static readonly Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
     }
 }

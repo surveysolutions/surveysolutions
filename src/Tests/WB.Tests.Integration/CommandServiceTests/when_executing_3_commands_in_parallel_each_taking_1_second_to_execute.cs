@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             timeSpent.TotalMilliseconds.ShouldBeLessThan(3000);
 
         private static CommandService commandService;
-        private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static TimeSpan timeSpent;
     }
 }
