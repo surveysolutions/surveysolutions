@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection
                     }
                 }
 
-                builder.Append("|");
+                builder.Value.Append("|");
 
                 return builder.Value.ToString();
             }        
