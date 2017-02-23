@@ -8,7 +8,7 @@
                             <img v-bind:src="googleMapPosition" draggable="false" />
                         </div>
                     </div>
-                    <div class="block-with-data">{{$me.answer.longitude}}, {{$me.answer.latitude}}</div>
+                    <div class="block-with-data">{{$me.answer.latitude}}, {{$me.answer.longitude}}</div>
                     <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
