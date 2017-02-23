@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
-            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
+            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();

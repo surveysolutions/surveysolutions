@@ -448,7 +448,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
-            => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
+            => this.Tree.AllNodes.OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 
         
         public bool IsEntityValid(Identity identity)
