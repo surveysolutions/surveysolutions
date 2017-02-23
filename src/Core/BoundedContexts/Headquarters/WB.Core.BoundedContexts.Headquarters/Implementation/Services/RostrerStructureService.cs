@@ -24,15 +24,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
         {
-            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
+            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question).ToLookup(group => group.RosterSizeQuestionId);
             var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
-
-            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
+            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups[question.PublicKey].Any());
 
             foreach (var rosterSizeQuestion in rosterSizeQuestions)
             {
-                var groupsFromRosterSizeQuestionScope =
-                    rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
+                var groupsFromRosterSizeQuestionScope = rosterGroups[rosterSizeQuestion.PublicKey].ToList();
 
                 var scopeVectorsOfTriggers = groupsFromRosterSizeQuestionScope.Select(
                     roster =>
