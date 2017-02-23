@@ -764,12 +764,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected static void CalculateLinkedToListOptionsOnTree(InterviewTree tree)
+        protected static void CalculateLinkedToListOptionsOnTree(InterviewTree tree, bool resetAnswerOnOptionChange = true)
         {
             var linkedToListQuestions = tree.FindQuestions().Where(x => x.IsLinkedToListQuestion);
             foreach (InterviewTreeQuestion linkedQuestion in linkedToListQuestions)
             {
-                linkedQuestion.CalculateLinkedToListOptions();
+                linkedQuestion.CalculateLinkedToListOptions(resetAnswerOnOptionChange);
             }
         }
 
