@@ -23,11 +23,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 var minSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
 
                 // Calculate inSampleSize
-                var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
-                BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions);
+                BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
+                using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
+                {
+                }
                 int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
 
-                var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize};
+                var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize, InPurgeable = true };
                 using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
                 {
                     if (bitmap != null)
@@ -53,7 +55,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
                 var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
-                var noImageOptions = new BitmapFactory.Options();
+                var noImageOptions = new BitmapFactory.Options() { InPurgeable = true };
                 nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
             }
 
@@ -122,11 +124,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             return inSampleSize;
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
         }
     }
 }
