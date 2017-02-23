@@ -15,10 +15,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private class HealthCheckException : Exception
         {
             public HealthCheckException(string message)
-                : base(message) {}
+                : base(message) { }
 
             public HealthCheckException(string message, IEnumerable<IInterviewTreeNode> affectedNodes)
-                : base(GetMessageWithNodes(message, affectedNodes)) {}
+                : base(GetMessageWithNodes(message, affectedNodes)) { }
 
             private static string GetMessageWithNodes(string message, IEnumerable<IInterviewTreeNode> nodes)
                 => $"{message}{Environment.NewLine}{string.Join(Environment.NewLine, nodes)}";
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             foreach (var section in this.Sections)
             {
-                ((IInternalInterviewTreeNode) section).SetTree(this);
+                ((IInternalInterviewTreeNode)section).SetTree(this);
             }
 
             WarmUpCache();
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
 
         internal bool HasRoster(Identity identity) => this.GetRoster(identity) != null;
-    
+
         internal InterviewTreeRoster GetRoster(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
 
@@ -92,12 +92,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (identity == null) return null;
             return this.nodesCache.GetOrNull(identity);
         }
-       
+
         public void ActualizeTree()
         {
             foreach (var treeSection in this.Sections)
                 treeSection.ActualizeChildren();
         }
+
+        public List<IInterviewTreeNode> AllNodesInOrderCache { get; private set; } = new List<IInterviewTreeNode>();
+
+        public void ActualizeNodesInOrderCache() => AllNodesInOrderCache = this.GetAllNodesInEnumeratorOrder().ToList();
 
         public void RemoveNode(Identity identity)
         {
@@ -194,10 +198,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => diffByVariable != null && diffByVariable.IsValueChanged;
 
         private static bool IsQuestionValid(InterviewTreeQuestionDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsValid;
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
 
         private static bool IsQuestionInalid(InterviewTreeQuestionDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.IsInvalid;
+            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
 
         private static bool IsStaticTextValid(InterviewTreeStaticTextDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
@@ -306,7 +310,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
                 if (targetRoster.HasValue)
                 {
-                    var level = isLinkedToRoster  
+                    var level = isLinkedToRoster
                         ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) - 1
                         : questionnaire.GetRosterLevelForEntity(targetRoster.Value) + 1;
                     var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
@@ -315,21 +319,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             return new InterviewTreeQuestion(questionIdentity,
-                title: title, 
-                variableName: variableName, 
-                questionType: questionType, 
+                title: title,
+                variableName: variableName,
+                questionType: questionType,
                 answer: null,
-                linkedOptions: null, 
+                linkedOptions: null,
                 cascadingParentQuestionId: cascadingParentQuestionId,
-                isYesNo: isYesNoQuestion, 
-                isDecimal: isDecimalQuestion, 
-                isLinkedToListQuestion: isLinkedToListQuestion, 
-                isTimestampQuestion: isTimestampQuestion, 
-                linkedSourceId: sourceForLinkedQuestion, 
-                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion, 
+                isYesNo: isYesNoQuestion,
+                isDecimal: isDecimalQuestion,
+                isLinkedToListQuestion: isLinkedToListQuestion,
+                isTimestampQuestion: isTimestampQuestion,
+                linkedSourceId: sourceForLinkedQuestion,
+                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
                 validationMessages: validationMessages,
-                isInterviewerQuestion : isInterviewerQuestion,
-                isPrefilled : isPrefilled);
+                isInterviewerQuestion: isInterviewerQuestion,
+                isPrefilled: isPrefilled);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
@@ -410,7 +414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 nodesCache[node.Identity] = node;
             }
         }
-        
+
         public void ProcessRemovedNodeByIdentity(Identity identity)
         {
             if (!this.nodesCache.ContainsKey(identity)) return;
@@ -418,7 +422,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var nodesToRemove =
                  this.nodesCache[identity].TreeToEnumerable(node => node.Children)
                     .Select(x => x.Identity)
-                    .Union(new[] {identity});
+                    .Union(new[] { identity });
 
             foreach (var nodeToRemove in nodesToRemove)
             {
@@ -466,8 +470,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
 
-        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder()
-            => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
+        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
+
     }
 
     public interface IInterviewTreeNode

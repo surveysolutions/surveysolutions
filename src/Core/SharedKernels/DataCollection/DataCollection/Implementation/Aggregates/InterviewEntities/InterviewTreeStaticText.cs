@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable
+    public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public SubstitionText Title { get; private set; }
 
@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsValid => this.FailedValidations.Count == 0;
+
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
         public void SetTitle(SubstitionText title)

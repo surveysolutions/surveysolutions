@@ -39,6 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection
                     }
                 }
 
+                builder.Append("|");
+
                 return builder.Value.ToString();
             }        
         }
