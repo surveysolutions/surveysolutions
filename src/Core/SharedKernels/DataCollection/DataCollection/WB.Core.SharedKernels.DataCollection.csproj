@@ -146,11 +146,17 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroup.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroupDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeNodeDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeQuestionDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRoster.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRosterDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticTextDiff.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeValidateableDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariableDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionInvariants.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
