@@ -482,6 +482,7 @@
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_and_roster_inside_it.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_with_nested_roster_inside_it.cs" />
+    <Compile Include="InterviewTests\Translation\when_switching_translation_and_fixed_roster_has_question_with_rostertitle_substitutuion.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
