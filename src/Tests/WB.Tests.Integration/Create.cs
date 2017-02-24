@@ -413,9 +413,9 @@ namespace WB.Tests.Integration
         }
 
         public static TextQuestion TextQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null)
+            string validationExpression = null, string questionText = null)
         {
-            return new TextQuestion
+            return new TextQuestion(questionText)
             {
                 QuestionType = QuestionType.Text,
                 PublicKey = id ?? Guid.NewGuid(),
