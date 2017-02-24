@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             IVariableToUIStringService variableToUiStringService)
         {
             this.Text = text;
+            this.BrowserReadyText = text;
             this.originalText = text;
             this.identity = identity;
             this.substitutionService = substitutionService;
@@ -42,6 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private readonly string originalText;
         public string Text { get; private set; }
+        public string BrowserReadyText { get; private set; }
 
         public bool HasSubstitutions => this.substitutionVariables!= null &&
                 (this.substitutionVariables.ByRosters.Any() ||
@@ -54,59 +56,68 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!this.HasSubstitutions)
                 return;
 
+            this.Text = this.GetTextWithReplacedSubstitutions(shouldAddBrowserTags: false);
+            this.BrowserReadyText = this.GetTextWithReplacedSubstitutions(shouldAddBrowserTags: true);
+        }
+
+        private string GetTextWithReplacedSubstitutions(bool shouldAddBrowserTags)
+        {
             var textWithReplacedSubstitutions = this.originalText;
+
             foreach (var substitution in this.substitutionVariables.ByRosters)
             {
-                var roster = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeRoster;
-                var rosterTitle = string.IsNullOrEmpty(roster?.RosterTitle) 
-                    ? this.substitutionService.DefaultSubstitutionText 
+                var roster = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity) as InterviewTreeRoster;
+                var rosterTitle = string.IsNullOrEmpty(roster?.RosterTitle)
+                    ? this.substitutionService.DefaultSubstitutionText
                     : roster.RosterTitle;
-                textWithReplacedSubstitutions = 
-                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
-                        substitution.Name, 
+                textWithReplacedSubstitutions =
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions,
+                        substitution.Name,
                         WebUtility.HtmlEncode(rosterTitle));
             }
 
             foreach (var substitution in this.substitutionVariables.ByVariables)
             {
-                var variable = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeVariable;
+                var variable = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity) as InterviewTreeVariable;
                 var variableValueAsString = this.variableToUiStringService.VariableToUIString(variable?.Value);
                 variableValueAsString = string.IsNullOrEmpty(variableValueAsString)
                     ? this.substitutionService.DefaultSubstitutionText
                     : variableValueAsString;
 
-                textWithReplacedSubstitutions = 
-                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
+                textWithReplacedSubstitutions =
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions,
                         substitution.Name,
                         WebUtility.HtmlEncode(variableValueAsString));
             }
 
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
-                var question = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeQuestion;
+                var question = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity) as InterviewTreeQuestion;
                 string answerString = question?.GetAnswerAsString(CultureInfo.CurrentCulture);
+
                 answerString = string.IsNullOrEmpty(answerString)
                     ? this.substitutionService.DefaultSubstitutionText
                     : answerString;
 
-                textWithReplacedSubstitutions = 
-                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, 
-                        substitution.Name, 
-                        WebUtility.HtmlEncode(answerString));
+                var htmlReadyAnswer = WebUtility.HtmlEncode(answerString);
+
+                if (shouldAddBrowserTags && question?.AsDateTime?.IsAnswered == true)
+                {
+                    var dateTime = question.AsDateTime.GetAnswer().Value;
+                    htmlReadyAnswer = $"<time datetime=\"{dateTime:o}\">{htmlReadyAnswer}</time>";
+                }
+
+                textWithReplacedSubstitutions =
+                    this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions,
+                        substitution.Name,
+                        htmlReadyAnswer);
             }
 
-            this.Text = textWithReplacedSubstitutions;
+            return textWithReplacedSubstitutions;
         }
 
-        public override string ToString()
-        {
-            return this.Text;
-        }
+        public override string ToString() => this.Text;
 
-        public SubstitionText Clone()
-        {
-            var clone = (SubstitionText)this.MemberwiseClone();
-            return clone;
-        }
+        public SubstitionText Clone() => (SubstitionText) this.MemberwiseClone();
     }
 }
