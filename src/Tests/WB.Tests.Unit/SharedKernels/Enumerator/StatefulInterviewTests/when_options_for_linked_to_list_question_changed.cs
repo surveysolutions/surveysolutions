@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_calculate_state_of_options_for_linked_question = () =>
         {
             interview.GetMultiOptionLinkedToListQuestion(linkedQuestionIdentity)
-                .Options.Count.ShouldEqual(1);
+                .Options.Length.ShouldEqual(1);
         };
 
         static StatefulInterview interview;

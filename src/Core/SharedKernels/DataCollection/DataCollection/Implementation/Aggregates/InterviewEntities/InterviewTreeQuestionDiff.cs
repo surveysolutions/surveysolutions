@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -78,9 +79,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.ChangedNode == null) return false;
                 if (!this.ChangedNode.IsLinkedToListQuestion) return false;
 
-                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? new List<decimal>();
+                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<decimal>.Value;
 
-                if (sourceOptions.Count != this.ChangedNode.AsLinkedToList.Options.Count)
+                if (sourceOptions.Length != this.ChangedNode.AsLinkedToList.Options.Length)
                     return true;
 
                 return !sourceOptions.SequenceEqual(this.ChangedNode.AsLinkedToList.Options);

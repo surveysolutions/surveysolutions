@@ -42,8 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
+    <Compile Include="EmptyArray.cs" />
     <Compile Include="NumericExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />

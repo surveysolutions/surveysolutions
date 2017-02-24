@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    [DebuggerDisplay("{ToString()}")]
+    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public class RosterVector : IEnumerable<decimal>
     {
         private int? cachedHashCode = null;
@@ -83,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 return false;
             }
-
+            
             return this.Array.SequenceEqual(other.Array);
         }
 
