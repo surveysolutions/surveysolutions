@@ -134,10 +134,10 @@ namespace WB.Tests.Integration.InterviewTests
             ILatestInterviewExpressionState precompiledState = null, 
             bool useLatestEngine = true,
             Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
-            QuestionnaireIdentity questionnaireIdentity = null)
+            QuestionnaireIdentity questionnaireIdentity = null,
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
-
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
 
@@ -147,7 +147,7 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
                 answersOnPrefilledQuestions: answersOnPrefilledQuestions,
-                questionnaireRepository: Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
+                questionnaireRepository: questionnaireStorage ?? Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
             
             ApplyAllEvents(interview, events);
 

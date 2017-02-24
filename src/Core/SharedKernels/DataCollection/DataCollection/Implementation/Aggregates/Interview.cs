@@ -248,8 +248,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
             this.ApplyEvents(treeDifference, command.UserId);
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
+            
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
