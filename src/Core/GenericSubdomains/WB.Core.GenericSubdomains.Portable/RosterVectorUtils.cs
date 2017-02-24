@@ -15,11 +15,6 @@ namespace WB.Core.GenericSubdomains.Portable
                 return true;
             }
 
-            if (vector1.Length != vector2.Length)
-            {
-                return false;
-            }
-
             return vector1.SequenceEqual(vector2);
         }
     }

@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
         private string[] JoinRowIdWithParentIdsInParentIdsVector(string id, string[] parentIds)
         {
-            var result = new string[parentIds.Count() + 1];
+            var result = new string[parentIds.Length + 1];
             result[0] = id;
             for (int i = 1; i < result.Length; i++)
             {

@@ -206,11 +206,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void UpdateRostersInExpressionState(InterviewTreeRosterDiff[] diff, ILatestInterviewExpressionState expressionState)
         {
-            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToArray();
+            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToList();
             var addedRosters = diff.Where(x => x.IsNodeAdded)
                 .Select(x => x.ChangedNode)
                 .OrderBy(x => x.RosterVector.Length)
-                .ToArray();
+                .ToList();
 
             foreach (var removedRosterIdentity in removedRosters.Select(ToRosterInstance))
             {
