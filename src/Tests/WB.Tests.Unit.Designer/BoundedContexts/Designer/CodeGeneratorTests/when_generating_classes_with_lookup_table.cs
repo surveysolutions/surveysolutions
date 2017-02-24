@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price = @Lookup__Price_Generator.GetTable();");
 
 
-        private static int version = 11;
+        private static int version = 16;
         private static CodeGenerator generator;
         private static Dictionary<string, string> generatedClassContent;
         private static QuestionnaireDocument questionnaire;

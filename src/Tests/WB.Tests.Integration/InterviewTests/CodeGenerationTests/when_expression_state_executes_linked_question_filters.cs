@@ -6,7 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 })
             });
-                IInterviewExpressionStateV7 state = GetInterviewExpressionState(questionnaireDocument,version: 13) as IInterviewExpressionStateV7;
+                IInterviewExpressionStateV8 state = GetInterviewExpressionState(questionnaireDocument,version: 17) as IInterviewExpressionStateV8;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
                 state.AddRoster(rosterId, new decimal[0], 2, null);
                 state.DisableGroups(new[] { new Identity(rosterId, new decimal[] {2}) });
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfOptions = filterResults.LinkedQuestionOptions[questionId].Count()
+                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[new Identity(questionId, RosterVector.Empty)].Count()
                 };
             });
         
