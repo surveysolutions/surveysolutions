@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
         {
             var changedLinkedOptions = questionsWithChangedOptionsSet
-                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.ToArray()))
+                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options))
                 .ToArray();
 
             if (changedLinkedOptions.Any())
