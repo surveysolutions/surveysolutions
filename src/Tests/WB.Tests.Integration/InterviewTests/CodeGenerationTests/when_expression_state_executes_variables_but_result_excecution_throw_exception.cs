@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Create.Variable(id: variableId, expression: "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =
-                    GetInterviewExpressionState(questionnaireDocument, version: 15) as
+                    GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
                 state.UpdateVariableValue(Create.Identity(variableId), 6);

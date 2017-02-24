@@ -8,7 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
-    internal class when_generate_single_class_for_version_10_with_questionnaire_with_roster : CodeGeneratorTestsContext
+    internal class when_generate_single_class_for_version_16_with_questionnaire_with_roster : CodeGeneratorTestsContext
     {
         Establish context = () =>
         {
@@ -35,16 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         Because of = () =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_with_V4_namespaces_included = () =>
-            generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V4");
+        It should_generate_class_with_V10_namespaces_included = () =>
+            generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V10");
 
-        It should_generate_class_with_method_IInterviewExpressionStateV4 = () =>
-            generatedClassContent.ShouldContain("IInterviewExpressionStateV4");
+        It should_generate_class_with_AbstractConditionalLevelInstanceV10 = () =>
+            generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV10");
 
-        It should_generate_class_with_AbstractConditionalLevelInstanceV4 = () =>
-            generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV4");
-
-        private static int version = 10;
+        private static int version = 16;
         private static CodeGenerator generator;
         private static string generatedClassContent;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");

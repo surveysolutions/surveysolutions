@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     }),
                 });
                 IInterviewExpressionStateV9 state =
-                    GetInterviewExpressionState(questionnaireDocument, version: 15) as
+                    GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
                 state.AddRoster(rosterId, new decimal[0], 2, null);

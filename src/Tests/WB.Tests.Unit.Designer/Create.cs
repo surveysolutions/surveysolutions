@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
@@ -165,19 +166,28 @@ namespace WB.Tests.Unit.Designer
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
-            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                },
-                isLookupTablesFeatureSupported: true,
-                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
+
+
+            return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV10" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7",
+                            "WB.Core.SharedKernels.DataCollection.V8",
+                            "WB.Core.SharedKernels.DataCollection.V9",
+                            "WB.Core.SharedKernels.DataCollection.V10",
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText(),
+                        linkedFilterMethodGenerator: model => new LinkedFilterMethodTemplateV10(model).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(
