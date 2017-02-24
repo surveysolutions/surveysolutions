@@ -198,6 +198,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
+            if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
+            {
+                return;
+            }
+
             var sharedPerson = new SharedPerson
             {
                 UserId = personId,
@@ -205,10 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 ShareType = shareType
             };
 
-            if (questionnaireListViewItem.SharedPersons.All(x => x.UserId != personId))
-            {
-                questionnaireListViewItem.SharedPersons.Add(sharedPerson);
-            }
+            questionnaireListViewItem.SharedPersons.Add(sharedPerson);
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
