@@ -287,18 +287,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetRoster(rosterIdentity)?.RosterTitle;
 
         public string GetTitleText(Identity entityIdentity)
-        {
-            var question = this.Tree.GetQuestion(entityIdentity);
-            if (question != null) return question.Title.Text;
+            => this.GetTitleSubstitutionText(entityIdentity)?.Text ?? string.Empty;
 
-            var group = this.Tree.GetGroup(entityIdentity);
-            if(group != null) return group.Title.Text;
+        public string GetBrowserReadyTitleHtml(Identity entityIdentity)
+            => this.GetTitleSubstitutionText(entityIdentity)?.BrowserReadyText ?? string.Empty;
 
-            var staticText = this.Tree.GetStaticText(entityIdentity);
-            if (staticText != null) return staticText.Title.Text;
-
-            return string.Empty;
-        }
+        private SubstitionText GetTitleSubstitutionText(Identity entityIdentity)
+            => this.Tree.GetQuestion(entityIdentity)?.Title
+            ?? this.Tree.GetGroup(entityIdentity)?.Title
+            ?? this.Tree.GetStaticText(entityIdentity)?.Title;
 
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
