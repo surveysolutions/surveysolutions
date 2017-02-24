@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection
             foreach (var scopeId in scopeIds)
             {
                 builder.Append("$");
-                builder.Append(scopeId.Id);
+                builder.Append(scopeId.Id.ToString());
 
                 foreach (var coordinate in scopeId.RosterVector.Coordinates)
                 {
