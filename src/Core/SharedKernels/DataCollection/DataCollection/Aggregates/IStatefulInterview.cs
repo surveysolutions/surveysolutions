@@ -81,6 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetRosterTitle(Identity rosterIdentity);
 
         string GetTitleText(Identity entityIdentity);
+        string GetBrowserReadyTitleHtml(Identity entityIdentity);
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity);
 
