@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
-        public void CalculateLinkedToListOptions()
+        public void CalculateLinkedToListOptions(bool resetAnswerOnOptionChange = true)
         {
             if (!this.IsLinkedToListQuestion) return;
             InterviewTreeLinkedToListQuestion linkedToListQuestion = this.AsLinkedToList;
@@ -312,13 +312,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
 
-            var optionsAreIdentical = previousOptions.SequenceEqual(options);
-            if (optionsAreIdentical) return;
+            if (resetAnswerOnOptionChange)
+            {
+                var optionsAreIdentical = previousOptions.SequenceEqual(options);
+                if (optionsAreIdentical) return;
 
-            if (this.IsMultiLinkedToList)
-                this.AsMultiLinkedToList.RemoveAnswer();
-            else
-                this.AsSingleLinkedToList.RemoveAnswer();
+                if (this.IsMultiLinkedToList)
+                    this.AsMultiLinkedToList.RemoveAnswer();
+                else
+                    this.AsSingleLinkedToList.RemoveAnswer();
+            }
         }
 
 
