@@ -1118,10 +1118,6 @@
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\Shared\Enumerator\WB.Infrastructure.Shared.Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
-      <Project>{E41DEB5C-2AD6-463F-9F76-10299FC2D9D1}</Project>
-      <Name>WB.Infrastructure.Shared.Enumerator</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\complete_screen_statistics_column_background.xml" />
