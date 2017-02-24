@@ -24,20 +24,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 // Calculate inSampleSize
                 BitmapFactory.Options boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true, InPurgeable = true };
-                BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions).Dispose(); // To determine actual image size
-                int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
-
-                var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize, InPurgeable = true };
-                using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
+                using (BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions)) // To determine actual image size
                 {
-                    if (bitmap != null)
+                    int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
+
+                    var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize, InPurgeable = true};
+                    using (var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions))
                     {
-                        SetupPaddingForImageView(control, displayMetrics, boundsOptions);
-                        control.SetImageBitmap(bitmap);
-                    }
-                    else
-                    {
-                        LoadDefaultImage(control);
+                        if (bitmap != null)
+                        {
+                            SetupPaddingForImageView(control, displayMetrics, boundsOptions);
+                            control.SetImageBitmap(bitmap);
+                        }
+                        else
+                        {
+                            LoadDefaultImage(control);
+                        }
                     }
                 }
             }

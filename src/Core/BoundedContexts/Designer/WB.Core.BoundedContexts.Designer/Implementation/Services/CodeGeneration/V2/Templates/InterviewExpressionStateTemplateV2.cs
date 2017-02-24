@@ -139,16 +139,16 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
                     "    var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], ros" +
                     "terVector);\r\n            var rosterStringKey = Util.GetRosterStringKey(rosterIde" +
                     "ntityKey);\r\n\r\n            var dependentRosters = this.InterviewScopes.Keys.Where" +
-                    "(x => x.StartsWith(rosterStringKey)).ToArray();\r\n\r\n            foreach (var rost" +
-                    "erKey in dependentRosters)\r\n            {\r\n                this.InterviewScopes." +
-                    "Remove(rosterKey);\r\n                foreach (var siblings in this.SiblingRosters" +
-                    ".Values)\r\n                {\r\n                    siblings.Remove(rosterKey);\r\n  " +
-                    "              }\r\n            }\r\n        }\r\n\r\n\t\tpublic void SetInterviewPropertie" +
-                    "s(IInterviewProperties properties)\r\n        {\r\n            this.InterviewPropert" +
-                    "ies = properties;\r\n            foreach (var item in this.InterviewScopes.Values)" +
-                    "\r\n            {\r\n                item.SetInterviewProperties(properties);\r\n     " +
-                    "       }\r\n        }\r\n\r\n        public override IInterviewExpressionState Clone()" +
-                    "\r\n\t\t{\r\n\t\t\treturn new ");
+                    "(x => x.StartsWith(rosterStringKey, StringComparison.Ordinal)).ToArray();\r\n\r\n   " +
+                    "         foreach (var rosterKey in dependentRosters)\r\n            {\r\n           " +
+                    "     this.InterviewScopes.Remove(rosterKey);\r\n                foreach (var sibli" +
+                    "ngs in this.SiblingRosters.Values)\r\n                {\r\n                    sibli" +
+                    "ngs.Remove(rosterKey);\r\n                }\r\n            }\r\n        }\r\n\r\n\t\tpublic " +
+                    "void SetInterviewProperties(IInterviewProperties properties)\r\n        {\r\n       " +
+                    "     this.InterviewProperties = properties;\r\n            foreach (var item in th" +
+                    "is.InterviewScopes.Values)\r\n            {\r\n                item.SetInterviewProp" +
+                    "erties(properties);\r\n            }\r\n        }\r\n\r\n        public override IInterv" +
+                    "iewExpressionState Clone()\r\n\t\t{\r\n\t\t\treturn new ");
             
             #line 107 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
