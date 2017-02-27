@@ -13,8 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public UserLight Responsible { get; set; }
 
-        public Guid QuestionnairePublicKey { get; set; }
-
         public Guid PublicKey { get; set; }
 
         public string Title { get; set; }

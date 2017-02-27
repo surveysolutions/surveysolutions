@@ -86,29 +86,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult.Groups.Count.ShouldEqual(5);
 
         It should_have_in_first_row_parent_roster_as_separate_screen = () =>
-            mergeResult.Groups.FirstOrDefault(g => g.Id == rosterId && g.RosterVector.SequenceEqual(new decimal[] { 0})).ShouldNotBeNull();
+            mergeResult.Groups.FirstOrDefault(g => g.Id.Id == rosterId && g.Id.RosterVector.SequenceEqual(new decimal[] { 0})).ShouldNotBeNull();
 
         It should_have_in_second_row_nested_roster_as_separate_screen = () =>
             mergeResult.Groups.FirstOrDefault(
                 g =>
-                    g.Id == nestedRosterId && g.RosterVector.SequenceEqual(new decimal[] { 0, 0 })).ShouldNotBeNull();
+                    g.Id.Id == nestedRosterId && g.Id.RosterVector.SequenceEqual(new decimal[] { 0, 0 })).ShouldNotBeNull();
 
         It should_have_in_third_row_nested_roster_as_separate_screen = () =>
            mergeResult.Groups.FirstOrDefault(
                 g =>
-                    g.Id == nestedRosterId && g.RosterVector.SequenceEqual(new decimal[] { 0, 1 })).ShouldNotBeNull();
+                    g.Id.Id == nestedRosterId && g.Id.RosterVector.SequenceEqual(new decimal[] { 0, 1 })).ShouldNotBeNull();
 
         It should_have_in_parent_roster_answered_question = () =>
-            mergeResult.Groups.FirstOrDefault(g => g.Id == rosterId && g.RosterVector.Length == 1 && g.RosterVector[0] == 0)
-                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == rosterQuestionId).Answer.ShouldEqual(1);
+            mergeResult.Groups.FirstOrDefault(g => g.Id.Id == rosterId && g.Id.RosterVector.Length == 1 && g.Id.RosterVector[0] == 0)
+                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == rosterQuestionId).Answer.ShouldEqual(1);
 
         It should_have_in_first_nested_roster_answered_question = () =>
-            mergeResult.Groups.FirstOrDefault(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(new decimal[]{0,0}))
-                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionInNestedRosterId).Answer.ShouldEqual(1);
+            mergeResult.Groups.FirstOrDefault(g => g.Id.Id == nestedRosterId && g.Id.RosterVector.SequenceEqual(new decimal[]{0,0}))
+                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == questionInNestedRosterId).Answer.ShouldEqual(1);
 
         It should_have_in_second_nested_roster_answered_question = () =>
-            mergeResult.Groups.FirstOrDefault(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(new decimal[] { 0, 1 }))
-                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionInNestedRosterId).Answer.ShouldEqual(2);
+            mergeResult.Groups.FirstOrDefault(g => g.Id.Id == nestedRosterId && g.Id.RosterVector.SequenceEqual(new decimal[] { 0, 1 }))
+                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == questionInNestedRosterId).Answer.ShouldEqual(2);
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;

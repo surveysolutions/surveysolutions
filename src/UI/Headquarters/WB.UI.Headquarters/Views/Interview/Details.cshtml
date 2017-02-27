@@ -1,21 +1,17 @@
-﻿@using System.Globalization
-@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
+﻿@using Main.Core.Entities.SubEntities
 @using Microsoft.Security.Application
 @using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.Views
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @using WB.UI.Shared.Web.Extensions
 @model WB.Core.BoundedContexts.Headquarters.Views.DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var interviewQuestions = Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>();
+    var interviewQuestions = Model.FilteredEntities.OfType<InterviewQuestionView>();
 }
 @section styles
 {
@@ -46,10 +42,10 @@
 
         var filter = { filteredBy: '@Model.Filter' };
         var filteredComboboxes = [
-            @Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label: {1}}}", x.Value, Encoder.JavaScriptEncode(x.Label))))))))
+            @Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", _.Id,string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label: {1}}}", x.Value, Encoder.JavaScriptEncode(x.Label))))))))
         ];
         var answeredYesNoQuestionsBySupervisor = [
-            @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
+            @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", _.Id, JsonConvert.SerializeObject(_.Answer)))))];
         var currentTranslation = '@(Model.InterviewDetails.CurrentTranslation ?? "")';
         var isAssignedToInterviewer = @Model.InterviewDetails.IsAssignedToInterviewer.ToString().ToLower();
 
@@ -73,8 +69,8 @@
             <ul id="groups-menu" class="list-group">
                 @foreach (var group in Model.InterviewDetails.Groups)
                 {
-                    <li class="list-group-item @SetGroupLevelClass(group.Depth) @css("active", group.Id == Model.SelectedGroupId && group.RosterVector.SequenceEqual(Model.SelectedGroupRosterVector))">
-                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id, rosterVector = Html.Stringify(@group.RosterVector)})">@group.Title</a>
+                    <li class="list-group-item @SetGroupLevelClass(group.Depth) @css("active", group.Id == Model.SelectedGroupId)">
+                        <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All, currentGroupId = group.Id})">@group.Title</a>
                     </li>
                 }
             </ul>
@@ -128,7 +124,7 @@
 
                     bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
                 }
-                
+
                 @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
@@ -154,98 +150,102 @@
             </div>
         </div>
         <div id="list">
-            @foreach (var group in Model.FilteredGroups)
-            {
-                <div id="group-@group.Id" class="group-item-content">
-                    <h2 class="heading">@group.Title</h2>
-                    <div class="questions">
-                        <table class="table table-bordered table-hover">
-                            <tbody>
-                            @foreach (var entity in group.Entities)
+            <div class="questions">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        @foreach (var entity in Model.FilteredEntities)
+                        {
+                            InterviewGroupView group = entity as InterviewGroupView;
+                            if (group != null)
                             {
-                                InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
-                                if (entityAsStaticText != null)
-                                {
-                                    @Html.Partial("StaticTextPartialView", entityAsStaticText)
-                                    continue;
-                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <div id="group-@group.Id" class="group-item-content">
+                                            <h2 class="heading">@group.Title</h2>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
 
-                                InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
-                                if (entityAsInterviewQuestionView != null)
+                            InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
+                            if (entityAsStaticText != null)
+                            {
+                                @Html.Partial("StaticTextPartialView", entityAsStaticText)
+                            }
+
+                            InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
+                            if (entityAsInterviewQuestionView != null)
+                            {
+                                if (Model.InterviewDetails.ReceivedByInterviewer)
                                 {
-                                    if (Model.InterviewDetails.ReceivedByInterviewer)
-                                    {
-                                        @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
-                                    }
-                                    else
-                                    {
-                                        @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary {{"InterviewId", Model.InterviewDetails.PublicKey}})
-                                    }
+                                    @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
+                                }
+                                else
+                                {
+                                    @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary {{"InterviewId", Model.InterviewDetails.PublicKey}})
                                 }
                             }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-@Html.Partial("CommentTemplatePartialView")
-@Html.Partial("HistoryOfStatusesPartialView", Model.History)
-@Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
+    @Html.Partial("CommentTemplatePartialView")
+    @Html.Partial("HistoryOfStatusesPartialView", Model.History)
+    @Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
 
-@helper SetGroupLevelClass(int level)
-{
+    @helper SetGroupLevelClass(int level)
+    {
     <text>level</text>@level
 
 }
 
-@helper SetFilterActiveClass(InterviewDetailsFilter filter)
-{
-    if (filter == Model.Filter)
+    @helper SetFilterActiveClass(InterviewDetailsFilter filter)
     {
+if (filter == Model.Filter)
+{
         <text>btn-primary</text>
-    }
+}
 }
 
-@helper SetFilterIconActiveClass(InterviewDetailsFilter filter)
-{
-    if (filter == Model.Filter)
+    @helper SetFilterIconActiveClass(InterviewDetailsFilter filter)
     {
-        <text>icon-white</text>
-    }
-}
-@helper css(string style, bool shouldBeAdded = true)
+if (filter == Model.Filter)
 {
+        <text>icon-white</text>
+}
+}
+    @helper css(string style, bool shouldBeAdded = true)
+    {
     @(shouldBeAdded ? style : string.Empty)
 }
 
-@functions
+    @functions
     {
 
-    private static bool IsFilteredCombobox(InterviewQuestionView entityView)
-    {
-        if (entityView.QuestionType == QuestionType.SingleOption)
+        private static bool IsFilteredCombobox(InterviewQuestionView entityView)
         {
-            var interviewQuestionViewSettings = entityView.Settings as SingleQuestionSettings;
+            if (entityView.QuestionType == QuestionType.SingleOption)
+            {
+                var interviewQuestionViewSettings = entityView.Settings as SingleQuestionSettings;
 
-            return interviewQuestionViewSettings != null && interviewQuestionViewSettings.IsFilteredCombobox;
+                return interviewQuestionViewSettings != null && interviewQuestionViewSettings.IsFilteredCombobox;
+            }
+            return false;
         }
-        return false;
-    }
 
-    private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
-    {
-        if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && entityView.IsEnabled && 
-            entityView.QuestionType == QuestionType.MultyOption)
+        private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
         {
-            var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;
+            if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && entityView.IsEnabled &&
+                entityView.QuestionType == QuestionType.MultyOption)
+            {
+                var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;
 
-            return interviewQuestionViewSettings != null && interviewQuestionViewSettings.YesNoQuestion;
+                return interviewQuestionViewSettings != null && interviewQuestionViewSettings.YesNoQuestion;
+            }
+            return false;
         }
-        return false;
-    }
 
-}
+    }

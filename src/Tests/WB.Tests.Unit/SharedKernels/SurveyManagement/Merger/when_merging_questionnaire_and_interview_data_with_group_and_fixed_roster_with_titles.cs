@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult.Groups.Count.ShouldEqual(3+1);
 
         It should_set__groupTitle__to_regular_group_with_groupId_id = () =>
-            mergeResult.Groups.Single(x => x.Id == groupId).Title.ShouldEqual(groupTitle);
+            mergeResult.Groups.Single(x => x.Id.Id == groupId).Title.ShouldEqual(groupTitle);
 
         It should_set_first_fixed_roster_title_ = () =>
-            mergeResult.Groups.Single(x => x.Id == fixedRosterId && x.RosterVector.SequenceEqual(new decimal[] { 0 }))
+            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.SequenceEqual(new decimal[] { 0 }))
                 .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[0]));
 
         It should_set_second_fixed_roster_title_ = () =>
-            mergeResult.Groups.Single(x => x.Id == fixedRosterId && x.RosterVector.SequenceEqual(new decimal[] { 1 }))
+            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.SequenceEqual(new decimal[] { 1 }))
                 .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[1]));
 
 

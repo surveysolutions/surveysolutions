@@ -1,52 +1,39 @@
-﻿@using System.Globalization
-@using Main.Core.Entities.SubEntities
+﻿@using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
-@using WB.Core.SharedKernels.DataCollection.Commands.Interview
-@using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
-@using WB.Core.SharedKernels.DataCollection.Views.Interview
-@using WB.UI.Headquarters.Resources
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+@using WB.Core.SharedKernels.DataCollection
+@model InterviewQuestionView
 
 
 @switch (Model.QuestionType)
             {
                 case QuestionType.SingleOption:
                     var singleOptionSetting = Model.Settings as SingleQuestionSettings;
-                    if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
+                    if (singleOptionSetting.IsLinkedToListQuestion || singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
                     {
-                        if (Model.Answer != null)
-                        {
-                            var answer = Convert.ToDecimal(Model.Answer);
-                            @Model.Options.First(option => answer == Convert.ToDecimal(option.Value)).Label
-                        }
-                    } else if (singleOptionSetting.IsLinkedToListQuestion) {
                         @Model.AnswerString
                     }
                     else
                     {
                         foreach (var option in Model.Options)
                         {
-                            string optionValue;
+                            string optionValue = option.Value.ToString();
                             bool isChecked;
                             if (singleOptionSetting.IsLinkedToRoster)
                             {
-                                optionValue = Stringify((decimal[])option.Value);
-                                isChecked = Model.Answer != null && ((decimal[])Model.Answer).SequenceEqual((decimal[])option.Value);
+                                isChecked = Model.Answer != null && ((decimal[]) Model.Answer).SequenceEqual((decimal[]) option.Value);
                             }
                             else
                             {
-                                optionValue = option.Value.ToString();
                                 isChecked = Model.Answer != null && Convert.ToDecimal(Model.Answer) == Convert.ToDecimal(option.Value);
                             }
 
-                            <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
-                            <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-                            <span>@option.Label</span>
+                            <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))">
+                                <input type="radio" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
+                                <span>@option.Label</span>
                             </label>
                         }
                     }
-                break;
+                    break;
 
                 case QuestionType.MultyOption:
                     var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
@@ -61,13 +48,11 @@
                     {
                         foreach (var option in Model.Options)
                         {
-                            string optionValue;
+                            string optionValue = option.Value.ToString();
                             bool isChecked = false;
                             int orderIndex = 0;
                             if (multiQuestionSettings.IsLinkedToRoster)
                             {
-                                optionValue = Stringify((decimal[])option.Value);
-
                                 if (Model.Answer != null)
                                 {
                                     var answers = (decimal[][])Model.Answer;
@@ -80,8 +65,6 @@
                             }
                             else
                             {
-                                optionValue = option.Value.ToString();
-
                                 if (Model.Answer != null)
                                 {
                                     var answers = (decimal[])Model.Answer;
@@ -92,8 +75,8 @@
                                     }
                                 }
                             }
-                            <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
-                            <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
+                            <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))">
+                            <input type="checkbox" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
 
                             <span>@option.Label</span>
                             @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
@@ -135,20 +118,15 @@
                     }
                     break;
                 case QuestionType.Multimedia:
-                    <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.Answer})" width="100%" height="auto" />
+                    <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.AnswerString})" width="100%" height="auto" />
                     break;  
 }
 
 @functions
     {
 
-    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
+    public string getInterviewItemIdWithPostfix(Identity identity, string postfix = "")
     {
-        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
-    }
-
-    public string Stringify(decimal[] array)
-    {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+        return string.Format("{0}_{1}", identity, postfix);
     }
 }

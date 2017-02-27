@@ -48,12 +48,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         
         private static InterviewGroupView GetNestedGroup()
         {
-            return mergeResult.Groups.Find(g => g.Id == nestedGroupId);
+            return mergeResult.Groups.Find(g => g.Id.Id == nestedGroupId);
         }
 
         private static InterviewStaticTextView GetStaticText()
         {
-            return GetNestedGroup().Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
+            return GetNestedGroup().Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id.Id == staticTextId);
         }
 
         private static InterviewDataAndQuestionnaireMerger merger;

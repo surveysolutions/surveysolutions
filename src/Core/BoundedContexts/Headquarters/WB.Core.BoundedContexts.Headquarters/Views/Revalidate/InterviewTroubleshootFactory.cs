@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
             var interviewTroubleshootView = new InterviewTroubleshootView
             {
                 Responsible = mergedInterview.Responsible,
-                QuestionnairePublicKey = mergedInterview.QuestionnairePublicKey,
+                QuestionnairePublicKey = interview.QuestionnaireId,
                 QuestionnaireVersion = interview.QuestionnaireVersion,
                 Title = mergedInterview.Title,
                 Description = mergedInterview.Description,

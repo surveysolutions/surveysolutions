@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     [DebuggerDisplay("{Title} ({Id})")]
-    public class InterviewGroupView 
+    public class InterviewGroupView : InterviewEntityView
     {
         public int Depth { set; get; }
-        public Guid? ParentId { set; get; }
         public string Title { get; set; }
-
-        public decimal[] RosterVector { get; set; }
-
-        public InterviewGroupView(Guid id)
+        public InterviewGroupView(Identity id) 
         {
             this.Entities = new List<InterviewEntityView>();
             this.Id = id;
         }
-        public Guid Id { set; get; }
+
+        public InterviewGroupView() { }
         public List<InterviewEntityView> Entities { set; get; }
     }
 }
