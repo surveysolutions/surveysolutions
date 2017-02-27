@@ -476,7 +476,6 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
                     Create.CodeGenerator(),
-                    Create.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
         }
 
