@@ -110,6 +110,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var result = new List<CommittedEvent>();
             using (var npgsqlTransaction = connection.BeginTransaction())
             {
+                ValidateStreamVersion(eventStream, connection);
+
                 var copyFromCommand = $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
                 using (var writer = connection.BeginBinaryImport(copyFromCommand))
                 {
@@ -144,6 +146,38 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 npgsqlTransaction.Commit();
             }
             return result;
+        }
+
+        private static void ValidateStreamVersion(UncommittedEventStream eventStream, NpgsqlConnection connection)
+        {
+            if (eventStream.InitialVersion == 0)
+            {
+                using (NpgsqlCommand validateVersionCommand = connection.CreateCommand())
+                {
+                    validateVersionCommand.CommandText =
+                        $"SELECT EXISTS(SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId)";
+                    validateVersionCommand.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, eventStream.SourceId);
+
+                    var streamExists = validateVersionCommand.ExecuteScalar() as bool?;
+                    if (streamExists.GetValueOrDefault())
+                        throw new InvalidOperationException(
+                            $"Unexpected stream version. Expected non existant stream, but received stream with version {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
+                }
+            }
+            else
+            {
+                using (NpgsqlCommand validateVersionCommand = connection.CreateCommand())
+                {
+                    validateVersionCommand.CommandText =
+                        $"SELECT MAX(eventsequence) FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId";
+                    validateVersionCommand.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, eventStream.SourceId);
+
+                    var storedLastSequence = validateVersionCommand.ExecuteScalar() as int?;
+                    if (storedLastSequence != eventStream.InitialVersion)
+                        throw new InvalidOperationException(
+                            $"Unexpected stream version. Expected {eventStream.InitialVersion}. Actual {storedLastSequence}. EventSourceId: {eventStream.SourceId}");
+                }
+            }
         }
 
         public int CountOfAllEvents()
@@ -266,7 +300,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 int globalSequence = (int) npgsqlCommand.ExecuteScalar();
 
                 NpgsqlCommand countCommand = connection.CreateCommand();
-                countCommand.CommandText = $"SELECT COUNT(*) FROM {tableNameWithSchema} WHERE globalsequence > {globalSequence}";
+                countCommand.CommandText = $"SELECT COUNT(*) FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence";
                 countCommand.Parameters.AddWithValue("globalSequence", globalSequence);
 
                 return (long) countCommand.ExecuteScalar();
