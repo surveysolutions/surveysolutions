@@ -35,7 +35,6 @@ using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
@@ -85,10 +84,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
-
-            this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
-            this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
-
+            
             CommandRegistry
                 .Setup<User>()
                 .ResolvesIdFrom<UserCommand>(command => command.UserId)
