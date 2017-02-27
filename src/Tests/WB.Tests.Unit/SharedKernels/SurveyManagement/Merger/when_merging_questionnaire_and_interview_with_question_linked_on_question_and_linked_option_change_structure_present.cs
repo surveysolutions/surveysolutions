@@ -53,21 +53,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, new ValueVector<Guid> {rosterId}, Create.Entity.RosterVector(0).ToArray(),
+            AddInterviewLevel(interview, new ValueVector<Guid> {rosterId}, Create.Entity.RosterVector(0).CoordinatesAsDecimals.ToArray(),
                 rosterTitles: new Dictionary<Guid, string>() {{rosterId, "roster0"}},
                 answeredQuestions: new Dictionary<Guid, object>() {{linkedQuestionSourceId, "ros0_txt"}});
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 0).CoordinatesAsDecimals.ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros00_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 1).CoordinatesAsDecimals.ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros01_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } }, answeredQuestions: new Dictionary<Guid, object>() { { linkedQuestionSourceId, "ros1_txt" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } }, answeredQuestions: new Dictionary<Guid, object>() { { linkedQuestionSourceId, "ros1_txt" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 0).CoordinatesAsDecimals.ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros10_txt" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } },
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).CoordinatesAsDecimals.ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } },
                 answeredQuestions: new Dictionary<Guid, object>() { { linkedOnNestedRosterQuestionSourceId, "ros11_txt" } });
 
             interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).ToArray()));

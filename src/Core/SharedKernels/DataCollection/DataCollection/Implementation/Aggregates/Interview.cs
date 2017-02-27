@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorStatePrototype = value;
             }
         }
-
+       
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
@@ -710,7 +710,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (roster.IsFixed)
                 {
                     string changedRosterTitle = questionnaire.GetFixedRosterTitle(roster.Identity.Id,
-                        roster.Identity.RosterVector.Last());
+                        roster.Identity.RosterVector.Last<int>());
 
                     roster.SetRosterTitle(changedRosterTitle);
                 }

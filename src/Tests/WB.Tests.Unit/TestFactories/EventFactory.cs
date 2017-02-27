@@ -189,7 +189,7 @@ namespace WB.Tests.Unit.TestFactories
                 fullRosterVectors
                     .Select(fullRosterVector => new AddedRosterInstance(
                         rosterId,
-                        outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                        outerRosterVector: fullRosterVector.CoordinatesAsDecimals.Take(fullRosterVector.Length - 1).ToArray(),
                         rosterInstanceId: fullRosterVector.Last(),
                         sortIndex: null))
                     .ToArray());
@@ -302,7 +302,7 @@ namespace WB.Tests.Unit.TestFactories
                 rosterVectors
                     .Select(fullRosterVector => new RosterInstance(
                         rosterGroupId,
-                        outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                        outerRosterVector: fullRosterVector.CoordinatesAsDecimals.Take(fullRosterVector.Length - 1).ToArray(),
                         rosterInstanceId: fullRosterVector.Last())).ToArray());
 
         public SupervisorAssigned SupervisorAssigned(Guid userId, Guid supervisorId)

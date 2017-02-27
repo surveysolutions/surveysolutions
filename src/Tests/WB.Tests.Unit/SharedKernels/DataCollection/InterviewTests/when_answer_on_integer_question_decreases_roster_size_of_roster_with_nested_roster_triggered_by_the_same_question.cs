@@ -63,8 +63,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_AnswersRemoved_event_for_parent_roster_row_and_for_nested_roster_row = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
-                => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1
-                && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1);
+                => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.Identical(new decimal[] { 0 })) == 1
+                && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1);
 
         It should_not_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event

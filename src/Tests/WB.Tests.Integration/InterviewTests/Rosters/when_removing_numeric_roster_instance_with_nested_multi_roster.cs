@@ -78,10 +78,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 {                    
                     interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 1);
 
-                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.SequenceEqual(new[] { 0m, 1m })));
-                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.SequenceEqual(new[] { 0m, 2m })));
-                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.SequenceEqual(new[] { 1m, 1m })));
-                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.SequenceEqual(new[] { 1m, 2m })));
+                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 0m, 1m })));
+                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 0m, 2m })));
+                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 1m, 1m })));
+                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 1m, 2m })));
                 }
 
                 return result;

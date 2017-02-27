@@ -37,6 +37,12 @@ namespace WB.Core.SharedKernels.DataCollection
             this.RosterVector = rosterVector ?? RosterVector.Empty;
         }
 
+        public Identity(Guid id, decimal[] rosterVector)
+        {
+            this.Id = id;
+            this.RosterVector = rosterVector != null ? new RosterVector(rosterVector) : RosterVector.Empty;
+        }
+
         public static Identity Create(Guid id, RosterVector rosterVector) => new Identity(id, rosterVector);
 
         public static Identity Parse(string value)

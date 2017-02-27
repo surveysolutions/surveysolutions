@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static CategoricalLinkedMultiOptionAnswer FromDecimalArrayArray(decimal[][] decimals)
             => decimals == null ? null : new CategoricalLinkedMultiOptionAnswer(decimals.Select(decimalArray => (RosterVector) decimalArray));
 
-        public decimal[][] ToDecimalArrayArray() => this.CheckedValues.Select(value => value.Coordinates.ToArray()).ToArray();
+        public decimal[][] ToDecimalArrayArray() => this.CheckedValues.Select(value => value.CoordinatesAsDecimals.ToArray()).ToArray();
 
         public override string ToString() => string.Join(", ", CheckedValues);
     }
