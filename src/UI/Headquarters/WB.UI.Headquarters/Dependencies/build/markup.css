@@ -8706,8 +8706,6 @@ table tr th .census-icon, table tr td .census-icon {
     margin-right: 3px;
     width: 11px;
     height: 14px;
-    /*background: transparent url("../img/icon-tablet.png") no-repeat;*/
-    /*@include image-2x("../img/icon-tablet2k.png", 11px, 14px);*/
     background-size: 11px 14px; }
 
 .supervisor {
@@ -8721,8 +8719,6 @@ table tr th .census-icon, table tr td .census-icon {
     margin-right: 3px;
     width: 11px;
     height: 14px;
-    /*background: transparent url("../img/icon-supervisor.png") no-repeat;*/
-    /*@include image-2x("../img/icon-supervisor2k.png", 11px, 14px);*/
     background-size: 11px 14px; }
 
 .two-columns-form, .flex-row {

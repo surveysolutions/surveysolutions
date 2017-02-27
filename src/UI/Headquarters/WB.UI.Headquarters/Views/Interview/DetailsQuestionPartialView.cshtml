@@ -1,13 +1,11 @@
-﻿@using System.Globalization
-@using Main.Core.Entities.SubEntities
-@using WB.UI.Headquarters.Resources
+﻿@using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@using WB.Infrastructure.Native.Sanitizer
 @model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
 
-<tr id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
+<tr id="@getInterviewItemIdWithPostfix(Model.Id, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">
-        <div class="btn btn-xs @css("btn-info", Model.IsFlagged) @css("btn-default", !Model.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+        <div class="btn btn-xs @css("btn-info", Model.IsFlagged) @css("btn-default", !Model.IsFlagged)" data-bind="click: flagAnswer.bind($data, $element, '@Model.Id.Id', '@Model.Id.RosterVector')">
             <i class="glyphicon glyphicon-flag"></i>
         </div>
     </td>
@@ -45,7 +43,7 @@
     </td>
 
     <td class="comments col-sm-3">
-        <dl id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
+        <dl id="@getInterviewItemIdWithPostfix(Model.Id, "commentList")" class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
             @if (Model.Comments != null && Model.Comments.Count > 0)
             {
                 foreach (var comment in Model.Comments)
@@ -61,7 +59,7 @@
         <div class="form-horizontal">
             <div class="has-feedback">
                 <div>
-                    <input type="text" class="form-control" placeholder="@Pages.DetailsQuestionPartialView_WriteCommentPlaceholder" data-bind="enterKey: addComment.bind($data, $element, '@Model.Id', '@Stringify(Model.RosterVector)')">
+                    <input type="text" class="form-control" placeholder="@Pages.DetailsQuestionPartialView_WriteCommentPlaceholder" data-bind="enterKey: addComment.bind($data, $element, '@Model.Id.Id', '@Model.Id.RosterVector')">
                     <span class="glyphicon glyphicon-comment form-control-feedback" aria-hidden="true"></span>
                 </div>
             </div>
@@ -77,13 +75,8 @@
 @functions
     {
 
-    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
+    public string getInterviewItemIdWithPostfix(Identity identity, string postfix = "")
     {
-        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
-    }
-
-    public string Stringify(decimal[] array)
-    {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+        return string.Format("{0}_{1}", identity, postfix);
     }
 }

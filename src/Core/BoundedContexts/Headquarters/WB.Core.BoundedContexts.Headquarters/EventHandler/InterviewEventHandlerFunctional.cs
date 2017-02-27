@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             get { return new object[] { this.users }; }
         }
 
-        private static string CreateLevelIdFromPropagationVector(decimal[] vector)
+        public static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             if (vector.Length == 0)
                 return "#";

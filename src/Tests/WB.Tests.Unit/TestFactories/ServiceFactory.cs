@@ -144,25 +144,20 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewDetailsViewFactory InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore = null,
             IPlainStorageAccessor<UserDocument> userStore = null,
-            IInterviewDataAndQuestionnaireMerger merger = null,
             IChangeStatusFactory changeStatusFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
-            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore = null,
-            IAttachmentContentService attachmentContentService = null)
-            => new InterviewDetailsViewFactory(interviewStore ?? new TestInMemoryWriter<InterviewData>(),
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null)
+            => new InterviewDetailsViewFactory(
                 userStore ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(_
                     => _.GetById(It.IsAny<object>()) == Create.Entity.UserDocument()),
-                merger ?? Mock.Of<IInterviewDataAndQuestionnaireMerger>(),
                 changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                interviewLinkedQuestionOptionsStore ?? new TestInMemoryWriter<InterviewLinkedQuestionOptions>(),
-                attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
-                Mock.Of<ITranslationStorage>(),
-                Mock.Of<IQuestionnaireTranslator>());
+                interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                interviewStore ?? new TestInMemoryWriter<InterviewData>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,

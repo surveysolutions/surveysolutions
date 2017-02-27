@@ -18,16 +18,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
     {
         private Establish context = () =>
         {
-            var singleOptionQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var multioptionQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var singleOptionQuestionId = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
+            var multioptionQuestionId = Identity.Create(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.SingleOptionQuestion(
-                    questionId: singleOptionQuestionId,
+                    questionId: singleOptionQuestionId.Id,
                     answerCodes: new decimal[] { 1, 2 },
                     optionsFilterExpression: "a"),
                 Create.Entity.MultipleOptionsQuestion(
-                    questionId: multioptionQuestionId,
+                    questionId: multioptionQuestionId.Id,
                     answers: new [] { 1, 2 },
                     optionsFilterExpression: "a"));
 
@@ -43,25 +43,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
                             {
                                 QuestionType = QuestionType.SingleOption,
                                 Id = singleOptionQuestionId,
-                                RosterVector = RosterVector.Empty,
                                 Options = new List<QuestionOptionView>
                                 {
                                     new QuestionOptionView { Label = "1", Value = 1},
                                     new QuestionOptionView { Label = "2", Value = 2}
-                                },
-                                IsFilteredCategorical = true
+                                }
                             },
                             new InterviewQuestionView
                             {
                                 QuestionType = QuestionType.MultyOption,
                                 Id = multioptionQuestionId,
-                                RosterVector = RosterVector.Empty,
                                 Options = new List<QuestionOptionView>
                                 {
                                     new QuestionOptionView { Label = "1", Value = 1},
                                     new QuestionOptionView { Label = "2", Value = 2}
-                                },
-                                IsFilteredCategorical = true
+                                }
                             }
                         }
                     }
@@ -80,11 +76,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
                 interviewId, interviewDetailsView, questionnaire, expressionState.Object);
         };
 
-        Because of = () => view = viewfactory.GetInterviewDetails(interviewId, null, Empty.RosterVector, InterviewDetailsFilter.All);
+        Because of = () => view = viewfactory.GetInterviewDetails(interviewId, InterviewDetailsFilter.All, null);
 
         It should_filter_out_options_for_categorical_questions = () =>
         {
-            var interviewGroupView = view.FilteredGroups.First();
+            var interviewGroupView = (InterviewGroupView)view.FilteredEntities.First();
             var questions = interviewGroupView.Entities.Cast<InterviewQuestionView>().ToList();
 
             questions[0].Options.Single().Value.ShouldEqual(2);

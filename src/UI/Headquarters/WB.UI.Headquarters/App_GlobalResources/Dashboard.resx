@@ -187,7 +187,7 @@
     <value>1. Click Import Template  button to load a questionnaire from Designer</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. Click on a questionnaire from the list to create interview assignments.</value>
+    <value>2. Click on a questionnaire from the list to create interview assignments</value>
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Web interview setup</value>

@@ -1,12 +1,10 @@
 using System;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public interface IInterviewDetailsViewFactory
     {
-        DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId = null,
-            decimal[] currentGroupRosterVector = null, InterviewDetailsFilter? filter = null);
-
-        Guid? GetFirstChapterId(Guid interviewId);
+        DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter filter, Identity currentGroupIdentity = null);
     }
 }

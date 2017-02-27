@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -140,7 +141,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             {
                 Groups = interviewGroups,
                 Responsible = responsible,
-                QuestionnairePublicKey = interview.QuestionnaireId,
                 Title = questionnaire.Title,
                 Description = questionnaire.Description,
                 PublicKey = interview.InterviewId,
@@ -222,12 +222,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 ? $"{currentGroupTitle}: {rosterTitleFromLevel}"
                 : currentGroupTitle;
 
-            var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
+            var completedGroup = new InterviewGroupView(Identity.Create(currentGroup.PublicKey, interviewLevel.RosterVector))
             {
                 Depth = depth,
-                Title = rosterTitle,
-                RosterVector = interviewLevel.RosterVector,
-                ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
+                Title = rosterTitle
             };
             var disabledGroups = interviewLevel.DisabledGroups.Union(upperInterviewLevels.SelectMany(upper => upper.DisabledGroups)).ToList();
             foreach (var entity in currentGroup.Children)

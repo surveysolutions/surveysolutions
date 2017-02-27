@@ -57,16 +57,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
         It should_return_3_fixed_roster_rows = () =>
-            mergeResult.Groups.Count(g => g.Id==rosterId).ShouldEqual(3);
+            mergeResult.Groups.Count(g => g.Id.Id==rosterId).ShouldEqual(3);
 
         It should_second_group_be_roster_row_with_sort_index_1 = () =>
-            mergeResult.Groups[1].RosterVector.ShouldEqual(new decimal[] { 0 });
+            mergeResult.Groups[1].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(0));
 
         It should_third_group_be_roster_row_with_sort_index_2 = () =>
-            mergeResult.Groups[2].RosterVector.ShouldEqual(new decimal[] { 1 });
+            mergeResult.Groups[2].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(1));
 
         It should_fourth_group_be_roster_row_with_sort_index_3 = () =>
-            mergeResult.Groups[3].RosterVector.ShouldEqual(new decimal[] { 2 });
+            mergeResult.Groups[3].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(2));
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
