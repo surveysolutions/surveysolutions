@@ -52,18 +52,6 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
     }
-    public class YesNoAnswersOnlyV2
-    {
-        public YesNoAnswersOnlyV2(int[] yes, int[] no)
-        {
-            this.Yes = yes;
-            this.No = no;
-        }
-
-        public int[] Yes { get; }
-
-        public int[] No { get; }
-    }
 
     public class YesNoAnswersOnly
     {
