@@ -30,8 +30,8 @@
         <div class="wrapper-info" v-if="completeInfo.entitiesWithError.length > 0">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{doesShowErrorsCommentWithCount ? 'First ' + completeInfo.entitiesWithError.length + ' entities with errors:' : 'Questions with errors:'}}</h4>
-                <ul class="list-unstyled marked-questions" v-for="entity in completeInfo.entitiesWithError">
-                    <li>
+                <ul class="list-unstyled marked-questions">
+                    <li v-for="entity in completeInfo.entitiesWithError">
                         <a href="#" @click="navigateTo(entity)">{{ entity.title }}</a>
                     </li>
                 </ul>
