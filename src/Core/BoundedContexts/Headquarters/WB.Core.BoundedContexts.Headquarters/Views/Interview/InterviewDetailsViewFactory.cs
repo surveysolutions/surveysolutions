@@ -164,13 +164,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsReadOnly = !(interviewQuestion.IsSupervisors && interview.Status < InterviewStatus.ApprovedByHeadquarters),
                 Options = ToOptionsView(questionnaireQuestion),
                 Answer = ToAnswerView(interviewQuestion),
-                IsFlagged = interviewData.Levels[InterviewEventHandlerFunctional.CreateLevelIdFromPropagationVector(
-                            interviewQuestion.Identity.RosterVector)].QuestionsSearchCache[interviewQuestion.Identity.Id].IsFlagged(),
+                IsFlagged = GetIsFlagged(interviewQuestion, interviewData),
                 FailedValidationMessages = GetFailedValidationMessages(
                     interviewQuestion.FailedValidations?.Select(
                         (x, index) => ToValidationView(interviewQuestion.ValidationMessages, x, index)),
                     questionnaireQuestion.ValidationConditions).ToList()
             };
+        }
+
+        private static bool GetIsFlagged(InterviewTreeQuestion interviewQuestion, InterviewData interviewData)
+        {
+            var levelId = InterviewEventHandlerFunctional.CreateLevelIdFromPropagationVector(
+                    interviewQuestion.Identity.RosterVector);
+
+            if (!interviewData.Levels.ContainsKey(levelId)) return false;
+            if (!interviewData.Levels[levelId].QuestionsSearchCache.ContainsKey(interviewQuestion.Identity.Id)) return false;
+
+            return interviewData.Levels[levelId].QuestionsSearchCache[interviewQuestion.Identity.Id].IsFlagged();
         }
 
         private static object ToAnswerView(InterviewTreeQuestion interviewQuestion)
