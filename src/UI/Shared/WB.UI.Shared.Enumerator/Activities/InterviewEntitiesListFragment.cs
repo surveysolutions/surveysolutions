@@ -52,6 +52,14 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
+        public override void OnDestroyView()
+        {
+            this.ViewModel?.Items.OfType<CommentsViewModel>()
+                .ForEach(x => x.CommentsInputShown -= this.OnCommentsBlockShown);
+
+            base.OnDestroyView();
+        }
+
         private void OnCommentsBlockShown(object sender, EventArgs args)
         {
             var compositeEntities = this.ViewModel.Items.ToList();
