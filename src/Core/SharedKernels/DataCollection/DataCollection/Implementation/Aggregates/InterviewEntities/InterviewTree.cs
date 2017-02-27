@@ -470,7 +470,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
 
-        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
+        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() => 
+            this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
 
     }
 
