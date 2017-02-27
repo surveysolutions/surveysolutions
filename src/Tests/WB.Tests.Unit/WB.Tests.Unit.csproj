@@ -447,8 +447,6 @@
     <Compile Include="BoundedContexts\Headquarters\DataExport\ExportedQuestionTests\when_creating_export_structure_for_single_option_question.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExport\ExportedQuestionTests\when_creating_export_structure_for_datetime_question.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExport\ExportedQuestionTests\when_creating_export_structure_for_text_question.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\InterviewDetailsViewFactoryTestsContext.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\when_getting_interview_details_and_questionnaire_has_filtered_categorical_question.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewsExportDenormalizerTests\InterviewsExportDenormalizerNunitTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\RosterStructureServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\when_getting_roster_structures_for_questionnaire_with_multi_option_roster_title.cs" />
