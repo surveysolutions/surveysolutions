@@ -106,6 +106,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
 
+            this.Tree.ActualizeNodesInOrderCache();
+
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
@@ -466,7 +468,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeSection FirstSection => this.Tree.Sections.First();
 
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
-            => this.GetAllGroupsAndRosters().Where(group => !group.IsDisabled());
+            => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 
         public IEnumerable<IInterviewTreeNode> GetAllNodes() => this.Tree.GetAllNodesInEnumeratorOrder();
 
