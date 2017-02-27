@@ -247,8 +247,7 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewDetailsViewFactory InterviewDetailsViewFactory(
-            Guid interviewId, InterviewDetailsView interviewDetailsView,
-            QuestionnaireDocument questionnaireDocument, 
+            Guid interviewId, QuestionnaireDocument questionnaireDocument, 
             ILatestInterviewExpressionState interviewExpressionState)
         {
             var questionnaireRepository = Setup.QuestionnaireRepository(questionnaireDocument);
