@@ -255,8 +255,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
 
-            this.RemoveOptions(textListAnswerRows);
-            this.InsertOrUpdateOptions(textListAnswerRows);
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.RemoveOptions(textListAnswerRows);
+                this.InsertOrUpdateOptions(textListAnswerRows);
+            });
 
             this.RaisePropertyChanged(() => this.HasOptions);
         }
@@ -271,9 +274,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (viewModelOption == null)
                 {
                     viewModelOption = this.CreateOptionViewModel(textListAnswerRow);
-
-                    this.mainThreadDispatcher.RequestMainThreadAction(
-                        () => this.options.Insert(textListAnswerRows.IndexOf(textListAnswerRow), viewModelOption));
+                    this.options.Insert(textListAnswerRows.IndexOf(textListAnswerRow), viewModelOption);
                 }
 
                 viewModelOption.Selected = viewModelOption.Value == linkedQuestionAnswer;
@@ -282,18 +283,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void RemoveOptions(List<TextListAnswerRow> textListAnswerRows)
         {
-            var removedOptionValues =
-                this.options.Select(option => option.Value).Except(textListAnswerRows.Select(row => row.Value)).ToList();
-
-            foreach (var removedOptionValue in removedOptionValues)
+            for (int optionIndex = this.options.Count - 1; optionIndex >= 0; optionIndex--)
             {
-                var removedOption = this.options.SingleOrDefault(option => option.Value == removedOptionValue);
-                if (removedOption == null) continue;
+                var optionToRemove = this.options[optionIndex];
+                if (textListAnswerRows?.Any(x => x.Value == optionToRemove.Value && x.Text == optionToRemove.Title) ??
+                    false) continue;
 
-                removedOption.BeforeSelected -= this.OptionSelected;
-                removedOption.AnswerRemoved -= this.RemoveAnswer;
+                optionToRemove.BeforeSelected -= this.OptionSelected;
+                optionToRemove.AnswerRemoved -= this.RemoveAnswer;
 
-                this.mainThreadDispatcher.RequestMainThreadAction(() => this.options.Remove(removedOption));
+                this.options.Remove(optionToRemove);
             }
         }
 
