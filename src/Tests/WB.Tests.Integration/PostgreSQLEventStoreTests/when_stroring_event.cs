@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         It should_persist_items_with_global_sequence_set = () =>
         {
             var eventStream = eventStore.Read(eventSourceId, 0);
-            eventStream.Select(x => x.GlobalSequence).SequenceEqual(new [] {1L, 2, 3}).ShouldBeTrue();
+            eventStream.Select(x => x.GlobalSequence).ShouldNotContain(0);
         };
         
         It should_count_stored_events = () => eventStore.CountOfAllEvents(); // it should not fail
