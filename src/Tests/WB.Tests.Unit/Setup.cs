@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -257,12 +258,18 @@ namespace WB.Tests.Unit
                 questionnaireRepository: questionnaireRepository);
 
             var interviewData = Create.Entity.InterviewData(questionnaireId: questionnaireDocument.PublicKey);
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId,
+                interview.QuestionnaireIdentity.QuestionnaireId, interview.QuestionnaireIdentity.Version,
+                interview.Status);
+            var interviewSummaryRepository = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            interviewSummaryRepository.Store(interviewSummary, interviewId);
 
             return Create.Service.InterviewDetailsViewFactory(
                 questionnaireStorage: questionnaireRepository,
                 interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
                 statefulInterviewRepository: Stub<IStatefulInterviewRepository>.Returning<IStatefulInterview>(interview),
-                merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
+                interviewSummaryRepository: interviewSummaryRepository
+                );
         }
 
         internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)

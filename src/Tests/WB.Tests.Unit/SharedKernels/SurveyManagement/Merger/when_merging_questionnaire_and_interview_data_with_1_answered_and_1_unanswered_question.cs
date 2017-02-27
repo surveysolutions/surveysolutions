@@ -74,17 +74,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         private static InterviewGroupView GetNestedGroup()
         {
-            return mergeResult.Groups.Find(g => g.Id == nestedGroupId);
+            return mergeResult.Groups.Find(g => g.Id.Id == nestedGroupId);
         }
 
         private static InterviewQuestionView GetAnsweredQuestion()
         {
-            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == answeredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == answeredQuestionId);
         }
 
         private static InterviewQuestionView GetUnAnsweredQuestion()
         {
-            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == unAnsweredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == unAnsweredQuestionId);
         }
 
         private static InterviewDataAndQuestionnaireMerger merger;

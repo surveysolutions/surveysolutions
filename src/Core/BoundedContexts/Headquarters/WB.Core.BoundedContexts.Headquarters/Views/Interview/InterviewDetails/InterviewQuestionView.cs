@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -21,8 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public string AnswerString { get; set; }
 
-        public decimal[] RosterVector { get; set; }
-
         public string Variable { get; set; }
 
         public List<QuestionOptionView> Options { get; set; }
@@ -40,9 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
-        public bool IsFilteredCategorical { get; set; }
-
-        public int[] PropagationVector { get; set; }
 
         public List<InterviewQuestionCommentView> Comments { get; set; }
 

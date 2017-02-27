@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -295,8 +296,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
             var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionIdentity.Id);
-            var isInterviewerQuestion = questionnaire.GetQuestionScope(questionIdentity.Id) == QuestionScope.Interviewer;
             var isPrefilled = questionnaire.IsPrefilled(questionIdentity.Id);
+
+            var questionScope = questionnaire.GetQuestionScope(questionIdentity.Id);
+
+            var isInterviewerQuestion = questionScope == QuestionScope.Interviewer;
+            var isSupervisors = questionScope == QuestionScope.Supervisor;
+            var isHidden = questionScope == QuestionScope.Hidden;
 
             if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
@@ -317,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
                 }
             }
-
+            
             return new InterviewTreeQuestion(questionIdentity,
                 title: title,
                 variableName: variableName,
@@ -332,8 +338,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
                 validationMessages: validationMessages,
-                isInterviewerQuestion: isInterviewerQuestion,
-                isPrefilled: isPrefilled);
+                isInterviewerQuestion : isInterviewerQuestion,
+                isPrefilled : isPrefilled,
+                isSupervisors: isSupervisors,
+                isHidden: isHidden);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)

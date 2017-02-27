@@ -1151,7 +1151,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\SpeedReportFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_day_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_without_filter.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewsToDeleteFactoryTests\when_questionnaireId_and_version_provided.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_hq_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_supervisor_role.cs" />
@@ -1493,7 +1492,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_input_view_model_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />

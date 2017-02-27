@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
         It should_question_be_disabled = () =>
-            ((InterviewQuestionView)mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId).Entities[0]).IsEnabled.ShouldEqual(false);
+            ((InterviewQuestionView)mergeResult.Groups.FirstOrDefault(g => g.Id.Id == nestedGroupId).Entities[0]).IsEnabled.ShouldEqual(false);
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;

@@ -29,7 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Identity commonParentRosterIdForLinkedQuestion = null, 
             SubstitionText[] validationMessages = null,
             bool isInterviewerQuestion = true,
-            bool isPrefilled = false)
+            bool isPrefilled = false,
+            bool isSupervisors = false,
+            bool isHidden = false)
             : base(identity)
         {
             this.ValidationMessages = validationMessages ?? new SubstitionText[0];
@@ -37,6 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.VariableName = variableName;
             this.IsInterviewer = isInterviewerQuestion;
             this.IsPrefilled = isPrefilled;
+            this.IsSupervisors = isSupervisors;
+            this.IsHidden = isHidden;
 
             if (questionType == QuestionType.SingleOption)
             {
@@ -132,6 +136,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string VariableName { get; }
         public bool IsInterviewer { get; private set; }
         public bool IsPrefilled { get; private set; }
+        public bool IsSupervisors { get; private set; }
+        public bool IsHidden { get; private set; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
 
