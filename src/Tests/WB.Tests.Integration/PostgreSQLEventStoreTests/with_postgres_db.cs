@@ -4,6 +4,10 @@ using Machine.Specifications;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -40,6 +44,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }
                 connection.Close();
             }
+
+            DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
+            DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
         };
 
         Cleanup things = () =>
@@ -61,5 +69,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         private static string TestConnectionString;
         private static string databaseName;
+        protected static string schemaName = "events";
     }
 }

@@ -489,6 +489,7 @@
     <Compile Include="NCrunch.Framework.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\when_appending_events_with_wrong_expected_version.cs" />
     <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
     <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
     <Compile Include="PostgreSQLTests\when_removing_from_repository_storage_if_id_starts_from.cs" />

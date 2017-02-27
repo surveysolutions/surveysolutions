@@ -5,9 +5,7 @@ using Machine.Specifications;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
@@ -47,10 +45,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 0,
                 DateTime.UtcNow,
                 new AccountLocked()));
-
-            DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
-            DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName, 
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             eventStore = new PostgresEventStore(
                 new PostgreConnectionSettings
@@ -100,8 +94,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventsAfterPosition[0].Payload.ShouldBeOfExactType(typeof(AccountConfirmed));
             eventsAfterPosition[1].Payload.ShouldBeOfExactType(typeof(AccountLocked));
         };
-
-        private static string schemaName = "events";
 
         static PostgresEventStore eventStore;
         static UncommittedEventStream events;
