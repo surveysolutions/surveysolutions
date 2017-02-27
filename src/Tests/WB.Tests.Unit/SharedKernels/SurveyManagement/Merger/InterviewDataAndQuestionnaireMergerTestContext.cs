@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         {
             var interviewGroupView =
                 interviewDetailsView.Groups.FirstOrDefault(
-                    g => g.Entities.Any(q => q.Id.Id == questionId) && g.Id.RosterVector.SequenceEqual(questionRosterVector));
+                    g => g.Entities.Any(q => q.Id.Id == questionId) && g.Id.RosterVector.Identical(questionRosterVector));
             if (
                 interviewGroupView != null)
                 return interviewGroupView
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         {
             var interviewGroupView = interviewDetailsView.Groups.FirstOrDefault(g => 
                 g.Entities.Any(q => q.Id.Id == staticTextId) && 
-                g.Id.RosterVector.SequenceEqual(questionRosterVector));
+                g.Id.RosterVector.Identical(questionRosterVector));
 
             return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id.Id == staticTextId);
         }

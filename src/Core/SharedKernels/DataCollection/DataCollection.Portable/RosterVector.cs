@@ -9,27 +9,33 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.DataCollection
 {
     [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class RosterVector : IEnumerable<decimal>
+    public class RosterVector : IEnumerable<int>//, IEnumerable<decimal>
     {
         private int? cachedHashCode = null;
-        public static readonly RosterVector Empty = new decimal[]{};
+        public static readonly RosterVector Empty = new int[]{};
 
-        private readonly ReadOnlyCollection<decimal> coordinates;
+        private readonly ReadOnlyCollection<int> coordinates;
 
         public RosterVector(IEnumerable<decimal> coordinates)
         {
             if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
-
-            this.coordinates = new ReadOnlyCollection<decimal>(new List<decimal>(coordinates));
+            this.coordinates = new ReadOnlyCollection<int>(coordinates.Select(Convert.ToInt32).ToList());
         }
 
-        public IReadOnlyCollection<decimal> Coordinates => this.coordinates;
+        public RosterVector(IEnumerable<int> coordinates)
+        {
+            if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
+            this.coordinates = new ReadOnlyCollection<int>(new List<int>(coordinates));
+        }
+
+        public IReadOnlyCollection<int> Coordinates => this.coordinates;
+        public IReadOnlyCollection<decimal> CoordinatesAsDecimals => new ReadOnlyCollection<decimal>(new List<decimal>(this.coordinates.Select(Convert.ToDecimal)));
 
         public override string ToString()
         {
             if (this.Coordinates.Count > 0)
             {
-                return $"_{string.Join("-", this.Coordinates.Select(c => (int)c))}";
+                return $"_{string.Join("-", this.Coordinates.Select(c => c))}";
             }
             else return string.Empty;
         }
@@ -48,28 +54,28 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.Coordinates.Take(targetLength).ToArray();
         }
 
-        public RosterVector ExtendWithOneCoordinate(decimal coordinate)
+        public RosterVector ExtendWithOneCoordinate(int coordinate)
         {
-            return new List<decimal>(this.Coordinates) { coordinate }.ToArray();
+            return new List<int>(this.Coordinates) { coordinate }.ToArray();
         }
 
-        #region Backward compatibility with decimal[]
+        #region Backward compatibility with int[]
 
-        private decimal[] array;
+        private int[] array;
 
-        private decimal[] Array => this.array ?? (this.array = this.Coordinates.ToArray());
+        private int[] Array => this.array ?? (this.array = this.Coordinates.ToArray());
 
-        IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator() => ((IEnumerable<decimal>)this.Array).GetEnumerator();
+        IEnumerator<int> IEnumerable<int>.GetEnumerator() => ((IEnumerable<int>)this.Array).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => this.Array.GetEnumerator();
 
         public int Length => this.Array.Length;
 
-        public decimal this[int index] => this.Array[index];
+        public int this[int index] => this.Array[index];
 
-        public static implicit operator decimal[](RosterVector rosterVector) => rosterVector.Array;
+        public static implicit operator int[](RosterVector rosterVector) => rosterVector.Array;
 
-        public static implicit operator RosterVector(decimal[] array) => new RosterVector(array);
+        public static implicit operator RosterVector(int[] array) => new RosterVector(array);
 
         public bool Identical(RosterVector other)
         {
@@ -90,6 +96,14 @@ namespace WB.Core.SharedKernels.DataCollection
 
         #endregion
 
+        #region Backward compatibility with decimal[]
+
+        //IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator() => ((IEnumerable<decimal>)this.Array.Select(Convert.ToDecimal)).GetEnumerator();
+        public static implicit operator decimal[] (RosterVector rosterVector) => rosterVector.Array.Select(Convert.ToDecimal).ToArray();
+        public static implicit operator RosterVector(decimal[] array) => new RosterVector(array);
+
+        #endregion
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -98,8 +112,8 @@ namespace WB.Core.SharedKernels.DataCollection
             if (obj.GetType() == typeof(RosterVector))
                 return this.Identical((RosterVector) obj);
 
-            if (obj.GetType() == typeof(decimal[]))
-                return this.Identical((decimal[])obj);
+            if (obj.GetType() == typeof(int[]))
+                return this.Identical((int[])obj);
 
             return false;
         }

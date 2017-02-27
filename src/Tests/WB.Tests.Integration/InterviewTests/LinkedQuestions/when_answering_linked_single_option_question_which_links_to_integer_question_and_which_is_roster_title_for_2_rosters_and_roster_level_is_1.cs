@@ -87,7 +87,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(RosterVector.Empty)));
+                .ShouldEachConformTo(
+                @event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(RosterVector.Empty.CoordinatesAsDecimals)));
 
         It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()

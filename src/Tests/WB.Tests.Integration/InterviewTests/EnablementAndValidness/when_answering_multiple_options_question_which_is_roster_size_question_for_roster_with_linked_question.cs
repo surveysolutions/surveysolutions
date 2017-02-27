@@ -65,8 +65,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 e =>
                                     e.ChangedLinkedQuestions[0].QuestionId == Create.Identity(linkedQuestionId, new decimal[] {1})
                                     && e.ChangedLinkedQuestions[0].Options.Length==2
-                                    && e.ChangedLinkedQuestions[0].Options[0].SequenceEqual(new decimal[] { 0 })
-                                    && e.ChangedLinkedQuestions[0].Options[1].SequenceEqual(new decimal[] { 1 }))
+                                    && e.ChangedLinkedQuestions[0].Options[0].Identical(new int[] { 0 })
+                                    && e.ChangedLinkedQuestions[0].Options[1].Identical(new int[] { 1 }))
                     };
                 }
             });

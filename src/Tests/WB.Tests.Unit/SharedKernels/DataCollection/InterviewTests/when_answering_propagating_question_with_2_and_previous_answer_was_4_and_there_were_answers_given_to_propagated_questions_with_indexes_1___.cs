@@ -47,22 +47,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_not_raise_AnswersRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_0 = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == propagatedQuestionId
-                && question.RosterVector.SequenceEqual(new decimal[] { 0 })));
+                && question.RosterVector.Identical(new decimal[] { 0 })));
 
         It should_not_raise_AnswersRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_1 = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == propagatedQuestionId
-                && question.RosterVector.SequenceEqual(new decimal[] { 1 })));
+                && question.RosterVector.Identical(new decimal[] { 1 })));
 
         It should_raise_AnswersRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_2 = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == propagatedQuestionId
-                && question.RosterVector.SequenceEqual(new decimal[] { 2 })));
+                && question.RosterVector.Identical(new decimal[] { 2 })));
 
         It should_not_raise_AnswersRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_3 = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == propagatedQuestionId
-                && question.RosterVector.SequenceEqual(new decimal[] { 3 })));
+                && question.RosterVector.Identical(new decimal[] { 3 })));
 
         Cleanup stuff = () =>
         {

@@ -31,11 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult.Groups.Single(x => x.Id.Id == groupId).Title.ShouldEqual(groupTitle);
 
         It should_set_first_fixed_roster_title_ = () =>
-            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.SequenceEqual(new decimal[] { 0 }))
+            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.Identical(new decimal[] { 0 }))
                 .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[0]));
 
         It should_set_second_fixed_roster_title_ = () =>
-            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.SequenceEqual(new decimal[] { 1 }))
+            mergeResult.Groups.Single(x => x.Id.Id == fixedRosterId && x.Id.RosterVector.Identical(new decimal[] { 1 }))
                 .Title.ShouldEqual(string.Format(fixedRosterTitleFormat, rosterFixedTitles[1]));
 
 
