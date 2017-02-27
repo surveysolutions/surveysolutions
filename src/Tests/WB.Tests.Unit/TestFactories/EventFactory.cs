@@ -111,6 +111,14 @@ namespace WB.Tests.Unit.TestFactories
             => new LinkedOptionsChanged(
                 options ?? new ChangedLinkedOptions[] {});
 
+        public LinkedToListOptionsChanged LinkedToListOptionsChanged(ChangedLinkedToListOptions[] options = null)
+            => new LinkedToListOptionsChanged(
+                
+                options ?? new ChangedLinkedToListOptions[] { });
+
+        public ChangedLinkedToListOptions ChangedLinkedToListOptions(Identity questionIdentity, decimal[] options = null)
+            => new ChangedLinkedToListOptions(questionIdentity, options ?? new decimal[0]);
+
         public MultipleOptionsQuestionAnswered MultipleOptionsQuestionAnswered(
             Guid? questionId = null,
             decimal[] rosterVector = null,
