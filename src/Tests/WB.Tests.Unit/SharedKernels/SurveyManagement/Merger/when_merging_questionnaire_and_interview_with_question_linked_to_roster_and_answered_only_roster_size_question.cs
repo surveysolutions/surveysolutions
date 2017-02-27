@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         Establish context = () =>
         {
             rosterSizeQuestionId = Guid.Parse("10000000000000000000000000000000");
-            linkedOnNestedRosterQuestionId = Guid.Parse("33333333333333333333333333333333");
+            Guid.Parse("33333333333333333333333333333333");
 
             rosterId = Guid.Parse("44444444444444444444444444444444");
             rosterTitleQuestionId = Guid.Parse("20000000000000000000000000000000");
@@ -46,8 +46,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, Create.Entity.InterviewQuestion(rosterSizeQuestionId, 2));
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(0).ToArray());
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(1).ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(0).CoordinatesAsDecimals.ToArray());
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId }, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray());
 
             user = Mock.Of<UserDocument>();
             merger = CreateMerger(questionnaire);
@@ -71,7 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static UserDocument user;
         
         private static Guid rosterSizeQuestionId;
-        private static Guid linkedOnNestedRosterQuestionId;
         private static Guid rosterId;
         private static Guid rosterTitleQuestionId;
         private static Guid interviewId;

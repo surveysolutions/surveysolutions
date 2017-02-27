@@ -78,9 +78,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     return new InvokeResult
                     {
                         IsQuestionAInValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionA)),
-                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.SequenceEqual(new[] { 1m } ))),
-                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.SequenceEqual(new[] { 2m } ))),
-                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.SequenceEqual(new[] { 3m } ))),
+                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 1m } ))),
+                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 2m } ))),
+                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 3m } ))),
                     };
                 }
             });

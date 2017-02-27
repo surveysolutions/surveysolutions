@@ -72,11 +72,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
-            List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
+            List<int> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new decimal[] {1, 2, 3, 4}, rosterIds);
+            Assert.AreEqual(new int[] {1, 2, 3, 4}, rosterIds);
         }
 
         [Test]
@@ -122,11 +122,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
-            List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
+            List<int> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new decimal[] { 1, 2, 3, 4 }, rosterIds);
+            Assert.AreEqual(new int[] { 1, 2, 3, 4 }, rosterIds);
         }
 
         [Test]
@@ -162,11 +162,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
-            List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
+            List<int> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new decimal[] { 3, 1, 4, 2 }, rosterIds);
+            Assert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
         }
 
         [Test]
@@ -212,11 +212,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
-            List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
+            List<int> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
             // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
-            Assert.AreEqual(new decimal[] { 3, 1, 4, 2 }, rosterIds);
+            Assert.AreEqual(new int[] { 3, 1, 4, 2 }, rosterIds);
         }
 
         static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");

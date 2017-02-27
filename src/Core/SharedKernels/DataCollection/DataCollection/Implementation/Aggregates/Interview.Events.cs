@@ -287,12 +287,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 
         private static AddedRosterInstance ToAddedRosterInstance(IInterviewTreeNode rosterNode)
-            => new AddedRosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.Shrink(), rosterNode.Identity.RosterVector.Last(), (rosterNode as InterviewTreeRoster).SortIndex);
+            => new AddedRosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(), rosterNode.Identity.RosterVector.Last(), (rosterNode as InterviewTreeRoster).SortIndex);
 
         private static RosterInstance ToRosterInstance(IInterviewTreeNode rosterNode)
-            => new RosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.Shrink(), rosterNode.Identity.RosterVector.Last());
+            => new RosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(), rosterNode.Identity.RosterVector.Last());
 
         private static ChangedVariable ToChangedVariable(InterviewTreeVariableDiff variable)
             => new ChangedVariable(variable.ChangedNode.Identity, variable.ChangedNode.Value);
     }
-}
+} 
