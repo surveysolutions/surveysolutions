@@ -76,6 +76,17 @@ namespace WB.Tests.Unit.TestFactories
             return interview;
         }
 
+        public StatefulInterview StatefulInterview(Guid interviewId, 
+            Guid? questionnaireId = null,
+            Guid? userId = null,
+            IQuestionnaire questionnaire = null,
+            bool shouldBeInitialized = true)
+        {
+            var interview = this.StatefulInterview(questionnaireId, userId, questionnaire, shouldBeInitialized);
+            interview.SetId(interviewId);
+            return interview;
+        }
+
         public StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             Guid? userId = null,
             IQuestionnaire questionnaire = null, 
