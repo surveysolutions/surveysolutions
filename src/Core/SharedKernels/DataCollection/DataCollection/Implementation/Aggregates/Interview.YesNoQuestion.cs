@@ -19,7 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            RequireYesNoAnswerAllowed(command.Question, YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), questionnaire, this.Tree);
+            new InterviewQuestionInvariants(command.Question, questionnaire, this.Tree)
+                .RequireYesNoAnswerAllowed(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions));
 
             var changedInterviewTree = this.Tree.Clone();
 

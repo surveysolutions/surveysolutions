@@ -19,7 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var questionIdentity = new Identity(questionId, rosterVector);
 
-            RequireGpsCoordinatesAnswerAllowed(questionIdentity, questionnaire, this.Tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireGpsCoordinatesAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
 
