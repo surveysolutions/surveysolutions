@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Platform.ExtensionMethods;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -32,12 +34,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected string interviewId;
 
-        public class SavedState
+        protected override void InitFromBundle(IMvxBundle parameters)
         {
-            public string InteriewId { get; set; }
+            base.InitFromBundle(parameters);
+            if (parameters.Data.ContainsKey("interviewId"))
+            {
+                this.Initialize(parameters.Data["interviewId"]);
+            }
         }
 
-        public void ReloadState(SavedState savedState) => this.Initialize(savedState.InteriewId);
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            bundle.Data["interviewId"] = this.interviewId;
+        }
 
         protected void Initialize(string interviewId)
         {
