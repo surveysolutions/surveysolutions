@@ -40,7 +40,7 @@ namespace WB.Core.GenericSubdomains.Portable
         
         public static IEnumerable<T> TreeToEnumerableDepthFirst<T>(this IEnumerable<T> tree, Func<T, IEnumerable<T>> getChildren)
         {
-            var itemsQueue = new Stack<T>(tree);
+            var itemsQueue = new Stack<T>(tree.Reverse());
 
             while (itemsQueue.Count > 0)
             {
