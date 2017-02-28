@@ -18,7 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            RequireLinkedToRosterSingleOptionAnswerAllowed(questionIdentity, selectedRosterVector, questionnaire, this.Tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireLinkedToRosterSingleOptionAnswerAllowed(selectedRosterVector);
 
             var changedInterviewTree = this.Tree.Clone();
 

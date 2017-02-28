@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -334,5 +335,187 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             => JoinUsingCommas(values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
 
         private static string JoinUsingCommas(IEnumerable<string> values) => string.Join(", ", values);
+
+        public void RequireTextPreloadValueAllowed()
+            => this
+                .RequireQuestion(QuestionType.Text);
+
+        public void RequireTextAnswerAllowed()
+            => this
+                .RequireQuestion(QuestionType.Text)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+
+        public void RequireNumericIntegerPreloadValueAllowed(int answer)
+            => this
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericIntegerQuestion()
+                .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
+
+        public void RequireNumericIntegerAnswerAllowed(int answer)
+            => this
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericIntegerQuestion()
+                .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+
+        public void RequireNumericRealPreloadValueAllowed()
+            => this
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericRealQuestion();
+
+        public void RequireNumericRealAnswerAllowed(double answer)
+            => this
+                .RequireQuestion(QuestionType.Numeric)
+                .RequireNumericRealQuestion()
+                .RequireAllowedDecimalPlaces(answer)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+
+        public void RequireDateTimePreloadValueAllowed()
+            => this
+                .RequireQuestion(QuestionType.DateTime);
+
+        public void RequireDateTimeAnswerAllowed()
+            => this
+                .RequireQuestion(QuestionType.DateTime)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+
+        public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue)
+            => this
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireOptionExists(selectedValue);
+
+        public void RequireFixedSingleOptionAnswerAllowed(decimal selectedValue, QuestionnaireIdentity questionnaireIdentity)
+            => this
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireOptionExists(selectedValue)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, questionnaireIdentity, this.Questionnaire.Translation);
+
+        public void RequireLinkedToListSingleOptionAnswerAllowed(decimal selectedValue)
+            => this
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedToListOptionIsAvailable(selectedValue);
+
+        public void RequireLinkedToRosterSingleOptionAnswerAllowed(decimal[] selectedLinkedOption)
+            => this
+                .RequireQuestion(QuestionType.SingleOption)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedOptionIsAvailable(selectedLinkedOption);
+
+        public void RequireFixedMultipleOptionsPreloadValueAllowed(IReadOnlyCollection<int> selectedValues)
+            => this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireMaxAnswersCountLimit(selectedValues.Count);
+
+        public void RequireFixedMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
+            => this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireQuestionInstanceExists()
+                .RequireMaxAnswersCountLimit(selectedValues.Count)
+                .RequireQuestionIsEnabled();
+
+        public void RequireLinkedToListMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
+            => this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireLinkedToListOptionsAreAvailable(selectedValues)
+                .RequireNotYesNoMultipleOptionsQuestion()
+                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
+                .RequireQuestionInstanceExists()
+                .RequireMaxAnswersCountLimit(selectedValues.Count)
+                .RequireQuestionIsEnabled();
+
+        public void RequireLinkedToRosterMultipleOptionsAnswerAllowed(decimal[][] selectedLinkedOptions)
+            => this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireLinkedOptionsAreAvailable(selectedLinkedOptions)
+                .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
+
+        public void RequireYesNoPreloadValueAllowed(YesNoAnswer answer)
+        {
+            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
+            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
+
+            this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
+                .RequireMaxAnswersCountLimit(yesAnswersCount);
+        }
+
+        public void RequireYesNoAnswerAllowed(YesNoAnswer answer)
+        {
+            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
+            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
+
+            this
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
+                .RequireMaxAnswersCountLimit(yesAnswersCount)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+        }
+
+        public void RequireTextListPreloadValueAllowed(Tuple<decimal, string>[] answers)
+            => this
+                .RequireQuestion(QuestionType.TextList)
+                .RequireRosterSizeAnswerNotNegative(answers.Length)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
+                .RequireMaxAnswersCountLimit(answers.Length);
+
+        public void RequireTextListAnswerAllowed(Tuple<decimal, string>[] answers)
+            => this
+                .RequireQuestion(QuestionType.TextList)
+                .RequireRosterSizeAnswerNotNegative(answers.Length)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
+                .RequireMaxAnswersCountLimit(answers.Length)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireUniqueValues(answers)
+                .RequireNotEmptyTexts(answers)
+                .RequireMaxAnswersCountLimit(answers);
+
+        public void RequireGpsCoordinatesPreloadValueAllowed()
+            => this
+                .RequireQuestion(QuestionType.GpsCoordinates);
+
+        public void RequireGpsCoordinatesAnswerAllowed()
+            => this
+                .RequireQuestion(QuestionType.GpsCoordinates)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
+
+        public void RequireQRBarcodePreloadValueAllowed()
+            => this
+                .RequireQuestion(QuestionType.QRBarcode);
+
+        public void RequireQRBarcodeAnswerAllowed()
+            => this
+                .RequireQuestion(QuestionType.QRBarcode)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
     }
 }

@@ -18,7 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            RequireLinkedToRosterMultipleOptionsAnswerAllowed(questionIdentity, selectedRosterVectors, questionnaire, this.Tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireLinkedToRosterMultipleOptionsAnswerAllowed(selectedRosterVectors);
 
             var changedInterviewTree = this.Tree.Clone();
 

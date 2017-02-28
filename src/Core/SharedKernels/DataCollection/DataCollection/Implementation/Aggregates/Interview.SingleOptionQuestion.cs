@@ -21,9 +21,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
 
             if (isLinkedToList)
-                RequireLinkedToListSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
+            {
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                    .RequireLinkedToListSingleOptionAnswerAllowed(selectedValue);
+            }
             else
-                this.RequireFixedSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
+            {
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                    .RequireFixedSingleOptionAnswerAllowed(selectedValue, this.QuestionnaireIdentity);
+            }
 
             var changedInterviewTree = this.Tree.Clone();
 

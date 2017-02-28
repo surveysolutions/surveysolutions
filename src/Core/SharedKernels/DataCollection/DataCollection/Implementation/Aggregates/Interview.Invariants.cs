@@ -129,238 +129,156 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Text);
+                .RequireTextPreloadValueAllowed();
         }
 
         private static void RequireTextAnswerAllowed(Identity questionIdentity,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Text)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireTextAnswerAllowed();
         }
 
         private static void RequireNumericIntegerPreloadValueAllowed(Identity questionIdentity, int answer,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Numeric)
-                .RequireNumericIntegerQuestion()
-                .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
+                .RequireNumericIntegerPreloadValueAllowed(answer);
         }
 
         private static void RequireNumericIntegerAnswerAllowed(Identity questionIdentity, int answer,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Numeric)
-                .RequireNumericIntegerQuestion()
-                .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireNumericIntegerAnswerAllowed(answer);
         }
 
         private static void RequireNumericRealPreloadValueAllowed(Identity questionIdentity,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Numeric)
-                .RequireNumericRealQuestion();
+                .RequireNumericRealPreloadValueAllowed();
         }
 
         private static void RequireNumericRealAnswerAllowed(Identity questionIdentity, double answer,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.Numeric)
-                .RequireNumericRealQuestion()
-                .RequireAllowedDecimalPlaces(answer)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireNumericRealAnswerAllowed(answer);
         }
 
         private static void RequireDateTimePreloadValueAllowed(Identity questionIdentity,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.DateTime);
+                .RequireDateTimePreloadValueAllowed();
         }
 
         private static void RequireDateTimeAnswerAllowed(Identity questionIdentity,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.DateTime)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireDateTimeAnswerAllowed();
         }
 
         private static void RequireFixedSingleOptionPreloadValueAllowed(Identity questionIdentity, decimal selectedValue,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.SingleOption)
-                .RequireOptionExists(selectedValue);
+                .RequireFixedSingleOptionPreloadValueAllowed(selectedValue);
         }
 
         private void RequireFixedSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.SingleOption)
-                .RequireOptionExists(selectedValue)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled()
-                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
+                .RequireFixedSingleOptionAnswerAllowed(selectedValue, this.QuestionnaireIdentity);
         }
 
         private static void RequireLinkedToListSingleOptionAnswerAllowed(Identity questionIdentity, decimal selectedValue,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.SingleOption)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled()
-                .RequireLinkedToListOptionIsAvailable(selectedValue);
+                .RequireLinkedToListSingleOptionAnswerAllowed(selectedValue);
         }
 
         private static void RequireLinkedToRosterSingleOptionAnswerAllowed(Identity questionIdentity, decimal[] selectedLinkedOption,
             IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.SingleOption)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled()
-                .RequireLinkedOptionIsAvailable(selectedLinkedOption);
+                .RequireLinkedToRosterSingleOptionAnswerAllowed(selectedLinkedOption);
         }
 
         private static void RequireFixedMultipleOptionsPreloadValueAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireOptionsExist(selectedValues)
-                .RequireNotYesNoMultipleOptionsQuestion()
-                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
-                .RequireMaxAnswersCountLimit(selectedValues.Count);
+                .RequireFixedMultipleOptionsPreloadValueAllowed(selectedValues);
         }
 
         private static void RequireFixedMultipleOptionsAnswerAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireOptionsExist(selectedValues)
-                .RequireNotYesNoMultipleOptionsQuestion()
-                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
-                .RequireQuestionInstanceExists()
-                .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionIsEnabled();
+                .RequireFixedMultipleOptionsAnswerAllowed(selectedValues);
         }
 
         private static void RequireLinkedToListMultipleOptionsAnswerAllowed(Identity questionIdentity, IReadOnlyCollection<int> selectedValues, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireLinkedToListOptionsAreAvailable(selectedValues)
-                .RequireNotYesNoMultipleOptionsQuestion()
-                .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
-                .RequireQuestionInstanceExists()
-                .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionIsEnabled();
+                .RequireLinkedToListMultipleOptionsAnswerAllowed(selectedValues);
         }
 
         private static void RequireLinkedToRosterMultipleOptionsAnswerAllowed(Identity questionIdentity, decimal[][] selectedLinkedOptions, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled()
-                .RequireLinkedOptionsAreAvailable(selectedLinkedOptions)
-                .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
+                .RequireLinkedToRosterMultipleOptionsAnswerAllowed(selectedLinkedOptions);
         }
 
         private static void RequireYesNoPreloadValueAllowed(Identity questionIdentity, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
-            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
-
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireOptionsExist(selectedValues)
-                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
-                .RequireMaxAnswersCountLimit(yesAnswersCount);
+                .RequireYesNoPreloadValueAllowed(answer);
         }
 
         private static void RequireYesNoAnswerAllowed(Identity questionIdentity, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
-            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
-
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.MultyOption)
-                .RequireOptionsExist(selectedValues)
-                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
-                .RequireMaxAnswersCountLimit(yesAnswersCount)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireYesNoAnswerAllowed(answer);
         }
 
         private static void RequireTextListPreloadValueAllowed(Identity questionIdentity, Tuple<decimal, string>[] answers, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.TextList)
-                .RequireRosterSizeAnswerNotNegative(answers.Length)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
-                .RequireMaxAnswersCountLimit(answers.Length);
+                .RequireTextListPreloadValueAllowed(answers);
         }
 
         private static void RequireTextListAnswerAllowed(Identity questionIdentity, Tuple<decimal, string>[] answers, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.TextList)
-                .RequireRosterSizeAnswerNotNegative(answers.Length)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
-                .RequireMaxAnswersCountLimit(answers.Length)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled()
-                .RequireUniqueValues(answers)
-                .RequireNotEmptyTexts(answers)
-                .RequireMaxAnswersCountLimit(answers);
+                .RequireTextListAnswerAllowed(answers);
         }
 
         private static void RequireGpsCoordinatesPreloadValueAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.GpsCoordinates);
+                .RequireGpsCoordinatesPreloadValueAllowed();
         }
 
         private static void RequireGpsCoordinatesAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.GpsCoordinates)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireGpsCoordinatesAnswerAllowed();
         }
 
         private static void RequireQRBarcodePreloadValueAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.QRBarcode);
+                .RequireQRBarcodePreloadValueAllowed();
         }
 
         private static void RequireQRBarcodeAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
             new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
-                .RequireQuestion(QuestionType.QRBarcode)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireQRBarcodeAnswerAllowed();
         }
     }
 }
