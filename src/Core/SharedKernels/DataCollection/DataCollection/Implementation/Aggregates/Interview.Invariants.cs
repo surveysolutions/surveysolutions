@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             RequireFixedMultipleOptionsPreloadValueAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
                     case QuestionType.QRBarcode:
-                        CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
+                        RequireQRBarcodePreloadValueAllowed(questionIdentity, questionnaire, tree);
                         break;
                     case QuestionType.GpsCoordinates:
                         RequireGpsCoordinatesPreloadValueAllowed(questionIdentity, questionnaire, tree);
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             RequireFixedMultipleOptionsAnswerAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
                     case QuestionType.QRBarcode:
-                        CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
+                        RequireQRBarcodeAnswerAllowed(questionIdentity, questionnaire, tree);
                         break;
                     case QuestionType.GpsCoordinates:
                         RequireGpsCoordinatesAnswerAllowed(questionIdentity, questionnaire, tree);
@@ -349,18 +349,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled();
         }
 
-        private static void CheckQRBarcodeInvariants(Identity questionIdentity,
-            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void RequireQRBarcodePreloadValueAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.QRBarcode);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.QRBarcode);
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireQuestionIsEnabled();
-            }
+        private static void RequireQRBarcodeAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.QRBarcode)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
         }
     }
 }

@@ -19,10 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireQuestion(QuestionType.QRBarcode)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+            RequireQRBarcodeAnswerAllowed(questionIdentity, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(answer));
