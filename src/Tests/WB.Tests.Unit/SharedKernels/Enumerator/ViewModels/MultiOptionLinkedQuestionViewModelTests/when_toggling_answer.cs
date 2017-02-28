@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         It should_send_command_with_selected_roster_vectors = () =>
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
-                c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.SequenceEqual(questionViewModel.Options.First().Value)))));
+                c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.Identical(questionViewModel.Options.First().Value)))));
 
         static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity questionId;

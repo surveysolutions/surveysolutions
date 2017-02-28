@@ -30,7 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         public IReadOnlyCollection<int> Coordinates => this.coordinates;
-        
+
+        [Obsolete("version 5.19. started transition to ints as vector. should be removed later")]
         public decimal[] CoordinatesAsDecimals => this.coordinatesAsDecimals
             ?? (this.coordinatesAsDecimals = this.coordinates.Select(Convert.ToDecimal).ToArray());
 

@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -38,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         Because of = () =>
              exception = Catch.Exception(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVectors: new[] { new decimal[] { 1 } }));
+                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: new RosterVector[] { new decimal[] { 1 } }));
 
         It should_raise_InterviewException = () =>
            exception.ShouldBeOfExactType<InterviewException>();
