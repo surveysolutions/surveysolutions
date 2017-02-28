@@ -48,9 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
-                        {
-                            CheckYesNoQuestionInvariants(questionIdentity, (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: false);
-                        }
+                            RequireYesNoPreloadValueAllowed(questionIdentity, (YesNoAnswer) answer, questionnaire, tree);
                         else
                             RequireFixedMultipleOptionsPreloadValueAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
@@ -106,9 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
-                        {
-                            CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks: true);
-                        }
+                            RequireYesNoAnswerAllowed(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree);
                         else
                             RequireFixedMultipleOptionsAnswerAllowed(questionIdentity, ((CategoricalFixedMultiOptionAnswer) answer).CheckedValues, questionnaire, tree);
                         break;
@@ -288,28 +284,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
         }
 
-        private static void CheckYesNoQuestionInvariants(Identity questionIdentity, YesNoAnswer answer,
-            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void RequireYesNoPreloadValueAllowed(Identity questionIdentity, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree)
         {
             int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
             var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
+                .RequireMaxAnswersCountLimit(yesAnswersCount);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.MultyOption);
-            questionInvariants.RequireOptionsExist(selectedValues);
+        private static void RequireYesNoAnswerAllowed(Identity questionIdentity, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
+            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
-            questionInvariants.RequireRosterSizeAnswerNotNegative(yesAnswersCount);
-            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount);
-            questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
-
-            questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireQuestionIsEnabled();
-            }
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.MultyOption)
+                .RequireOptionsExist(selectedValues)
+                .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
+                .RequireMaxAnswersCountLimit(yesAnswersCount)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
         }
 
         private static void CheckTextListInvariants(Identity questionIdentity, Tuple<decimal, string>[] answers,
