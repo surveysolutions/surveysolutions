@@ -71,16 +71,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, questionA, Empty.RosterVector, DateTime.Now, 1);
-                    interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 1 }, DateTime.Now, -30);
-                    interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 2 }, DateTime.Now, 35);
-                    interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 3 }, DateTime.Now, 300);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(1), DateTime.Now, -30);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(2), DateTime.Now, 35);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(3), DateTime.Now, 300);
 
                     return new InvokeResult
                     {
                         IsQuestionAInValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionA)),
-                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 1m } ))),
-                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 2m } ))),
-                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(new[] { 3m } ))),
+                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(1m)))),
+                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(2m)))),
+                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(3m)))),
                     };
                 }
             });
