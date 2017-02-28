@@ -19,8 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var questionIdentity = new Identity(questionId, rosterVector);
 
-            CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, this.Tree);
-          
+            RequireGpsCoordinatesAnswerAllowed(questionIdentity, questionnaire, this.Tree);
+
             var changedInterviewTree = this.Tree.Clone();
 
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
