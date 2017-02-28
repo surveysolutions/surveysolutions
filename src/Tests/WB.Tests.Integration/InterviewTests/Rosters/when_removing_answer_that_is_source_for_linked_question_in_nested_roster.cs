@@ -10,7 +10,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
 using Ncqrs.Spec;
-
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -64,8 +64,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 5 }, DateTime.Now, 66);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 6 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 3, 5, 7 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3, 5 }, new decimal[] { 1, 3, 6 } });
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1, 3, 5 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3, 5 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 3, 5, 7 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3, 5 }, new decimal[] { 1, 3, 6 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1, 3, 5 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3, 5 } });
 
                 using (var eventContext = new EventContext())
                 {

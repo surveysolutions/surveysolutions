@@ -188,7 +188,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsMultiLinkedOption)
                 {
                     expressionState.UpdateLinkedMultiOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray());
+                        changedQuestion.Identity.RosterVector, 
+                        changedQuestion.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray().Select(x => x.Select(Convert.ToDecimal).ToArray()).ToArray());
                 }
 
                 if (changedQuestion.IsSingleLinkedToList)

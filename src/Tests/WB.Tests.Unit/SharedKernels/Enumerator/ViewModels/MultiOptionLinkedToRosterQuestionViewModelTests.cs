@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Setup.StatefulInterview(questionnaire);
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numericQuestionId, RosterVector.Empty, DateTime.UtcNow, 5);
-            interview.AnswerMultipleOptionsLinkedQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
+            interview.AnswerMultipleOptionsLinkedQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new RosterVector[]
             {
                 new decimal[] { 2 }, 
             });

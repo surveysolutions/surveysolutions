@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             () => interview.AnswerDateTimeQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, DateTime.UtcNow),
             () => interview.AnswerGeoLocationQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 0, 0, 0, 0, DateTimeOffset.UtcNow),
             () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, new int[0]),
-            () => interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId,RosterVector.Empty, DateTime.Now, new [] { new decimal[0] }),
+            () => interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId,RosterVector.Empty, DateTime.Now, new RosterVector[] { new decimal[0] }),
             () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 0),
             () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 0),
             () => interview.AnswerPictureQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, string.Empty),

@@ -74,7 +74,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
         Because of = () =>
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new [] { linkedOption3Vector, linkedOption2Vector });
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new RosterVector[] { linkedOption3Vector, linkedOption2Vector });
 
         Cleanup stuff = () =>
         {

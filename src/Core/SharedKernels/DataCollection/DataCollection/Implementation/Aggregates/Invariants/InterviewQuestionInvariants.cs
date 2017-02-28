@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public InterviewQuestionInvariants RequireLinkedOptionsAreAvailable(IEnumerable<decimal[]> options)
+        public InterviewQuestionInvariants RequireLinkedOptionsAreAvailable(RosterVector[] options)
         {
             foreach (var option in options)
             {
@@ -443,7 +443,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireMaxAnswersCountLimit(selectedValues.Count)
                 .RequireQuestionIsEnabled();
 
-        public void RequireLinkedToRosterMultipleOptionsAnswerAllowed(decimal[][] selectedLinkedOptions)
+        public void RequireLinkedToRosterMultipleOptionsAnswerAllowed(RosterVector[] selectedLinkedOptions)
             => this
                 .RequireQuestion(QuestionType.MultyOption)
                 .RequireQuestionInstanceExists()

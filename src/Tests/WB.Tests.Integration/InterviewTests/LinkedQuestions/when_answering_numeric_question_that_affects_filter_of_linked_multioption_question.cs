@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerTextQuestion(userId, q2Id, Create.RosterVector(0), DateTime.Now, "test");
                 interview.AnswerNumericIntegerQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, 3);
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, q3Id, RosterVector.Empty, DateTime.Now, new decimal[][] {new []{0.0m}});
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, q3Id, RosterVector.Empty, DateTime.Now, new RosterVector[] {new []{0.0m}});
 
 
                 var result = new InvokeResults();
