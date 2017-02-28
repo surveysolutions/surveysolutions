@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.TextList:
-                        CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: false);
+                        RequireTextListPreloadValueAllowed(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree);
                         break;
 
                     default:
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
                         break;
                     case QuestionType.TextList:
-                        CheckTextListInvariants(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree, applyStrongChecks: true);
+                        RequireTextListAnswerAllowed(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree);
                         break;
 
                     default:
@@ -312,26 +312,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireQuestionIsEnabled();
         }
 
-        private static void CheckTextListInvariants(Identity questionIdentity, Tuple<decimal, string>[] answers,
-            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void RequireTextListPreloadValueAllowed(Identity questionIdentity, Tuple<decimal, string>[] answers, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.TextList)
+                .RequireRosterSizeAnswerNotNegative(answers.Length)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
+                .RequireMaxAnswersCountLimit(answers.Length);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.TextList);
-
-            questionInvariants.RequireRosterSizeAnswerNotNegative(answers.Length);
-            questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length);
-            questionInvariants.RequireMaxAnswersCountLimit(answers.Length);
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireQuestionIsEnabled();
-                questionInvariants.RequireUniqueValues(answers);
-                questionInvariants.RequireNotEmptyTexts(answers);
-                var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionIdentity.Id);
-                questionInvariants.RequireMaxAnswersCountLimit(answers, maxAnswersCountLimit);
-            }
+        private static void RequireTextListAnswerAllowed(Identity questionIdentity, Tuple<decimal, string>[] answers, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.TextList)
+                .RequireRosterSizeAnswerNotNegative(answers.Length)
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
+                .RequireMaxAnswersCountLimit(answers.Length)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled()
+                .RequireUniqueValues(answers)
+                .RequireNotEmptyTexts(answers)
+                .RequireMaxAnswersCountLimit(answers);
         }
 
         private static void CheckGpsCoordinatesInvariants(Identity questionIdentity,
