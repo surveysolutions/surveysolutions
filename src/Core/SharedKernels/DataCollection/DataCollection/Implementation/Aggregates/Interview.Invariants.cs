@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
                         break;
                     case QuestionType.GpsCoordinates:
-                        CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: false);
+                        RequireGpsCoordinatesPreloadValueAllowed(questionIdentity, questionnaire, tree);
                         break;
                     case QuestionType.TextList:
                         RequireTextListPreloadValueAllowed(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree);
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         CheckQRBarcodeInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
                         break;
                     case QuestionType.GpsCoordinates:
-                        CheckGpsCoordinatesInvariants(questionIdentity, questionnaire, tree, applyStrongChecks: true);
+                        RequireGpsCoordinatesAnswerAllowed(questionIdentity, questionnaire, tree);
                         break;
                     case QuestionType.TextList:
                         RequireTextListAnswerAllowed(questionIdentity, ((TextListAnswer)answer).ToTupleArray(), questionnaire, tree);
@@ -335,18 +335,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireMaxAnswersCountLimit(answers);
         }
 
-        private static void CheckGpsCoordinatesInvariants(Identity questionIdentity,
-            IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private static void RequireGpsCoordinatesPreloadValueAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
         {
-            var questionInvariants = new InterviewQuestionInvariants(questionIdentity, questionnaire, tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.GpsCoordinates);
+        }
 
-            questionInvariants.RequireQuestion(QuestionType.GpsCoordinates);
-
-            if (applyStrongChecks)
-            {
-                questionInvariants.RequireQuestionInstanceExists();
-                questionInvariants.RequireQuestionIsEnabled();
-            }
+        private static void RequireGpsCoordinatesAnswerAllowed(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree tree)
+        {
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, tree)
+                .RequireQuestion(QuestionType.GpsCoordinates)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
         }
 
         private static void CheckQRBarcodeInvariants(Identity questionIdentity,
