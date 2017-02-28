@@ -19,7 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            RequireTextListAnswerAllowed(questionIdentity, answers, questionnaire, this.Tree);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireTextListAnswerAllowed(answers);
 
             var changedInterviewTree = this.Tree.Clone();
 
