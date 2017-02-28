@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
+
     [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public class RosterVector : IEnumerable<int>//, IEnumerable<decimal>
     {
@@ -76,6 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public static implicit operator int[](RosterVector rosterVector) => rosterVector.Array;
 
         public static implicit operator RosterVector(int[] array) => new RosterVector(array);
+        
 
         public bool Identical(RosterVector other)
         {
@@ -98,10 +100,9 @@ namespace WB.Core.SharedKernels.DataCollection
 
         #region Backward compatibility with decimal[]
 
-        //IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator() => ((IEnumerable<decimal>)this.Array.Select(Convert.ToDecimal)).GetEnumerator();
         public static implicit operator decimal[] (RosterVector rosterVector) => rosterVector.Array.Select(Convert.ToDecimal).ToArray();
         public static implicit operator RosterVector(decimal[] array) => new RosterVector(array);
-
+        
         #endregion
 
         public override bool Equals(object obj)
