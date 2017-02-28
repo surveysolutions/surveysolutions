@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void UpdateRostersInExpressionState(InterviewTreeRosterDiff[] diff, ILatestInterviewExpressionState expressionState)
         {
-            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToList();
+            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode);
             var addedRosters = diff.Where(x => x.IsNodeAdded)
                 .Select(x => x.ChangedNode)
                 .OrderBy(x => x.RosterVector.Length)
@@ -220,7 +220,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var rosterNode in addedRosters)
             {
-                expressionState.AddRoster(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(), rosterNode.Identity.RosterVector.Last(), rosterNode.SortIndex);
+                expressionState.AddRoster(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(), 
+                    rosterNode.Identity.RosterVector.Last(), rosterNode.SortIndex);
             }
         }
 

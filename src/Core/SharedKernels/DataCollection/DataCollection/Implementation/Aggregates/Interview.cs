@@ -710,7 +710,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (roster.IsFixed)
                 {
                     string changedRosterTitle = questionnaire.GetFixedRosterTitle(roster.Identity.Id,
-                        roster.Identity.RosterVector.Last<int>());
+                        roster.Identity.RosterVector.Coordinates.Last());
 
                     roster.SetRosterTitle(changedRosterTitle);
                 }
