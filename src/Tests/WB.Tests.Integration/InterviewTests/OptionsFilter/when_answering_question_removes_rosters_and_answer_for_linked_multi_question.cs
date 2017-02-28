@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, new decimal[][]
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, new RosterVector[]
                 {
                     new [] { 2m }, new[] { 1m }, new[] { 3m }
                 });

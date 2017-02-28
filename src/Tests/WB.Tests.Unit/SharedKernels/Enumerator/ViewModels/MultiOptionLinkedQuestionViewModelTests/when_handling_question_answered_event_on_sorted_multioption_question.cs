@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         Because of = () =>
         {
             interview.AnswerMultipleOptionsLinkedQuestion(interviewerId, questionId.Id, RosterVector.Empty,
-                DateTime.UtcNow, new[] {new decimal[] {2}, new decimal[] {1}});
+                DateTime.UtcNow, new RosterVector[] {new decimal[] {2}, new decimal[] {1}});
 
             Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
         };

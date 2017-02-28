@@ -242,7 +242,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsMultiLinkedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, 
+                        changedQuestion.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray().Select(x => x.Select(Convert.ToDecimal).ToArray()).ToArray()));
                 }
 
                 if (changedQuestion.IsSingleLinkedToList)
@@ -287,12 +288,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 
         private static AddedRosterInstance ToAddedRosterInstance(IInterviewTreeNode rosterNode)
-            => new AddedRosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(), 
-                rosterNode.Identity.RosterVector.Coordinates.Last(), (rosterNode as InterviewTreeRoster).SortIndex);
+            => AddedRosterInstance.CreateFromIdentityAndSortIndex(rosterNode.Identity, (rosterNode as InterviewTreeRoster)?.SortIndex);
 
         private static RosterInstance ToRosterInstance(IInterviewTreeNode rosterNode)
-            => new RosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.CoordinatesAsDecimals.Shrink(),
-                rosterNode.Identity.RosterVector.Coordinates.Last());
+            => RosterInstance.CreateFromIdentity(rosterNode.Identity);
 
         private static ChangedVariable ToChangedVariable(InterviewTreeVariableDiff variable)
             => new ChangedVariable(variable.ChangedNode.Identity, variable.ChangedNode.Value);

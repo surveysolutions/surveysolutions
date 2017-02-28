@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.TestFactories
                 altitude: altitude,
                 timestamp: timestamp);
 
-        public AnswerMultipleOptionsLinkedQuestionCommand AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[][] answer = null)
+        public AnswerMultipleOptionsLinkedQuestionCommand AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, RosterVector[] answer = null)
             => new AnswerMultipleOptionsLinkedQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,

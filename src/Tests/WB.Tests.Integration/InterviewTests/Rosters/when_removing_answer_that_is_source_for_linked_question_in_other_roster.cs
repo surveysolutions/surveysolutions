@@ -12,7 +12,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
 using Ncqrs.Spec;
-
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -72,8 +72,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 1 }, DateTime.Now, 17);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 2 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[1] { 3 }, DateTime.Now, new decimal[][] { new decimal[] { 1 }, new decimal[] { 2 } });
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[0], DateTime.Now, new decimal[][] { new decimal[] { 1 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[1] { 3 }, DateTime.Now, new RosterVector[] { new decimal[] { 1 }, new decimal[] { 2 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[0], DateTime.Now, new RosterVector[] { new decimal[] { 1 } });
 
                 using (var eventContext = new EventContext())
                 {

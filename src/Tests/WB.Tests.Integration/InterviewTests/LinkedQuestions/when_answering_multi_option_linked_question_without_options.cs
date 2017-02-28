@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -33,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         Because of = () =>
              exception = Catch.Exception(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVectors: answer));
+                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
 
         It should_raise_InterviewException = () =>
            exception.ShouldBeOfExactType<InterviewException>();
@@ -47,6 +48,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[][] answer = new[] {new decimal[] {1}};
+        private static RosterVector[] answer = new RosterVector[] {new decimal[] {1}};
     }
 }

@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview = SetupInterview(questionnaireDocument: questionnaire);
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
-                new [] { new decimal[] { 1 }, new decimal[] {0}});
+                new RosterVector[] { new decimal[] { 1 }, new decimal[] {0}});
             eventContext = new EventContext();
         };
 
