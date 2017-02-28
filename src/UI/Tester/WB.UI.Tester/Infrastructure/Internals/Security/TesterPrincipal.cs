@@ -19,12 +19,12 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
-        public bool SignIn(string userName, string password, bool staySignedIn)
+        public bool SignIn(string userName, string passwordHash, bool staySignedIn)
         {
             this.currentUserIdentity = new TesterUserIdentity
             {
                 Name = userName,
-                Password = password,
+                Password = passwordHash,
                 UserId = Guid.NewGuid(),
                 Id = userName
             };
