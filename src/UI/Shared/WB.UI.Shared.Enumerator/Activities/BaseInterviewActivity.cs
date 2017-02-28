@@ -1,10 +1,11 @@
 ﻿using System;
-using Android.App;
+using Android.Content.Res;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -14,7 +15,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         where TViewModel : BaseInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
-        private DrawerLayout drawerLayout;
+        private DrawerLayout drawerLayout => this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
 
@@ -23,8 +24,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
@@ -84,15 +83,19 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private void OnSectionChange(SectionChangeMessage msg)
-        {
-            Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers(); }, null);
-        }
+        private void OnSectionChange(SectionChangeMessage msg) =>
+            Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() => { this.drawerLayout.CloseDrawers(); });
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {
             base.OnPostCreate(savedInstanceState);
             this.drawerToggle.SyncState();
+        }
+
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            this.drawerToggle.OnConfigurationChanged(newConfig);
         }
 
         public override void OnLowMemory()
