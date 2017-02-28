@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            CheckTextListInvariants(questionIdentity, answers, questionnaire, this.Tree);
+            RequireTextListAnswerAllowed(questionIdentity, answers, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 

@@ -82,27 +82,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        public void RequireMaxAnswersCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit)
-        {
-            if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
-                throw new InterviewException(
-                    $"Answers exceed MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
-        }
-
-        public void RequireNotEmptyTexts(Tuple<decimal, string>[] answers)
+        public InterviewQuestionInvariants RequireNotEmptyTexts(Tuple<decimal, string>[] answers)
         {
             if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
                 throw new InterviewException(
                     $"String values should be not empty or whitespaces for question {this.FormatQuestionForException()}. {this.InfoForException}");
+
+            return this;
         }
 
-        public void RequireUniqueValues(Tuple<decimal, string>[] answers)
+        public InterviewQuestionInvariants RequireUniqueValues(Tuple<decimal, string>[] answers)
         {
             var decimals = answers.Select(x => x.Item1).Distinct().ToArray();
 
             if (answers.Length > decimals.Length)
                 throw new InterviewException(
                     $"Decimal values should be unique for question {this.FormatQuestionForException()}. {this.InfoForException}");
+
+            return this;
         }
 
         public InterviewQuestionInvariants RequireOptionExists(decimal value)
@@ -135,6 +132,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Question {this.FormatQuestionForException()} has Yes/No type, but answer is given for Multiple Options type. {this.InfoForException}");
 
             return this;
+        }
+
+        public void RequireMaxAnswersCountLimit(Tuple<decimal, string>[] answers)
+        {
+            int? maxAnswersCountLimit = this.Questionnaire.GetListSizeForListQuestion(this.QuestionIdentity.Id);
+
+            if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
+                throw new InterviewException(
+                    $"Answers exceed MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
         public InterviewQuestionInvariants RequireMaxAnswersCountLimit(int answersCount)
