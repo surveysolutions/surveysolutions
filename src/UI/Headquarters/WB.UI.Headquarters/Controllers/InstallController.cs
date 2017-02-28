@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -12,14 +13,17 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InstallController : BaseController
     {
+        private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IPasswordHasher passwordHasher;
 
         public InstallController(ICommandService commandService,
                                  IGlobalInfoProvider globalInfo,
+                                 ISupportedVersionProvider supportedVersionProvider,
                                  ILogger logger,
                                  IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger)
         {
+            this.supportedVersionProvider = supportedVersionProvider;
             this.passwordHasher = passwordHasher;
         }
 
