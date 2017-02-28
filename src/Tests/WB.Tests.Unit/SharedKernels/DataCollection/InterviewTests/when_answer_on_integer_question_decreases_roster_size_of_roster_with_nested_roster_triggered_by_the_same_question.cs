@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
@@ -41,9 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1);
-            interview.Apply(new TextQuestionAnswered(userId, questionFromRosterId, new decimal[] { 0 }, DateTime.Now, "t1"));
-            interview.Apply(new TextQuestionAnswered(userId, questionFromNestedRosterId, new decimal[] { 0, 0 }, DateTime.Now, "t2"));
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, Create.Entity.RosterVector(), DateTime.Now, 1);
+            interview.Apply(new TextQuestionAnswered(userId, questionFromRosterId, Create.Entity.RosterVector(0), DateTime.Now, "t1"));
+            interview.Apply(new TextQuestionAnswered(userId, questionFromNestedRosterId, Create.Entity.RosterVector(0, 0), DateTime.Now, "t2"));
             eventContext = new EventContext();
         };
 
@@ -54,17 +55,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 0);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, Create.Entity.RosterVector(), DateTime.Now, 0);
 
         It should_raise_RosterInstancesRemoved_event_for_parent_roster_row_and_for_nested_roster_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances.Count(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0)==1
-                && @event.Instances.Count(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 }))==1);
+                && @event.Instances.Count(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Identical(Create.Entity.RosterVector(0)))==1);
 
         It should_raise_AnswersRemoved_event_for_parent_roster_row_and_for_nested_roster_row = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
-                => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.Identical(new decimal[] { 0 })) == 1
-                && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1);
+                => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.Identical(Create.Entity.RosterVector(0))) == 1
+                && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.Identical(Create.Entity.RosterVector(0, 0))) == 1);
 
         It should_not_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event

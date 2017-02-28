@@ -66,22 +66,22 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 0m }, DateTime.Now, new [] { 1, 2 });
-                interview.AnswerTextQuestion(userId, textQuestionId, new[] { 0m, 1m }, DateTime.Now, "aaa");
-                interview.AnswerTextQuestion(userId, textQuestionId, new[] { 0m, 2m }, DateTime.Now, "bbb");
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Create.RosterVector(0), DateTime.Now, new [] { 1, 2 });
+                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(0, 1), DateTime.Now, "aaa");
+                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(0, 2), DateTime.Now, "bbb");
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 1m }, DateTime.Now, new [] { 1, 2 });
-                interview.AnswerTextQuestion(userId, textQuestionId, new[] { 1m, 1m }, DateTime.Now, "ccc");
-                interview.AnswerTextQuestion(userId, textQuestionId, new[] { 1m, 2m }, DateTime.Now, "ddd");
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Create.RosterVector(1), DateTime.Now, new [] { 1, 2 });
+                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(1, 1), DateTime.Now, "ccc");
+                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(1, 2), DateTime.Now, "ddd");
 
                 using (var eventContext = new EventContext())
                 {                    
                     interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 1);
 
-                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 0m, 1m })));
-                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 0m, 2m })));
-                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 1m, 1m })));
-                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(new[] { 1m, 2m })));
+                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 1))));
+                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 2))));
+                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(1, 1))));
+                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(1, 2))));
                 }
 
                 return result;
