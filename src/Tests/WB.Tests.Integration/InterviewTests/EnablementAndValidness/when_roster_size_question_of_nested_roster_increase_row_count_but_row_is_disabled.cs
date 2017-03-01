@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                             Abc.Create.Entity.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
                                 rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new[]
                                 {
-                                    Create.Question()
+                                    Abc.Create.Entity.Question()
                                 })
                         })
                     );

@@ -26,11 +26,11 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(variable: "a", enablementCondition: null),
-                        Create.Question(id: questionId, variable: "b", enablementCondition: "a > 0"),
-                        Abc.Create.Entity.Group(null, "Group X", "i", null, false, null),
-                        Abc.Create.Entity.Group(groupId, "Group X", "groupConditional", "a < 0", false, null),
-                        Abc.Create.Entity.Roster(variable: "x", fixedTitles: new[] { "1", "2" }, enablementCondition: null),
+                        Abc.Create.Entity.NumericIntegerQuestion(variable: "a"),
+                        Abc.Create.Entity.Question(questionId: questionId, variable: "b", enablementCondition: "a > 0"),
+                        Abc.Create.Entity.Group(),
+                        Abc.Create.Entity.Group(groupId, enablementCondition: "a < 0"),
+                        Abc.Create.Entity.Roster(variable: "x", fixedTitles: new[] { "1", "2" }),
                         Abc.Create.Entity.Roster(rosterId: rosterId, variable: "fixedConditional", fixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
                     }),
                 });
