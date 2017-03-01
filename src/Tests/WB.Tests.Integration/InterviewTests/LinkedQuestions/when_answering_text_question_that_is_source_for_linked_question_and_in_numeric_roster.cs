@@ -17,19 +17,26 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             appDomainContext = AppDomainContext.Create();
         };
 
-        Because of = () =>
+        private Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
-                {
-                     Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    children: new IComposite[]
                     {
-                        Abc.Create.Entity.TextQuestion(q2Id, variable: "q2"),
-                    }),
-                    Create.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
-                });
+                        Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                        Abc.Create.Entity.Roster(rosterId,
+                        variable: "r1",
+                            rosterSizeQuestionId: q1Id,
+                            rosterTitleQuestionId: q2Id,
+                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            children: new IComposite[]
+                            {
+                                Abc.Create.Entity.TextQuestion(q2Id, variable: "q2"),
+                            }),
+                        Create.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
+                    });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
 

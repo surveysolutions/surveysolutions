@@ -60,7 +60,7 @@ namespace WB.Tests.Integration
 
             var navigationState = Mock.Of<NavigationState>(_ => _.InterviewId == interview.Id.FormatGuid());
 
-            var liteEventRegistry = Create.LiteEventRegistry();
+            var liteEventRegistry = Abc.Create.Service.LiteEventRegistry();
             var mvxMessenger = Mock.Of<IMvxMessenger>();
 
             Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
