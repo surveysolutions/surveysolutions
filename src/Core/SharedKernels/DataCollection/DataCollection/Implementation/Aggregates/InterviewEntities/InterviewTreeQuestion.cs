@@ -470,13 +470,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
                 
-                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                var nodes = options.Select(vector => new Identity(linkedLinkedSourceId, vector))
+                    .OrderBy(id => Tree.GetNodeCoordinatesInEnumeratorOrder(id), RosterVectorAsCoordinatesComparer.Instance);
                 
-                return this.Tree.AllNodesInOrderCache
-                    .Where(node => node.Identity.Id == linkedLinkedSourceId && optionsHashSet.Contains(node.Identity.RosterVector))
-                    .Take(options.Length)
-                    .Select(node => node.Identity.RosterVector)
-                    .ToArray();
+                return nodes.Select(n => n.RosterVector).ToArray();
             }
 
             return options;
