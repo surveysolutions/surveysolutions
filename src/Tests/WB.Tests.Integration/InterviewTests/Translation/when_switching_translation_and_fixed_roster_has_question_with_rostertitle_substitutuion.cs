@@ -38,8 +38,8 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             QuestionnaireDocument questionnaireWithTranslation = questionnaire.Clone();
             questionnaireWithTranslation.Find<Group>(x => x.IsRoster).First().FixedRosterTitles[1].Title = "test";
 
-            var doc = Create.PlainQuestionnaire(questionnaire);
-            var docWithTranslation = Create.PlainQuestionnaire(questionnaireWithTranslation);
+            var doc = IntegrationCreate.PlainQuestionnaire(questionnaire);
+            var docWithTranslation = IntegrationCreate.PlainQuestionnaire(questionnaireWithTranslation);
 
 
             var repo = Mock.Of<IQuestionnaireStorage>(repository
@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             interview.SwitchTranslation(new SwitchTranslation(interview.Id, "testTranslation", userId));
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(t1Id,new [] {1m})).ShouldEqual("title with test");
+            interview.GetTitleText(IntegrationCreate.Identity(t1Id,new [] {1m})).ShouldEqual("title with test");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

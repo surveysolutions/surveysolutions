@@ -38,8 +38,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         ),
                         Abc.Create.Event.QuestionsEnabled(new []
                         {
-                            Create.Identity(question1Id),
-                            Create.Identity(question2Id)
+                            IntegrationCreate.Identity(question1Id),
+                            IntegrationCreate.Identity(question2Id)
                         })
                     });
 

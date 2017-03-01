@@ -39,9 +39,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        Create.Identity(questionAId),
-                        Create.Identity(questionBId),
-                        Create.Identity(questionCId) 
+                        IntegrationCreate.Identity(questionAId),
+                        IntegrationCreate.Identity(questionBId),
+                        IntegrationCreate.Identity(questionCId) 
                     }),
                     Abc.Create.Event.NumericRealQuestionAnswered(
                         Abc.Create.Entity.Identity(questionBId), answer: 4.2m)

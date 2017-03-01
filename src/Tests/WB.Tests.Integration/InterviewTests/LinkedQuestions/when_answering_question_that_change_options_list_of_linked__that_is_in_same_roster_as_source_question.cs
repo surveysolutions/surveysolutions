@@ -45,18 +45,18 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(1), DateTime.Now, 20);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(2), DateTime.Now, 15);
 
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
+                    interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 35);
 
-                    result.OptionsCountForQuestion4InRoster1 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(1))?.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster2 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(2))?.Length ?? 0;
-                    result.OptionsCountForQuestion4InRoster3 = GetChangedOptions(eventContext, q4Id, Create.RosterVector(3))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster1 = GetChangedOptions(eventContext, q4Id, IntegrationCreate.RosterVector(1))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster2 = GetChangedOptions(eventContext, q4Id, IntegrationCreate.RosterVector(2))?.Length ?? 0;
+                    result.OptionsCountForQuestion4InRoster3 = GetChangedOptions(eventContext, q4Id, IntegrationCreate.RosterVector(3))?.Length ?? 0;
                 }
 
                 return result;

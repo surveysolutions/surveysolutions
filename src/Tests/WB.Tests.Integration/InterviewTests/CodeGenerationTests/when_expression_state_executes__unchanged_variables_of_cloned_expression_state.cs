@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 state.SetInterviewProperties(new InterviewProperties(Guid.NewGuid()));
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(Create.Identity(variableId),(long)6);
+                state.UpdateVariableValue(IntegrationCreate.Identity(variableId),(long)6);
                 var clonedState = state.Clone();
 
                 var variables = clonedState.ProcessVariables();

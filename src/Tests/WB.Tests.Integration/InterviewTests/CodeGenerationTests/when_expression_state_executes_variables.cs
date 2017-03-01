@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (long?) variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (long?) variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
                 };
             });
 

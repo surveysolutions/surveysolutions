@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_raise_AnswerRemoved_event_for_first_row = () =>
             eventContext.GetSingleEvent<AnswersRemoved>()
-                .Questions.ShouldContain(Create.Identity(sourceOfLinkQuestionId, Create.RosterVector(0)));
+                .Questions.ShouldContain(IntegrationCreate.Identity(sourceOfLinkQuestionId, IntegrationCreate.RosterVector(0)));
 
         It should_raise_AnswersRemoved_event_for_answered_linked_Question = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
