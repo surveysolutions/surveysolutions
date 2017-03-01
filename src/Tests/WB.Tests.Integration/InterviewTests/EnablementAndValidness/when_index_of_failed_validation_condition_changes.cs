@@ -8,6 +8,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -26,25 +27,25 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Guid staticTextId = Guid.Parse("22222222222222222222222222222222");
                 Identity staticTextIdentity = IntegrationCreate.Identity(staticTextId);
 
-                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Guid.NewGuid(),
-                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
+                    Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
                     {
                         IntegrationCreate.ValidationCondition("self < 125", "validation 1"),
                         IntegrationCreate.ValidationCondition("self >= 0", "validation 2")
                     }),
-                    Abc.Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
+                    Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
                     {
                         IntegrationCreate.ValidationCondition("num < 125", "static text validation 1"),
                         IntegrationCreate.ValidationCondition("num >= 0", "static text validation 2")
                     }));
 
                 var interview = SetupInterview(questionnaireDocument);
-                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId, answer: -5));
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: questionId, answer: -5));
                 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId, answer: 126));
+                    interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: questionId, answer: 126));
 
                     return new InvokeResults
                     {
