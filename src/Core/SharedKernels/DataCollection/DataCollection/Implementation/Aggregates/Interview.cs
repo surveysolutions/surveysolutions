@@ -2418,8 +2418,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 tree.RemoveNode(removedRosterIdentity);
             }
-
-            tree.ActualizeNodesInOrderCache();
         }
 
         private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)

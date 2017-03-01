@@ -26,7 +26,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             foreach (var action in this.deferQueue.GetConsumingEnumerable())
             {
-                action();
+                try
+                {
+                    action();
+                }
+                catch { /* nom nom nom */ }
             }
         }
 
