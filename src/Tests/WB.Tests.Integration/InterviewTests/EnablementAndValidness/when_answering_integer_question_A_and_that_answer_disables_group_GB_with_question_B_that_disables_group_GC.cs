@@ -31,26 +31,28 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var groupGCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(questionAId, "a"),
+                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
                     Create.Group(groupGBId, enablementCondition: "a > 0", children: new IComposite[] {
-                        Create.NumericIntegerQuestion(questionBId, "b")
+                        Unit.Create.Entity.NumericIntegerQuestion(questionBId, "b")
                     }),
                     Create.Group(groupGCId, enablementCondition: "b > 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Create.Event.QuestionsEnabled(new []
+                    Unit.Create.Event.QuestionsEnabled(new []
                     {
                         Create.Identity(questionAId),
                         Create.Identity(questionBId)
                     }),
-                    Create.Event.GroupsEnabled(new []
+                    Unit.Create.Event.QuestionsEnabled(new []
                     {
                         Create.Identity(groupGBId),
                         Create.Identity(groupGCId)
                     }),
-                    Create.Event.NumericIntegerQuestionAnswered(questionBId, 1)
+                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        questionId: questionBId, answer: 1
+                    )
                 });
 
                 using (var eventContext = new EventContext())

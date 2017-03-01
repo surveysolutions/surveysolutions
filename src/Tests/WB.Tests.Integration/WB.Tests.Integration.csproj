@@ -597,6 +597,10 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj">
+      <Project>{e8409caf-af6f-489d-8ff6-fa1e03a80f7f}</Project>
+      <Name>WB.Tests.Abc</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, obsoleteFixedTitles: new[] { "1" },
                         children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
+                            Unit.Create.Entity.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
                             Create.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
                                 rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new[]
                                 {

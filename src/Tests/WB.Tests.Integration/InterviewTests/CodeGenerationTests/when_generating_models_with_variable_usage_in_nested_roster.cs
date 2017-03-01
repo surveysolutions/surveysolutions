@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: questionId, variable: "q1"),
+                        Unit.Create.Entity.NumericIntegerQuestion(id: questionId, variable: "q1"),
                         Create.Variable(id: variableId, type: VariableType.Boolean, variableName: "num",
                             expression: "q1>5"),
                         Create.Roster(rosterId, variable: "assets",

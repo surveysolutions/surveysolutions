@@ -1393,5 +1393,10 @@ namespace WB.Tests.Unit.TestFactories
         {
             return new InterviewTextListAnswers(answers);
         }
+
+        public RosterVector RosterVector(int[] coordinates)
+        {
+            return new RosterVector(coordinates);
+        }
     }
 }

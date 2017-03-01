@@ -28,8 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var integerQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
-                    Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
+                    Unit.Create.Entity.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
+                    Unit.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
                     Create.Roster(rosterId,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,

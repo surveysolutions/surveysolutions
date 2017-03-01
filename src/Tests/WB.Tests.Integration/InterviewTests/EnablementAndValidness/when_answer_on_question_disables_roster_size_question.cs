@@ -26,8 +26,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
-                    Create.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
                     Create.Roster(id: rosterId, variable: "ros",
                         rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
                         rosterSizeSourceType: RosterSizeSourceType.Question)

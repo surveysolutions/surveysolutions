@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 answerTime: DateTime.Now, rosterVector: new decimal[0],
                 answers: new[] { new Tuple<decimal, string>(1, "a"), new Tuple<decimal, string>(3, "c") });
 
-            Assert.DoesNotThrow(() => interview.Apply(Create.Event.LinkedOptionsChanged(new [] {
+            Assert.DoesNotThrow(() => interview.Apply(Unit.Create.Event.LinkedOptionsChanged(new [] {
                 new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(1)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),
                 new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(2)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),
                 new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(3)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),

@@ -37,11 +37,11 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("31111111111111111111111111111113"),
                         Create.Chapter(children: new List<IComposite>
                                 {
-                                    Create.NumericIntegerQuestion(id: level1QuestionId, variable: "num1"),
+                                    Unit.Create.Entity.NumericIntegerQuestion(id: level1QuestionId, variable: "num1"),
                                     Create.NumericRoster(roster1, "roster1", 
                                         rosterSizeQuestionId: level1QuestionId, 
                                         children: new IComposite[]{ 
-                                            Create.NumericIntegerQuestion(level2QuestionId, variable: "num2"),
+                                            Unit.Create.Entity.NumericIntegerQuestion(level2QuestionId, variable: "num2"),
                                             Create.NumericRoster(roster2, "roster2", rosterSizeQuestionId: level2QuestionId) }),
                                 }),
                         Create.Chapter(children: new List<IComposite>
@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                                         rosterSizeQuestionId: level2QuestionId, 
                                                         children: new IComposite[]
                                                                   {
-                                                                        Create.NumericIntegerQuestion(level3QuestionId, variable: "num3"),
+                                                                        Unit.Create.Entity.NumericIntegerQuestion(level3QuestionId, variable: "num3"),
                                                                         Create.NumericRoster(roster5, "roster5",  rosterSizeQuestionId: level3QuestionId)
                                                                   })
                                                   })

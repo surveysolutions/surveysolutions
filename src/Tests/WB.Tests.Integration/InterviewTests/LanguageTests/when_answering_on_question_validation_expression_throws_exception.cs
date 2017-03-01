@@ -26,13 +26,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(question1Id, "q1"),
-                    Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
+                    Unit.Create.Entity.NumericIntegerQuestion(question1Id, "q1"),
+                    Unit.Create.Entity.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
                     );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Create.Event.NumericIntegerQuestionAnswered(question1Id, answer: 0)
+                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        question1Id, null, 0, null, null
+                    )
                 });
 
                 var result = new InvokeResults();
