@@ -124,26 +124,9 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.Questionnaire.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.InterviewTree.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.Invariants.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.RemoveAnswer.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.NumericRealQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.YesNoQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.QRBarcodeQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.SingleOptionQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.SingleOptionLinkedQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.PictureQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsLinkedQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.TextListQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.GPSQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.ExpressionState.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.TextQuestion.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroup.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroupDiff.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeNodeDiff.cs" />
@@ -393,7 +376,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="Implementation\Aggregates\Interview.NumericIntegerQuestion.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
