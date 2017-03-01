@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(yesNoQuestionId, RosterVector.Empty, Yes(1)));
+                    interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(yesNoQuestionId, RosterVector.Empty, Yes(1)));
 
                     return new InvokeResults
                     {

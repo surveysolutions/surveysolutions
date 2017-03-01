@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Abc.Create.Entity.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Abc.Create.Entity.Roster(roster3Id, variable:"fixed_nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                            fixedRosterTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
+                            fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(1, "Hello")}, children: new IComposite[]
                         {
                             Abc.Create.Entity.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {
@@ -59,12 +59,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(q2Id, RosterVector.Empty,
-                    Create.AnsweredYesNoOption(1m, yes: true),
-                    Create.AnsweredYesNoOption(2m, yes: true),
-                    Create.AnsweredYesNoOption(3m, yes: true)
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(q2Id, RosterVector.Empty,
+                    IntegrationCreate.AnsweredYesNoOption(1m, yes: true),
+                    IntegrationCreate.AnsweredYesNoOption(2m, yes: true),
+                    IntegrationCreate.AnsweredYesNoOption(3m, yes: true)
                     ));
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 2);
 
                 var result = new InvokeResults();
 

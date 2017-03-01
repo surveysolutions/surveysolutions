@@ -23,18 +23,18 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
 
                  Abc.Create.Entity.StaticText(dependentStaticTextOutsideRosterId,
-                    validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
+                    validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
 
-                Abc.Create.Entity.Roster(fixedRosterTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
+                Abc.Create.Entity.Roster(fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "one") }, children: new IComposite[]
                 {
                      Abc.Create.Entity.StaticText(dependentStaticTextInsideRosterId,
-                        validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
+                        validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
                 })
             }));
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 0));
+                interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 0));
 
                 return new InvokeResults
                 {
@@ -42,14 +42,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(Create.Identity(dependentStaticTextOutsideRosterId))
+                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextOutsideRosterId))
                         ?? false,
 
                     WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticTextInsideRoster = 
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(Create.Identity(dependentStaticTextInsideRosterId, Create.RosterVector(1)))
+                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextInsideRosterId, IntegrationCreate.RosterVector(1)))
                         ?? false,
                 };
             }

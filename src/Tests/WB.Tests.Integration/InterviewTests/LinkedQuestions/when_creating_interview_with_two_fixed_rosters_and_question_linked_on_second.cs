@@ -28,12 +28,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
                     Abc.Create.Entity.Roster(rosterId: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
                         enablementCondition: "@rowcode == 1",
-                        fixedRosterTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
+                        fixedRosterTitles: new[] {IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)},
                         children: new IComposite[]
                         {
                             Abc.Create.Entity.Roster(rosterId: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 variable: "r2", 
-                                fixedRosterTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)})
+                                fixedRosterTitles: new[] {IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)})
                         }),
                 });
 
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupStatefullInterview(questionnaireDocument, useLatestEngine: false);
-                    var questionIdentity = Create.Identity(linkedToQuestionId, RosterVector.Empty);
+                    var questionIdentity = IntegrationCreate.Identity(linkedToQuestionId, RosterVector.Empty);
 
                     result.LinkedOptionsCount =
                         eventContext.GetSingleEvent<LinkedOptionsChanged>().ChangedLinkedQuestions.First(x => x.QuestionId == questionIdentity).Options.Length;

@@ -36,9 +36,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 Guid rosterWithYesNoTitle = Guid.Parse("33333333333333333333333333333333");
                 Guid yesNoQuestionId = Guid.Parse("44444444444444444444444444444444");
 
-                var rosterTitleQuestionIdentity = Create.Identity(rosterTitleQuestionId,
-                    Create.RosterVector(0));
-                var rosterIdentity = Create.Identity(rosterId, Create.RosterVector(0));
+                var rosterTitleQuestionIdentity = IntegrationCreate.Identity(rosterTitleQuestionId,
+                    IntegrationCreate.RosterVector(0));
+                var rosterIdentity = IntegrationCreate.Identity(rosterId, IntegrationCreate.RosterVector(0));
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
@@ -101,9 +101,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
-                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new [] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, new [] { 1 });
                 interview.AnswerYesNoQuestion(
-                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), DateTime.Today, 
+                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, 
                     new List<AnsweredYesNoOption>
                     {
                         new AnsweredYesNoOption(1, true)

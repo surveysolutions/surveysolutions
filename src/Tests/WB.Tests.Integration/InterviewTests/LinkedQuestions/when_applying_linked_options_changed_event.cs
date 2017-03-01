@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                })
             });
 
-            var interview = Create.StatefulInterview(questionnaireDocument);
+            var interview = IntegrationCreate.StatefulInterview(questionnaireDocument);
 
             interview.AnswerTextListQuestion(userId: userId, questionId: textListQuestionId,
                 answerTime: DateTime.Now, rosterVector: new decimal[0],
@@ -39,9 +39,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 answers: new[] { new Tuple<decimal, string>(1, "a"), new Tuple<decimal, string>(3, "c") });
 
             Assert.DoesNotThrow(() => interview.Apply(Abc.Create.Event.LinkedOptionsChanged(new [] {
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(1)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(2)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Create.RosterVector(3)), new[] { Create.RosterVector(1), Create.RosterVector(3) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(1)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(2)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(3)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
             })));
         }
     }

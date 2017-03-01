@@ -305,7 +305,7 @@
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_plain_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
-    <Compile Include="Create.cs" />
+    <Compile Include="IntegrationCreate.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />

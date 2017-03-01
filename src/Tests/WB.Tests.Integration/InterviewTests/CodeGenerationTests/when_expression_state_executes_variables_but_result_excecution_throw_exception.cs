@@ -27,19 +27,19 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
-                        Create.Variable(id: variableId, expression: "1/(int)num.Value")
+                        IntegrationCreate.Variable(id: variableId, expression: "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
-                state.UpdateVariableValue(Create.Identity(variableId), 6);
+                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
                 state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 0);
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
                 };
             });
 

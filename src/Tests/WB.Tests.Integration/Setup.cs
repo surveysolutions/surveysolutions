@@ -69,11 +69,11 @@ namespace WB.Tests.Integration
                     questionnaireRepository,
                     mvxMessenger,
                     liteEventRegistry,
-                    Create.DynamicTextViewModel(
+                    IntegrationCreate.DynamicTextViewModel(
                         liteEventRegistry,
                         questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository),
-                    Create.AnswerNotifier(liteEventRegistry))
+                    IntegrationCreate.AnswerNotifier(liteEventRegistry))
                 {
                     NavigationState = navigationState,
                 };
@@ -91,18 +91,18 @@ namespace WB.Tests.Integration
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, IntegrationCreate.DynamicTextViewModel(
                         liteEventRegistry,
                         questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
-                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, IntegrationCreate.DynamicTextViewModel(
                         liteEventRegistry,
                         questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
-                        Create.AnswerNotifier(liteEventRegistry)));
+                        IntegrationCreate.AnswerNotifier(liteEventRegistry)));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())

@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate()
                 && _.GetInstance(typeof(Validator)) == new Validator());
 
-            commandService = Create.CommandService(serviceLocator: serviceLocator);
+            commandService = IntegrationCreate.CommandService(serviceLocator: serviceLocator);
         };
 
         Because of = () =>

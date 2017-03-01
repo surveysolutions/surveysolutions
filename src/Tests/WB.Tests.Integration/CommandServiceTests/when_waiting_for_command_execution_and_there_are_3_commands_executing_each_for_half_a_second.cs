@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
-            commandService = Create.CommandService(repository: repository);
+            commandService = IntegrationCreate.CommandService(repository: repository);
 
             var t1 = commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();

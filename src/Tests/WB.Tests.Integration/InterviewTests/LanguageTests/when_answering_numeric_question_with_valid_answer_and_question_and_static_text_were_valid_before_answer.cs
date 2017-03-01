@@ -41,8 +41,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                             questionId: questionA, answer: 1
                         ),
 
-                        Abc.Create.Event.AnswersDeclaredValid(new[] { Create.Identity(questionA)}),
-                        Abc.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
+                        Abc.Create.Event.AnswersDeclaredValid(new[] { IntegrationCreate.Identity(questionA)}),
+                        Abc.Create.Event.StaticTextsDeclaredValid(IntegrationCreate.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())

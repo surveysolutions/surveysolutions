@@ -69,12 +69,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
                     Yes(30), Yes(10)));
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
+                    interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
                         Yes(10), Yes(20)));
 
                     var deletedRosters = eventContext.GetSingleEvent<RosterInstancesRemoved>().Instances;

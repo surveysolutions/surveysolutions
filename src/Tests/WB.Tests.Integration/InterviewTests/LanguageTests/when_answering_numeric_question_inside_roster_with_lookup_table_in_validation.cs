@@ -33,10 +33,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var lookupId = Guid.Parse("dddddddddddddddddddddddddddddddd");
                 var userId = Guid.NewGuid();
 
-                var lookupTableContent = Create.LookupTableContent(new [] {"min", "max"},
-                    Create.LookupTableRow(1, new decimal?[] { 1.15m, 10}),
-                    Create.LookupTableRow(2, new decimal?[] { 1, 10}),
-                    Create.LookupTableRow(3, new decimal?[] { 1, 10})
+                var lookupTableContent = IntegrationCreate.LookupTableContent(new [] {"min", "max"},
+                    IntegrationCreate.LookupTableRow(1, new decimal?[] { 1.15m, 10}),
+                    IntegrationCreate.LookupTableRow(2, new decimal?[] { 1, 10}),
+                    IntegrationCreate.LookupTableRow(3, new decimal?[] { 1, 10})
                 );
 
                 var lookupTableServiceMock = new Mock<ILookupTableService>();
@@ -48,9 +48,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var assetsTitles = new[]
                 {
-                    Create.FixedTitle(1, "TV"),
-                    Create.FixedTitle(2, "Microwave"),
-                    Create.FixedTitle(3, "Cleaner")
+                    IntegrationCreate.FixedTitle(1, "TV"),
+                    IntegrationCreate.FixedTitle(2, "Microwave"),
+                    IntegrationCreate.FixedTitle(3, "Cleaner")
                 };
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
@@ -65,23 +65,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                             })
                     });
 
-                questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
+                questionnaire.LookupTables.Add(lookupId, IntegrationCreate.LookupTable("price"));
 
                 var interview = SetupInterview(questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, questionA, RosterVector.Empty, DateTime.Now, 1);
-                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(1), DateTime.Now, -30);
-                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(2), DateTime.Now, 35);
-                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(3), DateTime.Now, 300);
+                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(1), DateTime.Now, -30);
+                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(2), DateTime.Now, 35);
+                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(3), DateTime.Now, 300);
 
                     return new InvokeResult
                     {
                         IsQuestionAInValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionA)),
-                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(1m)))),
-                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(2m)))),
-                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(3m)))),
+                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(1m)))),
+                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(2m)))),
+                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(3m)))),
                     };
                 }
             });

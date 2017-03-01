@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(id: n1Id, variable: "n1"),
                     Abc.Create.Entity.NumericIntegerQuestion(id: n2Id, variable: "n2"),
-                    Create.Variable(id: variableId, variableName: "v1", expression: "n1+n2"),
+                    IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "n1+n2"),
                     Abc.Create.Entity.NumericIntegerQuestion(id: n3Id, variable: "n3", questionText: "title with %v1%"),
                 });
 
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.RemoveAnswer(n1Id, new decimal[0], userId, DateTime.Now);
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(n3Id)).ShouldEqual("title with [...]");
+            interview.GetTitleText(IntegrationCreate.Identity(n3Id)).ShouldEqual("title with [...]");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;
@@ -63,7 +63,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 children: new IComposite[]
                 {
                     Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
-                    Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                    IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);

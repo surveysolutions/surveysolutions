@@ -34,13 +34,13 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
-                    answeredOptions: new[] {Create.AnsweredYesNoOption(11m, true)},
+                    answeredOptions: new[] {IntegrationCreate.AnsweredYesNoOption(11m, true)},
                     answerTime: DateTime.UtcNow));
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
                     answeredOptions: new AnsweredYesNoOption[] {},

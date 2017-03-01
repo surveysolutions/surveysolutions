@@ -39,15 +39,15 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         rosterId: parentRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedRosterTitles: new FixedRosterTitle[] {
-                                Create.FixedTitle(1, "Parent 1"),
-                                Create.FixedTitle(2, "Parent 2") },
+                                IntegrationCreate.FixedTitle(1, "Parent 1"),
+                                IntegrationCreate.FixedTitle(2, "Parent 2") },
                         children: new IComposite[] {
                             Abc.Create.Entity.Roster(
                                 rosterId: rosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedTitle(3, "Roster 1"),
-                                    Create.FixedTitle(4, "Roster 2") },
+                                    IntegrationCreate.FixedTitle(3, "Roster 1"),
+                                    IntegrationCreate.FixedTitle(4, "Roster 2") },
                                 variable: "fixed_source",
                                 children: new IComposite[]
                                 {
@@ -58,8 +58,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                 rosterId: fixedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedTitle(5, "Item 1"),
-                                    Create.FixedTitle(6, "Item 2") },
+                                    IntegrationCreate.FixedTitle(5, "Item 1"),
+                                    IntegrationCreate.FixedTitle(6, "Item 2") },
                                 variable: "fix",
                                 children: new IComposite[]
                                 {

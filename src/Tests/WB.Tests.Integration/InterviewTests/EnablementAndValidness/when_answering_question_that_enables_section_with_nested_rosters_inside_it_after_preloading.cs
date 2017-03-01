@@ -43,10 +43,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     }));
 
-                var preloadedDataDto = Create.PreloadedDataDto(
-                    Create.PreloadedLevelDto(RosterVector.Empty, new Dictionary<Guid, AbstractAnswer> { { list1Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "Hello") }) } }),
-                    Create.PreloadedLevelDto(Create.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
-                    Create.PreloadedLevelDto(Create.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
+                var preloadedDataDto = IntegrationCreate.PreloadedDataDto(
+                    IntegrationCreate.PreloadedLevelDto(RosterVector.Empty, new Dictionary<Guid, AbstractAnswer> { { list1Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "Hello") }) } }),
+                    IntegrationCreate.PreloadedLevelDto(IntegrationCreate.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
+                    IntegrationCreate.PreloadedLevelDto(IntegrationCreate.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
 
                 var interview = SetupPreloadedInterview(preloadedDataDto, questionnaireDocument);
 
@@ -55,8 +55,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
                     return new InvokeResults
                     {
-                        TopRosterIsEnabled = interview.IsEnabled(Create.Identity(roster1Id, Create.RosterVector(1))),
-                        NestedRosterIsEnabled = interview.IsEnabled(Create.Identity(roster2Id, Create.RosterVector(1, 1)))
+                        TopRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster1Id, IntegrationCreate.RosterVector(1))),
+                        NestedRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster2Id, IntegrationCreate.RosterVector(1, 1)))
                     };
                 }
             });
