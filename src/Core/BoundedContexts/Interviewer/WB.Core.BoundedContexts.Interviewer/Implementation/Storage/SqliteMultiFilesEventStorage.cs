@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -475,6 +476,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 FloatParseHandling = FloatParseHandling.Decimal,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
+                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConvertor() }
             };
 
             private readonly IEventTypeResolver eventTypesResolver;

@@ -18,23 +18,23 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var dependentStaticTextOutsideRosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             var dependentStaticTextInsideRosterId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
 
-                Create.StaticText(dependentStaticTextOutsideRosterId,
-                    validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
+                 Abc.Create.Entity.StaticText(dependentStaticTextOutsideRosterId,
+                    validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
 
-                Create.Roster(fixedTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
+                Abc.Create.Entity.Roster(fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "one") }, children: new IComposite[]
                 {
-                    Create.StaticText(dependentStaticTextInsideRosterId,
-                        validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
+                     Abc.Create.Entity.StaticText(dependentStaticTextInsideRosterId,
+                        validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
                 })
             }));
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 0));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 0));
 
                 return new InvokeResults
                 {
@@ -42,14 +42,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(Create.Identity(dependentStaticTextOutsideRosterId))
+                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextOutsideRosterId))
                         ?? false,
 
                     WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticTextInsideRoster = 
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(Create.Identity(dependentStaticTextInsideRosterId, Create.RosterVector(1)))
+                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextInsideRosterId, IntegrationCreate.RosterVector(1)))
                         ?? false,
                 };
             }

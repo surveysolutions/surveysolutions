@@ -26,7 +26,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -201,11 +200,6 @@ namespace WB.Tests.Unit.Designer
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
                 Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICompilerSettings>());
-        }
-
-        public static CodeGeneratorV2 CodeGeneratorV2()
-        {
-            return new CodeGeneratorV2(new CodeGenerationModelsFactory());
         }
 
         public static QuestionProperties QuestionProperties()

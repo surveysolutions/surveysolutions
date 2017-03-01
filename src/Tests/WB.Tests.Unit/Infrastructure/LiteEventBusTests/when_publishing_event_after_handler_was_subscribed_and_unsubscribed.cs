@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests

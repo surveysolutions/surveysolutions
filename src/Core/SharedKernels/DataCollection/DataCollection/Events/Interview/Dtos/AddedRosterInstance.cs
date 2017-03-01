@@ -15,6 +15,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
             this.SortIndex = sortIndex;
         }
 
+        public static AddedRosterInstance CreateFromIdentityAndSortIndex(Identity identity, int? sortIndex)
+            => new AddedRosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1),
+                identity.RosterVector.Coordinates.Last(), sortIndex);
+
         public Identity GetIdentity()
         {
             var rosterVector = new RosterVector(this.OuterRosterVector.Concat(RosterInstanceId.ToEnumerable()));

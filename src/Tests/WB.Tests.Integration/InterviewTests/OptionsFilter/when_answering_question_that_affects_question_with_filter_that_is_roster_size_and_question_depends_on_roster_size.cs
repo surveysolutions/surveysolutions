@@ -26,20 +26,20 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option(value: "1", text: "Option 1"),
-                    Create.Option(value: "2", text: "Option 2"),
-                    Create.Option(value: "3", text: "Option 3"),
-                    Create.Option(value: "12", text: "Option 12"),
+                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
+                    Abc.Create.Entity.Option(value: "3", text: "Option 3"),
+                    Abc.Create.Entity.Option(value: "12", text: "Option 12"),
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
+                    Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
-                        Create.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
-                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
+                        Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
+                        Abc.Create.Entity.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
+                        Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
                     })
                 });
 
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerMultipleOptionsQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, new[] { 1, 2, 3 });
+                interview.AnswerMultipleOptionsQuestion(userId, q2Id, IntegrationCreate.RosterVector(1), DateTime.Now, new[] { 1, 2, 3 });
 
                 var result = new InvokeResults();
 

@@ -7,6 +7,7 @@ using MvvmCross.Test.Core;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
-            var interview = Unit.Setup.StatefulInterview(questionnaire);
+            var interview = Abc.Setup.StatefulInterview(questionnaire);
             interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
 
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);

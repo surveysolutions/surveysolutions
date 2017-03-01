@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,13 +13,13 @@ namespace WB.Tests.Integration.InterviewTests.Variables
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: n1Id, variable: "n1"),
-                    Create.NumericIntegerQuestion(id: n2Id, variable: "n2"),
-                    Create.Variable(id: variableId, variableName: "v1", expression: "n1+n2"),
-                    Create.NumericIntegerQuestion(id: n3Id, variable: "n3", title: "title with %v1%"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: n1Id, variable: "n1"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: n2Id, variable: "n2"),
+                    IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "n1+n2"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: n3Id, variable: "n3", questionText: "title with %v1%"),
                 });
 
             interview = SetupStatefullInterview(questionnaire);
@@ -37,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.RemoveAnswer(n1Id, new decimal[0], userId, DateTime.Now);
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(n3Id)).ShouldEqual("title with [...]");
+            interview.GetTitleText(IntegrationCreate.Identity(n3Id)).ShouldEqual("title with [...]");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;
@@ -58,11 +59,11 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.TextQuestion(id: textQuetionId, variable: "txt"),
-                    Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);

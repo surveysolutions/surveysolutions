@@ -3,6 +3,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
@@ -23,24 +24,24 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id:questionId, variable:"txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(Create.Identity(variableId), 6);
-                state.DisableVariables(new[] { Create.Identity(variableId)});
+                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId)});
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
                 };
             });
 

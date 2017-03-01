@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Establish context = () =>
         {
-            commandService = Create.CommandService();
+            commandService = Abc.Create.Service.CommandService();
         };
 
         Because of = () =>

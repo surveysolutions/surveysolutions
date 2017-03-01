@@ -7,6 +7,7 @@ using MvvmCross.Test.Core;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Setup.StatefulInterview(questionnaire);
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numericQuestionId, RosterVector.Empty, DateTime.UtcNow, 5);
-            interview.AnswerMultipleOptionsLinkedQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
+            interview.AnswerMultipleOptionsLinkedQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new RosterVector[]
             {
                 new decimal[] { 2 }, 
             });

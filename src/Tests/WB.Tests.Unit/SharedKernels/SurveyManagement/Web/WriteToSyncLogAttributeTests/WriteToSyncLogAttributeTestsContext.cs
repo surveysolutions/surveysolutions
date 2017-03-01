@@ -3,6 +3,7 @@ using System.Web.Http.Filters;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttributeTests

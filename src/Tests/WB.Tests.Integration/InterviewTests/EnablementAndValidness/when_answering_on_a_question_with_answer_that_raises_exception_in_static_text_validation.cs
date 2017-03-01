@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -25,24 +27,26 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a"),
-                            Create.StaticText(id: staticTextB, validationConditions: new [] { new ValidationCondition("10/a < 2", "err") }),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a"),
+                            Abc.Create.Entity.StaticText(publicKey: staticTextB, validationConditions: new List<ValidationCondition>{ new ValidationCondition("10/a < 2", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, -1, null, null
+                        ),
 
-                        Create.Event.StaticTextsDeclaredValid(new []{  Create.Identity(staticTextB) })
+                        Abc.Create.Event.StaticTextsDeclaredValid(IntegrationCreate.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, 0);
 
                     return new InvokeResult
                     {

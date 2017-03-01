@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
 {
@@ -58,7 +59,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         [Test]
         public void Should_return_answer_string_value_when_linked_multi_option_question_answered()
         {
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, this.linkedMultiOptionQuestionid, RosterVector.Empty, DateTime.Now, new[] { new decimal[] {0}});
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, this.linkedMultiOptionQuestionid, 
+                RosterVector.Empty, DateTime.Now, new RosterVector[] { new decimal[] {0}});
 
             var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedMultiOptionQuestionid));
             Assert.That(answerAsString, Is.EqualTo("zero"));

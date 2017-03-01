@@ -9,8 +9,10 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -40,17 +42,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster0" }});
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster0" }});
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0,0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0,1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0,0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0,1).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1,0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1,0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } });
 
-            interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).ToArray()));
+            interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray()));
 
             user = Mock.Of<UserDocument>();
             merger = CreateMerger(questionnaire);
@@ -66,23 +74,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         It should_first_option_of_linked_question_be_checked = () =>
             GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).AnswerString.ShouldEqual("1");
 
-        It should_answer_on_linked_question_be_roster_vector= () =>
-            GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Answer.ShouldEqual(Create.Entity.RosterVector(1));
+        It should_answer_on_linked_question_be_roster_vector = () =>
+            (GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Answer as decimal[]).Identical(Create.Entity.RosterVector(1));
 
         It should_question_linked_on_nested_roster_has_4_options = () =>
             GetQuestion(mergeResult, linkedOnNestedRosterQuestionId, new decimal[0]).Options.Select(x => x.Label).ShouldContainOnly("roster0: roster01", "roster0: roster02", "roster1: roster11", "roster1: roster12");
 
 
-        private static InterviewDataAndQuestionnaireMerger merger;
-        private static InterviewDetailsView mergeResult;
-        private static InterviewData interview;
-        private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        static InterviewDataAndQuestionnaireMerger merger;
+        static InterviewDetailsView mergeResult;
+        static InterviewData interview;
+        static QuestionnaireDocument questionnaire;
+        static UserDocument user;
         
-        private static Guid linkedQuestionId;
-        private static Guid linkedOnNestedRosterQuestionId;
-        private static Guid rosterId;
-        private static Guid nestedRosterId;
-        private static Guid interviewId;
+        static Guid linkedQuestionId;
+        static Guid linkedOnNestedRosterQuestionId;
+        static Guid rosterId;
+        static Guid nestedRosterId;
+        static Guid interviewId;
     }
 }
