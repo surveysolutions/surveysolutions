@@ -102,9 +102,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.ReplaceSubstitutions();
 
-            CalculateLinkedToListOptionsOnTree(this.Tree, false);
+            CalculateLinkedToListOptionsOnTree(this.Tree, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
+
+            this.Tree.ActualizeNodesInOrderCache();
 
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
@@ -168,8 +170,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         private InterviewTree sourceInterview;
-        
+
+        public DateTime? StartedDate => this.properties.StartedDate;
+        public DateTime? CompletedDate => this.properties.CompletedDate;
         public InterviewStatus Status => this.properties.Status;
+        public bool IsDeleted => this.properties.IsHardDeleted || this.Status == InterviewStatus.Deleted;
+
         public Guid Id => this.EventSourceId;
         public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
@@ -203,6 +209,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
 
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
+        
+        public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
 
         #region Command handlers
 
@@ -255,6 +263,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
 
+            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
+
             base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
                 command.UserId,
                 command.SynchronizedInterview.QuestionnaireId,
@@ -268,18 +278,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.CreatedOnClient
             );
 
-            this.SynchronizeInterview(command.UserId, command.SynchronizedInterview);
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
         }
-
-        internal void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
-        {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-        }
-
+        
         #endregion
 
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
@@ -321,10 +322,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
+        public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
+            => this.Tree.FindQuestionsFromSameOrDeeperLevel(entityId, questionIdentity);
+
         public bool IsQuestionPrefilled(Identity entityIdentity)
         {
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
+
+        public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
+            => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
             => this.Tree.GetQuestion(questionIdentity).Parents
@@ -445,6 +452,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 
+        
         public bool IsEntityValid(Identity identity)
         {
             var question = this.Tree.GetQuestion(identity);
@@ -528,5 +536,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 commentTime: commentDto.Date,
                 comment: commentDto.Text,
                 questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
+
+        public bool AcceptsInterviewerAnswers()
+        {
+            return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
+        }
     }
 }

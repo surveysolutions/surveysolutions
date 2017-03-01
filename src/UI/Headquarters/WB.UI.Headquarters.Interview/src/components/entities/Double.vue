@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @blur="answerDoubleQuestion"
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter decimal" title="Enter decimal" :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             v-numericFormatting="{aSep: formattingChar, mDec: countOfDecimalPlaces, vMin: '-999999999999999', vMax: '999999999999999', aPad: false }">
                         <wb-remove-answer />
                     </div>
@@ -29,19 +29,13 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
             answerDoubleQuestion(evnt) {
-
                 const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g,"").length > 15)
                 {
                     this.markAnswerAsNotSavedWithMessage('Entered value is bigger. Allow only 15 digits')
                     return
                 }
-
 
                 const answer = answerString != undefined && answerString != ''
                                 ? parseFloat(answerString)

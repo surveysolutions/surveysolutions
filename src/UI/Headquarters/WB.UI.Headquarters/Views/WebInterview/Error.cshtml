@@ -1,0 +1,12 @@
+﻿@using Recaptcha.Web.Mvc;
+@model WB.UI.Headquarters.Models.WebInterview.WebInterviewError
+@{
+    Layout = "_WebInterviewLayout.cshtml";
+    Response.StatusCode = 404;
+}
+<h1>
+    @WebInterview.WelcomeText
+</h1>
+<h3>
+    @Model.Message
+</h3>

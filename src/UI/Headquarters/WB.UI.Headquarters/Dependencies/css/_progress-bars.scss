@@ -7,7 +7,7 @@
 	}
 }
 .progress.question-progress{
-	height: 3px;
+	height: 5px;
 	background-color: transparent;
 	box-shadow: none;
 	@include absolute(null, 0, 0, 0);
@@ -41,7 +41,7 @@
 			display: block;
 			
 			margin-bottom: $margin-bottom;
-			@extend %uppercase-font;
+			@extend %uppercase-font; 
 			color: $gray_light;
 			&.error-text{
 				color: $red_error;

@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable
+    public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public SubstitionText Title { get; private set; }
 
@@ -18,9 +18,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Title = title;
             this.ValidationMessages = validationMessages ?? new SubstitionText[0];
+            this.FailedValidations = new List<FailedValidationCondition>();
         }
 
-        public bool IsValid => !this.FailedValidations?.Any() ?? true;
+        public bool IsValid => this.FailedValidations.Count == 0;
+
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
         public void SetTitle(SubstitionText title)
@@ -31,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void SetValidationMessages(SubstitionText[] validationMessages)
         {
+            if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;
             foreach (var validationMessage in validationMessages)
             {
@@ -44,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedValidations = failedValidations.ToReadOnlyCollection();
         }
         public void MarkValid()
-            => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+            => this.FailedValidations = new List<FailedValidationCondition>();
 
         public override string ToString()
             => $"StaticText {Identity} '{Title}'. " +
@@ -56,6 +59,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var clone = (InterviewTreeStaticText)this.MemberwiseClone();
             clone.Title = this.Title?.Clone();
             clone.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
+            clone.FailedValidations = this.FailedValidations
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
             return clone;
         }
 

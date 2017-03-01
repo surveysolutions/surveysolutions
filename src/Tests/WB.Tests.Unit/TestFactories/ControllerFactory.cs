@@ -21,13 +21,13 @@ namespace WB.Tests.Unit.TestFactories
             => new AttachmentsController(attachmentContentService);
 
         public QuestionnairesApiV1Controller InterviewerQuestionnaires(
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
+            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
             QuestionnaireDocument questionnaire = null,
             QuestionnaireBrowseItem questionnaireBrowseItem = null)
             => new QuestionnairesApiV1Controller(
-                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
                 Mock.Of<IQuestionnaireStorage>(_

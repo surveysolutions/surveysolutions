@@ -531,7 +531,7 @@ namespace WB.Tests.Unit.TestFactories
             => new InterviewTreeMultiOptionQuestion(answer);
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
-            string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
+            string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId = null,
             bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
             params int[] answers)
             => new MultyOptionsQuestion("Question MO")
@@ -545,6 +545,7 @@ namespace WB.Tests.Unit.TestFactories
                 MaxAllowedAnswers = maxAllowedAnswers,
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 YesNoView = isYesNo,
                 Answers = textAnswers?.ToList() ?? answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
                 Properties = new QuestionProperties(false, false)
@@ -1317,11 +1318,12 @@ namespace WB.Tests.Unit.TestFactories
             return question;
         }
 
-        private SubstitionText SubstitionText(Identity identity, string title)
+        public SubstitionText SubstitionText(Identity identity, 
+            string title,
+            SubstitutionVariables variables = null)
         {
-            return new SubstitionText(identity, title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
-
 
         public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
         {

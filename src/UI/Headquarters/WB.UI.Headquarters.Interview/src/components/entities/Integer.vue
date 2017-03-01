@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" class="field-to-fill" placeholder="Tap to enter number" :value="$me.answer" @blur="answerIntegerQuestion"
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter number" title="Enter number" :value="$me.answer" v-blurOnEnterKey @blur="answerIntegerQuestion"
                             v-numericFormatting="{aSep: formattingChar, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
                         <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
@@ -18,7 +18,8 @@
 <script lang="ts">
     import { entityDetails } from "components/mixins"
     import * as $ from "jquery"
-    import modal from "../Modal"
+    import modal from "../../modal"
+    import numerics from "../../numerics"
 
     export default {
         name: 'Integer',
@@ -29,13 +30,8 @@
             }
         },
         methods: {
-            markAnswerAsNotSavedWithMessage(message) {
-                const id = this.id
-                this.$store.dispatch("setAnswerAsNotSaved", { id, message })
-            },
-            answerIntegerQuestion(evnt) {
-
-                const answerString = $(evnt.target).autoNumeric('get')
+            async answerIntegerQuestion(evnt) {
+                const answerString = await numerics().get($(evnt.target))
                 const answer = answerString != undefined && answerString != ''
                                 ? parseInt(answerString)
                                 : null
@@ -82,7 +78,7 @@
                 const amountOfRostersToRemove = previousAnswer - answer;
                 const confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
-                modal.methods.confirm(confirmMessage,  result => {
+                modal.confirm(confirmMessage,  result => {
                     if (result) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                         return
@@ -107,7 +103,7 @@
                 var amountOfRostersToRemove = this.$me.answer;
                 var confirmMessage = `Are you sure you want to remove ${amountOfRostersToRemove} row(s) from each related roster?`
 
-                modal.methods.confirm(confirmMessage, result => {
+                modal.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
                     } else {

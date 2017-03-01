@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             var rosterIdentityKey = Util.GetRosterKey(GetParentRosterScopeIds(rosterId), rosterVector);
             var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
 
-            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(rosterStringKey)).ToArray();
+            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(rosterStringKey, StringComparison.Ordinal)).ToArray();
 
             foreach (var rosterKey in dependentRosters)
             {

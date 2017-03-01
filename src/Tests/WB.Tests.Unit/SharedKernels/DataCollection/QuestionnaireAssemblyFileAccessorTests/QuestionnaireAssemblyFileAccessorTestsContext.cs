@@ -6,12 +6,12 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
-    [Subject(typeof(QuestionnaireAssemblyFileAccessor))]
+    [Subject(typeof(QuestionnaireAssemblyAccessor))]
     class QuestionnaireAssemblyFileAccessorTestsContext
     {
-        protected static QuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor = null)
+        protected static QuestionnaireAssemblyAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
         {
-            return new QuestionnaireAssemblyFileAccessor(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "", "QuestionnaireAssembly");
+            return new QuestionnaireAssemblyAccessor(assemblyService ?? CreateIAssemblyService().Object);
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
@@ -19,6 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
             var result = new Mock<IFileSystemAccessor>();
             result.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
+            return result;
+        }
+
+        protected static Mock<IAssemblyService> CreateIAssemblyService()
+        {
+            var result = new Mock<IAssemblyService>();
+
             return result;
         }
     }

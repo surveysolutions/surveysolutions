@@ -9,5 +9,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public long QuestionnaireVersion { get; set; }
         public string WebInterviewLink { get; set; }
         public Guid? ResponsibleId { get; set; }
+        public bool UseCaptcha { get; set; }
     }
 }

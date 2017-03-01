@@ -88,8 +88,8 @@ namespace WB.UI.Interviewer.Infrastructure
                 return new NLogLogger("UNKNOWN");
             });
 
-            this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
-                kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
+            this.Bind<IQuestionnaireAssemblyAccessor>().ToConstructor(
+                kernel => new InterviewerQuestionnaireAssemblyAccessor(kernel.Inject<IFileSystemAccessor>(), 
                 kernel.Inject<ILogger>(), 
                 AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
             

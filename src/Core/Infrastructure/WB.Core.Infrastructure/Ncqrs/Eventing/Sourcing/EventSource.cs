@@ -132,10 +132,8 @@ namespace Ncqrs.Eventing.Sourcing
 
             //Legacy stuff...
             var sourcedEvent = evnt as ISourcedEvent;
-            if (sourcedEvent != null)
-            {
-                sourcedEvent.ClaimEvent(EventSourceId, eventSequence);
-            }
+            sourcedEvent?.ClaimEvent(this.EventSourceId, eventSequence);
+
             HandleEvent(wrappedEvent.Payload);
             OnEventApplied(wrappedEvent);
         }
@@ -149,8 +147,7 @@ namespace Ncqrs.Eventing.Sourcing
                 _currentVersion = _initialVersion;
             }
         
-            Interlocked.Increment(ref _currentVersion);
-            return _currentVersion;
+            return Interlocked.Increment(ref _currentVersion);
         }
 
         private void ApplyEventFromHistory(CommittedEvent evnt)

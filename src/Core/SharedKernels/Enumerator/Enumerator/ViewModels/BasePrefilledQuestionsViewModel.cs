@@ -29,8 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ILogger logger,
             IPrincipal principal,
             ICommandService commandService,
-            ICompositeCollectionInflationService compositeCollectionInflationService)
-            : base(principal, viewModelNavigationService, commandService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            VibrationViewModel vibrationViewModel)
+            : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException(nameof(interviewViewModelFactory));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -102,10 +103,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();
 
-        public void Dispose()
+        public override void Dispose()
         {
-            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
+            base.Dispose();
 
+            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
             foreach (var disposableItem in disposableItems)
             {
                 disposableItem.Dispose();

@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.RostersCount = rostersCount;
 
             var listItem = this.questionnaires.GetById(questionnaireId);
-            var sharedPersons = listItem.SharedPersons;
+            var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First()).ToList();
             
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.UserId == viewerId);
 
-            questionnaireInfoView.SharedPersons = sharedPersons.ToList();
+            questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
 

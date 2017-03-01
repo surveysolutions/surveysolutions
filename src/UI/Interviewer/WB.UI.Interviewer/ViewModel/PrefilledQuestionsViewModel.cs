@@ -3,7 +3,6 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -20,7 +19,8 @@ namespace WB.UI.Interviewer.ViewModel
             ILogger logger,
             IPrincipal principal,
             ICommandService commandService,
-            ICompositeCollectionInflationService compositeCollectionInflationService)
+            ICompositeCollectionInflationService compositeCollectionInflationService,
+            VibrationViewModel vibrationViewModel)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -29,7 +29,8 @@ namespace WB.UI.Interviewer.ViewModel
                 logger,
                 principal,
                 commandService,
-                compositeCollectionInflationService) {}
+                compositeCollectionInflationService,
+                vibrationViewModel) {}
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
 

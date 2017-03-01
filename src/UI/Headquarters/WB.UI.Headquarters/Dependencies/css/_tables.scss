@@ -1,7 +1,8 @@
 .table{
     color: $gray-text;
     width: 100% !important;
-    font: 16px/18px "RobotoRegular";
+    // font: 16px/18px "RobotoRegular";
+    font: 14px/16px Arial, sans-serif; 
     tr{
         .without-break{
             white-space: nowrap;
@@ -25,10 +26,43 @@
                     @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
                 }
             }
+            input.checkbox-filter{
+                & ~ label .tick{
+                    background-position: -43px 0;
+                }
+                & ~ label:hover .tick,
+                & ~ label:focus .tick{
+                    background-position: -43px -36px;
+                }
+                &:checked ~ label .tick {
+                    background-position: -43px -72px;
+                }
+                &:checked ~ label:hover .tick,
+                &:checked ~ label:focus .tick {
+                    background-position: -43px -108px;
+                }
+                &:disabled ~ label .tick,
+                &:checked:disabled ~ label .tick {
+                    background-position: -43px -144px;
+                }
+                &:disabled ~ label:hover .tick,
+                &:checked:disabled ~ label:hover .tick,
+                &:disabled ~ label:focus .tick,
+                &:checked:disabled ~ label:focus .tick {
+                    background-position: -43px -180px;
+                }
+            }
+            &:hover, &:focus, &:active{
+                td.without-break{
+                    &:before{
+                        @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
+                    }
+                }
+            }
         }
-        @include transition(all, 0.1s);
+        @include transition(all, 0.2s);
         td{
-            word-break: break-all;
+            /* word-break: break-all; */
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
@@ -43,7 +77,6 @@
             a, label, input, button{
                 cursor: not-allowed;
                 pointer-events: none;
-                
             }
             td{
                 &:hover, &:focus, &:active{
@@ -51,8 +84,7 @@
                         color: $gray_text !important;
                     }
                 }
-            }
-            
+            }   
         }
     }
     thead{
@@ -71,8 +103,8 @@
                 border-bottom: none;
                 border-top: none;
                 &.date{
-                    font: 13px/15px "TrebuchetMS";
-                    font-style: italic;
+                    font: 14px/16px "TrebuchetMS";
+                    // font-style: italic;
                 }
                 &.parameters{
                     font-family: "TrebuchetMSBold";
@@ -82,6 +114,10 @@
                         text-transform: none; 
                     }
                 } 
+                &.title-row{
+                    font-size: 18px;
+                    line-height: 20px;
+                }
                 padding: 15px;
                 vertical-align: middle;
                 height: 35px;
@@ -118,6 +154,13 @@
     }
     &> tbody > tr:nth-of-type(odd){
         background-color: #edeff0;
+        &.selected{
+            td.without-break{
+                &:before{
+                    @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
+                }
+            }
+        }
         td.without-break{
             &:before{
                 @include gradient-horizontal(transparent, #edeff0, 0%, 70%);
@@ -147,8 +190,13 @@
         padding-right: 25px !important;
         position: relative;
         cursor: pointer;
-        &.sorting_disabled:after{
-            display: none !important;
+        &.sorting_disabled{
+            &.sorting_desc, &.sorting_asc{
+                color: $gray_light;
+            }
+            &:after{
+                display: none !important;
+            }
         }
         &:focus, &:hover, &:active:focus{
             outline: none;
@@ -218,7 +266,7 @@
         tr{
             &:hover, &:focus{
                 background-color: $blue-super-light;
-                color: #000;
+                // color: #000;
                 a{
                     color: #000;
                 }
@@ -235,10 +283,16 @@
     thead tr, tbody tr{
         td, th{
             &.checkbox-cell{
+                min-width: 40px !important;
                 width: 40px !important;
-                max-width: 40px !important;
                 text-align: center;
-                padding: 10px 0 !important;
+                padding: 0;
+            }
+        }
+        th{
+            &.checkbox-cell{
+                padding-top: 12px;
+                padding-right: 0 !important;
             }
         }
     }
@@ -256,6 +310,9 @@
             } 
         }  
     }
+}
+.table-with-scroll{
+	overflow-x: auto;
 }
 .dataTables_wrapper{
     position: relative;
@@ -356,21 +413,27 @@
     }
 }
 .dataTables_processing{
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-    text-align: center;
-    height: 100%;
-    background: rgba(0,0,0, 0.1);
-    div{
-        background-color: white;
-        padding: 30px 40px;
-        display: inline-block;
-        font: 24px/26px "RobotoLight";
-        margin-top: 10px;
-        box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
+    @extend %loading-indicator;
+}
+.dataTables_scroll{
+    overflow-x: auto;
+    .dataTables_scrollHead{
+        .table{
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    .dataTables_scrollBody{
+        th{
+            border-top: none !important;
+            *{display: none;}
+            &:after{
+                display: none !important;
+            }
+        }
     }
 }
+
 @media (max-width: 1450px){
     .table-ordered{
         thead{
@@ -401,9 +464,6 @@
                 }
             }
         }
-    }
-    .dataTables_wrapper {
-        overflow-x: auto;
     }
 }
 @media (max-width: $screen-md-min){
@@ -587,3 +647,23 @@
         }
     }
 }
+.history{
+    td{
+        .comment{
+            padding-top: 10px;
+            h4{
+                margin-bottom: 5px;
+            }
+            p:last-of-type{
+                margin: 0;
+            }
+        }
+    }
+    td, th{
+        padding: 10px;
+        &:first-child{
+            min-width: 160px;
+        }
+    }
+  }
+

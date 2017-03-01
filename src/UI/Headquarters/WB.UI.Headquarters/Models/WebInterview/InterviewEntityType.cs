@@ -5,9 +5,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Group = 1,
         StaticText,
         CategoricalSingle,
+        Combobox,
         CategoricalMulti,
         CategoricalYesNo,
         Integer,
+        LinkedSingle,
         Double,
         DateTime,
         Gps,
@@ -17,6 +19,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Multimedia,
         TextQuestion,
         Unsupported,
-        NavigationButton
+        NavigationButton,
+        LinkedMulti
     }
 }

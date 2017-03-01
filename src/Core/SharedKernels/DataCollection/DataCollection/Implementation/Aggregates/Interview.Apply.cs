@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -41,44 +42,65 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(TextQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsText.SetAnswer(TextAnswer.FromString(@event.Answer));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsText.SetAnswer(TextAnswer.FromString(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(QRBarcodeQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(@event.Answer));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(PictureQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.RosterVector, @event.PictureFileName);
         }
 
         public virtual void Apply(NumericRealQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDouble.SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsDouble.SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.RosterVector, (double)@event.Answer);
         }
 
         public virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(DateTimeQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(SingleOptionQuestionAnswered @event)
         {
-            var question = this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            var question = this.Tree.GetQuestion(questionIdentity);
 
             question.AsSingleFixedOption?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
             question.AsSingleLinkedToList?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
@@ -88,7 +110,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
-            var question =  this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            var question =  this.Tree.GetQuestion(questionIdentity);
+
             question.AsMultiFixedOption?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
             question.AsMultiLinkedToList?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
@@ -97,14 +123,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(YesNoQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions).ToYesNoAnswersOnly());
         }
 
         public virtual void Apply(GeoLocationQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
                     @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp)));
 
             this.ExpressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.RosterVector, @event.Latitude,
@@ -113,20 +145,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(TextListQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.RosterVector, @event.Answers);
         }
 
         public virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
             this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
         }
 
         public virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray(@event.SelectedRosterVectors));
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray(@event.SelectedRosterVectors));
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVectors);
         }
 
@@ -363,6 +402,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(InterviewCompleted @event)
         {
             this.properties.WasCompleted = true;
+            this.properties.CompletedDate = @event.CompleteTime;
         }
 
         public virtual void Apply(InterviewRestarted @event) { }

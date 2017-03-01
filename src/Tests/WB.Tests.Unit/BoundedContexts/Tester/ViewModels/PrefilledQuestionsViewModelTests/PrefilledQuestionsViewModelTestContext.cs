@@ -3,11 +3,14 @@ using MvvmCross.Test.Core;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsViewModelTests
 {
@@ -24,7 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             IViewModelNavigationService viewModelNavigationService = null,
             ILogger logger = null,
             IPrincipal principal = null,
-            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+            ICompositeCollectionInflationService compositeCollectionInflationService = null,
+            VibrationViewModel vibrationViewModel = null)
         {
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
@@ -34,7 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 logger ?? Mock.Of<ILogger>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 Mock.Of<ICommandService>(),
-                Mock.Of<ICompositeCollectionInflationService>());
+                Mock.Of<ICompositeCollectionInflationService>(),
+                vibrationViewModel ?? Create.ViewModel.VibrationViewModel());
         }
     }
 }

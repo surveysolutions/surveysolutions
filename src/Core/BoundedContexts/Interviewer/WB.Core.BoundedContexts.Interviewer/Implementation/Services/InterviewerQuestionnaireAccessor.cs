@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
             IOptionsRepository optionsRepository, 

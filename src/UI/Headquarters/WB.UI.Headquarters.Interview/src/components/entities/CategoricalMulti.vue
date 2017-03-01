@@ -1,23 +1,24 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'">
+    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'ordered-question' : 'multiselect-question'" :noAnswer="noOptions">
+        <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
         <div class="question-unit">
-            <div class="options-group">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="form-group" v-for="option in $me.options">
                     <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer"
                         v-disabledWhenUnchecked="allAnswersGiven">
-                    <label :for="$me.id + '_' + option.value">
+                        <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
-                    <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
+                        <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
+                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
             </div>
         </div>
     </wb-question>
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
-    import * as $ from "jquery"
-    import modal from "../Modal"
+    import modal from "../../modal"
 
     export default {
         name: 'CategoricalMulti',
@@ -27,9 +28,8 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    if (!this.$me.isRosterSize)
-                    {
-                        this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+                    if (!this.$me.isRosterSize) {
+                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
                         return;
                     }
 
@@ -37,17 +37,16 @@
                     const previousAnswersCount = this.$me.answer.length;
                     const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
 
-                    if (!isNeedRemoveRosters)
-                    {
-                        this.$store.dispatch('answerMutliOptionQuestion', { answer: value, questionId: this.$me.id });
+                    if (!isNeedRemoveRosters) {
+                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, questionId: this.$me.id });
                         return;
                     }
 
                     const confirmMessage = 'Are you sure you want to remove related roster?';
 
-                    modal.methods.confirm(confirmMessage,  result => {
+                    modal.confirm(confirmMessage, result => {
                         if (result) {
-                            this.$store.dispatch("answerMutliOptionQuestion", { answer: value, questionId: this.$me.id })
+                            this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
                             return;
                         } else {
                             this.fetch()
@@ -56,23 +55,20 @@
                     })
                 }
             },
+            noOptions() {
+                return this.$me.options == null || this.$me.options.length == 0
+            },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
             }
         },
         methods: {
-            getAnswerOrder(answerValue){
+            getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)
-                return  answerIndex > -1 ? answerIndex + 1 : ""
-            }
-        },
-        directives: {
-            disabledWhenUnchecked: {
-                update: (el, binding) => {
-                    $(el).prop("disabled", binding.value && !el.checked)
-                }
+                return answerIndex > -1 ? answerIndex + 1 : ""
             }
         },
         mixins: [entityDetails]
     }
+
 </script>

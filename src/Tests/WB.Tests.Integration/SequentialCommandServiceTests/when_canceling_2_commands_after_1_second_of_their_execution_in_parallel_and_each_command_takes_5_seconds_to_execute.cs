@@ -22,7 +22,8 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             }
 
             public Guid CommandIdentifier { get; private set; }
-            public string Name { get; private set; }
+            public string Name { get; }
+            public Guid AggregateId { get; } = Guid.NewGuid();
         }
 
         private class Aggregate : EventSourcedAggregateRoot
@@ -38,10 +39,10 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .Handles<StoreNameFor5Seconds>(_ => aggregateId, aggregate => aggregate.StoreNameFor5Seconds);
+                .Handles<StoreNameFor5Seconds>(command => command.AggregateId, aggregate => aggregate.StoreNameFor5Seconds);
 
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
-                => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
+                => _.GetLatest(typeof(Aggregate), Moq.It.IsAny<Guid>()) == new Aggregate());
 
             commandService = Create.SequentialCommandService(repository: repository);
         };
@@ -70,6 +71,5 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
 
         private static List<string> executedCommands = new List<string>();
         private static SequentialCommandService commandService;
-        private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
     }
 }

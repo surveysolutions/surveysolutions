@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -21,6 +15,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
     {
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IPlainAggregateRootRepository plainRepository;
+        private readonly IAggregateLock aggregateLock;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
@@ -32,16 +27,18 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         public CommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
-            ILiteEventBus eventBus, 
+            ILiteEventBus eventBus,
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator,
-            IPlainAggregateRootRepository plainRepository)
+            IPlainAggregateRootRepository plainRepository,
+            IAggregateLock aggregateLock)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
             this.serviceLocator = serviceLocator;
             this.plainRepository = plainRepository;
+            this.aggregateLock = aggregateLock;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -130,25 +127,28 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            switch (aggregateKind)
+            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
-                case AggregateKind.EventSourced:
-                    this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, preProcessors, postProcessors, commandHandler, cancellationToken);
-                    break;
+                switch (aggregateKind)
+                {
+                    case AggregateKind.EventSourced:
+                        this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, preProcessors, postProcessors, commandHandler, cancellationToken);
+                        break;
 
-                case AggregateKind.Plain:
-                    this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, preProcessors, postProcessors, commandHandler, cancellationToken);
-                    break;
+                    case AggregateKind.Plain:
+                        this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, preProcessors, postProcessors, commandHandler, cancellationToken);
+                        break;
 
-                default:
-                    throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
-            }
+                    default:
+                        throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
+                }
+            });
         }
 
-        private void ExecuteEventSourcedCommand(ICommand command, 
+        private void ExecuteEventSourcedCommand(ICommand command,
             string origin,
-            Type aggregateType, 
-            Guid aggregateId, 
+            Type aggregateType,
+            Guid aggregateId,
             IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             IEnumerable<Action<IAggregateRoot, ICommand>> preProcessors,
             IEnumerable<Action<IAggregateRoot, ICommand>> postProcessors,
@@ -173,7 +173,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 if (!CommandRegistry.IsInitializer(command))
                     throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
-                aggregate = (IEventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+                aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
             }
 
@@ -198,18 +198,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
-            IEnumerable<CommittedEvent> commitedEvents;
-            try
-            {
-                commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
-                aggregate.MarkChangesAsCommitted();
-            }
-            catch (Exception)
-            {
-                var cachedRepository = this.eventSourcedRepository as EventSourcedAggregateRootRepositoryWithExtendedCache;
-                cachedRepository?.Evict(aggregate);
-                throw;
-            }
+            var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            aggregate.MarkChangesAsCommitted();
 
             try
             {
@@ -239,7 +229,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 if (!CommandRegistry.IsInitializer(command))
                     throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
-                aggregate = (IPlainAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+                aggregate = (IPlainAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
             }
 

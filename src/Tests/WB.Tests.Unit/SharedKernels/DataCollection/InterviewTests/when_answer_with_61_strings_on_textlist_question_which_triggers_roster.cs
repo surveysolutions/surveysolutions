@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -8,9 +10,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_with_61_strings_on_textlist_question_which_triggers_roster : InterviewTestsContext
+    internal class when_answer_with_61_strings_on_textlist_question_which_triggers_short_roster : InterviewTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
@@ -19,8 +21,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextListQuestion(questionId: rosterSizeQuestionId),
-                Create.Entity.Roster(rosterId: Guid.Parse("11111111111111111111111111111111"),
-                    rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
+                Create.Entity.FixedRoster(children: new List<IComposite>
+                {
+                    Create.Entity.FixedRoster(children: new List<IComposite>
+                    {
+                        Create.Entity.Roster(
+                            rosterId: Guid.Parse("11111111111111111111111111111111"),
+                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            rosterSizeQuestionId: rosterSizeQuestionId)
+                    })
+                }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));

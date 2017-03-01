@@ -115,6 +115,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable spam protection.
+        /// </summary>
+        public static string UseCaptcha {
+            get {
+                return ResourceManager.GetString("UseCaptcha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To start web interview select interviewer that is going to be used as assignee.
         /// </summary>
         public static string WebInterviewSetup_Description {

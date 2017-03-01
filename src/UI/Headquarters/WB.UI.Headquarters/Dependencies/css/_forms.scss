@@ -5,34 +5,35 @@
 @include placeholder {
     font-weight: normal !important;
     font-style: italic;
+    color: $gray_light !important;
 }
 input.wb-checkbox{
     display: none;
     @extend %questionnaire-sprite;
     & ~ label:hover .tick,
   	& ~ label:focus .tick{
-    	background-position: -37px 0px;
+    	background-position: -37px 2px;
   	}
   	&:checked ~ label .tick {
-    	background-position: -78px 0px;
+    	background-position: -78px 2px;
   	}
   	&:checked ~ label:hover .tick,
   	&:checked ~ label:focus .tick {
-    	background-position: -119px 0px;
+    	background-position: -119px 2px;
   	}
   	&:disabled ~ label .tick {
-    	background-position: -160px 0px;
+    	background-position: -160px 2px;
   	}
   	&:disabled ~ label:hover .tick,
   	&:disabled ~ label:focus .tick{
-    	background-position: -201px 0px;
+    	background-position: -201px 2px;
   	}
   	&:checked:disabled ~ label .tick{
-    	background-position: -242px 0px;
+    	background-position: -242px 2px;
   	}
   	&:checked:disabled ~ label:hover .tick,
   	&:checked:disabled ~ label:focus .tick{
-    	background-position: -283px 0px;
+    	background-position: -283px 2px;
   	}
 }
 input.checkbox-filter{
@@ -144,32 +145,32 @@ input.double-checkbox-white{
             color:  $gray_text;
             font-weight: bold;
         }
-       	& + label .tick {background-position: -324px 0px;}
+       	& + label .tick {background-position: -326px 2px;}
 
 	    & + label:hover .tick,
 	  	& + label:focus .tick{
-	    	background-position: -365px 0px;
+	    	background-position: -367px 2px;
 	  	}
 	  	&:checked + label .tick {
-	    	background-position: -406px 0px;
+	    	background-position: -408px 2px;
 	  	}
 	  	&:checked + label:hover .tick,
 	  	&:checked + label:focus .tick {
-	    	background-position: -447px 0px;
+	    	background-position: -449px 2px;
 	  	}
 	  	&:disabled + label .tick {
-	    	background-position: -570px 0px;
+	    	background-position: -572px 2px;
 	  	}
 	  	&:disabled + label:hover .tick,
 	  	&:disabled + label:focus .tick{
-	    	background-position: -611px 0px;
+	    	background-position: -613px 2px;
 	  	}
 	  	&:checked:disabled + label .tick{
-	    	background-position: -488px 0px;
+	    	background-position: -490px 2px;
 	  	}
 	  	&:checked:disabled + label:hover .tick,
 	  	&:checked:disabled + label:focus .tick{
-	    	background-position: -529px 0px;
+	    	background-position: -531px 2px;
 	  	}
     }
 }
@@ -183,7 +184,7 @@ input.double-checkbox-white{
 	width: 315px; 
 	.form-control{
 		border-color: $gray_form;
-/* 		box-shadow: none; */
+		border-right: none;
 		input {
 			ul{
 				width: 100%;
@@ -194,17 +195,12 @@ input.double-checkbox-white{
 	}
 	.input-group-btn .btn{
 		height: $input-height-base;
-		border-color: $gray-form;
+		border-color: darken($gray-form, 11%);
 		span{
 			$cross-height: 16px;
 			@include cancel($cross-height);
 			padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)/2 0;
 		}
-	}
-}
-.filters{
-	.input-group{
-		width: 295px;
 	}
 }
 .bootstrap-select.btn-group{

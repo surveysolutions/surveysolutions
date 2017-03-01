@@ -1,5 +1,7 @@
 <template>
+
     <div class="unit-section" :class="sectionClass">
+        <SectionLoadingProgress />
         <Breadcrumbs />
         <component v-for="entity in entities" :key="entity.identity" v-bind:is="entity.entityType" v-bind:id="entity.identity"></component>
     </div>
@@ -7,7 +9,8 @@
 
 <script lang="ts">
     import * as Vue from 'vue'
-    import Breadcrumbs from "./Breadcrumbs"
+    import * as debounce from "lodash/debounce"
+    import SectionProgress from "./SectionLoadProgress"
 
     export default {
         name: 'section-view',
@@ -15,14 +18,32 @@
             this.loadSection()
         },
         watch: {
-            $route(from, to) {
+            $route(to, from) {
                 this.loadSection()
+            },
+            fetchProgress(to, from) {
+                if (to === 0) {
+                    this.scroll()
+                } else {
+                    // cancel scroll - there is still some fetch activity occure
+                    this.scroll.cancel()
+                }
             }
         },
-        components: { Breadcrumbs },
+        data: () => {
+            return {
+                // scrolls current section view when all fetch actions are done
+                scroll: debounce(function () {
+                    this.$store.dispatch("scroll")
+                }, 300)
+            }
+        },
         computed: {
             entities() {
                 return this.$store.state.entities
+            },
+            fetchProgress() {
+                return this.$store.state.fetch.inProgress
             },
             info() {
                 return this.$store.state.breadcrumbs
@@ -38,14 +59,14 @@
                 }
                 return []
             }
-            // showBreadcrumbs() {
-            //     return this.info != null
-            // }
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("fetchSection")
+                this.$store.dispatch("fetchSectionEntities")
             }
+        },
+        components: {
+            SectionLoadingProgress: SectionProgress
         }
     }
 </script>

@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 Times.Never());
 
         private static CommandService commandService;
-        private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static Mock<IAggregateSnapshotter> snapshooterMock = new Mock<IAggregateSnapshotter>();
         private static Aggregate aggregateFromRepository;
         private static Mock<IEventBus> eventBusMock = new Mock<IEventBus>();

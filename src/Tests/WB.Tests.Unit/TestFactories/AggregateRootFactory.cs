@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.TestFactories
             IPlainStorageAccessor<TranslationInstance> translationsStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
@@ -73,6 +73,17 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireId: Guid.NewGuid(),
                 questionnaireVersion: 1));
 
+            return interview;
+        }
+
+        public StatefulInterview StatefulInterview(Guid interviewId, 
+            Guid? questionnaireId = null,
+            Guid? userId = null,
+            IQuestionnaire questionnaire = null,
+            bool shouldBeInitialized = true)
+        {
+            var interview = this.StatefulInterview(questionnaireId, userId, questionnaire, shouldBeInitialized);
+            interview.SetId(interviewId);
             return interview;
         }
 

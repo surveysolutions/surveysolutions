@@ -132,6 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
                 dataExportView.CanRefreshBeRequested = (process == null);
                 dataExportView.DataExportProcessId = process?.DataExportProcessId;
+                dataExportView.ProgressInPercents = process?.Progress ?? 0;
             }
 
             string path = string.Empty;

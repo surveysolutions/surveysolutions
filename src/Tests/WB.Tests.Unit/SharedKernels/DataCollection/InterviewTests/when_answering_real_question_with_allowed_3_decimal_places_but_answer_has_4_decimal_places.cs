@@ -49,8 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Because of = () => expectedException = Catch.Exception(() =>
             interview.AnswerNumericRealQuestion(userId, realQuestionId, new decimal[] { }, DateTime.Now, 0.1234));
 
-        It should_throw_InterviewException = () =>
-            expectedException.ShouldBeOfExactType(typeof (InterviewException));
+        It should_throw_AnswerNotAcceptedException = () =>
+            expectedException.ShouldBeOfExactType(typeof (AnswerNotAcceptedException));
+
+        It should_throw_exception_with_specific_words = () =>
+            expectedException.Message.ToSeparateWords().ShouldContain("allowed", "decimal", "places");
 
         private static Exception expectedException;
         private static Guid realQuestionId;

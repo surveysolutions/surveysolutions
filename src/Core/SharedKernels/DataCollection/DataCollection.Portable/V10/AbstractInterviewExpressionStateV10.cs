@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             var rosterStringKey = Util.GetRosterStringKey((rosterIdentityKey));
 
             var dependentRosters = this.InterviewScopes.Keys
-                .Where(x => x.StartsWith(rosterStringKey))
+                .Where(x => x.StartsWith(rosterStringKey, StringComparison.Ordinal))
                 .ToArray();
 
             foreach (var rosterKey in dependentRosters)
@@ -248,7 +248,21 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             var areLinkedAndSourceQuestionsOnSameLevel = SequenceEqualByIdentityId(linkedRosterScopeIds, sourceRosterScopeIds);
             if (areLinkedAndSourceQuestionsOnSameLevel)
-                return true;
+            {
+                if (sourceRosterVector.Length == linkedRosterVector.Length && linkedRosterVector.Length > 0)
+                {
+                    var linkedParentRosterVector = linkedRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
+                    var sourceParentRosterVector = sourceRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
+
+                    var doesScopesHasTheSameParent = sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
+                    if (doesScopesHasTheSameParent)
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
 
             int commonRosterLevel = this.GetCommonRosterLevel(linkedRosterScopeIds, sourceRosterScopeIds);
             var hasLinkedAndSourceQuestionsCommonParents = commonRosterLevel != 0;

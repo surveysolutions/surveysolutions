@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.ModelState.AddModelError(string.Empty, ErrorMessages.SiteAccessNotAllowed);
                 else
                 {
-                    this.authentication.SignIn(model.UserName, false);
+                    this.authentication.SignIn(model.UserName, true);
                     return this.RedirectToLocal(returnUrl);
                 }
             }
@@ -173,7 +173,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!targetUserInValidRole) 
                 throw new HttpException(404, string.Empty);
             
-            this.authentication.SignIn(currentUserIdentity.ObserverName, false);
+            this.authentication.SignIn(currentUserIdentity.ObserverName, true);
             return this.RedirectToAction("Index", "Headquarters");
         }
 

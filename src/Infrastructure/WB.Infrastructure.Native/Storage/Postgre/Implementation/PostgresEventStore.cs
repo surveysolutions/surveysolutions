@@ -12,7 +12,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    public class PostgresEventStore : IStreamableEventStore
+    public class PostgresEventStore  : IStreamableEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
         private static long lastUsedGlobalSequence = -1;
@@ -34,30 +34,46 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            int processed = 0;
+            IEnumerable<CommittedEvent> batch;
+            do
+            {
+                batch = this.ReadBatch(id, minVersion, processed).ToList();
+                foreach (var @event in batch)
+                {
+                    processed++;
+                    yield return @event;
+                }
+            } while (batch.Any());
+        }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            => this.Read(id, minVersion);
+
+        private IEnumerable<CommittedEvent> ReadBatch(Guid id, int minVersion, int processed)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= {minVersion} ORDER BY eventsequence";
+                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence LIMIT :batchSize OFFSET :processed";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
+                    command.Parameters.AddWithValue("minVersion", minVersion);
+                    command.Parameters.AddWithValue("batchSize", BatchSize);
+                    command.Parameters.AddWithValue("processed", processed);
 
-                    using (IDataReader npgsqlDataReader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
-                        while (npgsqlDataReader.Read())
+                        while (reader.Read())
                         {
-                            var commitedEvent = this.ReadSingleEvent(npgsqlDataReader);
-
-                            yield return commitedEvent;
+                            yield return this.ReadSingleEvent(reader);
                         }
                     }
                 }
             }
         }
-
-        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
-            => this.Read(id, minVersion);
 
         public int? GetLastEventSequence(Guid id)
         {
@@ -101,14 +117,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
                             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
-                        var nextSequnce = this.GetNextSequnce();
+                        var nextSequence = this.GetNextSequence();
 
                         writer.StartRow();
                         writer.Write(@event.EventIdentifier, NpgsqlDbType.Uuid);
                         writer.Write(@event.Origin, NpgsqlDbType.Text);
                         writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
                         writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
-                        writer.Write(nextSequnce, NpgsqlDbType.Integer);
+                        writer.Write(nextSequence, NpgsqlDbType.Integer);
                         writer.Write(eventString, NpgsqlDbType.Json);
                         writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
                         writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
@@ -119,7 +135,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                             @event.EventSourceId,
                             @event.EventSequence,
                             @event.EventTimeStamp,
-                            nextSequnce,
+                            nextSequence,
                             @event.Payload);
                         result.Add(committedEvent);
                     }
@@ -173,7 +189,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 conn.Open();
 
                 var npgsqlCommand = conn.CreateCommand();
-                npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
+                npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
+                npgsqlCommand.Parameters.AddWithValue("processed", processed);
 
                 using (var reader = npgsqlCommand.ExecuteReader())
                 {
@@ -206,7 +224,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 while (processed < eventsCountAfterPosition)
                 {
                     var npgsqlCommand = connection.CreateCommand();
-                    npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > {globalSequence} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                    npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
+                    npgsqlCommand.Parameters.AddWithValue("globalSequence", globalSequence);
+                    npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
+                    npgsqlCommand.Parameters.AddWithValue("processed", processed);
 
                     List<CommittedEvent> events = new List<CommittedEvent>();
 
@@ -280,7 +301,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return commitedEvent;
         }
 
-        private long GetNextSequnce()
+        private long GetNextSequence()
         {
             if (lastUsedGlobalSequence == -1)
             {
@@ -293,8 +314,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
 
-            Interlocked.Increment(ref lastUsedGlobalSequence);
-            return lastUsedGlobalSequence;
+            return Interlocked.Increment(ref lastUsedGlobalSequence);
         }
 
         private void FillLastUsedSequenceInEventStore()

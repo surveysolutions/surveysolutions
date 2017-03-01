@@ -43,3 +43,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("PerformanceTest")]
 [assembly: InternalsVisibleTo("event-store-scanner")]
 [assembly: InternalsVisibleTo("EventStoreToPlainStorageMigrator")]
+[assembly: InternalsVisibleTo("A2DB")]

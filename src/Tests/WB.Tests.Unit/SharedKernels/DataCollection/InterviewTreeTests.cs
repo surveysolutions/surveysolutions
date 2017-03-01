@@ -581,6 +581,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(ReferenceEquals(clonedQuestion.AsQRBarcode, question.AsQRBarcode), Is.False);
         }
 
+        private bool IsEmptyArray(object obj)
+        {
+            if (obj == null) return false;
+            return obj.GetType().IsArray && ((object[]) obj).Length == 0;
+        }
+
         [Test]
         public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_dif_references_for_all_tree()
         {
@@ -611,7 +617,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     if (sourceValue == null && clonedValue == null)
                         continue;
 
-                    Assert.That(ReferenceEquals(sourceValue, clonedValue), Is.False);
+                    if(IsEmptyArray(sourceValue) && IsEmptyArray(clonedValue))
+                        continue;
+                    
+                    Assert.IsFalse(ReferenceEquals(sourceValue, clonedValue));
                 }
 
                 var fields = nodeType.GetFields();

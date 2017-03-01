@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -74,15 +75,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.fileSystemAccessor);
         }
 
-        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
+        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            if (!this.fileSystemAccessor.IsFileExists(pathToAssembly))
-                return this.backwardCompatibleAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+            if (this.fileSystemAccessor.IsFileExists(pathToAssembly))
+                return pathToAssembly;
 
-            return pathToAssembly;
+            var oldPath = this.backwardCompatibleAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+
+            return this.fileSystemAccessor.IsFileExists(oldPath) ? oldPath : string.Empty;
+        }
+
+        public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
+        {
+            var path = CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            //please don't use LoadFile or Load here, but use LoadFrom
+            //dependent assemblies could not be resolved
+            return Assembly.LoadFrom(path);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
@@ -163,7 +177,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            return this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
+            return string.IsNullOrEmpty(this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion));
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)

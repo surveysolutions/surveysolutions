@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
+using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
-using ImageResizer;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.Resources
 {
+    [Localizable(false)]
     [AllowAnonymous]
     public class CompanyLogoController : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+        private readonly IImageProcessingService imageProcessingService;
         private const int defaultImageHeightToScale = 329;
         private const int defaultImageWidthToScale = 365;
 
-        public CompanyLogoController(IPlainKeyValueStorage<CompanyLogo> logoStorage)
+        public CompanyLogoController(IPlainKeyValueStorage<CompanyLogo> logoStorage, IImageProcessingService imageProcessingService)
         {
             this.logoStorage = logoStorage;
+            this.imageProcessingService = imageProcessingService;
         }
 
         [HttpGet]
@@ -41,7 +43,7 @@ namespace WB.UI.Headquarters.API.Resources
 
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new ByteArrayContent(GetTrasformedContent(companyLogo, defaultImageHeightToScale, defaultImageWidthToScale))
+                    Content = new ByteArrayContent(imageProcessingService.ResizeImage(companyLogo, defaultImageHeightToScale, defaultImageWidthToScale))
                 };
 
                 response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(@"image/png");
@@ -50,7 +52,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return response;
             }
 
-            return Request.CreateResponse(HttpStatusCode.NoContent);
+            return Request.CreateResponse(HttpStatusCode.NotFound);
         }
 
         private string GetEtagValue(byte[] bytes)
@@ -60,27 +62,6 @@ namespace WB.UI.Headquarters.API.Resources
                 var computeHash = hasher.ComputeHash(bytes);
                 string hash = BitConverter.ToString(computeHash).Replace("-", "");
                 return hash;
-            }
-        }
-
-        private static byte[] GetTrasformedContent(byte[] source, int? height = null, int? width = null)
-        {
-            if (!height.HasValue || !width.HasValue) return source;
-
-            //later should handle video and produce image preview 
-            using (var outputStream = new MemoryStream())
-            {
-                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
-                {
-                    MaxWidth = height.Value,
-                    MaxHeight = width.Value,
-                    Format = "png",
-                    Mode = FitMode.Pad,
-                    PaddingColor = Color.Transparent,
-                    Anchor = ContentAlignment.MiddleCenter
-                });
-
-                return outputStream.ToArray();
             }
         }
     }

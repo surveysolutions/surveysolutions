@@ -28,6 +28,7 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -60,8 +61,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Unit.SharedKernels.DataCollection;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -82,7 +81,8 @@ namespace WB.Tests.Unit.TestFactories
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
-                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>());
+                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
+                new AggregateLock());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
@@ -120,6 +120,20 @@ namespace WB.Tests.Unit.TestFactories
         public EventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
+
+        public EventSourcedAggregateRootRepositoryWithCache EventSourcedAggregateRootRepositoryWithCache(
+            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithCache(
+                eventStore ?? Mock.Of<IEventStore>(),
+                snapshotStore ?? Mock.Of<ISnapshotStore>(),
+                repository ?? Mock.Of<IDomainRepository>());
+
+        public EventSourcedAggregateRootRepositoryWithExtendedCache EventSourcedAggregateRootRepositoryWithExtendedCache(
+            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithExtendedCache(
+                eventStore ?? Mock.Of<IEventStore>(),
+                snapshotStore ?? Mock.Of<ISnapshotStore>(),
+                repository ?? Mock.Of<IDomainRepository>());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
@@ -311,5 +325,11 @@ namespace WB.Tests.Unit.TestFactories
             return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
                 featuredQuestions ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
         }
+
+        public PlainPostgresTransactionManager PlainPostgresTransactionManager(ISessionFactory sessionFactory = null)
+            => new PlainPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
+
+        public CqrsPostgresTransactionManager CqrsPostgresTransactionManager(ISessionFactory sessionFactory = null)
+            => new CqrsPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
     }
 }

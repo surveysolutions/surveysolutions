@@ -258,13 +258,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             ZlpIOHelper.SetFileAttributes(pathToFile, ZetaLongPaths.Native.FileAttributes.Readonly);
         }
 
-        public Assembly LoadAssembly(string assemblyFile)
-        {
-            //please don't use LoadFile or Load here, but use LoadFrom
-            //dependent assemblies could not be resolved
-            return Assembly.LoadFrom(assemblyFile);
-        }
-
         public bool IsWritePermissionExists(string path)
         {
             if (string.IsNullOrEmpty(path) || !Directory.Exists(path))

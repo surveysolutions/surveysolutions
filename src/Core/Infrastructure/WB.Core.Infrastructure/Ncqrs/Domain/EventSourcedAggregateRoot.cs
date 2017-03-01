@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain
@@ -52,7 +51,7 @@ namespace Ncqrs.Domain
 
         public bool HasUncommittedChanges() => this.changes.Any();
 
-        public IEnumerable<UncommittedEvent> GetUnCommittedChanges()
+        public List<UncommittedEvent> GetUnCommittedChanges()
         {
             return this.changes.ToList();
         }
@@ -64,6 +63,7 @@ namespace Ncqrs.Domain
 
         public void MarkChangesAsCommitted()
         {
+            this.AcceptChanges();
             this.changes.Clear();
         }
     }
