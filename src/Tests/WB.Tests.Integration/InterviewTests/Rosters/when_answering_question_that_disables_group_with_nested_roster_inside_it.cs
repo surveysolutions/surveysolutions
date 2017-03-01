@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         fixedRosterTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                            Abc.Create.Entity.Group(groupId, variable: "q1 == 1", children: new IComposite[]
+                            Abc.Create.Entity.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
                             {
                                 Abc.Create.Entity.Roster(
                                     rosterId: rosterId,
