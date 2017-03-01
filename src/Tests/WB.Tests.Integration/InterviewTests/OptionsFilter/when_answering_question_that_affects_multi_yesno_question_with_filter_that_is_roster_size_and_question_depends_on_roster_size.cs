@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -48,10 +49,13 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(q2Id, IntegrationCreate.RosterVector(1),
-                    IntegrationCreate.AnsweredYesNoOption(1m, yes: true),
-                    IntegrationCreate.AnsweredYesNoOption(2m, yes: true),
-                    IntegrationCreate.AnsweredYesNoOption(3m, yes: true)
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: IntegrationCreate.RosterVector(1),
+                    answeredOptions: new[]
+                    {
+                        Create.Entity.AnsweredYesNoOption(1m, true),
+                        Create.Entity.AnsweredYesNoOption(2m, true),
+                        Create.Entity.AnsweredYesNoOption(3m, true)
+                    }
                 ));
 
                 var result = new InvokeResults();

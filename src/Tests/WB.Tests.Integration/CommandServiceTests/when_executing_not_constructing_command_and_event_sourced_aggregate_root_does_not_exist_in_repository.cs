@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
 
-            commandService = IntegrationCreate.CommandService(repository: repository);
+            commandService = Abc.Create.Service.CommandService(repository: repository);
         };
 
         Because of = () =>

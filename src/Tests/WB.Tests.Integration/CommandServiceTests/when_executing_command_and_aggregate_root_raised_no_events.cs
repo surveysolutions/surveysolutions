@@ -9,6 +9,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -35,7 +36,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
-            commandService = IntegrationCreate.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object);
+            commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object);
         };
 
         Because of = () =>

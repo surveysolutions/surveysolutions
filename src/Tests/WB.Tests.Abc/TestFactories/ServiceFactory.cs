@@ -66,7 +66,7 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class ServiceFactory
     {
-        public static CommandService CommandService(
+        public CommandService CommandService(
             IEventSourcedAggregateRootRepository repository = null,
             IPlainAggregateRootRepository plainRepository = null,
             IEventBus eventBus = null, 

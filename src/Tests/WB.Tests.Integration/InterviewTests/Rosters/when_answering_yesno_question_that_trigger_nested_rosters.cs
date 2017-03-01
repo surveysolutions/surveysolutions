@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -20,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             appDomainContext = AppDomainContext.Create();
         };
 
-        Because of = () =>
+        private Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -72,14 +73,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
-                    Yes(10), Yes(20), Yes(40)));
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, 
+                    answeredOptions: new [] { Yes(10), Yes(20), Yes(40) }));
 
                 var sidebarViewModel = Setup.SidebarSectionViewModel(questionnaireDocument, interview);
                 sidebarViewModel.AllVisibleSections.ElementAt(1).ToggleCommand.Execute(null);
 
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId,
-                    RosterVector.Empty, Yes(10), Yes(40), Yes(30)));
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId,
+                    answeredOptions: new[] { Yes(10), Yes(40), Yes(30) }));
                 
                 result.FirstSectionContainsDuplicates = sidebarViewModel.AllVisibleSections.OfType<ISideBarSectionItem>().Select(x => x.SectionIdentity).Count() > 1;
 

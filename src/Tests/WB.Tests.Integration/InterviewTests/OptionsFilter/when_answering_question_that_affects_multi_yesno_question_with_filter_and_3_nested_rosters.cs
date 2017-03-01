@@ -59,11 +59,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(q2Id, RosterVector.Empty,
-                    IntegrationCreate.AnsweredYesNoOption(1m, yes: true),
-                    IntegrationCreate.AnsweredYesNoOption(2m, yes: true),
-                    IntegrationCreate.AnsweredYesNoOption(3m, yes: true)
-                    ));
+                interview.AnswerYesNoQuestion(
+                    Abc.Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: RosterVector.Empty,
+                        answeredOptions: new[]
+                        {
+                            Abc.Create.Entity.AnsweredYesNoOption(1m, true),
+                            Abc.Create.Entity.AnsweredYesNoOption(2m, true),
+                            Abc.Create.Entity.AnsweredYesNoOption(3m, true)
+                        }
+                        ));
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 2);
 
                 var result = new InvokeResults();

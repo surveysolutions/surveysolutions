@@ -9,7 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -40,17 +40,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 );
 
                 var lookupTableServiceMock = new Mock<ILookupTableService>();
-                lookupTableServiceMock
-                    .Setup(x => x.GetLookupTableContent(questionnaireId, lookupId))
-                    .Returns(lookupTableContent);
+                lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
 
                 Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
 
                 var assetsTitles = new[]
                 {
-                    IntegrationCreate.FixedTitle(1, "TV"),
-                    IntegrationCreate.FixedTitle(2, "Microwave"),
-                    IntegrationCreate.FixedTitle(3, "Cleaner")
+                    Create.Entity.FixedTitle(1, "TV"),
+                    Create.Entity.FixedTitle(2, "Microwave"),
+                    Create.Entity.FixedTitle(3, "Cleaner")
                 };
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
@@ -65,7 +63,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                             })
                     });
 
-                questionnaire.LookupTables.Add(lookupId, IntegrationCreate.LookupTable("price"));
+                questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 
                 var interview = SetupInterview(questionnaire);
 
