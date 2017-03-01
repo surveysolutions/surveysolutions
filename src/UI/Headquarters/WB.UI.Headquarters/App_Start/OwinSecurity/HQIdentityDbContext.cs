@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.Migrations;
 
-namespace WB.UI.Headquarters.Identity
+namespace WB.UI.Headquarters.OwinSecurity
 {
     internal sealed class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {

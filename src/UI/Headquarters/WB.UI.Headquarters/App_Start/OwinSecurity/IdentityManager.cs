@@ -14,7 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.UI.Headquarters.Identity
+namespace WB.UI.Headquarters.OwinSecurity
 {
     internal class IdentityManager : IIdentityManager
     {

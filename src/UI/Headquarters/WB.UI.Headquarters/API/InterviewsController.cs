@@ -172,9 +172,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage Delete(StatusChangeApiModel request)
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, executor.Id));
+            
+            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.identityManager.CurrentUserId));
         }
 
         [HttpPost]
@@ -183,16 +182,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
 
-            var userInfo = this.userViewFactory.Load(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value) : new UserViewInputModel(request.ResponsibleName, null));
+            var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value) : new UserViewInputModel(request.ResponsibleName, null));
 
             if (userInfo == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");
 
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
-
-            var executor = this.globalInfoProvider.GetCurrentUser();
-            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, executor.Id, userInfo.PublicKey));
+            
+            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.identityManager.CurrentUserId, userInfo.PublicKey));
         }
 
         #endregion

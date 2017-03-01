@@ -37,43 +37,32 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter request)
+        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
         {
+            Guid? supervisorId = null;
+
             if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
-                filter.SupervisorId = (await this.identityManager.GetUserByNameAsync(filter.SupervisorName))?.Id;
+                supervisorId = (await this.identityManager.GetUserByNameAsync(filter.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
             var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
             if (currentUserRole == UserRoles.Supervisor)
-                filter.SupervisorId = this.identityManager.CurrentUserId;
+                supervisorId = this.identityManager.CurrentUserId;
 
-            var input = new InterviewersInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                ViewerId = viewerId,
-                Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
+            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.GetSortOrder(),
+                filter.Search.Value, filter.Archived, filter.ConnectedToDevice, supervisorId);
 
-                SupervisorName = request.SupervisorName,
-                Archived = request.Archived,
-                ConnectedToDevice = request.ConnectedToDevice
-            };
-
-            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.SortOrder.GetOrderRequestString(),
-                filter.SearchBy, filter.Archived, filter.ConnectedToDevice, filter.SupervisorId);
             return new DataTableResponse<InterviewerListItem>
             {
-                Draw = request.Draw + 1,
+                Draw = filter.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
-                Data = interviewers.Select(x => new InterviewerListItem
+                Data = interviewers.Items.ToList().Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate =  x.CreationDate,
-
+                    CreationDate =  x.CreationDate.ToString(@"MMM dd, YYYY HH:mm"),
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId
@@ -142,16 +131,8 @@ namespace WB.UI.Headquarters.Controllers
 
         private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request, UserRoles userRoles)
         {
-            var input = new UserListViewInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Role = userRoles,
-                Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
-            };
-
-            var users = this.usersFactory.GetUsersByRole(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(), data.SearchBy, archived, role);
+            var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
+                request.Search.Value, false, userRoles);
 
             return new DataTableResponse<InterviewerListItem>
             {
@@ -162,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate,
+                    CreationDate = x.CreationDate.ToString(@"MMM dd, YYYY HH:mm"),
                     Email = x.Email,
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor
                 })
