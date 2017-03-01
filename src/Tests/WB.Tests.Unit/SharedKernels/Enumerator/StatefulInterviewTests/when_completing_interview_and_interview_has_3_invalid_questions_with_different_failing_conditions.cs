@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 },
             }));
 
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () =>

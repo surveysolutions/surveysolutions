@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Identity(disabledQuestion3Id, RosterVector.Empty),
             }));
 
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () =>

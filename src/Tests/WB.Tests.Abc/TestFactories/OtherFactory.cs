@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Moq;
 using Ncqrs.Eventing;
-using Ncqrs.Spec;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -35,9 +32,6 @@ namespace WB.Tests.Unit.TestFactories
                 new DateTime(2014, 10, 22),
                 0,
                 payload ?? Mock.Of<IEvent>());
-
-        public EventContext EventContext()
-            => new EventContext();
 
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {

@@ -5,7 +5,7 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.TestFactories
 {
-    internal class StorageFactory
+    public class StorageFactory
     {
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadeSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
