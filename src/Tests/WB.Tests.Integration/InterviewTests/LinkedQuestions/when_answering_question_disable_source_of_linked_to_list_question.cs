@@ -23,8 +23,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),
                         Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list",
                             enablementCondition: "num == 1"),
-                        Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
-                        Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
                     });
 
                 var interview = SetupInterview(questionnaireDocument);

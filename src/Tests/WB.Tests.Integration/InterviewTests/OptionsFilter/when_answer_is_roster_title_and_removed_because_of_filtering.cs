@@ -50,14 +50,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                         variable: null,
                         children: new IComposite[]
                         {
-                            Create.SingleQuestion(
+                            Abc.Create.Entity.SingleQuestion(
                                 id: rosterTitleQuestionId,
                                 variable: "singleopt",
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         }),
                      Abc.Create.Entity.Roster(rosterId: rosterWithMultioptionsTitle,
@@ -66,14 +66,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                         rosterTitleQuestionId: multioptionsQuestionId,
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(
+                            Abc.Create.Entity.MultyOptionsQuestion(
                                 id: multioptionsQuestionId,
                                 variable: "multiopt",
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         }),
                       Abc.Create.Entity.Roster(rosterId: rosterWithYesNoTitle,
@@ -82,15 +82,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                         rosterTitleQuestionId: yesNoQuestionId,
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(
+                            Abc.Create.Entity.MultyOptionsQuestion(
                                 id: yesNoQuestionId,
                                 variable: "yesno",
-                                yesNo: true,
+                                yesNoView: true,
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         })
                     );

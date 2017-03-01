@@ -45,10 +45,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         variable: "numRoster",
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
+                            Abc.Create.Entity.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
                             {
-                                Create.Option(value: "1", text: "Hello"),
-                                Create.Option(value: "2", text: "World")
+                                Abc.Create.Entity.Option(value: "1", text: "Hello"),
+                                Abc.Create.Entity.Option(value: "2", text: "World")
                             }),
                             Abc.Create.Entity.Roster(
                                 rosterId: nestedMultiRosterId,

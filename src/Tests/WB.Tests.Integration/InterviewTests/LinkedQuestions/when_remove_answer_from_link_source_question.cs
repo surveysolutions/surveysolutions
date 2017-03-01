@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         {
                             Abc.Create.Entity.TextQuestion(questionId: sourceOfLinkQuestionId, variable: "txt")
                         }),
-                    Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
+                    Abc.Create.Entity.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
                 });
 
             interview = SetupInterview(questionnaire);

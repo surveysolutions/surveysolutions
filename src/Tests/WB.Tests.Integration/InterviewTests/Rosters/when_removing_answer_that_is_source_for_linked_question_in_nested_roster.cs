@@ -49,9 +49,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
                             Abc.Create.Entity.Roster(rosterId: linkedRosterId, fixedRosterTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
                             {
-                                Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                                Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                             }),
-                            Create.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
+                            Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
                         }),
                     })
                 }));

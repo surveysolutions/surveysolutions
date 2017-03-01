@@ -555,7 +555,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, bool areAnswersOrdered = false)
+            string enablementCondition = null, 
+            string validationExpression = null, 
+            Guid? linkedToRosterId = null,
+            bool areAnswersOrdered = false,
+            string optionsFilter = null,
+            string linkedFilter = null)
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -567,7 +572,9 @@ namespace WB.Tests.Abc.TestFactories
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                AreAnswersOrdered = areAnswersOrdered
+                AreAnswersOrdered = areAnswersOrdered,
+                LinkedFilterExpression = linkedFilter,
+                Properties = { OptionsFilterExpression = optionsFilter }
             };
 
         public NumericQuestion NumericIntegerQuestion(Guid? id = null,
@@ -973,9 +980,17 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
+        public SingleQuestion SingleQuestion(Guid? id = null, string variable = null, 
+            string enablementCondition = null,
+            string validationExpression = null,
+            Guid? cascadeFromQuestionId = null,
+            List<Answer> options = null, 
+            Guid? linkedToQuestionId = null, 
+            QuestionScope scope = QuestionScope.Interviewer,
+            bool isFilteredCombobox = false, 
+            Guid? linkedToRosterId = null,
+            string linkedFilter = null,
+            string optionsFilter = null)
             => new SingleQuestion
             {
                 QuestionType = QuestionType.SingleOption,
@@ -988,18 +1003,24 @@ namespace WB.Tests.Abc.TestFactories
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                LinkedFilterExpression = linkedFilter,
+                Properties = new QuestionProperties(false, false)
+                {
+                    OptionsFilterExpression = optionsFilter
+                }
             };
 
         public StaticText StaticText(
             Guid? publicKey = null,
             string text = "Static Text X",
             string attachmentName = null,
+            string enablementCondition = null,
             List<ValidationCondition> validationConditions = null)
             => new StaticText(
                 publicKey ?? Guid.NewGuid(),
                 text,
-                null,
+                enablementCondition,
                 false,
                 validationConditions ?? new List<ValidationCondition>(),
                 attachmentName);

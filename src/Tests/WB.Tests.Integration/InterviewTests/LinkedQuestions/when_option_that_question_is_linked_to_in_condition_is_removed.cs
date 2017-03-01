@@ -27,8 +27,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                    children: new IComposite[]
                    {
                         Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list"),
-                        Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
-                        Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
                         Abc.Create.Entity.TextQuestion(questionId: questionWithConditionUsingSingleLinked, variable: "txt",
                             enablementCondition: "lnkSgl == 0"),
                         Abc.Create.Entity.TextQuestion(questionId: questionWithConditionUsingMultiLinked, variable: "txt1",

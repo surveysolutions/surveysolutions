@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
-                        Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                        Abc.Create.Entity.StaticText(publicKey: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                     }),
                     events: new object[]
                     {

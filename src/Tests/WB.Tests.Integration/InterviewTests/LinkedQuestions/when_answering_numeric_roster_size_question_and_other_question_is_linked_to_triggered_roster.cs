@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     {
                         Abc.Create.Entity.TextQuestion(questionId: q2Id, variable: "q2"),
                     }),
-                    Create.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
+                    Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);

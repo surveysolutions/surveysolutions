@@ -29,15 +29,15 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new[]
                 {
-                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId, options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId, options: new List<Answer>
                     {
-                        Create.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
-                        Create.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
+                        Abc.Create.Entity.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
+                        Abc.Create.Entity.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
                     }),
                 });
 

@@ -69,9 +69,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {
-                                            Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                                            Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                                         }),
-                                    Create.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
+                                    Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
                                 })
                         })
                     );

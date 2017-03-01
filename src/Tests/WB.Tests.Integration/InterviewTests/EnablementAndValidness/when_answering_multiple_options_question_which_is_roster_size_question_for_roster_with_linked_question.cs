@@ -34,19 +34,20 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Abc.Create.Entity.TextQuestion(questionId: txtSourceOfLinkId, variable: "txt")}),
-                    Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
+                     Abc.Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
                         options:
                             new List<Answer>
                             {
-                                Create.Option(value: "1", text: "Hello"),
-                                Create.Option(value: "2", text: "World")
+                                 Abc.Create.Entity.Option(value: "1", text: "Hello"),
+                                 Abc.Create.Entity.Option(value: "2", text: "World")
                             }),
                     Abc.Create.Entity.Roster(rosterId,
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         children: new[]
                         {
-                            Create.SingleOptionQuestion(linkedQuestionId, variable: "q2",
+                            Abc.Create.Entity.SingleOptionQuestion(linkedQuestionId, 
+                                variable: "q2",
                                 linkedToQuestionId: txtSourceOfLinkId)
                         })
                     );

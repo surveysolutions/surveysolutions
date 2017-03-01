@@ -28,8 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
-                    Create.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
+                    Abc.Create.Entity.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
+                    Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
                 });
 
                 var interview = SetupStatefullInterview(questionnaireDocument);

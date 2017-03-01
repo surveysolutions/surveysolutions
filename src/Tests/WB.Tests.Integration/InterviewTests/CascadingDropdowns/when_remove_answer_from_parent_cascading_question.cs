@@ -35,12 +35,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.SingleQuestion(id: parentCascadingQuestion, variable: "par",
+                        Abc.Create.Entity.SingleQuestion(id: parentCascadingQuestion, variable: "par",
                             options: new List<Answer>() {Create.Answer("1", 1), Create.Answer("2", 2)}),
-                        Create.SingleQuestion(id: childCascadingQuestionId, variable: "chil",
+                        Abc.Create.Entity.SingleQuestion(id: childCascadingQuestionId, variable: "chil",
                             cascadeFromQuestionId: parentCascadingQuestion,
                             options: new List<Answer>() {Create.Answer("11", 11, 1), Create.Answer("21", 21, 2)}),
-                        Create.SingleQuestion(id: childOfChildCascadingQuestionId, variable: "chilchil",
+                        Abc.Create.Entity.SingleQuestion(id: childOfChildCascadingQuestionId, variable: "chilchil",
                             cascadeFromQuestionId: childCascadingQuestionId,
                             options: new List<Answer>() {Create.Answer("111", 111, 11), Create.Answer("211", 211, 21)})
                     });

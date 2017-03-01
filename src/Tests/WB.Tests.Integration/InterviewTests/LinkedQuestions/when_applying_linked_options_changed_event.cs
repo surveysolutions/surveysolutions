@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                Abc.Create.Entity.TextListQuestion(textListQuestionId),
                Abc.Create.Entity.Roster(textListRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: textListQuestionId, children:new []
                {
-                   Create.SingleOptionQuestion(singleLinkedToListRosterId, linkedToRosterId: textListRosterId)
+                   Abc.Create.Entity.SingleOptionQuestion(singleLinkedToListRosterId, linkedToRosterId: textListRosterId)
                })
             });
 

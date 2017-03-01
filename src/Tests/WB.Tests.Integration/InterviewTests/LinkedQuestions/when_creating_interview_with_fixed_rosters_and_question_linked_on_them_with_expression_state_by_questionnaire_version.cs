@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {
-                    Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked", linkedFilter:"1==1"),
+                    Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked", linkedFilter:"1==1"),
                     Abc.Create.Entity.Roster(rosterId: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
                         fixedRosterTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
                         children: new IComposite[]
