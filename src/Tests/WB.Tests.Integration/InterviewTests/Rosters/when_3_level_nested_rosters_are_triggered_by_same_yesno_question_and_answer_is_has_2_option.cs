@@ -31,11 +31,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, options: new List<Answer>
+                    Abc.Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true, options: new List<Answer>
                     {
-                        Create.Option(value: "10", text: "A"),
-                        Create.Option(value: "20", text: "B"),
-                        Create.Option(value: "30", text: "C")
+                        Abc.Create.Entity.Option(value: "10", text: "A"),
+                        Abc.Create.Entity.Option(value: "20", text: "B"),
+                        Abc.Create.Entity.Option(value: "30", text: "C")
                     }),
 
                     Abc.Create.Entity.Roster(

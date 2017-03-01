@@ -30,9 +30,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.DateTimeQuestion(questionAId, "a"),
-                    Create.DateTimeQuestion(questionBId, "b", enablementCondition: "a > new DateTime(2015, 2, 2)"),
-                    Create.DateTimeQuestion(questionCId, "c", enablementCondition: "b > new DateTime(2015, 9, 9 )")
+                     Abc.Create.Entity.DateTimeQuestion(questionAId, variable: "a"),
+                     Abc.Create.Entity.DateTimeQuestion(questionBId, variable: "b", enablementCondition: "a > new DateTime(2015, 2, 2)"),
+                     Abc.Create.Entity.DateTimeQuestion(questionCId, variable: "c", enablementCondition: "b > new DateTime(2015, 9, 9 )")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>

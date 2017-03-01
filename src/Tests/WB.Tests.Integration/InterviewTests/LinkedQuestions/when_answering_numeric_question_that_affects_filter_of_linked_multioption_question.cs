@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     }),
                     Abc.Create.Entity.NumericIntegerQuestion(q4Id, variable: "q4"),
 
-                    Create.MultyOptionsQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter:"q4>1")
+                    Abc.Create.Entity.MultyOptionsQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter:"q4>1")
                 });
                 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);

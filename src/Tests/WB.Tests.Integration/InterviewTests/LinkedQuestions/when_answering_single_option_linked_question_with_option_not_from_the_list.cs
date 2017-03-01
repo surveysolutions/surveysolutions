@@ -17,14 +17,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var titleQuestionId = Guid.NewGuid();
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
+                Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_single"),
-                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Abc.Create.Entity.Roster(rosterId: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
                     {
-                        Create.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
+                        Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
                     })
             });
 

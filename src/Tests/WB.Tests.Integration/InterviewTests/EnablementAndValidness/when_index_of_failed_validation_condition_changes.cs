@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.ValidationCondition("self < 125", "validation 1"),
                         Create.ValidationCondition("self >= 0", "validation 2")
                     }),
-                    Create.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
+                    Abc.Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
                     {
                         Create.ValidationCondition("num < 125", "static text validation 1"),
                         Create.ValidationCondition("num >= 0", "static text validation 2")

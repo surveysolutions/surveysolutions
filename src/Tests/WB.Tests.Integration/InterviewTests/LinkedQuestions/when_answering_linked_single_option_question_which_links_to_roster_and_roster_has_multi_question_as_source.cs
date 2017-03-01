@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.MultyOptionsQuestion(id: triggerQuestionId, variable: "multi_trigger", options: new Answer[]
+                Abc.Create.Entity.MultyOptionsQuestion(id: triggerQuestionId, variable: "multi_trigger", options: new Answer[]
                 {
                     new Answer() { AnswerCode = 1, AnswerText = "1" }, 
                     new Answer() { AnswerCode = 2, AnswerText = "2" }, 
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     {
                         Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "text")
                     }),
-                Create.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
+                Abc.Create.Entity.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
             });
 
             interview = SetupInterview(questionnaireDocument);

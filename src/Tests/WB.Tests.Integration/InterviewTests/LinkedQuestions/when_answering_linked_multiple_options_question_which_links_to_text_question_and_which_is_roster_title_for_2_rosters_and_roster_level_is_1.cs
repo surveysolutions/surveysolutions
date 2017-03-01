@@ -40,12 +40,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var triggerQuestionId= Guid.NewGuid();
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
                     children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
+                        Abc.Create.Entity.MultyOptionsQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
                             variable: "link_multi")
                     }),
                 Abc.Create.Entity.Roster(rosterId: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),

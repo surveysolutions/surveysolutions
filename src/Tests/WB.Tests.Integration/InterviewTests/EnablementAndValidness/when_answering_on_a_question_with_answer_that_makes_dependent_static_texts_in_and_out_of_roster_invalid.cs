@@ -22,13 +22,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             {
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
 
-                Create.StaticText(dependentStaticTextOutsideRosterId,
-                    validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
+                 Abc.Create.Entity.StaticText(dependentStaticTextOutsideRosterId,
+                    validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
 
                 Abc.Create.Entity.Roster(fixedRosterTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
                 {
-                    Create.StaticText(dependentStaticTextInsideRosterId,
-                        validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
+                     Abc.Create.Entity.StaticText(dependentStaticTextInsideRosterId,
+                        validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable().ToList()),
                 })
             }));
 

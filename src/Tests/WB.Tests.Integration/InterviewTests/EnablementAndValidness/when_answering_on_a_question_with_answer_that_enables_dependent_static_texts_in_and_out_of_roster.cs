@@ -20,12 +20,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
-
-                Create.StaticText(dependentStaticTextOutsideRosterId, enablementCondition: "q1 > 0"),
-
+                Abc.Create.Entity.StaticText(dependentStaticTextOutsideRosterId, enablementCondition: "q1 > 0"),
                 Abc.Create.Entity.Roster(fixedRosterTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
                 {
-                    Create.StaticText(dependentStaticTextInsideRosterId, enablementCondition: "q1 > 0"),
+                     Abc.Create.Entity.StaticText(dependentStaticTextInsideRosterId, enablementCondition: "q1 > 0"),
                 })
             }));
 

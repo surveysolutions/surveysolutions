@@ -30,9 +30,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericRealQuestion(questionAId, "a"),
-                    Create.NumericRealQuestion(questionBId, "b", enablementCondition: "a < 0"),
-                    Create.NumericRealQuestion(questionCId, "c", enablementCondition: "b < 0")
+                     Abc.Create.Entity.NumericRealQuestion(questionAId, variable: "a"),
+                     Abc.Create.Entity.NumericRealQuestion(questionBId, variable: "b", enablementCondition: "a < 0"),
+                     Abc.Create.Entity.NumericRealQuestion(questionCId, variable: "c", enablementCondition: "b < 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>

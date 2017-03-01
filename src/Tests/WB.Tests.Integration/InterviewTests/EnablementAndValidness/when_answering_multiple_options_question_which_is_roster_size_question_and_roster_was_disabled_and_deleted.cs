@@ -30,8 +30,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var multiOptionQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
-                        options: new List<Answer>{ Create.Option(value: "1", text: "Hello"), Create.Option(value: "2", text: "World") }),
+                    Abc.Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
+                        options: new List<Answer>{ Abc.Create.Entity.Option(value: "1", text: "Hello"), Abc.Create.Entity.Option(value: "2", text: "World") }),
                     Abc.Create.Entity.Roster(rosterId, 
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,

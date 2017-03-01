@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                             rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             children: new[]
                             {
-                                Create.NumericRealQuestion(id: questionB, variable: "p",
+                                Abc.Create.Entity.NumericRealQuestion(id: questionB, variable: "p",
                                     validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
                             })
                     });

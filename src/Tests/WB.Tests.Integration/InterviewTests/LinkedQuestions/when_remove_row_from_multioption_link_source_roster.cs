@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
                     Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
-                    Create.MultyOptionsQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
+                    Abc.Create.Entity.MultyOptionsQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);

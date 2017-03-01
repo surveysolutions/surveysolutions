@@ -26,21 +26,21 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option(value: "1", text: "Option 1"),
-                    Create.Option(value: "2", text: "Option 2"),
-                    Create.Option(value: "3", text: "Option 3"),
-                    Create.Option(value: "12", text: "Option 12"),
+                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
+                    Abc.Create.Entity.Option(value: "3", text: "Option 3"),
+                    Abc.Create.Entity.Option(value: "12", text: "Option 12"),
                 };
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.SingleQuestion(q1Id, variable: "q1", options: options),
+                    Abc.Create.Entity.SingleQuestion(q1Id, variable: "q1", options: options),
                     Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
-                        Create.SingleQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
-                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "q2==2"),
-                        Create.SingleQuestion(q4Id, variable: "q4", options: options, optionsFilter: "@optioncode % (int)q3 == 0"),
-                        Create.SingleQuestion(q5Id, variable: "q5", options: options, enablementCondition: "q4 ==2"),
+                        Abc.Create.Entity.SingleQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
+                        Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "q2==2"),
+                        Abc.Create.Entity.SingleQuestion(q4Id, variable: "q4", options: options, optionsFilter: "@optioncode % (int)q3 == 0"),
+                        Abc.Create.Entity.SingleQuestion(q5Id, variable: "q5", options: options, enablementCondition: "q4 ==2"),
                     })
                 });
 

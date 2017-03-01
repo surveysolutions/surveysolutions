@@ -27,18 +27,21 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option("1"), Create.Option("2"), Create.Option("3"), Create.Option("12")
+                    Abc.Create.Entity.Option("1"),
+                    Abc.Create.Entity.Option("2"),
+                    Abc.Create.Entity.Option("3"),
+                    Abc.Create.Entity.Option("12")
                 };
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
+                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),
                     Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age"),
                     }),
-                    Create.MultyOptionsQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id),
+                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id),
                     Abc.Create.Entity.TextQuestion(questionId: q5Id, variable: "q5",
                         enablementCondition: "q4.Length > 2")
                 });

@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                              {
                                  Abc.Create.Entity.TextQuestion(questionId: sourceQuestionId, variable: "source")
                              }),
-                             Create.MultyOptionsQuestion(linkedOutsideId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                             Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                          }
                     );
 

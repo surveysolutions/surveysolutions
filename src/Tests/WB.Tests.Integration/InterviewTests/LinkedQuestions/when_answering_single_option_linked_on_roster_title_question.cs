@@ -20,13 +20,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId, variable: "link_single"),
+                Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId, variable: "link_single"),
                 Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Abc.Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
                     {
-                        Create.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
+                        Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
                     }),
                 Abc.Create.Entity.TextQuestion(questionId: disabledQuestionsId, variable: "txt_disabled",
                     enablementCondition: "IsAnswered(link_single)")
