@@ -29,15 +29,17 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", enablementCondition: "a >= 0"),
-                            Create.NumericIntegerQuestion(id: questionC, variable: "c", enablementCondition: "a <= 0"),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a"),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", enablementCondition: "a >= 0"),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionC, variable: "c", enablementCondition: "a <= 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: 0),
-                        Create.Event.QuestionsEnabled(new[]
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, 0, null, null
+                        ),
+                        Unit.Create.Event.QuestionsEnabled(new[]
                         {
                             Create.Identity(questionB),
                             Create.Identity(questionC),

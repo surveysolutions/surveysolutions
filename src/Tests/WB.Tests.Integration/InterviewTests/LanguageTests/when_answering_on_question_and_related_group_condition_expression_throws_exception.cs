@@ -28,13 +28,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 
                 var interview = SetupInterview(
                     Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                        Create.NumericIntegerQuestion(questionId, "q1"),
+                        Unit.Create.Entity.NumericIntegerQuestion(questionId, "q1"),
                         Create.Group(groupId, "g1", enablementCondition: "1/q1 == 1")
                     ),
                     events: new List<object>
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId, 1),
-                        Create.Event.GroupsDisabled(Create.Identity(groupId))
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionId, null, 1, null, null
+                        ),
+                        Unit.Create.Event.QuestionsEnabled(Create.Identity(groupId))
                     });
 
                 var result = new InvokeResults();

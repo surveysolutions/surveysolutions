@@ -26,13 +26,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Unit.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, 
                         rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Create.TextQuestion(q2Id, variable: "q2"),
                     }),
-                    Create.NumericIntegerQuestion(q4Id, variable: "q4"),
+                    Unit.Create.Entity.NumericIntegerQuestion(q4Id, variable: "q4"),
 
                     Create.MultyOptionsQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter:"q4>1")
                 });

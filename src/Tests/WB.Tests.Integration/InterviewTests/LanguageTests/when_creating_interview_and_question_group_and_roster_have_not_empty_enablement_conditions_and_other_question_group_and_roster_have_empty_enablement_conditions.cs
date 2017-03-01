@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(variable: "a", enablementCondition: null),
+                        Unit.Create.Entity.NumericIntegerQuestion(variable: "a", enablementCondition: null),
                         Create.Question(id: questionId, variable: "b", enablementCondition: "a > 0"),
                         Create.Group(variable: "i", enablementCondition: null),
                         Create.Group(id: groupId, variable: "groupConditional", enablementCondition: "a < 0"),

@@ -29,27 +29,30 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, -1, null, null
+                        ),
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionB, null, -2, null, null
+                        ),
 
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Unit.Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                },
-                                {
-                                    Create.Identity(questionB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                                Create.Identity(questionA),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            },
+                            {
+                                Create.Identity(questionB),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        })
                     });
 
             using (var eventContext = new EventContext())

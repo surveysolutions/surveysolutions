@@ -15,10 +15,10 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: n1Id, variable: "n1"),
-                    Create.NumericIntegerQuestion(id: n2Id, variable: "n2"),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: n1Id, variable: "n1"),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: n2Id, variable: "n2"),
                     Create.Variable(id: variableId, variableName: "v1", expression: "n1+n2"),
-                    Create.NumericIntegerQuestion(id: n3Id, variable: "n3", title: "title with %v1%"),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: n3Id, variable: "n3", questionText: "title with %v1%"),
                 });
 
             interview = SetupStatefullInterview(questionnaire);

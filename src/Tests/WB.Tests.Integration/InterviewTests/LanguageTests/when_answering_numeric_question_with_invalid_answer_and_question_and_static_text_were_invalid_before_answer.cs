@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -30,31 +31,31 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                             Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, -1, null, null
+                        ),
                         
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Unit.Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            }),
+                                Create.Identity(questionA),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        }),
 
-                        Create.Event.StaticTextsDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Unit.Create.Event.StaticTextsDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(staticTextB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                                Create.Identity(staticTextB),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        }.ToList())
                     });
 
             using (var eventContext = new EventContext())

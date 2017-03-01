@@ -4,7 +4,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -24,22 +23,24 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var questionA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-
+                
                 var interview = SetupInterview(
                     Create.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                             Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: 1),
+                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                            questionId: questionA, answer: 1
+                        ),
 
-                        Create.Event.AnswersDeclaredValid(new []{  Create.Identity(questionA)}),
-                        Create.Event.StaticTextsDeclaredValid(new []{  Create.Identity(staticTextB) })
+                        Unit.Create.Event.AnswersDeclaredValid(new[] { Create.Identity(questionA)}),
+                        Unit.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())

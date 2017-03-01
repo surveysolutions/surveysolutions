@@ -43,8 +43,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var interview = SetupInterview(questionnaire, new object[]
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: Empty.RosterVector),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    WB.Tests.Unit.Create.Event.SingleOptionQuestionAnswered(
+                        parentSingleOptionQuestionId, Empty.RosterVector, 1, null, null
+                    ),
+                    Unit.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())
