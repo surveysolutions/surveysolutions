@@ -4,6 +4,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -29,13 +30,15 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     }),
                     Create.Chapter(enablementCondition: "x1 == 1", children: new IComposite[]
                     {
-                        Create.ListQuestion(list1Id, variable: "l1"),
+                        Abc.Create.Entity.TextListQuestion(questionId: list1Id, variable: "l1",
+                            enablementCondition: null, validationExpression: null),
                         Abc.Create.Entity.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                         {
-                            Create.ListQuestion(list2Id, variable: "l2"),
+                            Abc.Create.Entity.TextListQuestion(questionId: list2Id, variable: "l2",
+                                enablementCondition: null, validationExpression: null),
                             Abc.Create.Entity.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                             {
-                                Create.TextQuestion(textId)
+                                Abc.Create.Entity.TextQuestion(questionId: textId, variable: null)
                             })
                         })
                     }));

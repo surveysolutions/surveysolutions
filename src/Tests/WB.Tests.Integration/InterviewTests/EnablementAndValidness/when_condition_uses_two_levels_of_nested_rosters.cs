@@ -4,6 +4,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -41,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                        rosterTitleQuestionId: textQuestionId,
                        children: new IComposite[]
                        {
-                           Create.TextQuestion(textQuestionId, variable: "title"),
+                           Abc.Create.Entity.TextQuestion(questionId: textQuestionId, variable: "title"),
                            Abc.Create.Entity.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
                            Abc.Create.Entity.Roster(petsRosterId, variable: "frnd",
                                rosterSizeSourceType: RosterSizeSourceType.Question,

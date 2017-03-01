@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -34,7 +35,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Option(value: "1", text: "Yes"),
                         Create.Option(value: "2", text: "No")
                     }),
-                    Create.ListQuestion(rosterSizeQuestionId, variable: "jobs", enablementCondition: "hwrkyn == 1"),
+                    Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestionId, variable: "jobs",
+                        enablementCondition: "hwrkyn == 1", validationExpression: null),
                     Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 2", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId));
 
                 var interview = SetupInterview(questionnaireDocument);
