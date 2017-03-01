@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         public void SetupEventContext()
         {
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         }
 
         [TearDown]

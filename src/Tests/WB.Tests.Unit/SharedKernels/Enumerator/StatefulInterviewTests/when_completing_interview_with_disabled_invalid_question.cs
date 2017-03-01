@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.QuestionsDisabled(new [] { invalidQuestionIdentity }));
             interview.Apply(Create.Event.StaticTextsDisabled(new [] { invalidStaticTextdentity }));
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () =>
