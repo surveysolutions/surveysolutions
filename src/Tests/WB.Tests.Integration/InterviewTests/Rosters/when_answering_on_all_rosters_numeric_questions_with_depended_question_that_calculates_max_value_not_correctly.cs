@@ -44,7 +44,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     Unit.Create.Entity.NumericIntegerQuestion(
                         id: rosterValidation,
-                        enablementCondition: "varRoster.Select(x => x.age).Max() > 65")
+                        enablementCondition: "varRoster.Select(x => x.age).Max() > 65",
+                        variable: null)
                 );
 
                 var result = new InvokeResults();
