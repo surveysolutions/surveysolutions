@@ -1481,13 +1481,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.zh.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\Identity\HQIdentityDbContext.cs" />
-    <Compile Include="App_Start\Identity\ApplicationSignInManager.cs" />
-    <Compile Include="App_Start\Identity\ApplicationUserManager.cs" />
-    <Compile Include="App_Start\Identity\AppUserStore.cs" />
-    <Compile Include="App_Start\Identity\AspNetPasswordHasher.cs" />
-    <Compile Include="App_Start\Identity\IAppUserStore.cs" />
-    <Compile Include="App_Start\Identity\IdentityManager.cs" />
+    <Compile Include="App_Start\OwinSecurity\HQIdentityDbContext.cs" />
+    <Compile Include="App_Start\OwinSecurity\ApplicationSignInManager.cs" />
+    <Compile Include="App_Start\OwinSecurity\ApplicationUserManager.cs" />
+    <Compile Include="App_Start\OwinSecurity\AppUserStore.cs" />
+    <Compile Include="App_Start\OwinSecurity\AspNetPasswordHasher.cs" />
+    <Compile Include="App_Start\OwinSecurity\IAppUserStore.cs" />
+    <Compile Include="App_Start\OwinSecurity\IdentityManager.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />

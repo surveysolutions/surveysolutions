@@ -68,8 +68,10 @@ using WB.UI.Shared.Web.Versions;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 using Microsoft.AspNet.Identity.Owin;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.Identity;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Infrastructure.Native;
+using WB.UI.Headquarters.OwinSecurity;
 using Constants = WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization.Constants;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 

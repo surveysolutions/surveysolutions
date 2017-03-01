@@ -55,8 +55,6 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-        {
-            return this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query, onlyActive: true);
-        }
+            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null, onlyActive: true);
     }
 }

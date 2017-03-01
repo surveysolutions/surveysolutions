@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.UI.Headquarters.Identity
+namespace WB.UI.Headquarters.OwinSecurity
 {
     internal class AppUserStore : UserStore<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>, IAppUserStore
     {
