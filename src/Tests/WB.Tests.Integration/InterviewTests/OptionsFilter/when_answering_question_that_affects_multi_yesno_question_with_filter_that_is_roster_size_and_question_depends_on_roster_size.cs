@@ -26,10 +26,10 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option(value: "1", text: "Option 1"),
-                    Create.Option(value: "2", text: "Option 2"),
-                    Create.Option(value: "3", text: "Option 3"),
-                    Create.Option(value: "12", text: "Option 12"),
+                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
+                    Abc.Create.Entity.Option(value: "3", text: "Option 3"),
+                    Abc.Create.Entity.Option(value: "12", text: "Option 12"),
                 };
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
@@ -37,9 +37,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNo: true),
+                        Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNoView: true),
                         Abc.Create.Entity.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
-                        Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
+                        Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "r1.Count() < 2"),
                     })
                 });
 

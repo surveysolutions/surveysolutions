@@ -34,33 +34,33 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var comboShouldNotBeRemoved = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
                         }),
-                    Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                    Abc.Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "grand child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "grand child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "grand child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "grand child 1 for parent option 2", parentValue: "2"),
                         }),
-                    Create.SingleQuestion(nonAnsweredCombo, "q4", options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(nonAnsweredCombo, "q4", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(comboShouldNotBeRemoved, "q5", cascadeFromQuestionId: nonAnsweredCombo,
+                    Abc.Create.Entity.SingleQuestion(comboShouldNotBeRemoved, "q5", cascadeFromQuestionId: nonAnsweredCombo,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
                         })
                     );
 

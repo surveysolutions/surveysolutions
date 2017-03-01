@@ -25,8 +25,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion3Id),
                         Abc.Create.Entity.Roster(roster3Id, variable:"roster3Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
                         {
-                            Create.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id),
-                            Create.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToRosterId: roster3Id, variable: "multi"),
+                            Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id, variable: null),
+                            Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToRosterId: roster3Id, variable: "multi"),
                         }),
                     }),
                 }),

@@ -23,20 +23,23 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var options = new List<Answer>
                 {
-                    Create.Option("1"), Create.Option("2"), Create.Option("3"), Create.Option("4")
+                    Abc.Create.Entity.Option("1"),
+                    Abc.Create.Entity.Option("2"),
+                    Abc.Create.Entity.Option("3"),
+                    Abc.Create.Entity.Option("4")
                 };
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Abc.Create.Entity.Roster(rosterId, variable:"r", fixedRosterTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
+                        Abc.Create.Entity.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
                         Abc.Create.Entity.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(q2Id, variable: "age"),
                             Abc.Create.Entity.Roster(roster2Id, variable:"r2", fixedRosterTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                             {
-                                Create.SingleQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter: "age > current.age")
+                                Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter: "age > current.age")
                             }),
                         })
                     })

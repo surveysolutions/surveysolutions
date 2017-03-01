@@ -33,20 +33,20 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var nestedGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.SingleQuestion(rosterSwitcherQuestionId, variable: "hwrkyn", options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(rosterSwitcherQuestionId, variable: "hwrkyn", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "Yes"),
-                        Create.Option(value: "2", text: "No")
+                        Abc.Create.Entity.Option(value: "1", text: "Yes"),
+                        Abc.Create.Entity.Option(value: "2", text: "No")
                     }),
                     Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestionId, variable: "jobs",
                         enablementCondition: "hwrkyn == 1", validationExpression: null),
                     Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 1", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId,
                         children: new IComposite[]
                         {
-                            Create.SingleQuestion(groupTriggerQuestionId, variable: "has_wage", options: new List<Answer>
+                            Abc.Create.Entity.SingleQuestion(groupTriggerQuestionId, variable: "has_wage", options: new List<Answer>
                             {
-                                Create.Option(value: "1", text: "Yes"),
-                                Create.Option(value: "2", text: "No")
+                                Abc.Create.Entity.Option(value: "1", text: "Yes"),
+                                Abc.Create.Entity.Option(value: "2", text: "No")
                             }),
                             Abc.Create.Entity.Group(nestedGroupId, "Group X", null, "has_wage == 1", false, null)
                         })

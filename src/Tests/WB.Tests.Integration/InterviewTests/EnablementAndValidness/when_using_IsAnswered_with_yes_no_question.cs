@@ -25,12 +25,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                     children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(id: yesNoQuestionId, 
+                        Abc.Create.Entity.MultyOptionsQuestion(id: yesNoQuestionId, 
                             variable:yesNoQuestionVariable,
-                            yesNo: true,
+                            yesNoView: true,
                             options: new List<Answer> {
-                                Create.Answer("one", 1),
-                                Create.Answer("two", 2),
+                                Abc.Create.Entity.Answer("one", 1),
+                                Abc.Create.Entity.Answer("two", 2),
                                 }
                         ),
                         Abc.Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)

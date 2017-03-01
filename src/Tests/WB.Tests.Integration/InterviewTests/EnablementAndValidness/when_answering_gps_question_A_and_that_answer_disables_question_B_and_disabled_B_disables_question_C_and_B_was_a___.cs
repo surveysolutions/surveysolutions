@@ -33,8 +33,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.GpsCoordinateQuestion(questionAId, "gps", enablementCondition: null,
                         validationExpression: null),
-                    Create.NumericRealQuestion(questionBId, "b", enablementCondition: "gps.Latitude < 0"),
-                    Create.NumericRealQuestion(questionCId, "c", enablementCondition: "gps.Latitude < 0")
+                    Abc.Create.Entity.NumericRealQuestion(questionBId, "b", enablementCondition: "gps.Latitude < 0"),
+                    Abc.Create.Entity.NumericRealQuestion(questionCId, "c", enablementCondition: "gps.Latitude < 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
