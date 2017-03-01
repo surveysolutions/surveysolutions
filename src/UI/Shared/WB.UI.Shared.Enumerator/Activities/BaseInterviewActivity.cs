@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         where TViewModel : BaseInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
-        private DrawerLayout drawerLayout => this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+        private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
 
@@ -24,6 +24,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
@@ -84,7 +85,17 @@ namespace WB.UI.Shared.Enumerator.Activities
         }
 
         private void OnSectionChange(SectionChangeMessage msg) =>
-            Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() => { this.drawerLayout.CloseDrawers(); });
+            Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() =>
+            {
+                try
+                {
+                    this.drawerLayout.CloseDrawers();
+                }
+                catch
+                {
+                    //ignore System.ArgumentExceptionHandle must be valid. Parameter name: instance
+                }
+            });
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {
