@@ -55,9 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 },
                 wasCompleted: true);
 
-            interview.SynchronizeInterview(
-                userId,
-                 synchronizationDto);
+            interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
             eventContext = new EventContext();
         };

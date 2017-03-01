@@ -100,7 +100,6 @@ namespace WB.UI.Designer.Api
                     if (!command.OldAttachmentId.HasValue)
                         throw new ArgumentException($"Old attachment id is empty and file is absent for attachment {command.AttachmentId} in questionnaire {command.QuestionnaireId}");
                     command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value);
-                    //command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.AttachmentId);
                 }
 
                 this.attachmentService.SaveMeta(

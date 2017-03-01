@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable
+    public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public InterviewTreeQuestion(Identity identity, 
             SubstitionText title, 
@@ -145,6 +145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void SetValidationMessages(SubstitionText[] validationMessages)
         {
+            if (validationMessages == null) throw new ArgumentNullException(nameof(validationMessages));
             this.ValidationMessages = validationMessages;
             foreach (var validationMessage in validationMessages)
             {
@@ -288,11 +289,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         .Where(x => x.Identity.Id == linkedQuestion.LinkedSourceId)
                         .ToList();
             }
-
+            
             var options = sourceNodes
                 .Where(x => !x.IsDisabled())
                 .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? true)
                 .Select(x => x.Identity.RosterVector).ToArray();
+
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
@@ -301,12 +303,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!this.IsLinkedToListQuestion) return;
             InterviewTreeLinkedToListQuestion linkedToListQuestion = this.AsLinkedToList;
 
-            var refListQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
-            var options = refListQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
+            var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
+           
+            var options = (refQuestion?.IsDisabled() ?? false)
+                ? new decimal[0]
+                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
 
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
-            if(resetAnswerOnOptionChange)
+
+            if (resetAnswerOnOptionChange)
             {
                 var optionsAreIdentical = previousOptions.SequenceEqual(options);
                 if (optionsAreIdentical) return;
@@ -436,17 +442,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
-            this.AsLinked.SetOptions(options);
+            var orderedOptions = this.GetOptionsInCorrectOrder(options);
+            this.AsLinked.SetOptions(orderedOptions);
 
             if (!removeAnswer) return;
 
-            var optionsAreIdentical = previousOptions.SequenceEqual(options);
+            var optionsAreIdentical = previousOptions.SequenceEqual(orderedOptions);
             if (optionsAreIdentical) return;
 
             if (this.IsMultiLinkedOption)
                 this.AsMultiLinkedOption.RemoveAnswer();
             else
                 this.AsSingleLinkedOption.RemoveAnswer();
+        }
+
+        private RosterVector[] GetOptionsInCorrectOrder(RosterVector[] options)
+        {
+            if (options.Length <= 1) return options;
+
+            if (this.IsSingleLinkedOption || this.IsMultiLinkedOption)
+            {
+                var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
+                
+                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                
+                return this.Tree.AllNodesInOrderCache
+                    .Where(node => node.Identity.Id == linkedLinkedSourceId && optionsHashSet.Contains(node.Identity.RosterVector))
+                    .Take(options.Length)
+                    .Select(node => node.Identity.RosterVector)
+                    .ToArray();
+            }
+
+            return options;
         }
 
         public void RemoveAnswer()

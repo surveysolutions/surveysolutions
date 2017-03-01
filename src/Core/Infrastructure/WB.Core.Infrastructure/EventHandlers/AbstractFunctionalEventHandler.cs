@@ -32,11 +32,14 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
+            if (publishableEvents.Any(this.Handles))
             {
-                foreach (var publishableEvent in publishableEvents)
+                using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
                 {
-                    this.Handle(publishableEvent, inMemoryStorage);
+                    foreach (var publishableEvent in publishableEvents)
+                    {
+                        this.Handle(publishableEvent, inMemoryStorage);
+                    }
                 }
             }
         }

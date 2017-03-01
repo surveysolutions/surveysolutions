@@ -12,21 +12,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, answers, this.Tree);
+            CheckTextListInvariants(questionIdentity, answers, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 
-            changedInterviewTree.GetQuestion(answeredQuestion).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(answers));
+            changedInterviewTree.GetQuestion(questionIdentity).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(answers));
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);

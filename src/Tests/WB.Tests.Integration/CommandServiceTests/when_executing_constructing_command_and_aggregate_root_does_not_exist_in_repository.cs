@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 Times.Once());
 
         private static CommandService commandService;
-        private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static IEnumerable<CommittedEvent> publishedEvents;
         private static Guid constructedAggregateId;
         private static Mock<IAggregateSnapshotter> snapshooterMock;

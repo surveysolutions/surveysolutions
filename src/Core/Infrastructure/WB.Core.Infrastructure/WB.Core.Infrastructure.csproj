@@ -67,11 +67,14 @@
     <Compile Include="EventFreeInfrastructureModule.cs" />
     <Compile Include="EventSourcedInfrastructureModule.cs" />
     <Compile Include="FileSystem\IProtectedArchiveUtils.cs" />
+    <Compile Include="Implementation\Aggregates\AggregateLock.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
     <Compile Include="CommandBus\Implementation\SequentialCommandService.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithExtendedCache.cs" />
+    <Compile Include="Implementation\Aggregates\IAggregateLock.cs" />
+    <Compile Include="Implementation\Aggregates\IAggregateRootCacheCleaner.cs" />
     <Compile Include="Implementation\Aggregates\PlainAggregateRootRepository.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />

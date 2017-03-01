@@ -4,36 +4,81 @@ import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
-import { getInstance as hubProxy } from "../api"
+import { apiCaller, getInstance as hubProxy, queryString } from "../api"
+import Complete from "../components/Complete"
 import Section from "../components/Section"
-import Start from "../components/Start"
+import SideBar from "../components/Sidebar"
 import store from "../store"
 
 const router = new VueRouter({
     base: virtualPath + "/",
     mode: "history",
     routes: [
-        { name: "root", path: "/:questionnaireId", component: Start },
-        { name: "prefilled", path: "/:interviewId/Cover", component: Section },
-        { name: "section", path: "/:interviewId/Section/:sectionId", component: Section }
+        {
+            name: "prefilled",
+            path: "/:interviewId/Cover",
+            components: {
+                default: Section,
+                sideBar: SideBar
+            }
+        },
+        {
+            name: "section",
+            path: "/:interviewId/Section/:sectionId",
+            components: {
+                default: Section,
+                sideBar: SideBar
+            }
+        },
+        {
+            name: "complete",
+            path: "/:interviewId/Complete",
+            components: {
+                default: Complete,
+                sideBar: SideBar
+            }
+        },
+        {
+            name: "finish",
+            path: "/Finish/:interviewId"
+        }
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
-            // handling history back event, setting scroll requirement for `from` sectionId
-            store.dispatch("fetch/sectionRequireScroll", { id: (from.params as any).sectionId })
-        } else if (!(store.state as any).fetch.scroll) {
-            store.dispatch("fetch/sectionRequireScroll", { top: 0 })
+            store.dispatch("sectionRequireScroll", { id: (from.params as any).sectionId })
         }
     }
 })
 
-router.afterEach((to, from) => {
+// tslint:disable:no-string-literal
+router.beforeEach(async (to, from, next) => {
+    queryString["interviewId"] = to.params["interviewId"]
+
     hubProxy().then((proxy) => {
-        // tslint:disable-next-line:no-string-literal
-        proxy.state.interviewId = to.params["interviewId"]
-        // tslint:disable-next-line:no-string-literal
         proxy.state.sectionId = to.params["sectionId"]
     })
+
+    if (to.name === "section") {
+        const isEnabled = await apiCaller(api => api.isEnabled(to.params["sectionId"]))
+        if (!isEnabled) {
+            next(false)
+            return
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
+
+    // navigation could be canceled
+    store.dispatch("onBeforeNavigate")
+
+    const hamburger = document.getElementById("sidebarHamburger")
+
+    // check for button visibility.
+    if (hamburger && hamburger.offsetParent != null) {
+        store.dispatch("toggleSidebarPanel", false /* close sidebar panel */)
+    }
 })
 
 export default router

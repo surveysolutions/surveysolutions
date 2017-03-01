@@ -16,27 +16,34 @@ namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
-    [WebInterviewEnabled]
+    [ObserverNotAllowed]
+    [WebInterviewFeatureEnabled]
     public class WebInterviewSetupController : BaseController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigurator configurator;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILogger logger, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IWebInterviewConfigurator configurator)
+            IWebInterviewConfigurator configurator,
+            IWebInterviewConfigProvider webInterviewConfigProvider)
             : base(commandService, globalInfo, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.configurator = configurator;
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
         public ActionResult Start(string id)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
+            if (config.Started) return RedirectToAction("Started", new {id = id});
 
             QuestionnaireBrowseItem questionnaire = this.FindCensusQuestionnaire(id);
             if (questionnaire == null)
@@ -47,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
+            model.UseCaptcha = true;
 
             return View(model);
         }
@@ -69,8 +77,8 @@ namespace WB.UI.Headquarters.Controllers
             if (model.ResponsibleId.HasValue)
             {
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-                this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value);
-                return RedirectToAction("Started", new {id = questionnaireIdentity});
+                this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value, model.UseCaptcha);
+                return RedirectToAction("Started", new {id = questionnaireIdentity.ToString()});
             }
 
             return View(model);
@@ -89,9 +97,20 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
 
-            model.WebInterviewLink = Url.Action("Index", "WebInterview", null, Request.Url.Scheme) + "/" + QuestionnaireIdentity.Parse(id);
+            model.WebInterviewLink = Url.Action("Start", "WebInterview", new {id=""}, Request.Url.Scheme) + "/" + QuestionnaireIdentity.Parse(id);
 
             return this.View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Started")]
+        public ActionResult StartedPost(string id)
+        {
+            var questionnaireId = QuestionnaireIdentity.Parse(id);
+            this.configurator.Stop(questionnaireId);
+
+            return RedirectToAction("Index", "SurveySetup");
         }
 
         private QuestionnaireBrowseItem FindCensusQuestionnaire(string id)

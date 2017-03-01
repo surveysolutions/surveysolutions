@@ -80,7 +80,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
 
-
 namespace WB.Core.BoundedContexts.Headquarters
 {
     public class HeadquartersBoundedContextModule : NinjectModule
@@ -90,7 +89,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
-        private readonly string questionnaireAssembliesDirectoryName;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -106,8 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
             int? interviewLimitCount = null,
-            string syncDirectoryName = "SYNC",
-            string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
+            string syncDirectoryName = "SYNC")
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -119,7 +116,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
-            this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
         }
 
         public override void Load()
@@ -182,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp))
                 .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedRosterVectors))
                 .Handles<AnswerMultipleOptionsQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedValues))
-                .Handles<AnswerYesNoQuestion>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerYesNoQuestion(command), config => config.ValidatedBy<InterviewAnswersCommandValidator>())
+                .Handles<AnswerYesNoQuestion>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerYesNoQuestion(command))
                 .Handles<AnswerNumericIntegerQuestionCommand>(command => command.InterviewId, aggregate => aggregate.AnswerNumericIntegerQuestion)
                 .Handles<AnswerNumericRealQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerNumericRealQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer))
                 .Handles<AnswerPictureQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerPictureQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.PictureFileName))
@@ -211,7 +207,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
                 .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
-                //.Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview))
+                                //.Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview))
+                .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.CompleteTime))
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
 
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
@@ -329,9 +326,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewSynchronizationFileStorage>().To<InterviewSynchronizationFileStorage>()
                 .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
 
-            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnaireAssemblyFileAccessor>()
-                .InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesDirectoryName);
-
+            this.Bind<IQuestionnaireAssemblyAccessor>().To<QuestionnaireAssemblyAccessor>().InSingletonScope();
+           
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
 

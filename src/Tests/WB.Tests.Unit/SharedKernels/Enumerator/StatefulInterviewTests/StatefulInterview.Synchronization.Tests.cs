@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -22,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var syncDto = Create.Entity.InterviewSynchronizationDto(
                 answers: new[] {commentedAnswer});
 
-            interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionId)).ToList();
 
@@ -53,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var syncDto = Create.Entity.InterviewSynchronizationDto(answers: new[] { answerOnTextList });
 
             //act
-            interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
             //assert
             var multiLinkedToList = interview.GetMultiOptionLinkedToListQuestion(Create.Entity.Identity(multiLinkedToListId, Create.Entity.RosterVector(1)));
@@ -67,12 +72,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             //arrange
             var textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var textQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var groupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var staticTextId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextListQuestion(textListQuestionId),
-                Create.Entity.ListRoster(rosterSizeQuestionId: textListQuestionId, children: new[]
+                Create.Entity.ListRoster(rosterSizeQuestionId: textListQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.TextQuestion(textQuestionId)
+                    Create.Entity.TextQuestion(textQuestionId),
+                    Create.Entity.Group(groupId),
+                    Create.Entity.StaticText(staticTextId)
                 }));
 
             var interview = Setup.StatefulInterview(questionnaire);
@@ -87,14 +96,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 answer: null, 
                 comments: Create.Entity.CommentSynchronizationDto("comment"));
 
-            var syncDto = Create.Entity.InterviewSynchronizationDto(answers: new[]
-            {
-                answerOnTextList,
-                answerTextQuestion
-            });
+            var groupIdentity = Create.Entity.InterviewItemId( groupId, Create.Entity.RosterVector(1));
+            var questionIdentity = Create.Entity.Identity( groupId, Create.Entity.RosterVector(1));
+            var staticTextIdentity = Create.Entity.Identity( groupId, Create.Entity.RosterVector(1));
+
+            var failedValidationConditions = new List<FailedValidationCondition> { Create.Entity.FailedValidationCondition(0) };
+
+            var syncDto = Create.Entity.InterviewSynchronizationDto(
+                answers: new[] { answerOnTextList, answerTextQuestion },
+                disabledGroups: new HashSet<InterviewItemId> { groupIdentity },
+                disabledQuestions: new HashSet<InterviewItemId> { groupIdentity },
+                failedValidationConditions: new  Dictionary<Identity, IList<FailedValidationCondition>>
+                {
+                    { questionIdentity, failedValidationConditions } 
+                },
+                disabledStaticTexts: new List<Identity> { staticTextIdentity },
+                invalidStaticTexts: new List<KeyValuePair<Identity, List<FailedValidationCondition>>>
+                {
+                    new KeyValuePair<Identity, List<FailedValidationCondition>>(staticTextIdentity, failedValidationConditions)
+                }
+               );
 
             //act
-            TestDelegate sync = () => interview.SynchronizeInterview(Guid.NewGuid(), syncDto);
+            TestDelegate sync = () => interview.ApplyEvent(new InterviewSynchronized(syncDto));
 
             //assert
             Assert.DoesNotThrow(sync);

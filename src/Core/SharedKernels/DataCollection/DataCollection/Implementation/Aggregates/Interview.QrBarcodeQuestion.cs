@@ -12,24 +12,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
-
-            questionInvariants.RequireQuestionExists();
-            questionInvariants.RequireQuestionType(QuestionType.QRBarcode);
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireQuestion(QuestionType.QRBarcode)
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
 
             var changedInterviewTree = this.Tree.Clone();
-            changedInterviewTree.GetQuestion(answeredQuestion).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(answer));
+            changedInterviewTree.GetQuestion(questionIdentity).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);

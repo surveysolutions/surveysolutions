@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Storage.EventStore;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;

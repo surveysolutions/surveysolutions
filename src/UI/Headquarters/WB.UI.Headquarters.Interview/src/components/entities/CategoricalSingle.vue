@@ -1,7 +1,7 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="single-select-question">
+    <wb-question :question="$me" questionCssClassName="single-select-question" :noAnswer="noOptions">
         <div class="question-unit">
-            <div class="options-group">
+            <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="radio" v-for="option in $me.options">
                     <div class="field">
                         <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
@@ -11,6 +11,7 @@
                         <wb-remove-answer />
                     </div>
                 </div>
+                <div v-if="noOptions" class="options-not-available">Options will be available after answering referenced question</div>
             </div>
         </div>
     </wb-question>
@@ -28,6 +29,9 @@
                 set(value) {
                     this.$store.dispatch("answerSingleOptionQuestion", { answer: value, questionId: this.$me.id })
                 }
+            },
+            noOptions() {
+                return this.$me.options == null || this.$me.options.length == 0
             }
         },
         mixins: [entityDetails]

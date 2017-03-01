@@ -11,18 +11,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var treeInvariants = new InterviewTreeInvariants(this.Tree);
-            var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
-
-            questionInvariants.RequireQuestionExists();
-            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            treeInvariants.RequireQuestionIsEnabled(questionIdentity);
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
+                .RequireQuestion()
+                .RequireQuestionInstanceExists()
+                .RequireQuestionIsEnabled();
 
             var changedInterviewTree = this.Tree.Clone();
 

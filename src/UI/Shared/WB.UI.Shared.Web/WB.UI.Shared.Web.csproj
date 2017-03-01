@@ -160,6 +160,7 @@
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
     <Compile Include="Elmah\ElmahDataFilter.cs" />
     <Compile Include="Extensions\Alerts.cs" />
+    <Compile Include="Extensions\ModelStateDictionaryHelper.cs" />
     <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />

@@ -1,7 +1,9 @@
 using Android.App;
 using Android.Views;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
@@ -42,5 +44,16 @@ namespace WB.UI.Tester.Activities
                 TesterUIResources.MenuItem_Title_Language_Original
             },
         };
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            if (!this.ViewModel.IsSuccessfullyLoaded) return;
+
+            var shouldShowVariables = ServiceLocator.Current.GetInstance<IEnumeratorSettings>()?.ShowVariables ?? false;
+            if (this.ViewModel.IsVariablesShowed  != shouldShowVariables)
+                this.ViewModel?.ReloadCommand?.Execute();
+        }
     }
 }

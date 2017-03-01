@@ -2,8 +2,14 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 115px 30px 50px 32px;
+	padding: 100px 5px 50px 5px;
 	margin-left: 12px;
+	.input-group, .btn-group.bootstrap-select{
+		margin-left: -10px !important;
+	} 
+	.input-group.date{
+		margin-left: 0 !important;
+	}
 }
 input.checkbox-filter{
   	display: none;
@@ -44,10 +50,20 @@ input.checkbox-filter{
     	background-position: 0px -180px;
   	}
 }
+.filters{
+	input.checkbox-filter{
+		& ~ label{
+	  		padding-left: 30px;
+	  		.tick {
+	  			left: -5px;
+	  		}
+	  	}
+	}
+}
 .filters-container {
 	color: $gray_text;
 	border-bottom: 3px solid $gray-super-light;
-	padding-bottom: 20px;
+	padding: 0 25px 20px 30px; 
 	.block-filter{
 		margin-bottom: 30px;
 		select{
@@ -106,15 +122,45 @@ input.checkbox-filter{
 	}
 }
 .preset-filters-container{
-	padding-top: 30px;
+	padding: 30px 25px 20px 30px;
 	a, .export-queue{
 		@extend h5;
 		color: $blue;
 		display: block;
 	}
 }
+.filters-container .flagged-questions{
+	margin: 0;
+}
+.filters {
+	.bootstrap-select.btn-group{
+		width: 305px !important;
+	}
+	.input-group{
+		width: 305px;
+	}
+}
+@media (max-width: 1300px){
+	.foldback-button{
+		display: block;
+	}
+	.fullscreen-hidden-filters{
+		.filters{
+			left: - $filter-width - 12px;
+			overflow: visible;
+			@include hidden-foldback-button();
+			.foldback-button{
+                right: - $width-foldback-button;
+            }
+		}
+	}
+}
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
+	.preset-filters-container, .filters-container{
+		padding-left: 20px;
+		padding-right: 15px;
+	}
 	.foldback-button{
 		display: block;
 	}
@@ -161,6 +207,7 @@ input.checkbox-filter{
 	}
 	
 }
+
 @media (max-width: $screen-xs-min){
 	.fullscreen-hidden-filters{
 		.filters{

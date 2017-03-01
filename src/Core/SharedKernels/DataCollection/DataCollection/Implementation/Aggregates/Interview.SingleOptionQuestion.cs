@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
@@ -10,19 +11,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var isLinkedToList = this.Tree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, this.Tree, isLinkedToList);
+            var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
+
+            if (isLinkedToList)
+                RequireLinkedToListSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
+            else
+                this.RequireFixedSingleOptionAnswerAllowed(questionIdentity, selectedValue, questionnaire, this.Tree);
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var givenAndRemovedAnswers = new List<Identity> { answeredQuestion };
-            var singleQuestion = changedInterviewTree.GetQuestion(answeredQuestion);
+            var givenAndRemovedAnswers = new List<Identity> { questionIdentity };
+            var singleQuestion = changedInterviewTree.GetQuestion(questionIdentity);
             
             if (isLinkedToList)
             {
@@ -37,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (questionWasAnsweredAndAnswerChanged)
                 {
-                    RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
+                    RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
                 }
             }
 

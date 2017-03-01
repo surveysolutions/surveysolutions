@@ -1,5 +1,5 @@
 @import "variables";
-$icon-font-path: '../fonts/';
+$icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';
 @import "../vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 @import "mixins";
@@ -13,6 +13,7 @@ $icon-font-path: '../fonts/';
 @import "zoomimg";
 @import "panels";
 @import "filters";
+@import "modal";
 
 @import "common";
 @import "import-questionnaires";
@@ -20,6 +21,9 @@ $icon-font-path: '../fonts/';
 @import "batch-upload";
 @import "export";
 @import "interview-details";
-@import "team-and-roles";
-@import "reports";
 @import "survey-setup";
+@import "web-interview-start";
+@import "main-information";
+@import "web-interview-first-last-chapter";
+@import "interviews";
+@import "bootstrap-mvc-validation";

@@ -17,12 +17,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
     {
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
 
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
         public InterviewExpressionStatePrototypeProvider(
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IFileSystemAccessor fileSystemAccessor, 
             IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {
@@ -33,19 +33,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
         public ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
-            string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
+            var assemblyExists = this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireId, questionnaireVersion);
 
-            if (!fileSystemAccessor.IsFileExists(assemblyFile))
+            if (!assemblyExists)
             {
-                Logger.Error($"Assembly was not found. Questionnaire={questionnaireId}, version={questionnaireVersion}, search={assemblyFile}");
+                Logger.Error($"Assembly was not found. Questionnaire={questionnaireId}, version={questionnaireVersion}");
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
 
             try
             {
-                //path is cached
-                //if assembly was loaded from this path it won't be loaded again 
-                var compiledAssembly = this.fileSystemAccessor.LoadAssembly(assemblyFile);
+                var compiledAssembly = this.questionnaireAssemblyFileAccessor.LoadAssembly(questionnaireId, questionnaireVersion);
 
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.ToList().
                     SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof (IInterviewExpressionState)) && x.IsPublic);

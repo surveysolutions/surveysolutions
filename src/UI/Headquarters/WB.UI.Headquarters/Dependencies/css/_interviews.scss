@@ -1,0 +1,221 @@
+.table-wrapper{
+	position: relative;
+	padding-top: 20px;
+	.wrapper-modal-dropdown{
+	    @include absolute(0, 0);
+	   /*  z-index: 2; */
+	   .modal-dialog{
+	   		@include absolute(-30px, 0);
+	   }
+	   .modal.in{
+	   		position: absolute;
+	   		overflow: visible;
+	   }
+	}
+}
+.table-with-prefilled-column{
+	.prefield-column, .spent-time, .template, .accepted-hq, .census, .number-rejected{
+		display: none;
+
+	}
+	td, th{
+		&.visible{
+			display: table-cell;
+		}
+		&.prefield-column{
+			border-color: $gray-form !important;
+			&.enumeration-area{
+				border-left: 2px solid $blue !important;
+			}
+			&.deelling-address{
+				border-right: 2px solid $blue !important;
+			}
+		}
+	}
+	tr:last-child{
+		td.prefield-column{
+			border-bottom: 2px solid $blue !important;
+		}
+	}
+	th.prefield-column{
+		border-top: 2px solid $blue !important;
+	}
+}
+th.prefield-column{
+	font: 12px/14px "TrebuchetMS";
+	text-transform: none;
+	font-weight: normal;
+	color: $blue;
+}
+td.prefield-column{
+	font-style: italic;
+}
+.interview-id{
+	min-width: 240px !important;
+	overflow: hidden;
+	.show-prefield-btn{
+		text-transform: none;
+		float: right;
+	}
+}
+.flags .flag{
+	color: $gray_text;
+	&:before{
+        background-position: 1px 0;
+    }
+    &:hover, &:focus, &:active{
+    	&:before{
+			background-position: -18px 0;
+		}
+    }
+}
+td.errors{
+	color: $red_error;
+}
+.table tbody tr td span.interviewer{
+	color: $gray_text;
+}
+.table-wrapper .table td.enumerator{
+	padding-top: 10px;
+	padding-bottom: 10px;	
+}
+.table tbody tr {
+	&:hover, &:focus, &:active{
+		td.not-synced-assign
+			a{
+				color: $gray_text;
+			}
+	}
+	td.not-synced-assign{
+		font-style: italic;
+		a{
+			color: $gray_light;
+		}
+	}
+}
+.comment-icon{
+	display: block;
+    @include size(25px, 23px); 
+	background: transparent url("#{$assetsPath}/img/comments-icon-1x.png") no-repeat;
+    @include image-2x("#{$assetsPath}/img/comments-icon-2x.png", 32px, 64px);
+    background-size: 32px 64px;
+    background-position: -4px -40px; 
+    &.responded{
+    	background-position: -4px -4px; 
+    }
+}
+.enumerator{
+	.interviewer, .supervisor{
+		&:before{
+			margin-right: 10px;
+		}
+	}
+}
+.statuses{
+	table{
+		tr:last-child td{
+		font-weight: bold !important;
+		}
+	}
+}
+.screen-small-resolution{
+		display: none;
+}
+@media (max-width: $screen-sm-min){
+	.interviews-large-screen{
+		display: none;
+	}
+	.screen-small-resolution{
+		padding: 15px;
+		display: block;
+		font: 14px/16px Arial, sans-serif;
+		.row-unit{
+			padding: 20px 15px;
+			background-color: #f8f9f9;
+			border-bottom: 2px solid $gray_form;
+			&:last-of-type{
+				border-bottom: none;
+			}
+		}
+		.header-unit{
+			position: relative;
+			margin-bottom: 15px;
+			input.checkbox-filter ~ label .tick{
+				left: -5px;
+			}
+			label{
+				padding-right: 60px;
+				.title-row{
+					font-weight: normal;
+					font-size: 18px;
+					line-height: 20px;
+					display: block;
+					margin-bottom: 5px;
+				}
+			}
+			.comment-icon{
+				@include absolute(0, 50px);
+			}
+		}
+		ul{
+			margin-bottom: 15px;
+			li{
+				margin-bottom: 5px;
+			}
+		}
+		%table-min-parametrs{
+			width: 50%;
+			border-right: 3px solid #f9f9f9;
+			&:nth-child(2){
+				border-right: none;
+			}
+		}
+		.table-min-wrapper{
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			.table-min{
+				@extend %table-min-parametrs;
+				.table-row{
+					min-height: 45px;
+					display: flex;
+					.table-td{
+						@extend %table-min-parametrs;
+						padding: 10px 20px;
+						line-height: 24px;
+						background-color: #edeff0;
+						.flag{
+							padding-left: 25px;
+						}
+						&.table-header{
+							padding-left: 0;
+							color: $gray_light;
+							font: 11px/13px "TrebuchetMSBold";
+							letter-spacing: 1px;
+							text-transform: uppercase;
+							background-color: transparent;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.screen-small-resolution{
+		.table-min-wrapper{
+			flex-direction: column;
+			.table-min{
+				width: 100%;
+			}
+		}
+		.header-unit{
+			.comment-icon{
+				right: 0;
+			}
+			label{
+				padding-right: 30px;
+			}
+		}
+	}
+}

@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
@@ -22,14 +23,17 @@ namespace WB.UI.Headquarters.Controllers
     public class SettingsController : BaseController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+        private readonly IImageProcessingService imageProcessingService;
 
         public SettingsController(ICommandService commandService, 
             IGlobalInfoProvider globalInfo,
             IPlainKeyValueStorage<CompanyLogo> logoStorage,
+            IImageProcessingService imageProcessingService,
             ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.logoStorage = logoStorage;
+            this.imageProcessingService = imageProcessingService;
         }
 
         public ActionResult Index()
@@ -55,7 +59,7 @@ namespace WB.UI.Headquarters.Controllers
 
                             try
                             {
-                                ValidateImage(array);
+                                this.imageProcessingService.ValidateImage(array);
 
                                 this.logoStorage.Store(new CompanyLogo
                                 {
@@ -81,21 +85,6 @@ namespace WB.UI.Headquarters.Controllers
             this.logoStorage.Remove(CompanyLogo.StorageKey);
             WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
             return RedirectToAction("Index");
-        }
-
-        private void ValidateImage(byte[] source)
-        {
-            using (var outputStream = new MemoryStream())
-            {
-                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
-                {
-                    MaxWidth = 1,
-                    MaxHeight = 1,
-                    Format = "png"
-                });
-
-                outputStream.ToArray();
-            }
         }
     }
 }

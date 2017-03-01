@@ -1,11 +1,14 @@
 <template>
     <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
+        <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
+
         <div class="question-editor" :class="questionEditorClass">
-            <wb-title />
-            <wb-instructions />
+            <wb-title v-if="!noTitle" />
+            <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation />
+            <wb-validation v-if="!noValidation" />
         </div>
+        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
 <script lang="ts">
@@ -13,26 +16,42 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer'],
         computed: {
             id() {
                 return this.question.id
             },
+            valuenow() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.uploaded
+                }
+                return 100
+            },
+            valuemax() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.total
+                }
+                return 100
+            },
             hash() {
                 return getLocationHash(this.question.id)
+            },
+            isFetchInProgress() {
+                return this.question.fetching
             },
             isEnabled() {
                 return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
             },
             questionClass() {
-                return [{ 'hidden-question': this.question.isDisabled }]
+                return [{ 'disabled-question': this.question.isDisabled }]
             },
             questionEditorClass() {
                 return [{
-                    answered: this.question.isAnswered,
+                    answered: this.question.isAnswered && !this.noAnswer,
                     'has-error': !this.question.validity.isValid
                 }, this.questionCssClassName]
             }
         }
     }
+
 </script>

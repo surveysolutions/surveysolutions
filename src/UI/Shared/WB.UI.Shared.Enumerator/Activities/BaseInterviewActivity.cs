@@ -1,15 +1,12 @@
 ﻿using System;
-using Android.App;
-using Android.Content;
-using Android.Content.PM;
+using Android.Content.Res;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
-using Plugin.CurrentActivity;
-using Plugin.Permissions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -21,15 +18,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
-        private MvxSubscriptionToken countOfInvalidEntitiesIncreasedToken;
-        private Vibrator vibrator;
 
         protected override int ViewResourceId => Resource.Layout.interview;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
@@ -42,13 +36,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnStart()
         {
-            this.vibrator = (Vibrator)this.GetSystemService(Context.VibratorService);
-
             var messenger = Mvx.Resolve<IMvxMessenger>();
 
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
-            this.countOfInvalidEntitiesIncreasedToken = messenger.Subscribe<CountOfInvalidEntitiesIncreasedMessage>(this.OnCountOfInvalidEntitiesIncreased);
             base.OnStart();
         }
 
@@ -83,29 +74,28 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             if (IsFinishing)
             {
+                var messenger = Mvx.Resolve<IMvxMessenger>();
+                messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
+                messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
+
+                this.ViewModel.Sections.Dispose();
+
                 this.Dispose();
             }
         }
 
-        private void OnCountOfInvalidEntitiesIncreased(CountOfInvalidEntitiesIncreasedMessage msg)
-        {
-            if (this.vibrator.HasVibrator)
-                vibrator.Vibrate(100);
-        }
-
-        private void OnSectionChange(SectionChangeMessage msg)
-        {
-            Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers(); }, null);
-        }
-
-        protected override void OnStop()
-        {
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
-            messenger.Unsubscribe<CountOfInvalidEntitiesIncreasedMessage>(this.countOfInvalidEntitiesIncreasedToken);
-            base.OnStop();
-        }
+        private void OnSectionChange(SectionChangeMessage msg) =>
+            Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() =>
+            {
+                try
+                {
+                    this.drawerLayout.CloseDrawers();
+                }
+                catch(ArgumentException)
+                {
+                    //ignore System.ArgumentExceptionHandle must be valid. Parameter name: instance
+                }
+            });
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {
@@ -113,8 +103,15 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.drawerToggle.SyncState();
         }
 
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            this.drawerToggle.OnConfigurationChanged(newConfig);
+        }
+
         public override void OnLowMemory()
         {
+            base.OnLowMemory();
             GC.Collect(GC.MaxGeneration);
         }
     }

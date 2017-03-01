@@ -35,9 +35,17 @@
                     </p>
                 </div>
                 <div>
-                    <a href="@Url.Action("Index", "SurveySetup")" class="btn btn-primary">
-                        @WebInterviewSetup.BackToQuestionnaires
-                    </a>
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="action-buttons">
+
+                            <input type="submit" class="btn btn-danger" value="Stop Web Interview" />
+
+                            <a href="@Url.Action("Index", "SurveySetup")" class="back-link">
+                                @WebInterviewSetup.BackToQuestionnaires
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

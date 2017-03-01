@@ -5,6 +5,10 @@
 		padding-left: 15px;
 		padding-right: 15px;
 	}
+	& *{
+		word-wrap: break-word;
+    	overflow-wrap: break-word;
+	}
 }
 .filters-container {
 	.flagged-questions{
@@ -22,44 +26,11 @@
 	}
 }
 .separate-filters-group{
-	@include gradient($gray_form, $gray_form, null, null);
+	@include gradient-horizontal($gray_form, $gray_form);
+	background-repeat: no-repeat;
 	background-size: 65px 1px;
-	background-position: 0 100%; 
+	background-position: 0 100%;
 	padding: 15px 0;
-}
-.flag{
-	font-size: 14px;
-	line-height: 24px;
-  	color: $gray_form;
-  	display: block;
-  	font-weight: bold;
-  	padding-left: 35px;
-  	position: relative;
-  	&:before{
-  		@extend .button-flag;
-  		content: "";
-  		@include absolute(0, null, null, 0);
-  	}
-	&.flagged{
-		color: $gray-text;
-		&:before{
-            background-position: 1px 0;
-        }
-	}
-	&:hover, &:focus{
-		color: $gray_light;
-		text-decoration: none;
-		&:before{
-			background-position: -56px 0;
-		}
-	}
-	&.flagged:hover, &.flagged:focus{
-		color: $gray-text;
-		text-decoration: none;
-		&:before{
-			background-position: -18px 0;
-		}
-	}	
 }
 .bootstrap-select .dropdown-menu > li > a.flagged{
 	padding-left: 35px;
@@ -89,11 +60,11 @@ label.inactive{
 			font-weight: normal;
 			margin: 0;
 		}
-		
+
 		.dropdown-menu li a{
 			margin: 0;
 		}
-	}	
+	}
 }
 .content{
 	@extend %aside;
@@ -123,7 +94,31 @@ label.inactive{
 				}
 			}
 		}
-	}	
+	}
+}
+.complete-link{
+	display: block;
+	font: 16px/18px "RobotoMedium";
+	padding: 15px 20px 15px 60px;
+	border-bottom: 1px solid rgb(221, 221, 221);
+	&:hover, &:focus, &:active{
+		background-color: #ebebeb;
+		text-decoration: none;
+	}
+	&.success-text{
+		color: $green;
+		&:hover, &:focus, &:active{
+			color: $green;
+		}
+	}
+	&.error-text{
+		&:hover, &:focus, &:active{
+			color: $red_error;
+		}
+	}
+}
+.router-link-active{
+	background-color: #ebebeb;
 }
 .unit-section{
 	position: relative;
@@ -134,6 +129,20 @@ label.inactive{
 	}
 }
 .questionnaire{
+	/*  .radio {
+		.wb-radio{
+			@include focus-for-inputs();
+			&:focus + label .tick:before{
+				right: -4px;
+	    		border-radius: 100%;
+			}
+		}
+	}
+	.form-group {
+		.wb-checkbox{
+			@include focus-for-inputs();
+		}
+	} */
 	background-color: #f8f8f8;
 	@include transition(margin, 0.3s);
 	.unit-title{
@@ -153,28 +162,33 @@ label.inactive{
 					color: rgba(255, 255, 255, 0.5);
 					font: 10px/12px "TrebuchetMS";
 			}
+			& > li:after{
+		  		color: rgba(255, 255, 255, 0.5);
+		  	}
 		}
 		h3{
 			font: 16px/18px "RobotoMedium";
 		}
 	}
-	.section-with-error>.unit-title{
-		background-color: $red_error;
-	}
 	.complete-section>.unit-title{
 		background-color: $green;
+	}
+	.section-with-error>.unit-title{
+		background-color: $red_error;
 	}
 }
 .question{
 	position: relative;
 	padding: 20px 30px 20px 70px;
 	border-bottom: 2px solid $gray-form;
+	@include transition(background, 0.3s);
 	.question-editor .button-flag{
 		@include absolute(0, null, null, -30px);
 	}
 	&.with-flag{
 		display: block;
-		@include gradient($gray-super-light, $gray-super-light, null, null);
+		@include gradient-horizontal($gray-super-light, $gray-super-light);
+		background-repeat: repeat-y;
 		background-size: 12px 100%;
 		.question-editor .button-flag{
 			@extend .flagged;
@@ -200,7 +214,6 @@ label.inactive{
 	}
 	p{
 		width: 90%;
-		
 		font-style: italic;
 		p:last-of-type{
 			margin-bottom: 10px;
@@ -212,6 +225,9 @@ label.inactive{
 	}
 	&.instruction{
 		color: $blue;
+		p{
+            white-space: pre-wrap;
+        }
 	}
 	&.text-danger{
 		color: $red_error;
@@ -234,6 +250,7 @@ label.inactive{
 				@extend %form;
 				width: 360px;
 				height: 40px;
+				padding: 10px 12px;
 				z-index: 0;
 				color: $gray_light;
 			}
@@ -248,31 +265,52 @@ label.inactive{
 		text-align: left;
 	}
 }
-.roster-section-block.answered .roster-section-info{
-	color: $green;
+%border-color{
+	.options-group{
+		background-color: transparent;
+	}
 }
-.question-editor.roster-section-block.has-error .question-unit{
-	.options-group{
-		background-color: transparent;
+.question-editor.roster-section-block.has-error.answered,
+.roster-section-block.answered {
+	@extend %border-color;
+	.roster-section-info{
+		color: $green;
 	}
+}
+.question-editor.roster-section-block.has-error,
+ .question-editor.roster-section-block.started,
+ .disabled-question .question-editor.roster-section-block{
+	@extend %border-color;
 	.roster-section-info{
 		color: $blue;
 	}
-} 
-.question-editor.roster-section-block.started .question-unit{
-	.options-group{
-		background-color: transparent;
+}
+ .disabled-question .question-editor.roster-section-block .disabled{
+	background-color: $gray-highlight-font;
+	background-image: none;
+}
+.roster-section-btn-wrapper{
+	padding: 0 10px;
+}
+.question:after{
+  	content: '';
+  	@include absolute(0, 0);
+  	@include square(100%);
+  	@include stripe-gradient(#dbdfe2, transparent);
+  	@include transition(opacity, 0.3s);
+  	@extend %visibility-hidden;
+}
+.question.disabled-question{
+	&:after{
+		@extend %visibility-visible;
 	}
-	.roster-section-info{
-		color: $blue;
-	}
-} 
-.question.hidden-question{
-	min-height: 65px;
-	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, transparent 2px, transparent 6px);
 	h5{
 		margin: 0;
 		color: $gray_light;
+		// z-index: 1;
+	}
+	.instructions-wrapper{
+		display: none;
 	}
 	.question-editor .button-flag{
 		z-index: 0;
@@ -280,29 +318,39 @@ label.inactive{
 	.question-unit, .information-block{
 		display: none;
 	}
+	.roster-section-wrapper .disabled{
+		background-color: $gray_light;
+		background-image: none;
+	}
 }
 .question.hidden-by-filter {
 	background: #f8f8f8;
 	padding: 2px;
-	& > .question-editor, 
-	& > h5, 
+	&.disabled-question:after{
+		@extend %visibility-hidden;
+	}
+	& > .question-editor,
+	& > h5,
 	& > .dropdown{
 		display: none;
 	}
 }
 .hidden-by-filter{
 	min-height: auto;
-	.question.hidden-question, &.question.hidden-question{
+	.question.disabled-question, &.question.disabled-question{
 		min-height: auto;
 	}
 }
-.unit-section.hidden-by-filter {	
+.unit-section.hidden-by-filter {
 	.unit-title .breadcrumb, .unit-title h3{
 		display: none;
-	} 
+	}
 	.question{
-		padding: 2px 0; 
+		padding: 2px 0;
 		background: #f8f8f8;
+		&:after{
+			@extend %visibility-hidden;
+		}
 		& *{
 			display: none;
 		}
@@ -322,9 +370,11 @@ label.inactive{
 	h5{
 		padding: 0 10px;
 		margin: 0 0 10px;
-
 		position: relative;
 		&:before{left: -25px;}
+	}
+	.instructions-wrapper .btn-link{
+		font: 10px/12px "TrebuchetMSBold";
 	}
 	&.answered .question-unit{
 		.options-group{
@@ -336,9 +386,25 @@ label.inactive{
 		.form-group{
 			border-color: $red-super-light;
 		}
-	}  
+	}
+	&.has-error .form-control:focus{
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	}
+	.question-unit{
+		.radio, .form-group{
+			border-color: transparent;
+		}
+	}
+	&.answered{
+		.question-unit{
+			.radio, .form-group{
+				border-color: $gray-form;
+			}
+		}
+	}
 }
-.question-unit{
+
+.question-editor{
 	.options-group{
 		padding: 10px;
 		border-radius: 7px;
@@ -356,33 +422,34 @@ label.inactive{
 				display: block;
 				font-size: 14px;
 				line-height: 18px;
-				padding: 11px 38px 11px 45px;
+				padding: 11px 38px 11px 40px;
 				margin: 0;
 				.tick{
-					@include absolute(null, null, null, 15px);
+					@include absolute(null, null, null, 12px);
 				}
 			}
 		}
 		.form-group{
 			label {
 				cursor: pointer;
+				.tick{
+					left: 10px;
+				}
+			}
+			.wb-checkbox + label{
+				color: $gray_light;
+	    		font-weight: normal;
+			}
+			.wb-checkbox:checked + label{
+				color:  $gray_text;
+            	font-weight: bold;
 			}
 		}
 		.field{
-			position: relative;
-			.field-to-fill{
-				width: 100%;
-				padding: 11px 15px;
-				border: none;
-				font-size: 14px;
-				line-height: 18px;
-				font-weight: bold;
-				padding-right: 38px;
-				border-radius: 5px;
-			}
 			.dropdown-toggle {
 				@extend .field-to-fill;
-				padding: 11px 38px 11px 15px;
+				height: 40px;
+				padding: 11px 38px 11px 10px;
 				span{
 					position: static;
 					font: 14px/18px Arial, sans-serif;
@@ -398,15 +465,15 @@ label.inactive{
 				width: 100%;
 				padding:  5px 10px;
 				li{
+					&>input{
+						width: 100%;
+						border: none;
+						padding: 7px 10px;
+					}
 					border-bottom: 1px solid $gray_form;
 					&:last-child{
 						border: none;
 					}
-				}
-			}
-			&.answered, &.has-error{
-				.btn-clear{
-					@extend %visibility-visible;
 				}
 			}
 			input:checked ~ .btn-clear{
@@ -415,6 +482,29 @@ label.inactive{
 		}
 	}
 }
+.field{
+	position: relative;
+	.field-to-fill{
+		width: 100%;
+		padding: 11px 12px;
+		border: none;
+		font-size: 14px;
+		line-height: 18px;
+		font-weight: bold;
+		padding-right: 38px;
+		border-radius: 5px;
+		&:focus{
+			outline: none;
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		}
+	}
+	&.answered, &.has-error{
+		.btn-clear{
+			@extend %visibility-visible;
+		}
+	}
+}
+
 .multimedia-question .image-zoom-box{
 	margin: 0;
 	margin-bottom: 10px;
@@ -437,7 +527,7 @@ label.inactive{
 .variable{
 	@extend .static-text;
 }
-.question-editor .question-unit .options-group .field 
+.question-editor .question-unit .options-group .field
 .gray-text{
 	color: $gray_light;
 	font-weight: normal;
@@ -489,12 +579,12 @@ label.inactive{
 		@include clearfix();
 		label{
 			padding-left: 0;
-			padding-right: 5px;
+			padding-right: 0;
 			display: inline-block;
 			float: left;
 
 			&:first-of-type{
-				padding-left: 15px;
+				padding-left: 12px;
 			}
 			.tick{
 				position: relative;
@@ -507,7 +597,7 @@ label.inactive{
 			color: $gray_light;
 			font-size: 18px;
 			line-height: 20px;
-			padding: 11px 5px;
+			padding: 10px 7px;
 			font-weight: normal;
 		}
 		&>span{
@@ -553,9 +643,6 @@ label.inactive{
 			line-height: 14px;
 			margin-bottom: 10px;
 			padding-right: 38px;
-			word-break: break-all;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
 		}
 	}
 }
@@ -576,12 +663,15 @@ label.inactive{
 .content .humburger-foldback-button{
 	display: none;
 }
-.fullscreen-hidden-content{	
+.web-interview .content .questionnaire-content div button.btn-history{
+	margin-right: 10px;
+}
+.fullscreen-hidden-content{
 	.content{
 		left: -$content-width;
 		box-shadow: none;
 		.humburger-foldback-button{
-			top: 65px;
+			top: $indent-foldback-button;
 			left: auto;
 			right: 20px;
 			background-color: $gray_light;
@@ -605,6 +695,16 @@ label.inactive{
 		}
 	}
 }
+
+.footer.footer-adaptive-content.footer-adaptive-filters{
+	padding-left: $filter-width + $content-width;
+}
+.footer.footer-adaptive-content{
+	padding-left: $content-width;
+}
+.footer.footer-adaptive-filters{
+	padding-left: $filter-width;
+}
 .web-interview-for-supervisor,
 .web-interview-for-supervisor.fullscreen-hidden-content,
 .web-interview-for-supervisor.fullscreen-hidden-filters,
@@ -618,57 +718,75 @@ label.inactive{
 		}
 	}
 }
-.wrapper-info{
-	@extend .action-container;
-	border-bottom: 2px solid $gray-form;
-	.container-info{
-		max-width: 550px;
-		h2{
-			margin-top: 20px;
+.options-not-available{
+	font: 13px/15px Arial, sans-serif;
+    font-weight: bold;
+    padding: 5px;
+    font-style: italic;
+    color: $gray_light;
+}
+.details-interview{
+	.wrapper-info{
+		h3{
+			margin-bottom: 20px;
 		}
-		p{
-			font-size: 14px;
-			line-height: 16px;
-			margin-bottom: 15px;
-			&:last-of-type{
-				margin-bottom: 0;
+		.history{
+			td:first-child, th:first-child{
+				min-width: 120px;
 			}
-			a{
-				color: $gray-text;
+			tr:first-of-type{
+				background-color: #ebebeb;
+				border-radius: 5px;
+				td{
+					font-weight: bold;
+				}
+			}
+			margin-left: -10px;
+			margin-right: -10px;
+			td{
+				padding: 10px;
 			}
 		}
 	}
 }
-.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: $filter-width + $content-width;
+.container-info{
+	dl{
+		font-size: 14px;
+		line-height: 16px;
+		dd{
+			margin-bottom: 5px;
+		}
+		dt{
+			margin-bottom: 30px;
+			a{
+				color: $gray_text;
+			}
+		} 
+			
+	}
 }
-.footer.footer-adaptive-content{
-	padding-left: $content-width;
-}
-.footer.footer-adaptive-filters{
-	padding-left: $filter-width;
-} 
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
 		@include tight-filters-aside();
 		.filters{
 			padding-top: 115px;
 			.foldback-button{
-	            top: 75px;
+	            top: $indent-foldback-button-hd;
 	        }
-		}
-		.content{
-			left: $filter-small-width +12px;
-		}
-		.details-interview{
-			&.questionnaire{
-				@include width-questionnaire($content-width-small + $filter-small-width);
+	        .preset-filters-container, .filters-container{
+				padding-left: 20px;
+				padding-right: 15px;
 			}
 		}
 	}
 	.content{
 		width: $content-width-small;
 		left: 12px;
+	}
+	.complete-link{
+		padding-left: 40px;
+		font-size: 14px;
+    	line-height: 16px;
 	}
 	.details-interview{
 		&.questionnaire{
@@ -678,7 +796,7 @@ label.inactive{
 	.questionnaire{
 		.unit-title{
 			width: auto;
-		} 
+		}
 	}
 	.footer.footer-adaptive-content.footer-adaptive-filters{
 		padding-left: $filter-small-width + $content-width-small;
@@ -688,7 +806,92 @@ label.inactive{
 	}
 	.footer.footer-adaptive-filters{
 		padding-left: $filter-small-width;
-	} 
+	}
+	.web-interview-for-supervisor,
+	.web-interview-for-supervisor.fullscreen-hidden-content,
+	.web-interview-for-supervisor.fullscreen-hidden-filters,
+	.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
+		.content{
+			left: $filter-small-width + 12px;
+			box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+
+		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire(($filter-small-width + $content-width-small));
+			}
+		}
+	}
+}
+@media only screen and (max-width: 1300px){
+	.web-interview-for-supervisor{
+		.content{
+			left: $filter-small-width + 12px;
+		}
+		.details-interview{
+			&.questionnaire{
+				@include width-questionnaire(($filter-small-width + $content-width-small));
+			}
+		}
+		&.fullscreen-hidden-content{
+			.content{
+				left: -$content-width-small;
+				box-shadow: none;
+				@include hidden-foldback-button();
+				z-index: 5;
+				overflow: visible;
+				 .foldback-button{
+	                right: - $width-foldback-button;
+	            }
+			}
+			.questionnaire.details-interview{
+				@include width-questionnaire($filter-small-width);
+			}
+			.filters{
+				overflow: auto;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+			}
+		}
+		&.fullscreen-hidden-filters{
+			.filters{
+				left: - $filter-small-width - 12px;
+				overflow: visible;
+				@include hidden-foldback-button();
+				 .foldback-button{
+	                right: - $width-foldback-button;
+	            }
+			}
+			.content{
+				left: 12px;
+				.questionnaire-content{
+					padding-left: 45px;
+				}
+			}
+			.details-interview{
+				&.questionnaire{
+					@include width-questionnaire($content-width-small);
+				}
+			}
+		}
+		&.fullscreen-hidden-filters.fullscreen-hidden-content{
+			.filters{
+				left: - $filter-small-width - 12px;
+				box-shadow: none;
+			}
+			.content{
+				left: -$content-width-small;
+				box-shadow: none;
+				.foldback-button{
+					top: 125px;
+				}
+			}
+			.details-interview{
+				&.questionnaire{
+					@include width-questionnaire(0px);
+				}
+			}
+		}
+	}
 }
 @media (max-width: $screen-md-min){
 	.content{
@@ -705,7 +908,7 @@ label.inactive{
 	        top: 60px !important;
 	    }
     }
-	.web-interview-for-supervisor{ 
+	.web-interview-for-supervisor{
 		.filters{
 			padding-top: 105px;
 			left: ((-$filter-small-width)-12px);
@@ -714,19 +917,22 @@ label.inactive{
 		.content{
 			left: 12px;
 			.foldback-button{
-				top: 65px;
-			} 
+				top: $indent-foldback-button;
+			}
 		}
 		.questionnaire{
 			&.details-interview{
 				@include width-questionnaire($content-width-small);
 			}
 			.unit-title{
-				padding-left: 50px;
+				padding-left: 60px;
 			}
-			 
+
 		}
-		&.fullscreen-hidden-content{	
+		.question{
+			padding-left: 50px;
+		}
+		&.fullscreen-hidden-content{
 			.content{
 				left: -$content-width-small;
 				box-shadow: none;
@@ -734,10 +940,16 @@ label.inactive{
 			.questionnaire.details-interview{
 				@include width-questionnaire($filter-small-width);
 			}
+			.question{
+				padding-left: 50px;
+			}
 			.filters{
 				left: 0;
 				overflow: auto;
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				.foldback-button{
+					top: $indent-foldback-button;
+				}
 			}
 		}
 		&.fullscreen-hidden-filters{
@@ -746,20 +958,23 @@ label.inactive{
 				left: 0;
 				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
 				@include visible-foldback-button();
+				.foldback-button{
+					top: $indent-foldback-button;
+				}
 			}
 			.questionnaire{
 				&.details-interview{
 					@include width-questionnaire($filter-small-width);
 				}
 				.question{
-					padding-left: 40px;
+					padding-left: 50px;
 				}
 				.action-container{
 					padding-left: 50px;
 				}
 				.unit-title{
-					padding-left: 50px;
-				} 
+					padding-left: 60px;
+				}
 				.button-flag{
 					left: -20px;
 				}
@@ -768,7 +983,7 @@ label.inactive{
 				left: -$content-width-small;
 				box-shadow: none;
 			}
-		} 
+		}
 		&.fullscreen-hidden-filters.fullscreen-hidden-content{
 			.content{
 				left: 12px;
@@ -778,19 +993,25 @@ label.inactive{
 				.questionnaire-content{
 					padding-left: 50px;
 				}
+				.foldback-button{
+		            top: $indent-foldback-button;
+		        }
 			}
 			.questionnaire{
 				&.details-interview{
 					@include width-questionnaire($content-width-small);
 				}
 				.question{
-					padding-left: 40px;
+					padding-left: 50px;
 				}
 				.action-container{
 					padding-left: 50px;
 				}
 				.button-flag{
 					left: -20px;
+				}
+				.unit-title{
+					padding-left: 60px;
 				}
 			}
 			.filters{
@@ -817,7 +1038,7 @@ label.inactive{
 		.questionnaire {
 			&.details-interview{
 				@include width-questionnaire(0px);
-			}		
+			}
 			.comment .form-inline .form-group{
 				display: inline-block;
 				margin-bottom: 0;
@@ -831,13 +1052,15 @@ label.inactive{
 			overflow: visible;
 			.foldback-button{
 				top: 120px;
-			} 
-			
+			}
+		}
+		.complete-link{
+			padding-left: 60px;
 		}
 		.filters{
 			.foldback-button{
-				top: 65px;
-			} 
+				top: $indent-foldback-button;
+			}
 		}
 		&.fullscreen-hidden-filters{
 			.content, .questionnaire{
@@ -859,8 +1082,7 @@ label.inactive{
 				border: none;
 				@include visible-foldback-button();
 				.foldback-button{
-			   		right: 5px;
-			   		top: 65px;
+			   		top: $indent-foldback-button;
 			   	}
 			   	.humburger-foldback-button{
 					display: block;
@@ -869,7 +1091,11 @@ label.inactive{
 		}
 		&.fullscreen-hidden-content.fullscreen-hidden-filters{
 			.content{
+				left: 0;
 				display: block;
+				.foldback-button{
+			   		top: $indent-foldback-button;
+			   	}
 			}
 		}
 		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
@@ -881,6 +1107,15 @@ label.inactive{
 	        margin-right: 0;
 	    }
 	}
+	.footer.footer-adaptive-content.footer-adaptive-filters{
+		padding-left: 0;
+	}
+	.footer.footer-adaptive-content{
+		padding-left: 0;
+	}
+	.footer.footer-adaptive-filters{
+		padding-left: 0;
+	}
 }
 @media only screen and (max-width: 615px){
 	.web-interview{
@@ -888,21 +1123,24 @@ label.inactive{
 			float: none;
 		}
 		.questionnaire {
+			.humburger-foldback-button{
+			 	top: 20px;
+			}
 			.comment .form-inline .form-group{
 				margin-bottom: 15px;
 			}
 			.question{
-				padding-left: 40px;
+				padding-left: 35px;
 			}
-			.unit-title{
-				padding-left: 45px;
+			 .unit-title{
+			 	padding-left: 45px;
 			}
 			.button-flag{
 				left: -20px;
 			}
-			.question-editor{
-				max-width: 285px;
-			}
+			// .question-editor{
+			// 	max-width: 285px;
+			// }
 			.comments-block .comment .form-inline .form-control{
 				width: (285px-20px);
 			}
@@ -910,26 +1148,81 @@ label.inactive{
 				width: 71%;
 			}
 			.gps-question.answered .map, .gps-question.has-error .map{
-				width: 225px;
+				width: 90%;
 			}
-			.multimedia-question .image-wrapper{
-				width: 225px;
-			}
+			// .multimedia-question .image-wrapper{
+			// 	width: 225px;
+			// }
 			.modal-img .modal-img-content{
 				max-width: 60% !important;
+			}
+			.options-group .badge{
+			 	left: -27px;
 			}
 		}
 		.aside-menu{
 			right: 20px;
 		}
+		.action-container{
+			padding-left: 50px;
+			a{
+				max-width: 265px;
+			}
+		}
 	}
 	.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: 0;
+		padding-left: 0;
 	}
 	.footer.footer-adaptive-content{
-		display: none;
+		display: block;
+		padding-left: 0;
 	}
 	.footer.footer-adaptive-filters{
-		display: none;
+		display: block;
+		padding-left: 0;
 	}
+}
+@media (max-width: $screen-xs-min){
+	.web-interview{
+		.action-container, .wrapper-info{
+			padding-left: 25px;
+		}
+		.questionnaire{
+			.question{
+				padding-left: 15px;
+				padding-right: 10px;
+			}
+			.unit-title{
+			 	padding-left: 25px;
+			 	padding-right: 10px;
+			 	.breadcrumb{
+			 		min-height: 42px;
+			 	  	padding-left: 25px;
+			 	}
+			}
+		}
+			
+	}
+	.web-interview.web-interview-for-supervisor {
+		.aside-menu{
+			right: 0;
+			z-index: 2;
+		}
+		.questionnaire{
+			.button-flag{
+				left: 10px;
+			}
+			.question-editor h5{
+				margin-left: 25px;
+				margin-right: 15px;
+			}
+			.unit-title{
+				padding-left: 40px;
+				.breadcrumb{
+					min-height: auto;
+					padding-left: 0;
+				}
+			}
+		}
+	}	
 }

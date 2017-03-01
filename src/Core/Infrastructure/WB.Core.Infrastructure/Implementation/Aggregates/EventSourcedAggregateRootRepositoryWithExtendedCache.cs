@@ -9,57 +9,69 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository
+    internal class EventSourcedAggregateRootRepositoryWithExtendedCache : EventSourcedAggregateRootRepository, IAggregateRootCacheCleaner
     {
-        private const int CacheSize = 100;
+        private readonly int cacheSize;
+
         private static readonly object lockObject = new object();
 
-        private static ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
+        private ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
 
-        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
-            : base(eventStore, snapshotStore, repository) { }
-
-
+        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, int cacheSize = 100)
+            : base(eventStore, snapshotStore, repository)
+        {
+            this.cacheSize = cacheSize;
+        }
+        
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
             => this.GetLatest(aggregateType, aggregateId, null, CancellationToken.None);
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             IEventSourcedAggregateRoot aggregateRoot
-                = GetFromCache(aggregateId)
+                = this.GetFromCache(aggregateId)
                 ?? base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
             if (aggregateRoot != null)
             {
-                PutToTopOfCache(aggregateRoot);
+                this.PutToTopOfCache(aggregateRoot);
             }
 
             return aggregateRoot;
         }
 
-        private static IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
+        private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            return cache.SingleOrDefault(aggregate => aggregate.EventSourceId == aggregateId);
+            var cachedAggregate = this.cache.SingleOrDefault(aggregate => aggregate.EventSourceId == aggregateId);
+
+            if (cachedAggregate == null) return null;
+
+            bool isDirty = cachedAggregate.HasUncommittedChanges();
+            if (isDirty) return null;
+
+            return cachedAggregate;
         }
 
-        private static void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
+        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
         {
             lock (lockObject)
             {
-                cache = ImmutableList.CreateRange(
+                if (this.cache.FirstOrDefault() == aggregateRoot) return;
+
+                this.cache = ImmutableList.CreateRange(
                     Enumerable
                         .Concat(
                             aggregateRoot.ToEnumerable(),
                             cache.Except(aggregate => aggregate.EventSourceId == aggregateRoot.EventSourceId))
-                        .Take(CacheSize));
+                        .Take(cacheSize));
             }
         }
 
-        public void Evict(IEventSourcedAggregateRoot aggregate)
+        public void Evict(Guid aggregateId)
         {
             lock (lockObject)
             {
-                cache = ImmutableList.CreateRange(cache.Except(ar => aggregate.EventSourceId == ar.EventSourceId));
+                this.cache = ImmutableList.CreateRange(cache.Except(aggregate => aggregate.EventSourceId == aggregateId));
             }
         }
     }
