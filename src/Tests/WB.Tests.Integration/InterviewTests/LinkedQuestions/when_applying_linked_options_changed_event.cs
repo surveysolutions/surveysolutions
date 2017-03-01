@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -23,10 +24,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-               Create.ListQuestion(textListQuestionId),
+               Abc.Create.Entity.TextListQuestion(questionId: textListQuestionId, variable: null,
+                   enablementCondition: null, validationExpression: null),
                Abc.Create.Entity.Roster(textListRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: textListQuestionId, children:new []
                {
-                   Create.SingleOptionQuestion(singleLinkedToListRosterId, linkedToRosterId: textListRosterId)
+                   Create.SingleOptionQuestion(singleLinkedToLislinkedToRosterIddToRosterId: textListRosterId)
                }) 
             });
 

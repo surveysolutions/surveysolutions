@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -51,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Abc.Create.Entity.Roster(rosterId: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id: linkedToQuestionId, variable: "link_source"),
+                        Abc.Create.Entity.TextQuestion(questionId: linkedToQuestionId, variable: "link_source"),
                     })
             });
 

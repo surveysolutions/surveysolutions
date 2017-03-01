@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -20,7 +21,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),
-                        Create.ListQuestion(id: listQuestionId, variable: "list", enablementCondition: "num == 1"),
+                        Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list",
+                            enablementCondition: "num == 1"),
                         Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
                         Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
                     });

@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
@@ -31,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     {
                         Abc.Create.Entity.Group(groupId, "Group X", null, "true", false, new IComposite[]
                         {
-                            Create.TextQuestion(id: questionId, variable: "txt"),
+                            Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
                             Create.Variable(id: variableId, expression: "txt.Length")
                         })
                     });

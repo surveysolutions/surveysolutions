@@ -5,6 +5,7 @@ using EventStore.Common.Utils;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -30,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, 
                         rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.TextQuestion(q2Id, variable: "q2"),
+                        Abc.Create.Entity.TextQuestion(questionId: q2Id, variable: "q2"),
                     }),
                     Abc.Create.Entity.NumericIntegerQuestion(q4Id, variable: "q4"),
 
@@ -68,15 +69,15 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             appDomainContext = null;
         };
 
-        private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
-        private static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
-        private static readonly Guid rosterId = Guid.Parse("88888888888888888888888888888888");
-        private static readonly Guid q1Id = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Guid q2Id = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid q3Id = Guid.Parse("44444444444444444444444444444444");
-        private static readonly Guid q4Id = Guid.Parse("54444444444444444444444444444444");
-        private static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static InvokeResults results;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static readonly Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
+        static readonly Guid rosterId = Guid.Parse("88888888888888888888888888888888");
+        static readonly Guid q1Id = Guid.Parse("22222222222222222222222222222222");
+        static readonly Guid q2Id = Guid.Parse("33333333333333333333333333333333");
+        static readonly Guid q3Id = Guid.Parse("44444444444444444444444444444444");
+        static readonly Guid q4Id = Guid.Parse("54444444444444444444444444444444");
+        static readonly Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         [Serializable]
         internal class InvokeResults

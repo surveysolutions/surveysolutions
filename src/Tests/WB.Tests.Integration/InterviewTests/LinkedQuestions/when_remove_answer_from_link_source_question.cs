@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -25,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", fixedTitles: new[] {"1", "2"},
                         children: new IComposite[]
                         {
-                            Create.TextQuestion(id: sourceOfLinkQuestionId, variable:"txt")
+                            Abc.Create.Entity.TextQuestion(questionId: sourceOfLinkQuestionId, variable: "txt")
                         }),
                     Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
                 });
@@ -45,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         Because of = () =>
            interview.RemoveAnswer(sourceOfLinkQuestionId, new decimal[] { 0 }, userId, DateTime.Now);
 
-        private It should_raise_AnswerRemoved_event_for_first_row = () =>
+        It should_raise_AnswerRemoved_event_for_first_row = () =>
             eventContext.GetSingleEvent<AnswersRemoved>()
                 .Questions.ShouldContain(Create.Identity(sourceOfLinkQuestionId, Create.RosterVector(0)));
 

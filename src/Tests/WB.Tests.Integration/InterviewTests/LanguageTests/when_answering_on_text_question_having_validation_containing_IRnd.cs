@@ -3,6 +3,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -26,7 +27,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
-                    Create.TextQuestion(variable: "test", id: questionId, validationExpression: "Quest.IRnd() > 2"),
+                    Abc.Create.Entity.TextQuestion(questionId: questionId, 
+                        variable: "test",
+                        validationExpression: "Quest.IRnd() > 2"),
                     Create.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
                 });
 

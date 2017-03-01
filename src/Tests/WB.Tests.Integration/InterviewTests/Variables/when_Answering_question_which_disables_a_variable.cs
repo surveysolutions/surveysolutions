@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -22,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.TextQuestion(id: textQuetionId, variable: "txt"),
+                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
                     Abc.Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
                     {
                         Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")

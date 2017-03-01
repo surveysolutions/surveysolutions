@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -36,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: triggerQuestionId, variable: "roster_var",
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id: questionId, variable: "text")
+                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "text")
                     }),
                 Create.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
             });
@@ -62,7 +63,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         It should_raise_SingleOptionLinkedQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<SingleOptionLinkedQuestionAnswered>();
 
-        private It should_contains_options_for_single_linked_question_in_original_order = () =>
+        It should_contains_options_for_single_linked_question_in_original_order = () =>
         {
             var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Create.Identity(linkedToRosterId));
             linkedToRosterQuestion.Options.ShouldEqual(new List<RosterVector>()
@@ -74,10 +75,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
 
-        private static EventContext eventContext;
-        private static Interview interview;
-        private static Guid userId;
-        private static Guid linkedToRosterId;
-        private static Guid rosterId;
+        static EventContext eventContext;
+        static Interview interview;
+        static Guid userId;
+        static Guid linkedToRosterId;
+        static Guid rosterId;
     }
 }

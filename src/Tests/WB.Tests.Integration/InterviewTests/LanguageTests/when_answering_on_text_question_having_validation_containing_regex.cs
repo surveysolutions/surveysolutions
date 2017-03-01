@@ -3,6 +3,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -26,7 +27,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.TextQuestion(variable: "test", id :questionId, validationExpression: "Regex.IsMatch(self, @\"^\\d{8}_\\d{1,4}$\")"),
+                        Abc.Create.Entity.TextQuestion(questionId: questionId,
+                            variable: "test",
+                            validationExpression: "Regex.IsMatch(self, @\"^\\d{8}_\\d{1,4}$\")", 
+                            text: null),
                     }),
                 });
 
