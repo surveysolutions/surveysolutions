@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var groupGCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, variable: "a"),
                     Create.Group(groupGBId, enablementCondition: "a > 0", children: new IComposite[] {
                         Unit.Create.Entity.NumericIntegerQuestion(questionBId, "b")
                     }),
@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Identity(questionAId),
                         Create.Identity(questionBId)
                     }),
-                    Unit.Create.Event.QuestionsEnabled(new []
+                    Unit.Create.Event.GroupsEnabled(new []
                     {
                         Create.Identity(groupGBId),
                         Create.Identity(groupGCId)
