@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
 using WB.Infrastructure.Native.Storage;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -37,11 +38,11 @@ namespace WB.Tests.Integration.InterviewTests
     {
         internal static AnsweredYesNoOption Yes(decimal value)
         {
-            return IntegrationCreate.AnsweredYesNoOption(value, true);
+            return Create.Entity.AnsweredYesNoOption(value, true);
         }
         internal static AnsweredYesNoOption No(decimal value)
         {
-            return IntegrationCreate.AnsweredYesNoOption(value, false);
+            return Create.Entity.AnsweredYesNoOption(value, false);
         }
 
         protected static Interview SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)

@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -36,7 +37,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetInstance(typeof(Aggregate)) == aggregate
                 && _.GetInstance(typeof(PostProcessor)) == mockOfPostProcessor.Object);
 
-            commandService = IntegrationCreate.CommandService(serviceLocator: serviceLocator);
+            commandService = Create.Service.CommandService(serviceLocator: serviceLocator);
         };
 
         Because of = () => commandService.Execute(commandWithPostProcesor, null);

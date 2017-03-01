@@ -40,11 +40,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     }));
 
                 var interview = SetupInterview(questionnaireDocument);
-                interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId, answer: -5));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId, answer: -5));
                 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId, answer: 126));
+                    interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId, answer: 126));
 
                     return new InvokeResults
                     {

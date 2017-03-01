@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -34,13 +35,13 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(Abc.Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
-                    answeredOptions: new[] {IntegrationCreate.AnsweredYesNoOption(11m, true)},
+                    answeredOptions: new[] { Create.Entity.AnsweredYesNoOption(11m, true)},
                     answerTime: DateTime.UtcNow));
 
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
                     answeredOptions: new AnsweredYesNoOption[] {},
