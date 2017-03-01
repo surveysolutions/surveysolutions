@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.Infrastructure
@@ -73,11 +74,17 @@ namespace WB.Tests.Unit.Infrastructure
                     new Identity(Guid.NewGuid(), new[] {1}),
                     new Identity(Guid.NewGuid(), new[] {0}),
                     new Identity(Guid.NewGuid(), new[] {10.0m, 2.0m, 3.0m})
-                }
+                },
+                Option = new int[] { 1, 2, 3 },
+                Options = new RosterVector[]
+                {
+                    new int[] { 1, 2, 3 },
+                    new int[] { },
+                    new int[] { 1, 2, 3 } }
             };
-            
-            var json = JsonConvert.SerializeObject(answer, JsonSettings);
 
+            var json = JsonConvert.SerializeObject(answer, JsonSettings);
+            json = json.Replace("[1,2,3]", "[1.0,2.0,3.0]");
             var answerFromJson = JsonConvert.DeserializeObject<TestAnswer>(json, JsonSettings);
             Assert.That(answer.Id, Is.EqualTo(answerFromJson.Id));
             Assert.That(answer.Questions[2].RosterVector, Is.EqualTo(answerFromJson.Questions[2].RosterVector));
@@ -87,6 +94,8 @@ namespace WB.Tests.Unit.Infrastructure
         {
             public Guid Id { get; set; }
             public Identity[] Questions { get; set; }
+            public RosterVector[] Options { get; set; }
+            public RosterVector Option { get; set; }
         }
 
         private static JsonSerializerSettings JsonSettings = new JsonSerializerSettings
@@ -96,7 +105,7 @@ namespace WB.Tests.Unit.Infrastructure
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter() },
+            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConvertor() },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
