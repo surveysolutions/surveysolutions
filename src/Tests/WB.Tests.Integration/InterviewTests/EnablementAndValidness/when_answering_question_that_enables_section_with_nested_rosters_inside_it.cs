@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var invokeResults = new InvokeResults();
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(numId, answer: 2));
+                    interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: numId, answer: 2));
                     invokeResults.SubGroupGotEnablementEvents = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(y => y.Id == roster2Id));
                 }
 
