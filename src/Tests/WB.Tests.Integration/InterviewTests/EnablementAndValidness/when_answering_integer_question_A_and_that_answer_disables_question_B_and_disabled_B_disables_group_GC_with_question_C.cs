@@ -31,23 +31,23 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var groupGCId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
-                    Unit.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
                     Create.Group(groupGCId, enablementCondition: "b > 0", children: new IComposite[] {
-                        Unit.Create.Entity.NumericIntegerQuestion(questionCId)
+                        Abc.Create.Entity.NumericIntegerQuestion(questionCId)
                     })
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Unit.Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
                         Create.Identity(questionAId),
                         Create.Identity(questionBId),
                         Create.Identity(questionCId)
                     }),
-                    Unit.Create.Event.GroupsEnabled(new [] { Unit.Create.Entity.Identity(groupGCId) }),
-                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                    Abc.Create.Event.GroupsEnabled(new [] { Abc.Create.Entity.Identity(groupGCId) }),
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
                         questionBId, null, 0, null, null
                     )
                 });

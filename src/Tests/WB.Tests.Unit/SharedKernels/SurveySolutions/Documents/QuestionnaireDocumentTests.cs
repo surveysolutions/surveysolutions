@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Tests.Abc;
 using WB.Tests.Unit;
 
 namespace Main.Core.Tests.Documents

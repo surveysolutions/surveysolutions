@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
+                        Abc.Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
                         Create.Variable(id: variableId, expression: "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =

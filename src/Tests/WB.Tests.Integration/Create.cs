@@ -108,7 +108,7 @@ namespace WB.Tests.Integration
             return macrosSubstitutionServiceMock.Object;
         }
 
-        public static RosterVector RosterVector(params int[] vectors) => Unit.Create.Entity.RosterVector(vectors);
+        public static RosterVector RosterVector(params int[] vectors) => Abc.Create.Entity.RosterVector(vectors);
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
         {

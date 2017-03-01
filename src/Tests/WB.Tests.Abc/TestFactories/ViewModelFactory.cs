@@ -1,33 +1,31 @@
-﻿using Moq;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using System;
+﻿using System;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
+using Moq;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
-using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class ViewModelFactory
     {
@@ -153,7 +151,7 @@ namespace WB.Tests.Unit.TestFactories
                 statefulInterviewRepository,
                 questionStateViewModel,
                 new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository),
-                answering ?? AnsweringViewModel());
+                answering ?? this.AnsweringViewModel());
         }
 
         public AnsweringViewModel AnsweringViewModel(ICommandService commandService = null,

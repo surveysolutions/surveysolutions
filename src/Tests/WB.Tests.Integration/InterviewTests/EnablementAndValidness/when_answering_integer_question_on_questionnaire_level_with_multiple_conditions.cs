@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
 
                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                   Unit.Create.Entity.NumericIntegerQuestion(id: petsAgeQuestionId,
+                   Abc.Create.Entity.NumericIntegerQuestion(id: petsAgeQuestionId,
                                                                  variable: "pet_age",
                                                                  validationConditions: new List<ValidationCondition>()
                                                                     {

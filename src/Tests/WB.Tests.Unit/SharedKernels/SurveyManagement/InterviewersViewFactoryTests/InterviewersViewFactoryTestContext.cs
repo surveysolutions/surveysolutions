@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc.Storage;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTests

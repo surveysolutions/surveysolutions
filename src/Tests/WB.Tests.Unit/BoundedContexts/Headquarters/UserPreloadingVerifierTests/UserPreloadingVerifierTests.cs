@@ -13,6 +13,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 {

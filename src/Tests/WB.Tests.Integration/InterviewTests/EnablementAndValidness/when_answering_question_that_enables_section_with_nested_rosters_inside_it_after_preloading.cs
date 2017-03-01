@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.Chapter(children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
+                        Abc.Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
                     }),
                     Create.Chapter(enablementCondition: "x1 == 1", children: new IComposite[]
                     {

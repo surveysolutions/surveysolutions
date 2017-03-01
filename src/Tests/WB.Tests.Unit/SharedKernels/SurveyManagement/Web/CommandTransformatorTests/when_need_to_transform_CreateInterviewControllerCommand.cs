@@ -2,6 +2,7 @@
 using Ncqrs.Commanding;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using It = Machine.Specifications.It;
 

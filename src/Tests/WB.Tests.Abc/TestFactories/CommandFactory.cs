@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code.CommandTransformation;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class CommandFactory
     {

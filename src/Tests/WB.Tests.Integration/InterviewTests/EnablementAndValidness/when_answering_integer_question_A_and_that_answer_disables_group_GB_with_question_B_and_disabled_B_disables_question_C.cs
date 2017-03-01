@@ -33,23 +33,23 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
                     Create.Group(groupGBId, enablementCondition: "a > 0", children: new IComposite[] {
-                        Unit.Create.Entity.NumericIntegerQuestion(questionBId, "b")
+                        Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b")
                     }),
-                    Unit.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
+                    Abc.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Unit.Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
                         Create.Identity(questionAId),
                         Create.Identity(questionBId),
                         Create.Identity(questionCId)
                     }),
-                    Unit.Create.Event.GroupsEnabled(new [] { Unit.Create.Entity.Identity(groupGBId) }),
-                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                    Abc.Create.Event.GroupsEnabled(new [] { Abc.Create.Entity.Identity(groupGBId) }),
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
                         questionBId, null, 1, null, null
                     )
                 });

@@ -1,15 +1,15 @@
 using System;
-using MvvmCross.Platform.Core;
 using Moq;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
-using WB.Tests.Unit.SharedKernels.DataCollection;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
+using WB.Tests.Abc.TestFactories;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Abc
 {
     internal static class Stub<TInterface>
         where TInterface : class

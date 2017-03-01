@@ -1,9 +1,9 @@
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     public class StorageFactory
     {

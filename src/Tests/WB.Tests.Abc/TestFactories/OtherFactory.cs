@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class OtherFactory
     {

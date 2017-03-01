@@ -32,15 +32,15 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 const string enablementCondition = "a > 2";
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "a"),
                     Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                         rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: enablementCondition, variable: null),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: enablementCondition, variable: null),
                             Create.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                                 rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
                                 {
-                                    Unit.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: enablementCondition, variable: null)
+                                    Abc.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: enablementCondition, variable: null)
                                 })
                         })
                     );

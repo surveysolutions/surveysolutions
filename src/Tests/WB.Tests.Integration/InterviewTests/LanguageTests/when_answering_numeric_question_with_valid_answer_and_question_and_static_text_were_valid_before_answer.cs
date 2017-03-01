@@ -29,18 +29,18 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                             Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
-                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionId: questionA, answer: 1
                         ),
 
-                        Unit.Create.Event.AnswersDeclaredValid(new[] { Create.Identity(questionA)}),
-                        Unit.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
+                        Abc.Create.Event.AnswersDeclaredValid(new[] { Create.Identity(questionA)}),
+                        Abc.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())

@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var numericQuestionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
+                    Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
                         Create.Option(value: "1", text: "parent option 1"),

@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
 
                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                   Unit.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "num"),
+                   Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "num"),
                    Create.Roster(familyRosterId, variable: "fam",
                        rosterSizeSourceType: RosterSizeSourceType.Question,
                        rosterSizeQuestionId: numericQuestionId,
@@ -42,17 +42,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                        children: new IComposite[]
                        {
                            Create.TextQuestion(textQuestionId, variable: "title"),
-                           Unit.Create.Entity.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
+                           Abc.Create.Entity.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
                            Create.Roster(petsRosterId, variable: "frnd",
                                rosterSizeSourceType: RosterSizeSourceType.Question,
                                rosterSizeQuestionId: petsQuestionId,
                                rosterTitleQuestionId: textQuestionId,
                                children: new IComposite[]
                                {
-                                   Unit.Create.Entity.NumericIntegerQuestion(petsAgeQuestionId, variable: "pet_age")
+                                   Abc.Create.Entity.NumericIntegerQuestion(petsAgeQuestionId, variable: "pet_age")
                                })
                        }),
-                   Unit.Create.Entity.NumericIntegerQuestion(finalQuestionId, variable: "fin", enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.pet_age)) > 10"));
+                   Abc.Create.Entity.NumericIntegerQuestion(finalQuestionId, variable: "fin", enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.pet_age)) > 10"));
 
 
                var interview = SetupInterview(questionnaireDocument);

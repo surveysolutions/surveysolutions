@@ -34,11 +34,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
                     Create.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age")
+                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age")
                     }),
                     Create.Roster(roster1Id, variable:"r1", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
+                        Abc.Create.Entity.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
                         Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.ageFilter")
                     })
                 });

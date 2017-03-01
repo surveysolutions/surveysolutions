@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
                     Guid.NewGuid(),
-                    Unit.Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
+                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
                     {
                         Create.ValidationCondition("self < 125", "validation 1"),
                         Create.ValidationCondition("self >= 0", "validation 2")

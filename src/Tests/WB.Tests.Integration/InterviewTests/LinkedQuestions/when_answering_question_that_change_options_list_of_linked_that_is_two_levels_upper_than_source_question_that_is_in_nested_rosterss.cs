@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                             Create.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
                             Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {
-                                Unit.Create.Entity.NumericIntegerQuestion(q2Id, variable: "age")
+                                Abc.Create.Entity.NumericIntegerQuestion(q2Id, variable: "age")
                             })
                         })
                     })

@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {
-                    Unit.Create.Entity.NumericIntegerQuestion(id: numericQuestionId, variable: "trigger"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: numericQuestionId, variable: "trigger"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.Question, 
                         variable: "r1", rosterSizeQuestionId: numericQuestionId)
                 });
