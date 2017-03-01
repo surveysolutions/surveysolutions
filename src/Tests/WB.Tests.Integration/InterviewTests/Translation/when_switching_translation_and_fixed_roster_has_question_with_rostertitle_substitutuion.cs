@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -28,7 +29,8 @@ namespace WB.Tests.Integration.InterviewTests.Translation
                         fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
-                            Create.TextQuestion(t1Id, "test", questionText:"title with %rostertitle%")
+                            Abc.Create.Entity.TextQuestion(questionId: t1Id, variable: "test",
+                                text: "title with %rostertitle%")
                         })
                     
             });

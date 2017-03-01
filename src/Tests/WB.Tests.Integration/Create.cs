@@ -228,32 +228,6 @@ namespace WB.Tests.Integration
             return yesNo;
         }
 
-        public static TextListQuestion ListQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null)
-        {
-            return new TextListQuestion
-            {
-                QuestionType = QuestionType.TextList,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-            };
-        }
-
-        public static TextQuestion TextQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null, string questionText = null)
-        {
-            return new TextQuestion(questionText)
-            {
-                QuestionType = QuestionType.Text,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-            };
-        }
-
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, 
             string variable = null,
             string enablementCondition = null, 

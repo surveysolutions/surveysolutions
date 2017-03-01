@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -23,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.ListQuestion(id: rosterSizeQuestionId, variable: "txt"),
+                Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestionId, variable: "txt"),
                 Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
                 Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
             });

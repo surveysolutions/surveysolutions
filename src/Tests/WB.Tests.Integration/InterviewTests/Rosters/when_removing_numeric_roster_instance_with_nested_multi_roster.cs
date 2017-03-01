@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -55,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                 variable: "multiRoster",
                                 children: new IComposite[]
                                 {
-                                    Create.TextQuestion(textQuestionId, variable: "text")
+                                    Abc.Create.Entity.TextQuestion(questionId: textQuestionId, variable: "text")
                                 })
                         })
                 );

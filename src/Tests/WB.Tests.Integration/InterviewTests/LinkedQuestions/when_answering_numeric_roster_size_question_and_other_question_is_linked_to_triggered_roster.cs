@@ -3,6 +3,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -26,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.TextQuestion(q2Id, variable: "q2"),
+                        Abc.Create.Entity.TextQuestion(questionId: q2Id, variable: "q2"),
                     }),
                     Create.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
                 });

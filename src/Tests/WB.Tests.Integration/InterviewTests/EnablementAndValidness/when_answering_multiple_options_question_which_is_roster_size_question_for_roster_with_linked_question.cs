@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -31,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
-                        children: new[] {Create.TextQuestion(variable: "txt", id: txtSourceOfLinkId)}),
+                        children: new[] {Abc.Create.Entity.TextQuestion(questionId: txtSourceOfLinkId, variable: "txt")}),
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
                         options:
                             new List<Answer>

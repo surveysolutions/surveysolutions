@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -15,13 +16,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.ListQuestion(id: rosterSizeQuestion1Id),
+                Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id),
                 Abc.Create.Entity.Roster(roster1Id, variable:"roster1Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]
                 {
-                    Create.ListQuestion(id: rosterSizeQuestion2Id),
+                    Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion2Id),
                     Abc.Create.Entity.Roster(roster2Id, variable:"roster2Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion2Id, children: new IComposite[]
                     {
-                        Create.ListQuestion(id: rosterSizeQuestion3Id),
+                        Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion3Id),
                         Abc.Create.Entity.Roster(roster3Id, variable:"roster3Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
                         {
                             Create.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id),

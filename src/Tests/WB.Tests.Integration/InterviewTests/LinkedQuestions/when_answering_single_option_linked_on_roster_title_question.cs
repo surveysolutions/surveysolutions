@@ -28,7 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     {
                         Create.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
                     }),
-                Create.TextQuestion(id: disabledQuestionsId, variable: "txt_disabled", enablementCondition:"IsAnswered(link_single)")
+                Abc.Create.Entity.TextQuestion(questionId: disabledQuestionsId, variable: "txt_disabled",
+                    enablementCondition: "IsAnswered(link_single)")
             });
 
             interview = SetupInterview(questionnaireDocument);
