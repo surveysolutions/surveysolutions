@@ -143,8 +143,8 @@
       <HintPath>..\..\..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Npgsql, Version=3.1.8.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.1.8\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.1.9.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.1.9\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -197,11 +197,13 @@
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
+    <Compile Include="LegacyAssemblySettings.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
     <Compile Include="Sanitizer\StringExtensions.cs" />
     <Compile Include="Storage\EntitySerializer.cs" />
+    <Compile Include="Storage\EventSourcedAggregateRootRepositoryWithWebCache.cs" />
     <Compile Include="Storage\INativeReadSideStorage.cs" />
     <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Storage\Postgre\Implementation\PlainTransactionManagerProvider.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSidePlainPostgresTransactionManagerWithSessions.cs" />
+    <Compile Include="Storage\Postgre\Implementation\SessionHandle.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />

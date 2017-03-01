@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () => 
-            interview.SynchronizeInterview(userId, interviewSynchronizationDto);
+            interview.Synchronize(Create.Command.Synchronize(userId, interviewSynchronizationDto));
 
         It should_raise_InterviewSynchronized_event = () =>
             eventContext.ShouldContainEvent<InterviewSynchronized>(@event => @event.InterviewData==interviewSynchronizationDto);

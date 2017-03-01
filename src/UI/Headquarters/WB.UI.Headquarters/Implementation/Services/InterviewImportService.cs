@@ -136,9 +136,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                         {
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
-
-                        Interlocked.Increment(ref createdInterviewsCount);
-                        this.Status.CreatedInterviewsCount = createdInterviewsCount;
+                        
+                        this.Status.CreatedInterviewsCount = Interlocked.Increment(ref createdInterviewsCount);
                         this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
                         this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
                         this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;

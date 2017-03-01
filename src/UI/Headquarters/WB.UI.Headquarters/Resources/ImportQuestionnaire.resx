@@ -136,7 +136,6 @@
     <value>title</value>
   </data>
   <data name="QuestionnaireCannotBeFound" xml:space="preserve">
-    <value>Requested questionnaire {0} cannot be found. Please refresh the list of questionnaires</value>
-    <comment>{0} - questionnaire title</comment>
+    <value>Requested questionnaire cannot be found. Please refresh the list of questionnaires</value>
   </data>
 </root>

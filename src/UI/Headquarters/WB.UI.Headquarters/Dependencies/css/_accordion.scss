@@ -23,7 +23,7 @@
 				position: relative;
 				@include transition(all, 0.3s);
 				&.group a{
-					padding-left: 0;
+					/* padding-left: 0; */
 					&:before, &:after{
 						display: none;
 					}
@@ -40,7 +40,7 @@
 					font: 16px/18px "RobotoMedium";
 					font-weight: normal;
 					color: $blue;
-					padding: 15px 20px 15px 25px;
+					padding: 15px 20px 15px 30px;
 					position: relative;
 					&:hover, &:focus{
 						text-decoration: none;
@@ -77,7 +77,7 @@
 				background-color: darken($gray-highlighting, 3%);
 			}			
 		} 
-		.in{
+		.current{
 			background-color: $gray-highlighting;
 		}
 	}
@@ -91,10 +91,11 @@
 @media only screen and (max-width: 1525px){
 	.structured-content{
 		.panel-default{
-			@include accordion(10px);
+			@include accordion(20px);
 			& > .panel-heading h3 a{
 				font-size: 14px;
 				line-height: 16px;
+				padding-left: 20px;
 			}
 		}
 	}
@@ -102,7 +103,10 @@
 @media (max-width: $screen-sm-min){
 	.structured-content{
 		.panel-default{
-			@include accordion(20px);
+			@include accordion(30px);
+			& > .panel-heading h3 a{
+				padding-left: 30px;
+			}
 		}
 	}
 }

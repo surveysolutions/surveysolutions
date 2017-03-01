@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
@@ -19,7 +20,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [LocalOrDevelopmentAccessOnly]
+    [ControlPanelAccess]
     [NoTransaction]
     public class ControlPanelApiController : ApiController
     {

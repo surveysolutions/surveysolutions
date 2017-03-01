@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public QuestionnairesApiV2Controller(
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,

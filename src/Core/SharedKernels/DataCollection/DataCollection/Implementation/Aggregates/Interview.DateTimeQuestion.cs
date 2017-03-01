@@ -11,18 +11,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties)
+                .RequireAnswerCanBeChanged();
 
-            var answeredQuestion = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
-            
-            var changedInterviewTree = this.Tree.Clone();
-            changedInterviewTree.GetQuestion(answeredQuestion).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
+            RequireDateTimeAnswerAllowed(questionIdentity, questionnaire, this.Tree);
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            var changedInterviewTree = this.Tree.Clone();
+            changedInterviewTree.GetQuestion(questionIdentity).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
+
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);

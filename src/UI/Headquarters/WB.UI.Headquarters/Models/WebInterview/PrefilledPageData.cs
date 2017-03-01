@@ -1,24 +1,12 @@
 ﻿namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class InterviewDetails
+    public class PrefilledPageData
     {
-        public SectionInfo[] Sections { get; set; }
-    }
-    
-    public class SectionInfo
-    {
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public SimpleGroupStatus Status { get; set; }
-        public string Title { get; set; }
-    }
-
-    public class SectionData
-    {
-        public SectionInfo Info { get; set; }
-        public Breadcrumb[] Breadcrumbs { set; get; }
         public InterviewEntityWithType[] Entities { get; set; }
-        public ButtonState NavigationState { get; set; }
+
+        public string FirstSectionId { get; set; }
+
+        public bool HasAnyQuestions { get; set; }
     }
 
     public class ButtonState : InterviewEntity
@@ -29,7 +17,8 @@
     }
 
     public enum ButtonType
-    {Start = 0, Next, Parent, Complete
+    {
+        Start = 0, Next, Parent, Complete
     }
 
     public class BreadcrumbInfo
@@ -37,13 +26,17 @@
         public Breadcrumb[] Breadcrumbs { get; set; }
         public string Status { get; set; }
         public string Title { get; set; }
+        public string RosterTitle { get; set; }
+        public bool IsRoster { get; set; }
     }
 
     public class Breadcrumb
     {
         public string Title { set; get; }
+        public string RosterTitle { get; set; }
         public string Target { get; set; }
         public string ScrollTo { get; set; }
+        public bool IsRoster { get; set; }
     }
 
     public enum SimpleGroupStatus

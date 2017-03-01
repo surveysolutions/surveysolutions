@@ -25,13 +25,24 @@ a{
 		color: $blue;
 	}
 }
+.btn, a{
+	&:hover, &:focus, &:active, &:active:focus{
+		outline: none;
+	}
+}
 html {
   position: relative;
   min-height: 100%;
+  height: 100%;
 	body {
+		&.gray-background{
+			background-color: #f8f8f8;
+		}
+		min-height: 100%;
+		position: relative;
 		color: $gray_text; 
-		min-width: 400px;
-		margin-bottom: 100px;
+		min-width: 360px;
+		padding-bottom: 100px;
 		font-family: Arial, sans-serif;
 		font-size: 16px;
 		line-height: 18px;
@@ -42,10 +53,12 @@ html {
 		.footer {
 			position: absolute;
 			bottom: 0;
-			@include size(100%, 60px);
+			@include size(100%, 100px);
+			padding-top: 40px;
 			text-align: left;
 			color: $gray_light;
 			@include font(12px, 16px);
+			@include transition(padding, 0.3s);
 			a{
 				color: $gray_light;
 				text-decoration: underline;
@@ -189,7 +202,7 @@ h5{
 	}
 }
 .alerts{
-	margin-top: 20px;
+	margin: 20px 0;
 	.alert{
 		margin: 0;
 		padding: 15px;
@@ -204,130 +217,29 @@ h5{
 		}
 		&.alert-success {
 		  @include alert-variant($alert-success-bg, $alert-success-border, $alert-success-text);
-		  /* @include colorful-cancel($alert-success-text); */
 		}
 		&.alert-info {
 		  @include alert-variant($alert-info-bg, $alert-info-border, $alert-info-text);
-		  /* @include colorful-cancel($alert-info-text); */
 		}
 		&.alert-warning {
 		  @include alert-variant($alert-warning-bg, $alert-warning-border, $alert-warning-text);
-		  /* @include colorful-cancel($alert-warning-text); */
 		}
 		&.alert-danger {
 		  @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
-		  /* @include colorful-cancel($alert-danger-text); */
 		}
-		/* .close{
-			span{
-				@include cancel(20px);
-			}
-		} */
-	}
-}
-body > .ui-pnotify
-{
-    z-index: 100050;
-}
-.ui-pnotify-modal-overlay{
-    background-color: rgba(0,0,0,.2);
-}
-.ui-pnotify{
- 	border-radius: 4px;
- 	background: #fff;
- 	box-shadow: 0 0 30px #323232;
-  	.alert{
-   		font-family: "RobotoMedium";
-        padding: 15px;
-        margin: 0;
-        &.alert-warning{
-            border-top: 10px solid $blue;
-            color: $blue;
-        }
-        &.alert-success{
-            border-top: 10px solid $green;
-            color: $green;
-        }
-        &.alert-info{
-            border-top: 10px solid $blue;
-            color: $blue;
-        }
-        &.alert-danger{
-            border-top: 10px solid $red;
-            color: $red;
-        }
-    	.ui-pnotify-title{
-     		font: 16px/18px "RobotoMedium";
-    	}
-    	.ui-pnotify-text{
-     		font-size: 14px;
-     		line-height: 16px;
-    	}
-  	}
-    &.loading-indicator{
-        border-radius: 0;
-        .ui-pnotify-container{
-            border-radius: 0;
-            box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
-        }
-        .ui-pnotify-container.alert{
-            padding: 30px 40px;
-            border-top: none;
-        }
-        .ui-pnotify-title{
-     		font: 24px/26px "RobotoLight";
-            padding: 0;
-            margin: 0;
-    	}
-    }
-    &.centered-modal{
-        position: fixed;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%);
-        margin: 0;
-    }
-}
-.ui-pnotify{
-	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
-	border-radius: 0;
-	.alert{
-		border-top: none !important;
-		padding: 20px;
-		
-		.ui-pnotify-text{
-			color: $gray_text;
-		}
-		.ui-pnotify-action-bar{
-			margin-top: 20px !important;
-			text-align: left !important;
-			.btn{
-				border-color: transparent;
-				color: $blue;
-				padding: 0;
-				margin-right: 20px;
-				&:last-of-type{
-					margin-right: 0;
-				}
-				&:hover, &:focus, &:active{
-					background-color: transparent;
-					text-decoration: underline;
-				}
-			}
-		}
-		.ui-pnotify-closer span{
-    		@include cancel(16px);
-    	}
 	}
 }
 .error-text{
-	color: $red_error;
+	color: $red_error !important;
 }
 .success-text{
-	color: $green_btn;
+	color: $green_btn !important;
 }
 .default-text{
-	color: $gray_form;
+	color: $gray_form !important;
+}
+.primary-text{
+	color: $blue !important;
 }
 .info-block{
     font: 14px/16px "RobotoRegular";
@@ -363,6 +275,9 @@ table{
 		}
 	}
 }
+.table tbody tr td span.census-icon{
+	color: #fff;
+}
 .census-icon{
 	text-transform: capitalize;
 	display: inline-block;
@@ -373,45 +288,201 @@ table{
     font: 13px/13px Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
+	&:hover, &:focus, &:active{
+    	color: #fff !important;		
+	}
 }
-.main-information{
-	margin-left: $filter-width - $margin-container + 12px +15px;
-	padding: 0 0 0 30px;
-	@include transition(margin, 0.3s);
-	.page-header{
-		div{
-			h1{
-				padding: 0;
+.flag{
+	font-size: 14px;
+	line-height: 24px;
+  	color: $gray_form;
+  	display: block;
+  	font-weight: bold;
+  	padding-left: 35px;
+  	position: relative;
+  	@include transition(color, 0.2s);
+  	&:before{
+  		@extend .button-flag;
+  		content: "";
+  		@include absolute(0, null, null, 0);
+  	}
+	&.flagged{
+		color: $gray-text;
+		&:before{
+            background-position: 1px 0;
+        }
+	}
+	&:hover, &:focus, &:active{
+		color: $gray_light;
+		text-decoration: none;
+		&:hover, &:focus{
+    		&:before{
+				background-position: -57px 0;
 			}
-			padding-right: 365px; 
-			&:after{
-				display: table;
-				content: "";
-				clear: both;
-			}
+    	}
+		&:before{
+			background-position: -57px 0;
 		}
-	} 
+	}
+	&.flagged:hover, &.flagged:focus{
+		color: $gray-text;
+		text-decoration: none;
+		&:before{
+			background-position: -18px 0;
+		}
+	}	
+}
+.view-mood{
+	position: fixed;
+	top: 70px;
+	z-index: 20;
+	width: 100%;
+	text-align: center;
+	color: $state-warning-text;
+	margin: 0;
+	border-radius: 0;
+	.panel-heading{
+		padding: 5px;
+		background-color: $highlight-color;
+	}
+	& + main {
+		margin-top: 30px;
+		.container-fluid{
+			
+			.filters{
+				padding-top: 130px;
+			}
+			.content{
+				padding-top: 100px;
+			}
+			.foldback-button{
+				top: $indent-foldback-button-hd + 30px;
+			}
+			.questionnaire{
+		    	.unit-title.is_stuck{
+			        top: 100px !important;
+			    }
+		    }
+		}
+	}
+	& + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button{
+	 	top: 155px;
+	}
 }
 @media (max-width: $screen-md-min){
-	.main-information {
-		padding-right: 20px;
-		.page-header div{
-			padding-right: 255px;
+	.view-mood{
+		top: 60px;
+		& + main {
+			.container-fluid{
+				margin-top: 30px;
+				.filters{
+					padding-top: 125px;
+				}
+				.content{
+					padding-top: 90px;
+				}
+				.foldback-button{
+					top: $indent-foldback-button + 30px;
+				}
+				.questionnaire{
+			    	.unit-title.is_stuck{
+				        top: 90px !important;
+				    }
+			    }
+			}
+		}
+		& + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button,
+		& + .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button,
+		& + .web-interview-for-supervisor.fullscreen-hidden-content .filters .foldback-button{
+		 	top: $indent-foldback-button + 30px;
 		}
 	}
 }
 @media (max-width: $screen-sm-min){
-	.main-information{
-		padding-right: 15px;
-		padding-left: 0;
-		.page-header div{
-			padding-right: 0;
+	.view-mood{
+		& + main {
+			.container-fluid{
+				.content{
+					.foldback-button{
+						top: 145px;
+					}
+					.humburger-foldback-button{
+						top: $indent-foldback-button + 30px;
+					}
+				}
+			}
+		}
+		& + .web-interview.fullscreen-hidden-content .content .foldback-button{
+			top: $indent-foldback-button + 30px;
 		}
 	}
 }
-@media (max-width: $screen-xs-min){
-	.main-information{
-		padding-right: 0px;
-		padding-top: 10px;
+.position-relative{
+	position: relative;
+}
+.empty{
+	width: 20px;
+	height: 2px;
+	background-color: $gray_light;
+	display: inline-block;
+	vertical-align: middle;
+}
+.loading{
+    @extend %loading-indicator;
+    position: fixed;
+    top: 15px;
+    z-index: 2000;
+}
+.toast{
+	.container-fluid{
+		padding: 0;
+		h1{
+			font: 24px/26px "RobotoLight";
+			color: #fff;
+			margin: 10px 0;
+		}
+		h2{
+			font: 18px/20px "RobotoLight";
+			margin-bottom: 10px;
+		}
+	}
+}
+.break-line{
+	word-break: break-all;
+}
+.interviewer{
+	font-size: 14px;
+	line-height: 16px;
+	font-weight: normal;
+	color: $gray_text;
+	&:hover, &:focus, &:active{
+		color: $blue;
+		text-decoration: none;
+	}
+	&:before{
+		display: inline-block;
+		content:"";
+		position: relative;
+		top: 2px; 
+		margin-right: 3px;
+		@include size(11px, 14px);
+		/*background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;*/
+		/*@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);*/
+		background-size: 11px 14px;
+	}
+}
+.supervisor{
+	color: $gray-text !important;
+	font-weight: normal;
+	&:before{
+		display: inline-block;
+		content:"";
+		position: relative;
+		top: 2px; 
+		margin-right: 3px;
+		@include size(11px, 14px);
+		/*background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;*/
+		/*@include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);*/
+		background-size: 11px 14px;
 	}
 }

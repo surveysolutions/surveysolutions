@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -108,14 +107,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; }
-
+        IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
         public bool HasOptions => this.Options.Any();
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
         {
             List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered ?
-                    this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() :
+                    this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder).ToList() :
                     this.Options.Where(x => x.Checked).ToList();
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
@@ -160,13 +159,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (selectedOptionIndex >= 0)
                 {
-                    option.CheckedOrder = selectedOptionIndex + 1;
                     option.Checked = true;
+                    option.CheckedOrder = selectedOptionIndex + 1;
                 }
                 else
                 {
-                    option.CheckedOrder = null;
                     option.Checked = false;
+                    option.CheckedOrder = null;
                 }
             }
         }
@@ -210,6 +209,5 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return result;
             }
         }
-
     }
 }

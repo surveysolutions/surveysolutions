@@ -1,5 +1,6 @@
 import { getLocationHash } from "../store/store.fetch"
 
+// Validation, Title, RemoveAnswer, Instruction, Attachment
 export const entityPartial = {
     computed: {
         $me() {
@@ -35,6 +36,9 @@ export function detailsMixin(fetchMethod: string, defaults) {
             },
             hash() {
                 return getLocationHash(this.id)
+            },
+            interviewId() {
+                return this.$route.params.interviewId
             }
         },
         props: ["id"],
@@ -51,6 +55,12 @@ export function detailsMixin(fetchMethod: string, defaults) {
             this.$store.dispatch("cleanUpEntity", this.id)
         },
         methods: {
+            cleanValidity() {
+                this.$store.dispatch("clearAnswerValidity", { id: this.id })
+            },
+            markAnswerAsNotSavedWithMessage(message) {
+                this.$store.dispatch("setAnswerAsNotSaved", { id: this.id, message })
+            },
             fetch(id) {
                 this.$store.dispatch({
                     type: fetchMethod,
@@ -62,6 +72,7 @@ export function detailsMixin(fetchMethod: string, defaults) {
     }
 }
 
+// Questions
 export const entityDetails = detailsMixin("fetchEntity", {
     isAnswered: false,
     validity: {

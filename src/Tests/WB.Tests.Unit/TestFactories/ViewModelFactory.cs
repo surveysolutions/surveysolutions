@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -53,20 +54,19 @@ namespace WB.Tests.Unit.TestFactories
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
-            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+            ICompositeCollectionInflationService compositeCollectionInflationService = null,
+            IVirbationService virbationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues,
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
                 mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),
-                Mock.Of<IMvxMessenger>(),
-                Mock.Of<IEnumeratorSettings>(),
-                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>());
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
+                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<ICommandService>());
 
         public ErrorMessagesViewModel ErrorMessagesViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
@@ -342,5 +342,12 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher());
+
+        public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
+            IEnumeratorSettings enumeratorSettings = null, IVirbationService virbationService = null)
+            => new VibrationViewModel(
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
+                virbationService ?? Mock.Of<IVirbationService>());
     }
 }

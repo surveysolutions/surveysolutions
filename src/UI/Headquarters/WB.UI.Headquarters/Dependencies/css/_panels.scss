@@ -7,16 +7,45 @@
 	background-color: $table-selected;
 	z-index: 5;
 	border-radius: 0;
+	padding: 0 30px;
 	label{
 		font-size: 16px;
 		line-height: 18px;
 		color: #fff;
-		padding-right: 40px;
+		padding-right: 45px;
+		margin-bottom: 10px !important;
 		.tick{
-			margin-right: 15px;
+			margin-right: 20px;
 		}
 	}
 	.panel-body{
 		padding: 10px;
+		.btn{
+			margin-right: 10px;
+			&.btn-link{
+				padding: 0;
+			}
+		}
 	}
+}
+@media (max-width: $screen-sm-min){
+	.panel-table{
+		padding: 0 10px;
+		label{
+			font-size: 12px;
+			line-height: 14px;
+			padding-right: 10px;
+			.tick{
+				margin-right: 10px;
+			}
+		}
+		.panel-body .btn{
+			margin-bottom: 10px;
+			padding: 5px;
+			font-size: 10px;
+			&:last-of-type{
+				margin-bottom: 0;
+			}
+		}
+	} 
 }

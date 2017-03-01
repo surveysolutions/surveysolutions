@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.Aggregates
     public interface IEventSourcedAggregateRoot : IAggregateRoot, IEventSource
     {
         bool HasUncommittedChanges();
-        IEnumerable<UncommittedEvent> GetUnCommittedChanges();
+        List<UncommittedEvent> GetUnCommittedChanges();
         void MarkChangesAsCommitted();
     }
 }

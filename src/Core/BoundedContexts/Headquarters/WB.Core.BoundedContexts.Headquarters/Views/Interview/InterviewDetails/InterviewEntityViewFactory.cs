@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -319,7 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             foreach (string usedVariable in usedVariables)
             {
                 string actualAnswerOrDots = answersForTitleSubstitution.ContainsKey(usedVariable) ? answersForTitleSubstitution[usedVariable] : "[...]";
-                title = substitutionService.ReplaceSubstitutionVariable(title, usedVariable, actualAnswerOrDots);
+                title = substitutionService.ReplaceSubstitutionVariable(title, usedVariable, WebUtility.HtmlEncode(actualAnswerOrDots));
             }
 
             return title;

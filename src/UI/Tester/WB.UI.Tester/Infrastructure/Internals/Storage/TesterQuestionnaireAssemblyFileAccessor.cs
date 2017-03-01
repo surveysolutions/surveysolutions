@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -7,23 +8,18 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
-    public class TesterQuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    public class TesterQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string assemblyStorageDirectory;
 
-        public TesterQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
+        public TesterQuestionnaireAssemblyAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.assemblyStorageDirectory = assemblyStorageDirectory;
         }
-
-        public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
-        {
-            return this.GetFullPathToAssembly(questionnaireId);
-        }
-
+        
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
         {
             throw new NotImplementedException();
@@ -32,6 +28,17 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             throw new NotImplementedException();
+        }
+
+        public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
+        {
+            var path = CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            //please don't use LoadFile or Load here, but use LoadFrom
+            //dependent assemblies could not be resolved
+            return Assembly.LoadFrom(path);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64String)
@@ -91,7 +98,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            var assemblyPath = this.GetFullPathToAssembly(questionnaireId);
+            var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
             if (!this.fileSystemAccessor.IsFileExists(assemblyPath))
                 return null;
 
@@ -100,10 +107,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         private string GetFolderNameForTemplate(Guid questionnaireId)
         {
-            return String.Format("dir-{0}", questionnaireId);
+            return $"dir-{questionnaireId}";
         }
 
-        private string GetFullPathToAssembly(Guid questionnaireId)
+        public string CheckAndGetFullPathToAssemblyOrEmpty(Guid questionnaireId, long questionnaireVersion)
         {
             var folderName = this.GetFolderNameForTemplate(questionnaireId);
             var assemblySearchPath = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
@@ -114,7 +121,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            throw new NotImplementedException();
+            var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
+            return this.fileSystemAccessor.IsFileExists(assemblyPath);
         }
     }
 }

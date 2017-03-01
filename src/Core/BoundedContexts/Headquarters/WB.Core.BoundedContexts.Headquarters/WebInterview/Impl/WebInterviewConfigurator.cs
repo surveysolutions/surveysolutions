@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             this.configs = configs;
         }
 
-        public void Start(QuestionnaireIdentity questionnaireId, Guid responsible)
+        public void Start(QuestionnaireIdentity questionnaireId, Guid responsible, bool useCaptcha)
         {
             var webInterviewConfig = this.configs.GetById(questionnaireId.ToString());
             if (webInterviewConfig == null)
@@ -26,8 +26,14 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
             webInterviewConfig.Started = true;
             webInterviewConfig.ResponsibleId = responsible;
+            webInterviewConfig.UseCaptcha = useCaptcha;
 
             this.configs.Store(webInterviewConfig, questionnaireId.ToString());
+        }
+
+        public void Stop(QuestionnaireIdentity questionnaireId)
+        {
+            this.configs.Remove(questionnaireId.ToString());
         }
     }
 }

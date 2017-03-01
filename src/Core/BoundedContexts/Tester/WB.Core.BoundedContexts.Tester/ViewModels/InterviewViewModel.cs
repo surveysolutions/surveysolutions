@@ -1,9 +1,8 @@
-using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -30,10 +29,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
-            IJsonAllTypesSerializer jsonSerializer)
+            IJsonAllTypesSerializer jsonSerializer,
+            VibrationViewModel vibrationViewModel,
+            IEnumeratorSettings enumeratorSettings)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService, jsonSerializer)
+                interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
         }

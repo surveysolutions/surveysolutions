@@ -111,14 +111,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         }
 
         protected static QuestionnairesApiV2Controller CreateQuestionnairesApiV2Controller(
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
+            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
         {
             var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
-                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 serializer ?? Mock.Of<ISerializer>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),

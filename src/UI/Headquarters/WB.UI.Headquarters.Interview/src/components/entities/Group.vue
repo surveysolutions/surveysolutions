@@ -1,19 +1,15 @@
 <template>
-    <div class="question" v-if="!$me.isLoading && !($me.isDisabled && $me.hideIfDisabled)" :class="[{'hidden-question': $me.isDisabled}]" :id="hash">
-        <div class="question-editor roster-section-block" :class="[{'has-error': hasInvalidAnswers && !isCompleted}, {'answered': isCompleted}]">
-            <div class="question-unit">
-                <div class="options-group">
-                    <router-link :to="navigateTo" class="btn btn-roster-section" :class="statusClass">
-                        {{this.$me.title}}<span v-if="this.$me.rosterTitle != null"> - <i>{{this.$me.rosterTitle}}</i></span>
-                    </router-link>
-                </div>
-                <div class="information-block roster-section-info">
-                    {{this.$me.statisticsByAnswersAndSubsections}}<span v-if="hasInvalidAnswers">, </span> 
-                    <span class="error-text" v-if="hasInvalidAnswers">{{this.$me.statisticsByInvalidAnswers}}</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true">
+        <div class="options-group">
+                <router-link :to="navigateTo" class="btn btn-roster-section" :class="btnStatusClass">
+                    {{this.$me.title}}<span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
+                </router-link>
+         </div>
+         <div class="information-block roster-section-info" v-if="!$me.isDisabled">
+                {{this.$me.statisticsByAnswersAndSubsections}}<span v-if="hasInvalidAnswers">, </span>
+                <span class="error-text" v-if="hasInvalidAnswers">{{this.$me.statisticsByInvalidAnswers}}</span>
+         </div>        
+    </wb-question>
 </template>
 
 <script lang="ts">
@@ -31,6 +27,9 @@
                     }
                 }
             },
+            rosterTitle(){
+                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"            
+            },
             isNotStarted() {
                 return this.$me.status == "NotStarted"
             },
@@ -41,13 +40,24 @@
                 return this.$me.status == "Completed"
             },
             hasInvalidAnswers() {
-                return this.$me.hasInvalidAnswers
+                return !this.$me.validity.isValid
+            },
+            btnStatusClass() {
+                return [{
+                    'btn-success': this.$me.validity.isValid && this.isCompleted,                    
+                    'btn-danger': !this.$me.validity.isValid,
+                    'btn-primary': !this.isCompleted ,
+                    'disabled': this.$me.isDisabled
+                }]
             },
             statusClass() {
-                return [{
-                    'btn-success': !this.hasInvalidAnswers && this.isCompleted,
-                    'btn-danger': this.hasInvalidAnswers,
-                    'btn-primary': !this.hasInvalidAnswers && !this.isCompleted
+                return ['roster-section-block', {
+                    'started': this.$me.validity.isValid && this.isStarted,
+                    'has-error': !this.$me.validity.isValid,
+                    '': this.$me.validity.isValid && !this.isCompleted                    
+                },
+                {
+                    'answered': this.isCompleted
                 }]
             }
         }

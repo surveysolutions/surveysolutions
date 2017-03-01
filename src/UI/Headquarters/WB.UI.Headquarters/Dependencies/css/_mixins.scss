@@ -6,29 +6,6 @@
          url('#{$assetsPath}/fonts/#{$family}.ttf') format('truetype'),
          url('#{$assetsPath}/fonts/#{$family}.svg##{$family}') format('svg');}
 }
-@mixin gradient($first_color, $second_color, $first_color2, $second_color2){
-		@if $first_color2==null and $second_color2==null{
-				background-color: $first_color;
-		-webkit-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		   -moz-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  	-ms-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  	 -o-background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		  		background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0;
-		}	
-		@else {
-			background-color: $first_color;
-	background: -webkit-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-				-webkit-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-	   background: -moz-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-	   			   -moz-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-		background: -ms-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-					-ms-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-		 background: -o-linear-gradient(90deg, $first_color, $second_color) no-repeat 0 0,
-		 			 -o-linear-gradient(90deg, $first_color2, $second_color2) no-repeat 0 0;
-			background: linear-gradient(0deg, $first_color, $second_color) no-repeat 0 0,
-						linear-gradient(0deg, $first_color2, $second_color2) no-repeat 0 0;
-		}
-}
 @mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
     position: absolute;
     top: $top;
@@ -112,7 +89,6 @@
 
 @mixin cancel($width: 14px){
     $height: 2px; 
-    outline: none;
     background-color: transparent;
     @include square($width);
     position: relative;
@@ -129,6 +105,7 @@
         @include rotate(45deg);
         position: relative;
         top: ($width - $height)/2;
+        @include transition(background, 0.2s);
     }
     &:after{
         @include rotate(-45deg);
@@ -141,14 +118,16 @@
     }
 }
 @mixin clear($width: 18px){
-    &:hover, &:active:focus, &:focus, &:active{
-        outline: none;
+    &:active, &:active:focus{
+        span:before, span:after{
+            background-color: #000;
+            @include opacity(1);
+        }
     }
     span{
         @include cancel($width);
     }
     @include absolute(0, 0);
-    @include transition(all, 0.2s);
     @extend %visibility-hidden;
 }
 @mixin question_title_colors($default, $with_error, $filled){
@@ -180,9 +159,10 @@
     }
 }
 @mixin btn-back-questionnaire($base-color, $arrow) {
-    background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
-    background-size: 22.5px 33.75px;
-    background-position: 10px 10px;
+    &:before{
+        background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
+        background-size: 22.5px 33.75px;
+    }
     color: $base-color;
     border-color: $base-color;
     &:active{
@@ -190,7 +170,6 @@
             background-color: lighten($base-color, 40%);
             color: $base-color;
             border-color: darken($base-color, 10%);
-
         }
     }
     &:hover,
@@ -200,23 +179,6 @@
         border-color: darken($base-color, 10%);
     }
 }
-/* @mixin colorful-cancel($color){
-    .close{
-        &:hover, &:focus, &:active{
-            span{
-                &:before, &:after{
-                    background-color: darken($color, 20%);
-                }
-            }
-        }
-        span{
-            opacity: 0.7;
-            &:before, &:after{
-                background-color: $color;  
-            }
-        }
-    }
-} */
 %font-header{
     color: $white;
     font-family: "RobotoLight";
@@ -249,8 +211,8 @@
 %uppercase-font{
     font: 12px/14px "TrebuchetMSBold";
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+    letter-spacing: 0.13em;
+} 
 %gray-uppercase{
     color: $gray_light;
     font: 11px/13px "TrebuchetMSBold";
@@ -286,17 +248,17 @@
         background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
         background-size: 629px 18px;
-        background-position: 4px 0px;
-        margin-right: 10px;
+        background-position: 4px 2px;
+        margin-right: 12px;
         @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 629px, 18px);
     }
 }
 %visibility-visible{
     visibility: visible;
-    opacity: 1;
+    @include opacity(1);
 }
 %visibility-hidden{
-    opacity: 0;
+    @include opacity(0);
     visibility: hidden;
 }
 %action-btn{
@@ -307,7 +269,7 @@
         }
     }
     .question-unit .options-group .field .btn-clear{
-        top: -13px;
+        top: -11px;
     }
     .block-with-data{
         font-size: 14px;
@@ -338,24 +300,23 @@
     .filters{
         padding-top: 105px;
         width: $filter-small-width;
-        padding-left: 12px;
         .bootstrap-select.btn-group{
-            width: 100% !important;   
+            width: calc(100% + 10px) !important;   
         } 
         .input-group{
-            width: 100%;
+            width: calc(100% + 10px);
         }
         .open > .dropdown-menu{
             width: 100%;    
         }
         .foldback-button{
-            top: 65px;
+            top: $indent-foldback-button;
         }
     }
 }
 @mixin visible-foldback-button(){
     .foldback-button{
-        right: 5px;
+        right: 10px;
         background-color: transparent;
         span.arrow{
             @include rotate(45deg);
@@ -374,7 +335,57 @@
 }
 %delete-outline{
     &:hover, &:focus, &:active, &.active:focus{
-        outline: none !important;
         box-shadow: none;
+    }
+}
+@mixin focus-for-inputs(){
+    display: block;
+    height: 0;
+    position: absolute;
+    @include opacity(0);
+    & + label .tick:before{
+        @extend %visibility-hidden;
+        display: block;
+        content: "";
+        width: 26px;
+        height: 26px;
+        border: 2px solid $gray_form;
+        position: absolute;
+        top: -4px;
+        right: -6px;
+        border-radius: 5px;
+        @include transition(all, 0.2s);
+    }
+    &:focus + label .tick:before{
+        @extend %visibility-visible;
+    }
+}
+@mixin fullscreen-hidden-filter($block){
+    .fullscreen-hidden-filters .#{$block}{
+        margin-left: 0;
+        padding-left: 12px;
+    } 
+}
+@mixin stripe-gradient($first-color, $second-color){
+    background-image: -webkit-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: -o-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: -moz-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-image: linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
+    background-size: 8px 8px;
+}
+%loading-indicator{
+    @include absolute(0, 0, 0, 0);
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    background: rgba(0,0,0, 0.1);
+    div{
+        background-color: white;
+        padding: 30px 40px;
+        display: inline-block;
+        font: 24px/26px "RobotoLight";
+        margin-top: 10px;
+        box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px $gray_light;
     }
 }

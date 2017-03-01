@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using It = Machine.Specifications.It;
 
@@ -11,7 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
     {
         Establish context = () =>
         {
-            questionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(fileSystemAccessor: FileSystemAccessorMock.Object);
+            AssemblyServiceMock.Setup(x => x.GetAssemblyInfo(Moq.It.IsAny<string>())).Returns(new AssemblyInfo() {  });
+            questionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(assemblyService: AssemblyServiceMock.Object);
         };
 
         Because of = () =>
@@ -27,8 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
             new[] { "assembly", "empty", version.ToString() }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
 
-        private static QuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
-        private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
+        private static QuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
+        private static readonly Mock<IAssemblyService> AssemblyServiceMock = CreateIAssemblyService();
         private static Guid questionnaireId = Guid.Parse("33332222111100000000111122223333");
         private static long version = 3;
 

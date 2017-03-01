@@ -8,20 +8,16 @@ var projectPath = path.resolve(__dirname, '../../../WB.UI.Headquarters')
 const config = {
     build: {
         env: require('./prod.env'),
-        // index: path.resolve(__dirname, '../dist/index.html'),
         index: path.resolve(projectPath, 'Views/WebInterview/Index.cshtml'),
         assetsRoot: path.resolve(projectPath, 'InterviewApp'),
         assetsSubDirectory: '',
         assetsPublicPath: '~/InterviewApp/',
-        productionSourceMap: true,
-        // Gzip off by default as many popular static hosts such as
-        // Surge or Netlify already gzip all static assets for you.
-        // Before setting to `true`, make sure to:
-        // npm install --save-dev compression-webpack-plugin
+        productionSourceMap: false,
         productionGzip: false,
         assetsRelativePath: "../../Dependencies/",
         productionGzipExtensions: ['js', 'css'],
-        template: '_IndexTemplate.cshtml'
+        template: '_IndexTemplate.cshtml',
+        bundleAnalyzerReport: true
     },
     dev: {
         env: require('./dev.env'),
@@ -29,16 +25,12 @@ const config = {
         index: path.resolve(projectPath, 'Views/WebInterview/Index.cshtml'),
         assetsRoot: path.resolve(projectPath, 'InterviewApp'),
         assetsSubDirectory: '',
-        assetsPublicPath: '~/InterviewApp/',
+        assetsPublicPath: '/headquarters/interviewapp/',
         assetsRelativePath: "/Headquarters/Dependencies/",
         proxyTable: {},
-        // CSS Sourcemaps off by default because relative paths are "buggy"
-        // with this option, according to the CSS-Loader README
-        // (https://github.com/webpack/css-loader#sourcemaps)
-        // In our experience, they generally work as expected,
-        // just be aware of this issue when enabling this option.
         cssSourceMap: false,
-        template: '_IndexTemplate.cshtml'
+        template: '_IndexTemplate.cshtml',
+        verbose: true
     },
 
     designer: {
@@ -47,7 +39,7 @@ const config = {
         index: 'index.html',
         assetsRoot: path.resolve(__dirname, '../.designTime'),
         assetsSubDirectory: '',
-        assetsPublicPath: '',
+        assetsPublicPath: '/',
         proxyTable: {
             "/signalr": argv.uri == null ? "https://superhq-dev.mysurvey.solutions/signalr" : argv.uri
         },

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -10,10 +11,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public interface IStatefulInterview
     {
+        DateTime? StartedDate { get; }
+        DateTime? CompletedDate { get; }
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
-
+        bool IsDeleted { get; }
         Guid Id { get; }
         string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }
@@ -102,6 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
+        IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
 
@@ -131,10 +135,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 
+        IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity);
+
         bool IsQuestionPrefilled(Identity entityIdentity);
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
         
         IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
+
+        IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
+        bool AcceptsInterviewerAnswers();
     }
 }

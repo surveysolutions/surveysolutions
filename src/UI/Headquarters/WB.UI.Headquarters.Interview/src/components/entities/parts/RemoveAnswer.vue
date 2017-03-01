@@ -12,7 +12,9 @@
         methods: {
             removeAnswer() {
                 this.$store.dispatch("removeAnswer", this.$me.id)
+                this.$emit('answerRemoved', this.$me.id)
             }
         }
     }
+
 </script>

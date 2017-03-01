@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
@@ -20,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
     public class QuestionnairesApiV1Controller : QuestionnairesControllerBase
     {
         public QuestionnairesApiV1Controller(
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,

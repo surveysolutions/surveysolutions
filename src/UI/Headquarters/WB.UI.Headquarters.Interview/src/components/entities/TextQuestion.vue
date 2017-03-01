@@ -3,10 +3,10 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter answer ' + userFriendlyMask" :value="$me.answer"
-                            @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered">
-                        <wb-remove-answer />
+                    <div class="field" :class="{answered: $me.isAnswered}">
+                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
+                            v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered" title="Enter text">
+                            <wb-remove-answer />
                     </div>
                 </div>
             </div>
@@ -35,9 +35,14 @@
                 const target = $(evnt.target)
                 let answer: string = target.val()
 
+                if (!answer || !answer.trim()) {
+                    this.markAnswerAsNotSavedWithMessage("Empty value cannot be saved")
+                    return
+                }
+
                 if (answer) {
                     if (this.$me.mask && !target.data("maskCompleted")) {
-                        this.$store.dispatch("setAnswerAsNotSaved", { id: this.$me.id, message: "Please, fill in all the required values" })
+                        this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")
                     }
                     else {
                         this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
@@ -47,7 +52,7 @@
         },
         directives: {
             mask: {
-                update: (el, binding) => {
+                bind(el, binding, vnode) {
                     if (binding.value) {
                         const input = $(el)
                         input.mask(binding.value, {
@@ -58,9 +63,13 @@
                                 input.data("maskCompleted", true);
                             },
                             translation: {
+                                "0": { pattern: /0/, fallback: "0" },
                                 "~": { pattern: /[a-zA-Z]/ },
                                 "#": { pattern: /\d/ },
-                                "*": { pattern: /[a-zA-Z0-9]/ }
+                                "*": { pattern: /[a-zA-Z0-9]/ },
+                                "9": { pattern: /9/, fallback: "9" },
+                                'A': { pattern: /A/, fallback: "A" },
+                                'S': { pattern: /S/, fallback: "S" }
                             }
                         })
                     }
@@ -68,4 +77,5 @@
             }
         }
     }
+
 </script>

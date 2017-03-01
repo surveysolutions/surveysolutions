@@ -147,8 +147,8 @@
       <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Npgsql, Version=3.1.8.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.1.8\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.1.9.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.1.9\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -414,12 +414,15 @@
     <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_gps_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_roster_and_roster_has_multi_question_as_source.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level3.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_roster_size_question_and_other_question_is_linked_to_triggered_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_disable_source_of_linked_to_list_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss.cs" />
@@ -444,6 +447,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
+    <Compile Include="InterviewTests\OptionsFilter\when_answering_multioption_question_removes_rosters_and_answer_for_linked_multi_question.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_multi_question.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_single_question.cs" />
     <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters.cs" />
@@ -472,6 +476,7 @@
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
+    <Compile Include="NCrunch.Framework.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
     <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
     <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />

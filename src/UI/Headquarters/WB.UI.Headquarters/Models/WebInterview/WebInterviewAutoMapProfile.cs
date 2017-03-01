@@ -1,6 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -18,21 +23,81 @@ namespace WB.UI.Headquarters.Models.WebInterview
                  .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()))
                  .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
+            this.CreateMap<InterviewTreeQuestion, StubEntity>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
+
             this.CreateMap<InterviewTreeQuestion, InterviewTextQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsText.GetAnswer()));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewBarcodeQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsQRBarcode.GetAnswer()));
+
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleFixedOption.GetAnswer().SelectedValue));
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
+                    x.IsLinkedToListQuestion
+                        ? x.AsSingleLinkedToList.GetAnswer().SelectedValue
+                        : x.AsSingleFixedOption.GetAnswer().SelectedValue));
+            
+            this.CreateMap<InterviewTreeQuestion, InterviewFilteredQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts =>
+                {
+                    opts.PreCondition(x => x.IsAnswered());
+                    opts.MapFrom(x => GetSingleFixedOptionAnswerAsDropdownItem(x));
+                });
+
+            this.CreateMap<InterviewTreeQuestion, InterviewLinkedSingleQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsSingleLinkedOption.GetAnswer().SelectedValue));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiLinkedOption.GetAnswer().CheckedValues));
+
             this.CreateMap<InterviewTreeQuestion, InterviewMutliOptionQuestion>()
-               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsMultiFixedOption.GetAnswer().CheckedValues));
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x =>
+                    x.IsLinkedToListQuestion
+                        ? x.AsMultiLinkedToList.GetAnswer().CheckedValues
+                        : x.AsMultiFixedOption.GetAnswer().CheckedValues));
+
+            this.CreateMap<CheckedYesNoAnswerOption, InterviewYesNoAnswer>();
+
+            this.CreateMap<InterviewTreeQuestion, InterviewYesNoQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsYesNo.GetAnswer().CheckedOptions));
             this.CreateMap<InterviewTreeQuestion, InterviewIntegerQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsInteger.GetAnswer().Value));
             this.CreateMap<InterviewTreeQuestion, InterviewDoubleQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDouble.GetAnswer().Value));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewDateQuestion>()
+               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
+               .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
+
+            this.CreateMap<Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.TextListAnswerRow, TextListAnswerRow>()
+                .ForMember(x => x.Text, opts => opts.MapFrom(x => x.Text))
+                .ForMember(x => x.Value, opts => opts.MapFrom(x => x.Value));
+            this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()
+               .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+               .ForMember(x => x.Rows, opts => opts.MapFrom(x => x.AsTextList.GetAnswer().Rows));
+
+            this.CreateMap<GeoPosition, GpsAnswer>()
+                .ForMember(x => x.Latitude, opts => opts.MapFrom(x => x.Latitude))
+                .ForMember(x => x.Longitude, opts => opts.MapFrom(x => x.Longitude))
+                .ForMember(x => x.Accuracy, opts => opts.MapFrom(x => x.Accuracy))
+                .ForMember(x => x.Altitude, opts => opts.MapFrom(x => x.Altitude))
+                .ForMember(x => x.Timestamp, opts => opts.MapFrom(x => x.Timestamp.ToUnixTimeMilliseconds()));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewGpsQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsGps.GetAnswer().Value));
 
             this.CreateMap<InterviewTreeStaticText, Validity>()
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
@@ -61,15 +126,43 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)));
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster));
+
+            this.CreateMap<InterviewTreeGroup, Validity>()
+                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => !HasQuestionsWithInvalidAnswers(x)));
 
             this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeRoster, InterviewEntity>()
                 .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
                 .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
                 .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.HasInvalidAnswers, opts => opts.MapFrom(x => HasQuestionsWithInvalidAnswers(x)))
-                .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle));
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => true));
+
+            this.CreateMap<InterviewTreeGroup, SidebarPanel>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.State, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
+                .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
+                .ForMember(x => x.HasChildren, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled())))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.RosterTitle, opts =>
+                {
+                    opts.Condition(x => x is InterviewTreeRoster);
+                    opts.MapFrom(x => (x as InterviewTreeRoster).RosterTitle);
+                })
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster)); 
+
+            this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.AsMultimedia.GetAnswer().FileName}"));
+        }
+
+        private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
+        {
+            return new DropdownItem(question.AsSingleFixedOption.GetAnswer().SelectedValue, question.GetAnswerAsString());
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)
@@ -86,7 +179,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup @group)
             => @group.Children
                 .OfType<InterviewTreeGroup>()
-                .Where(subGroup=> !subGroup.IsDisabled())
+                .Where(subGroup => !subGroup.IsDisabled())
                 .Any(subGroup => GetGroupStatus(subGroup) != GroupStatus.Completed || HasQuestionsWithInvalidAnswers(subGroup));
 
         private string GetGroupStatisticsByInvalidAnswers(InterviewTreeGroup group)
@@ -114,8 +207,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
             var subGroupsText = GetInformationBySubgroups(group);
             var enabledAnsweredQuestionsCount = @group.CountEnabledAnsweredQuestions();
 
-            return $@"{(enabledAnsweredQuestionsCount == 1 ? 
-                Resources.WebInterview.Interview_Group_AnsweredQuestions_One : 
+            return $@"{(enabledAnsweredQuestionsCount == 1 ?
+                Resources.WebInterview.Interview_Group_AnsweredQuestions_One :
                 string.Format(Resources.WebInterview.Interview_Group_AnsweredQuestions_Many, enabledAnsweredQuestionsCount))}, {subGroupsText}";
         }
 

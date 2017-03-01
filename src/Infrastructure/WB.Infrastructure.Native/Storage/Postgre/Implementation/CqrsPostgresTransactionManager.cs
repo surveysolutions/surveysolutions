@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
-using NHibernate.Persister.Entity;
 using Ninject;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -10,10 +9,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly ISessionFactory sessionFactory;
 
-        private ITransaction commandTransaction;
-        private ITransaction queryTransaction;
-        private ISession commandSession;
-        private ISession querySession;
+        private Lazy<SessionHandle> lazyCommandSession;
+        private Lazy<SessionHandle> lazyQuerySession;
 
         private bool triedToBeginCommandTransaction;
         private bool triedToBeginQueryTransaction;
@@ -27,23 +24,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             this.triedToBeginCommandTransaction = true;
 
-            if (this.commandTransaction != null && this.commandSession != null)
+            if (this.lazyCommandSession != null)
                 throw new InvalidOperationException();
 
-            this.commandSession = this.sessionFactory.OpenSession();
-            this.commandTransaction = this.commandSession.BeginTransaction(IsolationLevel.RepeatableRead);
+            this.lazyCommandSession = new Lazy<SessionHandle>(() =>
+            {
+                var commandSession = this.sessionFactory.OpenSession();
+                var commandTransaction = commandSession.BeginTransaction(IsolationLevel.RepeatableRead);
+
+                return new SessionHandle(commandSession, commandTransaction);
+            });
         }
 
         public void CommitCommandTransaction()
         {
-            if (this.commandTransaction == null || this.commandSession == null)
+            if (this.lazyCommandSession == null)
                 throw new InvalidOperationException();
 
-            this.commandTransaction.Commit();
-            this.commandTransaction = null;
+            if (this.lazyCommandSession.IsValueCreated)
+            {
+                this.lazyCommandSession.Value.Transaction.Commit();
+                this.lazyCommandSession.Value.Session.Close();
+            }
 
-            this.commandSession.Close();
-            this.commandSession = null;
+            this.lazyCommandSession = null;
 
             this.triedToBeginCommandTransaction = false;
         }
@@ -53,17 +57,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (!this.triedToBeginCommandTransaction)
                 throw new InvalidOperationException("Command transaction is not started and therefore cannot be rolled back.");
 
-            if (this.commandTransaction != null)
+            if (this.lazyCommandSession?.IsValueCreated == true)
             {
-                this.commandTransaction.Rollback();
-                this.commandTransaction = null;
+                this.lazyCommandSession.Value.Transaction.Rollback();
+                this.lazyCommandSession.Value.Session.Close();
             }
 
-            if (this.commandSession != null)
-            {
-                this.commandSession.Close();
-                this.commandSession = null;
-            }
+            this.lazyCommandSession = null;
 
             this.triedToBeginCommandTransaction = false;
         }
@@ -72,14 +72,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             this.triedToBeginQueryTransaction = true;
 
-            if (this.queryTransaction != null && this.querySession != null)
+            if (this.lazyQuerySession != null)
                 throw new InvalidOperationException("Query transaction is already started");
 
-            if (this.commandTransaction != null)
+            if (this.lazyCommandSession != null)
                 throw new InvalidOperationException("Query transaction is expected to be always open before CommandTransaction, or not opened at all for this request. Please make sure that this controller has action filter for transactions management applied. But some controllers like RebuildReadSide should not ever open query transaction. Check that you are not inside such controller before fixing any code.");
 
-            this.querySession = this.sessionFactory.OpenSession();
-            this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
+            this.lazyQuerySession = new Lazy<SessionHandle>(() =>
+            {
+                var querySession = this.sessionFactory.OpenSession();
+                var queryTransaction = querySession.BeginTransaction(IsolationLevel.ReadCommitted);
+
+                return new SessionHandle(querySession, queryTransaction);
+            });
         }
 
         public void RollbackQueryTransaction()
@@ -87,24 +92,23 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (!this.triedToBeginQueryTransaction)
                 throw new InvalidOperationException("Query transaction is not started and therefore cannot be rolled back.");
 
-            if (this.queryTransaction != null)
+            if (this.lazyQuerySession?.IsValueCreated == true)
             {
-                this.queryTransaction.Rollback();
-                this.queryTransaction = null;
+                this.lazyQuerySession.Value.Transaction.Rollback();
+                this.lazyQuerySession.Value.Session.Close();
             }
 
-            if (this.querySession != null)
-            {
-                this.querySession.Close();
-                this.querySession = null;
-            }
+            this.lazyQuerySession = null;
 
             this.triedToBeginQueryTransaction = false;
         }
 
         public ISession GetSession()
         {
-            var session = this.commandSession ?? this.querySession;
+            ISession querySession = this.lazyQuerySession?.Value.Session;
+            ISession commandSession = this.lazyCommandSession?.Value.Session;
+
+            var session = commandSession ?? querySession;
 
             if (session == null)
                 throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance.");
@@ -112,36 +116,23 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return session;
         }
 
-        public bool IsQueryTransactionStarted
-        {
-            get { return this.queryTransaction != null; }
-        }
+        public bool IsQueryTransactionStarted => this.lazyQuerySession != null;
 
         public void Dispose()
         {
-            if (this.commandSession != null)
+            if (this.lazyCommandSession?.IsValueCreated == true)
             {
-                this.commandSession.Dispose();
-                this.commandSession = null;
+                this.lazyCommandSession.Value.Dispose();
             }
 
-            if (this.querySession != null)
+            this.lazyCommandSession = null;
+
+            if (this.lazyQuerySession?.IsValueCreated == true)
             {
-                this.querySession.Dispose();
-                this.querySession = null;
+                this.lazyQuerySession.Value.Dispose();
             }
 
-            if (this.commandTransaction != null)
-            {
-                this.commandTransaction.Dispose();
-                this.commandTransaction = null;
-            }
-
-            if (this.queryTransaction != null)
-            {
-                this.queryTransaction.Dispose();
-                this.queryTransaction = null;
-            }
+            this.lazyQuerySession = null;
 
             GC.SuppressFinalize(this);
         }

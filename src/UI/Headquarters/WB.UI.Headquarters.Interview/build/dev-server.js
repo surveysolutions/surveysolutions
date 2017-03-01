@@ -65,14 +65,18 @@ app.use(devMiddleware)
 // compilation error display
 app.use(hotMiddleware)
 
-// // serve pure static assets
-// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-// app.use(staticPath, express.static('./static'))
+// serve pure static assets
+var staticPath = config.dev.assetsRoot //path.posix.join(config.dev.asset, config.dev.assetsSubDirectory)
+app.use(staticPath, express.static('./'))
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
+});
+
+app.get('/*', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
 
 var uri = 'http://localhost:' + port

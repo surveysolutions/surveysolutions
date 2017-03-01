@@ -2,22 +2,33 @@
 	font: 12px/14px "TrebuchetMSBold";
 	text-transform: uppercase;
     letter-spacing: 0.13em;
-    outline: none;
+    @include transition(background, 0.2s);
+    word-break: break-word;
 	&:disabled, &.disabled{
-		background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		//background-image: repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent !important;	
 		color: #fff !important;
+		cursor: not-allowed;
+		@include stripe-gradient(#d7d7d7, $gray_light);
 		&:hover, &:focus{
 			border-color: $gray-super-light;
+			outline: none;
 		}
 	}
+	&:focus{
+		/* outline: 1px auto $blue; */
+	}
+}
+a.disabled{
+	pointer-events: none;
+	cursor: not-allowed;
 }
 .btn-link{
 	@extend %gray-uppercase;
+	color: $blue;
 	&:hover, &:focus{
-		outline: none;
 		text-decoration: none;
-		color: darken($gray_light, 25%);
+		color: darken($blue, 15%);
 	}
 }
 .foldback-button{
@@ -62,7 +73,7 @@
 	@include size(42px, 32px);
 	cursor: pointer;
 	z-index: 3;
-	top: calc(50% - 16px);
+	top: calc(50% - 18px);
 	display: block;
 	@include transition(all, 0.2s);
 	&:before, &:after{
@@ -112,12 +123,11 @@
 .btn-default.btn-gray{
 	color: $white;
 	padding: 12px;
-	background-color: darken($gray_form, 10%);
+	background-color: $gray_light;
 	border: none;
 	&:hover, &:focus{
-		outline: none;
 		border: none;
-		background-color: darken($gray_form, 20%);
+		background-color: darken($gray_light, 10%);
 	}
 }
 .back-link{
@@ -131,7 +141,6 @@
 }
 .cancel{
 	border: none;
-	outline: none;
 }
 .button-flag{
 	display: inline-block;
@@ -143,11 +152,10 @@
 	border: none;
 	&:hover, &:focus{
 		background-position: -57px 0;
-		outline: none;
 	}
 	&.flagged, &:active{
     	background-position: 0 0;
-    	outline: none;
+    	/* outline: none; */
     	&:hover, &:focus{
     		background-position: -19px 0;
     	}
@@ -158,7 +166,7 @@
 	border-color: $red_error;
 	padding-top: 8px;
 	padding-bottom: 8px;
-	background-color: transparent;
+	background-color: #fff;
 	color: $red_error;
 	&:focus,
 	&.focus,
@@ -175,7 +183,6 @@
 	border-color: transparent;
 	color: $gray_light;
 	border-radius: 5px;
-	outline: none;
 	text-transform: none;
 	letter-spacing: 0.5px;
 	font: 14px/18px Arial, sans-serif;
@@ -188,8 +195,7 @@
 }
 .btn-plus{
 	@include cancel(14px);
-	@extend %delete-outline;
-	opacity: 1;
+	@include opacity(1);
 		&:before, &:after{
 			@include transition(all, 0.2s);
 	        @include rotate(0deg);
@@ -206,20 +212,35 @@
 }
 .btn-roster-section{
 	letter-spacing: normal;
-	font: 14px/14px Arial, sans-serif;
+	font: 14px/16px Arial, sans-serif;
 	font-weight: bold;
 	width: 100%;
 	text-transform: none;
-	padding: 12px 15px;
+	padding: 11px 15px;
 	text-align: left;
+	white-space: normal;
 }
 .btn-back{
-	padding-left: 40px;
+	&:before{
+		content: "";
+		display: block;
+		float: left;
+		@include size(22.5px, 33.75px);
+		margin-right: 15px;
+	}
+	span{
+		display: table-cell;
+		vertical-align: middle;
+	}
+	display: table;
+	padding-left: 15px;
 	background-color: transparent;
 	border-width: 3px;
-	min-height: 60px;
-	background-size: 22.5px 33.75px;
-	background-position: 10px 10px;
+	border-radius: 4px;
+	font: 17px/19px Arial;
+    font-weight: bold;
+    text-transform: none; 
+    letter-spacing: normal; 
 	&.btn-success{
 		@include btn-back-questionnaire ($green, "back-to-parrent-1-no-animation-2.png");	
 	}
@@ -228,5 +249,89 @@
 	}
 	&.btn-primary{
 		@include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
+	}
+}
+.section-blocker{
+	border: none;
+	margin: 0;
+	padding: 0;
+	@include absolute(0, 0, 0, 0);
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	z-index: 2;
+}
+.btn-looks-like-link{
+	padding: 0;
+	text-transform: none;
+	font: 16px/18px Arial, sans-serif;
+	letter-spacing: normal;
+	&:hover, &:focus, &:active{
+		text-decoration: underline;
+	}
+}
+.btn-strips{
+	border-radius: 0;
+	background-color: transparent;
+	@include square(16px);
+	position: relative;
+	span{
+		display: block;
+		height: 100%;
+		width: 2px;
+		background-color: $blue;
+		position: absolute;
+		top: 0;
+		left: calc(50% - 1px);
+	}
+	&:before, &:after{
+		content: "";
+		display: block;
+		@include absolute(0, 0);
+		height: 100%;
+		width: 2px;
+		background-color: $blue;
+	}
+	&:after{
+		right: auto;
+		left: 0;
+	}
+	span, &:before, &:after{
+		@include opacity(0.5);
+		@include transition(all, 0.2s);
+	}
+	&:hover, &:focus, &:active{
+		span, &:before, &:after{
+		@include opacity(1);
+		}
+	}
+}
+.btn-history{
+	background-color: #fff;
+	@include square(36px);
+	border-color: $gray_light;
+	border-width: 2px;
+	border-radius: 100%;
+	padding: 0;
+	position: relative;
+	&:after{
+		@include absolute(5px, 9px);
+		content: "";
+		display: block;
+		width: 15px;
+		height: 10px;
+		@include rotate(45deg);
+		border-bottom: 2px solid $gray_light;
+		border-right: 2px solid $gray_light;
+	}
+	&:active{
+		&:after{
+			@include rotate(90deg);
+			right: 5px;
+		}
+	}
+	&:hover, &:focus, &:active{
+		background-color: darken(#fff, 10%);
+	    border-color: darken($gray_light, 10%);
 	}
 }

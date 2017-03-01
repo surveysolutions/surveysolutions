@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -22,12 +23,20 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             {
                 AssemblyContext.SetupServiceLocator();
                 Guid questionId = Guid.Parse("11111111111111111111111111111111");
+                Guid staticTextId = Guid.Parse("22222222222222222222222222222222");
+                Identity staticTextIdentity = Create.Identity(staticTextId);
 
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
-                    children: Create.NumericIntegerQuestion(questionId, "num", new List<ValidationCondition>
+                    Guid.NewGuid(),
+                    Create.NumericIntegerQuestion(questionId, "num", new List<ValidationCondition>
                     {
                         Create.ValidationCondition("self < 125", "validation 1"),
                         Create.ValidationCondition("self >= 0", "validation 2")
+                    }),
+                    Create.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition("num < 125", "static text validation 1"),
+                        Create.ValidationCondition("num >= 0", "static text validation 2")
                     }));
 
                 var interview = SetupInterview(questionnaireDocument);
@@ -40,19 +49,23 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     return new InvokeResults
                     {
                         AnswerDeclaredInvalid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionId)),
+                        StaticTextDeclaredInvalid = eventContext.AnyEvent<StaticTextsDeclaredInvalid>(x => x.GetFailedValidationConditionsDictionary().ContainsKey(staticTextIdentity)),
                     };
                 }
             });
 
         It should_mark_question_as_invalid_with_new_failed_condition_index = () =>  results.AnswerDeclaredInvalid.ShouldBeTrue();
         
-        private static InvokeResults results;
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        It should_mark_static_text_as_invalid_with_new_failed_condition_index = () => results.StaticTextDeclaredInvalid.ShouldBeTrue();
+
+        static InvokeResults results;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults
         {
             public bool AnswerDeclaredInvalid { get; set; }
+            public bool StaticTextDeclaredInvalid { get; set; }
         }
     }
 }

@@ -61,6 +61,87 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This interview has been completed.
+        /// </summary>
+        public static string CompletionText {
+            get {
+                return ResourceManager.GetString("CompletionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart.
+        /// </summary>
+        public static string DiscardAndStart {
+            get {
+                return ResourceManager.GetString("DiscardAndStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue.
+        /// </summary>
+        public static string Error_CookiesTurnedOff {
+            get {
+                return ResourceManager.GetString("Error_CookiesTurnedOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The link has expired.
+        /// </summary>
+        public static string Error_InterviewExpired {
+            get {
+                return ResourceManager.GetString("Error_InterviewExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The information on that interview has been recorded. No further actions are required.
+        /// </summary>
+        public static string Error_NoActionsNeeded {
+            get {
+                return ResourceManager.GetString("Error_NoActionsNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview not found.
+        /// </summary>
+        public static string Error_NotFound {
+            get {
+                return ResourceManager.GetString("Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This interview has been completed.
+        /// </summary>
+        public static string FinishInterviewText {
+            get {
+                return ResourceManager.GetString("FinishInterviewText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have started an interview.
+        /// </summary>
+        public static string HasPreviousStartedInterview {
+            get {
+                return ResourceManager.GetString("HasPreviousStartedInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In progress.
+        /// </summary>
+        public static string InProgressText {
+            get {
+                return ResourceManager.GetString("InProgressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
@@ -147,6 +228,213 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interview_Group_Subgroups_Zero {
             get {
                 return ResourceManager.GetString("Interview_Group_Subgroups_Zero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview completion date: .
+        /// </summary>
+        public static string InterviewCompletionDateFormatText {
+            get {
+                return ResourceManager.GetString("InterviewCompletionDateFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview ID: {0}.
+        /// </summary>
+        public static string InterviewIdFormatText {
+            get {
+                return ResourceManager.GetString("InterviewIdFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview start date: .
+        /// </summary>
+        public static string InterviewStartDateFormatText {
+            get {
+                return ResourceManager.GetString("InterviewStartDateFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
+        /// </summary>
+        public static string InvitationSmallText {
+            get {
+                return ResourceManager.GetString("InvitationSmallText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;{0}&quot;.
+        /// </summary>
+        public static string InvitationText {
+            get {
+                return ResourceManager.GetString("InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        public static string NotStartedText {
+            get {
+                return ResourceManager.GetString("NotStartedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string Original_Language {
+            get {
+                return ResourceManager.GetString("Original_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or you can start a new interview.
+        /// </summary>
+        public static string OrStartInterview {
+            get {
+                return ResourceManager.GetString("OrStartInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only image files are accepted.
+        /// </summary>
+        public static string PictureQuestionNotAPicture {
+            get {
+                return ResourceManager.GetString("PictureQuestionNotAPicture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fill in captcha.
+        /// </summary>
+        public static string PleaseFillCaptcha {
+            get {
+                return ResourceManager.GetString("PleaseFillCaptcha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh page.
+        /// </summary>
+        public static string RefreshPage {
+            get {
+                return ResourceManager.GetString("RefreshPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume interview.
+        /// </summary>
+        public static string Resume {
+            get {
+                return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
+        /// </summary>
+        public static string Resume_InvitationSmallText {
+            get {
+                return ResourceManager.GetString("Resume_InvitationSmallText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can continue interview in the following survey: &quot;{0}&quot;.
+        /// </summary>
+        public static string Resume_InvitationText {
+            get {
+                return ResourceManager.GetString("Resume_InvitationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello and Welcome to the Survey Solutions Web Survey.
+        /// </summary>
+        public static string Resume_WelcomeText {
+            get {
+                return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This website is under heavy load. We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
+        /// </summary>
+        public static string ServerUnderLoad {
+            get {
+                return ResourceManager.GetString("ServerUnderLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start interview.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This interview has not been completed.
+        /// </summary>
+        public static string StartedInterviewText {
+            get {
+                return ResourceManager.GetString("StartedInterviewText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Survey.
+        /// </summary>
+        public static string StartPageTitle {
+            get {
+                return ResourceManager.GetString("StartPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web interview stopped.
+        /// </summary>
+        public static string Stopped {
+            get {
+                return ResourceManager.GetString("Stopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey: &quot;{0}&quot;.
+        /// </summary>
+        public static string SurveyFormatText {
+            get {
+                return ResourceManager.GetString("SurveyFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Web Survey.
+        /// </summary>
+        public static string WebSurvey {
+            get {
+                return ResourceManager.GetString("WebSurvey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello and Welcome to the Survey Solutions Web Survey.
+        /// </summary>
+        public static string WelcomeText {
+            get {
+                return ResourceManager.GetString("WelcomeText", resourceCulture);
             }
         }
     }
