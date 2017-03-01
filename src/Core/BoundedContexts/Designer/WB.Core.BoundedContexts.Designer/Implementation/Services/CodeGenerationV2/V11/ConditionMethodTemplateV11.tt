@@ -13,10 +13,14 @@ using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-	public class <#=Model.ClassName#> 
-	{
-		public <#=Model.ClassName#>() 
+	internal partial class <#=Model.ClassName#>
+	{  
+		private <#=Model.ReturnType#> <#=Model.MethodName#>()
 		{
+			<# if(Model.GenerateSelf) { #>
+			var self = <#=Model.VariableName#>;
+			<# } #>
+			return <#=Model.Expression#>;
 		}
 	}
 }

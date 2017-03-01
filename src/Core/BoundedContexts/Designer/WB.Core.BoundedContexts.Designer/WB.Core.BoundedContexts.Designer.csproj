@@ -303,12 +303,35 @@
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGeneratorV2.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGeneratorV2.cs" />
-    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.cs">
-      <DependentUpon>InterviewExpressionProcessorV11.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.cs">
+      <DependentUpon>ConditionMethodTemplateV11.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.cs">
+      <DependentUpon>LevelTemplateV11.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.cs">
+      <DependentUpon>InterviewExpressionProcessorTemplateV11.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\LinkedFilterMethodTemplateV11.cs">
+      <DependentUpon>LinkedFilterMethodTemplateV11.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\LinkedFilterMethodTemplateV11.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.cs">
+      <DependentUpon>OptionsFilterMethodTemplateV11.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
@@ -607,10 +630,11 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.tt">
+    <None Include="Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InterviewExpressionProcessorV11.cs</LastGenOutput>
+      <LastGenOutput>InterviewExpressionProcessorTemplateV11.cs</LastGenOutput>
     </None>
+    <Compile Include="Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.Extended.cs" />
     <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
@@ -688,6 +712,22 @@
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LevelTemplateV11.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>OptionsFilterMethodTemplateV11.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConditionMethodTemplateV11.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGenerationV2\V11\LinkedFilterMethodTemplateV11.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LinkedFilterMethodTemplateV11.cs</LastGenOutput>
+    </None>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LookupTablesTemplateV51.cs</LastGenOutput>

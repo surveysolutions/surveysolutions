@@ -59,6 +59,7 @@
     <Compile Include="V11\IInterviewLevelV11.cs" />
     <Compile Include="V11\AbstractInterviewExpressionProcessor.cs" />
     <Compile Include="V11\IInterviewExpressionProcessorV11.cs" />
+    <Compile Include="V11\IInterviewStateAccessorV11.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
     <Compile Include="V2\CustomFunctions\Extensions.cs" />
     <Compile Include="V2\CustomFunctions\LMS.cs" />
