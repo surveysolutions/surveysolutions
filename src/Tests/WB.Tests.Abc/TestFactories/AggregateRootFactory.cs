@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.TestFactories
 {
-    internal class AggregateRootFactory
+    public class AggregateRootFactory
     {
         public Interview Interview(Guid? interviewId = null,
             IQuestionnaireStorage questionnaireRepository = null,

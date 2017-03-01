@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.AnswerTextQuestion(userId, substitutionId, RosterVector.Empty, DateTime.UtcNow, "substitution text");
 
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () => interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
