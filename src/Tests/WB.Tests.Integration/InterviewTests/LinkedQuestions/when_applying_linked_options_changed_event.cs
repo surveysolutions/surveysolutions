@@ -24,12 +24,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-               Abc.Create.Entity.TextListQuestion(questionId: textListQuestionId, variable: null,
-                   enablementCondition: null, validationExpression: null),
+               Abc.Create.Entity.TextListQuestion(textListQuestionId),
                Abc.Create.Entity.Roster(textListRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: textListQuestionId, children:new []
                {
-                   Create.SingleOptionQuestion(singleLinkedToLislinkedToRosterIddToRosterId: textListRosterId)
-               }) 
+                   Create.SingleOptionQuestion(singleLinkedToListRosterId, linkedToRosterId: textListRosterId)
+               })
             });
 
             var interview = Create.StatefulInterview(questionnaireDocument);
