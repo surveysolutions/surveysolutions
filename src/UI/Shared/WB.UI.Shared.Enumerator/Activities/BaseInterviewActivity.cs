@@ -91,7 +91,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 {
                     this.drawerLayout.CloseDrawers();
                 }
-                catch
+                catch(ArgumentException)
                 {
                     //ignore System.ArgumentExceptionHandle must be valid. Parameter name: instance
                 }
