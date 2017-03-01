@@ -29,21 +29,22 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericRealQuestion(questionAId, "a"),
-                    Create.NumericRealQuestion(questionBId, "b", enablementCondition: "a < 0"),
-                    Create.NumericRealQuestion(questionCId, "c", enablementCondition: "b < 0")
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                     Abc.Create.Entity.NumericRealQuestion(questionAId, variable: "a"),
+                     Abc.Create.Entity.NumericRealQuestion(questionBId, variable: "b", enablementCondition: "a < 0"),
+                     Abc.Create.Entity.NumericRealQuestion(questionCId, variable: "c", enablementCondition: "b < 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        Create.Identity(questionAId),
-                        Create.Identity(questionBId),
-                        Create.Identity(questionCId) 
+                        IntegrationCreate.Identity(questionAId),
+                        IntegrationCreate.Identity(questionBId),
+                        IntegrationCreate.Identity(questionCId) 
                     }),
-                    Create.Event.NumericRealQuestionAnswered(questionBId, 4.2m)
+                    Abc.Create.Event.NumericRealQuestionAnswered(
+                        Abc.Create.Entity.Identity(questionBId), answer: 4.2m)
                 });
 
                 using (var eventContext = new EventContext())

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests

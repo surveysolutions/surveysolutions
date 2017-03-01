@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.QuestionsDisabled(new [] { invalidQuestionIdentity }));
             interview.Apply(Create.Event.StaticTextsDisabled(new [] { invalidStaticTextdentity }));
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         };
 
         Because of = () =>

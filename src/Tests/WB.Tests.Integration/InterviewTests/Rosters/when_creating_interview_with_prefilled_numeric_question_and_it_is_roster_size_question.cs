@@ -24,10 +24,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: numericQuestionId, variable: "trigger"),
-                    Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.Question, 
+                    Abc.Create.Entity.NumericIntegerQuestion(id: numericQuestionId, variable: "trigger"),
+                    Abc.Create.Entity.Roster(rosterId: roster1Id, rosterSizeSourceType: RosterSizeSourceType.Question, 
                         variable: "r1", rosterSizeQuestionId: numericQuestionId)
                 });
 

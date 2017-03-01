@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid questionId);
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid entityId);
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId);
 
-        bool IsQuestionLinkedToRoster(Guid questionId);
+        bool IsQuestionLinkedToRoster(Guid linkedQuestionId);
 
         bool IsQuestionInteger(Guid questionId);
 
@@ -246,10 +246,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
 
         IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
-        Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId);
+        Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId);
         string GetVariableLabel(Guid variableId);
         string GetVariableName(Guid variableId);
-        bool HasVariable(Guid entityId);
+        bool HasVariable(Guid variableId);
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);

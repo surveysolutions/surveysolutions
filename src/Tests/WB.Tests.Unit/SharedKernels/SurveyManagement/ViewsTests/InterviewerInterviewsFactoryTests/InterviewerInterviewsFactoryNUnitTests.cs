@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInterviewsFactoryTests
 {

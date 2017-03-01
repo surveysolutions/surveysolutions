@@ -18,9 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static decimal[] GetRosterVector(decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            var outerRosterList = outerRosterVector.ToList();
-            outerRosterList.Add(rosterInstanceId);
-            return outerRosterList.ToArray();
+            return outerRosterVector.ExtendWithOneItem(rosterInstanceId);
+        }
+
+        public static int[] GetRosterVector(int[] outerRosterVector, int rosterInstanceId)
+        {
+            return outerRosterVector.ExtendWithOneItem(rosterInstanceId);
         }
 
         public static string GetRosterStringKey(Identity[] scopeIds)

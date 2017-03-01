@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using It = Machine.Specifications.It;
 
@@ -29,28 +30,29 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Setup.MockedServiceLocator();
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                         Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                         Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2.1", text: "child 1 for parent option 2", parentValue: "2"),
-                            Create.Option(value: "2.2", text: "child 2 for parent option 2", parentValue: "2"),
-                            Create.Option(value: "2.3", text: "child 3 for parent option 2", parentValue: "2"),
+                             Abc.Create.Entity.Option(value: "1.1", text: "child 1 for parent option 1", parentValue: "1"),
+                             Abc.Create.Entity.Option(value: "1.2", text: "child 2 for parent option 1", parentValue: "1"),
+                             Abc.Create.Entity.Option(value: "2.1", text: "child 1 for parent option 2", parentValue: "2"),
+                             Abc.Create.Entity.Option(value: "2.2", text: "child 2 for parent option 2", parentValue: "2"),
+                             Abc.Create.Entity.Option(value: "2.3", text: "child 3 for parent option 2", parentValue: "2"),
                         })
                     );
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1,
-                        propagationVector: new decimal[] { }),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    Abc.Create.Event.SingleOptionQuestionAnswered(
+                        parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
+                    ),
+                    Abc.Create.Event.QuestionsEnabled(IntegrationCreate.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())

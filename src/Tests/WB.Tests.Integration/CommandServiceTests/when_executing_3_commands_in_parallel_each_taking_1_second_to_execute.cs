@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -8,6 +7,7 @@ using Ncqrs.Domain;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
-            commandService = Create.CommandService(repository: repository);
+            commandService = Create.Service.CommandService(repository: repository);
         };
 
         Because of = () =>

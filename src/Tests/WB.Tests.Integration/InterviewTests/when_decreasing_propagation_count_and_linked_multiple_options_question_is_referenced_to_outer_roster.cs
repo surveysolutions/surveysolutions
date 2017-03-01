@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -73,7 +74,7 @@ namespace WB.Tests.Integration.InterviewTests
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 0 }, answerTime, "A");
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 2 }, answerTime, "C");
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new decimal[] {0 , 0 }, answerTime,
-                new decimal[][] { new decimal[] { 0 }, new decimal[] { 2 } });
+                new RosterVector[] { new decimal[] { 0 }, new decimal[] { 2 } });
 
             eventContext = new EventContext();
         };
@@ -84,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests
         It should_raise_AnswersRemoved_event_with_source_for_linked_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == referencedQuestionId
-                    && question.RosterVector.SequenceEqual(new decimal[] { 2 })));
+                    && question.RosterVector.Identical(IntegrationCreate.RosterVector(2))));
 
         Cleanup stuff = () =>
         {

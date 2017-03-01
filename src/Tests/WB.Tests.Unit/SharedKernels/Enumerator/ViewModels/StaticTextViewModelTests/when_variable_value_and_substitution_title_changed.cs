@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests

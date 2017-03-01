@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -14,7 +15,7 @@ namespace WB.Infrastructure.Native.Storage
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter() },
+            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConvertor() },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }

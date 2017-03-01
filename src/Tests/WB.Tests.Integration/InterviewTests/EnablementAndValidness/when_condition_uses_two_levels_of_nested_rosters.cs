@@ -4,7 +4,9 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -33,31 +35,31 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                var finalQuestionId = Guid.Parse("88888888888888888888888888888888");
 
 
-               var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                   Create.NumericIntegerQuestion(numericQuestionId, variable: "num"),
-                   Create.Roster(familyRosterId, variable: "fam",
+               var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                   Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "num"),
+                   Abc.Create.Entity.Roster(familyRosterId, variable: "fam",
                        rosterSizeSourceType: RosterSizeSourceType.Question,
                        rosterSizeQuestionId: numericQuestionId,
                        rosterTitleQuestionId: textQuestionId,
                        children: new IComposite[]
                        {
-                           Create.TextQuestion(textQuestionId, variable: "title"),
-                           Create.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
-                           Create.Roster(petsRosterId, variable: "frnd",
+                           Abc.Create.Entity.TextQuestion(questionId: textQuestionId, variable: "title"),
+                           Abc.Create.Entity.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
+                           Abc.Create.Entity.Roster(petsRosterId, variable: "frnd",
                                rosterSizeSourceType: RosterSizeSourceType.Question,
                                rosterSizeQuestionId: petsQuestionId,
                                rosterTitleQuestionId: textQuestionId,
                                children: new IComposite[]
                                {
-                                   Create.NumericIntegerQuestion(petsAgeQuestionId, variable: "pet_age")
+                                   Abc.Create.Entity.NumericIntegerQuestion(petsAgeQuestionId, variable: "pet_age")
                                })
                        }),
-                   Create.NumericIntegerQuestion(finalQuestionId, variable: "fin", enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.pet_age)) > 10"));
+                   Abc.Create.Entity.NumericIntegerQuestion(finalQuestionId, variable: "fin", enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.pet_age)) > 10"));
 
 
                var interview = SetupInterview(questionnaireDocument);
 
-               interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, Empty.RosterVector, DateTime.Now, 1);
+               interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
 
                using (var eventContext = new EventContext())

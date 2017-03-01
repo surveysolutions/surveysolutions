@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -27,21 +30,19 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterSizeQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var integerQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
-                    Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
-                    Create.Roster(rosterId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
+                    Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
+                    Abc.Create.Entity.Roster(rosterId,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         enablementCondition: "@rowcode != (decimal)q0",
                         children: new[]
                                   {
-                                      Create.Group(
-                                          enablementCondition: "@rowcode != 2",
-                                          children: new []
-                                                    {
-                                                        Create.Question(idOfQuestionInRoster, variable:"q2")
-                                                    })
+                                      Abc.Create.Entity.Group(null, "Group X", null, "@rowcode != 2", false, new []
+                                      {
+                                          Abc.Create.Entity.Question(idOfQuestionInRoster, variable:"q2")
+                                      })
                                       
                                   })
                     );
@@ -49,11 +50,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var emptyVector = new decimal[] { };
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
-                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 2);
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 8);
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 8);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
 
                 using (var eventContext = new EventContext())
                 {

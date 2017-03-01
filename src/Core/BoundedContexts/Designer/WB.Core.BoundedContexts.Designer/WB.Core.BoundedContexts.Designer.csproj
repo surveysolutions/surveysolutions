@@ -333,7 +333,6 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
-    <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.cs">
@@ -681,8 +680,6 @@
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\InterviewExpressionStateTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplateV10.cs</LastGenOutput>
-      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
-&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
     </None>
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\QuestionnaireLevelTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -691,8 +688,6 @@
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\RosterScopeTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RosterScopeTemplateV10.cs</LastGenOutput>
-      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
-&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
     </None>
     <None Include="Implementation\Services\CodeGeneration\V10\Templates\SharedTemplateV10.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,25 +27,29 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
-                        Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
-                        Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, answer: -1
+                        ),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionB, answer: -2
+                        ),
+                        Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(IntegrationCreate.Identity(questionA))),
+                        Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(IntegrationCreate.Identity(questionB))),
                     });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, 3);
 
                     return new InvokeResult
                     {

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {

@@ -36,60 +36,61 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 Guid rosterWithYesNoTitle = Guid.Parse("33333333333333333333333333333333");
                 Guid yesNoQuestionId = Guid.Parse("44444444444444444444444444444444");
 
-                var rosterTitleQuestionIdentity = Create.Identity(rosterTitleQuestionId,
-                    Create.RosterVector(0));
-                var rosterIdentity = Create.Identity(rosterId, Create.RosterVector(0));
+                var rosterTitleQuestionIdentity = IntegrationCreate.Identity(rosterTitleQuestionId,
+                    IntegrationCreate.RosterVector(0));
+                var rosterIdentity = IntegrationCreate.Identity(rosterId, IntegrationCreate.RosterVector(0));
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(id: triggerQuestionId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
                         variable: "trigger"),
-                    Create.Roster(id: rosterId,
+                    Abc.Create.Entity.Roster(rosterId: rosterId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: rosterTitleQuestionId,
+                        variable: null,
                         children: new IComposite[]
                         {
-                            Create.SingleQuestion(
+                            Abc.Create.Entity.SingleQuestion(
                                 id: rosterTitleQuestionId,
                                 variable: "singleopt",
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         }),
-                     Create.Roster(id: rosterWithMultioptionsTitle,
+                     Abc.Create.Entity.Roster(rosterId: rosterWithMultioptionsTitle,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: multioptionsQuestionId,
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(
+                            Abc.Create.Entity.MultyOptionsQuestion(
                                 id: multioptionsQuestionId,
                                 variable: "multiopt",
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         }),
-                      Create.Roster(id: rosterWithYesNoTitle,
+                      Abc.Create.Entity.Roster(rosterId: rosterWithYesNoTitle,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: yesNoQuestionId,
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(
+                            Abc.Create.Entity.MultyOptionsQuestion(
                                 id: yesNoQuestionId,
                                 variable: "yesno",
-                                yesNo: true,
+                                yesNoView: true,
                                 optionsFilter: "trigger == 1",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "Option 1"),
-                                    Create.Option(value: "2", text: "Option 2"),
+                                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
                                 })
                         })
                     );
@@ -100,9 +101,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
-                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new [] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, new [] { 1 });
                 interview.AnswerYesNoQuestion(
-                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), DateTime.Today, 
+                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, 
                     new List<AnsweredYesNoOption>
                     {
                         new AnsweredYesNoOption(1, true)

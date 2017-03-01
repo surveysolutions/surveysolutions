@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {

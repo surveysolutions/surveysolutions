@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.QuestionaireRoleProviderTests

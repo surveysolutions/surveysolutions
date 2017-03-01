@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,16 +20,17 @@ namespace WB.Tests.Integration.InterviewTests.Translation
     {
         private Establish context = () =>
         {
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Roster(rosterId,
+                    Abc.Create.Entity.Roster(rosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        obsoleteFixedTitles: new[] { "a", "b" },
+                        fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
-                            Create.TextQuestion(t1Id, "test", questionText:"title with %rostertitle%")
+                            Abc.Create.Entity.TextQuestion(questionId: t1Id, variable: "test",
+                                text: "title with %rostertitle%")
                         })
                     
             });
@@ -36,8 +38,8 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             QuestionnaireDocument questionnaireWithTranslation = questionnaire.Clone();
             questionnaireWithTranslation.Find<Group>(x => x.IsRoster).First().FixedRosterTitles[1].Title = "test";
 
-            var doc = Create.PlainQuestionnaire(questionnaire);
-            var docWithTranslation = Create.PlainQuestionnaire(questionnaireWithTranslation);
+            var doc = IntegrationCreate.PlainQuestionnaire(questionnaire);
+            var docWithTranslation = IntegrationCreate.PlainQuestionnaire(questionnaireWithTranslation);
 
 
             var repo = Mock.Of<IQuestionnaireStorage>(repository
@@ -64,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             interview.SwitchTranslation(new SwitchTranslation(interview.Id, "testTranslation", userId));
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(t1Id,new [] {1m})).ShouldEqual("title with test");
+            interview.GetTitleText(IntegrationCreate.Identity(t1Id,new [] {1m})).ShouldEqual("title with test");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

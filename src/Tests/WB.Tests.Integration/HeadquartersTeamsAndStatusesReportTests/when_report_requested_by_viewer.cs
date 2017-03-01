@@ -20,9 +20,9 @@ namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
             };
 
             var repository = CreateInterviewSummaryRepository();

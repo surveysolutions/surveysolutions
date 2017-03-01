@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -26,18 +27,18 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.MockedServiceLocator();
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
-                    Create.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
+                    Abc.Create.Entity.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
+                    Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")
                 });
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
+                interview.AnswerYesNoQuestion(Abc.Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
-                    answeredOptions: new[] {Create.AnsweredYesNoOption(11m, true)},
+                    answeredOptions: new[] { Create.Entity.AnsweredYesNoOption(11m, true)},
                     answerTime: DateTime.UtcNow));
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(

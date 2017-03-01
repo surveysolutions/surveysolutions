@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -25,28 +28,30 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionC = Guid.Parse("cccccccccccccccccccccccccccccccc");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", enablementCondition: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionC, variable: "c", enablementCondition: "a < 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", enablementCondition: "a > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionC, variable: "c", enablementCondition: "a < 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: 0),
-                        Create.Event.QuestionsDisabled(new[]
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, 0, null, null
+                        ),
+                        Abc.Create.Event.QuestionsDisabled(new[]
                         {
-                            Create.Identity(questionB),
-                            Create.Identity(questionC),
+                            IntegrationCreate.Identity(questionB),
+                            IntegrationCreate.Identity(questionC),
                         }),
                     });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, 3);
 
                     return new InvokeResult
                     {

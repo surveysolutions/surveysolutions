@@ -18,20 +18,22 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             var interview = SetupInterview(
-                questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                    Create.NumericIntegerQuestion(dependentQuestionId, "q2",
-                        validationConditions: Create.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
+                    Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                    Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",
+                        validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
                 }),
                 events: new object[]
                 {
-                    Create.Event.NumericIntegerQuestionAnswered(questionId: dependentQuestionId, answer: 1),
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
+                        dependentQuestionId, null, 1, null, null
+                    ),
                 });
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {
@@ -39,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<AnswersDeclaredInvalid>()?
                             .FailedValidationConditions
-                            .ContainsKey(Create.Identity(dependentQuestionId))
+                            .ContainsKey(IntegrationCreate.Identity(dependentQuestionId))
                         ?? false,
                 };
             }

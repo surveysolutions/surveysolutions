@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
@@ -24,13 +27,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.Group(id: groupId, enablementCondition:"true", children: new IComposite[]
+                        Abc.Create.Entity.Group(groupId, "Group X", null, "true", false, new IComposite[]
                         {
-                            Create.TextQuestion(id: questionId, variable: "txt"),
-                            Create.Variable(id: variableId, expression: "txt.Length")
+                            Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                            IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =
@@ -38,8 +41,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.DisableVariables(new[] { Create.Identity(variableId) });
-                state.DisableGroups(new[] { Create.Identity(groupId) });
+                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId) });
+                state.DisableGroups(new[] { IntegrationCreate.Identity(groupId) });
                 state.SaveAllCurrentStatesAsPrevious();
 
                 var enablementConditions = state.ProcessEnablementConditions();
@@ -48,8 +51,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (long?)variables.ChangedVariableValues[Create.Identity(variableId)],
-                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(Create.Identity(variableId))
+                    IntVariableResult = (long?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)],
+                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(IntegrationCreate.Identity(variableId))
                 };
             });
 

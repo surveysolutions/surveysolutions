@@ -488,10 +488,9 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="ChangeCurrentCulture.cs" />
-    <Compile Include="Create.cs" />
-    <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\EventSourcedAggregateRootRepositoryTests\EventSourcedAggregateRootRepositoryWithCacheTests.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
+    <Compile Include="Infrastructure\IdentityJsonConverterTests.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\PlainPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
@@ -636,10 +635,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetInterview_and_param_of_unexpected_type.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogTests.cs" />
-    <Compile Include="SyncAsyncRunner.cs" />
-    <Compile Include="TestFactories\AggregateRootFactory.cs" />
-    <Compile Include="TestFactories\ControllerFactory.cs" />
-    <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\NumericTextFormatterTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_formatting.cs" />
@@ -651,11 +646,6 @@
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_errors.cs" />
-    <Compile Include="TestFactories\PreloadedAnswer.cs" />
-    <Compile Include="TestFactories\StorageFactory.cs" />
-    <Compile Include="TestFactories\ServiceFactory.cs" />
-    <Compile Include="TestFactories\FakeFactory.cs" />
-    <Compile Include="TestFactories\ViewModelFactory.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
@@ -693,7 +683,6 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_remotly_and_user_exist_and_password_were_entered.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
-    <Compile Include="TestFactories\EventFactory.cs" />
     <Compile Include="GenericSubdomains\Utils\ProgressAggregator\when_reporting_progress_from_two_progresses.cs" />
     <Compile Include="Infrastructure\SqliteEventStoreTests.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />
@@ -704,7 +693,6 @@
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
@@ -1211,7 +1199,6 @@
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_FormatValue_called_for_text__ab___and_mask_with_any_char_and_dashes.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
-    <Compile Include="TestFactories\OtherFactory.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />
@@ -1267,7 +1254,6 @@
     <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="QuestionnaireExtensions.cs" />
     <Compile Include="ResourceHelper.cs" />
-    <Compile Include="Setup.cs" />
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureTests\QuestionnaireRosterStructureTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureTests\when_getting_roster_scope_descriptios_for_questionnaire_which_has_fixed_roster_group.cs" />
     <Compile Include="SharedKernels\DataCollection\Factories\QuestionnaireRosterStructureTests\when_getting_roster_scope_descriptios_for_questionnarie_which_has_multyoption_roster_group.cs" />
@@ -1604,7 +1590,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_a_valid_package_with_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_TabletInformation_is_saving.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\TestInMemoryWriter.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
@@ -1658,10 +1643,6 @@
     <Compile Include="Applications\Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_not_in_development_and_called_not_by_localhost.cs" />
     <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Stub.cs" />
-    <Compile Include="TestFactories\CommandFactory.cs" />
-    <Compile Include="TestFactories\PublishedEventFactory.cs" />
-    <Compile Include="TestPlainStorage.cs" />
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1743,6 +1724,10 @@
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj">
+      <Project>{e8409caf-af6f-489d-8ff6-fa1e03a80f7f}</Project>
+      <Name>WB.Tests.Abc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

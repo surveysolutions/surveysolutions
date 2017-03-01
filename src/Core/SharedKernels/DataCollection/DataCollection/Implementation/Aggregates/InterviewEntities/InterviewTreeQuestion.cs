@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 CategoricalLinkedSingleOptionAnswer categoricalLinkedSingleOptionAnswer = 
                     (answerAsRosterVector != null)
                         ? CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector)
-                        : CategoricalLinkedSingleOptionAnswer.FromRosterVector(new RosterVector((decimal[]) answer));
+                        : CategoricalLinkedSingleOptionAnswer.FromRosterVector(new RosterVector((int[]) answer));
 
                 this.AsSingleLinkedOption.SetAnswer(categoricalLinkedSingleOptionAnswer);
                 return;
@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 CategoricalLinkedMultiOptionAnswer categoricalLinkedMultiOptionAnswer =
                     (answerAsRosterVector != null)
                         ? CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector)
-                        : CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray((decimal[][]) answer);
+                        : CategoricalLinkedMultiOptionAnswer.FromIntegerArrayArray((int[][]) answer);
                     
                 this.AsMultiLinkedOption.SetAnswer(categoricalLinkedMultiOptionAnswer);
                 return;
@@ -470,13 +470,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
                 
-                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                var nodes = options.Select(vector => new Identity(linkedLinkedSourceId, vector))
+                    .OrderBy(id => Tree.GetNodeCoordinatesInEnumeratorOrder(id), RosterVectorAsCoordinatesComparer.Instance);
                 
-                return this.Tree.AllNodesInOrderCache
-                    .Where(node => node.Identity.Id == linkedLinkedSourceId && optionsHashSet.Contains(node.Identity.RosterVector))
-                    .Take(options.Length)
-                    .Select(node => node.Identity.RosterVector)
-                    .ToArray();
+                return nodes.Select(n => n.RosterVector).ToArray();
             }
 
             return options;
