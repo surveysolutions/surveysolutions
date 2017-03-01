@@ -1160,9 +1160,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireQuestion(QuestionType.Multimedia)
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequirePictureAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1184,9 +1182,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireQuestion()
-                .RequireQuestionInstanceExists()
-                .RequireQuestionIsEnabled();
+                .RequireQuestionExists()
+                .RequireQuestionEnabled();
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1387,8 +1384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestion()
-                .RequireQuestionInstanceExists();
+                .RequireQuestionExists();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
@@ -1401,8 +1397,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestion()
-                .RequireQuestionInstanceExists();
+                .RequireQuestionExists();
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
@@ -1415,8 +1410,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestion()
-                .RequireQuestionInstanceExists();
+                .RequireQuestionExists();
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
