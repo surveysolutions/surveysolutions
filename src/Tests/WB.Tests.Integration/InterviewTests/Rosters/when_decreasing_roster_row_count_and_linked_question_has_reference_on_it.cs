@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                          children: new IComposite[]
                          {
-                             Unit.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),
+                             Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),
                              Create.Roster(id:rosterId, rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId, variable: "ros",
                              children: new IComposite[]
                              {

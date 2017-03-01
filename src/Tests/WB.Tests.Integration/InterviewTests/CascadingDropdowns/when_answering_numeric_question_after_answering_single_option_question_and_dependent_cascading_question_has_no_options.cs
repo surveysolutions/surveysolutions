@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(value: "11", text: "child 1 for parent option 1", parentValue: "1"),
                         Create.Option(value: "12", text: "child 2 for parent option 1", parentValue: "1"),
                     }),
-                    Unit.Create.Entity.NumericIntegerQuestion(numericId, "numeric")
+                    Abc.Create.Entity.NumericIntegerQuestion(numericId, "numeric")
                 });
 
                 var interview = SetupInterview(questionnaire, new object[]{});

@@ -31,20 +31,20 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
-                    Unit.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
-                    Unit.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Unit.Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
                         Create.Identity(questionAId),
                         Create.Identity(questionBId),
                         Create.Identity(questionCId)
                     }),
-                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
                         questionBId, null, 0, null, null
                     )
                 });

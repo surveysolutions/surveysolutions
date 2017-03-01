@@ -1,14 +1,10 @@
 using System;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class PublishedEventFactory
     {

@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     {
                         Create.Roster(id: linkedSourceRosterId, fixedTitles: new [] { Create.FixedTitle(5), Create.FixedTitle(6) }, children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
+                            Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
                             Create.Roster(id: linkedRosterId, fixedTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
                             {
                                 Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)

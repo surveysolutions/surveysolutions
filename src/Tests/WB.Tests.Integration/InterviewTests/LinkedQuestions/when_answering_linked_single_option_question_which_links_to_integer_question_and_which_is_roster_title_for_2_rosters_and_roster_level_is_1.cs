@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Create.Roster(id: linkedToRosterId, variable: "ros3", fixedTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
                     children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(id: linkedToQuestionId, variable: "link_source"),
+                        Abc.Create.Entity.NumericIntegerQuestion(id: linkedToQuestionId, variable: "link_source"),
                     })
             });
 

@@ -1,6 +1,6 @@
-﻿using WB.Tests.Unit.TestFactories;
+﻿using WB.Tests.Abc.TestFactories;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Abc
 {
     internal class Create
     {

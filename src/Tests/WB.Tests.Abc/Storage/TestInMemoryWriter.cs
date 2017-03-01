@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement
+namespace WB.Tests.Abc.Storage
 {
     public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
@@ -49,11 +48,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 
         public void Remove(T view)
         {
-            var keyOfItemToRemove = storage.FirstOrDefault(item => item.Value == view).Key;
+            var keyOfItemToRemove = this.storage.FirstOrDefault(item => item.Value == view).Key;
             if (string.IsNullOrEmpty(keyOfItemToRemove))
                 return;
 
-            Remove(keyOfItemToRemove);
+            this.Remove(keyOfItemToRemove);
         }
 
         public void Store(T view, string id)
@@ -65,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
         {
             foreach (var tuple in bulk)
             {
-                Store(tuple.Item1, tuple.Item2);
+                this.Store(tuple.Item1, tuple.Item2);
             }
         }
 

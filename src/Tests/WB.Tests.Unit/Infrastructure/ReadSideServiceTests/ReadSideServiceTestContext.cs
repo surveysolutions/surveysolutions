@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 {

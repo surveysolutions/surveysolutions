@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         variable: "fixed_source",
                         children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source")
+                            Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source")
                         }),
 
                     Create.Roster(
