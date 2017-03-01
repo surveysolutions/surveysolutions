@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -68,11 +69,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(30)));
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, answeredOptions: new [] { Yes(30) }));
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(20)));
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, answeredOptions: new[] { Yes(20) }));
 
                     var deletedRosters = eventContext.GetSingleEvent<RosterInstancesRemoved>().Instances;
                     var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;

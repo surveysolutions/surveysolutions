@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
-            commandService = IntegrationCreate.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
         };
 
         Because of = () =>

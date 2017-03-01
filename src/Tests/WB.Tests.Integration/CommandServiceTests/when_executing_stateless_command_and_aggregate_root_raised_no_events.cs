@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetStateless(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
-            commandService = IntegrationCreate.CommandService(repository: repository, eventBus: eventBusMock.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object);
         };
 
         Because of = () =>

@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -26,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {

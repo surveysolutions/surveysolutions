@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -40,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(yesNoQuestionId, RosterVector.Empty, Yes(1)));
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: yesNoQuestionId, answeredOptions: new[] { Yes(1) }));
 
                     return new InvokeResults
                     {

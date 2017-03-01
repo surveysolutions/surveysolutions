@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
-            commandService = IntegrationCreate.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
         };
 
         Because of = () =>

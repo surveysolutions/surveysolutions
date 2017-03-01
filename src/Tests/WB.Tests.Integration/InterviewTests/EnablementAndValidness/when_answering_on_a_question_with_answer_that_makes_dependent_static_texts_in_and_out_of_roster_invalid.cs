@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 0));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 0));
 
                 return new InvokeResults
                 {
