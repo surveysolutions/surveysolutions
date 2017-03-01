@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -67,7 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                var interview = SetupInterview(questionnaireDocument);
 
-               interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, Empty.RosterVector, DateTime.Now, 1);
+               interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
 
                using (var eventContext = new EventContext())

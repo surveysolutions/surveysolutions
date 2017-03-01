@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -65,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, RosterVector.Empty, DateTime.Now, 2);
 
                 interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Create.RosterVector(0), DateTime.Now, new [] { 1, 2 });
                 interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(0, 1), DateTime.Now, "aaa");
@@ -77,7 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {                    
-                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 1);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
                     result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 1))));
                     result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 2))));

@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
             using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, -3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, -3);
 
                     return new InvokeResult
                     {

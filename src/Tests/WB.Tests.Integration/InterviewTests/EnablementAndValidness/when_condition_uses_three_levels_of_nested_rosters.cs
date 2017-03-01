@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -61,7 +62,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument);
 
-                interview.AnswerNumericIntegerQuestion(userId, membersQuestionId, Empty.RosterVector, DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, membersQuestionId, RosterVector.Empty, DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, toysCountQuestionId, new[] { 0m, 0m }, DateTime.Now, 1);
 

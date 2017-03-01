@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -51,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionAId, Empty.RosterVector, answerTime, 0);
+                    interview.AnswerNumericIntegerQuestion(userId, questionAId, RosterVector.Empty, answerTime, 0);
 
                     return new InvokeResults
                     {

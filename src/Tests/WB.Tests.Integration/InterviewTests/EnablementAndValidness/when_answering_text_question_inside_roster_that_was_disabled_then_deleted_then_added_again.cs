@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -49,11 +50,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var emptyVector = new decimal[] { };
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
-                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 2);
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, Empty.RosterVector, DateTime.Now, 8);
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 3);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 8);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
 
                 using (var eventContext = new EventContext())
                 {
