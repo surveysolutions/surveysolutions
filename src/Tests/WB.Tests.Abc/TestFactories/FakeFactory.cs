@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class FakeFactory
     {
@@ -93,13 +93,13 @@ namespace WB.Tests.Unit.TestFactories
 
             public bool ShowViewModel(MvxViewModelRequest request)
             {
-                Requests.Add(request);
+                this.Requests.Add(request);
                 return true;
             }
 
             public bool ChangePresentation(MvxPresentationHint hint)
             {
-                Hints.Add(hint);
+                this.Hints.Add(hint);
                 return true;
             }
         }

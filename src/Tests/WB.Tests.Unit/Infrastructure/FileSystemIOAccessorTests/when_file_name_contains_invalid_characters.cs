@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.FileSystemIOAccessorTests
 {

@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
+                        Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
                         Create.Roster(rosterId, variable: "assets",
                             rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
                             children: new[]

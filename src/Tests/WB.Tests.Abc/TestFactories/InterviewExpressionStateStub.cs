@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.V10;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection
+namespace WB.Tests.Abc.TestFactories
 {
     internal class InterviewExpressionStateStub : AbstractInterviewExpressionStateV10, ILatestInterviewExpressionState
     {

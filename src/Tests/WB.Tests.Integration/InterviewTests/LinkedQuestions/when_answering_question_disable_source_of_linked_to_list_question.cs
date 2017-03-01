@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                     children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),
+                        Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),
                         Create.ListQuestion(id: listQuestionId, variable: "list", enablementCondition: "num == 1"),
                         Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
                         Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),

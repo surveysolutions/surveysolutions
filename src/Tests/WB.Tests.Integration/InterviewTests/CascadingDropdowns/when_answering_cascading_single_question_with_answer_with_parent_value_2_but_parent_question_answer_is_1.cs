@@ -49,10 +49,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
-                    WB.Tests.Unit.Create.Event.SingleOptionQuestionAnswered(
+                    Abc.Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
                     ),
-                    Unit.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    Abc.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())

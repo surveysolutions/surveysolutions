@@ -29,17 +29,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a"),
                             Create.StaticText(id: staticTextB, validationConditions: new [] { new ValidationCondition("10/a < 2", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
-                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionA, null, -1, null, null
                         ),
 
-                        Unit.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
+                        Abc.Create.Event.StaticTextsDeclaredValid(Create.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())

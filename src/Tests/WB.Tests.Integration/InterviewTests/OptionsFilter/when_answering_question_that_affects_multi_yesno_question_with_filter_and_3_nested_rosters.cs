@@ -34,11 +34,11 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Unit.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNo: true),
                     Create.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Unit.Create.Entity.NumericIntegerQuestion(q3Id, variable: "q3"),
+                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "q3"),
                     }),
                     Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {

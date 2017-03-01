@@ -20,13 +20,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var interview = SetupInterview(
                 questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Unit.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                    Unit.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",
+                    Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                    Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",
                         validationConditions: Create.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
                 }),
                 events: new object[]
                 {
-                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
                         dependentQuestionId, null, 1, null, null
                     ),
                 });

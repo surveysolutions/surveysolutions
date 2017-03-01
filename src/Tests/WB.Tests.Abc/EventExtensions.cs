@@ -3,7 +3,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Abc
 {
     internal static class EventExtensions
     {

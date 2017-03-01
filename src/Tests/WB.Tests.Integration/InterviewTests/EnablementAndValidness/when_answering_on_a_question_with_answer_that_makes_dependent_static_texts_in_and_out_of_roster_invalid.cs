@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Unit.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
 
                 Create.StaticText(dependentStaticTextOutsideRosterId,
                     validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),

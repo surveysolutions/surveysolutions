@@ -18,8 +18,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Unit.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                Unit.Create.Entity.NumericIntegerQuestion(dependentQuestionId, enablementCondition: "q1 > 0"),
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, enablementCondition: "q1 > 0"),
             }));
 
             using (var eventContext = new EventContext())

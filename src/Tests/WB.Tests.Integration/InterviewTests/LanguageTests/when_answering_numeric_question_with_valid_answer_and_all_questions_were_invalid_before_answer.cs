@@ -30,20 +30,20 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Unit.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Unit.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionA, null, -1, null, null
                         ),
-                        Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionB, null, -2, null, null
                         ),
-                        Unit.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
-                        Unit.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),
+                        Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
+                        Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),
                     });
 
                 using (var eventContext = new EventContext())

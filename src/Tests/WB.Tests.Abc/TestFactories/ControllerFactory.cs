@@ -1,6 +1,6 @@
 ﻿using WB.Core.BoundedContexts.Headquarters.Services;
 
-namespace WB.Tests.Unit.TestFactories
+namespace WB.Tests.Abc.TestFactories
 {
     internal class ControllerFactory
     {
