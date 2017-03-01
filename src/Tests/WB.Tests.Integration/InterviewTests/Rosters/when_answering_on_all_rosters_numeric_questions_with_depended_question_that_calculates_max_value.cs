@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Unit.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: null),
 
                     Create.Roster(
                         id: rosterId, 
@@ -45,6 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     Unit.Create.Entity.NumericIntegerQuestion(
                         id: rosterValidation,
+                        variable: null,
                         enablementCondition: "varRoster.Select(x => x.age).Max() > 65")
                 );
 
