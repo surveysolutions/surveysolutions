@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Option(value: "3", text: "Maybe")
                     }),
                     
-                    Create.Roster(rosterId, variable: "about_jobs", 
+                    Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", 
                         enablementCondition: "@rowindex == 0", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSwitcherQuestionId));
 
                 var interview = SetupInterview(questionnaireDocument);

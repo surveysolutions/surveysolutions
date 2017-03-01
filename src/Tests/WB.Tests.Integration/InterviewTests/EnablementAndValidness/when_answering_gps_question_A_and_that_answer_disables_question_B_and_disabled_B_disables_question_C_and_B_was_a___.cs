@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -30,7 +31,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.GpsCoordinateQuestion(questionAId, "gps"),
+                    Abc.Create.Entity.GpsCoordinateQuestion(questionAId, "gps", enablementCondition: null,
+                        validationExpression: null),
                     Create.NumericRealQuestion(questionBId, "b", enablementCondition: "gps.Latitude < 0"),
                     Create.NumericRealQuestion(questionCId, "c", enablementCondition: "gps.Latitude < 0")
                 );

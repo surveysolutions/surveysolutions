@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -19,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                Create.Group(dependentGroupId, enablementCondition: "q1 > 0"),
+                Abc.Create.Entity.Group(dependentGroupId, "Group X", null, "q1 > 0", false, null),
             }));
 
             using (var eventContext = new EventContext())

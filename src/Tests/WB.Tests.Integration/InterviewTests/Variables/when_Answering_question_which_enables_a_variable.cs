@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -21,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 children: new IComposite[]
                 {
                     Create.TextQuestion(id: textQuetionId, variable: "txt"),
-                    Create.Group(id: Guid.NewGuid(), enablementCondition: "txt==\"Nastya\"", children: new[]
+                    Abc.Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
                     {
                         Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
                     })

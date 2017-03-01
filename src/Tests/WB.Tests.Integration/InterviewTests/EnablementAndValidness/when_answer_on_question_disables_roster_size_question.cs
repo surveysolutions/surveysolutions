@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
                     Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
-                    Create.Roster(id: rosterId, variable: "ros",
+                    Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros",
                         rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
                         rosterSizeSourceType: RosterSizeSourceType.Question)
                 });

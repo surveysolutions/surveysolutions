@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -25,10 +27,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Question(variable: "a", enablementCondition: null),
                         Create.Question(variable: "b", enablementCondition: null),
-                        Create.Group(variable: "i", enablementCondition: null),
-                        Create.Group(variable: "j", enablementCondition: null),
-                        Create.Roster(variable: "x", enablementCondition: null),
-                        Create.Roster(variable: "y", enablementCondition: null),
+                        Abc.Create.Entity.Group(null, "Group X", "i", null, false, null),
+                        Abc.Create.Entity.Group(null, "Group X", "j", null, false, null),
+                        Abc.Create.Entity.Roster(variable: "x", enablementCondition: null),
+                        Abc.Create.Entity.Roster(variable: "y", enablementCondition: null),
                     }),
                 });
 

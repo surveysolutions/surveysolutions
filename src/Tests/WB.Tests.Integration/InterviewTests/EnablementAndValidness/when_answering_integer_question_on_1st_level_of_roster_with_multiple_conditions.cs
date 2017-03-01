@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                    Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "num"),
-                   Create.Roster(familyRosterId, variable: "fam",
+                   Abc.Create.Entity.Roster(familyRosterId, variable: "fam",
                        rosterSizeSourceType: RosterSizeSourceType.Question,
                        rosterSizeQuestionId: numericQuestionId,
                        rosterTitleQuestionId: textQuestionId,

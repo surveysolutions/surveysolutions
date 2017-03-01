@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.V9;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
@@ -27,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.Group(id: groupId, enablementCondition:"false", children: new IComposite[]
+                        Abc.Create.Entity.Group(groupId, "Group X", null, "false", false, new IComposite[]
                         {
                             Create.TextQuestion(id: questionId, variable: "txt"),
                             Create.Variable(id: variableId, expression: "txt.Length")

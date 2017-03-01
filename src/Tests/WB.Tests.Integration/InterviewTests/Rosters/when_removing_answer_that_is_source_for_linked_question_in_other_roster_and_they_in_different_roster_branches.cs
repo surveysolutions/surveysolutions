@@ -37,19 +37,19 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(commonRosterId, variable: "common_roster",
+                    Abc.Create.Entity.Roster(commonRosterId, variable: "common_roster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) },
+                        fixedRosterTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) },
                         children: new IComposite[] {
-                            Create.Roster(parentLinkedSourceRosterId,
+                            Abc.Create.Entity.Roster(parentLinkedSourceRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },
+                                fixedRosterTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },
                                 variable: "parent_linked_source_roster",
                                 children: new IComposite[]
                                 {
-                                    Create.Roster(linkedSourceRosterId,
+                                    Abc.Create.Entity.Roster(linkedSourceRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedTitles: new [] { Create.FixedTitle(5),  Create.FixedTitle(6) },
+                                        fixedRosterTitles: new [] { Create.FixedTitle(5),  Create.FixedTitle(6) },
                                         variable: "linked_source_roster",
                                         children: new IComposite[]
                                         {
@@ -57,15 +57,15 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                         }),
                                 }),
 
-                             Create.Roster(parentLinkedRosterId,
+                             Abc.Create.Entity.Roster(parentLinkedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) },
+                                fixedRosterTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) },
                                 variable: "parent_linked_roster",
                                 children: new IComposite[]
                                 {
-                                    Create.Roster(linkedRosterId,
+                                    Abc.Create.Entity.Roster(linkedRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedTitles: new [] { Create.FixedTitle(9), Create.FixedTitle(10) },
+                                        fixedRosterTitles: new [] { Create.FixedTitle(9), Create.FixedTitle(10) },
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {

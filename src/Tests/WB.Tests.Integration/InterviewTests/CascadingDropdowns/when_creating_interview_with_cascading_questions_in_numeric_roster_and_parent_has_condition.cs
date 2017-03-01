@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "numeric"),
-                    Create.Roster(topRosterId,
+                    Abc.Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: numericId,

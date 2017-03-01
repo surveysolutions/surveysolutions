@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -22,14 +23,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                    Abc.Create.Entity.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
+                        fixedRosterTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                            Create.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
+                            Abc.Create.Entity.Group(groupId, variable: "q1 == 1", children: new IComposite[]
                             {
-                                Create.Roster(
-                                    id: rosterId,
+                                Abc.Create.Entity.Roster(
+                                    rosterId: rosterId,
                                     rosterSizeSourceType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: q1Id,
                                     variable: "r",

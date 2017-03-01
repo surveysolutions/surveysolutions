@@ -31,9 +31,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.Roster(id: rosterId, variable: "fixed_roster",
+                            Abc.Create.Entity.Roster(rosterId: rosterId, variable: "fixed_roster",
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                obsoleteFixedTitles: new string[] {"1", "2", "3"}),
+                                fixedTitles: new string[] {"1", "2", "3"}),
                             Create.SingleOptionQuestion(questionId: questionId, variable: "a",
                                 linkedToRosterId: rosterId, linkedFilterExpression: "((string)null).Length>0"),
 

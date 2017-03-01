@@ -112,11 +112,7 @@ namespace WB.Tests.Integration
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
         {
-            Group group = Create.Group(
-                id: rosterId,
-                title: "Roster X",
-                variable: variable,
-                children: children);
+            Group group = Abc.Create.Entity.Group(rosterId, "Roster X", variable, null, false, children);
 
             group.IsRoster = true;
             group.RosterSizeSource = RosterSizeSourceType.Question;
@@ -159,7 +155,7 @@ namespace WB.Tests.Integration
             Guid? id = null,
             string enablementCondition = null,
             IEnumerable<IComposite> children = null)
-            => Create.Group(title: title, children: children, enablementCondition: enablementCondition, id: id);
+            => Abc.Create.Entity.Group(id, title, null, enablementCondition, false, children);
 
         public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
@@ -349,68 +345,6 @@ namespace WB.Tests.Integration
                 ValidationExpression = validationExpression
             };
         }
-
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
-        {
-            return new GpsCoordinateQuestion
-            {
-                QuestionType = QuestionType.GpsCoordinates,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
-            };
-        }
-
-        public static Group Roster(Guid? id = null, 
-            string title = "Roster X",
-            string variable = null, 
-            string enablementCondition = null,
-            string[] obsoleteFixedTitles = null, 
-            IEnumerable<IComposite> children = null, 
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-            Guid? rosterSizeQuestionId = null,
-            Guid? rosterTitleQuestionId = null,
-            FixedRosterTitle[] fixedTitles = null)
-        {
-            Group group = Create.Group(
-                id: id,
-                title: title,
-                variable: variable,
-                enablementCondition: enablementCondition,
-                children: children);
-
-            group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-            {
-                if (fixedTitles == null)
-                {
-                    group.FixedRosterTitles =
-                        (obsoleteFixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
-                            (x, i) => Create.FixedTitle(i, x)).ToArray();
-                }
-                else
-                {
-                    group.FixedRosterTitles = fixedTitles;
-                }
-            }
-            group.RosterSizeQuestionId = rosterSizeQuestionId;
-            group.RosterTitleQuestionId = rosterTitleQuestionId;
-
-            return group;
-        }
-
-        public static Group Group(
-            Guid? id = null, string title = "Group X", string variable = null,
-            string enablementCondition = null, IEnumerable<IComposite> children = null)
-            => new Group(title)
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                VariableName = variable,
-                ConditionExpression = enablementCondition,
-                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
-            };
 
         public static StaticText StaticText(
             Guid? id = null, string enablementCondition = null, IEnumerable<ValidationCondition> validationConditions = null)

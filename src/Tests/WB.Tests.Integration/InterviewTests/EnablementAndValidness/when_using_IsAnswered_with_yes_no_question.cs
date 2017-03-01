@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 Create.Answer("two", 2),
                                 }
                         ),
-                        Create.Group(id: groupId, enablementCondition: $"IsAnswered({yesNoQuestionVariable})")
+                        Abc.Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
                     });
 
                 var interview = SetupInterview(questionnaireDocument);

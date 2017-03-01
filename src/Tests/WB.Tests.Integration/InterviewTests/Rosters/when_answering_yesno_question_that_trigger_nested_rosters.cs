@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Group(sectionId, "Section", children: new IComposite[]
+                    Abc.Create.Entity.Group(sectionId, "Section", null, null, false, new IComposite[]
                     {
                         Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true,
                             options: new List<Answer>
@@ -44,22 +44,22 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                 Create.Option(value: "30", text: "C"),
                                 Create.Option(value: "40", text: "D")
                             }),
-                        Create.Roster(
-                            id: roster1Id,
+                        Abc.Create.Entity.Roster(
+                            rosterId: roster1Id,
                             rosterSizeSourceType: RosterSizeSourceType.Question,
                             rosterSizeQuestionId: rosterSizeQuestionId,
                             variable: "first",
                             children: new IComposite[]
                             {
-                                Create.Roster(
-                                    id: roster2Id,
+                                Abc.Create.Entity.Roster(
+                                    rosterId: roster2Id,
                                     rosterSizeSourceType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: rosterSizeQuestionId,
                                     variable: "second",
                                     children: new IComposite[]
                                     {
-                                        Create.Roster(
-                                            id: roster3Id,
+                                        Abc.Create.Entity.Roster(
+                                            rosterId: roster3Id,
                                             rosterSizeSourceType: RosterSizeSourceType.Question,
                                             rosterSizeQuestionId: rosterSizeQuestionId,
                                             variable: "third")
