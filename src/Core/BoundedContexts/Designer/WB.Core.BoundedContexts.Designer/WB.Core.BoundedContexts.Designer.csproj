@@ -302,6 +302,7 @@
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModel.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGeneratorV2.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGeneratorV2.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.cs">
       <DependentUpon>ConditionMethodTemplateV11.tt</DependentUpon>

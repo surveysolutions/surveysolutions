@@ -39,6 +39,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePost
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -81,6 +82,8 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
+            this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
+            this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
