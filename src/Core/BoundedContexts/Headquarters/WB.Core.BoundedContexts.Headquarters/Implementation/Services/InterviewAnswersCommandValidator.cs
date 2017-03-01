@@ -9,7 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class InterviewAnswersCommandValidator :
-        ICommandValidator<StatefulInterview, AnswerNumericIntegerQuestionCommand>,        ICommandValidator<StatefulInterview, AnswerNumericRealQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerNumericIntegerQuestionCommand>,
+        ICommandValidator<StatefulInterview, AnswerNumericRealQuestionCommand>,
         ICommandValidator<StatefulInterview, AnswerSingleOptionQuestionCommand>,
         ICommandValidator<StatefulInterview, AnswerSingleOptionLinkedQuestionCommand>,
         ICommandValidator<StatefulInterview, AnswerMultipleOptionsQuestionCommand>,
@@ -35,7 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new InterviewException(CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
         }
 
-        public void Validate(StatefulInterview aggregate, AnswerNumericIntegerQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);        public void Validate(StatefulInterview aggregate, AnswerNumericRealQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerNumericIntegerQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
+        public void Validate(StatefulInterview aggregate, AnswerNumericRealQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
         public void Validate(StatefulInterview aggregate, AnswerSingleOptionQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
         public void Validate(StatefulInterview aggregate, AnswerSingleOptionLinkedQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);
         public void Validate(StatefulInterview aggregate, AnswerMultipleOptionsQuestionCommand command) => this.ThrowIfUserDontHavePermissionsToAnswer(aggregate, command);

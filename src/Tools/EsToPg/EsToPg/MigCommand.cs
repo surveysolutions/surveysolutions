@@ -86,6 +86,7 @@ namespace EsToPg
                 int writtenEvents = 0;
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
+                int globalSequence = 1;
                 do
                 {
                     Stopwatch localWatch = new Stopwatch();
@@ -108,6 +109,8 @@ namespace EsToPg
                             metadata.Id = resolvedEvent.Event.EventId;
                             metadata.Value = value;
                             metadata.EventType = resolvedEvent.Event.EventType.ToPascalCase();
+                            metadata.GlobalSequence = globalSequence;
+                            globalSequence++;
 
                             events.Add(metadata);
                         }

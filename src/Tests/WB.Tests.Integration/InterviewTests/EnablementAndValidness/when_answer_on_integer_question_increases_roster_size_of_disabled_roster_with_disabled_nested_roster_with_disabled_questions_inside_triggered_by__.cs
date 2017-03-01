@@ -31,16 +31,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 const string enablementCondition = "a > 2";
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "a"),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "a"),
+                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                         rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(rosterQuestionId, enablementCondition: enablementCondition),
-                            Create.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
+                            Abc.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: enablementCondition, variable: null),
+                            Abc.Create.Entity.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                                 rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
                                 {
-                                    Create.NumericIntegerQuestion(nestedRosterQuestionId, enablementCondition: enablementCondition)
+                                    Abc.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: enablementCondition, variable: null)
                                 })
                         })
                     );
@@ -74,28 +74,28 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                     where.Groups.Count(
                                         instance =>
                                             instance.Id == nestedRosterId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1),
+                                            instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
                         FirstRowOfRosterDisabled =
                             HasEvent<GroupsDisabled>(eventContext.Events,
                                 where =>
                                     where.Groups.Count(
                                         instance =>
                                             instance.Id == rosterId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1),
+                                            instance.RosterVector.Identical(new decimal[] { 0 })) == 1),
                         FirstQuestionFromFirstRowOfNestedRosterDisabled =
                             HasEvent<QuestionsDisabled>(eventContext.Events,
                                 where =>
                                     where.Questions.Count(
                                         instance =>
                                             instance.Id == nestedRosterQuestionId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1),
+                                            instance.RosterVector.Identical(new decimal[] { 0, 0 })) == 1),
                         FirstQuestionFromFirstRowOfRosterDisabled =
                             HasEvent<QuestionsDisabled>(eventContext.Events,
                                 where =>
                                     where.Questions.Count(
                                         instance =>
                                             instance.Id == rosterQuestionId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1)
+                                            instance.RosterVector.Identical(new decimal[] { 0 })) == 1)
                     };
                 }
             });

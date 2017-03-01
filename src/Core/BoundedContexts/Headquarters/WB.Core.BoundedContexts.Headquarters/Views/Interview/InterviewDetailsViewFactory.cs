@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return interviewQuestion.AsMultiFixedOption.GetAnswer().ToDecimals();
 
             if (interviewQuestion.IsMultiLinkedOption)
-                return interviewQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray();
+                return interviewQuestion.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray();
 
             if (interviewQuestion.IsSingleFixedOption)
                 return interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue;

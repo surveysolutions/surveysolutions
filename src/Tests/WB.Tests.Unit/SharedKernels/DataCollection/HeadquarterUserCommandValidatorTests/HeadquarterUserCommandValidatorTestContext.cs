@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValidatorTests

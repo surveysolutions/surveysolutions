@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests

@@ -53,7 +53,6 @@ namespace WB.UI.Tester.Activities
                 this.FindPreference(TesterSettings.ShowVariablesParamterName).PreferenceChange += (sender, args) =>
                 {
                     var checkBoxPreference = args.Preference as CheckBoxPreference;
-                    Mvx.Trace("checkbox checked " + checkBoxPreference.Checked);
                     var summary = !checkBoxPreference.Checked ? // this wonderful api returns value BEFORE change
                         TesterUIResources.Prefs_ShowVariablesSummary_Checked
                         : TesterUIResources.Prefs_ShowVariablesSummary_UnChecked;

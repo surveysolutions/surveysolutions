@@ -3,6 +3,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,20 +17,26 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             appDomainContext = AppDomainContext.Create();
         };
 
-        Because of = () =>
+        private Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
-                {
-                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    children: new IComposite[]
                     {
-                        Create.TextQuestion(q2Id, variable: "q2"),
-                    }),
-                    Create.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
-                });
+                        Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                        Abc.Create.Entity.Roster(rosterId,
+                        variable: "r1",
+                            rosterSizeQuestionId: q1Id,
+                            rosterTitleQuestionId: q2Id,
+                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            children: new IComposite[]
+                            {
+                                Abc.Create.Entity.TextQuestion(q2Id, variable: "q2"),
+                            }),
+                        Abc.Create.Entity.SingleQuestion(q3Id, variable: "q3", linkedToRosterId: rosterId)
+                    });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
 
@@ -41,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextQuestion(userId, q2Id, Create.RosterVector(2), DateTime.Now, "hello");
+                    interview.AnswerTextQuestion(userId, q2Id, IntegrationCreate.RosterVector(2), DateTime.Now, "hello");
 
                     result.OptionsCountForQuestion3 = GetChangedOptions(eventContext, q3Id, RosterVector.Empty)?.Length ?? 0;
                 }

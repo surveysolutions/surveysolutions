@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -30,20 +31,20 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 var assetsTitles = new[]
                 {
-                    Create.FixedTitle(1, "TV"),
-                    Create.FixedTitle(2, "Microwave"),
-                    Create.FixedTitle(3, "Cleaner")
+                    Abc.Create.Entity.FixedTitle(1, "TV"),
+                    Abc.Create.Entity.FixedTitle(2, "Microwave"),
+                    Abc.Create.Entity.FixedTitle(3, "Cleaner")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: questionId, variable: "q1"),
-                        Create.Variable(id: variableId, type: VariableType.Boolean, variableName: "num",
+                        Abc.Create.Entity.NumericIntegerQuestion(id: questionId, variable: "q1"),
+                        Abc.Create.Entity.Variable(id: variableId, type: VariableType.Boolean, variableName: "num",
                             expression: "q1>5"),
-                        Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
+                        Abc.Create.Entity.Roster(rosterId, variable: "assets",
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             enablementCondition: "num.GetValueOrDefault()")
                     }),
                 });

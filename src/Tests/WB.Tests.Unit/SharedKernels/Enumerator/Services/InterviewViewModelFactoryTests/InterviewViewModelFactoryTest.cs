@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFactoryTests
 {

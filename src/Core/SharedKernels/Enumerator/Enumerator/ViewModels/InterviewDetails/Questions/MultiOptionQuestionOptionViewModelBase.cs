@@ -36,6 +36,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.CheckedOrder = this.QuestionViewModel.Options.Max(x => x.CheckedOrder) + 1;
                 }
+                else
+                {
+                    this.CheckedOrder = null;
+                }
 
                 this.RaisePropertyChanged();
             }

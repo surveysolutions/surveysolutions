@@ -32,17 +32,17 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 childCascadingQuestionId = Guid.Parse("21111111111111111111111111111111");
                 childOfChildCascadingQuestionId = Guid.Parse("31111111111111111111111111111111");
 
-                QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+                QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.SingleQuestion(id: parentCascadingQuestion, variable: "par",
-                            options: new List<Answer>() {Create.Answer("1", 1), Create.Answer("2", 2)}),
-                        Create.SingleQuestion(id: childCascadingQuestionId, variable: "chil",
+                        Abc.Create.Entity.SingleQuestion(id: parentCascadingQuestion, variable: "par",
+                            options: new List<Answer>() {IntegrationCreate.Answer("1", 1), IntegrationCreate.Answer("2", 2)}),
+                        Abc.Create.Entity.SingleQuestion(id: childCascadingQuestionId, variable: "chil",
                             cascadeFromQuestionId: parentCascadingQuestion,
-                            options: new List<Answer>() {Create.Answer("11", 11, 1), Create.Answer("21", 21, 2)}),
-                        Create.SingleQuestion(id: childOfChildCascadingQuestionId, variable: "chilchil",
+                            options: new List<Answer>() {IntegrationCreate.Answer("11", 11, 1), IntegrationCreate.Answer("21", 21, 2)}),
+                        Abc.Create.Entity.SingleQuestion(id: childOfChildCascadingQuestionId, variable: "chilchil",
                             cascadeFromQuestionId: childCascadingQuestionId,
-                            options: new List<Answer>() {Create.Answer("111", 111, 11), Create.Answer("211", 211, 21)})
+                            options: new List<Answer>() {IntegrationCreate.Answer("111", 111, 11), IntegrationCreate.Answer("211", 211, 21)})
                     });
 
                 interview = SetupInterview(questionnaire);

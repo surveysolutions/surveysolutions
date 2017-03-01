@@ -26,17 +26,20 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var options = new List<Answer>
                 {
-                    Create.Option("1"), Create.Option("2"), Create.Option("3"), Create.Option("12")
+                    Abc.Create.Entity.Option("1"),
+                    Abc.Create.Entity.Option("2"),
+                    Abc.Create.Entity.Option("3"),
+                    Abc.Create.Entity.Option("12")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
-                    Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
+                    Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(q3Id, variable: "age")
+                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age")
                     }),
-                    Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > 15")
+                    Abc.Create.Entity.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > 15")
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
@@ -44,14 +47,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(1), DateTime.Now, 20);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(2), DateTime.Now, 15);
 
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
+                    interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 35);
 
                     var changedLinkedOptions = GetChangedOptions(eventContext, q4Id, RosterVector.Empty);
 

@@ -28,13 +28,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.Roster(id: roster1Id, fixedTitles: new []
+                    Abc.Create.Entity.Roster(rosterId: roster1Id, fixedRosterTitles: new []
                     {
-                        Create.FixedTitle(1),
-                        Create.FixedTitle(2),
-                        Create.FixedTitle(3),
+                        IntegrationCreate.FixedTitle(1),
+                        IntegrationCreate.FixedTitle(2),
+                        IntegrationCreate.FixedTitle(3),
                     })
                 });
 
@@ -45,9 +45,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     ILatestInterviewExpressionState expressionState = GetInterviewExpressionState(questionnaireDocument);
 
                     var interview = new StatefulInterview(
-                        Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument),
+                        IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument),
                         Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
-                        Create.SubstitionTextFactory());
+                        IntegrationCreate.SubstitionTextFactory());
 
                     interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid());
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
 {

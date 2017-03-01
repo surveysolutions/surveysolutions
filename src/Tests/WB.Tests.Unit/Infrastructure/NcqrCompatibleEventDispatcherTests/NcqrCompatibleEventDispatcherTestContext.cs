@@ -6,6 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {

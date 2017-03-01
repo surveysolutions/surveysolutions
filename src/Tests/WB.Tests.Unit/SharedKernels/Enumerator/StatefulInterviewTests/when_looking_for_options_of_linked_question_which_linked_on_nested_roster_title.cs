@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -46,12 +47,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         It should_order_options_by_roster_sort_index_at_first = () =>
         {
-            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.First()).ToArray().ShouldEqual(new decimal[] { 1, 1, 2, 2 });
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.First()).ToArray().ShouldEqual(new int[] { 1, 1, 2, 2 });
         };
 
         It should_order_options_by_nested_roster_sort_index_in_scope_of_parent_roster = () =>
         {
-            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.Last()).ToArray().ShouldEqual(new decimal[] { 1, 2, 1, 2 });
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.Last()).ToArray().ShouldEqual(new int[] { 1, 2, 1, 2 });
         };
 
         private static IQuestionnaireStorage questionnaireRepository;

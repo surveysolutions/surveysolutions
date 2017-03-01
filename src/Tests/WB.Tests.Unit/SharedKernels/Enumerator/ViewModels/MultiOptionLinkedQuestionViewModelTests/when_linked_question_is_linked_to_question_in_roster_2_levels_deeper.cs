@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests

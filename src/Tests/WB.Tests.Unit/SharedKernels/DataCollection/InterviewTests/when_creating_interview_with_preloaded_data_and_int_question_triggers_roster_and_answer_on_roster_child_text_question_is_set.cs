@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {

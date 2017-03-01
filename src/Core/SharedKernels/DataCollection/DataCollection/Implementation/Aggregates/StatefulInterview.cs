@@ -105,9 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             CalculateLinkedToListOptionsOnTree(this.Tree, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
-
-            this.Tree.ActualizeNodesInOrderCache();
-
+            
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;

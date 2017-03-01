@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Memory.Implementation;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
 {

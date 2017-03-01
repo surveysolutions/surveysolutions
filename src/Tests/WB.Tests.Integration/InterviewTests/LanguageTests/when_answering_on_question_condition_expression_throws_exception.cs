@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -26,17 +27,19 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                        Create.NumericIntegerQuestion(question1Id, "q1"),
-                        Create.NumericIntegerQuestion(question2Id, "q2", enablementCondition: "1/q1 == 1")
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                        Abc.Create.Entity.NumericIntegerQuestion(question1Id, "q1"),
+                        Abc.Create.Entity.NumericIntegerQuestion(question2Id, "q2", enablementCondition: "1/q1 == 1")
                     ),
                     events: new List<object>
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(question1Id, 1),
-                        Create.Event.QuestionsEnabled(new []
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            question1Id, null, 1, null, null
+                        ),
+                        Abc.Create.Event.QuestionsEnabled(new []
                         {
-                            Create.Identity(question1Id),
-                            Create.Identity(question2Id)
+                            IntegrationCreate.Identity(question1Id),
+                            IntegrationCreate.Identity(question2Id)
                         })
                     });
 
@@ -44,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, Empty.RosterVector, DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, RosterVector.Empty, DateTime.Now, 0);
 
                     result.Questions2DisabledEventWasFound  = 
                         eventContext.Events.Any(b => b.Payload is QuestionsDisabled) &&

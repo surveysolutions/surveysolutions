@@ -3,6 +3,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -23,23 +24,27 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: 1),
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: 2),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, 1, null, null
+                        ),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionB, null, 2, null, null
+                        ),
                     });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, 3);
 
                     return new InvokeResult
                     {

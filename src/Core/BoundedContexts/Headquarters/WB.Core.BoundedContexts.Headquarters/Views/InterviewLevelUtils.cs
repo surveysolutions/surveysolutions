@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                     storedLinkedOptions.LinkedQuestionOptions[questionStringKey].Select(
                         option => interview.Levels.Values.FirstOrDefault(
                             x =>
-                                x.RosterVector.SequenceEqual(option) &&
+                                x.RosterVector.SequenceEqual(option.CoordinatesAsDecimals) &&
                                 x.ScopeVectors.Keys.Any(v => v.SequenceEqual(referencedEntityScope)))
                         ).Where(l => l != null).ToArray();
             }

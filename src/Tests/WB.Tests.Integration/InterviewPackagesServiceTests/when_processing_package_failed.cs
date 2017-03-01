@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         Establish context = () =>
         {
-            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             origin = "hq";
@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
                     });
 
-            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray());
+            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage

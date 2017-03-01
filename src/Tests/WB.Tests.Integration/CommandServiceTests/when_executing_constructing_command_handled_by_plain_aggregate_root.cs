@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
-            commandService = Create.CommandService(serviceLocator: serviceLocator);
+            commandService = Abc.Create.Service.CommandService(serviceLocator: serviceLocator);
         };
 
         Because of = () =>

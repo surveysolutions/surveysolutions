@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -24,21 +25,21 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             linkedToRosterId      = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             rosterId              = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.MultyOptionsQuestion(id: triggerQuestionId, variable: "multi_trigger", options: new Answer[]
+                Abc.Create.Entity.MultyOptionsQuestion(id: triggerQuestionId, variable: "multi_trigger", options: new Answer[]
                 {
                     new Answer() { AnswerCode = 1, AnswerText = "1" }, 
                     new Answer() { AnswerCode = 2, AnswerText = "2" }, 
                     new Answer() { AnswerCode = 3, AnswerText = "3" }, 
                 }),
-                Create.Roster(id: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: triggerQuestionId, variable: "roster_var",
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id: questionId, variable: "text")
+                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "text")
                     }),
-                Create.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
+                Abc.Create.Entity.SingleQuestion(id: linkedToRosterId, variable: "single", linkedToRosterId: rosterId)
             });
 
             interview = SetupInterview(questionnaireDocument);
@@ -62,9 +63,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         It should_raise_SingleOptionLinkedQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<SingleOptionLinkedQuestionAnswered>();
 
-        private It should_contains_options_for_single_linked_question_in_original_order = () =>
+        It should_contains_options_for_single_linked_question_in_original_order = () =>
         {
-            var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Create.Identity(linkedToRosterId));
+            var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(IntegrationCreate.Identity(linkedToRosterId));
             linkedToRosterQuestion.Options.ShouldEqual(new List<RosterVector>()
             {
                 new RosterVector(new decimal[] { 1m }),
@@ -74,10 +75,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
 
-        private static EventContext eventContext;
-        private static Interview interview;
-        private static Guid userId;
-        private static Guid linkedToRosterId;
-        private static Guid rosterId;
+        static EventContext eventContext;
+        static Interview interview;
+        static Guid userId;
+        static Guid linkedToRosterId;
+        static Guid rosterId;
     }
 }
