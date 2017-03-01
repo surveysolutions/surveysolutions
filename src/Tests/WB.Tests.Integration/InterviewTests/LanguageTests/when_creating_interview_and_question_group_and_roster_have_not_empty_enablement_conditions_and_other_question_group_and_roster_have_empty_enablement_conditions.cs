@@ -22,9 +22,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(variable: "a"),
                         Abc.Create.Entity.Question(questionId: questionId, variable: "b", enablementCondition: "a > 0"),

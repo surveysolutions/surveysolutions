@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var textQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeIntQuestionId, variable:"numeric"),
                     Abc.Create.Entity.Roster(
                         rosterId: numericRosterId, 

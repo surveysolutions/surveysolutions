@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.MockedServiceLocator();
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
                     Create.YesNoQuestion(questionId: questionId, variable: "hhAssets", answers: new[] {11}),
                     Create.Variable(variableId, VariableType.LongInteger, expression: "hhAssets.Missing.Length")

@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Guid staticTextId = Guid.Parse("22222222222222222222222222222222");
                 Identity staticTextIdentity = Create.Identity(staticTextId);
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Guid.NewGuid(),
                     Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
                     {

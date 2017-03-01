@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             var interview = SetupInterview(
-                questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",

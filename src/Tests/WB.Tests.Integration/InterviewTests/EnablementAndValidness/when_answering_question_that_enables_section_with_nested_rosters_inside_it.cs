@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -27,12 +28,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Guid userId = Guid.NewGuid();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Chapter(id: Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument(questionnaireId,
+                    Abc.Create.Entity.Group(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
                     }),
-                    Create.Chapter(id: Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), enablementCondition: "x1 == 1", children: new IComposite[]
+                    Abc.Create.Entity.Group(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), enablementCondition: "x1 == 1", children: new IComposite[]
                     {
                         Abc.Create.Entity.TextListQuestion(questionId: list1Id, variable: "l1"),
                         Abc.Create.Entity.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
@@ -46,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     }));
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(numId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, questionId: numId, answer: 1));
                 interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
                 interview.AnswerTextListQuestion(userId, list2Id, Create.RosterVector(1), DateTime.Now, new[] { Tuple.Create(1m, "World") });
 

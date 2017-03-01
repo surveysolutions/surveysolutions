@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var triggerQuestionId = Guid.NewGuid();
             var titleQuestionId = Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.MultyOptionsQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_multi"),

@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             {
                 Setup.MockedServiceLocator();
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
                     Abc.Create.Entity.GpsCoordinateQuestion(questionId, "gps", enablementCondition: null,
                         validationExpression: "false"),
