@@ -7,57 +7,11 @@ namespace WB.Core.SharedKernels.DataCollection.V11
     public abstract class AbstractInterviewExpressionProcessorV11<T> : IInterviewExpressionProcessorV11
         where T : IInterviewLevelV11
     {
-        public void UpdateSingleOptionAnswer(Identity questionId, int answer)
+        public void Init(IInterviewStateAccessorV11 state)
         {
+
         }
 
-        public void UpdateMultiOptionAnswer(Identity questionId, int[] answer)
-        {
-        }
-
-        public void UpdateTextListAnswer(Identity questionId, ListAnswerRow[] answers)
-        {
-        }
-
-        public void UpdateLinkedSingleOptionAnswer(Identity questionId, RosterVector selectedPropagationVector)
-        {
-        }
-
-        public void UpdateLinkedMultiOptionAnswer(Identity questionId, RosterVector[] selectedPropagationVectors)
-        {
-        }
-
-        public void UpdateYesNoAnswer(Identity questionId, YesNoAnswersOnlyV2 answers)
-        {
-        }
-
-        public void UpdateNumericIntegerAnswer(Identity questionId, long? answer)
-        {
-        }
-
-        public void UpdateNumericRealAnswer(Identity questionId, double? answer)
-        {
-        }
-
-        public void UpdateDateAnswer(Identity questionId, DateTime? answer)
-        {
-        }
-
-        public void UpdateMediaAnswer(Identity questionId, string answer)
-        {
-        }
-
-        public void UpdateTextAnswer(Identity questionId, string answer)
-        {
-        }
-
-        public void UpdateQrBarcodeAnswer(Identity questionId, string answer)
-        {
-        }
-
-        public void UpdateGeoLocationAnswer(Identity questionId, double latitude, double longitude, double accuracy, double altitude)
-        {
-        }
 
         public void DisableGroups(IEnumerable<Identity> groupsToDisable)
         {

@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.tt"
+    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class InterviewExpressionProcessorV11 : InterviewExpressionProcessorV11Base
+    public partial class LevelTemplateV11 : LevelTemplateV11Base
     {
 #line hidden
         /// <summary>
@@ -30,23 +30,75 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
-                    "tem.Text.RegularExpressions;\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.G" +
-                    "enerated\r\n{\r\n\tpublic class ");
+            this.Write("\r\npublic internal partial ");
             
-            #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.tt"
+            #line 9 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
-            this.Write(" \r\n\t{\r\n\t\tpublic ");
+            this.Write(" : IInterviewLevelV11\r\n{\r\n\tpublic ");
             
-            #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorV11.tt"
+            #line 11 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
-            this.Write("() \r\n\t\t{\r\n\t\t}\r\n\t}\r\n}");
+            this.Write("() \r\n\t{\r\n\t}\r\n\r\n");
+            
+            #line 15 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+	foreach (var question in Model.Questions) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("            \r\n    public ");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(" => state.GetAnswer<");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write(">(IdOf.");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(", RosterVector.Take(");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.RosterScope.Length));
+            
+            #line default
+            #line hidden
+            this.Write("));\r\n");
+            
+            #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
+            this.Write("}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -58,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public class InterviewExpressionProcessorV11Base
+    public class LevelTemplateV11Base
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;
