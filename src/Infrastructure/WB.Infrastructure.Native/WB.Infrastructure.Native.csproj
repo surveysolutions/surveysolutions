@@ -200,7 +200,6 @@
     <Compile Include="Sanitizer\StringExtensions.cs" />
     <Compile Include="Storage\EntitySerializer.cs" />
     <Compile Include="Storage\EventSourcedAggregateRootRepositoryWithWebCache.cs" />
-    <Compile Include="Storage\IdentityJsonConverter.cs" />
     <Compile Include="Storage\INativeReadSideStorage.cs" />
     <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
