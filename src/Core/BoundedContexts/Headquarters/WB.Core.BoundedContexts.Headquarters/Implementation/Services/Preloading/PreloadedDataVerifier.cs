@@ -907,7 +907,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 responsiblesCache[userNameLowerCase] = userNotExistOrArchived ? null : new UserToVerify
                 (
                     user.IsLockedByHQ || user.IsLockedBySupervisor,
-                    user.IsSupervisor() || user.Roles.Any(role => role == UserRoles.Interviewer)
+                    user.IsSupervisor(),
+                    user.Roles.Any(role => role == UserRoles.Interviewer)
                 );
             }
 

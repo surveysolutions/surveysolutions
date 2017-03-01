@@ -1,13 +1,11 @@
 ﻿using System.Net.Http;
-using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.UI.Headquarters.Identity;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
+namespace WB.UI.Headquarters.Filters
 {
     public class ObserverNotAllowedApiAttribute : ActionFilterAttribute
     {
@@ -24,21 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             }
             else
                 base.OnActionExecuting(filterContext);
-        }
-    }
-
-    public class ObserverNotAllowedAttribute : ActionFilterAttribute
-    {
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
-
-        public override void OnActionExecuting(HttpActionContext actionContext)
-        {
-            if (this.identityManager.IsCurrentUserObserver)
-            {
-                throw new HttpException(403, Strings.ObserverNotAllowed);
-            }
-
-            base.OnActionExecuting(actionContext);
         }
     }
 }

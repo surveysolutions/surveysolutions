@@ -13,8 +13,7 @@ namespace WB.UI.Headquarters.Filters
     {
         private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
         internal static bool Installed = false;
-
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
