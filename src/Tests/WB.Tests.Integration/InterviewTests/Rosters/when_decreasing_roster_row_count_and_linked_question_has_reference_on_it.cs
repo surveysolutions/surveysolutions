@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedOutsideId = Guid.Parse("22222222222222222222222222222222");
                 var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                          children: new IComposite[]
                          {
                              Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),

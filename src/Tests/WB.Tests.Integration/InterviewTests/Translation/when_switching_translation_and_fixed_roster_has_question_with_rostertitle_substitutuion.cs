@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.Translation
     {
         private Establish context = () =>
         {
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
                     Abc.Create.Entity.Roster(rosterId,

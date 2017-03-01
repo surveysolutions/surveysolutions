@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "num"),

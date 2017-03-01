@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.GpsCoordinateQuestion(questionAId, "gps", enablementCondition: null,
                         validationExpression: null),
                     Create.NumericRealQuestion(questionBId, "b", enablementCondition: "gps.Latitude < 0"),

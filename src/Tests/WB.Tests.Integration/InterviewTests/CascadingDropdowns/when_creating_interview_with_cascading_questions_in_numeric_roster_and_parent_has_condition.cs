@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
                 var numericId = Guid.Parse("55555555555555555555555555555555");
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "numeric"),
                     Abc.Create.Entity.Roster(topRosterId,
                         variable: "varRoster",

@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
                     Abc.Create.Entity.TextQuestion(questionId: questionId, 
                         variable: "test",

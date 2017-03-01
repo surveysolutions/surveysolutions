@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var textListRosterId =   Guid.Parse("22222222222222222222222222222222");
             var singleLinkedToListRosterId = Guid.Parse("33333333333333333333333333333333");
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                Abc.Create.Entity.TextListQuestion(textListQuestionId),
                Abc.Create.Entity.Roster(textListRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: textListQuestionId, children:new []
