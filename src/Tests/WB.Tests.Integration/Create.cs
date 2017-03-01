@@ -110,16 +110,6 @@ namespace WB.Tests.Integration
 
         public static RosterVector RosterVector(params int[] vectors) => Abc.Create.Entity.RosterVector(vectors);
 
-        public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
-        {
-            Group group = Abc.Create.Entity.Group(rosterId, "Roster X", variable, null, false, children);
-
-            group.IsRoster = true;
-            group.RosterSizeSource = RosterSizeSourceType.Question;
-            group.RosterSizeQuestionId = rosterSizeQuestionId;
-            return group;
-        }
-
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
             Guid? linkedToRosterId = null)
