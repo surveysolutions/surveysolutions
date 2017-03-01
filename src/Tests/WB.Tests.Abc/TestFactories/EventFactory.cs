@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.TestFactories
         public AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
             => new AnswersDeclaredInvalid(failedConditions);
 
-        public AnswersDeclaredValid AnswersDeclaredValid(Identity[] questions)
+        public AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
             => new AnswersDeclaredValid(questions);
 
         public AnswersDeclaredValid AnswersDeclaredValid()
@@ -42,6 +42,17 @@ namespace WB.Tests.Unit.TestFactories
 
         public DateTimeQuestionAnswered DateTimeQuestionAnswered(Guid interviewId, Identity question, DateTime answer)
             => new DateTimeQuestionAnswered(interviewId, question.Id, question.RosterVector, DateTime.UtcNow, answer);
+
+        public DateTimeQuestionAnswered DateTimeQuestionAnswered(
+            Guid questionId, DateTime answer, decimal[] propagationVector = null)
+        {
+            return new DateTimeQuestionAnswered(
+                 Guid.NewGuid(),
+                 questionId,
+                 propagationVector ?? RosterVector.Empty,
+                 DateTime.UtcNow, 
+                 answer);
+        }
 
         public GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
             => new GeoLocationQuestionAnswered(
@@ -140,12 +151,12 @@ namespace WB.Tests.Unit.TestFactories
                 selectedRosterVectors ?? new decimal[][]{});
 
         public NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
-            Guid? questionId = null, decimal[] rosterVector = null, int? answer = null)
+            Guid? questionId = null, decimal[] rosterVector = null, int? answer = null, Guid? userId = null, DateTime? answerDate = null)
             => new NumericIntegerQuestionAnswered(
-                Guid.NewGuid(),
+                userId ?? Guid.NewGuid(),
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? RosterVector.Empty,
-                DateTime.Now,
+                answerDate ?? DateTime.UtcNow,
                 answer ?? 1);
 
         public PictureQuestionAnswered PictureQuestionAnswered(Guid? questionId = null, decimal[] rosterVector = null, string answer = null, DateTime? answerTimeUtc = null)
@@ -220,11 +231,14 @@ namespace WB.Tests.Unit.TestFactories
                     rosterTitle ?? "title")
             });
 
-        public SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
-            => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
+        public SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null, DateTime? answerDate = null)
+            => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, answerDate ?? DateTime.UtcNow, answer);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTexts)
             => this.StaticTextsDeclaredInvalid(new[] {0}, staticTexts);
+
+        public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> arg)
+           => new StaticTextsDeclaredInvalid(arg);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
             params Identity[] staticTexts)
@@ -257,12 +271,12 @@ namespace WB.Tests.Unit.TestFactories
                 groups ?? new Identity[] {});
 
         public TextQuestionAnswered TextQuestionAnswered(
-            Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
+            Guid? questionId = null, decimal[] rosterVector = null, string answer = null, Guid? userId = null, DateTime? answerTime = null)
             => new TextQuestionAnswered(
-                Guid.NewGuid(),
+                userId ?? Guid.NewGuid(),
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
-                DateTime.Now,
+                answerTime??DateTime.Now,
                 answer ?? "answer");
 
         public TextListQuestionAnswered TextListQuestionAnswered(
@@ -319,5 +333,25 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewRejected InterviewRejected(Guid userId, string comment = null, DateTime? rejectTime = null)
             => new InterviewRejected(userId, comment, rejectTime);
+
+        public NumericRealQuestionAnswered NumericRealQuestionAnswered(Identity identity = null, decimal? answer = null, Guid? userId = null, DateTime? answerTime = null)
+        {
+            return new NumericRealQuestionAnswered(
+                   userId ?? Guid.NewGuid(),
+                   identity?.Id ?? Guid.NewGuid(),
+                   identity?.RosterVector ?? Create.Entity.RosterVector(),
+                   answerTime ?? DateTime.UtcNow,
+                   answer ?? 0);
+        }
+
+        public RosterInstancesAdded RosterInstancesAdded(AddedRosterInstance[] instances)
+        {
+            return new RosterInstancesAdded(instances);
+        }
+
+        public RosterInstancesRemoved RosterInstancesRemoved(RosterInstance[] rosterInstances)
+        {
+            return new RosterInstancesRemoved(rosterInstances);
+        }
     }
 }

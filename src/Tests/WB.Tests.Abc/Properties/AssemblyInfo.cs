@@ -36,5 +36,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
-[assembly: InternalsVisibleTo("WB.Tests.Intergration")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
 

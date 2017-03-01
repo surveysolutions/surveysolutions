@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using It = Machine.Specifications.It;
 
@@ -48,9 +49,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1,
-                        propagationVector: new decimal[] { }),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    WB.Tests.Unit.Create.Event.SingleOptionQuestionAnswered(
+                        parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
+                    ),
+                    Unit.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())

@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     Create.Roster(rosterId, variable:"r", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2),  Create.FixedTitle(3)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(q2Id, variable: "age"),
+                        Unit.Create.Entity.NumericIntegerQuestion(q2Id, variable: "age"),
                         Create.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
                         Create.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                         {

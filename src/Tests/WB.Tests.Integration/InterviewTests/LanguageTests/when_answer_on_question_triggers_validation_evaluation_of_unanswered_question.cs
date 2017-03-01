@@ -28,14 +28,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                    Create.NumericIntegerQuestion(dependentOnAnsweredQuestionId, "q2", validationExpression: "q1 + q2 > 0")
+                    Unit.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                    Unit.Create.Entity.NumericIntegerQuestion(dependentOnAnsweredQuestionId, "q2", validationExpression: "q1 + q2 > 0")
                );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
-                    Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(dependentOnAnsweredQuestionId))),
-                    Create.Event.NumericIntegerQuestionAnswered(dependentOnAnsweredQuestionId, 1)
+                    Unit.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(dependentOnAnsweredQuestionId))),
+                    Unit.Create.Event.NumericIntegerQuestionAnswered(
+                        dependentOnAnsweredQuestionId, null, 1, null, null
+                    )
                 });
 
                 var result = new InvokeResults();

@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
+                    Unit.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
 
                     Create.Roster(
                         id: rosterId, 
@@ -39,10 +39,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         variable: "varRoster",
                         children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(rosterAgeQuestionId, variable: "age")
+                            Unit.Create.Entity.NumericIntegerQuestion(rosterAgeQuestionId, variable: "age")
                         }),
 
-                    Create.NumericIntegerQuestion(
+                    Unit.Create.Entity.NumericIntegerQuestion(
                         id: rosterValidation,
                         enablementCondition: "varRoster.Select(x => x.age).Max() > 65")
                 );

@@ -26,8 +26,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: questionId, variable: "a", enablementCondition: "Quest.IRnd() > 0.5"),
-                        Create.NumericIntegerQuestion(variable: "b", enablementCondition: "Quest.IRnd() <= 0.5"),
+                        Unit.Create.Entity.NumericIntegerQuestion(id: questionId, variable: "a", enablementCondition: "Quest.IRnd() > 0.5"),
+                        Unit.Create.Entity.NumericIntegerQuestion(variable: "b", enablementCondition: "Quest.IRnd() <= 0.5"),
                     }),
                 });
 
