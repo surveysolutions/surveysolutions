@@ -66,7 +66,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
-            IGlobalInfoProvider globalInfo,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -75,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
             ILogger logger, IUserViewFactory usersRepository)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;

@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
@@ -32,5 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Task<ApplicationUser> GetUserByName(string userName);
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
+        RestCredentials GetDesignerUserCredentials();
     }
 }

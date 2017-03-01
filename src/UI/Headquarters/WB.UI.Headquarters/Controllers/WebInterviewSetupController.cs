@@ -26,12 +26,12 @@ namespace WB.UI.Headquarters.Controllers
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
             ILogger logger, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, 
+                  logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.configurator = configurator;
