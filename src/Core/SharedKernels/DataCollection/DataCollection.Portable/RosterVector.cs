@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         #region Backward compatibility with int[]
 
-        private int[] Array => this.coordinates;
+        public int[] Array => this.coordinates;
 
         IEnumerator<int> IEnumerable<int>.GetEnumerator() => ((IEnumerable<int>)this.Array).GetEnumerator();
 
