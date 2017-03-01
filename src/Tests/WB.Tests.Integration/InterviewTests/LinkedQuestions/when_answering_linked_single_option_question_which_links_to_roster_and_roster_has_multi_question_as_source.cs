@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     new Answer() { AnswerCode = 2, AnswerText = "2" }, 
                     new Answer() { AnswerCode = 3, AnswerText = "3" }, 
                 }),
-                Create.Roster(id: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: triggerQuestionId, variable: "roster_var",
                     children: new IComposite[]
                     {

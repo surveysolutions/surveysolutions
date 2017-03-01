@@ -35,17 +35,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var fixedRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(
-                        id: parentRosterId,
+                    Abc.Create.Entity.Roster(
+                        rosterId: parentRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new FixedRosterTitle[] {
+                        fixedRosterTitles: new FixedRosterTitle[] {
                                 Create.FixedTitle(1, "Parent 1"),
                                 Create.FixedTitle(2, "Parent 2") },
                         children: new IComposite[] {
-                            Create.Roster(
-                                id: rosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: rosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new FixedRosterTitle[] {
+                                fixedRosterTitles: new FixedRosterTitle[] {
                                     Create.FixedTitle(3, "Roster 1"),
                                     Create.FixedTitle(4, "Roster 2") },
                                 variable: "fixed_source",
@@ -54,10 +54,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                     Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source")
                                 }),
 
-                            Create.Roster(
-                                id: fixedRosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: fixedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new FixedRosterTitle[] {
+                                fixedRosterTitles: new FixedRosterTitle[] {
                                     Create.FixedTitle(5, "Item 1"),
                                     Create.FixedTitle(6, "Item 2") },
                                 variable: "fix",

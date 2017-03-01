@@ -32,10 +32,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "numeric"),
-                    Create.Roster(topRosterId,
+                    Abc.Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        obsoleteFixedTitles: new []{ "a", "b"},
+                        fixedTitles: new []{ "a", "b"},
                         children: new List<IComposite>
                         {
                             Create.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",

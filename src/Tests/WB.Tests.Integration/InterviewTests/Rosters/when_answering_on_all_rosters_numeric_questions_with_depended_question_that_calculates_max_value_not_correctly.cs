@@ -32,8 +32,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
 
-                    Create.Roster(
-                        id: rosterId, 
+                    Abc.Create.Entity.Roster(
+                        rosterId: rosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         variable: "varRoster",

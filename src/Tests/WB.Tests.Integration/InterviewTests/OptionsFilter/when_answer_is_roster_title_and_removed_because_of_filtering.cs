@@ -43,10 +43,11 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
                         variable: "trigger"),
-                    Create.Roster(id: rosterId,
+                    Abc.Create.Entity.Roster(rosterId: rosterId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: rosterTitleQuestionId,
+                        variable: null,
                         children: new IComposite[]
                         {
                             Create.SingleQuestion(
@@ -59,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                                     Create.Option(value: "2", text: "Option 2"),
                                 })
                         }),
-                     Create.Roster(id: rosterWithMultioptionsTitle,
+                     Abc.Create.Entity.Roster(rosterId: rosterWithMultioptionsTitle,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: multioptionsQuestionId,
@@ -75,7 +76,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                                     Create.Option(value: "2", text: "Option 2"),
                                 })
                         }),
-                      Create.Roster(id: rosterWithYesNoTitle,
+                      Abc.Create.Entity.Roster(rosterId: rosterWithYesNoTitle,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: triggerQuestionId,
                         rosterTitleQuestionId: yesNoQuestionId,

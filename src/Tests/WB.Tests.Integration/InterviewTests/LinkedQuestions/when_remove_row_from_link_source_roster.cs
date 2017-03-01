@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.ListQuestion(id: rosterSizeQuestionId, variable: "txt"),
-                Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
+                Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
                 Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
             });
 

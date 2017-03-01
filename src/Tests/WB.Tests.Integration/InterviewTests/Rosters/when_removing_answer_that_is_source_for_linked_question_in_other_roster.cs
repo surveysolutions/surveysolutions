@@ -40,10 +40,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var fixedRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(
-                        id: rosterId,
+                    Abc.Create.Entity.Roster(
+                        rosterId: rosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new FixedRosterTitle[] {
+                        fixedRosterTitles: new FixedRosterTitle[] {
                             Create.FixedTitle(1, "Roster 1"),
                             Create.FixedTitle(2, "Roster 2") },
                         variable: "fixed_source",
@@ -52,10 +52,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source")
                         }),
 
-                    Create.Roster(
-                        id: fixedRosterId,
+                    Abc.Create.Entity.Roster(
+                        rosterId: fixedRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new FixedRosterTitle[] {
+                        fixedRosterTitles: new FixedRosterTitle[] {
                             Create.FixedTitle(3, "Item 1"),
                             Create.FixedTitle(4, "Item 2") },
                         variable: "fix",

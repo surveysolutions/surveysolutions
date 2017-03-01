@@ -26,10 +26,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
+                    Abc.Create.Entity.Group(groupId, "Group X", null, "q1 == 1", false, new IComposite[]
                     {
-                        Create.Roster(
-                            id: rosterId,
+                        Abc.Create.Entity.Roster(
+                            rosterId: rosterId,
                             rosterSizeSourceType: RosterSizeSourceType.Question,
                             rosterSizeQuestionId: q1Id,
                             variable: "r",

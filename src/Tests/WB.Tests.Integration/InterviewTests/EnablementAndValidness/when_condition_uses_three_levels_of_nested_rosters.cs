@@ -36,17 +36,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(membersQuestionId, variable: "num"),
-                    Create.Roster(familyRosterId, variable: "fam",
+                    Abc.Create.Entity.Roster(familyRosterId, variable: "fam",
                         rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: membersQuestionId,
                         children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(petsQuestionId, variable: "pet"),
-                            Create.Roster(petsRosterId, variable: "frnd",
+                            Abc.Create.Entity.Roster(petsRosterId, variable: "frnd",
                                 rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: petsQuestionId,
                                 children: new IComposite[]
                                 {
                                     Abc.Create.Entity.NumericIntegerQuestion(toysCountQuestionId, variable: "toys_count"),
-                                    Create.Roster(petToysRoster, variable: "petToys",
+                                    Abc.Create.Entity.Roster(petToysRoster, variable: "petToys",
                                         rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: toysCountQuestionId,
                                         children: new IComposite[]
                                         {

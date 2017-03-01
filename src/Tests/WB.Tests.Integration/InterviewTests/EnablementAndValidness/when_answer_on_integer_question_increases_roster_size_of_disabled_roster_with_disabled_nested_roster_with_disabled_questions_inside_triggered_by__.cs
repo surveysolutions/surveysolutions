@@ -33,11 +33,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "a"),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
+                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                         rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(id: rosterQuestionId, enablementCondition: enablementCondition, variable: null),
-                            Create.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
+                            Abc.Create.Entity.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                                 rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
                                 {
                                     Abc.Create.Entity.NumericIntegerQuestion(id: nestedRosterQuestionId, enablementCondition: enablementCondition, variable: null)

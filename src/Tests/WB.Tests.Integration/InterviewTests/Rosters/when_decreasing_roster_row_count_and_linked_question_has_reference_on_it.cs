@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                          children: new IComposite[]
                          {
                              Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),
-                             Create.Roster(id:rosterId, rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId, variable: "ros",
+                             Abc.Create.Entity.Roster(rosterId:rosterId, rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId, variable: "ros",
                              children: new IComposite[]
                              {
                                  Create.TextQuestion(id:sourceQuestionId,variable: "source")

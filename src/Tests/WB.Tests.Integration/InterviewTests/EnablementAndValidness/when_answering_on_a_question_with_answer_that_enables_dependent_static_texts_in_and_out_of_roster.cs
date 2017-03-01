@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Create.StaticText(dependentStaticTextOutsideRosterId, enablementCondition: "q1 > 0"),
 
-                Create.Roster(fixedTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
+                Abc.Create.Entity.Roster(fixedRosterTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
                 {
                     Create.StaticText(dependentStaticTextInsideRosterId, enablementCondition: "q1 > 0"),
                 })

@@ -876,10 +876,11 @@ namespace WB.Tests.Abc.TestFactories
             return group;
         }
 
+        private static int rostersCounter = 0;
         public Group Roster(
             Guid? rosterId = null,
             string title = "Roster X",
-            string variable = "roster_var",
+            string variable = null,
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
@@ -891,7 +892,7 @@ namespace WB.Tests.Abc.TestFactories
             Group group = Create.Entity.Group(
                 groupId: rosterId,
                 title: title,
-                variable: variable,
+                variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
 

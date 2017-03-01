@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.Roster(id: roster1Id, fixedTitles: new []
+                    Abc.Create.Entity.Roster(rosterId: roster1Id, fixedRosterTitles: new []
                     {
                         Create.FixedTitle(1),
                         Create.FixedTitle(2),

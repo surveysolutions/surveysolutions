@@ -41,16 +41,16 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Create.Roster(id: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
                     children: new IComposite[]
                     {
                         Create.SingleQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
                             variable: "link_single")
                     }),
-                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.Roster(rosterId: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, fixedTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)}, variable: "ros3",
+                Abc.Create.Entity.Roster(rosterId: linkedToRosterId, fixedRosterTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)}, variable: "ros3",
                     children: new IComposite[]
                     {
                         Create.DateTimeQuestion(id: linkedToQuestionId, variable: "link_source")

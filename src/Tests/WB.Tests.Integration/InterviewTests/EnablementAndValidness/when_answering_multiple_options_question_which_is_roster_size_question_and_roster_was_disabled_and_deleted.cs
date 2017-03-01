@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
                         options: new List<Answer>{ Create.Option(value: "1", text: "Hello"), Create.Option(value: "2", text: "World") }),
-                    Create.Roster(rosterId, 
+                    Abc.Create.Entity.Roster(rosterId, 
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         enablementCondition: "!q1.Contains(2)",children: new[]

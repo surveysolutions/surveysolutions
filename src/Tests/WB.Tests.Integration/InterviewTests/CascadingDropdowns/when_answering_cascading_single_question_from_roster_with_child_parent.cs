@@ -37,10 +37,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(value: "1", text: "parent option 1"),
                         Create.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.Roster(topRosterId,
+                    Abc.Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        obsoleteFixedTitles: new[] { "a", "b" },
+                        fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
                             Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
