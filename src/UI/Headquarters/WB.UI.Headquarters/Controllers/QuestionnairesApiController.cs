@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,
                 RecordsFiltered = items.TotalCount,
-                Data = items.Items.Select(x => new QuestionnaireListItemModel
+                Data = items.Items.ToList().Select(x => new QuestionnaireListItemModel
                 {
                     QuestionnaireId = x.QuestionnaireId,
                     Version = x.Version,

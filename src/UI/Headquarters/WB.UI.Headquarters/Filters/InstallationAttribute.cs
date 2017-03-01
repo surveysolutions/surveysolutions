@@ -5,7 +5,6 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Identity;
 
 namespace WB.UI.Headquarters.Filters
 {

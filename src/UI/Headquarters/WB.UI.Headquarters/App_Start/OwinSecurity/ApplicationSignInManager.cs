@@ -6,7 +6,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.UI.Headquarters.Identity
+namespace WB.UI.Headquarters.OwinSecurity
 {
     public class ApplicationSignInManager : SignInManager<ApplicationUser, Guid>
     {

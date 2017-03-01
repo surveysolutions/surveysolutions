@@ -3,9 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.Commands;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using Humanizer;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -14,12 +11,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -38,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers
             set { HttpContext.Current.Session[this.identityManager.CurrentUserName] = value; }
         }
 
+        private readonly IIdentityManager identityManager;
         private readonly IRestService restService;
 
         public DesignerQuestionnairesApiController(

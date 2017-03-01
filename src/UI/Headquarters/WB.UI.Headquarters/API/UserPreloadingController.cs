@@ -7,7 +7,7 @@ using Resources;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.UserPreloading;
 
 namespace WB.UI.Headquarters.API
