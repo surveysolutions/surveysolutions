@@ -323,6 +323,7 @@
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="Utils\RosterInstanceExtensions.cs" />
+    <Compile Include="Utils\RosterVectorAsCoordinatesComparer.cs" />
     <Compile Include="Utils\RosterVectorConvertor.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
