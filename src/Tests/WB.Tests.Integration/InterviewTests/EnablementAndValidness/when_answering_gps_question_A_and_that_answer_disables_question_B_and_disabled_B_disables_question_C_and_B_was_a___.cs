@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Identity(questionCId) 
                     }),
                     Unit.Create.Event.NumericRealQuestionAnswered(
-                        Unit.Create.Entity.Identity(questionBId, (decimal[]) null), 4.2m, null, null)
+                        Unit.Create.Entity.Identity(questionBId), answer: 4.2m)
                 });
 
                 using (var eventContext = new EventContext())
