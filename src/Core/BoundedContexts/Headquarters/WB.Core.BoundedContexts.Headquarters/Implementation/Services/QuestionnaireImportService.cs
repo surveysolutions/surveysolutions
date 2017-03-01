@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IRestService restService;
-        private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly string apiPrefix = @"/api/hq";
         private readonly string apiVersion = @"v3";
         private readonly IStringCompressor zipUtils;
@@ -32,27 +31,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
+        private readonly IIdentityManager identityManager;
 
 
         public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider, 
-            IRestService restService, 
-            IGlobalInfoProvider globalInfoProvider, 
+            IRestService restService,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             ITranslationManagementService translationManagementService,
             ICommandService commandService,
-            ILogger logger)
+            ILogger logger,
+            IIdentityManager identityManager)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
-            this.globalInfoProvider = globalInfoProvider;
             this.zipUtils = zipUtils;
             this.attachmentContentService = attachmentContentService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.translationManagementService = translationManagementService;
             this.commandService = commandService;
             this.logger = logger;
+            this.identityManager = identityManager;
         }
 
         public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode)
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var designerUserCredentials = this.globalInfoProvider.GetDesignerUserCredentials();
+                var designerUserCredentials = this.identityManager.GetDesignerUserCredentials();
                 if (designerUserCredentials == null)
                 {
                     return new QuestionnaireImportResult
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
                 
                 this.commandService.Execute(new ImportFromDesigner(
-                    this.globalInfoProvider.GetCurrentUser().Id,
+                    this.identityManager.CurrentUserId,
                     questionnaire,
                     isCensusMode,
                     questionnaireAssembly,

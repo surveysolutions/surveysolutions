@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
 namespace WB.UI.Headquarters.Identity
@@ -108,9 +110,12 @@ namespace WB.UI.Headquarters.Identity
             var observer = await this.GetUserByName(observerName);
 
             this.CurrentUser.ObserverName = string.Empty;
-            this.authenticationManager.SignOut()
+            this.authenticationManager.SignOut();
 
             await this.signInManager.SignInAsync(observer, true, true);
         }
+
+        public RestCredentials GetDesignerUserCredentials()
+            => (RestCredentials) HttpContext.Current.Session[this.CurrentUserName];
     }
 }

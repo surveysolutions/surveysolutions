@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>(users =>
             {
-                var userDocuments = users.Where(user => user.Roles.Any(role => role == UserRoles.Operator));
+                var userDocuments = users.Where(user => user.Roles.Any(role => role == UserRoles.Interviewer));
                 if (onlyActive)
                 {
                     userDocuments = userDocuments.Where(x => !x.IsArchived && !x.IsLockedByHQ && !x.IsLockedBySupervisor);
