@@ -25,8 +25,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.Question(variable: "a", enablementCondition: null),
-                        Create.Question(variable: "b", enablementCondition: null),
+                        Abc.Create.Entity.Question(variable: "a", enablementCondition: null),
+                        Abc.Create.Entity.Question(variable: "b", enablementCondition: null),
                         Abc.Create.Entity.Group(null, "Group X", "i", null, false, null),
                         Abc.Create.Entity.Group(null, "Group X", "j", null, false, null),
                         Abc.Create.Entity.Roster(variable: "x", enablementCondition: null),

@@ -21,9 +21,9 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: responsible, teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: responsible, teamLeadId: Guid.NewGuid(), status: InterviewStatus.Completed),
             };
 
             var repository = CreateInterviewSummaryRepository();

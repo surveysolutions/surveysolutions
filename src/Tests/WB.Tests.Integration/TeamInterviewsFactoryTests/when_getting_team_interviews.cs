@@ -33,13 +33,13 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(status: InterviewStatus.ApprovedBySupervisor, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
-                Create.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
-                Create.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: 2),
-                Create.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version),
-                Create.InterviewSummary(status: InterviewStatus.ApprovedByHeadquarters, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
-                Create.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
-                Create.InterviewSummary(status: InterviewStatus.InterviewerAssigned, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.ApprovedBySupervisor, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: 2),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.ApprovedByHeadquarters, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.Completed, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
+                Abc.Create.Entity.InterviewSummary(status: InterviewStatus.InterviewerAssigned, responsibleId: responsibleId, questionnaireId: questionnaireId, questionnaireVersion: version),
             };
 
             PostgreReadSideStorage<InterviewSummary> repository;
