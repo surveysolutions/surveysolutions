@@ -37,11 +37,11 @@ namespace WB.Tests.Integration.InterviewTests
     {
         internal static AnsweredYesNoOption Yes(decimal value)
         {
-            return Create.AnsweredYesNoOption(value, true);
+            return IntegrationCreate.AnsweredYesNoOption(value, true);
         }
         internal static AnsweredYesNoOption No(decimal value)
         {
-            return Create.AnsweredYesNoOption(value, false);
+            return IntegrationCreate.AnsweredYesNoOption(value, false);
         }
 
         protected static Interview SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
             var interviewExpressionStatePrototypeProvider = CreateInterviewExpressionStateProviderStub(questionnaireId);
 
-            return Create.Interview(
+            return IntegrationCreate.Interview(
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
@@ -78,7 +78,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = Create.PreloadedInterview(
+            var interview = IntegrationCreate.PreloadedInterview(
                 preloadedData,
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
@@ -143,11 +143,11 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = Create.StatefulInterview(
+            var interview = IntegrationCreate.StatefulInterview(
                 questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
                 answersOnPrefilledQuestions: answersOnPrefilledQuestions,
-                questionnaireRepository: questionnaireStorage ?? Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
+                questionnaireRepository: questionnaireStorage ?? IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
             
             ApplyAllEvents(interview, events);
 
@@ -172,7 +172,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = Create.Interview(
+            var interview = IntegrationCreate.Interview(
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider);
@@ -198,7 +198,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.SubstitionTextFactory());
+                IntegrationCreate.SubstitionTextFactory());
 
             return interview;
         }
@@ -250,7 +250,7 @@ namespace WB.Tests.Integration.InterviewTests
             eventContext
                 .GetSingleEvent<LinkedOptionsChanged>()
                 .ChangedLinkedQuestions
-                .SingleOrDefault(x => x.QuestionId.Equals(Create.Identity(questionId, rosterVector)))
+                .SingleOrDefault(x => x.QuestionId.Equals(IntegrationCreate.Identity(questionId, rosterVector)))
                 ?.Options;
 
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
@@ -262,10 +262,10 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         protected static Assembly CompileAssemblyUsingQuestionnaireEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
+            => CompileAssembly(questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
 
         protected static Assembly CompileAssemblyUsingLatestEngine(QuestionnaireDocument questionnaireDocument)
-            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().LatestSupportedVersion);
+            => CompileAssembly(questionnaireDocument, IntegrationCreate.DesignerEngineVersionService().LatestSupportedVersion);
 
         protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, int engineVersion)
         {
@@ -288,7 +288,7 @@ namespace WB.Tests.Integration.InterviewTests
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    Create.CodeGenerator(),
+                    IntegrationCreate.CodeGenerator(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;

@@ -43,8 +43,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionB, answer: -2
                         ),
-                        Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
-                        Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),
+                        Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(IntegrationCreate.Identity(questionA))),
+                        Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(IntegrationCreate.Identity(questionB))),
                     });
 
                 using (var eventContext = new EventContext())

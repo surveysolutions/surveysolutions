@@ -49,12 +49,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var interview = SetupStatefullInterview(questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, questionId: numId, answer: 1));
                 interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
-                interview.AnswerTextListQuestion(userId, list2Id, Create.RosterVector(1), DateTime.Now, new[] { Tuple.Create(1m, "World") });
+                interview.AnswerTextListQuestion(userId, list2Id, IntegrationCreate.RosterVector(1), DateTime.Now, new[] { Tuple.Create(1m, "World") });
 
                 var invokeResults = new InvokeResults();
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(numId, answer: 2));
+                    interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(numId, answer: 2));
                     invokeResults.SubGroupGotEnablementEvents = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(y => y.Id == roster2Id));
                 }
 
@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
-                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(Create.Identity(roster1Id, Create.RosterVector(1)));
-                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(Create.Identity(roster2Id, Create.RosterVector(1, 1)));
+                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster1Id, IntegrationCreate.RosterVector(1)));
+                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster2Id, IntegrationCreate.RosterVector(1, 1)));
                     return invokeResults;
                 }
             });

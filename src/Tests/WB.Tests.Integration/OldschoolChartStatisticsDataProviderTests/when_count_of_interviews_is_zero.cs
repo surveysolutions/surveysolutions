@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
     {
         Establish context = () =>
         {
-            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(CumulativeReportStatusChangeMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(CumulativeReportStatusChangeMap) });
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);

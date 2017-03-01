@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedRosterTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
                             Abc.Create.Entity.SingleQuestion(q1Id, variable: "q1", optionsFilter: "@optioncode < 10")
                         })
@@ -36,15 +36,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 IEnumerable<CategoricalOption> options = new List<CategoricalOption>()
                 {
-                    Create.CategoricalOption(1, "Option 1"),
-                    Create.CategoricalOption(2, "Option 2"),
-                    Create.CategoricalOption(11, "Option 11"),
-                    Create.CategoricalOption(12, "Option 12"),
+                    IntegrationCreate.CategoricalOption(1, "Option 1"),
+                    IntegrationCreate.CategoricalOption(2, "Option 2"),
+                    IntegrationCreate.CategoricalOption(11, "Option 11"),
+                    IntegrationCreate.CategoricalOption(12, "Option 12"),
                 };
 
                 results = new InvokeResults
                 {
-                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options).Count()
+                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(IntegrationCreate.Identity(q1Id, IntegrationCreate.RosterVector(1)), options).Count()
                 };
                 return results;
             });

@@ -41,27 +41,27 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 new Tuple<decimal, string>(1, "house 1"),
                 new Tuple<decimal, string>(2, "house 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Create.RosterVector(1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, IntegrationCreate.RosterVector(1), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 1"),
                 new Tuple<decimal, string>(2, "house 1 person 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Create.RosterVector(2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, IntegrationCreate.RosterVector(2), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 1"),
                 new Tuple<decimal, string>(2, "house 2 person 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(1, 1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, IntegrationCreate.RosterVector(1, 1), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 1 pet 1"),
                 new Tuple<decimal, string>(2, "house 1 person 1 pet 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(1, 2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, IntegrationCreate.RosterVector(1, 2), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 2 pet 1"),
                 new Tuple<decimal, string>(2, "house 1 person 2 pet 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(2, 1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, IntegrationCreate.RosterVector(2, 1), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 1 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 1 pet 2"),
@@ -69,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
         Because of = () =>
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(2, 2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, IntegrationCreate.RosterVector(2, 2), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 2 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 2 pet 2"),
@@ -77,7 +77,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_single_question_has_2_options = () =>
         {
-            var identity = Create.Identity(linkedSingleQuestionId, Create.RosterVector(2, 2, 2));
+            var identity = IntegrationCreate.Identity(linkedSingleQuestionId, IntegrationCreate.RosterVector(2, 2, 2));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             
@@ -87,7 +87,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_multi_question_has_2_options = () =>
         {
-            var identity = Create.Identity(linkedSingleQuestionId, Create.RosterVector(2, 2, 2));
+            var identity = IntegrationCreate.Identity(linkedSingleQuestionId, IntegrationCreate.RosterVector(2, 2, 2));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             

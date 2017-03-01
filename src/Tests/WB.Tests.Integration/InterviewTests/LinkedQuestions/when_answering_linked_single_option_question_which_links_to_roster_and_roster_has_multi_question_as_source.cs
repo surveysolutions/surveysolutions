@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_contains_options_for_single_linked_question_in_original_order = () =>
         {
-            var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Create.Identity(linkedToRosterId));
+            var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(IntegrationCreate.Identity(linkedToRosterId));
             linkedToRosterQuestion.Options.ShouldEqual(new List<RosterVector>()
             {
                 new RosterVector(new decimal[] { 1m }),

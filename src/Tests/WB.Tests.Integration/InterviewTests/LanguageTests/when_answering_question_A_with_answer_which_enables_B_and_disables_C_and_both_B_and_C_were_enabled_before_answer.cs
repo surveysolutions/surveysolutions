@@ -44,8 +44,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         ),
                         Abc.Create.Event.QuestionsEnabled(new[]
                         {
-                            Create.Identity(questionB),
-                            Create.Identity(questionC),
+                            IntegrationCreate.Identity(questionB),
+                            IntegrationCreate.Identity(questionC),
                         }),
                     });
 

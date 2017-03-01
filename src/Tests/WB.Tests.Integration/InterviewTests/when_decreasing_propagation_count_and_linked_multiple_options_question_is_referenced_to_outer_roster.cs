@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.InterviewTests
         It should_raise_AnswersRemoved_event_with_source_for_linked_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event => @event.Questions.Any(question
                 => question.Id == referencedQuestionId
-                    && question.RosterVector.Identical(Create.RosterVector(2))));
+                    && question.RosterVector.Identical(IntegrationCreate.RosterVector(2))));
 
         Cleanup stuff = () =>
         {

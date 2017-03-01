@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Abc.Create.Entity.TextQuestion(questionId: questionId, 
                         variable: "test",
                         validationExpression: "Quest.IRnd() > 2"),
-                    Create.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
+                    IntegrationCreate.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
                 });
 
                 var userId = Guid.NewGuid();

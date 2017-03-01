@@ -69,13 +69,13 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Abc.Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
                     ),
-                    Abc.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
-                    Abc.Create.Event.AnswersDeclaredInvalid(new[] {Create.Identity(childCascadedComboboxId)}),
+                    Abc.Create.Event.QuestionsEnabled(IntegrationCreate.Identity(childCascadedComboboxId)),
+                    Abc.Create.Event.AnswersDeclaredInvalid(new[] {IntegrationCreate.Identity(childCascadedComboboxId)}),
                     Abc.Create.Event.SingleOptionQuestionAnswered(
                         childCascadedComboboxId, new decimal[] { }, 1, null, null
                     ),
-                    Abc.Create.Event.QuestionsEnabled(Create.Identity(grandChildCascadedComboboxId)),
-                    Abc.Create.Event.AnswersDeclaredValid(new[] {Create.Identity(childCascadedComboboxId)}),
+                    Abc.Create.Event.QuestionsEnabled(IntegrationCreate.Identity(grandChildCascadedComboboxId)),
+                    Abc.Create.Event.AnswersDeclaredValid(new[] {IntegrationCreate.Identity(childCascadedComboboxId)}),
                     Abc.Create.Event.SingleOptionQuestionAnswered(
                         grandChildCascadedComboboxId, new decimal[] { }, 1, null, null
                     ),

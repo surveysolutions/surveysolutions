@@ -44,8 +44,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         rosterId: rosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedRosterTitles: new FixedRosterTitle[] {
-                            Create.FixedTitle(1, "Roster 1"),
-                            Create.FixedTitle(2, "Roster 2") },
+                            IntegrationCreate.FixedTitle(1, "Roster 1"),
+                            IntegrationCreate.FixedTitle(2, "Roster 2") },
                         variable: "fixed_source",
                         children: new IComposite[]
                         {
@@ -56,8 +56,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         rosterId: fixedRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedRosterTitles: new FixedRosterTitle[] {
-                            Create.FixedTitle(3, "Item 1"),
-                            Create.FixedTitle(4, "Item 2") },
+                            IntegrationCreate.FixedTitle(3, "Item 1"),
+                            IntegrationCreate.FixedTitle(4, "Item 2") },
                         variable: "fix",
                         children: new IComposite[]
                         {

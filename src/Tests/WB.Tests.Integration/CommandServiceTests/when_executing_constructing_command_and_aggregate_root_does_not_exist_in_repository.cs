@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                         .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
                         {
                             constructedAggregateId = aggregate.EventSourceId;
-                            return Create.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
+                            return IntegrationCreate.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
                         });
 
             eventBusMock
@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
-            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
+            commandService = IntegrationCreate.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
         };
 
         Because of = () =>

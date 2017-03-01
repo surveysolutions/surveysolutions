@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                             variable: "link_multi")
                     }),
                 Abc.Create.Entity.Roster(rosterId: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Abc.Create.Entity.Roster(rosterId: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
+                Abc.Create.Entity.Roster(rosterId: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(0), IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)},
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.TextQuestion(questionId: linkedToQuestionId, variable: "link_source"),

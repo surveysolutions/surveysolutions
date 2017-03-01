@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var interview = SetupInterview(questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(UserId, q1Id, RosterVector.Empty, DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(UserId, q2Id, Create.RosterVector(0), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(UserId, q2Id, IntegrationCreate.RosterVector(0), DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {

@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",
-                        validationConditions: Create.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
+                        validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
                 }),
                 events: new object[]
                 {
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(IntegrationCreate.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {
@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<AnswersDeclaredInvalid>()?
                             .FailedValidationConditions
-                            .ContainsKey(Create.Identity(dependentQuestionId))
+                            .ContainsKey(IntegrationCreate.Identity(dependentQuestionId))
                         ?? false,
                 };
             }

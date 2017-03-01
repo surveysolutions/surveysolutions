@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 3);
-                interview.AnswerTextQuestion(userId, q2Id, Create.RosterVector(0), DateTime.Now, "test");
+                interview.AnswerTextQuestion(userId, q2Id, IntegrationCreate.RosterVector(0), DateTime.Now, "test");
                 interview.AnswerNumericIntegerQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, q3Id, RosterVector.Empty, DateTime.Now, new RosterVector[] {new []{0.0m}});
 

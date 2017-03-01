@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Abc.Create.Entity.Group(groupId, "Group X", null, "false", false, new IComposite[]
                         {
                             Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                            Create.Variable(id: variableId, expression: "txt.Length")
+                            IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =
@@ -41,15 +41,15 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(Create.Identity(variableId), 6);
+                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
                 var enablementConditions = state.ProcessEnablementConditions();
 
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)],
-                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(Create.Identity(variableId))
+                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)],
+                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(IntegrationCreate.Identity(variableId))
                 };
             });
 

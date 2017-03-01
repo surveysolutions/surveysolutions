@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             interview = SetupInterview(questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
-            interview.AnswerNumericRealQuestion(userId, titleQuestionId, Create.RosterVector(0), DateTime.Now, 18.5);
+            interview.AnswerNumericRealQuestion(userId, titleQuestionId, IntegrationCreate.RosterVector(0), DateTime.Now, 18.5);
             eventContext = new EventContext();
         };
 

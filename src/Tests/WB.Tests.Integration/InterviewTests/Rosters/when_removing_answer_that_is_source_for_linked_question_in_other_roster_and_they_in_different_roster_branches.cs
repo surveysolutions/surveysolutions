@@ -39,17 +39,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(commonRosterId, variable: "common_roster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) },
+                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2) },
                         children: new IComposite[] {
                             Abc.Create.Entity.Roster(parentLinkedSourceRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },
+                                fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(3), IntegrationCreate.FixedTitle(4) },
                                 variable: "parent_linked_source_roster",
                                 children: new IComposite[]
                                 {
                                     Abc.Create.Entity.Roster(linkedSourceRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new [] { Create.FixedTitle(5),  Create.FixedTitle(6) },
+                                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(5),  IntegrationCreate.FixedTitle(6) },
                                         variable: "linked_source_roster",
                                         children: new IComposite[]
                                         {
@@ -59,13 +59,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                              Abc.Create.Entity.Roster(parentLinkedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) },
+                                fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(7), IntegrationCreate.FixedTitle(8) },
                                 variable: "parent_linked_roster",
                                 children: new IComposite[]
                                 {
                                     Abc.Create.Entity.Roster(linkedRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new [] { Create.FixedTitle(9), Create.FixedTitle(10) },
+                                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(9), IntegrationCreate.FixedTitle(10) },
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {

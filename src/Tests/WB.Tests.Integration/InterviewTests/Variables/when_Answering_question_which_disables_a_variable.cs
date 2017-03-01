@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                     Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
                     Abc.Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
                     {
-                        Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                        IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
                     })
                 });
 

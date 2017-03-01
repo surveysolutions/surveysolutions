@@ -40,14 +40,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                Abc.Create.Entity.Roster(rosterId: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) }, children: new IComposite[] 
+                Abc.Create.Entity.Roster(rosterId: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2) }, children: new IComposite[] 
                 {
-                    Abc.Create.Entity.Roster(rosterId: parentLinkedSourceRosterId, fixedRosterTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },  children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId: parentLinkedSourceRosterId, fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(3), IntegrationCreate.FixedTitle(4) },  children: new IComposite[]
                     {
-                        Abc.Create.Entity.Roster(rosterId: linkedSourceRosterId, fixedRosterTitles: new [] { Create.FixedTitle(5), Create.FixedTitle(6) }, children: new IComposite[]
+                        Abc.Create.Entity.Roster(rosterId: linkedSourceRosterId, fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(5), IntegrationCreate.FixedTitle(6) }, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
-                            Abc.Create.Entity.Roster(rosterId: linkedRosterId, fixedRosterTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
+                            Abc.Create.Entity.Roster(rosterId: linkedRosterId, fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(7), IntegrationCreate.FixedTitle(8) }, children: new IComposite[]
                             {
                                 Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                             }),

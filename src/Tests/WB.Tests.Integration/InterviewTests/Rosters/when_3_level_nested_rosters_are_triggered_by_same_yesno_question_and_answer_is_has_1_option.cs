@@ -68,11 +68,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(30)));
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(30)));
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(20)));
+                    interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(20)));
 
                     var deletedRosters = eventContext.GetSingleEvent<RosterInstancesRemoved>().Instances;
                     var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;

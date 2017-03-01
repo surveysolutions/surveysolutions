@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedRosterTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                             Abc.Create.Entity.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
@@ -46,12 +46,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument);
 
-                interview.AnswerNumericIntegerQuestion(userId, q1Id, Create.RosterVector(1), DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1, 0), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q1Id, IntegrationCreate.RosterVector(1), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(1, 0), DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q1Id, Create.RosterVector(1), DateTime.Now, 2);
+                    interview.AnswerNumericIntegerQuestion(userId, q1Id, IntegrationCreate.RosterVector(1), DateTime.Now, 2);
 
                     result.QuestionsQ2Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q2Id));
                     result.RosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(g => g.Id == rosterId));

@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetInstance(typeof(Aggregate)) == aggregate
                 && _.GetInstance(typeof(PostProcessor)) == mockOfPostProcessor.Object);
 
-            commandService = Create.CommandService(serviceLocator: serviceLocator);
+            commandService = IntegrationCreate.CommandService(serviceLocator: serviceLocator);
         };
 
         Because of = () => commandService.Execute(commandWithPostProcesor, null);

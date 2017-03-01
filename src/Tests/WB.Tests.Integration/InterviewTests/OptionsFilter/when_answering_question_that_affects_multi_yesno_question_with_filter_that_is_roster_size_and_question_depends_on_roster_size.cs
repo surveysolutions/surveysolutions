@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
                         Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNoView: true),
                         Abc.Create.Entity.Roster(roster2Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]{}),
@@ -48,10 +48,10 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(q2Id, Create.RosterVector(1),
-                    Create.AnsweredYesNoOption(1m, yes: true),
-                    Create.AnsweredYesNoOption(2m, yes: true),
-                    Create.AnsweredYesNoOption(3m, yes: true)
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(q2Id, IntegrationCreate.RosterVector(1),
+                    IntegrationCreate.AnsweredYesNoOption(1m, yes: true),
+                    IntegrationCreate.AnsweredYesNoOption(2m, yes: true),
+                    IntegrationCreate.AnsweredYesNoOption(3m, yes: true)
                 ));
 
                 var result = new InvokeResults();

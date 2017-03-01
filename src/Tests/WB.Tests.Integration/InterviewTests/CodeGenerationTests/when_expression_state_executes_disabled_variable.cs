@@ -28,20 +28,20 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(Create.Identity(variableId), 6);
-                state.DisableVariables(new[] { Create.Identity(variableId)});
+                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId)});
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
                 };
             });
 

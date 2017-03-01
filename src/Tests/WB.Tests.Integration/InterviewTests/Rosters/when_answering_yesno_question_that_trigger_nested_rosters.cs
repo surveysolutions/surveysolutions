@@ -72,13 +72,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
                     Yes(10), Yes(20), Yes(40)));
 
                 var sidebarViewModel = Setup.SidebarSectionViewModel(questionnaireDocument, interview);
                 sidebarViewModel.AllVisibleSections.ElementAt(1).ToggleCommand.Execute(null);
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId,
+                interview.AnswerYesNoQuestion(IntegrationCreate.Command.AnswerYesNoQuestion(rosterSizeQuestionId,
                     RosterVector.Empty, Yes(10), Yes(40), Yes(30)));
                 
                 result.FirstSectionContainsDuplicates = sidebarViewModel.AllVisibleSections.OfType<ISideBarSectionItem>().Select(x => x.SectionIdentity).Count() > 1;
