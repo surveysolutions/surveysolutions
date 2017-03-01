@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 using It = Machine.Specifications.It;
@@ -70,7 +71,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionA, Empty.RosterVector, DateTime.Now, 1);
+                    interview.AnswerNumericIntegerQuestion(userId, questionA, RosterVector.Empty, DateTime.Now, 1);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(1), DateTime.Now, -30);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(2), DateTime.Now, 35);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(3), DateTime.Now, 300);

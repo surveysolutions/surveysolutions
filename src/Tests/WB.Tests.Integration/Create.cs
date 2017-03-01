@@ -426,18 +426,18 @@ namespace WB.Tests.Integration
 
         public static Identity Identity(Guid id, decimal[] rosterVector = null)
         {
-            return new Identity(id, rosterVector ?? Empty.RosterVector);
+            return new Identity(id, rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
         }
 
         public static AddedRosterInstance AddedRosterInstance(Guid groupId, decimal[] outerRosterVector = null,
             decimal rosterInstanceId = 0, int? sortIndex = null)
         {
-            return new AddedRosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId, sortIndex);
+            return new AddedRosterInstance(groupId, outerRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty, rosterInstanceId, sortIndex);
         }
 
         public static RosterInstance RosterInstance(Guid groupId, decimal[] outerRosterVector = null, decimal rosterInstanceId = 0)
         {
-            return new RosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId);
+            return new RosterInstance(groupId, outerRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty, rosterInstanceId);
         }
 
         public static HeaderStructureForLevel HeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

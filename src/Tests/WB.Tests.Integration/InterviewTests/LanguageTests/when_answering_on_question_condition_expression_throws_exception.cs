@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -46,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, Empty.RosterVector, DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, RosterVector.Empty, DateTime.Now, 0);
 
                     result.Questions2DisabledEventWasFound  = 
                         eventContext.Events.Any(b => b.Payload is QuestionsDisabled) &&

@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -58,7 +59,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (var eventContext = new EventContext())
                 {
 
-                    interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new[] { 1 });
+                    interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new[] { 1 });
                     return new InvokeResults()
                     {
                         WasLinkedOptionsChanged =
