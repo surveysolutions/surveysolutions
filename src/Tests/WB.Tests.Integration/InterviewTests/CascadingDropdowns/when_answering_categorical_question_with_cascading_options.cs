@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var nonAnsweredCombo = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var comboShouldNotBeRemoved = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
                         Create.Option(value: "1", text: "parent option 1"),

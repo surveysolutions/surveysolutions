@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.FixedTitle(2, "Microwave"),
                     Create.FixedTitle(3, "Cleaner")
                 };
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),

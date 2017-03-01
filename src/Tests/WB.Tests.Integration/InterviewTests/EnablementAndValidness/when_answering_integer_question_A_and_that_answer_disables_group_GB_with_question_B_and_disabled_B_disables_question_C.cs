@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
                     Abc.Create.Entity.Group(groupGBId, "Group X", null, "a > 0", false, new IComposite[] {
                         Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b")

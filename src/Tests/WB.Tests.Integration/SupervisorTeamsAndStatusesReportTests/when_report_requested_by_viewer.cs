@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
         {
             viewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var responsible = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
+            
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
                 Abc.Create.Entity.InterviewSummary(responsibleId: responsible, teamLeadId: viewerId, status: InterviewStatus.Completed),

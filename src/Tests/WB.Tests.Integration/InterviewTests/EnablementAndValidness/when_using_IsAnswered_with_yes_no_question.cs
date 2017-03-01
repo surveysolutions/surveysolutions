@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 AssemblyContext.SetupServiceLocator();
 
                 var yesNoQuestionVariable = "cat";
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                     children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(id: yesNoQuestionId, 

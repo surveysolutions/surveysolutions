@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.RosterVector(0));
                 var rosterIdentity = Create.Identity(rosterId, Create.RosterVector(0));
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
                         variable: "trigger"),
                     Abc.Create.Entity.Roster(rosterId: rosterId,

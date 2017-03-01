@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId, variable: "link_single"),
                 Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),

@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedSourceRosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                 Abc.Create.Entity.Roster(rosterId: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) }, children: new IComposite[] 
                 {
                     Abc.Create.Entity.Roster(rosterId: parentLinkedSourceRosterId, fixedRosterTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },  children: new IComposite[]

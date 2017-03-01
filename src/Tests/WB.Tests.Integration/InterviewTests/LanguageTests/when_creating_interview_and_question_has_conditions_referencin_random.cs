@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -22,9 +24,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new[]
                 {
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(id: questionId, variable: "a", enablementCondition: "Quest.IRnd() > 0.5"),
                         Abc.Create.Entity.NumericIntegerQuestion(variable: "b", enablementCondition: "Quest.IRnd() <= 0.5"),

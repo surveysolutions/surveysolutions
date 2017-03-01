@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Abc.Create.Entity.Group(groupId, "Group X", null, "q1 == 1", false, new IComposite[]
                     {

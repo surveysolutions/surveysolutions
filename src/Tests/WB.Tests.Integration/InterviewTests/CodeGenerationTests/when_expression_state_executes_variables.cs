@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),

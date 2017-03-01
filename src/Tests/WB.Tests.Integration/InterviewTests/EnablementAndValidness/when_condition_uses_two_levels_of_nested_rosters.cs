@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                var finalQuestionId = Guid.Parse("88888888888888888888888888888888");
 
 
-               var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+               var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                    Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "num"),
                    Abc.Create.Entity.Roster(familyRosterId, variable: "fam",
                        rosterSizeSourceType: RosterSizeSourceType.Question,

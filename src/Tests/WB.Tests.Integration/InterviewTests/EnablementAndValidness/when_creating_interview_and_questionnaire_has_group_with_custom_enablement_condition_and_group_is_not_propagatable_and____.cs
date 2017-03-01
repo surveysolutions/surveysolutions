@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, Abc.Create.Entity.Group(groupId, "Group X", null, "1 > 2", false, null));
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, Abc.Create.Entity.Group(groupId, "Group X", null, "1 > 2", false, null));
 
                 using (var eventContext = new EventContext())
                 {

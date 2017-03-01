@@ -24,11 +24,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
                     }),
-                    Create.Chapter(enablementCondition: "x1 == 1", children: new IComposite[]
+                    Abc.Create.Entity.Group(null, "Chapter X", null, "x1 == 1", false, new IComposite[]
                     {
                         Abc.Create.Entity.TextListQuestion(questionId: list1Id, variable: "l1",
                             enablementCondition: null, validationExpression: null),

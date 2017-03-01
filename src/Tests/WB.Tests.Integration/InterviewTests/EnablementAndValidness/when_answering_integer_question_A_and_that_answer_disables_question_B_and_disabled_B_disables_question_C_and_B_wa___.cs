@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
                     Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
                     Abc.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")

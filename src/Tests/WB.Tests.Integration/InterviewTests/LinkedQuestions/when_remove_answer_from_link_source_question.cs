@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             sourceOfLinkQuestionId = Guid.Parse("22222222222222222222222222222222");
             linkedQuestionId = Guid.Parse("33222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
                     Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", fixedTitles: new[] {"1", "2"},

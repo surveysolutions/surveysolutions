@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),

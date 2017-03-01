@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Option("1"), Create.Option("2"), Create.Option("3"), Create.Option("12")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1"),

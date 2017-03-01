@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
     {
         Establish context = () =>
         {
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id),
                 Abc.Create.Entity.Roster(roster1Id, variable:"roster1Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]

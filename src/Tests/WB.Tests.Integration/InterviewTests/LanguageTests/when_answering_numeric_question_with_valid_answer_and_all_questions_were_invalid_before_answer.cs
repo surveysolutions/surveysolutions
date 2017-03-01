@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -26,9 +27,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
                             Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
@@ -37,10 +38,10 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     events: new object[]
                     {
                         Abc.Create.Event.NumericIntegerQuestionAnswered(
-                            questionA, null, -1, null, null
+                            questionA, answer: -1
                         ),
                         Abc.Create.Event.NumericIntegerQuestionAnswered(
-                            questionB, null, -2, null, null
+                            questionB, answer: -2
                         ),
                         Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
                         Abc.Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),

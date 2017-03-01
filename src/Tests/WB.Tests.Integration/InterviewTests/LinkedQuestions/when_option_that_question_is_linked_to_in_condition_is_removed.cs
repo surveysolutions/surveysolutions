@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                Guid questionWithConditionUsingSingleLinked = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                Guid questionWithConditionUsingMultiLinked = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-               QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+               QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                    children: new IComposite[]
                    {
                         Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list"),

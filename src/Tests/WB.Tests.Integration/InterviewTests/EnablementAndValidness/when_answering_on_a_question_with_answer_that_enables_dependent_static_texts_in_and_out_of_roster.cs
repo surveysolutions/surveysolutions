@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var dependentStaticTextOutsideRosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             var dependentStaticTextInsideRosterId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
 

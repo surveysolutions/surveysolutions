@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             linkedOption2TextInvariantCulture = linkedOption2Answer.ToShortDateString();//"03/08/2014";
 
             var triggerQuestionId = Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,

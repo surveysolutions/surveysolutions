@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var fixedRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.Roster(
                         rosterId: rosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,

@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             linkedToRosterId      = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             rosterId              = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.MultyOptionsQuestion(id: triggerQuestionId, variable: "multi_trigger", options: new Answer[]
                 {
