@@ -40,14 +40,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                Create.Roster(id: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) }, children: new IComposite[] 
+                Abc.Create.Entity.Roster(rosterId: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) }, children: new IComposite[] 
                 {
-                    Create.Roster(id: parentLinkedSourceRosterId, fixedTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },  children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId: parentLinkedSourceRosterId, fixedRosterTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },  children: new IComposite[]
                     {
-                        Create.Roster(id: linkedSourceRosterId, fixedTitles: new [] { Create.FixedTitle(5), Create.FixedTitle(6) }, children: new IComposite[]
+                        Abc.Create.Entity.Roster(rosterId: linkedSourceRosterId, fixedRosterTitles: new [] { Create.FixedTitle(5), Create.FixedTitle(6) }, children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
-                            Create.Roster(id: linkedRosterId, fixedTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
+                            Abc.Create.Entity.Roster(rosterId: linkedRosterId, fixedRosterTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
                             {
                                 Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                             }),

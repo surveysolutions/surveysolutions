@@ -55,8 +55,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
-                        Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
+                        Abc.Create.Entity.Roster(rosterId, variable: "assets",
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             children: new[]
                             {
                                 Create.NumericRealQuestion(id: questionB, variable: "p",

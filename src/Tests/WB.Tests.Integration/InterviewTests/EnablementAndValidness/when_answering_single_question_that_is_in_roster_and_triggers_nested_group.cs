@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Option(value: "2", text: "No")
                     }),
                     Create.ListQuestion(rosterSizeQuestionId, variable: "jobs", enablementCondition: "hwrkyn == 1"),
-                    Create.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 1", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId,
+                    Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", enablementCondition: "hwrkyn == 1", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId,
                         children: new IComposite[]
                         {
                             Create.SingleQuestion(groupTriggerQuestionId, variable: "has_wage", options: new List<Answer>
@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 Create.Option(value: "1", text: "Yes"),
                                 Create.Option(value: "2", text: "No")
                             }),
-                            Create.Group(nestedGroupId, enablementCondition: "has_wage == 1")
+                            Abc.Create.Entity.Group(nestedGroupId, "Group X", null, "has_wage == 1", false, null)
                         })
                     );
 

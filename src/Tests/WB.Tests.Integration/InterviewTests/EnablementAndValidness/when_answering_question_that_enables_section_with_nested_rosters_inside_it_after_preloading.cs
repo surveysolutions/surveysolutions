@@ -30,10 +30,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Chapter(enablementCondition: "x1 == 1", children: new IComposite[]
                     {
                         Create.ListQuestion(list1Id, variable: "l1"),
-                        Create.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                        Abc.Create.Entity.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                         {
                             Create.ListQuestion(list2Id, variable: "l2"),
-                            Create.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                            Abc.Create.Entity.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                             {
                                 Create.TextQuestion(textId)
                             })

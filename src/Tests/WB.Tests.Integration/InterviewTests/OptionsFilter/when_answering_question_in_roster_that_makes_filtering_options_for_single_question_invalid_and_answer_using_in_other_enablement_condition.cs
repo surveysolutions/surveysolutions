@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.SingleQuestion(q1Id, variable: "q1", options: options),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
                         Create.SingleQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
                         Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "q2==2"),

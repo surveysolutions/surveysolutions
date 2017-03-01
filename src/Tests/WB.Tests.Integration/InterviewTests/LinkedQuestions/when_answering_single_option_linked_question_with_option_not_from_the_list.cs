@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_single"),
                 Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Create.Roster(id: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.Roster(rosterId: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
                     {

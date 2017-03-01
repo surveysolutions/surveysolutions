@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
-                    Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age", enablementCondition:"@rowindex == 1"),
                     }),

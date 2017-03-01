@@ -28,13 +28,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.Roster(rosterId, variable:"r", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                    Abc.Create.Entity.Roster(rosterId, variable:"r", fixedRosterTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
                         Create.SingleQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter: "age > 19"),
-                        Create.Roster(roster1Id, variable:"r1", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                        Abc.Create.Entity.Roster(roster1Id, variable:"r1", fixedRosterTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                         {
                             Create.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
-                            Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                            Abc.Create.Entity.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {
                                 Abc.Create.Entity.NumericIntegerQuestion(q2Id, variable: "age")
                             })

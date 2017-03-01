@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var txtSourceOfLinkId = Guid.NewGuid();
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(variable: "fix", obsoleteFixedTitles: new[] {"a", "b"},
+                    Abc.Create.Entity.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Create.TextQuestion(variable: "txt", id: txtSourceOfLinkId)}),
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
                         options:
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 Create.Option(value: "1", text: "Hello"),
                                 Create.Option(value: "2", text: "World")
                             }),
-                    Create.Roster(rosterId,
+                    Abc.Create.Entity.Roster(rosterId,
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         children: new[]

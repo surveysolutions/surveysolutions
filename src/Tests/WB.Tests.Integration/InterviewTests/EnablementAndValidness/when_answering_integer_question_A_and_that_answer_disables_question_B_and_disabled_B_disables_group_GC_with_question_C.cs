@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -33,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
                     Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
-                    Create.Group(groupGCId, enablementCondition: "b > 0", children: new IComposite[] {
+                    Abc.Create.Entity.Group(groupGCId, "Group X", null, "b > 0", false, new IComposite[] {
                         Abc.Create.Entity.NumericIntegerQuestion(questionCId)
                     })
                 );

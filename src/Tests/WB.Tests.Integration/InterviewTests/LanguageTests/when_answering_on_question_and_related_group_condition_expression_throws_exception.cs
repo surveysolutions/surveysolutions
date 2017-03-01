@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -29,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var interview = SetupInterview(
                     Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                         Abc.Create.Entity.NumericIntegerQuestion(questionId, "q1"),
-                        Create.Group(groupId, "g1", enablementCondition: "1/q1 == 1")
+                        Abc.Create.Entity.Group(groupId, "g1", null, "1/q1 == 1", false, null)
                     ),
                     events: new List<object>
                     {

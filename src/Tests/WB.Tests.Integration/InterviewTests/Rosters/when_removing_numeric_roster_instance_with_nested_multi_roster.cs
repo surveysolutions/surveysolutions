@@ -36,8 +36,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeIntQuestionId, variable:"numeric"),
-                    Create.Roster(
-                        id: numericRosterId, 
+                    Abc.Create.Entity.Roster(
+                        rosterId: numericRosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeIntQuestionId,
                         variable: "numRoster",
@@ -48,8 +48,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                 Create.Option(value: "1", text: "Hello"),
                                 Create.Option(value: "2", text: "World")
                             }),
-                            Create.Roster(
-                                id: nestedMultiRosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: nestedMultiRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.Question,
                                 rosterSizeQuestionId: rosterSizeMultiQuestionId,
                                 variable: "multiRoster",

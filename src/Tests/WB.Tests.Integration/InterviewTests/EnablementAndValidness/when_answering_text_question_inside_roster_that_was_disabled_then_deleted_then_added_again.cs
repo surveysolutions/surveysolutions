@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -30,18 +32,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(integerQuestionId, variable: "q0"),
                     Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "q1"),
-                    Create.Roster(rosterId,
+                    Abc.Create.Entity.Roster(rosterId,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         enablementCondition: "@rowcode != (decimal)q0",
                         children: new[]
                                   {
-                                      Create.Group(
-                                          enablementCondition: "@rowcode != 2",
-                                          children: new []
-                                                    {
-                                                        Create.Question(idOfQuestionInRoster, variable:"q2")
-                                                    })
+                                      Abc.Create.Entity.Group(null, "Group X", null, "@rowcode != 2", false, new []
+                                      {
+                                          Create.Question(idOfQuestionInRoster, variable:"q2")
+                                      })
                                       
                                   })
                     );

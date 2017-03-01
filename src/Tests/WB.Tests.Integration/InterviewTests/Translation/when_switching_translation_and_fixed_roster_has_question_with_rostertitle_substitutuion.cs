@@ -22,10 +22,10 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Roster(rosterId,
+                    Abc.Create.Entity.Roster(rosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        obsoleteFixedTitles: new[] { "a", "b" },
+                        fixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
                             Create.TextQuestion(t1Id, "test", questionText:"title with %rostertitle%")

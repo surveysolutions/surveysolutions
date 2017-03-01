@@ -42,8 +42,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Abc.Create.Entity.NumericIntegerQuestion(id: questionId, variable: "q1"),
                         Create.Variable(id: variableId, type: VariableType.Boolean, variableName: "num",
                             expression: "q1>5"),
-                        Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
+                        Abc.Create.Entity.Roster(rosterId, variable: "assets",
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             enablementCondition: "num.GetValueOrDefault()")
                     }),
                 });
