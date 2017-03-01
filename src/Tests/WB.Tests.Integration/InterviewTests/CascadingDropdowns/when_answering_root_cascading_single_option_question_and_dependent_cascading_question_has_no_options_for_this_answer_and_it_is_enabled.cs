@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -44,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var interview = SetupInterview(questionnaire, new object[]
                 {
                     Abc.Create.Event.SingleOptionQuestionAnswered(
-                        parentSingleOptionQuestionId, Empty.RosterVector, 1, null, null
+                        parentSingleOptionQuestionId, RosterVector.Empty, 1, null, null
                     ),
                     Abc.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });

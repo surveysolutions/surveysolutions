@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -48,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
-           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Create.Identity(variableId, Empty.RosterVector));
+           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Create.Identity(variableId, RosterVector.Empty));
 
         private static EventContext eventContext;
         private static Interview interview;

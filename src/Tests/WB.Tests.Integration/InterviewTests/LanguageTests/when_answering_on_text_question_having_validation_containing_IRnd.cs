@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -39,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
-                    interview.AnswerTextQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, "test");
+                    interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "test");
 
                     return new InvokeResult
                     {

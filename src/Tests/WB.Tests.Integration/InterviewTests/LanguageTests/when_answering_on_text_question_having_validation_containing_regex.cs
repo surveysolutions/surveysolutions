@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -35,11 +36,11 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 });
 
                 var interview = SetupInterview(questionnaireDocument);
-                interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "1");
+                interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "1");
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "12345678_1234");
+                    interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "12345678_1234");
 
                     return new InvokeResult
                     {

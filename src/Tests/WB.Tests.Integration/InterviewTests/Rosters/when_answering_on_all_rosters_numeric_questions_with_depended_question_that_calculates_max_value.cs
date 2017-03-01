@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -55,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {                    
-                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
 
                     interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 0 }, DateTime.Now, 17);
                     interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 1 }, DateTime.Now, 66);
