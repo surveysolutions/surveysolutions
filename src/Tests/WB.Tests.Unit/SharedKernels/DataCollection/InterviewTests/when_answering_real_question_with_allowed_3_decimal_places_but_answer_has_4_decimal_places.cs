@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -29,25 +31,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             realQuestionId = Guid.Parse("11111111111111111111111111111111");
 
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-                                                        => _.HasQuestion(realQuestionId) == true
-                                                        && _.GetMaxRosterRowCount() == Constants.MaxRosterRowCount
-                                                        && _.IsQuestionInteger(realQuestionId)==false
-                                                        && _.GetCountOfDecimalPlacesAllowedByQuestion(realQuestionId)==3
-                                                        && _.GetQuestionType(realQuestionId) == QuestionType.Numeric
-                                                        );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+            {
+                Create.Entity.NumericRealQuestion(id: realQuestionId, countOfDecimalPlaces: 3),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
-        Cleanup stuff = () =>
-        {
-        };
-
         Because of = () => expectedException = Catch.Exception(() =>
-            interview.AnswerNumericRealQuestion(userId, realQuestionId, new decimal[] { }, DateTime.Now, 0.1234));
+            interview.AnswerNumericRealQuestion(userId, realQuestionId, RosterVector.Empty, DateTime.Now, 0.1234));
 
         It should_throw_AnswerNotAcceptedException = () =>
             expectedException.ShouldBeOfExactType(typeof (AnswerNotAcceptedException));
