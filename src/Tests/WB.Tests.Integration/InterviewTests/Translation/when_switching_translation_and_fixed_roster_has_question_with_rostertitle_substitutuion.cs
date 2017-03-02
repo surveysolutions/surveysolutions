@@ -39,8 +39,8 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             QuestionnaireDocument questionnaireWithTranslation = questionnaire.Clone();
             questionnaireWithTranslation.Find<Group>(x => x.IsRoster).First().FixedRosterTitles[1].Title = "test";
 
-            var doc = IntegrationCreate.PlainQuestionnaire(questionnaire);
-            var docWithTranslation = IntegrationCreate.PlainQuestionnaire(questionnaireWithTranslation);
+            var doc = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            var docWithTranslation = Create.Entity.PlainQuestionnaire(document: questionnaireWithTranslation);
 
             var repo = Mock.Of<IQuestionnaireStorage>(repository
                 =>

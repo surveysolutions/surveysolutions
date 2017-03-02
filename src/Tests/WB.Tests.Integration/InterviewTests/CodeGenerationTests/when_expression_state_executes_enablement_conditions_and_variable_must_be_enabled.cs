@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -27,13 +26,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.Group(groupId, "Group X", null, "true", false, new IComposite[]
+                        Create.Entity.Group(groupId, children: new IComposite[]
                         {
-                            Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                            IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
+                            Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                            Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =
@@ -41,8 +40,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.DisableVariables(new[] { Abc.Create.Identity(variableId) });
-                state.DisableGroups(new[] { Abc.Create.Identity(groupId) });
+                state.DisableVariables(new[] { Create.Identity(variableId) });
+                state.DisableGroups(new[] { Create.Identity(groupId) });
                 state.SaveAllCurrentStatesAsPrevious();
 
                 var enablementConditions = state.ProcessEnablementConditions();

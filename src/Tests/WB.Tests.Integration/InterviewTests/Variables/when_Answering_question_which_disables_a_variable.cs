@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
@@ -20,13 +19,13 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
-                    Abc.Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
+                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
                     {
-                        IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                        Create.Entity.Variable(variableId, variableName: "v1", expression: "txt.Length")
                     })
                 });
 
