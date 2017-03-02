@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 state.SetInterviewProperties(new InterviewProperties(Guid.NewGuid()));
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId),(long)6);
+                state.UpdateVariableValue(Abc.Create.Identity(variableId),(long)6);
                 var clonedState = state.Clone();
 
                 var variables = clonedState.ProcessVariables();

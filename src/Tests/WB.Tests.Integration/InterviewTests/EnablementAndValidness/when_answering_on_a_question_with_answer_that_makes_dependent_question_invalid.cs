@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<AnswersDeclaredInvalid>()?
                             .FailedValidationConditions
-                            .ContainsKey(IntegrationCreate.Identity(dependentQuestionId))
+                            .ContainsKey(Abc.Create.Identity(dependentQuestionId))
                         ?? false,
                 };
             }

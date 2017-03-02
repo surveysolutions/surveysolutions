@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
-                    Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(IntegrationCreate.Identity(dependentOnAnsweredQuestionId))),
+                    Abc.Create.Event.AnswersDeclaredInvalid(IntegrationCreate.FailedValidationCondition(Abc.Create.Identity(dependentOnAnsweredQuestionId))),
                     Abc.Create.Event.NumericIntegerQuestionAnswered(
                         dependentOnAnsweredQuestionId, null, 1, null, null
                     )

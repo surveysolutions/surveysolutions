@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (long?) variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
+                    IntVariableResult = (long?) variables.ChangedVariableValues[Abc.Create.Identity(variableId)]
                 };
             });
 

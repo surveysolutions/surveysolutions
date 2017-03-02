@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                             questionA, null, -1, null, null
                         ),
 
-                        Abc.Create.Event.StaticTextsDeclaredValid(IntegrationCreate.Identity(staticTextB))
+                        Abc.Create.Event.StaticTextsDeclaredValid(Abc.Create.Identity(staticTextB))
                     });
 
                 using (var eventContext = new EventContext())

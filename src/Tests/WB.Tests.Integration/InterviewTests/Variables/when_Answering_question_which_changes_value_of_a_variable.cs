@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.RemoveAnswer(n1Id, new decimal[0], userId, DateTime.Now);
 
         It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(IntegrationCreate.Identity(n3Id)).ShouldEqual("title with [...]");
+            interview.GetTitleText(Abc.Create.Identity(n3Id)).ShouldEqual("title with [...]");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

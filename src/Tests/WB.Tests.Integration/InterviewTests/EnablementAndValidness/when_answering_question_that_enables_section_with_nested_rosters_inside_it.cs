@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
-                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster1Id, Abc.Create.Entity.RosterVector(new[] {1})));
-                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster2Id, Abc.Create.Entity.RosterVector(new[] {1, 1})));
+                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(Abc.Create.Identity(roster1Id, Abc.Create.Entity.RosterVector(new[] {1})));
+                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(Abc.Create.Identity(roster2Id, Abc.Create.Entity.RosterVector(new[] {1, 1})));
                     return invokeResults;
                 }
             });

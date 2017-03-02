@@ -77,7 +77,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_single_question_has_2_options = () =>
         {
-            var identity = IntegrationCreate.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
+            var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             
@@ -87,7 +87,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_multi_question_has_2_options = () =>
         {
-            var identity = IntegrationCreate.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
+            var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             
