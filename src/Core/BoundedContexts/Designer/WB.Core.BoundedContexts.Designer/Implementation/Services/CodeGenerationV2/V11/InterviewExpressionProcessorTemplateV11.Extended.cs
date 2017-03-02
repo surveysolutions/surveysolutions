@@ -9,9 +9,9 @@
 
         public CodeGenerationModel Model { get; private set; }
 
-        protected LevelTemplateV11 CreateLevelTemplate(LevelModel level)
+        protected LevelTemplateV11 CreateLevelTemplate(LevelModel level, CodeGenerationModel model)
         {
-            return new LevelTemplateV11(level);
+            return new LevelTemplateV11(level, model);
         }
     }
 }

@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers" #>
 
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,56 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : IInterviewExpressionProcessorV11
 	{
-		public <#=Model.ClassName#>() 
+		public <#=Model.ClassName#>(IInterviewState state) 
 		{
+			this.state = state;
 		}
+
+		protected IInterviewState state;
+
+		public Dictionary<string, IInterviewLevelV11> Levels = new Dictionary<string, IInterviewLevelV11>();
+        public Dictionary<string, List<string>> SiblingLevels = new Dictionary<string, List<string>>();
+
+		private IInterviewLevelV11 CreateLevel(Identity rosterIdentity)
+		{
 <#
 		foreach (var level in Model.AllLevels) 
 		{
-			LevelTemplateV11 template = CreateLevelTemplate(level);
-			this.Write(template.TransformText());
+#>
+			if (rosterIdentity.Id == IdOf.<#= level.Variable #>)
+			{
+				return new <#= level.ClassName#>(rosterIdentity.RosterVector, state, this);
+			}
+<#
+		}
+#>			
+		}
+	}
+
+<#
+	foreach (var level in Model.AllLevels) 
+	{
+		LevelTemplateV11 template = CreateLevelTemplate(level, Model);
+		this.Write(template.TransformText());
+	}
+#>
+
+	public static class IdOf
+	{
+<#
+		foreach (var question in Model.AllQuestions)
+		{
+#>
+		public static readonly Guid <#=question.Variable#> = <#= question.Id.AsBytesString() #>;
+<#
+		}
+#>
+<#
+		foreach (var roster in Model.AllRosters) 
+		{
+#>
+		public static readonly Guid <#=roster.Variable#> = <#= roster.Level.Id.AsBytesString() #>;
+<#
 		}
 #>
 	}
