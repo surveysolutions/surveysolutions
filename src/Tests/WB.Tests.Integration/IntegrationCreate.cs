@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using Humanizer;
 using Main.Core.Documents;
@@ -22,28 +21,16 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Headquarters.Commands;
-using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -101,29 +88,12 @@ namespace WB.Tests.Integration
             return macrosSubstitutionServiceMock.Object;
         }
 
-        public static RosterVector RosterVector(params int[] vectors) => Abc.Create.Entity.RosterVector(vectors);
-
-        public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
-        {
-            var questionnaire = new Questionnaire(
-                Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IQuestionnaireAssemblyAccessor>(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(),
-                Mock.Of<IFileSystemAccessor>(),
-                new InMemoryPlainStorageAccessor<TranslationInstance>());
-
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1, 1));
-
-            return questionnaire;
-        }
-
         public static Interview Interview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                IntegrationCreate.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory());
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -144,7 +114,7 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                IntegrationCreate.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory());
           
             interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
                 interviewId: Guid.NewGuid(),
@@ -159,19 +129,15 @@ namespace WB.Tests.Integration
             return interview;
         }
 
-        public static ISubstitionTextFactory SubstitionTextFactory()
-        {
-            return new SubstitionTextFactory(IntegrationCreate.SubstitutionService(), new VariableToUIStringService());
-        }
-
-        public static QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
-            => new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
-
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaireIdentity = QuestionnaireIdentity();
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 7);
 
-            var questionnaireRepository = QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity.QuestionnaireId,
+                Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                questionnaireIdentity.Version
+            );
 
             return StatefulInterview(
                 questionnaireIdentity: questionnaireIdentity,
@@ -187,7 +153,7 @@ namespace WB.Tests.Integration
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ??
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                IntegrationCreate.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory());
 
             interview.CreateInterview(
                 questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -198,11 +164,6 @@ namespace WB.Tests.Integration
                 new Guid("F111F111F111F111F111F111F111F111"));
 
             return interview;
-        }
-
-        public static Identity Identity(Guid id, decimal[] rosterVector = null)
-        {
-            return new Identity(id, rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, 
@@ -229,11 +190,6 @@ namespace WB.Tests.Integration
                     .Select(x => IntegrationCreate.CommittedEvent(payload: x.Payload,
                         eventSourceId: x.EventSourceId,
                         eventSequence: x.EventSequence)));
-        }
-
-        public static FileSystemIOAccessor FileSystemIOAccessor()
-        {
-            return new FileSystemIOAccessor();
         }
 
         public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
@@ -335,18 +291,11 @@ namespace WB.Tests.Integration
                     rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
 
-        public static ValidationCondition ValidationCondition(string expression = null, string message = null)
-            => new ValidationCondition(
-                expression,
-                message ?? (expression != null ? $"condition '{expression}' is not met" : null));
-
         public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null)
         {
             return new CumulativeReportStatusChange(Guid.NewGuid().FormatGuid(), questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1, date??DateTime.Now, InterviewStatus.Completed, 1);
         }
-
-        public static RosterVector RosterVector(params decimal[] coordinates) => new RosterVector(coordinates);
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
             => new DesignerEngineVersionService();
@@ -360,41 +309,8 @@ namespace WB.Tests.Integration
                 Mock.Of<ILogger>(), idColumnName);
         }
 
-        public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
-        {
-            return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression, label: null));
-        }
-
-        public static ChangedVariable ChangedVariableValueDto(Guid? variableId=null, RosterVector vector=null, object value=null)
-        {
-            return new ChangedVariable(IntegrationCreate.Identity(variableId ?? Guid.NewGuid(), vector?? new RosterVector(new decimal[0])), value);
-        }
-
-        public static DynamicTextViewModel DynamicTextViewModel(
-            ILiteEventRegistry registry = null,
-            IStatefulInterviewRepository interviewRepository = null,
-            IQuestionnaireStorage questionnaireRepository = null)
-            => new DynamicTextViewModel(
-                registry ?? Abc.Create.Service.LiteEventRegistry(),
-                interviewRepository: interviewRepository,
-                substitutionService: IntegrationCreate.SubstitutionService());
-
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
-            =>new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
-
-        public static ISubstitutionService SubstitutionService()
-            => new SubstitutionService();
-
-        public static CategoricalOption CategoricalOption(int value, string title, int? parentValue = null)
-        {
-            return new CategoricalOption
-            {
-                Value = value,
-                Title = title,
-                ParentValue = parentValue
-            };
-        }
+            => new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
 
         public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)
             => new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
@@ -404,35 +320,6 @@ namespace WB.Tests.Integration
                     new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
                 }
             };
-
-        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
-            => IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                IntegrationCreate.PlainQuestionnaire(questionnaireDocument));
-
-        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
-            => IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
-
-        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
-            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
-
-        private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
-            => Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == IntegrationCreate.PlainQuestionnaire(questionnaireDocument)
-                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
-                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
-
-        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
-            => IntegrationCreate.PlainQuestionnaire(document: questionnaireDocument);
-
-        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
-            => new PlainQuestionnaire(document, version);
-
 
         public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
         {

@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -45,10 +46,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     return new InvokeResults
                     {
                         NestedRosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups
-                                .Any(g  => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(IntegrationCreate.RosterVector(0, 0)))),
+                                .Any(g  => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Abc.Create.Entity.RosterVector(new[] {0, 0})))),
                         
                         NestedRosterEnabled = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups
-                                .Any(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(IntegrationCreate.RosterVector(0, 0)))),
+                                .Any(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Abc.Create.Entity.RosterVector(new[] {0, 0})))),
                     };
                 }
             });

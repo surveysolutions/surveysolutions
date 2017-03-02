@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupStatefullInterview(questionnaireDocument, useLatestEngine: false);
-                    var questionIdentity = IntegrationCreate.Identity(linkedToQuestionId, RosterVector.Empty);
+                    var questionIdentity = Abc.Create.Identity(linkedToQuestionId, RosterVector.Empty);
 
                     result.LinkedOptionsCount =
                         eventContext.GetSingleEvent<LinkedOptionsChanged>().ChangedLinkedQuestions.First(x => x.QuestionId == questionIdentity).Options.Length;

@@ -44,13 +44,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        IntegrationCreate.Identity(questionAId),
-                        IntegrationCreate.Identity(questionBId)
+                        Abc.Create.Identity(questionAId),
+                        Abc.Create.Identity(questionBId)
                     }),
                     Abc.Create.Event.GroupsEnabled(new []
                     {
-                        IntegrationCreate.Identity(groupGBId),
-                        IntegrationCreate.Identity(groupGCId)
+                        Abc.Create.Identity(groupGBId),
+                        Abc.Create.Identity(groupGCId)
                     }),
                     Abc.Create.Event.NumericIntegerQuestionAnswered(
                         questionId: questionBId, answer: 1

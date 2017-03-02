@@ -221,7 +221,6 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
-    <Compile Include="Settings\StoreProviders.cs" />
     <Compile Include="Versions\ProductVersion.cs" />
     <Compile Include="Versions\ProductVersionHistory.cs" />
     <Compile Include="Versions\ProductVersionModule.cs" />

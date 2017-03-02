@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var questionnaireMock = new Mock<IQuestionnaire>();
             var questionnaireDocumentMock = new QuestionnaireDocument();
 
-            var rostrerStructureService = new Mock<IRostrerStructureService>();
+            var rostrerStructureService = new Mock<IRosterStructureService>();
             rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(scopes);
             
             var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
