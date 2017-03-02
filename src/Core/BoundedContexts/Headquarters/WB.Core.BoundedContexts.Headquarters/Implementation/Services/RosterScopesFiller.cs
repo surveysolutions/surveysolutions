@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly QuestionnaireDocument document;
         private ILookup<RosterSizeSourceType, IGroup> groupsByRosterSizeSourceLookup;
         private Dictionary<Guid, Guid> groupsMappedOnPropagatableQuestion;
-        private Dictionary<Guid, IQuestion> qusetionsByPublicKeyDictionary;
+        private Dictionary<Guid, IQuestion> questionsByPublicKeyDictionary;
         private List<IQuestion> rosterSizeQuestions;
         private ILookup<Guid?, IGroup> rosterGroups;
         
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             this.groupsByRosterSizeSourceLookup = this.document.Find<IGroup>().Where(g => g.IsRoster).ToLookup(r => r.RosterSizeSource);
             this.groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId();
-            this.qusetionsByPublicKeyDictionary = this.document.Find<IQuestion>().ToDictionary(q => q.PublicKey);
+            this.questionsByPublicKeyDictionary = this.document.Find<IQuestion>().ToDictionary(q => q.PublicKey);
             this.rosterGroups = this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.Question].ToLookup(@group => @group.RosterSizeQuestionId);
             this.rosterSizeQuestions = this.document.Find<IQuestion>(question => this.rosterGroups[question.PublicKey].Any()).ToList();
             
@@ -119,10 +119,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (questionId == null) return null;
 
             IQuestion question;
-            if (!this.qusetionsByPublicKeyDictionary.TryGetValue(questionId.Value, out question))
+            if (this.questionsByPublicKeyDictionary.TryGetValue(questionId.Value, out question))
             {
                 return new RosterTitleQuestionDescription(question.PublicKey,
-                   this.qusetionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.GetParsedValue(), a => a.AnswerText));
+                   this.questionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.GetParsedValue(), a => a.AnswerText));
             }
 
             return null;
