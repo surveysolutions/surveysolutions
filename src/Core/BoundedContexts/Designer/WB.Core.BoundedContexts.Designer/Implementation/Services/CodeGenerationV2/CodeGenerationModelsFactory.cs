@@ -275,6 +275,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+
+            foreach (var staticText in questionnaire.Find<StaticText>())
+            {
+                var className = model.GetClassNameByRosterScope(questionnaire.GetRosterScope(staticText));
+                var conditionExpression = this.macrosSubstitutionService.InlineMacros(staticText.ConditionExpression, questionnaire.Macros.Values);
+                var formattedId = staticText.PublicKey.FormatGuid();
+                if (!string.IsNullOrWhiteSpace(conditionExpression))
+                {
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.StaticTextCondition(staticText.PublicKey),
+                        className,
+                        CodeGeneratorV2.EnablementPrefix + formattedId,
+                        conditionExpression,
+                        false,
+                        null);
+                }
+
+                for (int index = 0; index < staticText.ValidationConditions.Count; index++)
+                {
+                    var validation = staticText.ValidationConditions[index];
+                    var validationExpression = this.macrosSubstitutionService.InlineMacros(validation.Expression, questionnaire.Macros.Values);
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.StaticTextValidation(staticText.PublicKey, index),
+                        className,
+                        $"{CodeGeneratorV2.ValidationPrefix}{formattedId}__{index.ToString(CultureInfo.InvariantCulture)}",
+                        validationExpression,
+                        false,
+                        null);
+                }
+            }
         }
     }
 
