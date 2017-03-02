@@ -4,9 +4,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Ninject;
-using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -169,13 +167,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         private bool IsSupportFilterOptionCondition(IComposite documentEntity)
-        {
-            var question = documentEntity as IQuestion;
-            if (question != null && !question.Properties.OptionsFilterExpression.IsNullOrWhiteSpace())
-                return true;
-
-            return false;
-        }
+            => !string.IsNullOrWhiteSpace(((IQuestion) documentEntity)?.Properties.OptionsFilterExpression);
 
         public virtual void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {

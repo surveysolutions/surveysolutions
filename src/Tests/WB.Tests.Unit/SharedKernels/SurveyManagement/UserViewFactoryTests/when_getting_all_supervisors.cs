@@ -1,29 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
-    internal class when_getting_all_supervisors
+    internal class when_getting_all_supervisors : UserViewFactoryTestContext
     {
         Establish context = () =>
         {
-            new List<UserDocument>()
+            var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new []
             {
-                Create.Entity.UserDocument(Id.g1, userName: superBName, isLockedByHQ: true),
-                Create.Entity.UserDocument(Id.g2, userName: superAName),
-                Create.Entity.UserDocument(Id.g3, userName: superCName),
-                Create.Entity.UserDocument(Id.g4, userName: "inter1", supervisorId: Id.g2),
-                Create.Entity.UserDocument(Id.g5, userName: "inter2", supervisorId: Id.g2)
-            }.ForEach(x => usersStorage.Store(x, x.PublicKey.FormatGuid()));
+                Create.Entity.ApplicationUser(Id.g1, userName: superBName, isLockedByHQ: true),
+                Create.Entity.ApplicationUser(Id.g2, userName: superAName),
+                Create.Entity.ApplicationUser(Id.g3, userName: superCName),
+                Create.Entity.ApplicationUser(Id.g4, userName: "inter1", supervisorId: Id.g2),
+                Create.Entity.ApplicationUser(Id.g5, userName: "inter2", supervisorId: Id.g2)
+            });
 
 
-            teamFactory = Create.Service.TeamViewFactory(usersReader: usersStorage);
+            teamFactory = CreateInterviewersViewFactory(readerWithUsers);
         };
 
         Because of = () =>
@@ -53,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
             user.UserName.ShouldEqual(superCName);
         };
 
-        private static TeamViewFactory teamFactory;
+        private static IUserViewFactory teamFactory;
         private static UsersView result;
         private static readonly IPlainStorageAccessor<UserDocument> usersStorage = new TestPlainStorage<UserDocument>();
         private static readonly string superAName = "a_super1";

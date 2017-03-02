@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -10,10 +9,8 @@ using It = Machine.Specifications.It;
 using System.Collections.Generic;
 using System.Net;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -35,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userListViewFactory: userViewFactory);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object);
         };
 
         Because of = () =>

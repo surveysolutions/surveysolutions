@@ -3,12 +3,11 @@ using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
@@ -24,9 +23,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 UserName = "apiTest",
                 Password = "12345",
                 ConfirmPassword = "12345",
-                Id = userId.ToString()
+                Id = userId
             };
-
             var user = new UserView()
             {
                 PublicKey = userId,
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 
             userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
-            controller = CreateApiUserController(commandService: commandServiceMock.Object);
+            controller = CreateApiUserController(identityManager: identityManagerMock.Object);
         };
 
         Because of = () => actionResult = controller.Edit(inputModel).Result;
@@ -44,9 +42,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<ChangeUserCommand>(), Moq.It.IsAny<string>()), Times.Once);
+            identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>()), Times.Once);
 
-        private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
         private static Mock<IUserViewFactory> userViewFactory = new Mock<IUserViewFactory>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;

@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
@@ -15,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         public static InterviewsApiV2Controller CreateInterviewerInterviewsController(
             IPlainInterviewFileStorage plainInterviewFileStorage = null,
-            IGlobalInfoProvider globalInfoProvider = null,
+            IIdentityManager identityManager = null,
             IInterviewInformationFactory interviewsFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             ICommandService commandService = null,
@@ -25,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         {
             return new InterviewsApiV2Controller(
                 plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),
-                globalInfoProvider: globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
+                identityManager: identityManager ?? Mock.Of<IIdentityManager>(),
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),

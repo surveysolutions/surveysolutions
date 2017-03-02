@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Principal;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.Security;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.UI.Headquarters.Code;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using It = Machine.Specifications.It;
@@ -19,17 +13,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         Establish context = () =>
         {
-            var identityManagerMock = new Mock<IIdentityManager>();
-            identityManagerMock.Setup(_ => _.GetUsersInRole(Moq.It.IsAny<string>())).Returns(new[] {"hq"});
+            var identityManager = Mock.Of<IIdentityManager>(_=>_.HasAdministrator == true);
             
-            attribute = Create(identityManagerMock.Object);
+            attribute = Create(identityManager);
         };
 
         Because of = () =>
             exception =
                 Catch.Exception(
                     () =>
-                        attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null, null, null))));
+                        attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null))));
 
         It should_exception_not_be_null = () =>
             exception.ShouldNotBeNull();

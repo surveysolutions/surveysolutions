@@ -12,12 +12,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
     internal class ResourceControllerTestContext
     {
         protected static ResourceController CreateController(ICommandService commandService = null,
-            IGlobalInfoProvider globalInfoProvider = null,
+            IIdentityManager globalInfoProvider = null,
             ILogger logger = null, IPlainInterviewFileStorage plainInterviewFileStorage = null)
         {
             return new ResourceController(
                 commandService ?? Mock.Of<ICommandService>(),
-                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 logger ?? Mock.Of<ILogger>(), plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>());
         }
     }

@@ -64,11 +64,11 @@
       <HintPath>..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -94,6 +94,13 @@
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -101,6 +108,9 @@
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -968,12 +978,11 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_filtering_by_archived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_supervisor_filtering.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_pending_packages_by_interview_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_reprocessing_all_broken_packages.cs" />
@@ -1036,14 +1045,13 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_one_multi_option_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_is_nested_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\SupervisorsViewFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_need_sort_by_interviewers.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_searching_for_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_need_sort_by_interviewers.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_searching_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\TeamUsersAndQuestionnairesFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\when_questionnaire_is_deleted.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SqliteInmemoryStorage.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
@@ -1084,7 +1092,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_question_used_in_substitutions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_and_roster_has_no_roster_title_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_and_roster_has_roster_title_question.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\HeadquarterUserCommandValidatorTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_61_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_minus_1_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
@@ -1117,17 +1124,6 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_questions_affected_by_substitutions.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_archived_user.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_arhiving_observer.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_user.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_interviewer_is_creating_for_archived_supervisor.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_unarchive_active_user.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_unarhiving_interviewer_of_archived_supervisor.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_unarchive_user.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_user_is_creating_with_name_which_duplicates_active_user_name.cs" />
-    <Compile Include="SharedKernels\DataCollection\HeadquarterUserCommandValidatorTests\when_user_is_creating_with_name_which_duplicates_archived_user_name.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\when_user_linking_to_device.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_null_from_and_on_day_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_all_available_descendants_of_QuestionAnswered_recived.cs" />
@@ -1178,7 +1174,6 @@
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_interview_exists_in_each_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_responsible.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests\when_requesting_report_by_viewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthAttributeTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_and_request_header_has_bad_basic_auth_info.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_non_existant_user.cs" />
@@ -1405,7 +1400,6 @@
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
     <Compile Include="SharedKernels\DataCollection\RepositoryKeyHelperTests\when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories.cs" />
-    <Compile Include="SharedKernels\DataCollection\UserTests\UserARTests.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
     <Compile Include="SharedKernels\DataCollection\ValueVectorTests\when_comparing_ValueVector_with_non_ValueVector_object.cs" />

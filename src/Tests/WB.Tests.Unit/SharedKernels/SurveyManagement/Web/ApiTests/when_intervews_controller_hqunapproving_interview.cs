@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userListViewFactory: userViewFactory);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userViewFactory: userViewFactory);
         };
 
         Because of = () =>

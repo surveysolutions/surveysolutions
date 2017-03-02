@@ -7,9 +7,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
@@ -40,12 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
 
             teamInterviewViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<TeamInterviewsInputModel>())).Returns(interviewSummary);
 
-            var globalInfoProvider =
-                Mock.Of<IGlobalInfoProvider>(
-                    g => g.GetCurrentUser() == new UserLight() { Id = Guid.Parse("A1111111111111111111111111111111") });
+            var identityManager =
+                Mock.Of<IIdentityManager>(g => g.CurrentUserId == Guid.Parse("A1111111111111111111111111111111"));
 
             controller = CreateController(teamInterviewViewFactory: teamInterviewViewFactoryMock.Object, 
-                globalInfoProvider : globalInfoProvider);
+                identityManager : identityManager);
         };
 
         Because of = () =>

@@ -147,10 +147,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
         protected static IQuestionnaireImportService CreateIQuestionnaireImportService(
       ICommandService commandService = null,
-      IGlobalInfoProvider globalInfo = null,
+      IIdentityManager identityManager = null,
       IStringCompressor zipUtils = null,
       ILogger logger = null,
-      Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null,
       IRestService restService = null,
       ISupportedVersionProvider supportedVersionProvider = null,
       IAttachmentContentService attachmentContentService = null,
@@ -159,17 +158,17 @@ namespace WB.Tests.Unit.Applications.Headquarters
       )
         {
             var service = restService ?? Mock.Of<IRestService>();
-            var globalInfoProvider = globalInfo ?? new Mock<IGlobalInfoProvider> { DefaultValue = DefaultValue.Mock }.Object;
+            var globalInfoProvider = identityManager ?? new Mock<IIdentityManager> { DefaultValue = DefaultValue.Mock }.Object;
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 service,
-                globalInfoProvider,
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
                 Mock.Of<ITranslationManagementService>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                Mock.Of<ILogger>()
+                Mock.Of<ILogger>(),
+                globalInfoProvider
             );
             return questionnaireImportService;
         }

@@ -2,30 +2,30 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
-using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using It = Machine.Specifications.It;
 
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
-    internal class when_hq_filtering_by_archived : InterviewersViewFactoryTestContext
+    internal class when_hq_filtering_by_archived : UserViewFactoryTestContext
     {
         Establish context = () =>
         {
-            headquarter1 = CreateHeadquarter(headquarter1Id, "headquarter1");
+            headquarter1 = CreateUser(headquarter1Id, null, "headquarter1");
 
-            supervisor1 = CreateSupervisor(supervisor1Id, "supervisor1");
-            UserDocument interviewer11 = CreateInterviewer(interviewer11Id, supervisor1, "interviewer11", "device11");
-            UserDocument interviewer12 = CreateInterviewer(interviewer12Id, supervisor1, "interviewer12", null);
+            supervisor1 = CreateUser(supervisor1Id, null, "supervisor1");
+            var interviewer11 = CreateUser(interviewer11Id, supervisor1Id, "interviewer11", "device11");
+            var interviewer12 = CreateUser(interviewer12Id, supervisor1Id, "interviewer12", null);
 
-            supervisor2 = CreateSupervisor(supervisor2Id, "supervisor2");
-            UserDocument interviewer21 = CreateInterviewer(interviewer21Id, supervisor2, "interviewer21", "device21", true);
+            supervisor2 = CreateUser(supervisor2Id, null, "supervisor2");
+            var interviewer21 = CreateUser(interviewer21Id, supervisor2Id, "interviewer21", "device21", true);
 
-            supervisor3 = CreateSupervisor(supervisor3Id, "supervisor3");
-            UserDocument interviewer31 = CreateInterviewer(interviewer31Id, supervisor3, "interviewer31", "device31", true);
-            UserDocument interviewer32 = CreateInterviewer(interviewer32Id, supervisor3, "interviewer32", null);
-            UserDocument interviewer33 = CreateInterviewer(interviewer33Id, supervisor3, "interviewer33", "device33");
-            UserDocument interviewer34 = CreateInterviewer(interviewer34Id, supervisor3, "interviewer34", null, true);
+            supervisor3 = CreateUser(supervisor3Id, null, "supervisor3");
+            var interviewer31 = CreateUser(interviewer31Id, supervisor3Id, "interviewer31", "device31", true);
+            var interviewer32 = CreateUser(interviewer32Id, supervisor3Id, "interviewer32", null);
+            var interviewer33 = CreateUser(interviewer33Id, supervisor3Id, "interviewer33", "device33");
+            var interviewer34 = CreateUser(interviewer34Id, supervisor3Id, "interviewer34", null, true);
 
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(
                 headquarter1,
@@ -35,18 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTe
                 interviewer31, interviewer32, interviewer33, interviewer34);
 
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
-
-            interviewersInputModel = new InterviewersInputModel()
-            {
-                ViewerId = headquarter1Id,
-                Archived = true,
-                Page = 0,
-                PageSize = 20
-            };
         };
 
         Because of = () =>
-            result = interviewersViewFactory.Load(interviewersInputModel);
+            result = interviewersViewFactory.GetInterviewers(0, 20, null, null, true, null, null);
 
         It should_return_3_interviewers = () =>
         {
@@ -56,9 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTe
 
         It should_return_all_interviewers_in_correct_order = () =>
         {
-            result.Items.Skip(0).First().UserId.ShouldEqual(interviewer21Id.ToString());
-            result.Items.Skip(1).First().UserId.ShouldEqual(interviewer31Id.ToString());
-            result.Items.Skip(2).First().UserId.ShouldEqual(interviewer34Id.ToString());
+            result.Items.Skip(0).First().UserId.ShouldEqual(interviewer21Id);
+            result.Items.Skip(1).First().UserId.ShouldEqual(interviewer31Id);
+            result.Items.Skip(2).First().UserId.ShouldEqual(interviewer34Id);
         };
 
         It should_return_supervisorname_for_each_interviewers = () =>
@@ -69,13 +61,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTe
         };
 
 
-        private static UserDocument headquarter1;
-        private static UserDocument supervisor1;
-        private static UserDocument supervisor2;
-        private static UserDocument supervisor3;
-        private static InterviewersInputModel interviewersInputModel;
+        private static ApplicationUser headquarter1;
+        private static ApplicationUser supervisor1;
+        private static ApplicationUser supervisor2;
+        private static ApplicationUser supervisor3;
         private static InterviewersView result;
-        private static IInterviewersViewFactory interviewersViewFactory;
+        private static IUserViewFactory interviewersViewFactory;
         private static Guid headquarter1Id = Guid.Parse("77777777777777777777777777777777");
         private static Guid supervisor1Id = Guid.Parse("11111111111111111111111111111111");
         private static Guid supervisor2Id = Guid.Parse("22222222222222222222222222222222");

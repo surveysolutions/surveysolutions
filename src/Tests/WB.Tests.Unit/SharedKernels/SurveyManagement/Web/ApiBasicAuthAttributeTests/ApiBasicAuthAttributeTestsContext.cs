@@ -5,7 +5,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
@@ -17,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             Setup.InstanceToMockedServiceLocator(userViewFactory ?? Mock.Of<IUserViewFactory>());
             Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
-            return new ApiBasicAuthAttribute(isUserValid, new [] {UserRoles.Interviewer});
+            return new ApiBasicAuthAttribute(new [] {UserRoles.Interviewer});
         }
 
         protected static HttpActionContext CreateActionContext()
