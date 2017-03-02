@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var interview = SetupStatefullInterview(questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(interview.Id, userId, questionId: numId, answer: 1));
                 interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
-                interview.AnswerTextListQuestion(userId, list2Id, IntegrationCreate.RosterVector(1), DateTime.Now, new[] { Tuple.Create(1m, "World") });
+                interview.AnswerTextListQuestion(userId, list2Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, new[] { Tuple.Create(1m, "World") });
 
                 var invokeResults = new InvokeResults();
                 using (var eventContext = new EventContext())
@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
-                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster1Id, IntegrationCreate.RosterVector(1)));
-                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster2Id, IntegrationCreate.RosterVector(1, 1)));
+                    invokeResults.TopRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster1Id, Abc.Create.Entity.RosterVector(new[] {1})));
+                    invokeResults.NestedRosterIsEnabled = interview.IsEnabled(IntegrationCreate.Identity(roster2Id, Abc.Create.Entity.RosterVector(new[] {1, 1})));
                     return invokeResults;
                 }
             });

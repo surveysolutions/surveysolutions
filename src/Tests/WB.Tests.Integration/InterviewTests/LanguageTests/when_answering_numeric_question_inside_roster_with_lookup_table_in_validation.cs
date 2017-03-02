@@ -70,9 +70,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, questionA, RosterVector.Empty, DateTime.Now, 1);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(1), DateTime.Now, -30);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(2), DateTime.Now, 35);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(3), DateTime.Now, 300);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, -30);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.Now, 35);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Abc.Create.Entity.RosterVector(new[] {3}), DateTime.Now, 300);
 
                     return new InvokeResult
                     {

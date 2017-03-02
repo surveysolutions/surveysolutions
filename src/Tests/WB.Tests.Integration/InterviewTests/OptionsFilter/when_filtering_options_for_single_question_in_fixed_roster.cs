@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 results = new InvokeResults
                 {
-                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(IntegrationCreate.Identity(q1Id, IntegrationCreate.RosterVector(1)), options).Count()
+                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(IntegrationCreate.Identity(q1Id, Abc.Create.Entity.RosterVector(new[] {1})), options).Count()
                 };
                 return results;
             });

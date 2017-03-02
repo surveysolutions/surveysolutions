@@ -1,4 +1,7 @@
-﻿using WB.Tests.Abc.TestFactories;
+﻿using System;
+using System.Linq;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Abc
 {
@@ -19,5 +22,10 @@ namespace WB.Tests.Abc
 
         public static readonly FakeFactory Fake = new FakeFactory();
         public static readonly StorageFactory Storage = new StorageFactory();
+
+        public static Identity Identity(Guid? id = null, params int[] rosterVector) => Entity.Identity(id, rosterVector);
+
+        public static RosterVector RosterVector(params int[] coordinates) =>  Entity.RosterVector(coordinates);
+        public static object test1(params int[] coordinates) => new object();
     }
 }

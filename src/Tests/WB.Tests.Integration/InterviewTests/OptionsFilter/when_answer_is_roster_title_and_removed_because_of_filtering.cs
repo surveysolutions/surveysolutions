@@ -37,8 +37,8 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 Guid yesNoQuestionId = Guid.Parse("44444444444444444444444444444444");
 
                 var rosterTitleQuestionIdentity = IntegrationCreate.Identity(rosterTitleQuestionId,
-                    IntegrationCreate.RosterVector(0));
-                var rosterIdentity = IntegrationCreate.Identity(rosterId, IntegrationCreate.RosterVector(0));
+                    Abc.Create.Entity.RosterVector(new[] {0}));
+                var rosterIdentity = IntegrationCreate.Identity(rosterId, Abc.Create.Entity.RosterVector(new[] {0}));
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
@@ -101,9 +101,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
-                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, new [] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Today, new [] { 1 });
                 interview.AnswerYesNoQuestion(
-                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, IntegrationCreate.RosterVector(0), DateTime.Today, 
+                    new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Today, 
                     new List<AnsweredYesNoOption>
                     {
                         new AnsweredYesNoOption(1, true)
