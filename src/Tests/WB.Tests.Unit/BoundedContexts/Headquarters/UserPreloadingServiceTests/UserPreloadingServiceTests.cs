@@ -317,26 +317,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
         public void
             GetUserRoleFromDataRecord_Then_supervisor_interviewer_or_undefined_role_should_be_returned()
         {
-            var userPreloadingService =
-                this.CreateUserPreloadingService(); ;
+            var userPreloadingService = this.CreateUserPreloadingService();
 
-            var supervisor =
-                userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "Supervisor"));
+            var supervisor = userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "Supervisor"));
+            var interviewer = userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "interviewer"));
+            var undefined = userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "aaas"));
 
-            var interviewer =
-                userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "interviewer"));
-
-            var undefined =
-               userPreloadingService.GetUserRoleFromDataRecord(Create.Entity.UserPreloadingDataRecord(role: "aaas"));
-
-            Assert.That(supervisor,
-                Is.EqualTo(UserRoles.Supervisor));
-
-            Assert.That(interviewer,
-              Is.EqualTo(UserRoles.Interviewer));
-
-            Assert.That(undefined,
-             Is.EqualTo(0));
+            Assert.That(supervisor, Is.EqualTo(UserRoles.Supervisor));
+            Assert.That(interviewer, Is.EqualTo(UserRoles.Interviewer));
+            Assert.That(undefined, Is.EqualTo((UserRoles)0));
         }
 
         private UserPreloadingService CreateUserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage=null,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using It = Machine.Specifications.It;
@@ -12,18 +13,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     {
         Establish context = () =>
         {
-            supervisor1 = CreateUser(supervisor1Id, null, "supervisor1");
-            var interviewer11 = CreateUser(interviewer11Id, supervisor1Id, "interviewer11", "device11");
-            var interviewer12 = CreateUser(interviewer12Id, supervisor1Id, "interviewer12", null);
+            supervisor1 = Create.Entity.ApplicationUser(supervisor1Id, null, userName: "supervisor1", role: UserRoles.Supervisor);
+            var interviewer11 = Create.Entity.ApplicationUser(interviewer11Id, supervisor1Id, userName: "interviewer11", deviceId: "device11");
+            var interviewer12 = Create.Entity.ApplicationUser(interviewer12Id, supervisor1Id, userName: "interviewer12");
 
-            supervisor2 = CreateUser(supervisor2Id, null, "supervisor2");
-            var interviewer21 = CreateUser(interviewer21Id, supervisor2Id, "interviewer21", "device21");
+            supervisor2 = Create.Entity.ApplicationUser(supervisor2Id, null, userName:"supervisor2", role: UserRoles.Supervisor);
+            var interviewer21 = Create.Entity.ApplicationUser(interviewer21Id, supervisor2Id, userName:"interviewer21", deviceId: "device21");
 
-            supervisor3 = CreateUser(supervisor3Id, null, "supervisor3");
-            var interviewer31 = CreateUser(interviewer31Id, supervisor3Id, "interviewer31", "device31");
-            var interviewer32 = CreateUser(interviewer32Id, supervisor3Id, "interviewer32", null);
-            var interviewer33 = CreateUser(interviewer33Id, supervisor3Id, "interviewer33", null);
-            var interviewer34 = CreateUser(interviewer34Id, supervisor3Id, "interviewer34", null, true);
+            supervisor3 = Create.Entity.ApplicationUser(supervisor3Id, null, userName:"supervisor3", role: UserRoles.Supervisor);
+            var interviewer31 = Create.Entity.ApplicationUser(interviewer31Id, supervisor3Id, userName:"interviewer31", deviceId: "device31");
+            var interviewer32 = Create.Entity.ApplicationUser(interviewer32Id, supervisor3Id, userName:"interviewer32");
+            var interviewer33 = Create.Entity.ApplicationUser(interviewer33Id, supervisor3Id, userName:"interviewer33");
+            var interviewer34 = Create.Entity.ApplicationUser(interviewer34Id, supervisor3Id, userName:"interviewer34", isArchived: true);
 
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(
                 supervisor1, supervisor2, supervisor3,

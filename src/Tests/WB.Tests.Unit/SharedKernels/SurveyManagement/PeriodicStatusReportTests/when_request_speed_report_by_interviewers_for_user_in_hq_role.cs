@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Machine.Specifications;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -12,7 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     {
         Establish context = () =>
         {
-            periodicStatusReportController = CreatePeriodicStatusReportController();
+            var identityManager = Mock.Of<IIdentityManager>(x => x.IsCurrentUserHeadquarter == true);
+            periodicStatusReportController = CreatePeriodicStatusReportController(identityManager: identityManager);
         };
 
         Because of = () =>
