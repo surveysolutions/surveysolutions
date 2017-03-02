@@ -29,7 +29,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -134,7 +133,11 @@ namespace WB.Tests.Integration
         {
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 7);
 
-            var questionnaireRepository = QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity.QuestionnaireId,
+                Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                questionnaireIdentity.Version
+            );
 
             return StatefulInterview(
                 questionnaireIdentity: questionnaireIdentity,
@@ -288,18 +291,11 @@ namespace WB.Tests.Integration
                     rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
 
-        public static ValidationCondition ValidationCondition(string expression = null, string message = null)
-            => new ValidationCondition(
-                expression,
-                message ?? (expression != null ? $"condition '{expression}' is not met" : null));
-
         public static CumulativeReportStatusChange CumulativeReportStatusChange(Guid? questionnaireId=null, long? questionnaireVersion=null, DateTime? date = null)
         {
             return new CumulativeReportStatusChange(Guid.NewGuid().FormatGuid(), questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1, date??DateTime.Now, InterviewStatus.Completed, 1);
         }
-
-        public static RosterVector RosterVector(params decimal[] coordinates) => new RosterVector(coordinates);
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
             => new DesignerEngineVersionService();
@@ -313,11 +309,6 @@ namespace WB.Tests.Integration
                 Mock.Of<ILogger>(), idColumnName);
         }
 
-        public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
-        {
-            return Create.Entity.Variable(id, type, variableName, expression);
-        }
-
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
             => new AnswerNotifier(registry ?? Abc.Create.Service.LiteEventRegistry());
 
@@ -329,23 +320,6 @@ namespace WB.Tests.Integration
                     new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
                 }
             };
-
-        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
-            => IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                IntegrationCreate.PlainQuestionnaire(questionnaireDocument));
-
-        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
-            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
-
-        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
-            => IntegrationCreate.PlainQuestionnaire(document: questionnaireDocument);
-
-        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
-            => new PlainQuestionnaire(document, version);
-
 
         public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
         {

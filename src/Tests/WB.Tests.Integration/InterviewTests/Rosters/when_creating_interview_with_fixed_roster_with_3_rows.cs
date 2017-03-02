@@ -42,7 +42,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     ILatestInterviewExpressionState expressionState = GetInterviewExpressionState(questionnaireDocument);
 
                     var interview = new StatefulInterview(
-                        IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument),
+                        Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                            questionnaireIdentity.QuestionnaireId,
+                            Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                            questionnaireIdentity.Version
+                        ),
                         Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
                         Create.Service.SubstitionTextFactory());
 

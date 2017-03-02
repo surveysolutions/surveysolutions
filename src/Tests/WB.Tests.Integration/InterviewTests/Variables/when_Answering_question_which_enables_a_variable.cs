@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
@@ -24,10 +23,10 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Abc.Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
-                    Abc.Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
+                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
                     {
-                        IntegrationCreate.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                     })
                 });
 

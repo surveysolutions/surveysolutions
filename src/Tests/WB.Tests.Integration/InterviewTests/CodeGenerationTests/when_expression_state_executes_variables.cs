@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -26,8 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
+                        Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
