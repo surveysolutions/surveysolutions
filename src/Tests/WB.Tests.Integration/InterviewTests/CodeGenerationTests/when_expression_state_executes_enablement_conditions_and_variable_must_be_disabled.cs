@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -33,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Abc.Create.Entity.Group(groupId, "Group X", null, "false", false, new IComposite[]
                         {
                             Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                            IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
+                            Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =

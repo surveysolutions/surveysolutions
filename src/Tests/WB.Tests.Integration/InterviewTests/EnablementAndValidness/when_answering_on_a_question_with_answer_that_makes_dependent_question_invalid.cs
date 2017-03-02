@@ -5,6 +5,8 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -22,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, "q2",
-                        validationConditions: IntegrationCreate.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
+                        validationConditions: Create.Entity.ValidationCondition(expression: "q1 != q2", message: null).ToEnumerable()),
                 }),
                 events: new object[]
                 {

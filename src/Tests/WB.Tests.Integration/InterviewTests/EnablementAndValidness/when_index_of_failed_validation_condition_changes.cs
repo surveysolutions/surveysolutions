@@ -31,13 +31,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Guid.NewGuid(),
                     Create.Entity.NumericIntegerQuestion(questionId, variable: "num", validationConditions: new List <ValidationCondition>
                     {
-                        IntegrationCreate.ValidationCondition("self < 125", "validation 1"),
-                        IntegrationCreate.ValidationCondition("self >= 0", "validation 2")
+                        Create.Entity.ValidationCondition(expression: "self < 125", message: "validation 1"),
+                        Create.Entity.ValidationCondition(expression: "self >= 0", message: "validation 2")
                     }),
                     Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition>
                     {
-                        IntegrationCreate.ValidationCondition("num < 125", "static text validation 1"),
-                        IntegrationCreate.ValidationCondition("num >= 0", "static text validation 2")
+                        Create.Entity.ValidationCondition(expression: "num < 125", message: "static text validation 1"),
+                        Create.Entity.ValidationCondition(expression: "num >= 0", message: "static text validation 2")
                     }));
 
                 var interview = SetupInterview(questionnaireDocument);

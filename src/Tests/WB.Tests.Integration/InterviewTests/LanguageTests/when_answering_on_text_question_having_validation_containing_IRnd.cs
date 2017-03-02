@@ -3,12 +3,12 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -26,12 +26,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
-                    Abc.Create.Entity.TextQuestion(questionId: questionId, 
+                    Create.Entity.TextQuestion(questionId: questionId, 
                         variable: "test",
                         validationExpression: "Quest.IRnd() > 2"),
-                    IntegrationCreate.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
+                    Create.Entity.Variable(variableId, VariableType.Double, "v1", "Quest.IRnd()")
                 });
 
                 var userId = Guid.NewGuid();
