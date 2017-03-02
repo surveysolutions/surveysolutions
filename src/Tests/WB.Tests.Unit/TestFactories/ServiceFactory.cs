@@ -234,7 +234,7 @@ namespace WB.Tests.Unit.TestFactories
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
                 new QuestionDataParser(),
-                new UserViewFactory(new TestPlainStorage<UserDocument>()));
+                new UserViewFactory(Mock.Of<IIdentityManager>()));
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -256,10 +256,8 @@ namespace WB.Tests.Unit.TestFactories
             => new SubstitutionService();
 
         public TeamViewFactory TeamViewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
-            IPlainStorageAccessor<UserDocument> usersReader = null)
-            => new TeamViewFactory(
-                interviewSummaryReader, usersReader);
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
+            => new TeamViewFactory(interviewSummaryReader);
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();

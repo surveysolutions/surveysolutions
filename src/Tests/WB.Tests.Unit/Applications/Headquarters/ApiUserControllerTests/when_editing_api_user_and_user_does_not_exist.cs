@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 
         Because of = () =>
         {
-            actionResult = controller.Edit(inputModel);
+            actionResult = controller.Edit(inputModel).Result;
         };
 
         It should_return_ViewResult = () =>
