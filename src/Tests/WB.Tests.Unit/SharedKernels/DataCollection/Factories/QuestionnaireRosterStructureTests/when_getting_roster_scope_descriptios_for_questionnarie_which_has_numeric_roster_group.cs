@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             rosterScopes.Single().Value.Type.ShouldEqual(RosterScopeType.Numeric);
 
         private static QuestionnaireDocument questionnarie;
-        private static IRostrerStructureService rosterStructureService;
+        private static IRosterStructureService rosterStructureService;
         private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid numericRosterGroupId;
         private static Guid numericQuestionId;
