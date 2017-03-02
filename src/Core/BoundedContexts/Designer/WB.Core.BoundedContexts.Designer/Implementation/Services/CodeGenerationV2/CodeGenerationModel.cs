@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2
 {
@@ -39,6 +41,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public LevelModel GetLevelByVariable(string variable)
         {
             return AllRosters.FirstOrDefault(x => x.Variable == variable)?.Level;
+        }
+
+        public string GetClassNameByRosterScope(RosterScope rosterScope)
+        {
+            return AllLevels.First(x => x.RosterScope.Equals(rosterScope)).ClassName;
         }
     }
 }
