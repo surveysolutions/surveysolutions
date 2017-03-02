@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.Entity.Group(groupId, children: new IComposite[]
+                        Create.Entity.Group(groupId, enablementCondition: "true", children: new IComposite[]
                         {
                             Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
                             Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
