@@ -60,4 +60,13 @@
 <# 
 	}
 #>
+
+<#
+	foreach (var variable in Model.Variables) 
+    {
+#>            
+		public <#=variable.ClassName#>[] <#=variable.Variable#> => <#=variable.ExpressionMethod#>();
+<# 
+	}
+#>
 	}

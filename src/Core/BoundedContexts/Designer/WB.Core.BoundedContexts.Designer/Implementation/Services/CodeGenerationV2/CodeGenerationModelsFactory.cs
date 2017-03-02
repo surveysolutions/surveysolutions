@@ -8,11 +8,26 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using static System.String;
+using System.Globalization;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2
 {
     public class CodeGenerationModelsFactory : ICodeGenerationModelsFactory
     {
+        private readonly IExpressionProcessor expressionProcessor;
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly ILookupTableService lookupTableService;
+
+        public CodeGenerationModelsFactory(
+            IExpressionProcessor expressionProcessor,
+            IMacrosSubstitutionService macrosSubstitutionService, 
+            ILookupTableService lookupTableService)
+        {
+            this.expressionProcessor = expressionProcessor;
+            this.macrosSubstitutionService = macrosSubstitutionService;
+            this.lookupTableService = lookupTableService;
+        }
+
         public CodeGenerationModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var codeGenerationModel = new CodeGenerationModel
@@ -172,44 +187,94 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
         {
-            var linkedWithFilter = questionnaire.Find<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.LinkedFilterExpression));
+            var linkedWithFilter = questionnaire
+                .Find<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(macrosSubstitutionService.InlineMacros(x.LinkedFilterExpression, questionnaire.Macros.Values)));
 
             foreach (var question in linkedWithFilter)
             {
                 if (!question.LinkedToRosterId.HasValue && !question.LinkedToQuestionId.HasValue) continue;
 
-
                 var questionModel = model.GetQuestionById(question.PublicKey);
+
+                string sourceLevelClassName;
+                if (question.LinkedToQuestionId.HasValue)
+                {
+                    var sourceQuestion = model.GetQuestionById(question.LinkedToQuestionId.Value);
+                    sourceLevelClassName = sourceQuestion.ClassName;
+                }
+                else
+                {
+                    var sourceLevel = model.GetLevelByVariable(GetVariable(questionnaire.Find<IGroup>(question.LinkedToRosterId.Value)));
+                    sourceLevelClassName = sourceLevel.ClassName;
+                }
+
+                var linkedFilterExpression = macrosSubstitutionService.InlineMacros(question.LinkedFilterExpression, questionnaire.Macros.Values);
                 yield return
                     new LinkedFilterMethodModel(
                         ExpressionLocation.LinkedQuestionFilter(questionModel.Id),
-                        questionModel.ClassName,
+                        sourceLevelClassName,
                         $"{CodeGeneratorV2.LinkedFilterPrefix}{questionModel.Variable}",
-                        question.LinkedFilterExpression,
-                        questionModel.Variable);
+                        linkedFilterExpression,
+                        questionModel.ClassName);
             }
         }
 
         public IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
         {
-            var questionsWithFilter = questionnaire.Find<IQuestion>().Where(x => !string.IsNullOrWhiteSpace(x.Properties.OptionsFilterExpression));
+            var questionsWithFilter = questionnaire
+                .Find<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(macrosSubstitutionService.InlineMacros(x.Properties.OptionsFilterExpression, questionnaire.Macros.Values)));
 
             foreach (var question in questionsWithFilter)
             {
                 var questionModel = model.GetQuestionById(question.PublicKey);
+                var optionsFilterExpression = macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
+
                 yield return 
                     new OptionsFilterMethodModel(
                         ExpressionLocation.CategoricalQuestionFilter(questionModel.Id),
                         questionModel.ClassName, 
                         $"{CodeGeneratorV2.OptionsFilterPrefix}{questionModel.Variable}", 
-                        question.Properties.OptionsFilterExpression,
+                        optionsFilterExpression,
                         questionModel.Variable);
             }
         }
 
         public IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
         {
-            return Enumerable.Empty<ConditionMethodModel>();
+            foreach (var questionModel in model.AllQuestions)
+            {
+                var question = questionnaire.Find<IQuestion>(questionModel.Id);
+                var conditionExpression = this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaire.Macros.Values);
+                if (!string.IsNullOrWhiteSpace(conditionExpression))
+                {
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.QuestionCondition(questionModel.Id),
+                        questionModel.ClassName,
+                        CodeGeneratorV2.EnablementPrefix + questionModel.Variable,
+                        question.ConditionExpression,
+                        false,
+                        questionModel.Variable);
+                }
+
+                for (int index = 0; index < question.ValidationConditions.Count; index++)
+                {
+                    var validation = question.ValidationConditions[index];
+                    var validationExpression = this.macrosSubstitutionService.InlineMacros(validation.Expression, questionnaire.Macros.Values);
+
+                    if (!string.IsNullOrWhiteSpace(validationExpression))
+                    {
+                        yield return new ConditionMethodModel(
+                            ExpressionLocation.QuestionValidation(questionModel.Id, index),
+                            questionModel.ClassName,
+                            $"{CodeGeneratorV2.ValidationPrefix}{questionModel.Variable}__{index.ToString(CultureInfo.InvariantCulture)}",
+                            validationExpression,
+                            true,
+                            questionModel.Variable);
+                    }
+                }
+            }
         }
     }
 
@@ -277,6 +342,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public RosterScope RosterScope { get; set; }
     }
 
+    public class VariableModel
+    {
+        public Guid Id { set; get; }
+        public string Variable { set; get; }
+        public string ClassName { get; set; }
+        public string ExpressionMethod { get; set; }
+        public string TypeName { get; set; }
+        public RosterScope RosterScope { get; set; }
+    }
+
     public class RosterModel
     {
         public string Variable { set; get; }
@@ -292,5 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<QuestionModel> Questions { get; private set; } = new List<QuestionModel>();
         public List<RosterModel> Rosters { get; private set; } = new List<RosterModel>();
+        public List<VariableModel> Variables { get; private set; } = new List<VariableModel>();
+
     }
 }
