@@ -68,7 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                             Abc.Create.Entity.AnsweredYesNoOption(3m, true)
                         }
                         ));
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {3}), DateTime.Now, 2);
 
                 var result = new InvokeResults();
 

@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextQuestion(userId, q2Id, IntegrationCreate.RosterVector(2), DateTime.Now, "hello");
+                    interview.AnswerTextQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.Now, "hello");
 
                     result.OptionsCountForQuestion3 = GetChangedOptions(eventContext, q3Id, RosterVector.Empty)?.Length ?? 0;
                 }

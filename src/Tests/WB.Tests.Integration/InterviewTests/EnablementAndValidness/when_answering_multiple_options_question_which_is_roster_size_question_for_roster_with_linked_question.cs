@@ -54,8 +54,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, IntegrationCreate.RosterVector(0), DateTime.Now,"a");
-                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, IntegrationCreate.RosterVector(1), DateTime.Now, "b");
+                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now,"a");
+                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, "b");
 
                 using (var eventContext = new EventContext())
                 {
@@ -68,8 +68,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 e =>
                                     e.ChangedLinkedQuestions[0].QuestionId == IntegrationCreate.Identity(linkedQuestionId, new decimal[] {1})
                                     && e.ChangedLinkedQuestions[0].Options.Length==2
-                                    && e.ChangedLinkedQuestions[0].Options[0].Identical(IntegrationCreate.RosterVector(0))
-                                    && e.ChangedLinkedQuestions[0].Options[1].Identical(IntegrationCreate.RosterVector(1)))
+                                    && e.ChangedLinkedQuestions[0].Options[0].Identical(Abc.Create.Entity.RosterVector(new[] {0}))
+                                    && e.ChangedLinkedQuestions[0].Options[1].Identical(Abc.Create.Entity.RosterVector(new[] {1})))
                     };
                 }
             });

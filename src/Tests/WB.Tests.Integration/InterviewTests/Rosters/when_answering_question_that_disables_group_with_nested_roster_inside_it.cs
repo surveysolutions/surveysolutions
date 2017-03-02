@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -46,12 +47,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument);
 
-                interview.AnswerNumericIntegerQuestion(userId, q1Id, IntegrationCreate.RosterVector(1), DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(1, 0), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1, 0}), DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q1Id, IntegrationCreate.RosterVector(1), DateTime.Now, 2);
+                    interview.AnswerNumericIntegerQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 2);
 
                     result.QuestionsQ2Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q2Id));
                     result.RosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(g => g.Id == rosterId));

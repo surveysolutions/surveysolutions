@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -49,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextInsideRosterId, IntegrationCreate.RosterVector(1)))
+                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextInsideRosterId, Abc.Create.Entity.RosterVector(new[] {1})))
                         ?? false,
                 };
             }
