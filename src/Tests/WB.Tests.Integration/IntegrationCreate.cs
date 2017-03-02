@@ -101,8 +101,6 @@ namespace WB.Tests.Integration
             return macrosSubstitutionServiceMock.Object;
         }
 
-        public static RosterVector RosterVector(params int[] vectors) => Abc.Create.Entity.RosterVector(vectors);
-
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaire = new Questionnaire(
