@@ -26,6 +26,5 @@ namespace WB.Tests.Abc
         public static Identity Identity(Guid? id = null, params int[] rosterVector) => Entity.Identity(id, rosterVector);
 
         public static RosterVector RosterVector(params int[] coordinates) =>  Entity.RosterVector(coordinates);
-        public static object test1(params int[] coordinates) => new object();
     }
 }
