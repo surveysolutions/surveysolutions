@@ -30,9 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
-                    "tem.Text.RegularExpressions;\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.G" +
-                    "enerated\r\n{\r\n\tinternal partial class ");
+            this.Write("\r\n//using System;\r\n//using System.Collections.Generic;\r\n//using System.Linq;\r\n//u" +
+                    "sing System.Text.RegularExpressions;\r\n\r\nnamespace WB.Core.SharedKernels.DataColl" +
+                    "ection.Generated\r\n{\r\n\tinternal partial class ");
             
             #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));

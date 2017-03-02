@@ -210,6 +210,46 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
+            this.Write("\r\n");
+            
+            #line 64 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+	foreach (var variable in Model.Variables) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("            \r\n\t\tpublic ");
+            
+            #line 68 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variable.ClassName));
+            
+            #line default
+            #line hidden
+            this.Write("[] ");
+            
+            #line 68 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variable.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(" => ");
+            
+            #line 68 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variable.ExpressionMethod));
+            
+            #line default
+            #line hidden
+            this.Write("();\r\n");
+            
+            #line 69 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
             this.Write("\t}\r\n");
             return this.GenerationEnvironment.ToString();
         }

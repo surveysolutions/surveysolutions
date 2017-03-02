@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<QuestionModel> AllQuestions { set; get; }
         public List<LevelModel> AllLevels { set; get; }
 
+        // change it later
         public List<RosterModel> AllRosters => AllLevels
             .SelectMany(x => x.Rosters)
             .GroupBy(x => x.Variable)
@@ -33,6 +34,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public QuestionModel GetQuestionById(Guid questionId)
         {
             return AllQuestions.FirstOrDefault(x => x.Id == questionId);
+        }
+
+        public LevelModel GetLevelByVariable(string variable)
+        {
+            return AllRosters.FirstOrDefault(x => x.Variable == variable)?.Level;
         }
     }
 }
