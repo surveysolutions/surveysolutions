@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -136,7 +137,7 @@ namespace WB.Tests.Unit.TestFactories
             {
                 Text = text,
                 UserId = userId ?? Guid.NewGuid(),
-                UserRole = userRole ?? UserRoles.Operator
+                UserRole = userRole ?? UserRoles.Interviewer
             };
         }
 
@@ -1060,13 +1061,19 @@ namespace WB.Tests.Unit.TestFactories
                 TimeSpan = timeSpanWithPreviousStatus ?? new TimeSpan()
             };
 
-        public User User(Guid? userId = null)
+        public ApplicationUser ApplicationUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
+            string userName = "name", bool isLockedByHQ = false)
         {
-            var user = new User();
-            user.SetId(userId ?? Guid.NewGuid());
-            return user;
+            return new ApplicationUser
+            {
+                Id = userId ?? Guid.NewGuid(),
+                IsArchived = isArchived ?? false,
+                UserName = userName,
+                IsLockedByHeadquaters = isLockedByHQ,
+                SupervisorId = supervisorId
+            };
         }
-
+        
         public UserDocument UserDocument()
             => Create.Entity.UserDocument(userId: null);
 

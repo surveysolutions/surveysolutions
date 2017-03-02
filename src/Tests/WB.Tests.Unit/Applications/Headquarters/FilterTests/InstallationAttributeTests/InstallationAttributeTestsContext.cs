@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.UI.Headquarters.Code;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests
@@ -14,7 +12,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         protected static InstallationAttribute Create(IIdentityManager identityManager = null)
         {
-            Setup.InstanceToMockedServiceLocator<IIdentityManager>(identityManager ?? Mock.Of<IIdentityManager>());
+            Setup.InstanceToMockedServiceLocator(identityManager ?? Mock.Of<IIdentityManager>());
 
             var installationAttribute = new InstallationAttribute();
             InstallationAttribute.Installed = false;

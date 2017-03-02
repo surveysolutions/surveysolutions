@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -172,9 +171,6 @@ namespace WB.Tests.Unit.TestFactories
                 AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
             };
 
-        public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Interviewer, string userName = "name", Guid? supervisorId = null)
-            => new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.Entity.UserLight(supervisorId), "", "");
-
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
             long questionnaireContentVersion = 1)
@@ -189,17 +185,11 @@ namespace WB.Tests.Unit.TestFactories
                 base64StringOfAssembly,
                 questionnaireContentVersion,
                 2);
-
-        public LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
-            => new LinkUserToDevice(userId, deviceId);
-
+        
         public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
             => new SynchronizeInterviewEventsCommand(
                 Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new IEvent[0], InterviewStatus.Completed, true);
-
-        public UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
-            => new UnarchiveUserCommand(userId);
-
+        
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
             return new DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);

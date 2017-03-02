@@ -16,7 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.OwinSecurity
 {
-    internal class IdentityManager : IIdentityManager
+    public class IdentityManager : IIdentityManager
     {
         private readonly ApplicationUserManager userManager;
         private readonly ApplicationSignInManager signInManager;
