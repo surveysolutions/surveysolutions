@@ -13,6 +13,7 @@ using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using Prometheus;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -127,6 +128,8 @@ namespace WB.UI.Headquarters
         {
             this.logger.Info("Ending application.");
             this.logger.Info("ShutdownReason: " + HostingEnvironment.ShutdownReason.ToString());
+
+            ServiceLocator.Current.GetInstance<IScheduler>()?.Shutdown();
 
             if (HostingEnvironment.ShutdownReason == ApplicationShutdownReason.HostingEnvironment)
             {
