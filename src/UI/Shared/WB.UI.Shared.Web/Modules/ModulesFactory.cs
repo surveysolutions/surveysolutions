@@ -1,10 +1,7 @@
-﻿using System;
-using System.Web.Configuration;
+﻿using System.Web.Configuration;
 using Ninject.Modules;
-using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
-using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Modules
 {
@@ -12,42 +9,12 @@ namespace WB.UI.Shared.Web.Modules
     {
         public static NinjectModule GetEventStoreModule()
         {
-            var storeProvider = CoreSettings.EventStoreProvider;
+            var eventStoreSettings = new PostgreConnectionSettings();
+            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+            eventStoreSettings.SchemaName = "events";
 
-            if (storeProvider == StoreProviders.EventStore)
-            {
-                var eventStoreConnectionSettings = new EventStoreSettings();
-                
-                eventStoreConnectionSettings.ServerIP = WebConfigurationManager.AppSettings["EventStore.ServerIP"];
-                eventStoreConnectionSettings.ServerTcpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerTcpPort"]);
-                eventStoreConnectionSettings.ServerHttpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerHttpPort"]);
-                eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
-                eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
-                eventStoreConnectionSettings.MaxCountToRead = int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]);
-
-                return new EventStoreWriteSideModule(eventStoreConnectionSettings);
-            }
-            else if (storeProvider == StoreProviders.Postgres)
-            {
-                var eventStoreSettings = new PostgreConnectionSettings();
-                eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
-                eventStoreSettings.SchemaName = "events";
-                
-                return new PostgresWriteSideModule(eventStoreSettings,
-                    new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
-            }
-
-            return null;
-        }
-
-        private static bool? TryParseBool(string value)
-        {
-            bool result;
-            if (bool.TryParse(value, out result))
-            {
-                return result;
-            }
-            return false;
+            return new PostgresWriteSideModule(eventStoreSettings,
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
         }
     }
 }

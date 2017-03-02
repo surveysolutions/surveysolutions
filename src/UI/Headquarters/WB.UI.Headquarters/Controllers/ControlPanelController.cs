@@ -15,8 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Infrastructure.Native.Storage.EventStore;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
@@ -33,7 +31,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
-        private readonly IEventStoreApiService eventStoreApiService;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -44,7 +41,6 @@ namespace WB.UI.Headquarters.Controllers
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             ITransactionManagerProvider transactionManagerProvider,
-            IEventStoreApiService eventStoreApiService,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
              : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
@@ -53,7 +49,6 @@ namespace WB.UI.Headquarters.Controllers
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
-            this.eventStoreApiService = eventStoreApiService;
         }
 
         public ActionResult CreateHeadquarters()
@@ -245,12 +240,5 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult EventStore() => this.View();
         public ActionResult BrokenInterviewPackages() => this.View();
-
-        public async Task<ActionResult> RunScavenge()
-        {
-            await eventStoreApiService.RunScavengeAsync();
-            object model = "Scavenge has executed at " + DateTime.Now;
-            return this.View("EventStore", model);
-        }
     }
 }
