@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         public override void RefreshEntities(Guid interviewId, params Identity[] questions) => this.AddToQueue(() => base.RefreshEntities(interviewId, questions));
-        public override void RefreshRemovedEntities(Guid interviewId, params Identity[] questions) => this.AddToQueue(() => base.RefreshRemovedEntities(interviewId, questions));
+        public override void RefreshRemovedEntities(Guid interviewId, params Identity[] entities) => this.AddToQueue(() => base.RefreshRemovedEntities(interviewId, entities));
         public override void RefreshEntitiesWithFilteredOptions(Guid interviewId) => this.AddToQueue(() => base.RefreshEntitiesWithFilteredOptions(interviewId));
         public override void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities) => this.AddToQueue(() => base.RefreshLinkedToListQuestions(interviewId, identities));
         public override void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities) => this.AddToQueue(() => base.RefreshLinkedToRosterQuestions(interviewId, rosterIdentities));
