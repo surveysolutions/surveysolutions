@@ -4,9 +4,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Ninject;
-using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -98,7 +96,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
         }
 
-        public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] questions)
+        public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
@@ -112,7 +110,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             {
                 var entitiesToRefresh = new List<Tuple<string, Identity>>();
 
-                foreach (var entity in questions)
+                foreach (var entity in entities)
                 {
                     var parent = questionnarie.GetParentById(entity.Id);
                     var parentVector = entity.RosterVector;
@@ -171,7 +169,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private bool IsSupportFilterOptionCondition(IComposite documentEntity)
         {
             var question = documentEntity as IQuestion;
-            if (question != null && !question.Properties.OptionsFilterExpression.IsNullOrWhiteSpace())
+            if (question != null && !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression))
                 return true;
 
             return false;
