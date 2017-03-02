@@ -5,6 +5,7 @@ using System.Web.Http.Controllers;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Code;
@@ -14,13 +15,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
 {
     internal class when_authorizing_not_an_interviewer : ApiBasicAuthAttributeTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
-            var userViewFactoryMock = new Mock<IUserViewFactory>();
-            userViewFactoryMock.Setup(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()))
-                .Returns(new UserView() { Roles = new HashSet<UserRoles>(new[] { UserRoles.Supervisor }) });
+            var mockOfIdentityManager = new Mock<IIdentityManager>();
+            mockOfIdentityManager.Setup(_ => _.IsUserValidWithPasswordHash(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(true);
+            mockOfIdentityManager.Setup(_ => _.GetUserByName(Moq.It.IsAny<string>()))
+                .Returns(Create.Entity.ApplicationUser(role: UserRoles.Headquarter));
 
-            attribute = Create((userName, password) => true, userViewFactoryMock.Object);
+            attribute = CreateApiBasicAuthAttribute((userName, password) => true, mockOfIdentityManager.Object);
 
             actionContext = CreateActionContext();
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");

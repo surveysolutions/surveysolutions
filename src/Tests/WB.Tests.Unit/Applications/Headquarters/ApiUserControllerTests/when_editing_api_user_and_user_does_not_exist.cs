@@ -1,6 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
@@ -19,7 +25,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 Password = "12345",
                 ConfirmPassword = "12345"
             };
-            controller = CreateApiUserController(commandServiceMock.Object);
+
+            identityManagerMock.Setup(x => x.GetUserByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<ApplicationUser>(null));
+
+            controller = CreateApiUserController(identityManager: identityManagerMock.Object);
         };
 
         Because of = () =>
@@ -31,10 +40,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.ShouldBeOfExactType<ViewResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            controller.TempData[Alerts.ERROR].ShouldEqual("Could not update user information because current user does not exist");
+            controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).ShouldContain("Could not update user information because current user does not exist");
 
 
-        private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;

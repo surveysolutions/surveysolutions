@@ -42,8 +42,8 @@ namespace WB.UI.Headquarters.Code
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
             
             if (basicCredentials == null ||
-                !(this.TreatPasswordAsPlain && this.identityManager.IsUserValidWithPassword(basicCredentials.Username, basicCredentials.Password)) ||
-                !(!this.TreatPasswordAsPlain && this.identityManager.IsUserValidWithPasswordHash(basicCredentials.Username, basicCredentials.Password)))
+                (this.TreatPasswordAsPlain && !this.identityManager.IsUserValidWithPassword(basicCredentials.Username, basicCredentials.Password)) ||
+                (!this.TreatPasswordAsPlain && !this.identityManager.IsUserValidWithPasswordHash(basicCredentials.Username, basicCredentials.Password)))
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;

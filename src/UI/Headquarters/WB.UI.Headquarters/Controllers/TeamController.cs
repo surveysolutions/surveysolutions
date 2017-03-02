@@ -28,6 +28,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var appUser = await this.identityManager.GetUserByIdAsync(editModel.Id);
 
+            if(appUser == null)
+                return IdentityResult.Failed(@"Could not update user information because current user does not exist");
+
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;

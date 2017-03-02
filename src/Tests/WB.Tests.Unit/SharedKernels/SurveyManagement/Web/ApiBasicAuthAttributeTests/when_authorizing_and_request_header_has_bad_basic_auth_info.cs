@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     {
         Establish context = () =>
         {
-            attribute = Create((userName, password)=> false);
+            attribute = CreateApiBasicAuthAttribute((userName, password)=> false);
 
             actionContext = CreateActionContext();
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "aaaaaaaa");

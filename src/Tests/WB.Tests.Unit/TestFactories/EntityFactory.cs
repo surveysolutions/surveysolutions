@@ -1062,16 +1062,20 @@ namespace WB.Tests.Unit.TestFactories
             };
 
         public ApplicationUser ApplicationUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
-            string userName = "name", bool isLockedByHQ = false)
+            string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer, string deviceId = null)
         {
-            return new ApplicationUser
+            var user = new ApplicationUser
             {
                 Id = userId ?? Guid.NewGuid(),
                 IsArchived = isArchived ?? false,
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
-                SupervisorId = supervisorId
+                SupervisorId = supervisorId,
+                DeviceId = deviceId
             };
+            user.Roles.Add(new AppUserRole {UserId = user.Id, RoleId = ((byte)role).ToGuid()});
+
+            return user;
         }
         
         public UserDocument UserDocument()

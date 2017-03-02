@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 {
     internal class when_editing_api_user : ApiUserControllerTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var userId = Guid.NewGuid();
 
@@ -25,13 +25,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 ConfirmPassword = "12345",
                 Id = userId
             };
-            var user = new UserView()
-            {
-                PublicKey = userId,
-                UserName = "apiTest1"
-            };
 
-            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
+            identityManagerMock.Setup(x => x.GetUserByIdAsync(userId)).Returns(Task.FromResult(Create.Entity.ApplicationUser()));
+            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
 
             controller = CreateApiUserController(identityManager: identityManagerMock.Object);
         };
@@ -45,7 +41,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
-        private static Mock<IUserViewFactory> userViewFactory = new Mock<IUserViewFactory>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;
