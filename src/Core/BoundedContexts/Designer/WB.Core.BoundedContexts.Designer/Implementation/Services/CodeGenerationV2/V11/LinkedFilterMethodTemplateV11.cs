@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("(IInterviewLevelV11 scope)\r\n\t\t{\r\n\t\t\tvar current = scope as ");
             
             #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LinkedFilterMethodTemplateV11.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.LinkedQuestionScopeName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.SourceLevelClassName));
             
             #line default
             #line hidden
