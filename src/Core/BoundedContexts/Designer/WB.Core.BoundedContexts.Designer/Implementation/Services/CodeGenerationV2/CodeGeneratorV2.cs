@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public const string InterviewExpressionStatePrefix = "ExpressionProcessor";
         public const string PrivateFieldsPrefix = "@__";
-        public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
+        public const string QuestionnaireIdName = "questionnaire";
         public const string QuestionnaireLevel = "QuestionnaireLevel";
         public const string EnablementPrefix = "IsEnabled__";
         public const string OptionsFilterPrefix = "FilterOption__";

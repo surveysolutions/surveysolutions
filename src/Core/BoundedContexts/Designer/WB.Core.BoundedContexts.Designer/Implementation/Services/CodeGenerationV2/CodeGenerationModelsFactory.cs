@@ -43,11 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     levelClassName = CodeGeneratorV2.QuestionnaireLevel;
                     levelModel.Id = questionnaire.PublicKey;
+                    levelModel.Variable = CodeGeneratorV2.QuestionnaireIdName;
                 }
                 else
                 {
                     levelModel.Id = firstRosterInScope.PublicKey;
-                    levelModel.Variable = firstRosterInScope.VariableName ?? "_" + firstRosterInScope.PublicKey.FormatGuid();
+                    levelModel.Variable = GetVariable(firstRosterInScope);
                     levelClassName = CodeGeneratorV2.LevelPrefix + levelModel.Variable;
                 }
 
@@ -59,9 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var question in questionnaire.Find<IQuestion>())
             {
-                string varName = !IsNullOrEmpty(question.StataExportCaption)
-                    ? question.StataExportCaption
-                    : "__" + question.PublicKey.FormatGuid();
+                string varName = GetVariable(question);
 
                 var rosterScope = questionnaire.GetRosterScope(question);
                 var levelClassName = levelClassNames[rosterScope];
@@ -73,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     TypeName = GenerateQuestionTypeName(question, questionnaire),
                     RosterScope = rosterScope
                 };
+
                 codeGenerationModel.AllQuestions.Add(questionModel);
             }
 
@@ -85,9 +85,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         level.Questions.Add(question);
                     }
                 }
+
+                foreach (var rosterScopePairs in rosterScopes)
+                {
+                    var rosterScope = rosterScopePairs.Key;
+                    if (!rosterScope.IsSameOrParentScopeFor(level.RosterScope))
+                        continue;
+
+                    var rosters = rosterScopePairs.Value.Where(x => x.IsRoster);
+                    foreach (var roster in rosters)
+                    {
+                        level.Rosters.Add(new RosterModel
+                        {
+                            Variable = GetVariable(roster),
+                            Level = codeGenerationModel.AllLevels.First(x => x.RosterScope.Equals(rosterScope))
+                        });
+                    }
+                }
             }
 
             return codeGenerationModel;
+        }
+
+        private string GetVariable(IQuestion question)
+        {
+            return !IsNullOrEmpty(question.StataExportCaption) ? question.StataExportCaption : "__" + question.PublicKey.FormatGuid();
+        }
+
+        private string GetVariable(IGroup group)
+        {
+            return !IsNullOrEmpty(group.VariableName) ? group.VariableName :  "__" + group.PublicKey.FormatGuid();
         }
 
         private static string GenerateQuestionTypeName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
@@ -247,6 +274,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public RosterScope RosterScope { get; set; }
     }
 
+    public class RosterModel
+    {
+        public string Variable { set; get; }
+        public LevelModel Level { get; set; }
+    }
+
     public class LevelModel
     {
         public Guid Id { set; get; }
@@ -254,6 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string ClassName { get; set; }
         public RosterScope RosterScope { get; set; }
 
-        public List<QuestionModel> Questions { get; set; } = new List<QuestionModel>();
+        public List<QuestionModel> Questions { get; private set; } = new List<QuestionModel>();
+        public List<RosterModel> Rosters { get; private set; } = new List<RosterModel>();
     }
 }

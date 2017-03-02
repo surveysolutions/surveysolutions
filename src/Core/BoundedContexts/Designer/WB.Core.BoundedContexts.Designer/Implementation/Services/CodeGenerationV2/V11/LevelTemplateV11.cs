@@ -30,23 +30,93 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\npublic internal partial ");
+            this.Write("\r\n\tpublic internal partial ");
             
             #line 9 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
-            this.Write(" : IInterviewLevelV11\r\n{\r\n\tpublic ");
+            this.Write(" : IInterviewLevelV11\r\n\t{\r\n\t\tpublic ");
             
             #line 11 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
-            this.Write("() \r\n\t{\r\n\t}\r\n\r\n");
+            this.Write("(RosterVector rosterVector, IInterviewState state, ");
+            
+            #line 11 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Processor.ClassName));
+            
+            #line default
+            #line hidden
+            this.Write(" processor) \r\n\t\t{\r\n\t\t\tthis.state = state;\r\n\t\t\tthis.processor = processor;\r\n");
             
             #line 15 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+	if (Model.RosterScope.Length == 0)
+	{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tthis.RosterVector = RosterVector.Empty;\r\n\t\t\tthis.Identity = new Identity(IdOf." +
+                    "");
+            
+            #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(", RosterVector.Empty);\r\n");
+            
+            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+	}
+	else
+	{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tthis.RosterVector = rosterVector;\r\n\t\t\tthis.Identity = new Identity(IdOf.");
+            
+            #line 27 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(", rosterVector);\r\n");
+            
+            #line 28 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write(@"		}
+
+		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
+		private IInterviewExpressionProcessorV11 processor;
+
+		private IInterviewState state;
+
+		public RosterVector RosterVector { get; private set; }
+
+		public Identity Identity  { get; private set; }
+
+		public decimal @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
+		public int @rowindex => state.GetRosterIndex(Identity);
+
+		public string @rowname => state.GetRosterTitle(Identity);
+
+");
+            
+            #line 49 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
 
 	foreach (var question in Model.Questions) 
     {
@@ -54,51 +124,83 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("            \r\n    public ");
+            this.Write("            \r\n\t\tpublic ");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(" => state.GetAnswer<");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
             this.Write(">(IdOf.");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
             
             #line default
             #line hidden
             this.Write(", RosterVector.Take(");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.RosterScope.Length));
             
             #line default
             #line hidden
             this.Write("));\r\n");
             
-            #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            #line 54 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
  
 	}
 
             
             #line default
             #line hidden
-            this.Write("}\r\n");
+            
+            #line 57 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+
+	foreach (var roster in Model.Rosters) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("            \r\n\t\tpublic ");
+            
+            #line 61 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(roster.Level.ClassName));
+            
+            #line default
+            #line hidden
+            this.Write("[] ");
+            
+            #line 61 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(roster.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(" => processor.GetLevels(Identity);\r\n");
+            
+            #line 62 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\LevelTemplateV11.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
+            this.Write("\t}\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

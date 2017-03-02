@@ -6,18 +6,60 @@
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-public internal partial <#=Model.ClassName#> : IInterviewLevelV11
-{
-	public <#=Model.ClassName#>() 
+	public internal partial <#=Model.ClassName#> : IInterviewLevelV11
 	{
+		public <#=Model.ClassName#>(RosterVector rosterVector, IInterviewState state, <#= Processor.ClassName #> processor) 
+		{
+			this.state = state;
+			this.processor = processor;
+<#
+	if (Model.RosterScope.Length == 0)
+	{
+#>
+			this.RosterVector = RosterVector.Empty;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, RosterVector.Empty);
+<#
 	}
+	else
+	{
+#>
+			this.RosterVector = rosterVector;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, rosterVector);
+<#
+    }
+#>
+		}
+
+		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
+		private IInterviewExpressionProcessorV11 processor;
+
+		private IInterviewState state;
+
+		public RosterVector RosterVector { get; private set; }
+
+		public Identity Identity  { get; private set; }
+
+		public decimal @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
+		public int @rowindex => state.GetRosterIndex(Identity);
+
+		public string @rowname => state.GetRosterTitle(Identity);
 
 <#
 	foreach (var question in Model.Questions) 
     {
 #>            
-    public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+		public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
 <# 
 	}
 #>
-}
+<#
+	foreach (var roster in Model.Rosters) 
+    {
+#>            
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels(Identity);
+<# 
+	}
+#>
+	}

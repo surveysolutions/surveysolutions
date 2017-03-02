@@ -16,6 +16,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<QuestionModel> AllQuestions { set; get; }
         public List<LevelModel> AllLevels { set; get; }
 
+        public List<RosterModel> AllRosters => AllLevels
+            .SelectMany(x => x.Rosters)
+            .GroupBy(x => x.Variable)
+            .Select(x => x.First())
+            .ToList();
+
         public List<Guid> ConditionsPlayOrder { get; set; }
 
         public string[] AdditionalInterfaces { get; set; }
