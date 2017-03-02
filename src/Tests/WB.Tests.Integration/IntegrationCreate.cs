@@ -71,7 +71,10 @@ namespace WB.Tests.Integration
 
         public static CodeGeneratorV2 CodeGeneratorV2()
         {
-            return new CodeGeneratorV2(new CodeGenerationModelsFactory());
+            return new CodeGeneratorV2(new CodeGenerationModelsFactory(
+                ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                DefaultMacrosSubstitutionService(),
+                ServiceLocator.Current.GetInstance<ILookupTableService>()));
         }
 
         private static ICompilerSettings GetCompilerSettingsStub()
