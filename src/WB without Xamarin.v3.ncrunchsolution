@@ -1,7 +1,6 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AdditionalFilesToIncludeForSolution>
-      <Value>..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\**.*</Value>
       <Value>**/**.resx</Value>
       <Value>**/**.csproj</Value>
     </AdditionalFilesToIncludeForSolution>
