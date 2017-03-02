@@ -6,11 +6,10 @@
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-	public internal partial <#=Model.ClassName#> : IInterviewLevelV11
+	internal partial class <#=Model.ClassName#> : IInterviewLevelV11
 	{
-		public <#=Model.ClassName#>(RosterVector rosterVector, IInterviewState state, <#= Processor.ClassName #> processor) 
+		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Processor.ClassName #> processor) 
 		{
-			this.state = state;
 			this.processor = processor;
 <#
 	if (Model.RosterScope.Length == 0)
@@ -32,9 +31,9 @@
 
 		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
 
-		private IInterviewExpressionProcessorV11 processor;
+		private readonly <#= Processor.ClassName #> processor;
 
-		private IInterviewState state;
+		private IInterviewState state => processor.state;
 
 		public RosterVector RosterVector { get; private set; }
 
@@ -45,7 +44,6 @@
 		public int @rowindex => state.GetRosterIndex(Identity);
 
 		public string @rowname => state.GetRosterTitle(Identity);
-
 <#
 	foreach (var question in Model.Questions) 
     {
@@ -58,7 +56,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels(Identity);
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels<<#=roster.Level.ClassName#>>(Identity);
 <# 
 	}
 #>

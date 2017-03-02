@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public QuestionnaireExpressionProcessorGenerator(
             IDynamicCompiler codeCompiler, 
             ICodeGenerator codeGenerator,
-            IDynamicCompilerSettingsProvider compilerSettingsProvider, 
-            ICodeGeneratorV2 codeGeneratorV2)
+            ICodeGeneratorV2 codeGeneratorV2,
+            IDynamicCompilerSettingsProvider compilerSettingsProvider)
         {
             this.codeCompiler =  codeCompiler;
             this.codeGenerator = codeGenerator;

@@ -176,6 +176,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var question in linkedWithFilter)
             {
+                if (!question.LinkedToRosterId.HasValue && !question.LinkedToQuestionId.HasValue) continue;
+
+
                 var questionModel = model.GetQuestionById(question.PublicKey);
                 yield return
                     new LinkedFilterMethodModel(
@@ -248,19 +251,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
     public class LinkedFilterMethodModel : ConditionMethodModel
     {
-        public string LinkedQuestionScopeName { get; }
+        public string SourceLevelClassName { get; }
 
-        public bool IsSourceAndLinkedQuestionOnSameLevel => LinkedQuestionScopeName == this.ClassName;
+        public bool IsSourceAndLinkedQuestionOnSameLevel => this.SourceLevelClassName == this.ClassName;
 
         public LinkedFilterMethodModel(
             ExpressionLocation location, 
             string className, 
             string methodName, 
             string expression, 
-            string linkedQuestionScopeName)
+            string sourceLevelClassName)
             : base(location, className, methodName, expression, false, string.Empty, "bool")
         {
-            this.LinkedQuestionScopeName = linkedQuestionScopeName;
+            this.SourceLevelClassName = sourceLevelClassName;
         }
     }
 

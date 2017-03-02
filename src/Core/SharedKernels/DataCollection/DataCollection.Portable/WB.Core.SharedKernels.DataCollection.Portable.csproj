@@ -52,6 +52,7 @@
     <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewProperties.cs" />
     <Compile Include="LinkedQuestionOptionsChanges.cs" />
+    <Compile Include="ListAnswerRow.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="CategoricalOption.cs" />
     <Compile Include="StructuralChanges.cs" />
