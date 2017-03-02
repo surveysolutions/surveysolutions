@@ -34,18 +34,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private readonly IExportQuestionService exportQuestionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public ExportViewFactory(
             IFileSystemAccessor fileSystemAccessor,
             IExportQuestionService exportQuestionService,
             IQuestionnaireStorage questionnaireStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportQuestionService = exportQuestionService;
             this.questionnaireStorage = questionnaireStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version)
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (questionnaire == null)
                 return null;
 
-            var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
+            var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
             
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
