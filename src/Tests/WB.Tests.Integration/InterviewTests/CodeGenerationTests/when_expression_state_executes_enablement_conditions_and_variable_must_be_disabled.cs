@@ -41,15 +41,15 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.UpdateVariableValue(Abc.Create.Identity(variableId), 6);
                 var enablementConditions = state.ProcessEnablementConditions();
 
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)],
-                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(IntegrationCreate.Identity(variableId))
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)],
+                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(Abc.Create.Identity(variableId))
                 };
             });
 

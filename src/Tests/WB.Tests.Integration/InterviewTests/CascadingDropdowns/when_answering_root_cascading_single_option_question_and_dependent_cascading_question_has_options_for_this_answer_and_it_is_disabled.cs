@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var interview = SetupInterview(questionnaire, new object[]
                 {
                     Abc.Create.Event.SingleOptionQuestionAnswered(parentSingleOptionQuestionId, RosterVector.Empty, 2),
-                    Abc.Create.Event.QuestionsDisabled(new [] { IntegrationCreate.Identity(childCascadedComboboxId) }),
+                    Abc.Create.Event.QuestionsDisabled(new [] { Abc.Create.Identity(childCascadedComboboxId) }),
                 });
 
                 using (var eventContext = new EventContext())

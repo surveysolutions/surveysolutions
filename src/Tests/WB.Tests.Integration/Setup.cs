@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration
 {
@@ -69,9 +70,8 @@ namespace WB.Tests.Integration
                     questionnaireRepository,
                     mvxMessenger,
                     liteEventRegistry,
-                    IntegrationCreate.DynamicTextViewModel(
+                    Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository),
                     IntegrationCreate.AnswerNotifier(liteEventRegistry))
                 {
@@ -91,16 +91,14 @@ namespace WB.Tests.Integration
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, IntegrationCreate.DynamicTextViewModel(
+                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
-                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, IntegrationCreate.DynamicTextViewModel(
+                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
                         IntegrationCreate.AnswerNotifier(liteEventRegistry)));
 

@@ -43,14 +43,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextOutsideRosterId))
+                            .ContainsKey(Abc.Create.Identity(dependentStaticTextOutsideRosterId))
                         ?? false,
 
                     WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticTextInsideRoster = 
                         eventContext
                             .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
                             .GetFailedValidationConditionsDictionary()
-                            .ContainsKey(IntegrationCreate.Identity(dependentStaticTextInsideRosterId, Abc.Create.Entity.RosterVector(new[] {1})))
+                            .ContainsKey(Abc.Create.Identity(dependentStaticTextInsideRosterId, Abc.Create.Entity.RosterVector(new[] {1})))
                         ?? false,
                 };
             }

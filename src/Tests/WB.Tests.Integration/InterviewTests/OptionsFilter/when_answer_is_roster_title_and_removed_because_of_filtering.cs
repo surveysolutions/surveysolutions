@@ -36,9 +36,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 Guid rosterWithYesNoTitle = Guid.Parse("33333333333333333333333333333333");
                 Guid yesNoQuestionId = Guid.Parse("44444444444444444444444444444444");
 
-                var rosterTitleQuestionIdentity = IntegrationCreate.Identity(rosterTitleQuestionId,
+                var rosterTitleQuestionIdentity = Abc.Create.Identity(rosterTitleQuestionId,
                     Abc.Create.Entity.RosterVector(new[] {0}));
-                var rosterIdentity = IntegrationCreate.Identity(rosterId, Abc.Create.Entity.RosterVector(new[] {0}));
+                var rosterIdentity = Abc.Create.Identity(rosterId, Abc.Create.Entity.RosterVector(new[] {0}));
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId,
