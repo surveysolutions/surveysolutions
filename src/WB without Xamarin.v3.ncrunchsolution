@@ -1,8 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AdditionalFilesToIncludeForSolution>
-      <Value>**/**.resx</Value>
-      <Value>**/**.csproj</Value>
+      <Value>**\**.resx</Value>
+      <Value>**\**.csproj</Value>
     </AdditionalFilesToIncludeForSolution>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
     <SolutionConfigured>True</SolutionConfigured>
