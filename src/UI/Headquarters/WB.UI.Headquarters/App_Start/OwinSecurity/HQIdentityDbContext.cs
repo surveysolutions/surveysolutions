@@ -6,7 +6,7 @@ using WB.UI.Headquarters.Migrations;
 
 namespace WB.UI.Headquarters.OwinSecurity
 {
-    internal sealed class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
+    public class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
         public HQIdentityDbContext() : base(@"DefaultConnection")
         {

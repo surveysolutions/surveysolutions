@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     {
         Establish context = () =>
         {
-            var supervisor = CreateUser(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), null, "Supervisor1");
+            var supervisor = Create.Entity.ApplicationUser(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), userName: "Supervisor1", role: UserRoles.Supervisor);
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(supervisor);
 
             supervisorsViewFactory = CreateInterviewersViewFactory(readerWithUsers);

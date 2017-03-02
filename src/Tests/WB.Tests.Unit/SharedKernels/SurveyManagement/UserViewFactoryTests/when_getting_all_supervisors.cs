@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -13,9 +14,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
         {
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new []
             {
-                Create.Entity.ApplicationUser(Id.g1, userName: superBName, isLockedByHQ: true),
-                Create.Entity.ApplicationUser(Id.g2, userName: superAName),
-                Create.Entity.ApplicationUser(Id.g3, userName: superCName),
+                Create.Entity.ApplicationUser(Id.g1, userName: superBName, isLockedByHQ: true, role: UserRoles.Supervisor),
+                Create.Entity.ApplicationUser(Id.g2, userName: superAName, role: UserRoles.Supervisor),
+                Create.Entity.ApplicationUser(Id.g3, userName: superCName, role: UserRoles.Supervisor),
                 Create.Entity.ApplicationUser(Id.g4, userName: "inter1", supervisorId: Id.g2),
                 Create.Entity.ApplicationUser(Id.g5, userName: "inter2", supervisorId: Id.g2)
             });
