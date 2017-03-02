@@ -5,6 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -27,21 +29,21 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                        IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
+                        Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
-                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId)});
+                state.UpdateVariableValue(Create.Identity(variableId), 6);
+                state.DisableVariables(new[] { Create.Identity(variableId)});
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
                 };
             });
 

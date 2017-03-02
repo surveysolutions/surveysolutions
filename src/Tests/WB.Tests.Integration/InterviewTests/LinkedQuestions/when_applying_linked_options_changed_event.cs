@@ -39,9 +39,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 answers: new[] { new Tuple<decimal, string>(1, "a"), new Tuple<decimal, string>(3, "c") });
 
             Assert.DoesNotThrow(() => interview.Apply(Abc.Create.Event.LinkedOptionsChanged(new [] {
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(1)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(2)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
-                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, IntegrationCreate.RosterVector(3)), new[] { IntegrationCreate.RosterVector(1), IntegrationCreate.RosterVector(3) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Abc.Create.Entity.RosterVector(new[] {1})), new[] { Abc.Create.Entity.RosterVector(new[] {1}), Abc.Create.Entity.RosterVector(new[] {3}) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Abc.Create.Entity.RosterVector(new[] {2})), new[] { Abc.Create.Entity.RosterVector(new[] {1}), Abc.Create.Entity.RosterVector(new[] {3}) }),
+                new ChangedLinkedOptions(Identity.Create(singleLinkedToListRosterId, Abc.Create.Entity.RosterVector(new[] {3})), new[] { Abc.Create.Entity.RosterVector(new[] {1}), Abc.Create.Entity.RosterVector(new[] {3}) }),
             })));
         }
     }

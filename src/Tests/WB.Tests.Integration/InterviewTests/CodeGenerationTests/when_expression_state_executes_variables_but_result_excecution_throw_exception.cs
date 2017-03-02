@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -23,23 +25,23 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
-                        IntegrationCreate.Variable(id: variableId, expression: "1/(int)num.Value")
+                        Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.UpdateVariableValue(Create.Identity(variableId), 6);
                 state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 0);
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)]
                 };
             });
 

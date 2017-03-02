@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -49,26 +50,26 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, IntegrationCreate.RosterVector(1), DateTime.Now, new[] { 1, 2, 3 });
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, IntegrationCreate.RosterVector(2), DateTime.Now, new[] { 1, 3, 4 });
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(1, 1), DateTime.Now, 20);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(1, 2), DateTime.Now, 22);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(1, 3), DateTime.Now, 18);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(2, 1), DateTime.Now, 15);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(2, 3), DateTime.Now, 19);
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, new[] { 1, 2, 3 });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.Now, new[] { 1, 3, 4 });
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.Now, 20);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.Now, 22);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1, 3}), DateTime.Now, 18);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {2, 1}), DateTime.Now, 15);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {2, 3}), DateTime.Now, 19);
 
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q2Id, IntegrationCreate.RosterVector(2, 4), DateTime.Now, 24);
+                    interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {2, 4}), DateTime.Now, 24);
 
-                    result.OptionsCountForQuestion3InRoster1_1_1 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(1, 1, 1))?.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster1_2_2 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(1, 2, 2))?.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster1_3_1 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(1, 3, 1))?.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster2_1_2 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(2, 1, 2))?.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster2_3_1 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(2, 3, 1))?.Length ?? 0;
-                    result.OptionsCountForQuestion3InRoster2_4_1 = GetChangedOptions(eventContext, q3Id, IntegrationCreate.RosterVector(2, 4, 1))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster1_1_1 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {1, 1, 1}))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster1_2_2 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {1, 2, 2}))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster1_3_1 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {1, 3, 1}))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster2_1_2 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {2, 1, 2}))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster2_3_1 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {2, 3, 1}))?.Length ?? 0;
+                    result.OptionsCountForQuestion3InRoster2_4_1 = GetChangedOptions(eventContext, q3Id, Abc.Create.Entity.RosterVector(new[] {2, 4, 1}))?.Length ?? 0;
                 }
 
                 return result;

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -33,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Abc.Create.Entity.Group(groupId, "Group X", null, "false", false, new IComposite[]
                         {
                             Abc.Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
-                            IntegrationCreate.Variable(id: variableId, expression: "txt.Length")
+                            Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =
@@ -41,15 +40,15 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.UpdateVariableValue(Abc.Create.Identity(variableId), 6);
                 var enablementConditions = state.ProcessEnablementConditions();
 
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)],
-                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(IntegrationCreate.Identity(variableId))
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)],
+                    IsVariableDisabled = enablementConditions.VariablesToBeDisabled.Contains(Abc.Create.Identity(variableId))
                 };
             });
 

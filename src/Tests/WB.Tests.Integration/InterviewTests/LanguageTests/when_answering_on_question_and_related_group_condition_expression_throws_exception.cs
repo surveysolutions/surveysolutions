@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Abc.Create.Event.NumericIntegerQuestionAnswered(
                             questionId, null, 1, null, null
                         ),
-                        Abc.Create.Event.QuestionsEnabled(IntegrationCreate.Identity(groupId))
+                        Abc.Create.Event.QuestionsEnabled(Abc.Create.Identity(groupId))
                     });
 
                 var result = new InvokeResults();

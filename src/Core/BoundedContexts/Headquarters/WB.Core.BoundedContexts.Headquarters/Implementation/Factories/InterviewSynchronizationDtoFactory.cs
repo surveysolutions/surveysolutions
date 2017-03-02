@@ -24,20 +24,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public InterviewSynchronizationDtoFactory(
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
             IQuestionnaireStorage questionnaireStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.questionnaireStorage = questionnaireStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             if (questionnaire == null)
                 throw new Exception("Questionnaire was not found");
-            var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
+            var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
             
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)

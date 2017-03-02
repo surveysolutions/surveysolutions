@@ -49,9 +49,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
                 interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(1), DateTime.Now, 20);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(2), DateTime.Now, 15);
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, IntegrationCreate.RosterVector(3), DateTime.Now, 35);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 20);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.Now, 15);
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {3}), DateTime.Now, 35);
                 interview.AnswerSingleOptionLinkedQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, new [] { 3m });
                 var result = new InvokeResults();
 

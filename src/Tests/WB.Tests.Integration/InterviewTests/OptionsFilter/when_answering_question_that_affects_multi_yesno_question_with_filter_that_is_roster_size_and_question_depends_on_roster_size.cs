@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: IntegrationCreate.RosterVector(1),
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: Abc.Create.Entity.RosterVector(new[] {1}),
                     answeredOptions: new[]
                     {
                         Create.Entity.AnsweredYesNoOption(1m, true),

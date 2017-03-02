@@ -1,11 +1,9 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using EventStore.Common.Utils;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -43,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 3);
-                interview.AnswerTextQuestion(userId, q2Id, IntegrationCreate.RosterVector(0), DateTime.Now, "test");
+                interview.AnswerTextQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now, "test");
                 interview.AnswerNumericIntegerQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, q3Id, RosterVector.Empty, DateTime.Now, new RosterVector[] {new []{0.0m}});
 

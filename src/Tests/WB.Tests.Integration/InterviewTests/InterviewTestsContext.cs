@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -148,7 +146,11 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
                 answersOnPrefilledQuestions: answersOnPrefilledQuestions,
-                questionnaireRepository: questionnaireStorage ?? IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
+                questionnaireRepository: questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                    questionnaireIdentity.QuestionnaireId,
+                    Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                    questionnaireIdentity.Version
+                ));
             
             ApplyAllEvents(interview, events);
 
@@ -199,7 +201,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                IntegrationCreate.SubstitionTextFactory());
+                Create.Service.SubstitionTextFactory());
 
             return interview;
         }
@@ -251,7 +253,7 @@ namespace WB.Tests.Integration.InterviewTests
             eventContext
                 .GetSingleEvent<LinkedOptionsChanged>()
                 .ChangedLinkedQuestions
-                .SingleOrDefault(x => x.QuestionId.Equals(IntegrationCreate.Identity(questionId, rosterVector)))
+                .SingleOrDefault(x => x.QuestionId.Equals(Abc.Create.Identity(questionId, rosterVector)))
                 ?.Options;
 
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)

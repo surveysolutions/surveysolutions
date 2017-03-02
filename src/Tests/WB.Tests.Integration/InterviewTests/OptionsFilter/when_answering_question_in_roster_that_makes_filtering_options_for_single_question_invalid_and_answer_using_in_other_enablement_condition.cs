@@ -49,10 +49,10 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerSingleOptionQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 12);
-                interview.AnswerSingleOptionQuestion(userId, q2Id, IntegrationCreate.RosterVector(1), DateTime.Now, 2 );
-                interview.AnswerSingleOptionQuestion(userId, q3Id, IntegrationCreate.RosterVector(1), DateTime.Now, 2);
-                interview.AnswerSingleOptionQuestion(userId, q4Id, IntegrationCreate.RosterVector(1), DateTime.Now, 2);
-                interview.AnswerSingleOptionQuestion(userId, q5Id, IntegrationCreate.RosterVector(1), DateTime.Now, 3);
+                interview.AnswerSingleOptionQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 2 );
+                interview.AnswerSingleOptionQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 2);
+                interview.AnswerSingleOptionQuestion(userId, q4Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 2);
+                interview.AnswerSingleOptionQuestion(userId, q5Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 3);
 
                 var result = new InvokeResults();
 

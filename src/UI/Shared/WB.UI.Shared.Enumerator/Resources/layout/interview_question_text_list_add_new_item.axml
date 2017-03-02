@@ -5,6 +5,6 @@
               android:orientation="horizontal"
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
   
-  <EditText style="@style/Interview_Question_Answer_List_Editor"
-   local:MvxBind="FocusValueChanged AddNewItemCommand; Text Text; Watermark Localization('TextListQuestion_Hint');" />
+  <EditText style="@style/Interview_Question_Answer_Text_Editor"
+            local:MvxBind="FocusValueChanged AddNewItemCommand; Text Text; Watermark Localization('TextListQuestion_Hint');" />
 </LinearLayout>
