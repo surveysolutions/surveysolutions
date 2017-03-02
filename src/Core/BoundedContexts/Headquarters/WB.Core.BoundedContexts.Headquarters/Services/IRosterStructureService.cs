@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
-    public interface IRostrerStructureService
+    public interface IRosterStructureService
     {
         Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes(QuestionnaireDocument document);
     }

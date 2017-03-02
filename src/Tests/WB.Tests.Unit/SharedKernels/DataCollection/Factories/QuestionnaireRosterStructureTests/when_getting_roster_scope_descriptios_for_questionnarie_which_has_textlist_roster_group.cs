@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                 }
             );
             
-            rostrerStructureService = new RosterStructureService();
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>
-            rosterScopes = rostrerStructureService.GetRosterScopes(questionnarie);
+            rosterScopes = rosterStructureService.GetRosterScopes(questionnarie);
 
         It should_contain_1_roster_scope = () =>
             rosterScopes.Count().ShouldEqual(1);
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             rosterScopes.Single().Value.Type.ShouldEqual(RosterScopeType.TextList);
 
         private static QuestionnaireDocument questionnarie;
-        private static IRostrerStructureService rostrerStructureService;
+        private static IRosterStructureService rosterStructureService;
         private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid textlistRosterGroupId;
         private static Guid textlistQuestionId;
