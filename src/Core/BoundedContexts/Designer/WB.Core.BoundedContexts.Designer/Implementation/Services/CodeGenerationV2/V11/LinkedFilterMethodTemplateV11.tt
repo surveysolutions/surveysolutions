@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	{   
 		private <#=Model.ReturnType#> <#=Model.MethodName#>(IInterviewLevelV11 scope)
 		{
-			var current = scope as <#=Model.LinkedQuestionScopeName#>;
+			var current = scope as <#=Model.SourceLevelClassName#>;
 			return <#=Model.Expression#>;
 		}   
 	}

@@ -292,6 +292,7 @@ namespace WB.Tests.Integration.InterviewTests
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGenerator(),
+                    IntegrationCreate.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;
