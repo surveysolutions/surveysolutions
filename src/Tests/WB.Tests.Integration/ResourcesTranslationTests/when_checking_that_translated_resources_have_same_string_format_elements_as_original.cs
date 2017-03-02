@@ -77,12 +77,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                                         if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
                                         {
                                             var fi = new FileInfo(csproj);
-                                            if (
-                                                fi.DirectoryName.StartsWith(
-                                                    @"D:\src\wb\src\Core\BoundedContexts\Designer"))
-                                            {
-                                                Console.WriteLine();
-                                            }
                                             yield return Path.Combine(fi.DirectoryName, reader.Value);
                                         }
                                     }
