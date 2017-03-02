@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 AssemblyContext.SetupServiceLocator();
                 Guid questionId = Guid.Parse("11111111111111111111111111111111");
                 Guid staticTextId = Guid.Parse("22222222222222222222222222222222");
-                Identity staticTextIdentity = IntegrationCreate.Identity(staticTextId);
+                Identity staticTextIdentity = Abc.Create.Identity(staticTextId);
 
                 QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Guid.NewGuid(),

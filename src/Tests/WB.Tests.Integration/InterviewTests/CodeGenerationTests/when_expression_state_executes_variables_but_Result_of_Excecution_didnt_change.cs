@@ -33,9 +33,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
-                state.EnableVariables(new [] { IntegrationCreate.Identity(variableId) });
+                state.EnableVariables(new [] { Abc.Create.Identity(variableId) });
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), (long)6);
+                state.UpdateVariableValue(Abc.Create.Identity(variableId), (long)6);
                  var variables = state.ProcessVariables();
 
                 return new InvokeResults()

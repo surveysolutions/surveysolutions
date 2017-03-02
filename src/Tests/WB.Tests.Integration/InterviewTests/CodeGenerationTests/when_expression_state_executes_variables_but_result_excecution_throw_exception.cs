@@ -33,13 +33,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
 
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
+                state.UpdateVariableValue(Abc.Create.Identity(variableId), 6);
                 state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 0);
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)]
                 };
             });
 

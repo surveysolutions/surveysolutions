@@ -41,8 +41,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId) });
-                state.DisableGroups(new[] { IntegrationCreate.Identity(groupId) });
+                state.DisableVariables(new[] { Abc.Create.Identity(variableId) });
+                state.DisableGroups(new[] { Abc.Create.Identity(groupId) });
                 state.SaveAllCurrentStatesAsPrevious();
 
                 var enablementConditions = state.ProcessEnablementConditions();
@@ -51,8 +51,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (long?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)],
-                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(IntegrationCreate.Identity(variableId))
+                    IntVariableResult = (long?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)],
+                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(Abc.Create.Identity(variableId))
                 };
             });
 

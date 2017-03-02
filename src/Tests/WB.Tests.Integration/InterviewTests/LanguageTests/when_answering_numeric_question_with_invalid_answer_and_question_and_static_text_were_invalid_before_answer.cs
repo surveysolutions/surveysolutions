@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Abc.Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
                         {
                             {
-                                IntegrationCreate.Identity(questionA),
+                                Abc.Create.Identity(questionA),
                                 new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
                             }
                         }),
@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Abc.Create.Event.StaticTextsDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
                         {
                             {
-                                IntegrationCreate.Identity(staticTextB),
+                                Abc.Create.Identity(staticTextB),
                                 new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
                             }
                         }.ToList())

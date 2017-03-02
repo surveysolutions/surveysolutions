@@ -35,13 +35,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         IInterviewExpressionStateV9;
 
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
-                state.UpdateVariableValue(IntegrationCreate.Identity(variableId), 6);
-                state.DisableVariables(new[] { IntegrationCreate.Identity(variableId)});
+                state.UpdateVariableValue(Abc.Create.Identity(variableId), 6);
+                state.DisableVariables(new[] { Abc.Create.Identity(variableId)});
                 var variables = state.ProcessVariables();
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[IntegrationCreate.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)]
                 };
             });
 

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
@@ -52,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Abc.Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
                     ),
-                    Abc.Create.Event.QuestionsEnabled(IntegrationCreate.Identity(childCascadedComboboxId)),
+                    Abc.Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
                 });
 
                 using (var eventContext = new EventContext())
