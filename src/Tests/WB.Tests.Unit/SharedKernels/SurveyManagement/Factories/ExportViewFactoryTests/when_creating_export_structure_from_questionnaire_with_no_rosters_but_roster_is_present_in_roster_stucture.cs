@@ -35,13 +35,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             var questionnaireMock = new Mock<IQuestionnaire>();
 
-            var rostrerStructureService = new Mock<IRostrerStructureService>();
+            var rostrerStructureService = new Mock<IRosterStructureService>();
             rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(rosterScopes);
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock.Object);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
-            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rostrerStructureService : rostrerStructureService.Object);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rosterStructureService : rostrerStructureService.Object);
         };
 
         Because of = () =>

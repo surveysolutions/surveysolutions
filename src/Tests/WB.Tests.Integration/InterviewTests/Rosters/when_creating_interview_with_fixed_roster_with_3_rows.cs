@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -45,9 +42,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     ILatestInterviewExpressionState expressionState = GetInterviewExpressionState(questionnaireDocument);
 
                     var interview = new StatefulInterview(
-                        IntegrationCreate.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument),
+                        Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                            questionnaireIdentity.QuestionnaireId,
+                            Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                            questionnaireIdentity.Version
+                        ),
                         Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
-                        IntegrationCreate.SubstitionTextFactory());
+                        Create.Service.SubstitionTextFactory());
 
                     interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid());
 

@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -36,15 +37,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 IEnumerable<CategoricalOption> options = new List<CategoricalOption>()
                 {
-                    IntegrationCreate.CategoricalOption(1, "Option 1"),
-                    IntegrationCreate.CategoricalOption(2, "Option 2"),
-                    IntegrationCreate.CategoricalOption(11, "Option 11"),
-                    IntegrationCreate.CategoricalOption(12, "Option 12"),
+                    Create.Entity.CategoricalQuestionOption(1, "Option 1", null),
+                    Create.Entity.CategoricalQuestionOption(2, "Option 2", null),
+                    Create.Entity.CategoricalQuestionOption(11, "Option 11", null),
+                    Create.Entity.CategoricalQuestionOption(12, "Option 12", null),
                 };
 
                 results = new InvokeResults
                 {
-                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(IntegrationCreate.Identity(q1Id, IntegrationCreate.RosterVector(1)), options).Count()
+                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Abc.Create.Identity(q1Id, Abc.Create.Entity.RosterVector(new[] {1})), options).Count()
                 };
                 return results;
             });

@@ -30,6 +30,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Structures", "Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj", "{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Integration", "Tests\WB.Tests.Integration\WB.Tests.Integration.csproj", "{39A777F1-EF3F-457F-80EC-46470EF236E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericSubdomains", "GenericSubdomains", "{6B7FFF83-E2B8-43F7-8469-D2D69537F00B}"
 EndProject
@@ -52,6 +55,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit", "Tests\WB.Tests.Unit\WB.Tests.Unit.csproj", "{4A3E17E6-7FCE-488C-899E-DD13FD40F289}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
 EndProject

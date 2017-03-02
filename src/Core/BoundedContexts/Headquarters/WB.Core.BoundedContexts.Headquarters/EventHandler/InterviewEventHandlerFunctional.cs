@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public override object[] Readers
         {
@@ -296,12 +296,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             IPlainStorageAccessor<UserDocument> users,
             IReadSideKeyValueStorage<InterviewData> interviewData,
             IQuestionnaireStorage questionnaireStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
             : base(interviewData)
         {
             this.users = users;
             this.questionnaireStorage = questionnaireStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewCreated> @event)
@@ -397,7 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters =  this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters =  this.rosterStructureService.GetRosterScopes(questionnarie);
 
                 foreach (var instance in @event.Payload.Instances)
                 {
@@ -415,7 +415,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters = this.rosterStructureService.GetRosterScopes(questionnarie);
 
                 foreach (var instance in @event.Payload.Instances)
                 {
@@ -438,7 +438,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters = this.rosterStructureService.GetRosterScopes(questionnarie);
                 var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, rosters);
                 List<string> keysOfLevelsByScope =
                     this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);

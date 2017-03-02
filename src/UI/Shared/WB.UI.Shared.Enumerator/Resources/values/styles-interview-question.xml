@@ -125,17 +125,6 @@
     <item name="android:background">@drawable/question_text_question</item>
   </style>
   
-   <style name="Interview_Question_Answer_Text_Editor" >
-    <item name="android:maxLines">1</item>
-    <item name="android:singleLine">true</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_weight">1</item>
-    <item name="android:focusable">true</item>
-    <item name="android:layout_width">@dimen/Zero</item>
-    <item name="android:focusableInTouchMode">true</item>
-    <item name="android:textCursorDrawable">@null</item>
-    <item name="android:background">@drawable/question_list_item_editor_background</item>
-  </style>
   <style name="Interview_Question_Answer_Input_RemoveAnswerWrapper">
     <item name="android:layout_height">fill_parent</item>
     <item name="android:layout_width">wrap_content</item>
@@ -255,18 +244,19 @@
     <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
     <item name="android:background">@drawable/question_list_item_background</item>
   </style>
-  
-  <style name="Interview_Question_Answer_List_Editor" >
+
+
+  <style name="Interview_Question_Answer_Text_Editor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
     <item name="android:focusable">true</item>
-    <item name="android:layout_width">@dimen/Interview_Question_List_Editor_width</item>
+    <item name="android:layout_width">@dimen/Zero</item>
     <item name="android:focusableInTouchMode">true</item>
-    <item name="android:textStyle">bold</item>
     <item name="android:textCursorDrawable">@null</item>
-    <item name="android:background">@drawable/question_list_item_editor_background</item>   
+    <item name="android:background">@drawable/question_list_item_editor_background</item>
+    <item name="android:textColorHint">@color/editorHintTextColor</item>
   </style>
 
   <style name="Interview_Question_Answer_List_DeleteButton">

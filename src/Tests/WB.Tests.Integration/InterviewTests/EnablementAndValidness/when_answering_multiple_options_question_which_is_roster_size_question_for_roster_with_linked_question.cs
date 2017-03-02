@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -32,21 +33,21 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var txtSourceOfLinkId = Guid.NewGuid();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
+                    Create.Entity.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Abc.Create.Entity.TextQuestion(questionId: txtSourceOfLinkId, variable: "txt")}),
-                     Abc.Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
+                     Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",
                         options:
                             new List<Answer>
                             {
-                                 Abc.Create.Entity.Option(value: "1", text: "Hello"),
-                                 Abc.Create.Entity.Option(value: "2", text: "World")
+                                 Create.Entity.Option(value: "1", text: "Hello"),
+                                 Create.Entity.Option(value: "2", text: "World")
                             }),
-                    Abc.Create.Entity.Roster(rosterId,
+                    Create.Entity.Roster(rosterId,
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         children: new[]
                         {
-                            Abc.Create.Entity.SingleOptionQuestion(linkedQuestionId, 
+                            Create.Entity.SingleOptionQuestion(linkedQuestionId, 
                                 variable: "q2",
                                 linkedToQuestionId: txtSourceOfLinkId)
                         })
@@ -54,22 +55,22 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, IntegrationCreate.RosterVector(0), DateTime.Now,"a");
-                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, IntegrationCreate.RosterVector(1), DateTime.Now, "b");
+                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {0}), DateTime.Now,"a");
+                interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {1}), DateTime.Now, "b");
 
                 using (var eventContext = new EventContext())
                 {
 
                     interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new[] { 1 });
-                    return new InvokeResults()
+                    return new InvokeResults
                     {
                         WasLinkedOptionsChanged =
                             HasEvent<LinkedOptionsChanged>(eventContext.Events,
                                 e =>
-                                    e.ChangedLinkedQuestions[0].QuestionId == IntegrationCreate.Identity(linkedQuestionId, new decimal[] {1})
+                                    e.ChangedLinkedQuestions[0].QuestionId == Create.Identity(linkedQuestionId, 1)
                                     && e.ChangedLinkedQuestions[0].Options.Length==2
-                                    && e.ChangedLinkedQuestions[0].Options[0].Identical(IntegrationCreate.RosterVector(0))
-                                    && e.ChangedLinkedQuestions[0].Options[1].Identical(IntegrationCreate.RosterVector(1)))
+                                    && e.ChangedLinkedQuestions[0].Options[0].Identical(Create.RosterVector(0))
+                                    && e.ChangedLinkedQuestions[0].Options[1].Identical(Create.RosterVector(1)))
                     };
                 }
             });

@@ -50,15 +50,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.Entity.FixedTitle(2, "Microwave"),
                     Create.Entity.FixedTitle(3, "Cleaner")
                 };
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
-                        Abc.Create.Entity.Roster(rosterId, variable: "assets",
+                        Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
+                        Create.Entity.Roster(rosterId, variable: "assets",
                             rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             children: new[]
                             {
-                                Abc.Create.Entity.NumericRealQuestion(id: questionB, variable: "p",
+                                Create.Entity.NumericRealQuestion(id: questionB, variable: "p",
                                     validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
                             })
                     });
@@ -70,16 +70,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(userId, questionA, RosterVector.Empty, DateTime.Now, 1);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(1), DateTime.Now, -30);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(2), DateTime.Now, 35);
-                    interview.AnswerNumericRealQuestion(userId, questionB, IntegrationCreate.RosterVector(3), DateTime.Now, 300);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(1), DateTime.Now, -30);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(2), DateTime.Now, 35);
+                    interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(3), DateTime.Now, 300);
 
                     return new InvokeResult
                     {
                         IsQuestionAInValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionA)),
-                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(1m)))),
-                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(2m)))),
-                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(IntegrationCreate.RosterVector(3m)))),
+                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(1)))),
+                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(2)))),
+                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(3)))),
                     };
                 }
             });

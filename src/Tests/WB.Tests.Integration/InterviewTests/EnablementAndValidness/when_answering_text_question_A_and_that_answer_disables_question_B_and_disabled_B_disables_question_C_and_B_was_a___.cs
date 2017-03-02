@@ -40,9 +40,9 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        IntegrationCreate.Identity(questionAId),
-                        IntegrationCreate.Identity(questionBId),
-                        IntegrationCreate.Identity(questionCId)
+                        Abc.Create.Identity(questionAId),
+                        Abc.Create.Identity(questionBId),
+                        Abc.Create.Identity(questionCId)
                     }),
                     Abc.Create.Event.TextQuestionAnswered(questionBId, null, "2", null, null)
                 });

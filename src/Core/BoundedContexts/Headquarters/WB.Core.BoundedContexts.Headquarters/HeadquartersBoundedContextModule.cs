@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();
 
-            this.Bind<IRostrerStructureService>().To<RosterStructureService>();
+            this.Bind<IRosterStructureService>().To<RosterStructureService>();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
 
             this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();

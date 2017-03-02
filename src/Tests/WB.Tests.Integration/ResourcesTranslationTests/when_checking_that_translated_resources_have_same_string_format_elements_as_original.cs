@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using Machine.Specifications;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -9,9 +11,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     {
         Establish context = () =>
         {
-            translatedResourceFiles = Enumerable.Concat(
-                TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"),
-                TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"));
+            var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
+            translatedResourceFiles = GetAllLinkedResourceFiles(csproj)
+                .Where(file => Path.GetFileNameWithoutExtension(file).Contains("."));
         };
 
         Because of = () =>
@@ -41,7 +43,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 if (!originalResources.ContainsKey(translatedResource.Key))
                 {
-                    yield return $"{translatedResource.Key}: no original resource string found";
+                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
                     continue;
                 }
 
@@ -51,7 +53,38 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 string originalStringFormatEntries = GetStringFormatEntriesAsString(originalResourceValue);
 
                 if (translatedStringFormatEntries != originalStringFormatEntries)
-                    yield return $"{translatedResource.Key}: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
+                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
+            }
+        }
+
+        public static IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
+        {
+            foreach (var csproj in csprojFiles)
+            {
+                using (XmlReader reader = XmlReader.Create(csproj))
+                {
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
+                            {
+                                while (reader.MoveToNextAttribute())
+                                {
+                                    if (string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            var fi = new FileInfo(csproj);
+                                            yield return Path.Combine(fi.DirectoryName, reader.Value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
