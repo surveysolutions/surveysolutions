@@ -33,7 +33,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -145,11 +144,7 @@ namespace WB.Tests.Unit.Designer
 
         public static Group Chapter(string title = "Chapter X", Guid? chapterId = null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
         {
-            return Create.Group(
-                title: title,
-                groupId: chapterId,
-                hideIfDisabled: hideIfDisabled,
-                children: children);
+            return Abc.Create.Entity.Group(groupId: chapterId, title: title, hideIfDisabled: hideIfDisabled, children: children);
         }
 
         public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
