@@ -42,7 +42,7 @@
             android:id="@+id/LoginPage_error_message"
             android:layout_width="wrap_content"
             local:MvxBind="Text ErrorMessage; Visible Or(Not(IsUserValid), IsOnlineLoginButtonVisible)" />
-        
+
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="vertical">
@@ -52,16 +52,23 @@
             android:singleLine="true"
             android:inputType="textVisiblePassword|textNoSuggestions"
             local:MvxBind="Text UserName; Enabled False; BackgroundStyle ValidationStyleBackground(True);" />
-          <EditText
-            style="@style/Login_Password_Editor"
-            android:id="@+id/LoginPage_password"
-            android:layout_below="@+id/LoginPage_login"
-            android:singleLine="true"
-            android:inputType="textPassword"
-            local:MvxBind="Text Password; 
-                Watermark Localization('PasswordHint'); 
-                BackgroundStyle ValidationStyleBackground(IsUserValid);
-                FocusValueChanged SignInCommand; " />
+
+
+
+          <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                local:passwordToggleEnabled="true"
+                local:hintEnabled="false">
+            <android.support.design.widget.TextInputEditText
+                style="@style/Login_Password_Editor"
+                android:inputType="textPassword"
+                local:MvxBind="Text Password; 
+                  Watermark Localization('PasswordHint'); 
+                  BackgroundStyle ValidationStyleBackground(IsUserValid);
+                  FocusValueChanged SignInCommand; "/>
+          </android.support.design.widget.TextInputLayout>
+
           <LinearLayout android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -72,8 +79,6 @@
                     local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
           </LinearLayout>
         </LinearLayout>
-
-
       </LinearLayout>
     </ScrollView>
   </RelativeLayout>
