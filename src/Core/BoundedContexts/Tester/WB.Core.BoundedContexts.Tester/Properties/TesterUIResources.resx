@@ -159,6 +159,9 @@
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
     <value>Original</value>
   </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Reload questionnaire</value>
+  </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
