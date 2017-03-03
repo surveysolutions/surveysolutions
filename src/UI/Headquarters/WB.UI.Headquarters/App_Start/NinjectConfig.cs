@@ -9,22 +9,17 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
 using Main.DenormalizerStorage;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin.Security;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -52,7 +47,6 @@ using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
-using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Models.WebInterview;
@@ -66,16 +60,12 @@ using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using FilterScope = System.Web.Http.Filters.FilterScope;
-using Microsoft.AspNet.Identity.Owin;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native;
-using WB.UI.Headquarters.OwinSecurity;
 using Constants = WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization.Constants;
-using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
-namespace WB.UI.Headquarters
+namespace WB.UI.Headquarters.Injections
 {
     public static class NinjectConfig
     {
@@ -86,10 +76,10 @@ namespace WB.UI.Headquarters
                 new SyncPackagesProcessorBackgroundJobSetting(useBackgroundJobForProcessingPackages,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     synchronizationBatchCount:
-                        WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
+                    WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
                     synchronizationParallelExecutorsCount:
-                        WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount",
-                            @default: 1));
+                    WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount",
+                        @default: 1));
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
@@ -118,14 +108,15 @@ namespace WB.UI.Headquarters
             var cacheSettings = new ReadSideCacheSettings(
                 enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
                 esentCacheFolder:
-                    Path.Combine(appDataDirectory,
-                        WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                Path.Combine(appDataDirectory,
+                    WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
                 cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
+                new OwinSecurityModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
@@ -142,7 +133,7 @@ namespace WB.UI.Headquarters
                     new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
                     cacheSettings,
                     mappingAssemblies)
-                );
+            );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
@@ -155,8 +146,8 @@ namespace WB.UI.Headquarters
 
             var userPreloadingConfigurationSection =
                 (UserPreloadingConfigurationSection)
-                    (WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ??
-                     new UserPreloadingConfigurationSection());
+                (WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ??
+                 new UserPreloadingConfigurationSection());
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
@@ -178,12 +169,12 @@ namespace WB.UI.Headquarters
             var exportSettings = new ExportSettings(
                 WebConfigurationManager.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
             var interviewDataExportSettings =
-            new InterviewDataExportSettings(basePath,
-                bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
-                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
-                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
-                WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
-                WebConfigurationManager.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
+                new InterviewDataExportSettings(basePath,
+                    bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                    WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
+                    WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
+                    WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
+                    WebConfigurationManager.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
 
             var sampleImportSettings = new SampleImportSettings(
                 WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
@@ -268,22 +259,7 @@ namespace WB.UI.Headquarters
                 }
             }));
 
-            kernel.Bind<IPasswordHasher>().To<AspNetPasswordHasher>();
-            kernel.Bind<IAuthenticationManager>()
-                .ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext().Authentication);
-
-            kernel.Bind<ApplicationSignInManager>().ToMethod(context => GetOwinInstance<ApplicationSignInManager>());
-            kernel.Bind<ApplicationUserManager>().ToMethod(context => GetOwinInstance<ApplicationUserManager>());
-
-            kernel.Bind<IIdentityManager>().To<IdentityManager>();
-
             return kernel;
-        }
-
-        private static T GetOwinInstance<T>()
-        {
-            var contextBase = new HttpContextWrapper(HttpContext.Current);
-            return contextBase.GetOwinContext().Get<T>();
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

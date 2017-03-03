@@ -5,7 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.UI.Headquarters.OwinSecurity
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class ApplicationUserManager : UserManager<ApplicationUser, Guid>
     {

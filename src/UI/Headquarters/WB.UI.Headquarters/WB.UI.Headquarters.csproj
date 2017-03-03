@@ -85,11 +85,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework6.Npgsql, Version=3.1.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
@@ -163,10 +163,6 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -1481,13 +1477,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.zh.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\OwinSecurity\HQIdentityDbContext.cs" />
-    <Compile Include="App_Start\OwinSecurity\ApplicationSignInManager.cs" />
-    <Compile Include="App_Start\OwinSecurity\ApplicationUserManager.cs" />
-    <Compile Include="App_Start\OwinSecurity\AppUserStore.cs" />
-    <Compile Include="App_Start\OwinSecurity\AspNetPasswordHasher.cs" />
-    <Compile Include="App_Start\OwinSecurity\IAppUserStore.cs" />
-    <Compile Include="App_Start\OwinSecurity\IdentityManager.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
@@ -1510,7 +1499,6 @@
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="API\Formatters\JsonNetFormatter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\NinjectConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\StatusHelper.cs" />
@@ -1559,7 +1547,7 @@
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="App_Start\NinjectConfig.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
@@ -1575,7 +1563,6 @@
     <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
-    <Compile Include="Migrations\SchemaBasedHistoryContext.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
@@ -1817,6 +1804,7 @@
   <ItemGroup>
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
+    <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,12 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @using WB.UI.Shared.Web.Extensions
+@{
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+}
 <!DOCTYPE html>
 
 <html>
@@ -43,15 +46,15 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (identityManager.IsCurrentUserAdministrator)
                 {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (identityManager.IsCurrentUserHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
+                else if (identityManager.IsCurrentUserObserver)
                 {
                     @Html.Partial("ObserverMainMenu")
                 }
@@ -64,7 +67,7 @@
     </nav>
 </header>
     
-    @if (User.Identity.IsObserver())
+    @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
     {
         <div class="panel panel-warning view-mood">
             <div class="panel-heading">
