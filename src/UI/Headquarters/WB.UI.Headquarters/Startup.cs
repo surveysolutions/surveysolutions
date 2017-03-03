@@ -24,13 +24,16 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using Owin;
 using Prometheus;
+using Quartz;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.OwinSecurity;
+using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
 
@@ -50,9 +53,9 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            var ninjectKernel = NinjectConfig.CreateKernel();
-
             ConfigureAuth(app);
+
+            var ninjectKernel = NinjectConfig.CreateKernel();
 
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
 
@@ -63,6 +66,7 @@ namespace WB.UI.Headquarters
             HealthCheck();
 
             InitializeMVC();
+
 
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
@@ -76,10 +80,8 @@ namespace WB.UI.Headquarters
                 .Use(SetSessionStateBehavior)
                 .UseStageMarker(PipelineStage.MapHandler)
                 .UseNinjectMiddleware(() => ninjectKernel)
-                .UseNinjectWebApi(config).MapSignalR(new HubConfiguration
-            {
-                EnableDetailedErrors = true
-            });
+                .UseNinjectWebApi(config)
+                .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
         }
 
         public void ConfigureAuth(IAppBuilder app)
@@ -98,15 +100,14 @@ namespace WB.UI.Headquarters
                 Provider = new CookieAuthenticationProvider
                 {
                     OnValidateIdentity = SecurityStampValidator
-                .OnValidateIdentity<ApplicationUserManager, ApplicationUser, Guid>(
-                    validateInterval: TimeSpan.FromMinutes(30),
-                    regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
-                    getUserIdCallback: (id) => Guid.Parse(id.GetUserId()))
+                        .OnValidateIdentity<ApplicationUserManager, ApplicationUser, Guid>(
+                            validateInterval: TimeSpan.FromMinutes(30),
+                            regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
+                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId()))
                 }
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-            
         }
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)
@@ -137,6 +138,8 @@ namespace WB.UI.Headquarters
 
             logger.Info(@"Ending application.");
             logger.Info(@"ShutdownReason: " + HostingEnvironment.ShutdownReason);
+
+            ServiceLocator.Current.GetInstance<IScheduler>()?.Shutdown();
 
             if (HostingEnvironment.ShutdownReason != ApplicationShutdownReason.HostingEnvironment) return;
 

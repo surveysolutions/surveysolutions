@@ -10,18 +10,18 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
-namespace WB.UI.Headquarters.OwinSecurity
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class IdentityManager : IIdentityManager
     {
         private readonly ApplicationUserManager userManager;
         private readonly ApplicationSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
-        private Guid currentUserId => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
+
+        readonly Guid adminRole = ((byte)UserRoles.Administrator).ToGuid();
 
         public IdentityManager(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
             IAuthenticationManager authenticationManager)
@@ -31,15 +31,8 @@ namespace WB.UI.Headquarters.OwinSecurity
             this.authenticationManager = authenticationManager;
         }
 
-        public bool HasAdministrator
-        {
-            get
-            {
-                var adminRoleId = ((byte) UserRoles.Administrator).ToGuid();
-                return this.userManager.Users.Any(
-                    user => user.Roles.Any(role => role.RoleId == adminRoleId));
-            }
-        }
+        public bool HasAdministrator => this.userManager.Users.Any(
+            user => user.Roles.Any(role => role.RoleId == this.adminRole));
 
         public bool IsCurrentUserSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
@@ -51,7 +44,7 @@ namespace WB.UI.Headquarters.OwinSecurity
 
         private bool IsCurrentUserInRole(UserRoles role) => this.authenticationManager.User.IsInRole(role.ToString());
 
-        public ApplicationUser CurrentUser => this.userManager.Users?.FirstOrDefault(user=>user.Id == this.currentUserId);
+        public ApplicationUser CurrentUser => this.userManager.Users?.FirstOrDefault(user=>user.Id == this.CurrentUserId);
         public IQueryable<ApplicationUser> Users => this.userManager.Users;
         public Guid CurrentUserId => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
         public string CurrentUserName => this.authenticationManager.User.Identity.Name;
@@ -98,7 +91,7 @@ namespace WB.UI.Headquarters.OwinSecurity
 
         public async Task<UserRoles> GetRoleForCurrentUserAsync()
         {
-            var userRoles = await this.userManager.GetRolesAsync(this.currentUserId);
+            var userRoles = await this.userManager.GetRolesAsync(this.CurrentUserId);
 
             return (UserRoles) Enum.Parse(typeof(UserRoles), userRoles[0]);
         }

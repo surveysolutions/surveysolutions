@@ -1,4 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.UI.Headquarters.Resources
 @using WB.UI.Shared.Web.Extensions
 
@@ -7,10 +9,11 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Pages.Interviewers_Title;
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
 }
 
-@{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
-@{ bool isAdmin = User.IsInRole(UserRoles.Administrator.ToString()); }
+@{ bool isVisibleSupervisorColumn = identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator; }
+@{ bool isAdmin = identityManager.IsCurrentUserAdministrator; }
 
 
 @section scripts

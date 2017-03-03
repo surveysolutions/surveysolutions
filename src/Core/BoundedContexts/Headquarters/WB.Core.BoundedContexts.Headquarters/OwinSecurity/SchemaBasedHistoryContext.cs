@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Migrations.History;
 
-namespace WB.UI.Headquarters.Migrations
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class SchemaBasedHistoryContext : HistoryContext
     {

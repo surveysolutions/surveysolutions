@@ -1,9 +1,12 @@
-﻿@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
-@using WB.Core.GenericSubdomains.Utils
-@using WB.UI.Headquarters.Code
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var isAdmin = identityManager.IsCurrentUserAdministrator;
+    var isAdminOrObserver = isAdmin || identityManager.IsCurrentUserObserver;
+    var isAdminOrHeadquarters = isAdmin || identityManager.IsCurrentUserHeadquarter;
 }
 
 @section scripts
@@ -34,7 +37,7 @@
 {
     <div class="btn-group">
         <div class="form-inline">
-            @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+            @if (isAdminOrHeadquarters)
             {
                 <a class="btn btn-default" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">
                     <i class="glyphicon glyphicon-user"></i> @Users.AddSupervisor
@@ -77,7 +80,7 @@
         <!-- ko foreach:Items -->
         <tr>
             <td>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                @if (isAdminOrHeadquarters)
                 {
                     <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName()"></a>
                 }
@@ -91,7 +94,7 @@
                 <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
             </td>
             <td>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                @if (isAdminOrHeadquarters)
                 {
                     <a data-bind="attr:{href: $connectedToDeviceUrl + '?supervisor=' + UserName() + '&connectedToDevice=false'}, text: NotConnectedToDeviceInterviewersCount"></a>
                 }
@@ -101,7 +104,7 @@
                 }
             </td>
             <td>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                @if (isAdminOrHeadquarters)
                 {
                     <a data-bind="attr: { href: $interviewersUrl + '?supervisor=' + UserName() }, text: InterviewersCount()"></a>
                 }
@@ -111,13 +114,13 @@
                 }
             </td>
             <td>
-                @if ((User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
+                @if (isAdminOrObserver)
                 {
                     <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="Impersonate as this user in read only mode">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                 }
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (isAdmin)
                 {
                     <div class="btn-group pull-right">
                         <a class="btn btn-danger" data-bind="click : $parent.archiveSupervisor">

@@ -3,9 +3,8 @@ using System.Data.Entity.Migrations;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Headquarters.OwinSecurity;
 
-namespace WB.UI.Headquarters.Migrations
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     internal sealed class Configuration : DbMigrationsConfiguration<HQIdentityDbContext>
     {

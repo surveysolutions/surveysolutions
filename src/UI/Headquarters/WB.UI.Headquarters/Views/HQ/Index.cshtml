@@ -1,11 +1,11 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.UI.Headquarters.Identity
-@using WB.UI.Headquarters.Resources
 
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Dashboard.Questionnaires;
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var isAdmin = identityManager.IsCurrentUserAdministrator;
 }
 
 @section scripts
@@ -120,7 +120,7 @@
                         <!-- /ko -->
 
 
-                        @if (User.IsInRole("Administrator"))
+                        @if (isAdmin)
                         {
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">

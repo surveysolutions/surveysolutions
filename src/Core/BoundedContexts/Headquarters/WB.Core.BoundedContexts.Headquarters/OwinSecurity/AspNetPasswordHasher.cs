@@ -1,6 +1,6 @@
 using Microsoft.AspNet.Identity;
 
-namespace WB.UI.Headquarters.OwinSecurity
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class AspNetPasswordHasher : IPasswordHasher
     {

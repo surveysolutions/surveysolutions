@@ -1,9 +1,9 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.UI.Headquarters.Identity
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
+    var isCurrentUserObserver = ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver;
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
@@ -32,7 +32,7 @@
         </ul>
     </li>
     @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
-    @if (!(ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver))
+    @if (!isCurrentUserObserver)
     {
         @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
     }
