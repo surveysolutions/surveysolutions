@@ -302,8 +302,14 @@
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModel.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\CodeGeneratorV2.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\ConditionMethodModel.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGenerationModelsFactory.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\ICodeGeneratorV2.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\LevelModel.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\LinkedFilterMethodModel.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\OptionsFilterMethodModel.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\QuestionModel.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\RosterModel.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.cs">
       <DependentUpon>ConditionMethodTemplateV11.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -333,6 +339,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGenerationV2\VariableModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
@@ -341,8 +348,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs" >
-	  <AutoGen>True</AutoGen>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
     </Compile>

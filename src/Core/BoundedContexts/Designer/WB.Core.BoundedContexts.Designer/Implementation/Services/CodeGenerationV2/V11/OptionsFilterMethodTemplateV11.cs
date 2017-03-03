@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("(int optioncode)\r\n\t\t{\r\n\t\t\tvar self = ");
             
             #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
             
             #line default
             #line hidden

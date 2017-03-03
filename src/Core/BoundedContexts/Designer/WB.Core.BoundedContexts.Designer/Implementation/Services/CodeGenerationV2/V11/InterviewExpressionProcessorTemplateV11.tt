@@ -84,5 +84,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <#
 		}
 #>
+<#
+		foreach (var staticText in Model.AllStaticTexts) 
+		{
+#>
+		public static readonly Guid <#=staticText.Variable#> = <#= staticText.Id.AsBytesString() #>;
+<#
+		}
+#>
+
 	}
 }

@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string LookupPrefix = "@Lookup__";
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
         public const string LevelPrefix = "Level_";
+        public const string StaticText = "text_";
 
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
@@ -38,22 +39,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
             };
 
-            foreach (ConditionMethodModel expressionMethodModel in modelsFactory.CreateMethodModels(readOnlyQuestionnaireDocument, model))
+            foreach (ConditionMethodModel expressionMethodModel in model.ExpressionMethodModel)
             {
                 var methodTemplate = new ConditionMethodTemplateV11(expressionMethodModel);
                 generatedClasses.Add(expressionMethodModel.Location.Key, methodTemplate.TransformText());
             }
 
-            foreach (var categoricalOptionsFilterModel in modelsFactory.CreateCategoricalOptionsFilterModels(readOnlyQuestionnaireDocument, model))
+            foreach (var categoricalOptionsFilterModel in model.CategoricalOptionsFilterModel)
             {
                 var methodTemplate = new OptionsFilterMethodTemplateV11(categoricalOptionsFilterModel);
                 generatedClasses.Add(categoricalOptionsFilterModel.Location.Key, methodTemplate.TransformText());
             }
 
-            foreach (LinkedFilterMethodModel categoricalOptionsFilterModel in modelsFactory.CreateLinkedFilterModels(readOnlyQuestionnaireDocument, model))
+            foreach (LinkedFilterMethodModel linkedFilterMethodModel in model.LinkedFilterMethodModel)
             {
-                var methodTemplate = new LinkedFilterMethodTemplateV11(categoricalOptionsFilterModel);
-                generatedClasses.Add(categoricalOptionsFilterModel.Location.Key, methodTemplate.TransformText());
+                var methodTemplate = new LinkedFilterMethodTemplateV11(linkedFilterMethodModel);
+                generatedClasses.Add(linkedFilterMethodModel.Location.Key, methodTemplate.TransformText());
             }
 
             return generatedClasses;

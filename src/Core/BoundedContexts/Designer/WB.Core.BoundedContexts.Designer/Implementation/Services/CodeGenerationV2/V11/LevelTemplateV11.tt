@@ -27,9 +27,27 @@
 <#
     }
 #>
+<#
+	foreach (var method in Processor.GetEnablementConditions(Model.ClassName)) 
+    {
+#>            
+			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+<#
+	foreach (var methodGroup in Processor.GetValidationConditions(Model.ClassName)) 
+    {
+#>
+			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
+<# 
+	}
+#>
 		}
 
-		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+		private static Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
+		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
 
 		private readonly <#= Processor.ClassName #> processor;
 
@@ -39,7 +57,7 @@
 
 		public Identity Identity  { get; private set; }
 
-		public decimal @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
 
 		public int @rowindex => state.GetRosterIndex(Identity);
 
