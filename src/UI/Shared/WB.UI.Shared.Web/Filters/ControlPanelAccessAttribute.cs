@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Filters
@@ -8,7 +9,7 @@ namespace WB.UI.Shared.Web.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.HttpContext.User.IsInRole("Administrator") &&
+            if (!filterContext.HttpContext.User.IsInRole(nameof(UserRoles.Administrator)) &&
                 !filterContext.HttpContext.Request.IsLocal &&
                 !CoreSettings.IsDevelopmentEnvironment)
             {

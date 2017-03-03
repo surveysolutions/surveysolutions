@@ -2,9 +2,8 @@ using System;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.Migrations;
 
-namespace WB.UI.Headquarters.OwinSecurity
+namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
@@ -19,11 +18,11 @@ namespace WB.UI.Headquarters.OwinSecurity
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApplicationUser>().ToTable("users", Migrations.Configuration.SchemaName);
-            modelBuilder.Entity<AppRole>().ToTable("roles", Migrations.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserRole>().ToTable("userroles", Migrations.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserLogin>().ToTable("userlogins", Migrations.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserClaim>().ToTable("userclaims", Migrations.Configuration.SchemaName);
+            modelBuilder.Entity<ApplicationUser>().ToTable("users", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<AppRole>().ToTable("roles", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<AppUserRole>().ToTable("userroles", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<AppUserLogin>().ToTable("userlogins", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<AppUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
         }
 
         public static HQIdentityDbContext Create() => new HQIdentityDbContext();

@@ -41,6 +41,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var creationResult = await this.identityManager.CreateUserAsync(new ApplicationUser
                 {
+                    Id = Guid.Parse(@"00000000000000000000000000000001"),
+                    FullName = @"Administrator",
                     UserName = model.UserName,
                     Email = model.Email
                 }, model.Password, UserRoles.Administrator);

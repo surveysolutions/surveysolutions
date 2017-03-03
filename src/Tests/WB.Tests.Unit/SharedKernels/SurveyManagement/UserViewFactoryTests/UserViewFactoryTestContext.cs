@@ -4,9 +4,9 @@ using System.Linq;
 using Machine.Specifications;
 using Microsoft.Owin.Security;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.UI.Headquarters.OwinSecurity;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {

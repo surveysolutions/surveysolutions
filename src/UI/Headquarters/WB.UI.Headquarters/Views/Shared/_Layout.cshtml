@@ -1,13 +1,11 @@
-﻿@using System.Diagnostics
-@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Code
-@using WB.UI.Headquarters.Identity
 @using WB.UI.Shared.Web.Extensions
+@{
+    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,15 +28,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (identityManager.IsCurrentUserAdministrator)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (identityManager.IsCurrentUserHeadquarter)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
+                else if (identityManager.IsCurrentUserObserver)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
                 }
@@ -48,15 +46,15 @@
                 }
             </div>
             <div class="collapse navbar-collapse">
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (identityManager.IsCurrentUserAdministrator)
             {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (identityManager.IsCurrentUserHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
+                else if (identityManager.IsCurrentUserObserver)
                 {
                     @Html.Partial("ObserverMainMenu")
                 }
@@ -68,7 +66,7 @@
 
         </div>
     </div>
-    @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
+    @if (identityManager.IsCurrentUserObserver)
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
             @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
@@ -155,7 +153,7 @@
                         "#IncomingPackagesQueueIndicator").load();
                 }
 
-                @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
+                @if (identityManager.IsCurrentUserObserver)
             {
                 <text>
                 $('button[type="submit"]').attr("disabled", "disabled");
