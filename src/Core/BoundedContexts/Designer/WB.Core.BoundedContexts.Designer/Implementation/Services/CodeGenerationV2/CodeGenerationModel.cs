@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2
@@ -18,12 +19,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<QuestionModel> AllQuestions { set; get; }
         public List<LevelModel> AllLevels { set; get; }
 
+        public List<StaticTextModel> AllStaticTexts { get; private set; } = new List<StaticTextModel>();
+
         // change it later
         public List<RosterModel> AllRosters => AllLevels
             .SelectMany(x => x.Rosters)
             .GroupBy(x => x.Variable)
             .Select(x => x.First())
             .ToList();
+
+        public List<ConditionMethodModel> ExpressionMethodModel { private set;  get; } = new List<ConditionMethodModel>();
+
+        public List<OptionsFilterMethodModel> CategoricalOptionsFilterModel { private set;  get; } = new List<OptionsFilterMethodModel>();
+
+        public List<LinkedFilterMethodModel> LinkedFilterMethodModel { private set;  get; } = new List<LinkedFilterMethodModel>();
 
         public List<Guid> ConditionsPlayOrder { get; set; }
 
@@ -32,6 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<LookupTableTemplateModel> LookupTables { get; set; }
         public string ClassName { get; set; }
+        
 
         public QuestionModel GetQuestionById(Guid questionId)
         {
@@ -47,5 +57,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             return AllLevels.First(x => x.RosterScope.Equals(rosterScope)).ClassName;
         }
+
+        public IEnumerable<ConditionMethodModel> GetEnablementConditions(string className)
+        {
+            return ExpressionMethodModel
+                .Where(x => x.Location.ExpressionType == ExpressionLocationType.Condition)
+                .Where(x => x.ClassName == className);
+        }
+
+        public Dictionary<string, string[]> GetValidationConditions(string className)
+        {
+            return ExpressionMethodModel
+                .Where(x => x.Location.ExpressionType == ExpressionLocationType.Validation)
+                .Where(x => x.ClassName == className)
+                .GroupBy(x => x.Variable)
+                .ToDictionary(x => x.Key, x => x.OrderBy(v => v.Location.ExpressionPosition).Select(v => v.MethodName).ToArray());
+        }
+        
     }
 }

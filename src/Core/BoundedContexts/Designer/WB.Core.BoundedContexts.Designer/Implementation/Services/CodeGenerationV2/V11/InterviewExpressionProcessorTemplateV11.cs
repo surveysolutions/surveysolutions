@@ -197,7 +197,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\t}\r\n}");
+            
+            #line 87 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+
+		foreach (var staticText in Model.AllStaticTexts) 
+		{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic static readonly Guid ");
+            
+            #line 91 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(staticText.Variable));
+            
+            #line default
+            #line hidden
+            this.Write(" = ");
+            
+            #line 91 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(staticText.Id.AsBytesString()));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 92 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+
+		}
+
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

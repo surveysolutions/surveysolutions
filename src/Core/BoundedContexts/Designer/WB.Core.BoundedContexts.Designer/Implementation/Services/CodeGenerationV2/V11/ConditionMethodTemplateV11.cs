@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\t\t\tvar self = ");
             
             #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\ConditionMethodTemplateV11.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
             
             #line default
             #line hidden

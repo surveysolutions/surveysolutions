@@ -91,6 +91,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 codeGenerationModel.AllQuestions.Add(questionModel);
             }
 
+            foreach (var staticText in questionnaire.Find<StaticText>())
+            {
+                string varName = GetVariable(staticText);
+
+                var rosterScope = questionnaire.GetRosterScope(staticText);
+                var levelClassName = levelClassNames[rosterScope];
+                var questionModel = new StaticTextModel
+                {
+                    Id = staticText.PublicKey,
+                    Variable = varName,
+                    ClassName = levelClassName,
+                    RosterScope = rosterScope
+                };
+
+                codeGenerationModel.AllStaticTexts.Add(questionModel);
+            }
+
             foreach (var level in codeGenerationModel.AllLevels)
             {
                 foreach (var question in codeGenerationModel.AllQuestions)
@@ -119,7 +136,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 }
             }
 
+            codeGenerationModel.ExpressionMethodModel.AddRange(CreateMethodModels(questionnaire, codeGenerationModel));
+            codeGenerationModel.LinkedFilterMethodModel.AddRange(this.CreateLinkedFilterModels(questionnaire, codeGenerationModel));
+            codeGenerationModel.CategoricalOptionsFilterModel.AddRange(this.CreateCategoricalOptionsFilterModels(questionnaire, codeGenerationModel));
+
             return codeGenerationModel;
+        }
+
+        private string GetVariable(StaticText staticText)
+        {
+            return CodeGeneratorV2.StaticText + staticText.PublicKey.FormatGuid();
         }
 
         private string GetVariable(IQuestion question)
@@ -151,13 +177,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         return typeof(YesNoAnswers).Name;
 
                     if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
-                        return "decimal[]";
+                        return "int[]";
 
                     if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
                     {
-                        return "decimal[]";
+                        return "int[]";
                     }
-                    return "decimal[][]";
+                    return $"{typeof(RosterVector).Name}[]";
 
                 case QuestionType.DateTime:
                     return "DateTime?";
@@ -167,15 +193,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
                     {
-                        return "decimal?";
+                        return "int?";
                     }
 
-                    return "decimal[]";
+                    return typeof(RosterVector).Name;
                 case QuestionType.TextList:
-                    return "ListAnswerRow[]";
+                    return $"{typeof(ListAnswerRow).Name}[]";
 
                 case QuestionType.GpsCoordinates:
-                    return "GeoLocation";
+                    return typeof(GeoLocation).Name;
 
                 case QuestionType.Multimedia:
                     return "string";
@@ -280,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 var className = model.GetClassNameByRosterScope(questionnaire.GetRosterScope(staticText));
                 var conditionExpression = this.macrosSubstitutionService.InlineMacros(staticText.ConditionExpression, questionnaire.Macros.Values);
-                var formattedId = staticText.PublicKey.FormatGuid();
+                var formattedId = CodeGeneratorV2.StaticText + staticText.PublicKey.FormatGuid();
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {
                     yield return new ConditionMethodModel(
@@ -289,7 +315,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         CodeGeneratorV2.EnablementPrefix + formattedId,
                         conditionExpression,
                         false,
-                        null);
+                        formattedId);
                 }
 
                 for (int index = 0; index < staticText.ValidationConditions.Count; index++)
@@ -302,102 +328,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         $"{CodeGeneratorV2.ValidationPrefix}{formattedId}__{index.ToString(CultureInfo.InvariantCulture)}",
                         validationExpression,
                         false,
-                        null);
+                        formattedId);
                 }
             }
+
+
+            foreach (var group in questionnaire.Find<Group>())
+            {
+            }
         }
-    }
-
-    public class ConditionMethodModel
-    {
-        public ConditionMethodModel(ExpressionLocation location, 
-            string className, 
-            string methodName, 
-            string expression, 
-            bool generateSelf, 
-            string variableName, 
-            string returnType = "bool")
-        {
-            this.Location = location;
-            this.ClassName = className;
-            this.MethodName = methodName;
-            this.Expression = expression;
-            this.VariableName = variableName;
-            this.GenerateSelf = generateSelf;
-            this.ReturnType = returnType;
-        }
-
-        public ExpressionLocation Location { get; set; }
-        public string ClassName { set; get; }
-        public string MethodName { set; get; }
-        public string Expression { set; get; }
-        public string VariableName { set; get; }
-        public bool GenerateSelf { set; get; }
-        public string ReturnType { get; set; }
-    }
-
-    public class OptionsFilterMethodModel : ConditionMethodModel
-    {
-        public OptionsFilterMethodModel(ExpressionLocation location, string className, string methodName, string expression, string variableName)
-            : base(location, className, methodName, expression, true, variableName, "bool")
-        {
-        }
-    }
-
-    public class LinkedFilterMethodModel : ConditionMethodModel
-    {
-        public string SourceLevelClassName { get; }
-
-        public bool IsSourceAndLinkedQuestionOnSameLevel => this.SourceLevelClassName == this.ClassName;
-
-        public LinkedFilterMethodModel(
-            ExpressionLocation location, 
-            string className, 
-            string methodName, 
-            string expression, 
-            string sourceLevelClassName)
-            : base(location, className, methodName, expression, false, string.Empty, "bool")
-        {
-            this.SourceLevelClassName = sourceLevelClassName;
-        }
-    }
-
-    public class QuestionModel
-    {
-        public Guid Id { set; get; }
-        public string Variable { set; get; }
-        public string ClassName { get; set; }
-
-        public string TypeName { get; set; }
-        public RosterScope RosterScope { get; set; }
-    }
-
-    public class VariableModel
-    {
-        public Guid Id { set; get; }
-        public string Variable { set; get; }
-        public string ClassName { get; set; }
-        public string ExpressionMethod { get; set; }
-        public string TypeName { get; set; }
-        public RosterScope RosterScope { get; set; }
-    }
-
-    public class RosterModel
-    {
-        public string Variable { set; get; }
-        public LevelModel Level { get; set; }
-    }
-
-    public class LevelModel
-    {
-        public Guid Id { set; get; }
-        public string Variable { set; get; }
-        public string ClassName { get; set; }
-        public RosterScope RosterScope { get; set; }
-
-        public List<QuestionModel> Questions { get; private set; } = new List<QuestionModel>();
-        public List<RosterModel> Rosters { get; private set; } = new List<RosterModel>();
-        public List<VariableModel> Variables { get; private set; } = new List<VariableModel>();
-
     }
 }
