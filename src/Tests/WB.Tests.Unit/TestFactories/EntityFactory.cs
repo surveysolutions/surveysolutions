@@ -1061,6 +1061,21 @@ namespace WB.Tests.Unit.TestFactories
                 TimeSpan = timeSpanWithPreviousStatus ?? new TimeSpan()
             };
 
+
+        public UserView UserView(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
+            string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
+            string deviceId = null)
+            => new UserView
+            {
+                PublicKey = userId ?? Guid.NewGuid(),
+                IsArchived = isArchived ?? false,
+                UserName = userName,
+                IsLockedByHQ = isLockedByHQ,
+                Supervisor = new UserLight(supervisorId ?? Guid.NewGuid(), "supervisor"),
+                DeviceId = deviceId,
+                Roles = new SortedSet<UserRoles>(new[] {role})
+            };
+
         public ApplicationUser ApplicationUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer, string deviceId = null)
         {
