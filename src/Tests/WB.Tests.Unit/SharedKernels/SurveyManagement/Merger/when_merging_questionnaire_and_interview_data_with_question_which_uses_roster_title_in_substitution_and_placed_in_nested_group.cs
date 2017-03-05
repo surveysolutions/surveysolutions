@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { rosterId, "" } });
             
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
 
             merger = CreateMerger(questionnaire);
         };
@@ -89,7 +90,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid rosterId = Guid.Parse("20000000000000000000000000000000");
         private static Guid nestedGroupId = Guid.Parse("30000000000000000000000000000000");

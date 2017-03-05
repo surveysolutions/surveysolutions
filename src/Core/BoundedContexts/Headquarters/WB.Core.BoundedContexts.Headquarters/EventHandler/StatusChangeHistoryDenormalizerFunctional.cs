@@ -5,6 +5,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
@@ -44,15 +45,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>
     {
-        private readonly IPlainStorageAccessor<UserDocument> users;
+        private readonly IUserViewFactory users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
         private readonly string unknown = "Unknown";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
-        public override object[] Readers
-        {
-            get { return new object[] {this.users, this.interviewSummares}; }
-        }
+        public override object[] Readers => new object[] {this.interviewSummares};
 
         private InterviewStatuses RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewStatuses interviewStatuses, Guid interviewId, Guid userId, DateTime answerTime)
         {
@@ -62,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (!this.listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewStatuses.InterviewCommentedStatuses.Last().Status))
                 return interviewStatuses;
 
-            UserDocument responsible = this.users.GetById(userId.FormatGuid());
+            var responsible = this.users.GetUser(new UserViewInputModel(userId));
 
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Interviewer))
                 return interviewStatuses;
@@ -86,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public StatusChangeHistoryDenormalizerFunctional(
             IReadSideRepositoryWriter<InterviewStatuses> statuses,
-            IPlainStorageAccessor<UserDocument> users,
+            IUserViewFactory users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
             : base(statuses)
         {
@@ -295,11 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         private string GetResponsibleIdName(Guid responsibleId)
-        {
-            var userDocument = this.users.GetById(responsibleId.FormatGuid());
-            var userName = userDocument?.UserName;
-            return userName ?? this.unknown;
-        }
+            => this.users.GetUser(new UserViewInputModel(responsibleId))?.UserName ?? this.unknown;
 
         private InterviewStatuses CreateInterviewStatuses(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
         {
@@ -331,7 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var supervisorName = supervisorId.HasValue ? this.GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? this.GetResponsibleIdName(interviewerId.Value) : "";
 
-            var statusOriginator = this.users.GetById(userId.FormatGuid());
+            var statusOriginator = this.users.GetUser(new UserViewInputModel(userId));
 
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 eventId,

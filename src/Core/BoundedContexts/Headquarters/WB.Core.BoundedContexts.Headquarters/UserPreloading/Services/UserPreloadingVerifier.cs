@@ -5,7 +5,9 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly IUserPreloadingService userPreloadingService;
 
-        private  readonly IPlainStorageAccessor<UserDocument> userStorage;
+        private  readonly IUserRepository userStorage;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
@@ -36,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
-            IPlainStorageAccessor<UserDocument> userStorage, 
+            IUserRepository userStorage, 
             UserPreloadingSettings userPreloadingSettings, 
             ILogger logger)
         {
@@ -94,34 +96,46 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
         {
-            var activeUserNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var supervisorRoleId = ((byte)UserRoles.Supervisor).ToGuid();
+            var interviewerRoleId = ((byte)UserRoles.Interviewer).ToGuid();
 
-            userStorage.Query(_ => _.Where(u => !u.IsArchived).Select(u => u.UserName.ToLower())).ToHashSet());
+            var allInterviewersAndSupervisors =
+                this.userStorage.Users.Select(x => new
+                {
+                    UserId = x.Id,
+                    UserName = x.UserName,
+                    IsArchived = x.IsArchived,
+                    SupervisorId = x.SupervisorId,
+                    IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
+                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                }).ToArray();
 
-            var activeSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var activeUserNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
+            
+            var activeSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .Distinct()
+                .ToHashSet();
 
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower()).Distinct()).ToHashSet()
-                );
+            var archivedSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
 
-            var archivedSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
-
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower())).ToHashSet()
-                );
-
-            var archivedInterviewerNamesMappedOnSupervisorName = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Interviewer))
-                            .Select(
-                                u => new {u.UserName, SupervisorName = u.Supervisor == null ? "" : u.Supervisor.Name}))
-                    .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower())
-                );
+            var archivedInterviewerNamesMappedOnSupervisorName = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsInterviewer)
+                .Select(u =>
+                    new
+                    {
+                        u.UserName,
+                        SupervisorName = allInterviewersAndSupervisors
+                            .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
+                    })
+                .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
             var validationFunctions = new[]
             {

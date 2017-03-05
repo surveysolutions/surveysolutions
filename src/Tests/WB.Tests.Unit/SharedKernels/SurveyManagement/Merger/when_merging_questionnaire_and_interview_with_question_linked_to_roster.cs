@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray()));
 
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             merger = CreateMerger(questionnaire);
         };
 
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         static InterviewDetailsView mergeResult;
         static InterviewData interview;
         static QuestionnaireDocument questionnaire;
-        static UserDocument user;
+        static UserView user;
         
         static Guid linkedQuestionId;
         static Guid linkedOnNestedRosterQuestionId;
