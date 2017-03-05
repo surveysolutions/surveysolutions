@@ -21,15 +21,18 @@ namespace WB.UI.Headquarters.Controllers
     public class BatchUserUploadController : BaseController
     {
         private readonly IUserPreloadingService userPreloadingService;
+        private readonly IUserBatchCreator userBatchCreator;
         private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         public BatchUserUploadController(
             ICommandService commandService, 
             ILogger logger, 
-            IUserPreloadingService userPreloadingService) : 
+            IUserPreloadingService userPreloadingService,
+            IUserBatchCreator userBatchCreator) : 
             base(commandService, logger)
         {
             this.userPreloadingService = userPreloadingService;
+            this.userBatchCreator = userBatchCreator;
         }
 
         public ActionResult UserBatchUploads()
@@ -167,8 +170,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 plainTransactionManager.ExecuteInPlainTransaction(() =>
                    this.userPreloadingService.EnqueueForUserCreation(id));
-                
-                this.RunCreationInSeparateTask();
+
+                this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
                 return this.RedirectToAction("UserCreationProcessDetails", new {id});
             }
@@ -186,7 +189,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
-                this.RunCreationInSeparateTask();
+                this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
                 return this.RedirectToAction("UserCreationProcessDetails", new { id });
             }
             catch (Exception e)
@@ -194,26 +197,6 @@ namespace WB.UI.Headquarters.Controllers
                 Logger.Error("Error on user verification ", e);
                 return RedirectToAction("UserBatchUploads");
             }
-        }
-
-        private void RunCreationInSeparateTask()
-        {
-            Task.Factory.StartNew(() =>
-            {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                try
-                {
-                    ServiceLocator.Current.GetInstance<IUserBatchCreator>().CreateUsersFromReadyToBeCreatedQueue();
-                }
-                catch (Exception exc)
-                {
-                    Logger.Error("Error on user verification ", exc);
-                }
-                finally
-                {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                }
-            });
         }
 
         [ObserverNotAllowed]
