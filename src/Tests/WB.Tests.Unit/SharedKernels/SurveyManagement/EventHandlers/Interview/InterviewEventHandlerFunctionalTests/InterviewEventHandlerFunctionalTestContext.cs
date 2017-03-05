@@ -5,8 +5,10 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -22,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class InterviewEventHandlerFunctionalTestContext
     {
-        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserDocument user = null)
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserView user = null)
         {
 
             var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
@@ -35,8 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
             questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock);
-            var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
-            userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
+            var userDocumentMockStorage = new Mock<IUserViewFactory>();
+            userDocumentMockStorage.Setup(x => x.GetUser(It.IsAny<UserViewInputModel>())).Returns(user);
 
             return new InterviewEventHandlerFunctional(
                 userDocumentMockStorage.Object,
