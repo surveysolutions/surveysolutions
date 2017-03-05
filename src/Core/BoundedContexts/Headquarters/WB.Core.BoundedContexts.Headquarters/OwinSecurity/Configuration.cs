@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     internal sealed class Configuration : DbMigrationsConfiguration<HQIdentityDbContext>
     {
-        public const string SchemaName = "system";
+        public const string SchemaName = "users";
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;

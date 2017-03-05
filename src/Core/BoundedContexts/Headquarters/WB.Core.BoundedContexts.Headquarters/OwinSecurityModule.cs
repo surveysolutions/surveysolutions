@@ -1,27 +1,29 @@
 using System.Web;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Ninject;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
     public class OwinSecurityModule : NinjectModule
     {
-        private IOwinContext owinContext => new HttpContextWrapper(HttpContext.Current).GetOwinContext();
-
         public override void Load()
         {
+            this.Bind<HQIdentityDbContext>().ToConstant(HQIdentityDbContext.Create());
+            this.Bind<IUserRepository>().To<AppUserStore>();
+
             this.Bind<IPasswordHasher>().To<AspNetPasswordHasher>();
-            this.Bind<IAuthenticationManager>().ToMethod(context => this.owinContext.Authentication);
-
-            this.Bind<ApplicationSignInManager>().ToMethod(context => this.owinContext.Get<ApplicationSignInManager>());
-            this.Bind<ApplicationUserManager>().ToMethod(context => this.owinContext.Get<ApplicationUserManager>());
-
-            this.Bind<IIdentityManager>().To<IdentityManager>();
+            this.Bind<IOwinContext>().ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext()).InRequestScope();
+            this.Bind<IAuthenticationManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Authentication).InRequestScope();
+            this.Bind<ApplicationSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<ApplicationSignInManager>()).InRequestScope();
+            this.Bind<ApplicationUserManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<ApplicationUserManager>()).InRequestScope();
+            this.Bind<IIdentityManager>().To<IdentityManager>().InRequestScope();
         }
     }
 }

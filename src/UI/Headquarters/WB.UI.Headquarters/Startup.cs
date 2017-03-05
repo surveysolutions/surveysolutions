@@ -53,9 +53,9 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
-
             var ninjectKernel = NinjectConfig.CreateKernel();
+
+            ConfigureAuth(app);
 
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
 
