@@ -117,6 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             {
                 this.identityManager.CreateUser(new ApplicationUser
                 {
+                    Id = Guid.NewGuid(),
                     UserName = supervisorToCreate.Login,
                     FullName = supervisorToCreate.FullName,
                     Email = supervisorToCreate.Email,
