@@ -235,13 +235,13 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
-            this.Kernel.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Kernel.Bind<IUserViewFactory>().ToMethod(context=>new UserViewFactory(context.Kernel.Get<IIdentityManager>()));
-            this.Kernel.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
-            this.Kernel.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
-            this.Kernel.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
-            this.Kernel.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
-            this.Kernel.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
+            this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
+            this.Bind<IUserViewFactory>().To<UserViewFactory>();
+            this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
+            this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
+            this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
+            this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
+            this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
 
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 

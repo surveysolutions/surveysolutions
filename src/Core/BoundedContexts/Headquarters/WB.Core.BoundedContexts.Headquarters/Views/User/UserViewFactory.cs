@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserViewFactory : IUserViewFactory
     {
-        protected readonly IIdentityManager identityManager;
+        protected readonly IUserRepository UserRepository;
 
-        public UserViewFactory(IIdentityManager identityManager)
+        public UserViewFactory(IUserRepository UserRepository)
         {
-            this.identityManager = identityManager;
+            this.UserRepository = UserRepository;
         }
 
         public UserView GetUser(UserViewInputModel input)
@@ -35,13 +35,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 return users.FirstOrDefault();
             };
 
-            var user = query.Invoke(this.identityManager.Users);
+            var user = query.Invoke(this.UserRepository.Users);
 
             if (user == null) return null;
 
             UserLight supervisor = user.SupervisorId.HasValue
                 ? new UserLight(user.SupervisorId.Value,
-                    this.identityManager.GetUserByIdAsync(user.SupervisorId.Value).Result.UserName)
+                    this.UserRepository.FindByIdAsync(user.SupervisorId.Value).Result.UserName)
                 : null;
 
             return new UserView
@@ -81,14 +81,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.identityManager.Users)
+                .Invoke(this.UserRepository.Users)
                 .ToList();
 
             return new UserListView
             {
                 Page = pageIndex,
                 PageSize = pageSize,
-                TotalCount = query.Invoke(this.identityManager.Users).Count(),
+                TotalCount = query.Invoke(this.UserRepository.Users).Count(),
                 Items = filteredUsers.ToList()
             };
         }
@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(ApplicationUser.UserName), 1, pageSize)
-                .Invoke(this.identityManager.Users)
+                .Invoke(this.UserRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
                 {
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.identityManager.Users).Count(),
+                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
         }
@@ -152,12 +152,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.identityManager.Users)
+                .Invoke(this.UserRepository.Users)
                 .ToList();
 
             return new InterviewersView
             {
-                TotalCount = query.Invoke(this.identityManager.Users).Count(),
+                TotalCount = query.Invoke(this.UserRepository.Users).Count(),
                 Items = filteredUsers.ToList()
             };
         }
@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(ApplicationUser.UserName), 1, pageSize)
-                .Invoke(this.identityManager.Users)
+                .Invoke(this.UserRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
                 {
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.identityManager.Users).Count(),
+                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
         }
@@ -203,11 +203,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(ApplicationUser.UserName) : orderBy;
 
-            var filteredUsers = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize).Invoke(this.identityManager.Users).ToList();
+            var filteredUsers = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize).Invoke(this.UserRepository.Users).ToList();
 
             return new SupervisorsView
             {
-                TotalCount = query.Invoke(this.identityManager.Users).Count(),
+                TotalCount = query.Invoke(this.UserRepository.Users).Count(),
                 Items = filteredUsers
             };
         }
