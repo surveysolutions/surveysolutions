@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 
         private static IUserViewFactory teamFactory;
         private static UsersView result;
-        private static readonly IPlainStorageAccessor<UserDocument> usersStorage = new TestPlainStorage<UserDocument>();
+        private static readonly IPlainStorageAccessor<UserView> usersStorage = new TestPlainStorage<UserView>();
         private static readonly string superAName = "a_super1";
         private static readonly string superCName = "c_super2";
     }

@@ -455,7 +455,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return cachedQuestionnaireExportStructure;
         }
 
-        private UserDocument GetUserDocument(Guid originatorId)
+        private UserView GetUserDocument(Guid originatorId)
         {
             var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId.FormatGuid(),
                 (key) => this.userReader.GetUser(new UserViewInputModel(key)));
@@ -465,13 +465,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return cachedUserDocument;
         }
 
-        private string GetUserName(UserDocument responsible)
+        private string GetUserName(UserView responsible)
         {
             var userName = responsible != null ? responsible.UserName : "";
             return userName;
         }
 
-        private string GetUserRole(UserDocument user)
+        private string GetUserRole(UserView user)
         {
             const string UnknownUserRole = "";
             if (user == null || !user.Roles.Any())

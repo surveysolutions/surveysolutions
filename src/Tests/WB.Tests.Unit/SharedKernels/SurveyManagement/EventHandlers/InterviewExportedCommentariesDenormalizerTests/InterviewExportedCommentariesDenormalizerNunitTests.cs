@@ -4,6 +4,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -16,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
     {
         private InterviewExportedCommentariesDenormalizer CreateInterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage = null,
-            IPlainStorageAccessor<UserDocument> userStorage = null,
+            IUserViewFactory userStorage = null,
             IQuestionnaireExportStructureStorage questionnaireReader = null)
         {
             return new InterviewExportedCommentariesDenormalizer(
                 interviewCommentariesStorage ?? new TestInMemoryWriter<InterviewCommentaries>(),
-                userStorage ?? new TestPlainStorage<UserDocument>(),
+                userStorage ?? Mock.Of<IUserViewFactory>(),
                 questionnaireReader??Mock.Of<IQuestionnaireExportStructureStorage>());
         }
 

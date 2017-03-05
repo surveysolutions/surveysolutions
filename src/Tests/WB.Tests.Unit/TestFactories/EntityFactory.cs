@@ -1093,12 +1093,12 @@ namespace WB.Tests.Unit.TestFactories
             return user;
         }
         
-        public UserDocument UserDocument()
+        public UserView UserDocument()
             => Create.Entity.UserDocument(userId: null);
 
-        public UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
+        public UserView UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName = "name", bool isLockedByHQ = false)
         {
-            var user = new UserDocument { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
+            var user = new UserView { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
             if (supervisorId.HasValue)
             {
                 user.Roles.Add(UserRoles.Interviewer);

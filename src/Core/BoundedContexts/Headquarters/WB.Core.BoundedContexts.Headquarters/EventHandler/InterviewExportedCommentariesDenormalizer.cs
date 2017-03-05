@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -32,13 +33,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
-        private readonly IPlainStorageAccessor<UserDocument> userStorage;
+        private readonly IUserViewFactory userStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
-            IPlainStorageAccessor<UserDocument> userStorage,
+            IUserViewFactory userStorage,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
@@ -48,10 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public override object[] Writers => new[] {this.interviewCommentariesStorage};
 
-        public override object[] Readers
-        {
-            get { return new object[] { this.userStorage }; }
-        }
+        public override object[] Readers => new object[0];
 
         public void CleanWritersByEventSource(Guid eventSourceId)
         {
@@ -253,7 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             decimal[] rosterVector,
             DateTime timestamp)
         {
-            UserDocument responsible = this.userStorage.GetById(originatorId.FormatGuid());
+            UserView responsible = this.userStorage.GetUser(new UserViewInputModel(originatorId));
             var originatorName = responsible == null ? this.unknown : responsible.UserName;
             var originatorRole = responsible == null || !responsible.Roles.Any()
                 ? 0

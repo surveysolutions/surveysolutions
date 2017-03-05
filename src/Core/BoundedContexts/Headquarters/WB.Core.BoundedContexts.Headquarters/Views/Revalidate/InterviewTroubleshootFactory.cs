@@ -2,11 +2,9 @@
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
 {
@@ -20,12 +18,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IPlainStorageAccessor<UserDocument> userStore;
+        private readonly IUserViewFactory userStore;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
-            IPlainStorageAccessor<UserDocument> userStore,
+            IUserViewFactory userStore,
             IInterviewDataAndQuestionnaireMerger merger, 
             IQuestionnaireStorage questionnaireStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
@@ -50,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Revalidate
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
+            var user = this.userStore.GetUser(new UserViewInputModel(interview.ResponsibleId));
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 

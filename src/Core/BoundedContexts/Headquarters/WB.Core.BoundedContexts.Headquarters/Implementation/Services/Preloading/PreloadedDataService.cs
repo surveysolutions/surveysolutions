@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
 
             var supervisorsCache = new Dictionary<string, Guid>();
-            var interviewersCache = new Dictionary<string, UserDocument>();
+            var interviewersCache = new Dictionary<string, UserView>();
             var idColumnIndex = this.GetIdColumnIndex(topLevelData);
             var responsibleNameIndex = this.GetResponsibleNameIndex(topLevelData);
             var result = new List<PreloadedDataRecord>();
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var result = new List<PreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
-            var interviewersCache = new Dictionary<string, UserDocument>();
+            var interviewersCache = new Dictionary<string, UserView>();
 
             var responsibleNameIndex = this.GetResponsibleNameIndex(sampleDataFile);
             var topLevelFileName = this.GetValidFileNameForTopLevelQuestionnaire();
@@ -535,7 +535,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return user.PublicKey;
         }
 
-        private UserDocument GetInterviewerIdAndUpdateCache(Dictionary<string, UserDocument> interviewerCache, string name)
+        private UserView GetInterviewerIdAndUpdateCache(Dictionary<string, UserView> interviewerCache, string name)
         {
             if (string.IsNullOrEmpty(name))
                 return null;

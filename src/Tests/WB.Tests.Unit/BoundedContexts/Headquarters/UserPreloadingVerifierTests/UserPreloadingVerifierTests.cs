@@ -5,9 +5,11 @@ using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -38,8 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_existing_user_Then_record_verification_error_with_code_PLU0001()
         {
             var userName = "nastya";
-            var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName), "id");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -76,9 +77,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             var userName = "nastya";
             var supervisorName = "super";
-            var userStorage = new  TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName, supervisorId: Guid.NewGuid(), isArchived:true), "id1");
-            userStorage.Store(Create.Entity.UserDocument(userName: supervisorName), "id2");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, supervisorId: Guid.NewGuid(), isArchived: true),
+                Create.Entity.ApplicationUser(userName: supervisorName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(login: userName, supervisor: supervisorName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -95,8 +95,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_user_in_other_role_Then_record_verification_error_with_code_PLU0004()
         {
             var userName = "nastya";
-            var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName, isArchived:true), "id");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, isArchived: true));
+            
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -269,12 +269,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 
         private UserPreloadingVerifier CreateUserPreloadingVerifier(
             IUserPreloadingService userPreloadingService = null,
-            IPlainStorageAccessor<UserDocument> userStorage = null)
+            IUserRepository userStorage = null)
         {
             return
                 new UserPreloadingVerifier(
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
-                    userStorage ?? new TestPlainStorage<UserDocument>(),
+                    userStorage ?? Mock.Of<IUserRepository>(),
                     Create.Entity.UserPreloadingSettings(), Mock.Of<ILogger>());
         }
 

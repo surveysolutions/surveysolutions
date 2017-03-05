@@ -52,10 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public override object[] Readers
-        {
-            get { return new object[] { this.users }; }
-        }
+        public override object[] Readers => new object[0];
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
         {
