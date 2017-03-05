@@ -20,16 +20,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             {
             }
         }
-        protected static IUserViewFactory CreateInterviewersViewFactory(IIdentityManager identityManager)
-            => new UserViewFactory(identityManager);
+        protected static IUserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
+            => new UserViewFactory(userRepository);
 
-        protected static IIdentityManager CreateQueryableReadSideRepositoryReaderWithUsers(params ApplicationUser[] users)
-        {
-            var applicationUserManager = Mock.Of<TestApplicationUserManager>(x=>x.Users == users.AsQueryable());
-            var authenticationManager = new Mock<IAuthenticationManager>();
-
-            return new IdentityManager(applicationUserManager,
-                new ApplicationSignInManager(applicationUserManager, authenticationManager.Object), authenticationManager.Object);
-        }
+        protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers(params ApplicationUser[] users)
+            => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
     }
 }

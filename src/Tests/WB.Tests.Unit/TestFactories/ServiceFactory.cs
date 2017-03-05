@@ -38,6 +38,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -234,7 +235,7 @@ namespace WB.Tests.Unit.TestFactories
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
                 new QuestionDataParser(),
-                new UserViewFactory(Mock.Of<IIdentityManager>()));
+                new UserViewFactory(Mock.Of<IUserRepository>()));
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(

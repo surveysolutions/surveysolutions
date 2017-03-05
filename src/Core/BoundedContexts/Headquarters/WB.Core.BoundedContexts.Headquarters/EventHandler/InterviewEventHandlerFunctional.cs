@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
@@ -73,14 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, VariablesEnabled>,
         IUpdateHandler<InterviewData, TranslationSwitched>
     {
-        private readonly IPlainStorageAccessor<UserDocument> users;
+        private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IRostrerStructureService rostrerStructureService;
 
-        public override object[] Readers
-        {
-            get { return new object[] { this.users }; }
-        }
+        public override object[] Readers => new object[0];
 
         public static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
@@ -293,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public InterviewEventHandlerFunctional(
-            IPlainStorageAccessor<UserDocument> users,
+            IUserViewFactory users,
             IReadSideKeyValueStorage<InterviewData> interviewData,
             IQuestionnaireStorage questionnaireStorage,
             IRostrerStructureService rostrerStructureService)
@@ -331,7 +329,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private InterviewData CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
             Guid questionnaireId, long questionnaireVersion, long eventSequence, bool createdOnClient)
         {
-            var responsible = this.users.GetById(userId.FormatGuid());
+            var responsible = this.users.GetUser(new UserViewInputModel(userId));
 
             var interview = new InterviewData()
             {
@@ -474,7 +472,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswerCommented> @event)
         {
-            var commenter = this.users.GetById(@event.Payload.UserId.FormatGuid());
+            var commenter = this.users.GetUser(new UserViewInputModel(@event.Payload.UserId));
             
             return this.SaveComment(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
                 @event.Payload.Comment, @event.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", @event.Payload.CommentTime,
