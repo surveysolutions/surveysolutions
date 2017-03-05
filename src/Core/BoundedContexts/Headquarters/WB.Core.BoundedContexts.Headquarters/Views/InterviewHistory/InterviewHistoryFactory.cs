@@ -4,6 +4,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -14,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
     internal class InterviewHistoryFactory : IInterviewHistoryFactory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
-        private readonly IPlainStorageAccessor<UserDocument> userReader;
+        private readonly IUserViewFactory userReader;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IEventStore eventStore;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
         public InterviewHistoryFactory(
             IEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
-            IPlainStorageAccessor<UserDocument> userReader,
+            IUserViewFactory userReader,
             ILogger logger, InterviewDataExportSettings interviewDataExportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
