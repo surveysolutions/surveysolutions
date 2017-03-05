@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using It = Machine.Specifications.It;
 
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             questionnaire = CreateQuestionnaireDocumentWithGroupAndFixedRoster(groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
             interview = CreateInterviewDataForQuestionnaireWithGroupAndFixedRoster(interviewId, groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
             
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             merger = CreateMerger(questionnaire);
         };
 
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
         private static Guid groupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid fixedRosterId = Guid.Parse("22222222222222222222222222222222");
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");

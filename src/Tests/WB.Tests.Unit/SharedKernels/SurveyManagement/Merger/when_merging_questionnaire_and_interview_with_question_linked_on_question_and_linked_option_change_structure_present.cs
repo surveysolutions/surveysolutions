@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using It = Machine.Specifications.It;
@@ -72,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).ToArray()));
 
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             interviewLinkedQuestionOptions =
                 Create.Entity.InterviewLinkedQuestionOptions(Create.Entity.ChangedLinkedOptions(linkedQuestionId,
                     options:
@@ -113,7 +114,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
         private static InterviewLinkedQuestionOptions interviewLinkedQuestionOptions;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid linkedQuestionId;
         private static Guid linkedOnNestedRosterQuestionId;

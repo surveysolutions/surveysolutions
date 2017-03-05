@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
-        private readonly IPlainStorageAccessor<UserDocument> userStore;
+        private readonly IUserViewFactory userStore;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -39,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public InterviewDetailsViewFactory(
-            IPlainStorageAccessor<UserDocument> userStore,
+            IUserViewFactory userStore,
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IQuestionnaireStorage questionnaireStorage,
@@ -63,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var interviewData = this.interviewDataRepository.GetById(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interviewSummary.QuestionnaireId,
                 interviewSummary.QuestionnaireVersion);
-            var responsible = this.userStore.GetById(interviewSummary.ResponsibleId.FormatGuid());
+            var responsible = this.userStore.GetUser(new UserViewInputModel(interviewSummary.ResponsibleId));
 
             return new DetailsViewModel
             {
@@ -292,7 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Text = comment.Comment,
             CommenterId = comment.UserId,
             CommenterRole = comment.UserRole,
-            CommenterName = this.userStore.GetById(comment.UserId.FormatGuid())?.UserName ?? "<UNKNOWN>",
+            CommenterName = this.userStore.GetUser(new UserViewInputModel(comment.UserId))?.UserName ?? "<UNKNOWN>",
             Date = comment.CommentTime
         };
 
