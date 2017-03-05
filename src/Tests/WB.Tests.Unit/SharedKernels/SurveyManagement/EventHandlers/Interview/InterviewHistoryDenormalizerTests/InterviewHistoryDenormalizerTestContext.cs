@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     internal class InterviewHistoryDenormalizerTestContext
     {
         protected static InterviewParaDataEventHandler CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IPlainStorageAccessor<UserDocument> userDocumentWriter = null,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IUserViewFactory userDocumentWriter = null,
             QuestionnaireExportStructure questionnaire = null)
         {
             return new InterviewParaDataEventHandler(
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryWriter ??
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
-                userDocumentWriter ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
+                userDocumentWriter ?? Mock.Of<IUserViewFactory>(),
                 new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
