@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fill in captcha.
+        /// </summary>
+        public static string PleaseFillCaptcha {
+            get {
+                return ResourceManager.GetString("PleaseFillCaptcha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requested questionnaire &quot;{0}&quot; has errors. Please verify the questionnaire on Designer..
         /// </summary>
         public static string Questionnaire_verification_failed {
