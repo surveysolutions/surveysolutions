@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 @{
@@ -57,8 +58,10 @@
                 <div class="col-md-6 col-sm-6 col-xs-12 left-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
-                            @using (Html.BeginForm("LogOn", "Account", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {id = "log-in", @class = "log-in"}))
+                            @using (Html.BeginForm("LogOn", "Account", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, 
+                                new {id = "log-in", @class = "log-in"}))
                             {
+                                @Html.AntiForgeryToken()
                                 <div class="retina headquarter">Survey Solutions Headquarters</div>
                                 if (ViewData.ModelState.ContainsKey("InvalidCredentials") && ViewData.ModelState["InvalidCredentials"].Errors.Any())
                                 {
@@ -70,13 +73,28 @@
                                         </p>
                                     </div>
                                 }
-
+                                if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
+                                {
+                                    <div class="form-group has-error">
+                                        <p>
+                                            <span class="help-block">
+                                                @Html.ValidationMessage("InvalidCaptcha")
+                                            </span>
+                                        </p>
+                                    </div>
+                                }
                                 <div class="form-group">
                                     @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", autocomplete = "off", placeholder = Pages.Login})
                                 </div>
                                 <div class="form-group">
                                     @Html.PasswordFor(m => m.Password, new {@class = "form-control", autocomplete = "off", placeholder = Pages.Password})
                                 </div>
+                                if (this.Model.RequireCaptcha)
+                                {
+                                    <div class="form-group">
+                                        @Html.RenderCaptcha()
+                                    </div>
+                                }
                                 <div class="form-actions">
                                     <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
                                 </div>

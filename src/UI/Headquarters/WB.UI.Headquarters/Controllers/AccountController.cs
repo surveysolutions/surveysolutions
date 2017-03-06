@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -12,12 +13,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Attributes;
+using WB.UI.Shared.Web.Captcha;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -25,13 +26,15 @@ namespace WB.UI.Headquarters.Controllers
     public class AccountController : TeamController
     {
         private readonly IFormsAuthentication authentication;
+        private readonly ICaptchaProvider captchaProvider;
 
         public AccountController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IFormsAuthentication authentication, IUserViewFactory userViewFactory,
+            IFormsAuthentication authentication, IUserViewFactory userViewFactory, ICaptchaProvider captchaProvider,
             IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
             this.authentication = authentication;
+            this.captchaProvider = captchaProvider;
         }
 
         [HttpGet]
@@ -66,16 +69,42 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [NoTransaction]
         public ActionResult LogOn(string returnUrl)
-        {
+        {   
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
-            return this.View();
+
+            return this.View(new LogOnModel());
         }
 
+        [Obsolete("Replace logic with proper failed login count from membership identity as soon as it merged")]
+        private bool IsRequireCaptcha(string userName)
+        {
+            var userKey = $@"_failedLogin_{userName}";
+            var count = (int)(this.HttpContext.Cache[userKey] ?? 0);
+            return count >= 5;
+        }
+
+        [Obsolete("Replace logic with proper failed login count from membership identity as soon as it merged")]
+        private void RegisterFailedLogin(string userName)
+        {
+            var userKey = $@"_failedLogin_{userName}";
+            var count = (int)(this.HttpContext.Cache[userKey] ?? 0);
+            count += 1;
+            HttpContext.Cache.Insert(userKey, count, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(20));
+        }
+        
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
+
+            if (IsRequireCaptcha(model.UserName) && !this.captchaProvider.IsCaptchaValid(this))
+            {
+                this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
+                model.RequireCaptcha = IsRequireCaptcha(model.UserName);
+                return View(model);
+            }
+
             if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
             {
                 var isInterviewer = Roles.GetRolesForUser(model.UserName).Contains(UserRoles.Operator.ToString());
@@ -88,8 +117,13 @@ namespace WB.UI.Headquarters.Controllers
                     return this.RedirectToLocal(returnUrl);
                 }
             }
-            else this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
+            else
+            {
+                RegisterFailedLogin(model.UserName);
+                this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
+            }
 
+            model.RequireCaptcha = IsRequireCaptcha(model.UserName);
             return this.View(model);
         }
 
