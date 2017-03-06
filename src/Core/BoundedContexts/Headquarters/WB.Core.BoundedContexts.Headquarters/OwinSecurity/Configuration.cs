@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             //  This method will be called after migrating to the latest version.
 
+            if (context.Roles.Any()) return;
+
             foreach (int userRole in Enum.GetValues(typeof(UserRoles)))
             {
                 context.Roles.AddOrUpdate(new AppRole
