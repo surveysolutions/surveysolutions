@@ -320,7 +320,7 @@
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\ConcurrentDistinctList.cs" />
     <Compile Include="Utils\IdentityJsonConverter.cs" />
-    <Compile Include="Utils\QuestionnaireHelper.cs" />
+    <Compile Include="Utils\CompositeHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="Utils\RosterInstanceExtensions.cs" />
     <Compile Include="Utils\RosterVectorAsCoordinatesComparer.cs" />

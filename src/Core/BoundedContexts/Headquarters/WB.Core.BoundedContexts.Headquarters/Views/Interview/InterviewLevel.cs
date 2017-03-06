@@ -12,9 +12,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
             this.QuestionsSearchCache = new Dictionary<Guid, InterviewQuestion>();
-            this.Variables=new Dictionary<Guid, object>();
+            this.Variables = new Dictionary<Guid, object>();
             this.StaticTexts = new Dictionary<Guid, InterviewStaticText>();
-            this.DisabledVariables=new HashSet<Guid>();
+            this.DisabledVariables = new HashSet<Guid>();
         }
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
