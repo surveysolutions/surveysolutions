@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly ISynchronizationService synchronizationService;
 
         public LoginViewModel(
@@ -28,6 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IPasswordHasher passwordHasher,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger)
             : base(principal, viewModelNavigationService)
@@ -35,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.viewModelNavigationService = viewModelNavigationService;
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
+            this.logoStorage = logoStorage;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
         }
@@ -100,10 +103,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return;
             }
 
+            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = currentInterviewer.Name;
             this.ErrorMessage = InterviewerUIResources.Login_WrondPassword;
         }
+
+        public byte[] CustomLogo { get; private set; }
 
         private void SignIn()
         {
