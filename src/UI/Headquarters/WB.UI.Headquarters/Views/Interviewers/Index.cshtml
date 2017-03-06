@@ -42,21 +42,15 @@
     <script type="text/javascript">
         'use strict';
 
-        Supervisor.VM.InterviewersNew = function(listViewUrl,
-            commandExecutionUrl,
+        Supervisor.VM.InterviewersNew = function (listViewUrl,
+            archiveUsersUrl,
             interviewersPageUrl,
             supervisorsUrl,
             ajax,
             notifier) {
-            Supervisor.VM.InterviewersNew.superclass.constructor.apply(this, [commandExecutionUrl]);
+            Supervisor.VM.InterviewersNew.superclass.constructor.apply(this, []);
 
-            var $commandsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-
-            var archiveUserCommad = "ArchiveUserCommad";
-            var unArchiveUserCommad = "UnarchiveUserCommand";
             var self = this;
-
-
 
             self.Url = new Url();
             self.SupervisorUrl = supervisorsUrl;
@@ -82,22 +76,18 @@
             self.SelectedItems = ko.observableArray([]);
 
 
-            self.getConfirmAndSendCommand = function(confirmMessage, commandName) {
+            self.getConfirmAndSendRequest = function(confirmMessage, archive) {
                 notifier.confirm("@Pages.ConfirmationNeededTitle",
                     confirmMessage,
                     // confirm
                     function() {
-                        var commands = ko.utils.arrayMap(self.SelectedItems(),
-                            function(rawItem) {
-                                return ko.toJSON({ userId: rawItem });
-                            });
 
-                        var command = {
-                            type: commandName,
-                            commands: commands
+                        var request = {
+                            userIds: self.SelectedItems(),
+                            archive: archive
                         };
 
-                        ajax.sendRequest($commandsUrl, "post", command, false,
+                        ajax.sendRequest(archiveUsersUrl, "post", request, false,
                             // onSuccess
                             function (data) {
                                 var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
@@ -115,7 +105,7 @@
                                     $.each(failedDomainExceptions, function (index, message) {
                                         notifier.showError("Operation failed" ,  message );
                                     });
-                                } 
+                                }
                             });
                     },
                     // cancel
@@ -124,13 +114,11 @@
 
 
             self.unarchiveInterviewers = function() {
-                self
-                    .getConfirmAndSendCommand("@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm", unArchiveUserCommad);
+                self.getConfirmAndSendRequest("@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm", false);
             };
 
             self.archiveInterviewers = function() {
-                self.getConfirmAndSendCommand("@Pages.Interviewers_ArchiveInterviewersConfirmMessage",
-                    archiveUserCommad);
+                self.getConfirmAndSendRequest("@Pages.Interviewers_ArchiveInterviewersConfirmMessage", true);
             }
 
             self.updater = function() {};
@@ -170,14 +158,18 @@
 
             var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
             var $interviewersApiUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
             var $supervisorsUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
             var $commandExecutionUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
 
-            var model = new Supervisor.VM.InterviewersNew($interviewersApiUrl,
-                $commandExecutionUrl,
+            var $archiveUsersUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
+
+            var model = new Supervisor.VM.InterviewersNew(
+                $interviewersApiUrl,
+                $archiveUsersUrl,
                 $interviewersPageUrl,
                 $supervisorsUrl,
                 ajax,

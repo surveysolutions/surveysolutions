@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             SetHistoryContextFactory("Npgsql",
                 (connection, defaultSchema) => new SchemaBasedHistoryContext(connection, defaultSchema, SchemaName));
         }

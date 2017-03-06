@@ -128,13 +128,11 @@ namespace WB.UI.Headquarters.Controllers
             if (string.IsNullOrEmpty(personName))
                 throw new HttpException(404, string.Empty);
 
-            var user = this.identityManager.GetUserByNameAsync(personName);
+            var user = await this.identityManager.GetUserByNameAsync(personName);
             if (user == null)
                 throw new HttpException(404, string.Empty);
 
-            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
-            
-            if (new[] { UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer }.Contains(currentUserRole))
+            if (!new[] {UserRoles.Headquarter, UserRoles.Supervisor}.Contains(user.Roles.First().Role))
                 throw new HttpException(404, string.Empty);
 
             //do not forget pass current user to display you are observing

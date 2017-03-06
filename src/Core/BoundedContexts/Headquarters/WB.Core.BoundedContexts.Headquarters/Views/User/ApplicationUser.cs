@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual bool IsArchived { get; set; }
         public virtual bool IsLockedBySupervisor{get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
-        public virtual string ObserverName { get; set; }
         public virtual Guid? SupervisorId { get; set; }
         public virtual DateTime CreationDate { get; set; }
         public virtual string DeviceId { get; set; }
@@ -34,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             userIdentity.AddClaims(new []
             {
-                new Claim("ObserverName", this.ObserverName ?? string.Empty),
                 new Claim("DeviceId", this.DeviceId ?? string.Empty)
             });
 
