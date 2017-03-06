@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -32,6 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 principal ?? Mock.Of<IPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                new InMemoryPlainStorage<CompanyLogo>(), 
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 logger ?? Mock.Of<ILogger>());
         }

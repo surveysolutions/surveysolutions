@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
@@ -46,6 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
+                new InMemoryPlainStorage<CompanyLogo>(),  
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
