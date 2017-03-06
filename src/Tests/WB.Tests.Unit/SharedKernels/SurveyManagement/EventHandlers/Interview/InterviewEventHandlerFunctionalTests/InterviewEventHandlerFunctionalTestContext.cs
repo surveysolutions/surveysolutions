@@ -22,19 +22,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class InterviewEventHandlerFunctionalTestContext
     {
-        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserDocument user = null)
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserDocument user = null,
+            QuestionnaireDocument questionnaireDocument = null)
         {
 
             var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var questionnaireMock = new Mock<IQuestionnaire>();
-            var questionnaireDocumentMock = new QuestionnaireDocument();
+            var questionnaireDocumentMock = questionnaireDocument ?? new QuestionnaireDocument();
 
             var rostrerStructureService = new Mock<IRosterStructureService>();
             rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(scopes);
             
             var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock);
+            questionnaireRosterStructureMockStorage.Setup(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
+            questionnaireRosterStructureMockStorage.Setup(
+                x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock);
+
             var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
 

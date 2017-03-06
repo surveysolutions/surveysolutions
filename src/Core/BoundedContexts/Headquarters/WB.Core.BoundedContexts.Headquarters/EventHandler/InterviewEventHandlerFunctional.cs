@@ -14,11 +14,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -107,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, scopeVector);
+                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, new Guid[0], new Guid[0], new Guid[0], scopeVector);
             }
         }
 
@@ -119,7 +121,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, ValueVector<Guid> scopeVector)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, Guid[] questionsIds, 
+            Guid[] variableIds, Guid[] staticTextsIds,  ValueVector<Guid> scopeVector)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
@@ -128,6 +131,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var groupId in groupIds)
                 {
                     level.DisabledGroups.Remove(groupId);
+                }
+
+                foreach (var entitiesId in questionsIds)
+                {
+                    level.QuestionsSearchCache.Remove(entitiesId);
+                }
+
+                foreach (var staticTextsId in staticTextsIds)
+                {
+                    level.StaticTexts.Remove(staticTextsId);
+                }
+
+                foreach (var variableId in variableIds)
+                {
+                    level.DisabledVariables.Remove(variableId);
+                    level.Variables.Remove(variableId);
                 }
 
                 if (!level.ScopeVectors.ContainsKey(scopeVector))
@@ -424,7 +443,25 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                     var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
 
-                    this.RemoveLevelFromInterview(state, levelKey, new[] {instance.GroupId}, scopeOfCurrentGroup.ScopeVector);
+                    var roster = questionnarie.Find<IGroup>(instance.GroupId);
+
+                    var questionsIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IQuestion>().Select(x => x.PublicKey).ToArray();
+                    
+                    var groupIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IGroup>().Select(x => x.PublicKey).Concat(new [] { instance.GroupId }).ToArray();
+
+                    var variablesIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IVariable>().Select(x => x.PublicKey).ToArray();
+
+                    var staticTextsIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IStaticText>().Select(x => x.PublicKey).ToArray();
+
+                    this.RemoveLevelFromInterview(state, levelKey, groupIds, questionsIds, variablesIds, staticTextsIds, scopeOfCurrentGroup.ScopeVector);
                 }
             }
             return state;

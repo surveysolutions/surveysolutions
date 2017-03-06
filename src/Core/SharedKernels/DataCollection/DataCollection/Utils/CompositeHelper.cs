@@ -1,33 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
-    public static class QuestionnaireHelper
+    public static class CompositeHelper
     {
-        public static List<IQuestion> GetFeaturedQuestions(this IQuestionnaireDocument document)
+        public static List<IQuestion> GetFeaturedQuestions(this IComposite document)
         {
             return document.GetAllQuestions().Where(x => x.Featured).ToList();
         }
 
-        public static IEnumerable<IQuestion> GetAllQuestions(this IQuestionnaireDocument document, bool skipPropagateGroups = false)
+        public static IEnumerable<IQuestion> GetAllQuestions(this IComposite element, bool skipPropagateGroups = false)
         {
             var treeStack = new Stack<IComposite>();
-            treeStack.Push(document);
+            treeStack.Push(element);
             while (treeStack.Count > 0)
             {
                 var node = treeStack.Pop();
 
                 foreach (var child in node.Children)
                 {
-                    if (child is IGroup)
+                    var @group = child as IGroup;
+                    if (@group != null)
                     {
-                        if (!skipPropagateGroups || !((IGroup) child).IsRoster)
+                        if (!skipPropagateGroups || !@group.IsRoster)
                         {
-                            treeStack.Push(child);
+                            treeStack.Push(@group);
                         }
                     }
                     else if (child is IQuestion)
