@@ -3,8 +3,11 @@
     <span class="cursor"></span>
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" id="{{item.itemId}}" ui-sref="questionnaire.chapter.variable({itemId: item.itemId})">
-        <div class="variable-name">
+        <div class="item-text">
             <div class="icon icon-variable"></div>
+            <span ng-bind-html="item.variableData.label | escape | highlight:search.searchText"></span>
+        </div>
+        <div class="qname-block">
             <span ng-bind-html="item.variableData.name | escape | highlight:search.searchText"></span>
         </div>
     </a>

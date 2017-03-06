@@ -31,16 +31,16 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="edit-group-condition">Expression <help key="expression" /></label>
-            <div class="pseudo-form-control">
-                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeVariable.expression"></div>
-            </div>
-        </div>
-        <div class="form-group">
             <label for="edit-variable-title-highlight" class="wb-label">Variable label <help key="variableDescription"/></label>
             <div class="pseudo-form-control">
                 <div id="edit-variable-title-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeVariable.label"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="edit-group-condition">Expression <help key="expression" /></label>
+            <div class="pseudo-form-control">
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeVariable.expression"></div>
             </div>
         </div>
     </div>
