@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [HttpGet]
         public HttpResponseMessage Get()
         {
-            var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"] ?? "";
+            var incomingEtag = Request.Headers.IfNoneMatch.FirstOrDefault()?.Tag ?? "";
             var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
 
             if (companyLogo == null) return Request.CreateResponse(HttpStatusCode.NoContent);
