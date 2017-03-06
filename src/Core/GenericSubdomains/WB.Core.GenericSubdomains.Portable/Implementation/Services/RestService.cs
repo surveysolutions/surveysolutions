@@ -35,8 +35,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
 
-            if (this.restServiceSettings.AcceptUnsignedSslCertificate && restServicePointManager != null)
-                restServicePointManager.AcceptUnsignedSslCertificate();
+            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
+                restServicePointManager?.AcceptUnsignedSslCertificate();
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
@@ -86,6 +86,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             IFlurlClient restClient = fullUrl
                 .WithTimeout(this.restServiceSettings.Timeout)
+                .AllowHttpStatus(HttpStatusCode.NotModified, HttpStatusCode.NoContent)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
             if (forceNoCache)
@@ -155,10 +156,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, CancellationToken? token)
+        public async Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, Dictionary<string, string> customHeaders, 
+            CancellationToken? token)
         {
-            return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
-                    method: HttpMethod.Get, forceNoCache: forceNoCache, userCancellationToken: token,
+            return await this.ExecuteRequestAsync(url: url, 
+                    queryString: queryString, 
+                    credentials: credentials,
+                    method: HttpMethod.Get,
+                    customHeaders: customHeaders,
+                    forceNoCache: forceNoCache, 
+                    userCancellationToken: token,
                     request: null);
         }
 

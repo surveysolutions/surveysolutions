@@ -35,7 +35,8 @@
           android:gravity="center">
         <ImageView
             style="@style/Login_Logo"
-            android:id="@+id/LoginPage_logo" />
+            android:id="@+id/LoginPage_logo"
+            local:MvxBind="CompanyLogo CustomLogo"/>
 
         <TextView
             style="@style/Login_ErrorMessage"
@@ -52,8 +53,6 @@
             android:singleLine="true"
             android:inputType="textVisiblePassword|textNoSuggestions"
             local:MvxBind="Text UserName; Enabled False; BackgroundStyle ValidationStyleBackground(True);" />
-
-
 
           <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"

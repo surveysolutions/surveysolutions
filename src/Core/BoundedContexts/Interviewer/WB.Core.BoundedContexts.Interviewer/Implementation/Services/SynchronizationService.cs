@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
+        private readonly string logoController = string.Concat(interviewerApiUrl, apiVersion, "/companyLogo");
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
@@ -466,6 +467,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 onDownloadProgressChanged?.Invoke(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive ?? 0);
             };
             return onDownloadProgressChangedInternal;
+        }
+
+        public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
+        {
+            var response = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+                url: this.logoController,
+                credentials: this.restCredentials,
+                customHeaders: !string.IsNullOrEmpty(storedClientEtag) ? new Dictionary<string, string> {{"If-None-Match", storedClientEtag }} : null,
+                token: cancellationToken));
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+                return new CompanyLogoInfo {HasCustomLogo = false};
+            if (response.StatusCode == HttpStatusCode.NotModified)
+                return new CompanyLogoInfo {LogoNeedsToBeUpdated = false, HasCustomLogo = true};
+
+            return new CompanyLogoInfo
+            {
+                HasCustomLogo = true,
+                LogoNeedsToBeUpdated = true,
+                Logo = await response.Content.ReadAsByteArrayAsync(),
+                Etag = response.Headers.ETag.Tag
+            };
         }
     }
 }
