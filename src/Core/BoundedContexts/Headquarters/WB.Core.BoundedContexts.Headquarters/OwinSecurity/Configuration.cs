@@ -1,8 +1,13 @@
 using System;
 using System.Data.Entity.Migrations;
+using System.Linq;
+using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
@@ -30,16 +35,33 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 });
             }
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users=>users.ToList()))
+            {
+                context.Users.AddOrUpdate(new ApplicationUser
+                {
+                    Id = oldUser.PublicKey,
+                    CreationDate = oldUser.CreationDate,
+                    DeviceId = oldUser.DeviceId,
+                    Email = oldUser.Email,
+                    IsArchived = oldUser.IsArchived,
+                    IsLockedByHeadquaters = oldUser.IsLockedByHQ,
+                    IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
+                    FullName = oldUser.PersonName,
+                    PhoneNumber = oldUser.PhoneNumber,
+                    SupervisorId = oldUser.Supervisor?.Id,
+                    UserName = oldUser.UserName,
+                    PasswordHash = oldUser.Password,
+                    SecurityStamp = Guid.NewGuid().FormatGuid(),
+                    Roles =
+                    {
+                        new AppUserRole
+                        {
+                            UserId = oldUser.PublicKey,
+                            RoleId = ((byte) oldUser.Roles.First()).ToGuid()
+                        }
+                    }
+                });
+            }
         }
     }
 }

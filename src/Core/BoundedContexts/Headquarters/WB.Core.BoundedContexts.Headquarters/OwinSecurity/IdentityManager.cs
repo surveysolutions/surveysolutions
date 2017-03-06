@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.userManager.Users.Where(
-                user => user.SupervisorId == supervisorId || user.Id == supervisorId);
+                user => user.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
 
             foreach (var supervisorAndDependentInterviewer in supervisorAndDependentInterviewers)
             {
