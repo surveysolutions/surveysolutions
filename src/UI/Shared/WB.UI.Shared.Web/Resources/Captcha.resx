@@ -117,28 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="TemplateNotFound" xml:space="preserve">
-    <value>Requested questionnaire "{0}" cannot be found. Please refresh the list of questionnaires.</value>
+  <data name="EnterText" xml:space="preserve">
+    <value>Enter the text you see above</value>
   </data>
-  <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Requested questionnaire "{0}" has errors. Please verify the questionnaire on Designer.</value>
+  <data name="InvalidCaptcha" xml:space="preserve">
+    <value>Invalid captcha</value>
   </data>
-  <data name="ServerError" xml:space="preserve">
-    <value>Internal server error occurred. Please contact with customer support of Survey Solutions.</value>
+  <data name="Required" xml:space="preserve">
+    <value>Is required field</value>
   </data>
-  <data name="RequestTimeout" xml:space="preserve">
-    <value>Timeout when connecting to 'Designer' website. Please, check your internet connection.</value>
-  </data>
-  <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Server is unavailable.  Please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
-  </data>
-  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
-    <value>The user name or password provided is incorrect.</value>
-  </data>
-  <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>You have no access to this site. Contact your administrator.</value>
-  </data>
-  <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Please fill in captcha</value>
+  <data name="TryAnother" xml:space="preserve">
+    <value>Try another</value>
   </data>
 </root>
