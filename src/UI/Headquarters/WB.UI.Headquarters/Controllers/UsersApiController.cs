@@ -165,14 +165,18 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
+        public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
             var archiveResults = await this.identityManager.ArchiveUsersAsync(request.UserIds, request.Archive);
 
-            return new JsonCommandResponse
+            return new JsonBundleCommandResponse
             {
-                IsSuccess = archiveResults.All(result=>result.Succeeded),
-                DomainException = string.Join(@"; ", archiveResults.Select(result => result.Errors))
+                CommandStatuses = archiveResults.Select(x =>
+                    new JsonCommandResponse
+                    {
+                        IsSuccess = x.Succeeded,
+                        DomainException = string.Join(@"; ", x.Errors)
+                    }).ToList()
             };
         }
     }
