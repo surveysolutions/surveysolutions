@@ -1037,6 +1037,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading company logo.
+        /// </summary>
+        public static string Synchronization_DownloadingLogo {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadingLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} interviews deleted.
         /// </summary>
         public static string Synchronization_Fail_State_DeletedInterviews_Format {

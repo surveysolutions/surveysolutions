@@ -57,7 +57,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                         new DashboardLastUpdate { Id = userName, LastUpdateDate = DateTime.Now }
                     }.ToReadOnlyCollection());
 
-            return new DashboardViewModel(principal: mockOfPrincipal.Object,
+            return new DashboardViewModel(
+                principal: mockOfPrincipal.Object,
                 designerApiService: designerApiService,
                 commandService: commandService,
                 questionnaireImportService: questionnaireImportService,
@@ -69,7 +70,17 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 logger: logger ?? Mock.Of<ILogger>(),
                 attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
-                translationsStorage: translationsStorage ?? Mock.Of<IPlainStorage<TranslationInstance>>());
+                questionnaireDownloader: new QuestionnaireDownloadViewModel(
+                    principal: mockOfPrincipal.Object,
+                    designerApiService: designerApiService,
+                    commandService: commandService,
+                    questionnaireImportService: questionnaireImportService,
+                    viewModelNavigationService: viewModelNavigationService,
+                    friendlyErrorMessageService: friendlyErrorMessageService,
+                    userInteractionService: userInteractionService,
+                    logger: logger ?? Mock.Of<ILogger>(),
+                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>()
+                ));
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

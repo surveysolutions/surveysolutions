@@ -424,8 +424,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                     var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
 
-                    this.RemoveLevelFromInterview(state, levelKey, new[] {instance.GroupId},
-                        scopeOfCurrentGroup.ScopeVector);
+                    this.RemoveLevelFromInterview(state, levelKey, new[] {instance.GroupId}, scopeOfCurrentGroup.ScopeVector);
                 }
             }
             return state;

@@ -612,4 +612,7 @@
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Супервизор и верность текущей даты на устройстве</value>
   </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Загрузка логотипа</value>
+  </data>
 </root>
