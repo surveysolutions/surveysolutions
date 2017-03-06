@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Main.Core.Entities.SubEntities;
@@ -22,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private readonly IAuthenticationManager authenticationManager;
 
         readonly Guid adminRole = ((byte)UserRoles.Administrator).ToGuid();
+        const string observerClaimType = @"observer";
 
         public IdentityManager(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
             IAuthenticationManager authenticationManager)
@@ -36,8 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public bool IsCurrentUserSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
-        public bool IsCurrentUserObserver => this.authenticationManager.User.HasClaim(
-            claim => claim.Issuer == @"ObserverName" && !string.IsNullOrEmpty(claim.Value));
+        public bool IsCurrentUserObserver => this.authenticationManager.User.HasClaim(claim => claim.Type == observerClaimType);
 
         public bool IsCurrentUserAdministrator => this.IsCurrentUserInRole(UserRoles.Administrator);
         public bool IsCurrentUserHeadquarter => this.IsCurrentUserInRole(UserRoles.Headquarter);
@@ -157,18 +158,28 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public async Task SignInAsObserverAsync(string userName)
         {
-            var observer = await this.GetUserByNameAsync(userName);
-            observer.ObserverName = this.CurrentUserName;
+            var userToObserve = await this.GetUserByNameAsync(userName);
+            userToObserve.Claims.Add(new AppUserClaim
+            {
+                UserId = userToObserve.Id,
+                ClaimType = observerClaimType,
+                ClaimValue = this.CurrentUserName
+            });
+            userToObserve.Claims.Add(new AppUserClaim
+            {
+                UserId = userToObserve.Id,
+                ClaimType = ClaimTypes.Role,
+                ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+            });
 
-            await this.signInManager.SignInAsync(observer, true, true);
+            await this.signInManager.SignInAsync(userToObserve, true, true);
         }
 
         public async Task SignInBackFromObserverAsync()
         {
-            var observerName = this.authenticationManager.User.FindFirst("ObserverName")?.Value;
+            var observerName = this.authenticationManager.User.FindFirst(observerClaimType)?.Value;
             var observer = await this.GetUserByNameAsync(observerName);
-
-            this.CurrentUser.ObserverName = string.Empty;
+            
             this.authenticationManager.SignOut();
 
             await this.signInManager.SignInAsync(observer, true, true);
