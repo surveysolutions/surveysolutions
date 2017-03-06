@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -61,9 +62,15 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
                 return;
             }
+;
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, userInfo.UserName),
+                new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()), 
+                new Claim("DeviceId", userInfo.DeviceId)
+            }, @"Basic");
 
-            var identity = new GenericIdentity(basicCredentials.Username, "Basic");
-            var principal = new GenericPrincipal(identity, null);
+            var principal = new ClaimsPrincipal(identity);
 
             Thread.CurrentPrincipal = principal;
             if (HttpContext.Current != null)
