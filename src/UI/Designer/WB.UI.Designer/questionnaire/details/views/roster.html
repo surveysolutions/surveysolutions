@@ -26,12 +26,13 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-group-title" class="wb-label">Roster name</label><br>
-            <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title" msd-elastic></textarea>
-
+            <label for="edit-roster-title-highlight" class="wb-label">Roster name</label><br>
+            <div class="pseudo-form-control">
+                <div id="edit-roster-title-highlight"
+                     ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.title"></div>
+            </div>
             <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
             </div>
-
         </div>
 
         <div class="form-group enabling-group">
