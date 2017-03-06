@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.NavigateToDashboard);
+        public IMvxCommand ReloadQuestionnaireCommand => new MvxCommand(this.ReloadQuestionnaire);
 
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
@@ -59,6 +60,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private void NavigateToDashboard()
+        {
+            this.viewModelNavigationService.NavigateToDashboard();
+            this.Dispose();
+        }
+
+        private void ReloadQuestionnaire()
         {
             this.viewModelNavigationService.NavigateToDashboard();
             this.Dispose();

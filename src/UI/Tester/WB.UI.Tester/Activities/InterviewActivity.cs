@@ -33,7 +33,7 @@ namespace WB.UI.Tester.Activities
             {
                 Resource.Id.interview_reload,
                 TesterUIResources.MenuItem_Title_Reload,
-                this.ViewModel.NavigateToDashboardCommand
+                this.ViewModel.ReloadQuestionnaireCommand
             },
             {
                 Resource.Id.interview_signout,
