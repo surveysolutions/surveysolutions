@@ -7,7 +7,6 @@
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @using WB.UI.Shared.Web.Extensions
 @model WB.Core.BoundedContexts.Headquarters.Views.DetailsViewModel
 @{
@@ -239,18 +238,20 @@ if (filter == Model.Filter)
             return false;
         }
 
-    private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
-    {
-        var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
-        if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
-        entityView.QuestionType == QuestionType.MultyOption)
+        private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
         {
-            if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && entityView.IsEnabled &&
+            var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+            if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
                 entityView.QuestionType == QuestionType.MultyOption)
             {
-                var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;
+                if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
+                    entityView.QuestionType == QuestionType.MultyOption)
+                {
+                    var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;
 
-                return interviewQuestionViewSettings != null && interviewQuestionViewSettings.YesNoQuestion;
+                    return interviewQuestionViewSettings != null && interviewQuestionViewSettings.YesNoQuestion;
+                }
+
             }
             return false;
         }
