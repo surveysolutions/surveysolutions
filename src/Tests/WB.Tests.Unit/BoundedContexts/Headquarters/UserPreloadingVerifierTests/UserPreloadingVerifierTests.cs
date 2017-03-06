@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_user_in_other_role_Then_record_verification_error_with_code_PLU0004()
         {
             var userName = "nastya";
-            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, isArchived: true));
+            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, isArchived: true, role: UserRoles.Supervisor));
             
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
