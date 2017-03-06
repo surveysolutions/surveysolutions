@@ -9,6 +9,7 @@ using MvvmCross.Platform.Platform;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -42,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
-        private readonly IPlainStorage<CompanyLogo> logoStorage;
+        private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
         
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
-            IPlainStorage<CompanyLogo> logoStorage, 
+            CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher)
         {
@@ -74,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
-            this.logoStorage = logoStorage;
+            this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
         }
@@ -98,12 +99,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Password = this.principal.CurrentUserIdentity.Password
                 };
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    this.UpdatePasswordOfInterviewer(restCredentials.Password);
+                    this.UpdatePasswordOfInterviewer(this.restCredentials.Password);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -113,7 +114,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.DownloadCompanyLogo(progress, cancellationToken);
+                await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
 
                 progress.Report(new SyncProgressInfo
                 {
@@ -213,35 +214,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     this.restCredentials.Password = this.passwordHasher.Hash(newPassword);
                     await this.SyncronizeAsync(progress, cancellationToken);
-                }
-            }
-        }
-
-        private async Task DownloadCompanyLogo(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
-        {
-            progress.Report(new SyncProgressInfo
-            {
-                Title = InterviewerUIResources.Synchronization_DownloadingLogo
-            });
-
-            var logoStorageId = CompanyLogo.StorageKey;
-            var existingLogo = this.logoStorage.GetById(logoStorageId);
-            CompanyLogoInfo remoteLogoInfo = await this.synchronizationService.GetCompanyLogo(existingLogo?.ETag, cancellationToken);
-
-            if (!remoteLogoInfo.HasCustomLogo)
-            {
-                this.logoStorage.Remove(logoStorageId);
-            }
-            else
-            {
-                if (remoteLogoInfo.LogoNeedsToBeUpdated)
-                {
-                    this.logoStorage.Store(new CompanyLogo
-                    {
-                        Id = logoStorageId,
-                        ETag = remoteLogoInfo.Etag,
-                        File = remoteLogoInfo.Logo
-                    });
                 }
             }
         }
