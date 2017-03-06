@@ -50,6 +50,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using CompanyLogo = WB.UI.Headquarters.Models.CompanyLogo.CompanyLogo;
 using TranslationInstance = WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.TranslationInstance;
 
 namespace WB.Tests.Abc.TestFactories
@@ -1420,6 +1421,17 @@ namespace WB.Tests.Abc.TestFactories
         public RosterVector RosterVector(int[] coordinates)
         {
             return new RosterVector(coordinates);
+        }
+
+        public CompanyLogo HqCompanyLogo(bool withContent = true)
+        {
+            var hqCompanyLogo = new CompanyLogo();
+            if (withContent)
+            {
+                hqCompanyLogo.Logo = Guid.NewGuid().ToByteArray();
+            }
+
+            return hqCompanyLogo;
         }
     }
 }
