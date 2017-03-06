@@ -21,15 +21,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             this.logoStorage = logoStorage;
         }
 
+        [HttpGet]
         public HttpResponseMessage Get()
         {
-            var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"];
+            var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"] ?? "";
             var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
 
             if (companyLogo == null) return Request.CreateResponse(HttpStatusCode.NoContent);
 
             var etagValue = companyLogo.GetEtagValue();
-            if (etagValue.Equals(incomingEtag, StringComparison.InvariantCultureIgnoreCase))
+            if (etagValue.Equals(incomingEtag.Replace("\"", ""), StringComparison.InvariantCultureIgnoreCase))
             {
                 return Request.CreateResponse(HttpStatusCode.NotModified);
             }
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new ByteArrayContent(companyLogo.Logo);
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(@"image/png");
-            response.Headers.ETag = new EntityTagHeaderValue(etagValue);
+            response.Headers.ETag = new EntityTagHeaderValue($"\"{etagValue}\"");
+
             return response;
         }
     }

@@ -153,6 +153,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.zh-CN.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CompanyLogoInfo.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
+    <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
