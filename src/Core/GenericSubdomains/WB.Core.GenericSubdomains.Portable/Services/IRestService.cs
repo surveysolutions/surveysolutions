@@ -11,7 +11,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public interface IRestService
     {
-        Task<HttpResponseMessage> GetAsync(string url, object queryString = null, RestCredentials credentials = null, bool forceNoCache = false, CancellationToken? token = null);
+        Task<HttpResponseMessage> GetAsync(string url, object queryString = null, RestCredentials credentials = null, bool forceNoCache = false, Dictionary<string, string> customHeaders = null, CancellationToken ? token = null);
         Task<HttpResponseMessage> PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<T> GetAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,

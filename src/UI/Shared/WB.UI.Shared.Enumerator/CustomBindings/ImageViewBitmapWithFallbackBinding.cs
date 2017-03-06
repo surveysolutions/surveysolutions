@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
     {
-        private static Bitmap nullImageBitmap = null;
+        private static Bitmap nullImageBitmap;
 
         public ImageViewBitmapWithFallbackBinding(ImageView androidControl) : base(androidControl)
         {
@@ -38,18 +38,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                         }
                         else
                         {
-                            LoadDefaultImage(control);
+                            this.SetDefaultImage(control);
                         }
                     }
                 }
             }
             else
             {
-                LoadDefaultImage(control);
+                this.SetDefaultImage(control);
             }
         }
 
-        private static void LoadDefaultImage(ImageView control)
+        protected virtual void SetDefaultImage(ImageView control)
         {
             if (nullImageBitmap == null)
             {

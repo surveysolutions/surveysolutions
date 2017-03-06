@@ -139,6 +139,7 @@ namespace WB.UI.Headquarters
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
+                new CaptchaModule(),
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),

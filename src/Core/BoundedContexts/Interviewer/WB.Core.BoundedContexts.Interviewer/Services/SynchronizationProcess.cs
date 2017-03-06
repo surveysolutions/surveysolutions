@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Exceptions;
+using MvvmCross.Platform.Platform;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -38,6 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
         
@@ -54,6 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
+            CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher)
         {
@@ -68,6 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
+            this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
         }
@@ -91,12 +99,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Password = this.principal.CurrentUserIdentity.Password
                 };
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    this.UpdatePasswordOfInterviewer(restCredentials.Password);
+                    this.UpdatePasswordOfInterviewer(this.restCredentials.Password);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -105,6 +113,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.SyncronizeQuestionnairesAsync(progress, statistics, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
+                await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
 
                 progress.Report(new SyncProgressInfo
                 {
@@ -174,6 +184,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
             catch (Exception ex)
             {
+                Mvx.Trace(ex.ToLongString());
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Fail_Title,
@@ -209,8 +220,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private async Task<string> GetNewPasswordAsync()
         {
+            var message = InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name);
             return await this.userInteractionService.ConfirmWithTextInputAsync(
-                message: InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name),
+                message: message,
                 okButton: UIResources.LoginText,
                 cancelButton: InterviewerUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
