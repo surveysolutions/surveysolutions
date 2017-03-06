@@ -209,8 +209,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private async Task<string> GetNewPasswordAsync()
         {
+            var message = InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name);
             return await this.userInteractionService.ConfirmWithTextInputAsync(
-                message: InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name),
+                message: message,
                 okButton: UIResources.LoginText,
                 cancelButton: InterviewerUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
