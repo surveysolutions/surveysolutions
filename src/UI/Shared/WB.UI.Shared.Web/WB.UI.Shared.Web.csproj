@@ -156,11 +156,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
+    <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
     <Compile Include="Captcha\HostedCaptchaProvider.cs" />
     <Compile Include="Captcha\ICaptchaProvider.cs" />
     <Compile Include="Captcha\ReCaptchaProvider.cs" />
-    <Compile Include="Captcha\ViewHelper.cs" />
+    <Compile Include="Captcha\Extensions.cs" />
+    <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
@@ -220,7 +222,7 @@
     <Compile Include="Membership\IMembershipWebUser.cs" />
     <Compile Include="Membership\IMembershipUserService.cs" />
     <Compile Include="Membership\MembershipUserService.cs" />
-    <Compile Include="Modules\CaptchaModule.cs" />
+    <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
     <Compile Include="Modules\ModulesFactory.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />

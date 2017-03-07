@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -59,6 +60,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
+using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -323,5 +325,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public CqrsPostgresTransactionManager CqrsPostgresTransactionManager(ISessionFactory sessionFactory = null)
             => new CqrsPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
+
+        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null, NameValueCollection membershipSettings = null)
+        {
+            return new ConfigurationManager(appSettings ?? new NameValueCollection(), membershipSettings ?? new NameValueCollection());
+        }
     }
 }

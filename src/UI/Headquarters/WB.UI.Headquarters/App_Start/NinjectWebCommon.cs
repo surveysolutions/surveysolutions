@@ -68,6 +68,7 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 using WB.Infrastructure.Native;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.UI.Shared.Web.Captcha;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]

@@ -1,9 +1,8 @@
 ﻿using Ninject;
 using Ninject.Modules;
-using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 
-namespace WB.UI.Shared.Web.Modules
+namespace WB.UI.Shared.Web.Captcha
 {
     public class CaptchaModule : NinjectModule
     {
@@ -31,6 +30,8 @@ namespace WB.UI.Shared.Web.Modules
                         break;
                 }
             }
+
+            this.Bind<ICaptchaService>().To<WebCacheBasedCaptchaService>();
         }
     }
 }
