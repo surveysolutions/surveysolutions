@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IViewModelNavigationService viewModelNavigationService,
             IInterviewerSettings interviewerSettings, 
             ITabletDiagnosticService tabletDiagnosticService,
-            SendTabletInformationViewModel sendTabletInformationViewModel,
+            BackupViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override bool IsAuthenticationRequired => false;
 
-        public SendTabletInformationViewModel TabletInformation { get; set; }
+        public BackupViewModel TabletInformation { get; set; }
 
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
 
