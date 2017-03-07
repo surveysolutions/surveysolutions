@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -10,11 +9,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
+    public class BackupViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
         private readonly ISynchronizationService synchronizationService;
@@ -30,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private bool isInProgress;
         private string informationPackageFilePath;
 
-        public SendTabletInformationViewModel(
+        public BackupViewModel(
             IBackupRestoreService backupRestoreService,
             ISynchronizationService synchronizationService,
             ILogger logger, 
@@ -88,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
-        private async Task CreateTabletInformation()
+        private async Task CreateBackupAsync()
         {
             if (this.IsInProgress)
                 return;
@@ -117,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsInProgress = false;
         }
 
-        private async Task SendTabletInformation()
+        private async Task SendBackupAsync()
         {
             if (this.IsInProgress)
                 return;
@@ -127,12 +125,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                await this.synchronizationService.SendTabletInformationAsync(informationPackageFilePath, cancellationTokenSource.Token);
+                await this.synchronizationService.SendBackupAsync(informationPackageFilePath, cancellationTokenSource.Token);
                 this.PackageSendingAttemptResponceText = InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
             {
-                this.logger.Error("Error when sending tablet info. ", ex);
+                this.logger.Error("Error when sending backup. ", ex);
                 this.PackageSendingAttemptResponceText = ex.Message;
             }
             this.IsPackageSendingAttemptCompleted = true;
@@ -140,24 +138,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsInProgress = false;
         }
 
-        private void DeleteTabletInformation()
+        private void DeleteBackup()
         {
             this.IsPackageBuild = false;
         }
 
-        public IMvxCommand CreateTabletInformationCommand
-        {
-            get { return new MvxCommand(async () => await this.CreateTabletInformation()); }
-        }
-
-        public IMvxCommand SendTabletInformationCommand
-        {
-            get { return new MvxCommand(async () => await this.SendTabletInformation()); }
-        }
-
-        public IMvxCommand DeleteTabletInformationCommand
-        {
-            get { return new MvxCommand(DeleteTabletInformation); }
-        }
+        public IMvxAsyncCommand CreateBackupCommand => new MvxAsyncCommand(this.CreateBackupAsync);
+        public IMvxAsyncCommand SendBackupCommand => new MvxAsyncCommand(this.SendBackupAsync);
+        public IMvxCommand DeleteBackupCommand => new MvxCommand(this.DeleteBackup);
     }
 }

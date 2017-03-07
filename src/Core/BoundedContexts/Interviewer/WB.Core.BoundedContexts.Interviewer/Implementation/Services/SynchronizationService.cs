@@ -304,9 +304,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: this.restCredentials, token: token).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
-        public async Task SendTabletInformationAsync(string filePath, CancellationToken token)
+        public async Task SendBackupAsync(string filePath, CancellationToken token)
         {
-            var tabletInformationHeaders = new Dictionary<string, string>()
+            var backupHeaders = new Dictionary<string, string>()
             {
                 { "DeviceId", this.interviewerSettings.GetDeviceId() },
             };
@@ -317,7 +317,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     await this.restService.SendStreamAsync(
                         stream: fileStream,
-                        customHeaders: tabletInformationHeaders,
+                        customHeaders: backupHeaders,
                         url: string.Concat(interviewerApiUrl, "/tabletInfo"),
                         credentials: this.restCredentials,
                         token: token).ConfigureAwait(false);
