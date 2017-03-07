@@ -74,13 +74,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage, progress, cancellationToken);
 
-                    var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+                    var dummyQuestionnaireIdentity = GenerateDummyQuestionnaireIdentity(questionnaireId);
 
                     var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
 
-                    this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations, progress);
+                    this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage, translations, progress);
 
-                    var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity, progress);
+                    var interviewId = await this.CreateInterview(dummyQuestionnaireIdentity, progress);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
@@ -118,7 +118,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private static QuestionnaireIdentity GenerateFakeQuestionnaireIdentity() => new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+        private static QuestionnaireIdentity GenerateDummyQuestionnaireIdentity(string questionnaireId)
+            => new QuestionnaireIdentity(Guid.Parse(questionnaireId), 1);
 
         private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity, IProgress<string> progress)
         {
