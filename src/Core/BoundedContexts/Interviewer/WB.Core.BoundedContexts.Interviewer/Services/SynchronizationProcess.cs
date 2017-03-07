@@ -346,6 +346,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private async Task DownloadInterviewsAsync(SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
+            var localCensusQuestionnaireIds =
+                this.questionnairesAccessor.GetCensusQuestionnaireIdentities()
+                    .Select(questionnaireIdentity => questionnaireIdentity.ToString());
+
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
@@ -354,8 +358,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
-            var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
+            var localInterviewsToRemove = localInterviews.Where(interview =>
+                !remoteInterviewIds.Contains(interview.InterviewId) &&
+                (!interview.CanBeDeleted || (interview.CanBeDeleted && !localCensusQuestionnaireIds.Contains(interview.QuestionnaireId))));
 
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId).ToList();
 
