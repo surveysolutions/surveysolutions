@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,24 +10,63 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class RoslynExpressionProcessor : IExpressionProcessor
     {
+        private static readonly string[] ForbiddenDateTimeStaticProperties = { "Now", "Today", "UtcNow" };
+        public static readonly string ForbiddenDatetimeNow = "DateTime.Now";
+
         public IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression)
         {
             string code = WrapToClass(expression);
 
             var tree = SyntaxFactory.ParseSyntaxTree(code);
 
-            return tree
+            var tokens = tree
                 .GetRoot()
                 .ChildNodesAndTokens()
-                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                .TreeToEnumerable(node => this.IsMemberAccessor(node) ? Enumerable.Empty<SyntaxNodeOrToken>() : node.ChildNodesAndTokens())
+                .ToArray();
+
+            var identifiers = tokens
                 .Where(IsIdentifierToken)
                 .Except(IsFunction)
                 .Except(IsConstructorCall)
                 .Except(IsLambdaParameter)
                 .Select(token => token.ToString())
-                .Except(string.IsNullOrEmpty)
+                .Except(string.IsNullOrEmpty);
+
+            var forbiddenIdentifiers = tokens
+                .Where(IsMemberAccessor)
+                .Select(token => ForbiddenDatetimeNow);
+
+            return identifiers
+                .Union(forbiddenIdentifiers)
                 .Distinct()
                 .ToReadOnlyCollection();
+        }
+
+        private bool IsMemberAccessor(SyntaxNodeOrToken nodeOrToken)
+        {
+            if (nodeOrToken.Kind() != SyntaxKind.SimpleMemberAccessExpression) return false;
+            var childNodesAndTokens = nodeOrToken.ChildNodesAndTokens().ToList();
+            var right = childNodesAndTokens.Last();
+
+            // Expression tree. Case 1:
+            //     +--- . ---+
+            //  DateTime    Now
+
+            // Expression tree. Case 2:
+            //         +--- . ---+
+            //    +--- . ---+   Now
+            // System    DateTime
+
+            if (right.Kind() != SyntaxKind.IdentifierName || !ForbiddenDateTimeStaticProperties.Contains(right.ToFullString().Trim()))
+                return false;
+
+            var left = childNodesAndTokens.First();
+            var dateTimeNode = left.Kind() == SyntaxKind.SimpleMemberAccessExpression
+                ? left.ChildNodesAndTokens().Last()
+                : childNodesAndTokens.First();
+
+            return dateTimeNode.ToFullString().Trim() == "DateTime";
         }
 
         public bool ContainsBitwiseAnd(string expression)
