@@ -168,9 +168,6 @@
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>Mot de passe doit comporter au moins {2} caractères</value>
   </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Entrée trop longue</value>
-  </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>Nom et prénom</value>
   </data>

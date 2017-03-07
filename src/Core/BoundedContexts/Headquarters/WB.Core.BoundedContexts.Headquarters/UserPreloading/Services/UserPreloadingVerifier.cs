@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -136,12 +135,24 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
                 new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),
                 new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
+                new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
+                new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
             };
 
             for (int i = 0; i < validationFunctions.Length; i++)
             {
                 this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
             }
+        }
+
+        private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
+        {
+            return arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMasxLength;
+        }
+
+        private bool FullNameLengthVerification(UserPreloadingDataRecord record)
+        {
+            return record.FullName?.Length > this.userPreloadingSettings.FullNameMaxLength;
         }
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
