@@ -75,13 +75,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private async Task ReloadQuestionnaire()
         {
-            var interview = this.interviewRepository.Get(this.interviewId);
-            string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
+            if (this.IsInProgress) return;
 
-            await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
-                questionnaireId, this.QuestionnaireTitle, new Progress<string>(), CancellationToken.None);
+            this.IsInProgress = true;
+            try
+            {
+                var interview = this.interviewRepository.Get(this.interviewId);
+                string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
-            this.Dispose();
+                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
+                    questionnaireId, this.QuestionnaireTitle, new Progress<string>(), CancellationToken.None);
+
+                this.Dispose();
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
