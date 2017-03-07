@@ -150,4 +150,10 @@
   <data name="PLU0011" xml:space="preserve">
     <value>Колонка Supervisor должна быть пустой для пользователя с ролью «Supervisor»</value>
   </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>Полное имя не может содержать больше 100 символов</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>Номер телефона не может содержать больше 15 символов</value>
+  </data>
 </root>
