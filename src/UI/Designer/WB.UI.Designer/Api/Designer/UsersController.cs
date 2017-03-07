@@ -1,5 +1,6 @@
 using System.Web.Http;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
@@ -33,14 +34,17 @@ namespace WB.UI.Designer.Api
 
         private readonly IRecaptchaService recaptchaService;
         private readonly IAuthenticationService authenticationService;
+        private readonly ICaptchaService captchaService;
         private readonly IMembershipUserService membership;
         private readonly IAccountRepository accountRepository;
 
-        public UsersController(IRecaptchaService recaptchaService, IAuthenticationService authenticationService,
+        public UsersController(IRecaptchaService recaptchaService, 
+            IAuthenticationService authenticationService, ICaptchaService captchaService,
             IMembershipUserService membership, IAccountRepository accountRepository)
         {
             this.recaptchaService = recaptchaService;
             this.authenticationService = authenticationService;
+            this.captchaService = captchaService;
             this.membership = membership;
             this.accountRepository = accountRepository;
         }
@@ -52,6 +56,7 @@ namespace WB.UI.Designer.Api
         {
             if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
                 return new LoginResponseModel()
                 {
                     Status = LoginStatus.InvalidLoginOrPassword,
@@ -72,6 +77,8 @@ namespace WB.UI.Designer.Api
             var user = this.accountRepository.Get(model.UserName);
             if (user == null)
             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+
                 return new LoginResponseModel()
                 {
                     Status = LoginStatus.InvalidLoginOrPassword,
@@ -81,6 +88,8 @@ namespace WB.UI.Designer.Api
 
             if (user.IsLockedOut)
             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+
                 return new LoginResponseModel()
                 {
                     Status = LoginStatus.NotApproved,
