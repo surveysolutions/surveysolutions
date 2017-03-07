@@ -87,6 +87,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Sections = sectionsViewModel;
         }
 
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
+        }
+
         public abstract void NavigateBack();
 
         private NavigationIdentity targetNavigationIdentity;
