@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -28,14 +27,16 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IFormsAuthentication authentication;
         private readonly ICaptchaProvider captchaProvider;
+        private readonly ICaptchaService captchaService;
 
         public AccountController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IFormsAuthentication authentication, IUserViewFactory userViewFactory, ICaptchaProvider captchaProvider,
+            IFormsAuthentication authentication, IUserViewFactory userViewFactory, ICaptchaProvider captchaProvider, ICaptchaService captchaService,
             IPasswordHasher passwordHasher)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
             this.authentication = authentication;
             this.captchaProvider = captchaProvider;
+            this.captchaService = captchaService;
         }
 
         [HttpGet]
@@ -74,36 +75,22 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
 
-            return this.View(new LogOnModel());
+            return this.View(new LogOnModel
+            {
+                RequireCaptcha = this.captchaService.ShouldShowCaptcha(null)
+            });
         }
 
-        [Obsolete("Replace logic with proper failed login count from membership identity as soon as it merged")]
-        private bool IsRequireCaptcha(string userName)
-        {
-            var userKey = $@"_failedLogin_{userName}";
-            var count = (int)(this.HttpContext.Cache[userKey] ?? 0);
-            return count >= 5;
-        }
-
-        [Obsolete("Replace logic with proper failed login count from membership identity as soon as it merged")]
-        private void RegisterFailedLogin(string userName)
-        {
-            var userKey = $@"_failedLogin_{userName}";
-            var count = (int)(this.HttpContext.Cache[userKey] ?? 0);
-            count += 1;
-            HttpContext.Cache.Insert(userKey, count, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(20));
-        }
-        
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
+            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
-            if (IsRequireCaptcha(model.UserName) && !this.captchaProvider.IsCaptchaValid(this))
+            if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
-                model.RequireCaptcha = IsRequireCaptcha(model.UserName);
-                return View(model);
+                return this.View(model);
             }
 
             if (this.ModelState.IsValid && Membership.ValidateUser(model.UserName, this.passwordHasher.Hash(model.Password)))
@@ -115,16 +102,17 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     this.authentication.SignIn(model.UserName, true);
+                    this.captchaService.ResetFailedLogin(model.UserName);
                     return this.RedirectToLocal(returnUrl);
                 }
             }
             else
             {
-                RegisterFailedLogin(model.UserName);
+                this.captchaService.RegisterFailedLogin(model.UserName);
+                model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
                 this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
             }
-
-            model.RequireCaptcha = IsRequireCaptcha(model.UserName);
+            
             return this.View(model);
         }
 
