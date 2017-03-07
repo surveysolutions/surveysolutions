@@ -214,7 +214,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input name is too long.
+        ///   Looks up a localized string similar to User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        /// </summary>
+        public static string PersonNameAllowedCharactersErrorMessage {
+            get {
+                return ResourceManager.GetString("PersonNameAllowedCharactersErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person name should not contain more than {1} characters.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
@@ -228,6 +237,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PersonNameFieldName {
             get {
                 return ResourceManager.GetString("PersonNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number should not contain more than {1} characters.
+        /// </summary>
+        public static string PhoneErrorLength {
+            get {
+                return ResourceManager.GetString("PhoneErrorLength", resourceCulture);
             }
         }
         
