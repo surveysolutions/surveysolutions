@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public bool HasAnyDataToBePrepared { get; set; }
         public bool CanRefreshBeRequested { get; set; }
         public DateTime? LastUpdateDate { get; set; }
-        public long FileSize { get; set; }
+        public double FileSize { get; set; }
         public int ProgressInPercents { get; set; }
         public string DataExportProcessId { get; set; }
         public DataExportStatus StatusOfLatestExportProcess { get; set; }
