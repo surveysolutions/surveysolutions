@@ -81,6 +81,9 @@ main{
 }
 @media (max-width: $screen-md-min){
 	html body {
+		padding-top: 70px;
+	}
+	html body.wide-navbar {
 		padding-top: 60px;
 	}
 	.container, .container-fluid {
@@ -89,6 +92,9 @@ main{
 }
 
 @media (max-width: $screen-sm){
+	html body {
+		padding-top: 60px;
+	}
 	main .container{
 		width: auto;
 		margin-left: auto;
@@ -165,13 +171,26 @@ h5{
 		h1{
 			float: left;
 			margin-right: 30px;
+			margin-bottom: 15px;
 		}
 		.btn{
 			float: left;
-		}	
+			padding: 8px;
+			margin-bottom: 10px;
+		}
 	}
 	p{
 		font-family: "RobotoRegular";
+	}
+	ul{
+		font-size: 14px;
+		line-height: 16px;
+		li{
+			padding-bottom: 3px;
+			&::last-child{
+				padding-bottom: 0;
+			}
+		}
 	}
 }
 .row{
@@ -179,6 +198,9 @@ h5{
 		padding-left: 15px;
 	}
 }
+// .row div[class^="col"] .page-header{
+// 	padding-left: 0;
+// }
 .alert{
 	margin-bottom: 20px;
 	background-color: transparent;
@@ -369,9 +391,24 @@ table{
 	 	top: 155px;
 	}
 }
+.extra-margin-bottom{
+	margin-bottom: 30px;
+}
 @media (max-width: $screen-md-min){
+	.wide-navbar{
+		.view-mood{
+			top: 60px;
+			& + main {
+				.container-fluid{
+					.content{
+						padding-top: 90px;
+					}
+				}
+			}
+		}
+	}
 	.view-mood{
-		top: 60px;
+		top: 70px;
 		& + main {
 			.container-fluid{
 				margin-top: 30px;
@@ -379,7 +416,7 @@ table{
 					padding-top: 125px;
 				}
 				.content{
-					padding-top: 90px;
+					padding-top: 100px;
 				}
 				.foldback-button{
 					top: $indent-foldback-button + 30px;
@@ -400,9 +437,11 @@ table{
 }
 @media (max-width: $screen-sm-min){
 	.view-mood{
+		top: 60px;
 		& + main {
 			.container-fluid{
 				.content{
+					padding-top: 90px;
 					.foldback-button{
 						top: 145px;
 					}
@@ -466,8 +505,9 @@ table{
 		top: 2px; 
 		margin-right: 3px;
 		@include size(11px, 14px);
-		/*background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;*/
-		/*@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);*/
+		background: transparent url("#{$assetsPath}/img/icon-tablet.png") no-repeat;
+		@include image-2x("#{$assetsPath}/img/icon-tablet2k.png", 11px, 14px);
+		@include opacity(0.3);
 		background-size: 11px 14px;
 	}
 }
@@ -481,8 +521,124 @@ table{
 		top: 2px; 
 		margin-right: 3px;
 		@include size(11px, 14px);
-		/*background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;*/
-		/*@include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);*/
+		background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
+		@include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);
 		background-size: 11px 14px;
+	}
+}
+.screen-small-resolution{
+		display: none;
+}
+@media (max-width: $screen-sm-min){
+	.interviews-large-screen{
+		display: none;
+	}
+	.screen-small-resolution{
+		padding: 15px;
+		display: block;
+		font: 14px/16px Arial, sans-serif;
+		.row-unit{
+			padding: 20px 15px;
+			background-color: #f8f9f9;
+			border-bottom: 2px solid $gray_form;
+			&.selected{
+				background-color: darken(#f8f9f9, 7%);
+			}
+			&:last-of-type{
+				border-bottom: none;
+			}
+		}
+		.header-unit{
+			position: relative;
+			margin-bottom: 15px;
+			input.checkbox-filter ~ label .tick{
+				left: -5px;
+			}
+			label{
+				padding-right: 60px;
+			}
+			.title-row{
+				font-weight: normal;
+				font-size: 18px;
+				line-height: 20px;
+				display: block;
+				margin-bottom: 5px;
+			}
+			.comment-icon{
+				@include absolute(0, 50px);
+			}
+		}
+		ul{
+			margin-bottom: 15px;
+			li{
+				margin-bottom: 5px;
+			}
+		}
+		%table-min-parametrs{
+			width: 50%;
+			margin-right: 3px;
+			&:nth-child(2){
+				margin-right: 0;
+			}
+		}
+		.table-min-wrapper{
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			.table-min{
+				@extend %table-min-parametrs;
+				justify-content: space-between;
+				display: flex;
+				flex-direction: column;
+				.table-row{
+					min-height: 45px;
+					display: flex;
+					.table-td{
+						@extend %table-min-parametrs;
+						padding: 10px 20px;
+						line-height: 24px;
+						background-color: #edeff0;
+						&:hover, &:active, &:focus{
+							a{
+								color: $blue;
+							}
+						}
+						a{
+							color: $gray_text;
+							text-decoration: none;
+						}
+						.flag{
+							padding-left: 25px;
+						}
+						&.table-header{
+							padding-left: 0;
+							color: $gray_light;
+							font: 11px/13px "TrebuchetMSBold";
+							letter-spacing: 1px;
+							text-transform: uppercase;
+							background-color: transparent;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.screen-small-resolution{
+		.table-min-wrapper{
+			flex-direction: column;
+			.table-min{
+				width: 100%;
+			}
+		}
+		.header-unit{
+			.comment-icon{
+				right: 0;
+			}
+			label{
+				padding-right: 30px;
+			}
+		}
 	}
 }
