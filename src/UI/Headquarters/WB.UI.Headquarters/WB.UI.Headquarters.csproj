@@ -648,6 +648,11 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
     <EmbeddedResource Include="Resources\Strings.pt.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
@@ -1048,6 +1053,9 @@
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
+    <Content Include="Views\Troubleshooting\Index.cshtml" />
+    <Content Include="Views\Troubleshooting\CensusInterviews.cshtml" />
+    <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1512,6 +1520,7 @@
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
@@ -1731,6 +1740,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Troubleshooting.Designer.cs">
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\TabletSyncMessages.Designer.cs">
       <AutoGen>True</AutoGen>

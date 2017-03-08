@@ -389,3 +389,25 @@
         box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px $gray_light;
     }
 }
+@mixin synchronizations-arrow($color, $angle-after, $angle-before){
+    position: relative;
+    width: 15px;
+    height: 10px;
+    &:before, &:after{
+        position: absolute;
+        content: "";
+        top: 3px;
+        height: 4px;
+        width: 10px;
+        background: $color;
+        border-radius: 3px;
+    }
+    &:after{
+        left: 5px;
+        @include rotate($angle-after);
+    }
+    &:before{
+        right: 5px;
+        @include rotate($angle-before);
+    }
+}
