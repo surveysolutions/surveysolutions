@@ -328,7 +328,6 @@ input.double-checkbox-white{
 		@include absolute(0, null, null, 0);
 		border: none;
 		height: 35px;
-/* 		outline: none; */
 		display: inline-block;
 		padding: 10px;
 	    background: url('#{$assetsPath}/img/search.png') no-repeat;
@@ -336,17 +335,18 @@ input.double-checkbox-white{
 	    background-size: 80px 20px;
 	    @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
 	    cursor: pointer;
-	   /*  @extend %delete-outline; */
+		@include transition(none);
 	    &:hover{
 	    	background-position: -40px 8px;
 	    }
 	}
 	.btn-clear{
 		@include clear(22px);
-		right: -35px;
+		right: -37px;
 		padding: 6px;
-		/* @extend %delete-outline; */
+		@extend %delete-outline;
 		transition: none;
+		background-color: #fff;
 	}
 	.form-control{
 		height: 35px;
@@ -355,7 +355,7 @@ input.double-checkbox-white{
 		padding-right: 0;
 		padding-left: 0;
 		border: none;
-		/* @extend %delete-outline; */
+		@extend %delete-outline;
 	}
 }	
 .active-search{

@@ -11,6 +11,9 @@
 		margin-left: 0 !important;
 	}
 }
+.block-filter .btn-group.bootstrap-select{
+	margin-left: -10px !important;
+} 
 input.checkbox-filter{
   	display: none;
   	& ~ label{
@@ -64,58 +67,58 @@ input.checkbox-filter{
 	color: $gray_text;
 	border-bottom: 3px solid $gray-super-light;
 	padding: 0 25px 20px 30px; 
-	.block-filter{
-		margin-bottom: 30px;
-		select{
-			border-color: $gray_form;
-			max-width: 90%;
-			option{
-				width: 200px;
-			}
+}
+.block-filter{
+	margin-bottom: 30px;
+	select{
+		border-color: $gray_form;
+		max-width: 90%;
+		option{
+			width: 200px;
 		}
-		.form-group{
-			margin-bottom: 10px;
+	}
+	.form-group{
+		margin-bottom: 10px;
+		label{
+			font-size: 14px;
+			line-height: 20px;
+			font-family: inherit;
+			font-weight: normal;
+			margin: 0;
+		}
+		&:last-of-type{
+			margin-bottom: 0;
+		}
+	}
+	.form-date{
+		margin-bottom: 15px;
+		max-width: 275px;
+		.input-group.date{
+			width: 100%;
 			label{
+				display: table-cell;
+				vertical-align: middle;
 				font-size: 14px;
-			    line-height: 20px;
-			    font-family: inherit;
-			    font-weight: normal;
-			    margin: 0;
+				line-height: 16px;
+				width: 50px;
+				font-weight: normal;
 			}
-			&:last-of-type{
-				margin-bottom: 0;
+			.form-control{
+				border-right: none;
+				border-color: $gray_form;
+				border-bottom-left-radius: 4px;
+				border-top-left-radius: 4px;
 			}
-		}
-		.form-date{
-			margin-bottom: 15px;
-			max-width: 275px;
-			.input-group.date{
-				width: 100%;
-				label{
-					display: table-cell;
-					vertical-align: middle;
-					font-size: 14px;
-					line-height: 16px;
-					width: 50px;
-					font-weight: normal;
-				}
-				.form-control{
-					border-right: none;
-					border-color: $gray_form;
-					border-bottom-left-radius: 4px;
-					border-top-left-radius: 4px;
-				}
-				.input-group-addon{
-					background-color: transparent;
-					border-left: none;
-					border-color: $gray_form;
-					padding: 3px 10px; 
-					.calendar{
-						@include size(21px, 20px); 
-						display: inline-block;
-						background: url("#{$assetsPath}/img/calendar.png") no-repeat;
-						@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
-					}
+			.input-group-addon{
+				background-color: transparent;
+				border-left: none;
+				border-color: $gray_form;
+				padding: 3px 10px; 
+				.calendar{
+					@include size(21px, 20px); 
+					display: inline-block;
+					background: url("#{$assetsPath}/img/calendar.png") no-repeat;
+					@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
 				}
 			}
 		}

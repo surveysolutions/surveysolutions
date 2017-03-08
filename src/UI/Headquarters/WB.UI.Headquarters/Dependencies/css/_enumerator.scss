@@ -1,0 +1,381 @@
+.enumerators{
+    .table-wrapper{
+        margin-left: -15px;
+        max-width: 1210px;
+    }
+}
+.interviews-information{
+    margin-bottom: 40px;  
+    .number-information{
+        color: $gray_text;
+        float: left;
+        padding-right: 15px;
+        font-family: "RobotoLight";
+        width: 25%;
+        &:last-of-type{
+            padding-right: 0;
+        }
+        .amount-of-questionnaires{
+            padding-right: 100px;
+            border-bottom: 2px solid #f0f0f0; 
+            font-size: 60px;
+            line-height: 62px;
+            @include transition(all, 0.2s);
+        }
+        .description{
+            padding-top: 7px;
+            text-transform: uppercase;
+            font: 10px/12px "RobotoMedium";
+            width: 100px;
+            @include transition(all, 0.2s);
+        }
+        &:hover, &:focus, &:active, &:active:focus{
+            text-decoration: none;
+            color: $blue;
+            .amount-of-questionnaires{
+                border-color: $blue;
+            }
+        }
+    }
+}
+.connection-statistics{
+    margin-bottom: 30px;
+    h3{
+        margin-bottom: 20px;
+    }
+    font-size: 14px;
+    line-height: 16px;
+    ul{
+        margin-bottom: 15px;
+        li{
+            margin-bottom: 3px;
+            &::last-child{
+                margin-bottom: 0;
+            }
+        }
+    }
+    .detailed-statistics{
+        display: block;
+        &+a{
+            margin-top: 15px;
+        }
+    }
+}
+.detailed-statistics-block{
+    display: block;
+    td{
+        width: 50%;
+    }
+    .table{
+        margin-left: -15px;
+    }
+}
+@media (max-width: $screen-md-min){
+    .enumerators{
+        .table-wrapper{
+            margin-left: 0;
+        }
+        .detailed-statistics-block .table{
+            margin: 0;
+        }
+    }
+}
+@media (max-width: $screen-sm-min){
+    .enumerators {
+        .table-interviews{
+            display: none;
+        }
+        .screen-small-resolution{
+            padding: 0;
+        }
+    }
+}
+@media (max-width: 600px){
+    .interviews-information .number-information{
+        width: 50%;
+    }
+}
+.graphic-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 150px;
+    margin-bottom: 60px;
+}
+.graphic{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    &:after, &:before{
+        display: block;
+        content: "";
+        @include absolute(0, 0);
+        z-index: 3;
+        width: 100%;
+        height: 15px;
+        @include gradient-vertical(#fff, rgba(255, 255, 255, 0), 0%, 80%);
+        
+    }
+    &:before{
+        top: auto;
+        bottom: 0;
+        @include gradient-vertical(rgba(255, 255, 255, 0), #fff, 0%, 80%);
+    }
+}
+.day-unit{
+    height: 100%;
+    display: flex;
+    position: relative;
+    .day{
+        display: block;
+        @include absolute(null, null, -15px, 0px);
+        font: 12px/14px "TrebuchetMS";
+        text-transform: uppercase;
+    }
+    &:before{
+        display: block;
+        content: "";
+        @include absolute(0, null, null, 0);
+        width: 2px;
+        height: 100%;
+        background-color: #f0f0f0;
+    }
+    &:last-of-type{
+        .quarter-of-day:last-child{
+            .recent-activity, .unfinished-assignments{
+                position: relative;
+                &:after{
+                    display: block;
+                    content: "";
+                    @include absolute(0, 0, 0, 0);
+                    z-index: 2;
+                    @include gradient-horizontal(rgba(255, 255, 255, 0), #fff, 0%, 60%);
+                }
+            }
+        }
+    }
+}
+.recent-activity.first-column{
+    padding-left: 2px;
+}
+.quarter-of-day{
+    width: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.recent-activity{
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: 75px;
+    padding-bottom: 5px;
+    & {
+        .uploaded, .downloaded, .successful-connection{
+            display: flex;
+            flex-shrink: 0;
+        } 
+    }
+}
+.unfinished-assignments{
+    border-top: 2px solid #f0f0f0;
+    height: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.downloaded {
+     @include synchronizations-arrow($blue, -45deg, 45deg);
+}
+.successful-connection{
+    width: 15px;
+    height: 10px;
+    &:before{
+        display: block;
+        border-radius: 3px;
+        content: "";
+        position: relative;
+        top: calc(50% - 2px);
+        width: 13px;
+        height: 4px;
+        background-color: $gray_form;
+    }
+}
+.uploaded {
+    @include synchronizations-arrow($green, 45deg, -45deg);
+}
+.explanation{
+    height: 100%;
+    font-size: 12px;
+    line-height: 14px;
+    .downloaded, .uploaded, .successful-connection{
+        display: inline-block;
+    }
+}
+.graphic-explanation{
+    width: 300px;
+    font: 12px/14px "TrebuchetMSBold";
+    .recent-activity {
+         align-items: flex-start;
+         margin-left: 20px;
+         ul li{
+            padding-left: 25px;
+            position: relative;
+            .uploaded, .downloaded, .successful-connection{
+                @include absolute(0,null, null, 0);
+            }
+         }
+    }
+    .unfinished-assignments{
+        padding-left: 20px;
+        p{
+            margin: 10px 0 0 25px;
+        }
+    }
+}
+.half-of-quarter{
+    width: 50%;
+}
+.unfinished-unit{
+    width: 100%;
+    height: 7px;
+    background: rgba(42, 129, 203, 0.7);
+    position: relative;
+    z-index: 2;
+}
+@media (max-width: $screen-sm-min){
+    .graphic-wrapper{
+        display: block;
+        height: auto;
+        margin: 30px 0 30px 50px;;
+    }
+    .graphic{
+        height: auto;
+        display: block;
+        width: 200px;
+        float: left;
+        margin-right: 40px;
+         &:after, &:before{
+             height: 100%;
+             width: 15px;
+             left: 0;
+             @include gradient-horizontal(#fff, rgba(255, 255, 255, 0), 0%, 80%);
+         }
+         &:before{
+             left: auto;
+             right: 0;
+             @include gradient-horizontal(rgba(255, 255, 255, 0), #fff, 0%, 80%);
+        }
+    }
+    .day-unit{
+        height: auto;
+        width: 100%;
+        display: block;
+        &:before{
+            width: 100%;
+            height: 2px;
+        }
+        .day{
+            top: calc(50% - 7px);
+            bottom: auto;
+            left: -55px;
+            width: 50px;
+            text-align: right;
+        }
+        &:last-of-type{
+        .quarter-of-day:last-child{
+            .recent-activity, .unfinished-assignments{
+                &:after{
+                    @include gradient-vertical(rgba(255, 255, 255, 0), #fff, 0%, 60%);
+                }
+            }
+        }
+    }
+    }
+    .recent-activity.first-column{
+        padding-left: 0;
+        padding-top: 2px;
+    }
+    .quarter-of-day{
+        width: 100%;
+        height: 18px;
+        flex-direction: row;
+    }
+    .recent-activity{
+        flex-direction: row-reverse;
+        height: auto;
+        padding-bottom: 0;
+        padding-right: 5px;
+        width: 50%;
+    }
+    .downloaded, .uploaded{
+        display: block;
+        width: 10px;
+        height: 15px;
+        &:before{
+            top: 3px;
+            right: 0;
+        }
+        &:after{
+            top: 8px;
+            left: 0;
+        }
+    }
+    .successful-connection{
+        width: 10px;
+        height: 15px;
+        &:before{
+            width: 4px;
+            height: 13px;
+            top: calc(50% - 6.5px);
+            left: calc(50% - 2px);
+        }
+    }
+    .unfinished-assignments{
+        height: auto;
+        flex-direction: column;
+        width: 50%;
+        border-top: none;
+        border-left: 2px solid #f0f0f0;
+    }
+    .half-of-quarter{
+        width: 100%;
+        height: 9px;
+        display: flex;
+        flex-direction: row;
+    }
+    .unfinished-unit{
+        height: 100%;
+        width: 7px;
+    }
+    .graphic-explanation{
+        float: left;
+        .recent-activity{
+            width: 100%;
+            display: block;
+            ul li{
+                margin-bottom: 5px;
+            }
+        }
+        .unfinished-assignments{
+            width: 100%;
+            border-left: none;
+            border-top: 2px solid #f0f0f0;
+        }
+    }
+}
+@media (max-width: 670px){
+    .graphic-wrapper{
+        margin: 30px 0;
+        .graphic{
+            float: none;
+            margin: 0 auto 30px;
+        }
+        .graphic-explanation{
+            float: none;
+        }
+    }
+}

@@ -117,6 +117,10 @@
                 &.title-row{
                     font-size: 18px;
                     line-height: 20px;
+                    a, span{
+                        font-size: 18px;
+                        line-height: 20px;
+                    }
                 }
                 padding: 15px;
                 vertical-align: middle;
@@ -317,7 +321,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-53px, 0, null, null);
+        @include absolute(-53px, -10px);
         z-index: 2;
         label{
             font-size: 0;
@@ -433,7 +437,11 @@
         }
     }
 }
-
+.table-wrapper{
+    .dataTables_filter{
+        top: -40px;
+    }
+}
 @media (max-width: 1450px){
     .table-ordered{
         thead{
@@ -475,6 +483,11 @@
     }
     .dataTables_paginate{
         margin-bottom: 30px;
+    }
+    .table-wrapper{
+        .dataTables_paginate{
+            margin-bottom: 0;
+        }
     }
     .table{
         tr{
