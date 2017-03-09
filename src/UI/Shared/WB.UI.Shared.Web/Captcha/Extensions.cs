@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Web.Captcha
 
         public static string GetCaptchaService(this IConfigurationManager manager)
         {
-            return manager.AppSettings.GetString("CaptchaService", "none");
+            return manager.AppSettings.GetString("CaptchaService", "hosted");
         }
 
         public static int GetMaxFailedLoginCountBeforeCaptchaAppear(this IConfigurationManager manager)
