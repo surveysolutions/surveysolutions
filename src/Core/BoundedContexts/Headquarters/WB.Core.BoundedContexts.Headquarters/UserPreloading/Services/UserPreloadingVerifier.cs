@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
         {
-            return arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMasxLength;
+            return arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMaxLength;
         }
 
         private bool FullNameLengthVerification(UserPreloadingDataRecord record)

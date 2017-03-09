@@ -15,7 +15,7 @@
             string passwordFormatRegex, 
             string phoneNumberFormatRegex, 
             int fullNameMaxLength, 
-            int phoneNumberMasxLength)
+            int phoneNumberMaxLength)
         {
             this.VerificationIntervalInSeconds = verificationIntervalInSeconds;
             this.CreationIntervalInSeconds = creationIntervalInSeconds;
@@ -29,7 +29,7 @@
             this.PasswordFormatRegex = passwordFormatRegex;
             this.PhoneNumberFormatRegex = phoneNumberFormatRegex;
             this.FullNameMaxLength = fullNameMaxLength;
-            this.PhoneNumberMasxLength = phoneNumberMasxLength;
+            this.PhoneNumberMaxLength = phoneNumberMaxLength;
         }
 
         public int VerificationIntervalInSeconds { get; private set; }
@@ -47,6 +47,6 @@
 
         public int FullNameMaxLength { get; private set; }
 
-        public int PhoneNumberMasxLength { get; private set; }
+        public int PhoneNumberMaxLength { get; private set; }
     }
 }
