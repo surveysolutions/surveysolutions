@@ -219,4 +219,10 @@
   <data name="PhoneErrorLength" xml:space="preserve">
     <value>Phone number should not contain more than {1} characters</value>
   </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>To change password provide valid existing password</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Old password</value>
+  </data>
 </root>

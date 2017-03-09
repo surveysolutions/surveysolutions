@@ -219,4 +219,10 @@
   <data name="PhoneErrorLength" xml:space="preserve">
     <value>Номер телефона не может содержать больше {1} символов</value>
   </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Для смены пароля предоставьте верный текущий пароль</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Текущий пароль</value>
+  </data>
 </root>

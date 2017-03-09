@@ -187,6 +187,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To change password provide valid existing password.
+        /// </summary>
+        public static string OldPasswordErrorMessage {
+            get {
+                return ResourceManager.GetString("OldPasswordErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string OldPasswordFieldName {
+            get {
+                return ResourceManager.GetString("OldPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {
