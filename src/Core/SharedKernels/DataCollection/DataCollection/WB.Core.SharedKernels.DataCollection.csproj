@@ -350,6 +350,7 @@
     <Compile Include="WebApi\InterviewDetailsApiView.cs" />
     <Compile Include="WebApi\InterviewApiView.cs" />
     <Compile Include="WebApi\IdentityApiView.cs" />
+    <Compile Include="WebApi\ClientInfoApiView.cs" />
     <Compile Include="WebApi\QuestionnaireApiView.cs" />
     <Compile Include="WebApi\InterviewerApiView.cs" />
     <Compile Include="WebApi\RosterApiView.cs" />

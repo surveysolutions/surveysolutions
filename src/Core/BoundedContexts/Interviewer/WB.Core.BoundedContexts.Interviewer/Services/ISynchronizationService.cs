@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task SendClientInfoAsync(ClientInfoApiView info, CancellationToken? token = null);
         Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
