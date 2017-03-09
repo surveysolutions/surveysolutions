@@ -5,7 +5,7 @@ import "bootstrap-sass/assets/javascripts/bootstrap/dropdown"
 
 import "jquery-mask-plugin"
 
-import * as vue from "vue"
+import Vue from "vue"
 
 import CategoricalMulti from "./CategoricalMulti"
 import CategoricalSingle from "./CategoricalSingle"
@@ -28,34 +28,34 @@ import TextQuestion from "./TextQuestion"
 import Humburger from "./ui/humburger"
 import Unsupported from "./Unsupported"
 
-vue.component("CategoricalMulti", CategoricalMulti)
-vue.component("CategoricalSingle", CategoricalSingle)
-vue.component("CategoricalYesNo", CategoricalYesNo)
-vue.component("Combobox", Combobox)
-vue.component("DateTime", DateTime)
-vue.component("Double", Double)
-vue.component("Gps", Gps)
-vue.component("Group", Group)
-vue.component("Integer", Integer)
-vue.component("LinkedMulti", LinkedMulti)
-vue.component("LinkedSingle", LinkedSingle)
-vue.component("Multimedia", Multimedia)
-vue.component("NavigationButton", NavigationButton)
-vue.component("QRBarcode", QRBarcode)
-vue.component("StaticText", StaticText)
-vue.component("TextList", TextList)
-vue.component("TextQuestion", TextQuestion)
-vue.component("Unsupported", Unsupported)
-vue.component("wb-question", Question)
-vue.component("wb-humburger", Humburger)
+Vue.component("CategoricalMulti", CategoricalMulti)
+Vue.component("CategoricalSingle", CategoricalSingle)
+Vue.component("CategoricalYesNo", CategoricalYesNo)
+Vue.component("Combobox", Combobox)
+Vue.component("DateTime", DateTime)
+Vue.component("Double", Double)
+Vue.component("Gps", Gps)
+Vue.component("Group", Group)
+Vue.component("Integer", Integer)
+Vue.component("LinkedMulti", LinkedMulti)
+Vue.component("LinkedSingle", LinkedSingle)
+Vue.component("Multimedia", Multimedia)
+Vue.component("NavigationButton", NavigationButton)
+Vue.component("QRBarcode", QRBarcode)
+Vue.component("StaticText", StaticText)
+Vue.component("TextList", TextList)
+Vue.component("TextQuestion", TextQuestion)
+Vue.component("Unsupported", Unsupported)
+Vue.component("wb-question", Question)
+Vue.component("wb-humburger", Humburger)
 
-vue.component("wb-typeahead", (resolve, reject) => {
+Vue.component("wb-typeahead", (resolve, reject) => {
      require.ensure(["./ui/typeahead"], r => {
         resolve(require("./ui/typeahead").default)
     }, "libs")
 })
 
-vue.component("vue-flatpickr", (resolve, reject) => {
+Vue.component("vue-flatpickr", (resolve, reject) => {
      require.ensure(["vue-flatpickr"], r => {
         const flatpick = require("vue-flatpickr")
         resolve(flatpick.default)

@@ -1,5 +1,5 @@
 import * as $ from "jquery"
-import * as Vue from "vue"
+import Vue from "vue"
 
 Vue.directive("blurOnEnterKey", {
     inserted: (el) => {
