@@ -5817,7 +5817,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-.dataTables_wrapper .dataTables_filter label.active input, .active-search .search .btn-clear, .aside-menu.open > .dropdown-menu, .question.disabled-question:after, .question-editor .options-group .field input:checked ~ .btn-clear, .field.answered .btn-clear, .field.has-error .btn-clear {
+.dataTables_wrapper .dataTables_filter label.active input, .active-search .search .btn-clear, .combo-box input:checked ~ .btn-clear, .aside-menu.open > .dropdown-menu, .question.disabled-question:after, .question-editor .options-group .field input:checked ~ .btn-clear, .field.answered .btn-clear, .field.has-error .btn-clear {
   visibility: visible;
   opacity: 1;
   filter: alpha(opacity=100); }
@@ -6332,6 +6332,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   padding: 10px; }
   .history td:first-child, .history th:first-child {
     min-width: 160px; }
+
+.uploaded-to-hq {
+  min-width: 150px; }
 
 .btn {
   font: 12px/14px "TrebuchetMSBold";
@@ -7614,6 +7617,35 @@ input.double-checkbox-white {
       background-position: -40px 10px; }
       .active-search .search .btn-search:hover {
         background-position: -60px 10px; }
+
+.combo-box {
+  position: relative; }
+  .combo-box .dropdown-toggle {
+    height: 40px;
+    padding: 11px 38px 11px 10px; }
+    .combo-box .dropdown-toggle span {
+      position: static !important;
+      font: 14px/18px Arial, sans-serif;
+      letter-spacing: normal;
+      text-transform: none; }
+    .combo-box .dropdown-toggle .gray-text {
+      color: #a6a8a9;
+      font-weight: normal;
+      font-style: italic; }
+    .combo-box .dropdown-toggle:hover, .combo-box .dropdown-toggle:focus, .combo-box .dropdown-toggle:active {
+      z-index: 0; }
+  .combo-box .dropdown-menu {
+    z-index: 2;
+    width: 100%;
+    padding: 5px 10px; }
+    .combo-box .dropdown-menu li {
+      border-bottom: 1px solid #dbdfe2; }
+      .combo-box .dropdown-menu li > input {
+        width: 100%;
+        border: none;
+        padding: 7px 10px; }
+      .combo-box .dropdown-menu li:last-child {
+        border: none; }
 
 .structured-content {
   margin: 0; }
@@ -10293,7 +10325,7 @@ label.inactive {
 
 .field {
   position: relative; }
-  .field .field-to-fill, .question-editor .options-group .field .dropdown-toggle {
+  .field .field-to-fill, .field .combo-box .dropdown-toggle, .combo-box .field .dropdown-toggle, .question-editor .options-group .field .dropdown-toggle {
     width: 100%;
     padding: 11px 12px;
     border: none;
@@ -10302,7 +10334,7 @@ label.inactive {
     font-weight: bold;
     padding-right: 38px;
     border-radius: 5px; }
-    .field .field-to-fill:focus, .question-editor .options-group .field .dropdown-toggle:focus {
+    .field .field-to-fill:focus, .field .combo-box .dropdown-toggle:focus, .combo-box .field .dropdown-toggle:focus, .question-editor .options-group .field .dropdown-toggle:focus {
       outline: none;
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
 
@@ -11084,7 +11116,7 @@ body.no-cookies div.no-cookies {
     margin: 10px 0; }
   .web-interview .first-last-chapter .value-is-absent {
     font-weight: bold; }
-  .web-interview .first-last-chapter .field-to-fill, .web-interview .first-last-chapter .question-editor .options-group .field .dropdown-toggle, .question-editor .options-group .field .web-interview .first-last-chapter .dropdown-toggle {
+  .web-interview .first-last-chapter .field-to-fill, .web-interview .first-last-chapter .combo-box .dropdown-toggle, .combo-box .web-interview .first-last-chapter .dropdown-toggle, .web-interview .first-last-chapter .question-editor .options-group .field .dropdown-toggle, .question-editor .options-group .field .web-interview .first-last-chapter .dropdown-toggle {
     display: block;
     border: 1px solid #dbdfe2;
     resize: none;

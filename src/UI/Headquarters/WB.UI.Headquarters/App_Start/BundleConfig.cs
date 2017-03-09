@@ -42,6 +42,11 @@ namespace WB.UI.Headquarters
                 "~/Content/controlpanel.css"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/vue-and-components").Include(
+               "~/Dependencies/build/vue-libs.js",
+               "~/Dependencies/build/troubleshooting.js"
+            ));
+
             bundles.Add(new ScriptBundle("~/js/common").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",

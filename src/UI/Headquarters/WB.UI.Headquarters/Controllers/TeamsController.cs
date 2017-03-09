@@ -1,9 +1,9 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -56,5 +56,22 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null, onlyActive: true);
+
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public UsersView AllInterviewersCamelCase(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            return this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query, onlyActive: true);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public UsersView SupervisorsCamelCase(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
+        {
+            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+        }
     }
 }
