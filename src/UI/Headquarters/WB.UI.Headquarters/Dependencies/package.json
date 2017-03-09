@@ -3,13 +3,21 @@
   "version": "1.0.0",
   "description": "Survey Solutions Headquarters js module",
   "private": true,
-  "devDependencies": {    
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-runtime": "^6.23.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "browserify-shim": "^3.8.13",
     "del": "^2.2.2",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.1.2",
     "gulp-debug": "^3.0.0",
+    "gulp-filter": "^5.0.0",
     "gulp-inject": "^4.1.0",
     "gulp-load-plugins": "^1.4.0",
     "gulp-main-bower-files": "^1.6.0",
@@ -20,15 +28,26 @@
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
-    "main-bower-files": "^2.13.1"
+    "main-bower-files": "^2.13.1",
+    "vinyl-source-stream": "^1.1.0",
+    "vueify": "^9.4.1",
+    "vueify-insert-css": "^1.0.0"
+  },
+  "browserify-shim": {
+    "vue": "global:Vue",
+    "vue-resource": "global:VueResource"
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
   },
   "scripts": {
     "bower": "node_modules\\.bin\\bower install",
     "bower-force": "node_modules\\.bin\\bower install --force",
-    "gulp" : "node_modules\\.bin\\gulp --production"
+    "gulp": "node_modules\\.bin\\gulp --production"
   },
   "dependencies": {
     "bower": "^1.8.0",
+    "browserify": "^14.1.0",
     "gulp": "^3.9.1",
     "gulp-install": "^0.6.0",
     "gulp-main-bower-files": "^1.6.0"

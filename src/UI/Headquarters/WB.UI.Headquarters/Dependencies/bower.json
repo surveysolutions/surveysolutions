@@ -28,12 +28,19 @@
     "pnotify": "^3.0.0",
     "bootstrap-select": "^1.12.2",
     "jQuery-contextMenu": "^2.4.2",
-    "jquery-highlight": "^3.3.0"
+    "jquery-highlight": "^3.3.0",
+    "vue": "^2.2.1",
+    "vue-resource": "^1.2.1"
   },
   "devDependencies": {},
   "overrides": {
     "knockout-mapping": {
       "main": "build/output/knockout.mapping-latest.js"
+    },
+    "vue": {
+      "main": [
+        "dist/vue.js"
+      ]
     },
     "pnotify": {
       "main": [

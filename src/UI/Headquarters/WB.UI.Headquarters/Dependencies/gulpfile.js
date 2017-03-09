@@ -1,4 +1,8 @@
-﻿var gulp = require('gulp'),
+﻿var browserify = require('browserify'),
+    babelify = require('babelify'),
+    source = require("vinyl-source-stream");
+
+var gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -8,8 +12,8 @@
     cssnano = require('gulp-cssnano'),
     util = require('gulp-util'),
     debug = require('gulp-debug'),
-    rename = require('gulp-rename');
-
+    rename = require('gulp-rename'),
+    vueify = require('vueify');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -62,8 +66,44 @@ var config = {
     jsLibsInject: 'jsLibs'
 };
 
+gulp.task('vueify', wrapPipe(function (success, error) {
+    var b = browserify({
+        entries: './vue/troubleshooting.js',
+        debug: true
+    });
+
+    return b
+            .transform(babelify, { presets: ['es2015'], plugins: ["transform-runtime"] })
+            .transform(vueify)
+        .bundle()
+        .pipe(source('troubleshooting.js'))
+        .pipe(gulp.dest(config.buildDir).on('error', error));
+}));
+
+//gulp.task('vueify', wrapPipe(function (success, error) {
+//    return gulp.src('./vue/*.vue')
+//   // return gulp.src('./vue/vue-components.js')
+//      .pipe(vueify().on('error', error))
+//      .pipe(concat('vue-components.js').on('error', error))
+//      .pipe(gulp.dest(config.buildDir).on('error', error))
+//      .pipe(rename({ suffix: '.min' }).on('error', error))
+//      .pipe(plugins.uglify().on('error', error))
+//      .pipe(gulp.dest(config.buildDir).on('error', error));
+//}));
+
+gulp.task('vue-libs', wrapPipe(function (success, error) {
+    return gulp.src('./bower.json')
+      .pipe(mainBowerFiles('**/vue*.js').on('error', error))
+      .pipe(concat('vue-libs.js').on('error', error))
+      .pipe(gulp.dest(config.buildDir).on('error', error))
+      .pipe(rename({ suffix: '.min' }).on('error', error))
+      .pipe(plugins.uglify().on('error', error))
+      .pipe(gulp.dest(config.buildDir).on('error', error));
+}));
+
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
-    return gulp.src(config.bootstrapFontFiles).pipe(gulp.dest(config.fontsDir));
+    return gulp.src(config.bootstrapFontFiles)
+        .pipe(gulp.dest(config.fontsDir).on('error', error));
 }));
 
 gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
@@ -81,11 +121,18 @@ gulp.task('watch-styles', function () {
     gulp.watch(config.cssFilesToWatch, ['styles']);
 });
 
+function mainBowerFilesFilter(filePath) {
+    if (filePath.includes("\\vue")) return false;
+    return !filePath.endsWith(".js");
+}
+
 gulp.task('bowerJs', wrapPipe(function (success, error) {
+
+    var filter = plugins.filter(['**/*.js', '!**/vue*.js']);
+
     return gulp.src('./bower.json')
-        .pipe(mainBowerFiles('**/*.js').on('error', error))
-        //gulp.src(mainBowerFiles('**/*.js').on('error', error))
-        .pipe(plugins.ngAnnotate().on('error', error))
+        .pipe(mainBowerFiles().on('error', error))
+        .pipe(filter)
       	.pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
@@ -126,8 +173,8 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (succes
     }
     // DEV: to include files not in batch
     //else {
-    //    var cssLibs = gulp.src(mainBowerFiles('**/*.css'));
-    //    var jsLibs = gulp.src(mainBowerFiles('**/*.js'));
+    //    var cssLibs = gulp.src('./bower.json').pipe(mainBowerFiles('**/*.css'));// gulp.src(mainBowerFiles('**/*.css'));
+    //    var jsLibs = gulp.src('./bower.json').pipe(mainBowerFiles('**/*.js'));// gulp.src(mainBowerFiles('**/*.js'));
 
     //    var tasks = config.filesToInject.map(function (fileToInject) {
     //        var target = gulp.src(fileToInject.folder + fileToInject.file);
@@ -159,5 +206,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(/*'watch-styles', */'move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject');
+    gulp.start(/*'watch-styles', */'move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs');
 });
