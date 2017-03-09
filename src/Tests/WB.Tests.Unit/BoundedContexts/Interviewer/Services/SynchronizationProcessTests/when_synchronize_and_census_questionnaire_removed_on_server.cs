@@ -37,10 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             });
 
             progressInfo = new Progress<SyncProgressInfo>();
-            progressInfo.ProgressChanged += (sender, progressInfo) =>
-            {
-                totalDeletedInterviewsCount = progressInfo.Statistics.TotalDeletedInterviewsCount;
-            };
+            progressInfo.ProgressChanged += ProgressInfo_ProgressChanged;
 
             synchronizationService = Mock.Of<ISynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
@@ -62,7 +59,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFactory: mockOFInterviewAccessor.Object
                 );
         };
-        
+
+        private static void ProgressInfo_ProgressChanged(object sender, SyncProgressInfo e)
+            => totalDeletedInterviewsCount = e.Statistics.TotalDeletedInterviewsCount;
 
         Because of = () => viewModel.SyncronizeAsync(progressInfo, CancellationToken.None).WaitAndUnwrapException();
 
@@ -71,6 +70,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
         It should_remove_1_interview_from_local_storage = () =>
             mockOFInterviewAccessor.Verify(_=>_.RemoveInterview(interviewId), Times.Once);
+
+        private Cleanup stuff = () =>
+        {
+            progressInfo.ProgressChanged -= ProgressInfo_ProgressChanged;
+            progressInfo = null;
+        };
 
         static SynchronizationProcess viewModel;
         static ISynchronizationService synchronizationService;
