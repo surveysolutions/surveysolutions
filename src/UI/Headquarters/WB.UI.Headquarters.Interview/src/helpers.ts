@@ -1,6 +1,6 @@
 import indexOf from "lodash/indexOf"
 
-import * as Vue from "vue"
+import Vue from "vue"
 
 function forEachIfNeeded(data, each) {
     if (Array.isArray(data)) {

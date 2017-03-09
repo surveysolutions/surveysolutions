@@ -11,7 +11,7 @@
 </template>
 <script lang="ts">
     import SidebarPanel from "./SidebarPanel"
-    import * as Vue from "vue"
+    import Vue from "vue"
 
     export default {
         name: 'sidebar',
