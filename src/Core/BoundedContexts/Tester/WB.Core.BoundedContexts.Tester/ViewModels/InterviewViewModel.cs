@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class InterviewViewModel : BaseInterviewViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IUserInteractionService userInteractionService;
 
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
@@ -38,12 +40,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
+            IUserInteractionService userInteractionService,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.userInteractionService = userInteractionService;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
@@ -80,6 +84,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
             try
             {
+                if (!await this.userInteractionService.ConfirmAsync(TesterUIResources.Interview_QuestionnaireReload_Confirm))
+                    return;
+
                 var interview = this.interviewRepository.Get(this.interviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 

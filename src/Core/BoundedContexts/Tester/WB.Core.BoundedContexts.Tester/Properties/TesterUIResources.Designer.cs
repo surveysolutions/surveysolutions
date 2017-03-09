@@ -152,6 +152,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All data you entered will be lost and new version of the questionnaire will be downloaded from the server..
+        /// </summary>
+        public static string Interview_QuestionnaireReload_Confirm {
+            get {
+                return ResourceManager.GetString("Interview_QuestionnaireReload_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
         public static string Login_Error_NotFound {
