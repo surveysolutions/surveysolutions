@@ -1630,6 +1630,7 @@
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\ManageAccountModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />

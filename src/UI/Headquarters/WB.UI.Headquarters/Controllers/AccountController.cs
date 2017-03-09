@@ -19,6 +19,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -133,6 +134,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect("~/");
         }
 
+        [Authorize]
         public ActionResult Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -142,16 +144,31 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null || !(GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
                 throw new HttpException(404, string.Empty);
 
-            return View(new UserEditModel() {Id = currentUser.PublicKey, Email = currentUser.Email, 
-                PersonName = currentUser.PersonName, PhoneNumber = currentUser.PhoneNumber});
+            return View(new ManageAccountModel
+            {
+                Id = currentUser.PublicKey,
+                Email = currentUser.Email,
+                PersonName = currentUser.PersonName,
+                PhoneNumber = currentUser.PhoneNumber
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult Manage(UserEditModel model)
+        [Authorize]
+        public ActionResult Manage(ManageAccountModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                bool isPasswordValid = Membership.ValidateUser(this.GlobalInfo.GetCurrentUser().Name, this.passwordHasher.Hash(model.OldPassword));
+                if (!isPasswordValid)
+                {
+                    this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
+                }
+            }
 
             if (this.ModelState.IsValid)
             {
