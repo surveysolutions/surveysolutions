@@ -224,7 +224,6 @@
     <Compile Include="Membership\MembershipUserService.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
-    <Compile Include="Modules\ModulesFactory.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
