@@ -73,7 +73,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainAggregateRootRepository plainRepository = null,
             IEventBus eventBus = null, 
             IAggregateSnapshotter snapshooter = null,
-            IServiceLocator serviceLocator = null)
+            IServiceLocator serviceLocator = null,
+            IAggregateLock aggregateLock = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
@@ -81,7 +82,7 @@ namespace WB.Tests.Abc.TestFactories
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                new AggregateLock());
+                aggregateLock ?? Stub.Lock());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
