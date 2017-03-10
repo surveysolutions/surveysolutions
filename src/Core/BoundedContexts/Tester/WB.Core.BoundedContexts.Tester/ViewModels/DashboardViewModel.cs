@@ -216,9 +216,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand loadQuestionnaireCommand;
 
         public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
-            = new MvxCommand<QuestionnaireListItem>(
-                async questionnaire => await this.LoadQuestionnaireAsync(questionnaire.Id, questionnaire.Title),
-                item => !this.IsInProgress));
+            = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
 
         private IMvxAsyncCommand refreshQuestionnairesCommand;
 
@@ -271,7 +269,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
-        private async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle)
+        private async Task LoadQuestionnaireAsync(QuestionnaireListItem questionnaireListItem)
         {
             if (this.IsInProgress) return;
 
@@ -279,15 +277,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
 
             var progress = new Progress<string>();
-            progress.ProgressChanged += Progress_ProgressChanged;
+            progress.ProgressChanged += this.Progress_ProgressChanged;
 
             try
             {
-                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(questionnaireId, questionnaireTitle, progress, this.tokenSource.Token);
+                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress, this.tokenSource.Token);
             }
             finally
             {
-                progress.ProgressChanged -= Progress_ProgressChanged;
+                progress.ProgressChanged -= this.Progress_ProgressChanged;
                 this.IsInProgress = false;
             }
         }
