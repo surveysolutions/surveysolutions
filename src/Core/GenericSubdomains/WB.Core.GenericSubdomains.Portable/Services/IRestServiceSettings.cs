@@ -8,5 +8,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         TimeSpan Timeout { get;  }
         int BufferSize { get;  }
         bool AcceptUnsignedSslCertificate { get;  }
+        string UserAgent { get; }
     }
 }
