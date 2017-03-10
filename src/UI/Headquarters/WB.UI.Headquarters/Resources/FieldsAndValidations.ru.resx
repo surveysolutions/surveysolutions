@@ -220,9 +220,9 @@
     <value>Номер телефона не может содержать больше {1} символов</value>
   </data>
   <data name="OldPasswordErrorMessage" xml:space="preserve">
-    <value>Для смены пароля предоставьте верный текущий пароль</value>
+    <value>Не верный старый пароль</value>
   </data>
   <data name="OldPasswordFieldName" xml:space="preserve">
-    <value>Текущий пароль</value>
+    <value>Старый пароль</value>
   </data>
 </root>
