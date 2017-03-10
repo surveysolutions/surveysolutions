@@ -30,6 +30,8 @@
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1",
     "vinyl-source-stream": "^1.1.0",
+    "vue": "^2.2.2",
+    "vue-resource": "^1.2.1",
     "vueify": "^9.4.1",
     "vueify-insert-css": "^1.0.0"
   },
@@ -38,7 +40,9 @@
     "vue-resource": "global:VueResource"
   },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "scripts": {
     "bower": "node_modules\\.bin\\bower install",

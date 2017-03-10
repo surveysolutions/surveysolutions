@@ -538,7 +538,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\**\*.*" />
+    <None Include="Dependencies\build\**\*.*" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
@@ -597,8 +597,8 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <None Include="Dependencies\vue\userSelector.vue" />
-    <Content Include="Dependencies\vue\troubleshooting.js" />
+    <Content Include="Dependencies\vue\UserSelector.vue" />
+    <Content Include="Dependencies\vue\troubleshooting-census.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>

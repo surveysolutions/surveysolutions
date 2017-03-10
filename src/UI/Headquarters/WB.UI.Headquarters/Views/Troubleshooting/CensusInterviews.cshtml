@@ -4,7 +4,7 @@
 }
 @section scripts
 {
-    @Scripts.Render("~/js/vue-and-components")
+    @Scripts.Render("~/js/troubleshooting-census")
 
     <script type="text/javascript">
     </script>
@@ -22,10 +22,12 @@
             </div>
         </div>
         <div id="app">
-            <user-selector control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AllInterviewersCamelCase" })"></user-selector>
+            <user-selector control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AllInterviewersCamelCase"})"></user-selector>
             <p>{{interviewerId}}</p>
-            <user-selector control-id="supervisorId" :value="supervisorId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "SupervisorsCamelCase" })"></user-selector>
+            <user-selector control-id="supervisorId" :value="supervisorId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "SupervisorsCamelCase"})"></user-selector>
             <p>{{supervisorId}}</p>
         </div>
     </div>
 </main>
+
+

@@ -24,8 +24,6 @@
 </template>
 
 <script>
-    Vue = require('vue');
-
     module.exports = {
         name: 'user-selector',
         props: ['fetchUrl', 'controlId', 'value'],
