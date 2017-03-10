@@ -529,6 +529,11 @@ table{
 .screen-small-resolution{
 		display: none;
 }
+.gray-text{
+	color: $gray_light;
+	font-weight: normal;
+	font-style: italic;
+}
 @media (max-width: $screen-sm-min){
 	.interviews-large-screen{
 		display: none;

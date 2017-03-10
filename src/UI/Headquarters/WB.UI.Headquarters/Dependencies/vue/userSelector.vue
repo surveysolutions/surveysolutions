@@ -2,15 +2,15 @@
     <div class="combo-box">
         <div class="btn-group btn-input clearfix">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                <span data-bind="label" v-if="value === null" class="gray-text">Click to answer</span>
-                <span data-bind="label" v-else>{{value}}</span>
+                <span data-bind="label" v-if="value === null" class="gray-text">{{placeholderText}}</span>
+                <span data-bind="label" v-else>{{value.userName}}</span>
             </button>
             <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
                 <li>
-                    <input type="text" ref="searchBox" :id="inputId" placeholder="Search" input="updateOptionsList" v-on:keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
+                    <input type="text" ref="searchBox" :id="inputId" placeholder="Search" @input="updateOptionsList" v-on:keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
                 </li>
                 <li v-for="option in options" :key="option.userId">
-                    <a href="javascript:void(0);" v-on:click="selectOption(option.userId)" v-html="highlight(option.userName, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
+                    <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="highlight(option.userName, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
                 </li>
                 <li v-if="isLoading">
                     <a>Loading...</a>
@@ -20,13 +20,16 @@
                 </li>
             </ul>
         </div>
+        <button v-if="value !== null" class="btn btn-link btn-clear" @click="clear">
+            <span></span>
+        </button>
     </div>
 </template>
 
 <script>
     module.exports = {
         name: 'user-selector',
-        props: ['fetchUrl', 'controlId', 'value'],
+        props: ['fetchUrl', 'controlId', 'value', 'placeholder'],
         data: function () {
             return {
                 options: [],
@@ -38,12 +41,21 @@
             inputId: function () {
                 return `sb_${this.controlId}`;
             },
-            valueTitle: function () {
-
+            placeholderText: function () {
+                return this.placeholder || "Select";
             }
         },
-        mounted: function () {
-            this.fetchUsers();
+        mounted: function() {
+            const jqEl = $(this.$el)
+            const focusTo = jqEl.find(`#${this.inputId}`)
+            jqEl.on('shown.bs.dropdown', () => {
+                focusTo.focus()
+                this.fetchUsers(this.searchTerm)
+            })
+
+            jqEl.on('hidden.bs.dropdown', () => {
+                this.searchTerm = ""
+            })
         },
         methods: {
             onSearchBoxDownKey(event) {
@@ -58,20 +70,22 @@
                     event.stopPropagation();
                 }
             },
-            fetchUsers: function (filter) {
+            fetchUsers: function (filter = "") {
+                console.log(`filter: {filter}`);
                 this.isLoading = true;
-                this.$http.get(this.fetchUrl)
+                this.$http.get(this.fetchUrl, {params: { query: filter }})
                     .then(response => {
                         this.options = response.body.users || [];
                         this.isLoading = false;
                     }, response => {
-                        console.log("error");
+                        
                         this.isLoading = false;
                     });
 
             },
             clear: function () {
-
+                this.$emit('selected', null, this.controlId);
+                this.searchTerm = "";
             },
             selectOption: function (value) {
                 this.$emit('selected', value, this.controlId);

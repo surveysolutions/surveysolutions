@@ -99,7 +99,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    height: 150px;
+    height: $graphic-height;
     margin-bottom: 60px;
 }
 .graphic{
@@ -113,7 +113,7 @@
         @include absolute(0, 0);
         z-index: 3;
         width: 100%;
-        height: 15px;
+        height: 12px;
         @include gradient-vertical(#fff, rgba(255, 255, 255, 0), 0%, 80%);
         
     }
@@ -171,10 +171,10 @@
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    height: 75px;
-    padding-bottom: 5px;
+    height: $graphic-height/2;
+    padding-bottom: 3px;
     & {
-        .uploaded, .downloaded, .successful-connection{
+        .uploaded, .downloaded, .successful-connection, .failed-connection{
             display: flex;
             flex-shrink: 0;
         } 
@@ -182,7 +182,7 @@
 }
 .unfinished-assignments{
     border-top: 2px solid #f0f0f0;
-    height: 75px;
+    height: $graphic-height/2;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -190,28 +190,48 @@
 .downloaded {
      @include synchronizations-arrow($blue, -45deg, 45deg);
 }
-.successful-connection{
-    width: 15px;
-    height: 10px;
-    &:before{
-        display: block;
-        border-radius: 3px;
-        content: "";
-        position: relative;
-        top: calc(50% - 2px);
-        width: 13px;
-        height: 4px;
-        background-color: $gray_form;
-    }
-}
 .uploaded {
     @include synchronizations-arrow($green, 45deg, -45deg);
+}
+.successful-connection{
+    @include connection-status($gray_form);
+}
+.failed-connection{
+    @include connection-status($red-super-light);
+}
+.over-limit{
+    width: 15px;
+    height: 6px;
+    position: relative;
+    %dot{
+        display: block;
+        width: 4px;
+        height: 4px;
+        border-radius: 4px;
+        background-color: $gray_form;
+    }
+    span{
+        @extend %dot;
+        position: absolute;
+        top: 0;
+        left: calc(50% - 2px);
+        &:before, &:after{
+            @extend %dot;
+            content: "";
+            position: absolute;
+            left: -5px;
+            bottom: 0;
+        }
+        &:after{
+            left: 5px;
+        }
+    }
 }
 .explanation{
     height: 100%;
     font-size: 12px;
     line-height: 14px;
-    .downloaded, .uploaded, .successful-connection{
+    .downloaded, .uploaded, .successful-connection, .failed-connection{
         display: inline-block;
     }
 }
@@ -224,7 +244,7 @@
          ul li{
             padding-left: 25px;
             position: relative;
-            .uploaded, .downloaded, .successful-connection{
+            .uploaded, .downloaded, .successful-connection, .failed-connection{
                 @include absolute(0,null, null, 0);
             }
          }
@@ -255,12 +275,12 @@
     .graphic{
         height: auto;
         display: block;
-        width: 200px;
+        width: $graphic-height;
         float: left;
         margin-right: 40px;
          &:after, &:before{
              height: 100%;
-             width: 15px;
+             width: 12px;
              left: 0;
              @include gradient-horizontal(#fff, rgba(255, 255, 255, 0), 0%, 80%);
          }
@@ -324,14 +344,31 @@
             left: 0;
         }
     }
-    .successful-connection{
-        width: 10px;
+    .over-limit{
+        width: 6px;
+        height: 15px;
+        span{
+            top: calc(50% - 2px);
+            left: 0;
+            &:before, &:after{
+                left: 0;
+                bottom: -5px;
+            }
+            &:after{
+                left: 0;
+                top: -5px;
+            }
+        }
+    }
+    .successful-connection, .failed-connection{
+        width: 6px;
         height: 15px;
         &:before{
             width: 4px;
             height: 13px;
-            top: calc(50% - 6.5px);
-            left: calc(50% - 2px);
+            bottom: calc(50% - 6.5px);
+            left: auto;
+            right: 0;
         }
     }
     .unfinished-assignments{
