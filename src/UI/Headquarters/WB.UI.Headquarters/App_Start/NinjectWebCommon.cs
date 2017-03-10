@@ -15,6 +15,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Ninject;
+using Ninject.Modules;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -68,6 +69,7 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 using WB.Infrastructure.Native;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Shared.Web.Captcha;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -157,7 +159,11 @@ namespace WB.UI.Headquarters
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
-            var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var eventStoreSettings = new PostgreConnectionSettings();
+            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+            eventStoreSettings.SchemaName = "events";
+            var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
