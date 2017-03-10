@@ -23,17 +23,17 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 Setup.MockedServiceLocator();
                
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {
-                    Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
-                    Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
+                    Abc.Create.Entity.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
+                    Abc.Create.Entity.Roster(rosterId: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
                         enablementCondition: "@rowcode == 1",
-                        fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
+                        fixedRosterTitles: new[] {IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)},
                         children: new IComposite[]
                         {
-                            Create.Roster(id: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                            Abc.Create.Entity.Roster(rosterId: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 variable: "r2", 
-                                fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)})
+                                fixedRosterTitles: new[] {IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)})
                         }),
                 });
 
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupStatefullInterview(questionnaireDocument, useLatestEngine: false);
-                    var questionIdentity = Create.Identity(linkedToQuestionId, RosterVector.Empty);
+                    var questionIdentity = Abc.Create.Identity(linkedToQuestionId, RosterVector.Empty);
 
                     result.LinkedOptionsCount =
                         eventContext.GetSingleEvent<LinkedOptionsChanged>().ChangedLinkedQuestions.First(x => x.QuestionId == questionIdentity).Options.Length;

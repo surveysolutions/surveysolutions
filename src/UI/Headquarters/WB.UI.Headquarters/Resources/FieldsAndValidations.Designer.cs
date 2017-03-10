@@ -187,6 +187,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To change password provide valid existing password.
+        /// </summary>
+        public static string OldPasswordErrorMessage {
+            get {
+                return ResourceManager.GetString("OldPasswordErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string OldPasswordFieldName {
+            get {
+                return ResourceManager.GetString("OldPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {
@@ -214,7 +232,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input name is too long.
+        ///   Looks up a localized string similar to User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        /// </summary>
+        public static string PersonNameAllowedCharactersErrorMessage {
+            get {
+                return ResourceManager.GetString("PersonNameAllowedCharactersErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person name should not contain more than {1} characters.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
@@ -228,6 +255,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PersonNameFieldName {
             get {
                 return ResourceManager.GetString("PersonNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number should not contain more than {1} characters.
+        /// </summary>
+        public static string PhoneErrorLength {
+            get {
+                return ResourceManager.GetString("PhoneErrorLength", resourceCulture);
             }
         }
         

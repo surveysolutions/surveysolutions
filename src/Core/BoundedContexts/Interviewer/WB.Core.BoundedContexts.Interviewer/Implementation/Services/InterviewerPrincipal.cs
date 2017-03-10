@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
-        public bool SignIn(string userName, string password, bool staySignedIn)
+        public bool SignIn(string userName, string passwordHash, bool staySignedIn)
         {
             var localInterviewers = this.interviewersPlainStorage
-                .Where(interviewer => interviewer.Password == password); // db query
+                .Where(interviewer => interviewer.Password == passwordHash); // db query
 
             var localInterviewer = localInterviewers // memory query
                 .FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase));

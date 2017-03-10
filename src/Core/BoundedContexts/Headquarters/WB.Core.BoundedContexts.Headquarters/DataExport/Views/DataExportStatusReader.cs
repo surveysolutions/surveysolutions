@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -159,14 +160,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         private void SetDataExportLastUpdateTimeAndSizeIfFilePresent(DataExportView dataExportView, string filePath)
         {
-            if (fileSystemAccessor.IsFileExists(filePath))
+            if (this.fileSystemAccessor.IsFileExists(filePath))
             {
                 dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
-                dataExportView.FileSize = this.fileSystemAccessor.GetFileSize(filePath)/(1024 * 1024);
+                dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));
                 dataExportView.HasDataToExport = true;
             }
         }
-
-        
     }
 }

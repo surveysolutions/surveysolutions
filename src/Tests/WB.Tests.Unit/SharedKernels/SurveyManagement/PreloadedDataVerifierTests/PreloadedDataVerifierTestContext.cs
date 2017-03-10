@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     Mock.Of<IQuestionnaireStorage>( _ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire && 
                                                          _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
                     Mock.Of<IQuestionnaireExportStructureStorage>(_ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
-                    Mock.Of<IRostrerStructureService>(_ => _.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireRosterStructure));
+                    Mock.Of<IRosterStructureService>(_ => _.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireRosterStructure));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

@@ -136,7 +136,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        private void ConfirmWithTextInputImpl(string message, Action<string> okCallback, Action cancelCallBack, string title, string okButton, string cancelButton, bool isTextInputPassword)
+        private void ConfirmWithTextInputImpl(string message, 
+            Action<string> okCallback, 
+            Action cancelCallBack, 
+            string title, 
+            string okButton, 
+            string cancelButton, 
+            bool isTextInputPassword)
         {
             var userInteractionId = Guid.NewGuid();
 

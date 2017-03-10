@@ -30,34 +30,34 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
                 var numericId = Guid.Parse("55555555555555555555555555555555");
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(numericId, variable: "numeric"),
-                    Create.Roster(topRosterId,
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "numeric"),
+                    Abc.Create.Entity.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        obsoleteFixedTitles: new []{ "a", "b"},
+                        fixedTitles: new []{ "a", "b"},
                         children: new List<IComposite>
                         {
-                            Create.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",
+                            Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",
                                 options: new List<Answer>
                                 {
-                                    Create.Option(value: "1", text: "parent option 1"),
-                                    Create.Option(value: "2", text: "parent option 2")
+                                    Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                                    Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                                 }),
-                            Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                            Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                                 options:
                                     new List<Answer>
                                     {
-                                        Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                                        Create.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
+                                        Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                                        Abc.Create.Entity.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
                                     }
                                 ),
-                            Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                            Abc.Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                                 options:
                                     new List<Answer>
                                     {
-                                        Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                                        Create.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
+                                        Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                                        Abc.Create.Entity.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
                                     }
                                 ),
 

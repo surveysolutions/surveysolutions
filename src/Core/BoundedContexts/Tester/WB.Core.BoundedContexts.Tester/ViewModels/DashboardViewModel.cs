@@ -12,20 +12,15 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -46,9 +41,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncRunner asyncRunner;
-        private readonly IPlainStorage<TranslationInstance> translationsStorage;
-
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
+
+        private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
         public DashboardViewModel(
             IPrincipal principal,
@@ -63,21 +58,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             ILogger logger,
             IAttachmentContentStorage attachmentContentStorage,
             IAsyncRunner asyncRunner,
-            IPlainStorage<TranslationInstance> translationsStorage)
+            QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;
             this.commandService = commandService;
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
             this.asyncRunner = asyncRunner;
-            this.translationsStorage = translationsStorage;
-            this.friendlyErrorMessageService = friendlyErrorMessageService;
+            this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
         public override void Load()
@@ -220,15 +215,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private IMvxCommand loadQuestionnaireCommand;
 
-        public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ??
-                                                       (this.loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(
-                                                               async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), (item) => !this.IsInProgress));
+        public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
+            = new MvxCommand<QuestionnaireListItem>(
+                async questionnaire => await this.LoadQuestionnaireAsync(questionnaire.Id, questionnaire.Title),
+                item => !this.IsInProgress));
 
         private IMvxAsyncCommand refreshQuestionnairesCommand;
 
-        public IMvxAsyncCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
-                                                           (this.refreshQuestionnairesCommand =
-                                                               new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress));
+        public IMvxAsyncCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ?? (this.refreshQuestionnairesCommand
+            = new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress));
         
         public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
         public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
@@ -276,142 +271,29 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
-        private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
+        private async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle)
         {
             if (this.IsInProgress) return;
+
             this.tokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
 
-            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CheckConnectionToServer;
+            var progress = new Progress<string>();
+            progress.ProgressChanged += Progress_ProgressChanged;
 
             try
             {
-                var questionnairePackage = await this.DownloadQuestionnaire(selectedQuestionnaire);
-
-                if (questionnairePackage != null)
-                {
-                    this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
-
-                    await this.DownloadQuestionnaireAttachments(questionnairePackage);
-
-                    var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
-
-                    var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId: selectedQuestionnaire.Id, token: this.tokenSource.Token);
-
-                    this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations);
-
-                    var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity);
-
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
-                }
-            }
-            catch (RestException ex)
-            {
-                if (ex.Type == RestExceptionType.RequestCanceledByUser)
-                    return;
-
-                string errorMessage;
-                switch (ex.StatusCode)
-                {
-                    case HttpStatusCode.Forbidden:
-                        errorMessage = string.Format(TesterUIResources.ImportQuestionnaire_Error_Forbidden, selectedQuestionnaire.Title);
-                        break;
-                    case HttpStatusCode.PreconditionFailed:
-                        errorMessage = String.Format(TesterUIResources.ImportQuestionnaire_Error_PreconditionFailed, selectedQuestionnaire.Title);
-                        break;
-                    case HttpStatusCode.NotFound:
-                        errorMessage = String.Format(TesterUIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
-                        break;
-                    default:
-                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                    await this.userInteractionService.AlertAsync(errorMessage);
-                else throw;
-            }
-            catch (Exception ex)
-            {
-                this.logger.Error("Import questionnaire exception. ", ex);
+                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(questionnaireId, questionnaireTitle, progress, this.tokenSource.Token);
             }
             finally
             {
-                this.IsInProgress = false;   
+                progress.ProgressChanged -= Progress_ProgressChanged;
+                this.IsInProgress = false;
             }
         }
 
-        private QuestionnaireIdentity GenerateFakeQuestionnaireIdentity()
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
-            return questionnaireIdentity;
-        }
+        private void Progress_ProgressChanged(object sender, string progress) => this.ProgressIndicator = progress;
 
-        private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity)
-        {
-            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
-
-            var interviewId = Guid.NewGuid();
-
-            await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
-                interviewId: interviewId,
-                userId: this.principal.CurrentUserIdentity.UserId,
-                questionnaireIdentity: questionnaireIdentity,
-                answersTime: DateTime.UtcNow,
-                supervisorId: Guid.NewGuid()));
-            return interviewId;
-        }
-
-        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage, TranslationDto[] translations)
-        {
-            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
-
-            var questionnaireDocument = questionnairePackage.Document;
-            questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-            questionnaireDocument.Id = questionnaireIdentity.QuestionnaireId.FormatGuid();
-
-            var supportingAssembly = questionnairePackage.Assembly;
-
-            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly, translations);
-        }
-
-        private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
-        {
-            return await this.designerApiService.GetQuestionnaireAsync(
-                selectedQuestionnaire: selectedQuestionnaire,
-                onDownloadProgressChanged: (downloadProgress) =>
-                {
-                    this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
-                },
-                token: this.tokenSource.Token);
-        }
-
-        private async Task DownloadQuestionnaireAttachments(Questionnaire questionnaire)
-        {
-            if (questionnaire == null)
-                return;
-
-            var attachments = questionnaire.Document.Attachments;
-
-            foreach (var attachment in attachments)
-            {
-                var attachmentContentId = attachment.ContentId;
-
-                var isExistsContent = this.attachmentContentStorage.Exists(attachmentContentId);
-                if (!isExistsContent)
-                {
-                    var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentContentId,
-                                        onDownloadProgressChanged: (downloadProgress) =>
-                                        {
-                                            this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress);
-                                        },
-                                        token: this.tokenSource.Token);
-
-                    this.attachmentContentStorage.Store(attachmentContent);
-                }
-            }
-        }
-       
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;

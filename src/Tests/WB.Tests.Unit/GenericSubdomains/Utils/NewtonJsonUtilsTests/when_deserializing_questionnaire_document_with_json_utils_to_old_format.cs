@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Newtonsoft.Json;
 using WB.Infrastructure.Native.Storage;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {

@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -21,21 +23,21 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
+                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                            Create.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
+                            Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                            Abc.Create.Entity.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
                             {
-                                Create.Roster(
-                                    id: rosterId,
+                                Abc.Create.Entity.Roster(
+                                    rosterId: rosterId,
                                     rosterSizeSourceType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: q1Id,
                                     variable: "r",
                                     children: new IComposite[]
                                     {
-                                        Create.NumericIntegerQuestion(q2Id, variable: "q2"),
+                                        Abc.Create.Entity.NumericIntegerQuestion(q2Id, variable: "q2"),
                                     })
                             })
                         })
@@ -45,12 +47,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument);
 
-                interview.AnswerNumericIntegerQuestion(userId, q1Id, Create.RosterVector(1), DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1, 0), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(userId, q2Id, Abc.Create.Entity.RosterVector(new[] {1, 0}), DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q1Id, Create.RosterVector(1), DateTime.Now, 2);
+                    interview.AnswerNumericIntegerQuestion(userId, q1Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, 2);
 
                     result.QuestionsQ2Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q2Id));
                     result.RosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(g => g.Id == rosterId));

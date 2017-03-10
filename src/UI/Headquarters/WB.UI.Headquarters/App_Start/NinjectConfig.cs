@@ -14,6 +14,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Ninject;
+using Ninject.Modules;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -64,6 +65,8 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native;
 using Constants = WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization.Constants;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
+using WB.UI.Shared.Web.Captcha;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -121,6 +124,7 @@ namespace WB.UI.Headquarters.Injections
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
+                new CaptchaModule(),
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
@@ -137,7 +141,11 @@ namespace WB.UI.Headquarters.Injections
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
-            var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var eventStoreSettings = new PostgreConnectionSettings();
+            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+            eventStoreSettings.SchemaName = "events";
+            var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
@@ -161,7 +169,9 @@ namespace WB.UI.Headquarters.Injections
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
                     passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
-                    phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex);
+                    phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
+                    fullNameMaxLength: UserModel.PersonNameMaxLength,
+                    phoneNumberMaxLength: UserModel.PhoneNumberLength);
 
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);

@@ -17,5 +17,16 @@ namespace WB.Core.GenericSubdomains.Portable
 
             return string.Format("{0:n1} {1}", dValue, suffixes[i]);
         }
+
+        public static double SizeInMegabytes(long value)
+        {
+            var oneMb = 1024*1024;
+            double valueInMb = (double)value/oneMb;
+            if (valueInMb < 1)
+                return Math.Max(0.1, Math.Round(valueInMb, 1));
+            if (valueInMb < 10)
+                return Math.Round(valueInMb, 1);
+            return Math.Round(valueInMb);
+        }
     }
 }

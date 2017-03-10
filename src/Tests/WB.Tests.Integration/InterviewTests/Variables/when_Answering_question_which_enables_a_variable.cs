@@ -3,8 +3,11 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
@@ -17,13 +20,13 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.TextQuestion(id: textQuetionId, variable: "txt"),
-                    Create.Group(id: Guid.NewGuid(), enablementCondition: "txt==\"Nastya\"", children: new[]
+                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
                     {
-                        Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                     })
                 });
 
@@ -45,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
-           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Create.Identity(variableId, Empty.RosterVector));
+           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Abc.Create.Identity(variableId, RosterVector.Empty));
 
         private static EventContext eventContext;
         private static Interview interview;

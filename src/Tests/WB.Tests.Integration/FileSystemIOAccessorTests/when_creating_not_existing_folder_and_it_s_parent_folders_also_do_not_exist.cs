@@ -8,7 +8,7 @@ namespace WB.Tests.Integration.FileSystemIOAccessorTests
     {
         Establish context = () =>
         {
-            fileSystemAccessor = Create.FileSystemIOAccessor();
+            fileSystemAccessor = new FileSystemIOAccessor();
 
             DeleteFolderIfExists("a/b/c", fileSystemAccessor);
             DeleteFolderIfExists("a/b", fileSystemAccessor);

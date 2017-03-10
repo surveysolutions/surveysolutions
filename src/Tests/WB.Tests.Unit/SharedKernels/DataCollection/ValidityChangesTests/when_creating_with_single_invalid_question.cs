@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.ValidityChangesTests
 {

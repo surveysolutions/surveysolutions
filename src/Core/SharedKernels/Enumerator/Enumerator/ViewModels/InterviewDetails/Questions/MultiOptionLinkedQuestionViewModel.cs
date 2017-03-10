@@ -123,8 +123,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            decimal[][] selectedValues = allSelectedOptions
-                .Select(x => x.Value)
+            var selectedValues = allSelectedOptions
+                .Select(x => new RosterVector(x.Value))
                 .ToArray();
 
             var command = new AnswerMultipleOptionsLinkedQuestionCommand(

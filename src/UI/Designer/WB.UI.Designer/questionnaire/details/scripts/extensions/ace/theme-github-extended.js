@@ -29,8 +29,12 @@ color: #0086B3;\
 .ace-github .ace_support.ace_function {\
 color: #0086B3;\
 }\
+.ace-github .ace_variable  {\
+box-shadow: 0 -1px 0 #dd2c2c inset;\
+}\
 .ace-github .ace_support.ace_variable  {\
 color: #3da802;\
+box-shadow: none;\
 }\
 .ace-github .ace_comment {\
 color: #998;\

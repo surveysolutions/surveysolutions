@@ -78,6 +78,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
+    <Compile Include="ViewModels\QuestionnaireDownloadViewModel.cs" />
     <Compile Include="Views\DashboardLastUpdate.cs" />
     <Compile Include="Views\QuestionnaireListItem.cs" />
     <Compile Include="Views\TesterUserIdentity.cs" />

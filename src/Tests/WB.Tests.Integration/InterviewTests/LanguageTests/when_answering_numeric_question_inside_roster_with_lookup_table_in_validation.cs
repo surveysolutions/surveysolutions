@@ -7,8 +7,9 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -32,45 +33,43 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var lookupId = Guid.Parse("dddddddddddddddddddddddddddddddd");
                 var userId = Guid.NewGuid();
 
-                var lookupTableContent = Create.LookupTableContent(new [] {"min", "max"},
-                    Create.LookupTableRow(1, new decimal?[] { 1.15m, 10}),
-                    Create.LookupTableRow(2, new decimal?[] { 1, 10}),
-                    Create.LookupTableRow(3, new decimal?[] { 1, 10})
+                var lookupTableContent = IntegrationCreate.LookupTableContent(new [] {"min", "max"},
+                    IntegrationCreate.LookupTableRow(1, new decimal?[] { 1.15m, 10}),
+                    IntegrationCreate.LookupTableRow(2, new decimal?[] { 1, 10}),
+                    IntegrationCreate.LookupTableRow(3, new decimal?[] { 1, 10})
                 );
 
                 var lookupTableServiceMock = new Mock<ILookupTableService>();
-                lookupTableServiceMock
-                    .Setup(x => x.GetLookupTableContent(questionnaireId, lookupId))
-                    .Returns(lookupTableContent);
+                lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
 
                 Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
 
                 var assetsTitles = new[]
                 {
-                    Create.FixedTitle(1, "TV"),
-                    Create.FixedTitle(2, "Microwave"),
-                    Create.FixedTitle(3, "Cleaner")
+                    Create.Entity.FixedTitle(1, "TV"),
+                    Create.Entity.FixedTitle(2, "Microwave"),
+                    Create.Entity.FixedTitle(3, "Cleaner")
                 };
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
-                        Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
+                        Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
+                        Create.Entity.Roster(rosterId, variable: "assets",
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
                             children: new[]
                             {
-                                Create.NumericRealQuestion(id: questionB, variable: "p",
+                                Create.Entity.NumericRealQuestion(id: questionB, variable: "p",
                                     validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
                             })
                     });
 
-                questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
+                questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 
                 var interview = SetupInterview(questionnaire);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionA, Empty.RosterVector, DateTime.Now, 1);
+                    interview.AnswerNumericIntegerQuestion(userId, questionA, RosterVector.Empty, DateTime.Now, 1);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(1), DateTime.Now, -30);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(2), DateTime.Now, 35);
                     interview.AnswerNumericRealQuestion(userId, questionB, Create.RosterVector(3), DateTime.Now, 300);
@@ -78,9 +77,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     return new InvokeResult
                     {
                         IsQuestionAInValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionA)),
-                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(1m)))),
-                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(2m)))),
-                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(3m)))),
+                        IsQuestionB1InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(1)))),
+                        IsQuestionB2InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(2)))),
+                        IsQuestionB3InValid = eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == questionB && q.RosterVector.Identical(Create.RosterVector(3)))),
                     };
                 }
             });

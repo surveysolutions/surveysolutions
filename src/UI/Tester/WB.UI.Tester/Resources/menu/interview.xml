@@ -18,6 +18,9 @@
     </menu>
   </item>
   <item
+      android:id="@+id/interview_reload"
+      local:showAsAction="never" />
+  <item
       android:id="@+id/interview_settings"
       local:showAsAction="never" />
   <item

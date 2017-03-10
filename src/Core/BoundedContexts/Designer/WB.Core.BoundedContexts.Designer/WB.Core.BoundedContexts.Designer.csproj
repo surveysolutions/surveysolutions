@@ -307,7 +307,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs" >
+	  <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
+    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
@@ -670,8 +674,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>LookupTablesTemplateV51.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
