@@ -6,12 +6,12 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class CompanyLogoApiV2Controller : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;

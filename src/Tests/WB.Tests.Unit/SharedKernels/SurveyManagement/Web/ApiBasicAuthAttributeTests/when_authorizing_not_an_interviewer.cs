@@ -6,8 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Code;
 using It = Machine.Specifications.It;
 

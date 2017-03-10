@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class InterviewEventHandlerFunctionalTestContext
     {
-        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserView user = null)
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserView user = null, QuestionnaireDocument questionnaireDocument = null)
         {
 
             var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();

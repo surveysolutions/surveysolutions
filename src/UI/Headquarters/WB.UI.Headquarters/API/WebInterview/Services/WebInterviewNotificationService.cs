@@ -167,10 +167,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         private bool IsSupportFilterOptionCondition(IComposite documentEntity)
-        {
-            var question = documentEntity as IQuestion;
-            if (question != null && !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression))
-                return true;
+            => !string.IsNullOrWhiteSpace((documentEntity as IQuestion)?.Properties.OptionsFilterExpression);
 
         public virtual void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {
