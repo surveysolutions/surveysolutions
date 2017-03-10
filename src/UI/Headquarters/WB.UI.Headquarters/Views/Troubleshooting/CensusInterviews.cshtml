@@ -7,9 +7,10 @@
     @Scripts.Render("~/js/troubleshooting-census")
 
     <script type="text/javascript">
+      
     </script>
 }
-<main>
+<main id="app">
     <div class="container">
         <div class="row">
             <div class="page-header">
@@ -21,13 +22,51 @@
                 </h1>
             </div>
         </div>
-        <div id="app">
-            <user-selector control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AllInterviewersCamelCase"})"></user-selector>
-            <p>{{interviewerId}}</p>
-            <user-selector control-id="supervisorId" :value="supervisorId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "SupervisorsCamelCase"})"></user-selector>
-            <p>{{supervisorId}}</p>
+        <div class="row extra-margin-bottom">
+            <div class="col-sm-7">
+                <p>It will be useful to know enumerator, interview template and timeline. <br />> We will show if there was any errors with synchronizations during selected period.</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="block-filter">
+                    <h5>Enumerator</h5>
+                    <user-selector placeholder="Select interviewer" control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AllInterviewersCamelCase"})"></user-selector>
+                </div>
+                <div class="block-filter">
+                    <h5>Survey template questionnaire version</h5>
+                    <select class="selectpicker">
+                        <option selected>
+                            [v.12] Livestock Field Officer questionnaire blablabla blab bal
+                        </option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                    </select>
+                </div>
+                <div class="block-filter">
+                    <h5>Time-period when this interview was conducted or synchronized with HQ server (local time)</h5>
+                    <div class="form-date">
+                        <div class='input-group date' id='datetimepicker6'>
+                            <label>From: </label>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-date">
+                        <div class='input-group date' id='datetimepicker7'>
+                            <label>To: </label>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-filter">
+                    <button type="button" class="btn btn-primary btn-lg">Find interviews</button>
+                </div>
+            </div>
         </div>
     </div>
 </main>
-
 
