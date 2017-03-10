@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -83,9 +84,27 @@ namespace WB.UI.Interviewer.Settings
                 Android.Provider.Settings.Secure.AndroidId);
         }
 
+        private static string _userAgent = null;
+        public string UserAgent
+        {
+            get
+            {
+                if (_userAgent != null) return _userAgent;
+
+                var flags = new List<string>();
+#if DEBUG
+                flags.Add("DEBUG");
+#endif
+                flags.Add($"QuestionnarieVersion/{this.GetSupportedQuestionnaireContentVersion()}");
+                _userAgent = $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
+                return _userAgent;
+            }
+        }
+
         public string GetApplicationVersionName()
         {
-            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+            var packageInfo = Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0);
+            return packageInfo.VersionName;
         }
 
         public string GetDeviceTechnicalInformation()
