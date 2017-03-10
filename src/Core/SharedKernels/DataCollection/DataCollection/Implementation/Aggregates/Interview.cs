@@ -385,7 +385,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
 
             var userRole = @event.UserId == this.properties.InterviewerId
-                ? UserRoles.Operator
+                ? UserRoles.Interviewer
                 : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : UserRoles.Headquarter;
 
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, userRole, @event.CommentTime, @event.Comment,

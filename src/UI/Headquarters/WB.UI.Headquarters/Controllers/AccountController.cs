@@ -22,6 +22,9 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer")]
     public class AccountController : TeamController
     {
+        private readonly ICaptchaProvider captchaProvider;
+        private readonly ICaptchaService captchaService;
+
         public AccountController(
             ICommandService commandService, 
             ILogger logger,
@@ -131,7 +134,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!string.IsNullOrEmpty(model.Password))
             {
-                bool isPasswordValid = Membership.ValidateUser(this.GlobalInfo.GetCurrentUser().Name, this.passwordHasher.Hash(model.OldPassword));
+                bool isPasswordValid = this.identityManager.IsUserValidWithPassword(this.identityManager.CurrentUserName, model.OldPassword);
                 if (!isPasswordValid)
                 {
                     this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);

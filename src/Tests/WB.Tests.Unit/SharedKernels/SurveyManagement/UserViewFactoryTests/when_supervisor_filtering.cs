@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 
