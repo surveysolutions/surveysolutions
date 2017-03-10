@@ -1,9 +1,14 @@
-﻿import Vue from 'vue';
-import VueResource from 'vue-resource';
+﻿//Vue = require('vue');
+//VueResource = require('vue-resource');
+//UserSelector = require('./userSelector.vue');
+
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import UserSelector from './UserSelector.vue'
 
 Vue.use(VueResource);
 
-Vue.component("user-selector", require('./userSelector.vue'));
+Vue.component("user-selector", UserSelector);
 
 $(function() {
     var app = new Vue({

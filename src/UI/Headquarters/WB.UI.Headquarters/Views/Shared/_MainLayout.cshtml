@@ -7,6 +7,17 @@
 @{
     var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
 }
+
+@functions{
+    public string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -14,6 +25,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="@TokenHeaderValue()">
+    
     @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 
     <!-- cssLibs:css -->
@@ -29,7 +42,7 @@
     <title>@ViewBag.Title</title>
     @RenderSection("scripts", false)
 </head>
-<body>
+<body class="wide-navbar">
 <header>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid ">

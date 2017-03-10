@@ -12,6 +12,11 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
+            bundles.Add(new ScriptBundle("~/js/troubleshooting-census").Include(
+                "~/Dependencies/build/vue-libs.js",
+                "~/Dependencies/build/vue/troubleshooting-census.js"
+             ));
+
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.min.css",
@@ -41,11 +46,6 @@ namespace WB.UI.Headquarters
                 "~/Content/bootstrap.css",
                 "~/Content/controlpanel.css"
                 ));
-
-            bundles.Add(new ScriptBundle("~/js/vue-and-components").Include(
-               "~/Dependencies/build/vue-libs.js",
-               "~/Dependencies/build/troubleshooting.js"
-            ));
 
             bundles.Add(new ScriptBundle("~/js/common").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
