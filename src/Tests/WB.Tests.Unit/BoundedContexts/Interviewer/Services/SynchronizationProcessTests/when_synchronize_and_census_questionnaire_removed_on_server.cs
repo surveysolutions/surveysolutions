@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var principal = Setup.InterviewerPrincipal("name", "pass");
 
-            interviewId = Guid.Parse("11111111111111111111111111111111");
+            interviewId = Guid.NewGuid();
 
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>
