@@ -446,57 +446,14 @@ label.inactive{
 			}
 		}
 		.field{
-			.dropdown-toggle {
-				@extend .field-to-fill;
-				height: 40px;
-				padding: 11px 38px 11px 10px;
-				span{
-					position: static;
-					font: 14px/18px Arial, sans-serif;
-					letter-spacing: normal;
-					text-transform: none;
-				}
-				&:hover, &:focus, &:active {
-					z-index: 0;
-				}
-			}
-			.dropdown-menu{
-				z-index: 2;
-				width: 100%;
-				padding:  5px 10px;
-				li{
-					&>input{
-						width: 100%;
-						border: none;
-						padding: 7px 10px;
-					}
-					border-bottom: 1px solid $gray_form;
-					&:last-child{
-						border: none;
-					}
-				}
-			}
-			input:checked ~ .btn-clear{
-				@extend %visibility-visible;
-			}
+			@extend %combobox;
 		}
 	}
 }
 .field{
 	position: relative;
 	.field-to-fill{
-		width: 100%;
-		padding: 11px 12px;
-		border: none;
-		font-size: 14px;
-		line-height: 18px;
-		font-weight: bold;
-		padding-right: 38px;
-		border-radius: 5px;
-		&:focus{
-			outline: none;
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-		}
+		@extend %field-to-fill;
 	}
 	&.answered, &.has-error{
 		.btn-clear{
@@ -526,12 +483,6 @@ label.inactive{
 }
 .variable{
 	@extend .static-text;
-}
-.question-editor .question-unit .options-group .field
-.gray-text{
-	color: $gray_light;
-	font-weight: normal;
-	font-style: italic;
 }
 .ordered-question{
 	.form-group{

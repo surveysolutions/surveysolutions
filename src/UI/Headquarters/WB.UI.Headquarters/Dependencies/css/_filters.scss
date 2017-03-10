@@ -4,16 +4,13 @@
 	border-right: 3px solid $gray-super-light;
 	padding: 100px 5px 50px 5px;
 	margin-left: 12px;
-	.input-group, .btn-group.bootstrap-select{
-		margin-left: -10px !important;
-	} 
+	// .input-group, .btn-group.bootstrap-select{
+	// 	margin-left: -10px !important;
+	// } 
 	.input-group.date{
 		margin-left: 0 !important;
 	}
 }
-.block-filter .btn-group.bootstrap-select{
-	margin-left: -10px !important;
-} 
 input.checkbox-filter{
   	display: none;
   	& ~ label{

@@ -115,7 +115,8 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
     	.pipe(gulp.dest(config.buildDir));
 }));
 
-gulp.task('watch-styles', function () {
+gulp.task('watch-vue', function() {
+    gulp.watch('./vue/*.*', ['vueify']);
     gulp.watch(config.cssFilesToWatch, ['styles']);
 });
 
@@ -203,5 +204,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(/*'watch-styles', */'move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
 });
