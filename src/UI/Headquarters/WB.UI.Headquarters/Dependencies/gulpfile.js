@@ -13,7 +13,9 @@ var gulp = require('gulp'),
     util = require('gulp-util'),
     debug = require('gulp-debug'),
     rename = require('gulp-rename'),
-    vueify = require('vueify');
+    vueify = require('vueify'),
+    glob = require('glob'),
+    es = require('event-stream');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -67,29 +69,25 @@ var config = {
 };
 
 gulp.task('vueify', wrapPipe(function (success, error) {
-    var b = browserify({
-        entries: './vue/troubleshooting.js',
-        debug: true
+    glob('./vue/*.js', function (err, files) {
+        if (err) error();
+        var tasks = files.map(function (entry) {
+            var b = browserify({
+                entries: entry,
+                debug: true
+            });
+
+            return b
+                .transform(babelify, { presets: ['es2015'] })
+                .transform(vueify)
+            .bundle()
+            .pipe(source(entry))
+            .pipe(gulp.dest(config.buildDir).on('error', error));
+        });
+
+        es.merge(tasks).on('end', success);
     });
-
-    return b
-            .transform(babelify, { presets: ['es2015'], plugins: ["transform-runtime"] })
-            .transform(vueify)
-        .bundle()
-        .pipe(source('troubleshooting.js'))
-        .pipe(gulp.dest(config.buildDir).on('error', error));
 }));
-
-//gulp.task('vueify', wrapPipe(function (success, error) {
-//    return gulp.src('./vue/*.vue')
-//   // return gulp.src('./vue/vue-components.js')
-//      .pipe(vueify().on('error', error))
-//      .pipe(concat('vue-components.js').on('error', error))
-//      .pipe(gulp.dest(config.buildDir).on('error', error))
-//      .pipe(rename({ suffix: '.min' }).on('error', error))
-//      .pipe(plugins.uglify().on('error', error))
-//      .pipe(gulp.dest(config.buildDir).on('error', error));
-//}));
 
 gulp.task('vue-libs', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
@@ -127,7 +125,6 @@ function mainBowerFilesFilter(filePath) {
 }
 
 gulp.task('bowerJs', wrapPipe(function (success, error) {
-
     var filter = plugins.filter(['**/*.js', '!**/vue*.js']);
 
     return gulp.src('./bower.json')
@@ -142,7 +139,7 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
 }));
 
 gulp.task('bowerCss', wrapPipe(function (success, error) {
-    return  gulp.src('./bower.json')
+    return gulp.src('./bower.json')
         .pipe(mainBowerFiles('**/*.css').on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(concat('libs.css').on('error', error))
