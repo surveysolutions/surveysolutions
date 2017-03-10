@@ -54,6 +54,7 @@
     "browserify": "^14.1.0",
     "gulp": "^3.9.1",
     "gulp-install": "^0.6.0",
-    "gulp-main-bower-files": "^1.6.0"
+    "gulp-main-bower-files": "^1.6.0",
+    "vue-flatpickr": "^2.3.0"
   }
 }
