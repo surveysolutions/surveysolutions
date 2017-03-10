@@ -1,9 +1,12 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.ComponentModels;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -61,17 +64,21 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public UsersView AllInterviewersCamelCase(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            return this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query, onlyActive: true);
+            var users = this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query, onlyActive: true);
+            var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
+            return new ComboboxModel(options, users.TotalCountByQuery);
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public UsersView SupervisorsCamelCase(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
+        public ComboboxModel SupervisorsCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
-            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+            var users = this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+            var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
+            return new ComboboxModel(options, users.TotalCountByQuery);
         }
     }
 }

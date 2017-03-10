@@ -1615,6 +1615,7 @@
     <Compile Include="Models\CloneQuestionnaireModel.cs" />
     <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\ComponentModels\ComboboxModel.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />

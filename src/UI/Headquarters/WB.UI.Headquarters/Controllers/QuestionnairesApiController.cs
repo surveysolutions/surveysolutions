@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Shared.Web.Filters;
 
@@ -24,6 +26,9 @@ namespace WB.UI.Headquarters.Controllers
     public class QuestionnairesApiController : BaseApiController
     {
         private readonly IIdentityManager identityManager;
+        private const int DEFAULTPAGESIZE = 12;
+        private const string DEFAULTEMPTYQUERY = "";
+
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
@@ -93,6 +98,21 @@ namespace WB.UI.Headquarters.Controllers
             deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.identityManager.CurrentUserId);
             
             return new JsonCommandResponse() { IsSuccess = true };
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public ComboboxModel QuestionnairesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool censusOnly = false)
+        {
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
+            {
+                PageSize = pageSize,
+                Filter = query,
+                IsAdminMode = true
+            });
+
+            return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.TotalCount);
         }
     }
 }
