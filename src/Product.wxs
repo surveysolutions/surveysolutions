@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
+    
+    <Product Id="EE5F1DD2-13D8-442C-9978-8E8918EA789D" 
+             Name="SurveySolutions" 
+             Language="1033" 
+             Version="1.0.0.0" 
+             Manufacturer="The World Bank" 
+             UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
+        
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+
+        <!--not supported in wix 3.10 should be in 3.11 and 4-->
+        <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" />
+        
+        <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again. You may get it here: https://www.microsoft.com/en-us/download/details.aspx?id=53345">
+            <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
+        </Condition>
+            
+        
+        <Condition Message="This application only runs in Windows Server 2008 R2  or higher.">
+            <![CDATA[Installed OR (VersionNT >= 602)]]> <!--for dev win 10 supported-->
+            
+            <!--<![CDATA[Installed OR ((VersionNT = v6.1 AND ServicePackLevel >= 1 AND NTProductType <= 3) OR (VersionNT = v6.2 AND NTProductType <= 3) OR (VersionNT = v6.3 AND NTProductType <= 3))]]>-->
+        </Condition>
+
+        <!--<Property Id="CONNSTRING"/>-->
+        
+        <UI>
+
+            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+            <UIRef Id="WixUI_InstallDir" />
+
+            <DialogRef Id="ConnectionStringDlg" />
+
+            <!--Override original step-->
+            <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+
+            <!--Custom step-->
+            <Publish Dialog="ConnectionStringDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
+            <Publish Dialog="ConnectionStringDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+
+            <!--Override original step-->
+            <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConnectionStringDlg" Order="1">NOT Installed</Publish>
+
+            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="SurveySolutions has been succesfully installed." />
+
+        </UI>
+        
+        <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+        <UIRef Id="WixUI_InstallDir" />
+
+        <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
+        <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
+        <CustomAction Id="InstallIISSetProperty" 
+                      Property="InstallIIS" 
+                      Execute="immediate"
+                      Value="&quot;[System64Folder]dism.exe&quot; /Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets" />
+        <!-- Call dism.exe quietly (without showing command prompt).
+                 (see also http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html) -->
+        <CustomAction Id="InstallIIS" 
+                      BinaryKey="WixCA" 
+                      DllEntry="CAQuietExec64"
+                      Execute="deferred" 
+                      HideTarget="no" 
+                      Return="ignore" 
+                      Impersonate="no"/>
+
+        <InstallExecuteSequence>
+
+            <Custom Action="InstallIISSetProperty" After="CostFinalize">
+                <![CDATA[NOT Installed]]>
+            </Custom>
+            <Custom Action="InstallIIS" Before="WriteRegistryValues">
+                <![CDATA[NOT Installed]]>
+            </Custom>
+
+        </InstallExecuteSequence>
+        
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        
+        <MediaTemplate  EmbedCab="yes" />
+
+        <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
+        <ComponentGroupRef Id="ProductComponents" />
+          
+        <ComponentGroupRef Id="SettingsUpdate" />
+        </Feature>
+    </Product>
+    
+    
+            
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="INSTALLFOLDER" >
+                    <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
+                        <Directory Id="CONFIGFOLDER" Name="Configuration">
+                        </Directory>
+                    </Directory>
+            </Directory>
+        </Directory>
+        
+        <SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />
+    
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
+           
+                <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes">
+                    
+                    <iis:WebAppPool
+                        Id="SurveySolutionsSiteAppPool"
+                        Name="SurveySolutionsSiteAppPool"
+                        ManagedRuntimeVersion="v4.0"
+                        ManagedPipelineMode="integrated"
+                        Identity="applicationPoolIdentity" />
+
+                    <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutionsSite" Directory="INSTALLFOLDER" ConfigureIfExists="no">
+                        <iis:WebAddress Id="webSite" Port="9700" />
+                        <iis:WebDirProperties Id="webSite" AnonymousAccess="no" WindowsAuthentication="yes" />
+                        <iis:WebApplication Id="webSite" WebAppPool="SurveySolutionsSiteAppPool" Name="SyrveySolutionsWebApplication" />
+
+                        <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
+                        <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
+
+                        <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
+                    </iis:WebSite>
+
+                </Component>
+                
+                <!--add harvested project output-->
+            
+                <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
+                
+        </ComponentGroup>
+        
+        <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER">
+<!--            <Component Id="ConfigCreate" Guid="335F0D52-04C7-4DB4-A9C7-C447F405C2EA" >
+                <File Source="Headquarters.Web.config" />
+            </Component>  -->
+                
+            <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA">
+                <CreateFolder/>
+                <File Source="Headquarters.Web.config" PatchIgnore="yes"/>
+
+                <util:XmlFile Id="CreateElementXml1" 
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement" 
+                              ElementPath="//configuration/appSettings"
+                              Name="add" Sequence='1'/>
+                
+                <util:XmlFile Id="UpdateElementXml1"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add"
+                              Name="key"
+                              Value="Postgres"
+                              Sequence='2'/>
+                
+                <util:XmlFile Id="UpdateElementValueXml1"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add"
+                              Name="value"
+                              Value="[CONNSTRING]"
+                              Sequence='3'/>
+                
+                <util:XmlFile Id="CreateElementXml2"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement"
+                              ElementPath="//configuration/appSettings"
+                              Name="add" Sequence='4'/>
+
+                <util:XmlFile Id="UpdateElementXml2"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
+                              Name="key"
+                              Value="DataStorePath"
+                              Sequence='5'/>
+
+                <util:XmlFile Id="UpdateElementValueXml2"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]@key='DataStorePath'[\]]"
+                              Name="value"
+                              Value="[INSTALLFOLDER]Data_Site"
+                              Sequence='6'/>
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+
+    <Fragment>
+        <UI>
+        <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="SurveySolutions">
+            
+            <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+            <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+            <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+                <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+            </Control>
+
+            <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ConnectionStringDlgDescription)" />
+            
+            <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="Connection string" />
+            <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+            <!--Text="!(loc.ConnectionStringBannerBitmap)"-->
+            <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+            <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+            <Control Id="connStringTextbox" Type="Edit" X="20" Y="100"  Height="18" Width="320" Property="CONNSTRING"  />
+
+        </Dialog>
+        </UI>
+    </Fragment>
+</Wix>
