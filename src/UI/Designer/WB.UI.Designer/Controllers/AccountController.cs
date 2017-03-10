@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
-            return this.View(new LoginModel()
+            return this.View(new LoginModel
             {
                 ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
                 GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"],

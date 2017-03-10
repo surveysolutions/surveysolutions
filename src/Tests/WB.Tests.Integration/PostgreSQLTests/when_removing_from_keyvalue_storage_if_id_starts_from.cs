@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             var sessionProvider =
                 Mock.Of<ISessionProvider>(
                     x => x.GetSession() == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
-            storage = Create.PostgresReadSideKeyValueStorage<TestRemoveKeyValueStartsFromClass>(
+            storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestRemoveKeyValueStartsFromClass>(
                 sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString });
 
             storage.Store(new TestRemoveKeyValueStartsFromClass { Value = "test1" }, $"{nastya}1");

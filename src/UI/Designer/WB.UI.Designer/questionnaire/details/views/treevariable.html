@@ -3,36 +3,39 @@
     <span class="cursor"></span>
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" id="{{item.itemId}}" ui-sref="questionnaire.chapter.variable({itemId: item.itemId})">
-        <div class="variable-name">
+        <div class="item-text">
             <div class="icon icon-variable"></div>
+            <span ng-bind-html="item.variableData.label | escape | highlight:search.searchText"></span>
+        </div>
+        <div class="qname-block">
             <span ng-bind-html="item.variableData.name | escape | highlight:search.searchText"></span>
         </div>
     </a>
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a ng-click="addQuestionAfter(item)">Add question after</a>
+                <a ng-click="addQuestionAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add question after</a>
             </li>
             <li>
-                <a ng-click="addRosterAfter(item)">Add roster after</a>
+                <a ng-click="addRosterAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add roster after</a>
             </li>
             <li>
-                <a ng-click="addGroupAfter(item)">Add sub-section after</a>
+                <a ng-click="addGroupAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add sub-section after</a>
             </li>
             <li>
-                <a ng-click="addStaticTextAfter(item)">Add static text after</a>
+                <a ng-click="addStaticTextAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add static text after</a>
             </li>
             <li>
-                <a ng-click="addVariableAfter(item)">Add variable after</a>
+                <a ng-click="addVariableAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add variable after</a>
             </li>
             <li>
                 <a ng-click="copyRef(item)">Copy</a>
             </li>
             <li>
-                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)">Paste after</a>
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
             </li>
             <li>
-                <a ng-click="deleteVariable(item)">Delete</a>
+                <a ng-click="deleteVariable(item)" ng-if="!questionnaire.isReadOnlyForUser">Delete</a>
             </li>
         </ul>
     </div>

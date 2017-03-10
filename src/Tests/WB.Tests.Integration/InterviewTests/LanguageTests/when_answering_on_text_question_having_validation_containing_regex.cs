@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -22,20 +26,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new[]
                 {
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(children: new IComposite[]
                     {
-                        Create.TextQuestion(variable: "test", id :questionId, validationExpression: "Regex.IsMatch(self, @\"^\\d{8}_\\d{1,4}$\")"),
+                        Abc.Create.Entity.TextQuestion(questionId: questionId,
+                            variable: "test",
+                            validationExpression: "Regex.IsMatch(self, @\"^\\d{8}_\\d{1,4}$\")", 
+                            text: null),
                     }),
                 });
 
                 var interview = SetupInterview(questionnaireDocument);
-                interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "1");
+                interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "1");
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "12345678_1234");
+                    interview.AnswerTextQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, "12345678_1234");
 
                     return new InvokeResult
                     {

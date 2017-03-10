@@ -753,16 +753,17 @@ label.inactive{
 	dl{
 		font-size: 14px;
 		line-height: 16px;
-		dd{
-			margin-bottom: 5px;
-		}
 		dt{
+			margin-bottom: 5px;
+			font-weight: normal;
+		}
+		dd{
 			margin-bottom: 30px;
+			font-weight: bold;
 			a{
 				color: $gray_text;
 			}
 		} 
-			
 	}
 }
 @media only screen and (max-width: 1525px){
@@ -894,18 +895,33 @@ label.inactive{
 	}
 }
 @media (max-width: $screen-md-min){
+	.details-interview{
+		.action-container, .wrapper-info{
+			padding-left: 60px;
+		}
+	}
 	.content{
-        padding-top: 60px;
+        padding-top: 70px;
 		.questionnaire-content .breadcrumb{
 			margin-right: 30px;
 		}
     }
+	.wide-navbar{
+		.content{
+			padding-top: 60px;
+		}
+		.questionnaire{
+			.unit-title.is_stuck{
+				top: 60px !important;
+			}
+		}
+	}
     .aside-menu{
     	right: 0;
     }
     .questionnaire{
     	.unit-title.is_stuck{
-	        top: 60px !important;
+	        top: 70px !important;
 	    }
     }
 	.web-interview-for-supervisor{

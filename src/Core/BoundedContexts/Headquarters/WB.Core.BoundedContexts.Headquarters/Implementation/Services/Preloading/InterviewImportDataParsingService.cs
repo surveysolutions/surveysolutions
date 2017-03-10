@@ -17,21 +17,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IPreloadedDataRepository preloadedDataRepository, 
             IQuestionnaireStorage questionnaireStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.preloadedDataRepository = preloadedDataRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public InterviewImportData[] GetInterviewsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
-            var questionnaireRosterStructure = this.rostrerStructureService.GetRosterScopes(bigTemplateObject);
+            var questionnaireRosterStructure = this.rosterStructureService.GetRosterScopes(bigTemplateObject);
 
             var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                     questionnaireRosterStructure, bigTemplateObject);

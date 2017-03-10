@@ -138,4 +138,7 @@
   <data name="SiteAccessNotAllowed" xml:space="preserve">
     <value>You have no access to this site. Contact your administrator.</value>
   </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Please fill in captcha</value>
+  </data>
 </root>

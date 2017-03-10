@@ -15,11 +15,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -76,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public override object[] Readers => new object[0];
 
@@ -105,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, scopeVector);
+                this.RemoveLevelFromInterview(interview, levelKey.Key, levelKey.Value, new Guid[0], new Guid[0], new Guid[0], scopeVector);
             }
         }
 
@@ -117,7 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, ValueVector<Guid> scopeVector)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid[] groupIds, Guid[] questionsIds, 
+            Guid[] variableIds, Guid[] staticTextsIds,  ValueVector<Guid> scopeVector)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
@@ -126,6 +129,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 foreach (var groupId in groupIds)
                 {
                     level.DisabledGroups.Remove(groupId);
+                }
+
+                foreach (var entitiesId in questionsIds)
+                {
+                    level.QuestionsSearchCache.Remove(entitiesId);
+                }
+
+                foreach (var staticTextsId in staticTextsIds)
+                {
+                    level.StaticTexts.Remove(staticTextsId);
+                }
+
+                foreach (var variableId in variableIds)
+                {
+                    level.DisabledVariables.Remove(variableId);
+                    level.Variables.Remove(variableId);
                 }
 
                 if (!level.ScopeVectors.ContainsKey(scopeVector))
@@ -294,12 +313,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             IUserViewFactory users,
             IReadSideKeyValueStorage<InterviewData> interviewData,
             IQuestionnaireStorage questionnaireStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
             : base(interviewData)
         {
             this.users = users;
             this.questionnaireStorage = questionnaireStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewCreated> @event)
@@ -395,7 +414,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters =  this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters =  this.rosterStructureService.GetRosterScopes(questionnarie);
 
                 foreach (var instance in @event.Payload.Instances)
                 {
@@ -413,7 +432,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters = this.rosterStructureService.GetRosterScopes(questionnarie);
 
                 foreach (var instance in @event.Payload.Instances)
                 {
@@ -422,8 +441,25 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                     var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
 
-                    this.RemoveLevelFromInterview(state, levelKey, new[] {instance.GroupId},
-                        scopeOfCurrentGroup.ScopeVector);
+                    var roster = questionnarie.Find<IGroup>(instance.GroupId);
+
+                    var questionsIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IQuestion>().Select(x => x.PublicKey).ToArray();
+                    
+                    var groupIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IGroup>().Select(x => x.PublicKey).Concat(new [] { instance.GroupId }).ToArray();
+
+                    var variablesIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IVariable>().Select(x => x.PublicKey).ToArray();
+
+                    var staticTextsIds = roster.Children
+                        .TreeToEnumerableDepthFirst(x => x.Children)
+                        .OfType<IStaticText>().Select(x => x.PublicKey).ToArray();
+
+                    this.RemoveLevelFromInterview(state, levelKey, groupIds, questionsIds, variablesIds, staticTextsIds, scopeOfCurrentGroup.ScopeVector);
                 }
             }
             return state;
@@ -436,7 +472,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var rosters = this.rosterStructureService.GetRosterScopes(questionnarie);
                 var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, rosters);
                 List<string> keysOfLevelsByScope =
                     this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);

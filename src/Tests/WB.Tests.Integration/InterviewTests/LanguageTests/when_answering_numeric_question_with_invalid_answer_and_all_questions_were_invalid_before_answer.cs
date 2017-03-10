@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -25,36 +26,39 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
-                        Create.Chapter(children: new IComposite[]
+                        Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
+                            Abc.Create.Entity.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
                         }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, -1, null, null
+                        ),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionB, null, -2, null, null
+                        ),
 
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Abc.Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                },
-                                {
-                                    Create.Identity(questionB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                                Abc.Create.Entity.Identity(questionA),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            },
+                            {
+                                Abc.Create.Entity.Identity(questionB),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        })
                     });
 
             using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, -3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, -3);
 
                     return new InvokeResult
                     {

@@ -57,10 +57,6 @@
       <HintPath>..\..\..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EventStore.Client.3.9.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
@@ -200,20 +196,10 @@
     <Compile Include="Sanitizer\StringExtensions.cs" />
     <Compile Include="Storage\EntitySerializer.cs" />
     <Compile Include="Storage\EventSourcedAggregateRootRepositoryWithWebCache.cs" />
-    <Compile Include="Storage\IdentityJsonConverter.cs" />
     <Compile Include="Storage\INativeReadSideStorage.cs" />
     <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
-    <Compile Include="Storage\EventStore\EventStoreSettings.cs" />
-    <Compile Include="Storage\EventStore\EventStoreWriteSideModule.cs" />
-    <Compile Include="Storage\EventStore\IEventStoreApiService.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventMetada.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreApiService.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreConnectionProvider.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
-    <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
-    <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
     <Compile Include="Storage\NewtonJsonSerializer.cs" />
     <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />

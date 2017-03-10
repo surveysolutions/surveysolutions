@@ -609,4 +609,7 @@ for further instructions</value>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time</value>
   </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Downloading company logo</value>
+  </data>
 </root>

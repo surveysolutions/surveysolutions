@@ -163,7 +163,7 @@
     <value>Пароль должен состоять по крайней мере из {2} символов</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Слишком длинное имя</value>
+    <value>Полное имя не должно содержать больше {1} символов</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>Полное имя</value>
@@ -212,5 +212,17 @@
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>Имя пользователя может содержать только буквы, пробелы, точки и апосторофы</value>
+  </data>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>Номер телефона не может содержать больше {1} символов</value>
+  </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Не верный старый пароль</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Старый пароль</value>
   </data>
 </root>

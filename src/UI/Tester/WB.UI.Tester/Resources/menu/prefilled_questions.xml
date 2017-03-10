@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+	  xmlns:local="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/menu">
+  <item
+      android:id="@+id/prefilled_questions_dashboard"
+      local:showAsAction="never" />
+  <item
+      android:id="@+id/prefilled_questions_language"
+      local:showAsAction="never">
+    <menu>
+      <group
+          android:id="@+id/prefilled_questions_languages">
+        <item
+            android:id="@+id/prefilled_questions_language_original"
+            local:showAsAction="never" />
+      </group>
+    </menu>
+  </item>
+  <item
+      android:id="@+id/prefilled_questions_settings"
+      local:showAsAction="never" />
+  <item
+      android:id="@+id/prefilled_questions_signout"
+      local:showAsAction="never" />
+</menu>

@@ -1,10 +1,12 @@
 using System;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
@@ -30,7 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, new decimal[0], DateTime.Now, new decimal[][] {}));
+            exception = Catch.Only<InterviewException>(
+                () => interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, new decimal[0], DateTime.Now, new RosterVector[] {}));
 
         It should_throw_InterviewException = () =>
             exception.ShouldNotBeNull();

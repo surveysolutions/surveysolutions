@@ -13,8 +13,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Infrastructure.Native.Storage.EventStore;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
@@ -30,7 +28,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IIdentityManager identityManager;
         private readonly ISettingsProvider settingsProvider;
-        private readonly IEventStoreApiService eventStoreApiService;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -38,7 +35,6 @@ namespace WB.UI.Headquarters.Controllers
             IIdentityManager identityManager,
             ILogger logger,
             ISettingsProvider settingsProvider,
-            IEventStoreApiService eventStoreApiService,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
              : base(commandService: commandService, logger: logger)
         {
@@ -46,7 +42,6 @@ namespace WB.UI.Headquarters.Controllers
             this.serviceLocator = serviceLocator;
             this.identityManager = identityManager;
             this.settingsProvider = settingsProvider;
-            this.eventStoreApiService = eventStoreApiService;
         }
 
         public ActionResult CreateHeadquarters()
@@ -222,12 +217,5 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult EventStore() => this.View();
         public ActionResult BrokenInterviewPackages() => this.View();
-
-        public async Task<ActionResult> RunScavenge()
-        {
-            await eventStoreApiService.RunScavengeAsync();
-            object model = "Scavenge has executed at " + DateTime.Now;
-            return this.View("EventStore", model);
-        }
     }
 }

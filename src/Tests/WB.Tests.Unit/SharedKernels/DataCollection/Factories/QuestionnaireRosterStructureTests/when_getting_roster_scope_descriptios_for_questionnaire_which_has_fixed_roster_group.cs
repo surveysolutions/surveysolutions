@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             rosterScopes.Single().Value.Type.ShouldEqual(RosterScopeType.Fixed);
 
         private static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA");
-        private static IRostrerStructureService rosterStructureService;
+        private static IRosterStructureService rosterStructureService;
         private static QuestionnaireDocument questionnarie;
         private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid fixedRosterGroupId;

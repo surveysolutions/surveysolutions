@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -30,21 +31,22 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterValidation = Guid.Parse("22222222222222222222222222222222");
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: null),
 
-                    Create.Roster(
-                        id: rosterId, 
+                    Abc.Create.Entity.Roster(
+                        rosterId: rosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         variable: "varRoster",
                         children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(rosterAgeQuestionId, variable: "age")
+                            Abc.Create.Entity.NumericIntegerQuestion(rosterAgeQuestionId, variable: "age")
                         }),
 
-                    Create.NumericIntegerQuestion(
+                    Abc.Create.Entity.NumericIntegerQuestion(
                         id: rosterValidation,
+                        variable: null,
                         enablementCondition: "varRoster.Select(x => x.age).Max() > 65")
                 );
 
@@ -54,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 using (var eventContext = new EventContext())
                 {                    
-                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
 
                     interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 0 }, DateTime.Now, 17);
                     interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 1 }, DateTime.Now, 66);

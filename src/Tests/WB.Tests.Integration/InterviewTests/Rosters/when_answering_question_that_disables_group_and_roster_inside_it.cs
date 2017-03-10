@@ -24,18 +24,18 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
-                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Abc.Create.Entity.Group(groupId, "Group X", null, "q1 == 1", false, new IComposite[]
                     {
-                        Create.Roster(
-                            id: rosterId,
+                        Abc.Create.Entity.Roster(
+                            rosterId: rosterId,
                             rosterSizeSourceType: RosterSizeSourceType.Question,
                             rosterSizeQuestionId: q1Id,
                             variable: "r",
                             children: new IComposite[]
                             {
-                                Create.NumericIntegerQuestion(q2Id, variable: "q2"),
+                                Abc.Create.Entity.NumericIntegerQuestion(q2Id, variable: "q2"),
                             })
                     })
                 );
@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var interview = SetupInterview(questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(UserId, q1Id, RosterVector.Empty, DateTime.Now, 1);
-                interview.AnswerNumericIntegerQuestion(UserId, q2Id, Create.RosterVector(0), DateTime.Now, 1);
+                interview.AnswerNumericIntegerQuestion(UserId, q2Id, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {

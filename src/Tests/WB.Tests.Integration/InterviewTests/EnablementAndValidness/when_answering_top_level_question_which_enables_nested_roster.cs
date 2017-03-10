@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -28,10 +29,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericRealQuestion(rosterSizeQuestionId, "a"),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new []{ Create.FixedTitle(0) }, children: new IComposite[] {
-                        Create.Roster(nestedRosterId, enablementCondition: "a > 0", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new []{ Create.FixedTitle(0) })  
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericRealQuestion(rosterSizeQuestionId, "a"),
+                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(0) }, children: new IComposite[] {
+                        Abc.Create.Entity.Roster(nestedRosterId, enablementCondition: "a > 0", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(0) })  
                     })
                 );
 
@@ -45,10 +46,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     return new InvokeResults
                     {
                         NestedRosterDisabled = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups
-                                .Any(g  => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Create.RosterVector(0, 0)))),
+                                .Any(g  => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Abc.Create.Entity.RosterVector(new[] {0, 0})))),
                         
                         NestedRosterEnabled = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups
-                                .Any(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Create.RosterVector(0, 0)))),
+                                .Any(g => g.Id == nestedRosterId && g.RosterVector.SequenceEqual(Abc.Create.Entity.RosterVector(new[] {0, 0})))),
                     };
                 }
             });

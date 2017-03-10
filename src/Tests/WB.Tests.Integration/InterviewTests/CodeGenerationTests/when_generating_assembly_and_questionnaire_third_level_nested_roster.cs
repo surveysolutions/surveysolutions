@@ -4,6 +4,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
@@ -34,31 +35,31 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 var roster5 = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 QuestionnaireDocument questionnaireDocument =
-                    Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("31111111111111111111111111111113"),
-                        Create.Chapter(children: new List<IComposite>
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("31111111111111111111111111111113"),
+                        Abc.Create.Entity.Group(children: new List<IComposite>
+                        {
+                            Abc.Create.Entity.NumericIntegerQuestion(id: level1QuestionId, variable: "num1"),
+                            Abc.Create.Entity.NumericRoster(roster1, variable: "roster1", 
+                                rosterSizeQuestionId: level1QuestionId, 
+                                children: new IComposite[]{ 
+                                    Abc.Create.Entity.NumericIntegerQuestion(level2QuestionId, variable: "num2"),
+                                    Abc.Create.Entity.NumericRoster(roster2, "roster2", rosterSizeQuestionId: level2QuestionId) }),
+                        }),
+                        Abc.Create.Entity.Group(children: new List<IComposite>
+                        {
+                            Abc.Create.Entity.NumericRoster(roster3, variable:"roster3", 
+                                rosterSizeQuestionId: level1QuestionId,
+                                children: new []
                                 {
-                                    Create.NumericIntegerQuestion(id: level1QuestionId, variable: "num1"),
-                                    Create.NumericRoster(roster1, "roster1", 
-                                        rosterSizeQuestionId: level1QuestionId, 
-                                        children: new IComposite[]{ 
-                                            Create.NumericIntegerQuestion(level2QuestionId, variable: "num2"),
-                                            Create.NumericRoster(roster2, "roster2", rosterSizeQuestionId: level2QuestionId) }),
-                                }),
-                        Create.Chapter(children: new List<IComposite>
-                                {
-                                    Create.NumericRoster(roster3, "roster3", 
-                                        rosterSizeQuestionId: level1QuestionId,
-                                        children: new []
-                                                  {
-                                                      Create.NumericRoster(roster4, "roster4", 
-                                                        rosterSizeQuestionId: level2QuestionId, 
-                                                        children: new IComposite[]
-                                                                  {
-                                                                        Create.NumericIntegerQuestion(level3QuestionId, variable: "num3"),
-                                                                        Create.NumericRoster(roster5, "roster5",  rosterSizeQuestionId: level3QuestionId)
-                                                                  })
-                                                  })
-                                }));
+                                    Abc.Create.Entity.NumericRoster(roster4, variable:"roster4", 
+                                        rosterSizeQuestionId: level2QuestionId, 
+                                        children: new IComposite[]
+                                        {
+                                            Abc.Create.Entity.NumericIntegerQuestion(level3QuestionId, variable: "num3"),
+                                            Abc.Create.Entity.NumericRoster(roster5, variable:"roster5",  rosterSizeQuestionId: level3QuestionId)
+                                        })
+                                })
+                        }));
 
                 GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, CreateQuestionnaireVersion(), out resultAssembly);
 

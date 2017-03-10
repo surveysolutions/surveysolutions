@@ -12,22 +12,6 @@ namespace WB.UI.Shared.Web.Settings
             get { return ServiceLocator.Current.GetInstance<IConfigurationManager>(); }
         }
 
-        public static StoreProviders EventStoreProvider
-        {
-            get
-            {
-                string eventStoreProviderSetting = config.AppSettings["EventStore.Provider"];
-                if (string.IsNullOrEmpty(eventStoreProviderSetting))
-                {
-                    return StoreProviders.EventStore;
-                }
-                else
-                {
-                    return (StoreProviders) Enum.Parse(typeof (StoreProviders), eventStoreProviderSetting);
-                }
-            }
-        }
-
         public static bool IsDevelopmentEnvironment
         {
             get { return config.AppSettings["IsDevelopmentEnvironment"].ToBool(false); }

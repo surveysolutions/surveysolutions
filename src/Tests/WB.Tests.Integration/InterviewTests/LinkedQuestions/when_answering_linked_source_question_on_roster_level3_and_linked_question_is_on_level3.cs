@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -13,19 +14,19 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
     {
         Establish context = () =>
         {
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.ListQuestion(id: rosterSizeQuestion1Id),
-                Create.Roster(roster1Id, variable:"roster1Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]
+                Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id),
+                Abc.Create.Entity.Roster(roster1Id, variable:"roster1Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion1Id, children: new IComposite[]
                 {
-                    Create.ListQuestion(id: rosterSizeQuestion2Id),
-                    Create.Roster(roster2Id, variable:"roster2Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion2Id, children: new IComposite[]
+                    Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion2Id),
+                    Abc.Create.Entity.Roster(roster2Id, variable:"roster2Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion2Id, children: new IComposite[]
                     {
-                        Create.ListQuestion(id: rosterSizeQuestion3Id),
-                        Create.Roster(roster3Id, variable:"roster3Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
+                        Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion3Id),
+                        Abc.Create.Entity.Roster(roster3Id, variable:"roster3Id", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion3Id, children: new IComposite[]
                         {
-                            Create.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id),
-                            Create.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToRosterId: roster3Id, variable: "multi"),
+                            Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleQuestionId, linkedToRosterId: roster3Id, variable: null),
+                            Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToRosterId: roster3Id, variable: "multi"),
                         }),
                     }),
                 }),
@@ -40,27 +41,27 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 new Tuple<decimal, string>(1, "house 1"),
                 new Tuple<decimal, string>(2, "house 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Create.RosterVector(1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 1"),
                 new Tuple<decimal, string>(2, "house 1 person 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Create.RosterVector(2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion2Id, Abc.Create.Entity.RosterVector(new[] {2}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 1"),
                 new Tuple<decimal, string>(2, "house 2 person 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(1, 1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 1 pet 1"),
                 new Tuple<decimal, string>(2, "house 1 person 1 pet 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(1, 2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 1 person 2 pet 1"),
                 new Tuple<decimal, string>(2, "house 1 person 2 pet 2"),
             });
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(2, 1), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {2, 1}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 1 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 1 pet 2"),
@@ -68,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
         Because of = () =>
-            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Create.RosterVector(2, 2), DateTime.UtcNow, new[]
+            interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {2, 2}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 2 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 2 pet 2"),
@@ -76,7 +77,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_single_question_has_2_options = () =>
         {
-            var identity = Create.Identity(linkedSingleQuestionId, Create.RosterVector(2, 2, 2));
+            var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             
@@ -86,7 +87,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         It should_linked_multi_question_has_2_options = () =>
         {
-            var identity = Create.Identity(linkedSingleQuestionId, Create.RosterVector(2, 2, 2));
+            var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
             linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
             
