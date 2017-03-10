@@ -3,14 +3,14 @@
         <div class="btn-group btn-input clearfix">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                 <span data-bind="label" v-if="value === null" class="gray-text">{{placeholderText}}</span>
-                <span data-bind="label" v-else>{{value.userName}}</span>
+                <span data-bind="label" v-else>{{value.value}}</span>
             </button>
             <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
                 <li>
                     <input type="text" ref="searchBox" :id="inputId" placeholder="Search" @input="updateOptionsList" v-on:keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
                 </li>
-                <li v-for="option in options" :key="option.userId">
-                    <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="highlight(option.userName, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
+                <li v-for="option in options" :key="option.key">
+                    <a href="javascript:void(0);" v-on:click="selectOption(option)" v-html="highlight(option.value, searchTerm)" v-on:keydown.up="onOptionUpKey"></a>
                 </li>
                 <li v-if="isLoading">
                     <a>Loading...</a>
@@ -50,7 +50,7 @@
             const focusTo = jqEl.find(`#${this.inputId}`)
             jqEl.on('shown.bs.dropdown', () => {
                 focusTo.focus()
-                this.fetchUsers(this.searchTerm)
+                this.fetchOptions(this.searchTerm)
             })
 
             jqEl.on('hidden.bs.dropdown', () => {
@@ -70,12 +70,12 @@
                     event.stopPropagation();
                 }
             },
-            fetchUsers: function (filter = "") {
+            fetchOptions: function (filter = "") {
                 console.log(`filter: {filter}`);
                 this.isLoading = true;
                 this.$http.get(this.fetchUrl, {params: { query: filter }})
                     .then(response => {
-                        this.options = response.body.users || [];
+                        this.options = response.body.options || [];
                         this.isLoading = false;
                     }, response => {
                         
@@ -91,7 +91,7 @@
                 this.$emit('selected', value, this.controlId);
             },
             updateOptionsList(e) {
-                this.fetchUsers(e.target.value);
+                this.fetchOptions(e.target.value);
             },
             highlight: function (title, searchTerm) {
                 var encodedTitle = _.escape(title);
