@@ -142,10 +142,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static CategoricalLinkedMultiOptionAnswer FromRosterVectors(IEnumerable<RosterVector> checkedValues)
             => checkedValues == null ? null : new CategoricalLinkedMultiOptionAnswer(checkedValues);
 
-        public static CategoricalLinkedMultiOptionAnswer FromDecimalArrayArray(decimal[][] decimals)
-            => decimals == null ? null : new CategoricalLinkedMultiOptionAnswer(decimals.Select(decimalArray => (RosterVector) decimalArray));
+        public static CategoricalLinkedMultiOptionAnswer FromIntegerArrayArray(int[][] integers)
+            => integers == null ? null : new CategoricalLinkedMultiOptionAnswer(integers.Select(intArray => (RosterVector) intArray));
 
-        public decimal[][] ToDecimalArrayArray() => this.CheckedValues.Select(value => value.CoordinatesAsDecimals.ToArray()).ToArray();
+        public RosterVector[] ToRosterVectorArray() => this.CheckedValues.ToArray();
 
         public override string ToString() => string.Join(", ", CheckedValues);
     }

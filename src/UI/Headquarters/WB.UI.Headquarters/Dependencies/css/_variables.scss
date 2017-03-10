@@ -3,7 +3,7 @@ $screen-sm:                  880px;
 $screen-md:                  1210px;
 $screen-lg:                  1400px;
 $screen-md-min:              $screen-md;
-$grid-float-breakpoint:     $screen-md-min;
+$screen-sm-min:              $screen-sm;
 $grid-gutter-width:         30px;
 $container-tablet:             (768px + $grid-gutter-width);
 $container-desktop:            (960px + $grid-gutter-width);

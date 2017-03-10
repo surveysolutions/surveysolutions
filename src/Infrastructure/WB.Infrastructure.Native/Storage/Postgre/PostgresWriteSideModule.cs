@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -36,7 +34,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
             this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
-            this.Kernel.Bind<IEventStoreApiService>().To<NullIEventStoreApiService>();
         }
 
         private IStreamableEventStore GetEventStore()
@@ -46,14 +43,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
 
             return eventStore;
-        }
-
-        class NullIEventStoreApiService : IEventStoreApiService
-        {
-            public Task RunScavengeAsync()
-            {
-                return Task.FromResult(true);
-            }
         }
     }
 }

@@ -5,6 +5,8 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
@@ -17,13 +19,13 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.TextQuestion(id: textQuetionId, variable: "txt"),
-                    Create.Group(id: Guid.NewGuid(), enablementCondition: "txt!=\"Nastya\"", children: new[]
+                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
                     {
-                        Create.Variable(id: variableId, variableName: "v1", expression: "txt.Length")
+                        Create.Entity.Variable(variableId, variableName: "v1", expression: "txt.Length")
                     })
                 });
 

@@ -26,18 +26,17 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option("2"), Create.Option("22")
+                    Abc.Create.Entity.Option("2"), Abc.Create.Entity.Option("22")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
-                    Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
+                    Abc.Create.Entity.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(q3Id, variable: "age", enablementCondition:"@rowindex == 1"),
+                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age", enablementCondition:"@rowindex == 1"),
                     }),
-                    Create.MultyOptionsQuestion(q4Id, variable: "q4", linkedToRosterId: rosterId),
-                    
+                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "q4", linkedToRosterId: rosterId)
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);

@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,14 +23,16 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                Guid questionWithConditionUsingSingleLinked = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                Guid questionWithConditionUsingMultiLinked = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-               QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+               QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                    children: new IComposite[]
                    {
-                        Create.ListQuestion(id: listQuestionId, variable: "list"),
-                        Create.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
-                        Create.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
-                        Create.TextQuestion(id: questionWithConditionUsingSingleLinked, variable: "txt", enablementCondition: "lnkSgl == 0"),
-                        Create.TextQuestion(id: questionWithConditionUsingMultiLinked, variable: "txt1", enablementCondition: "lnkMul.Contains(0)")
+                        Abc.Create.Entity.TextListQuestion(questionId: listQuestionId, variable: "list"),
+                        Abc.Create.Entity.SingleOptionQuestion(questionId: linkedSingleOptionQuestion, variable: "lnkSgl", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.MultyOptionsQuestion(id: linkedMultioptionQuestion, variable: "lnkMul", linkedToQuestionId: listQuestionId),
+                        Abc.Create.Entity.TextQuestion(questionId: questionWithConditionUsingSingleLinked, variable: "txt",
+                            enablementCondition: "lnkSgl == 0"),
+                        Abc.Create.Entity.TextQuestion(questionId: questionWithConditionUsingMultiLinked, variable: "txt1",
+                            enablementCondition: "lnkMul.Contains(0)")
                    });
 
                var interview = SetupInterview(questionnaireDocument);

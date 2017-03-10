@@ -22,17 +22,17 @@ namespace WB.Tests.Integration.SupervisorTeamsAndStatusesReportTests
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
-                Create.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
-                                        
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
-                Create.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.SupervisorAssigned),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.InterviewerAssigned),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedBySupervisor),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedBySupervisor),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.ApprovedByHeadquarters),
+                Abc.Create.Entity.InterviewSummary(responsibleId: firstResponsibleId, status: InterviewStatus.RejectedByHeadquarters),
+
+                Abc.Create.Entity.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(responsibleId: secondResponsibleId, status: InterviewStatus.Completed),
             };
 
             var repository = CreateInterviewSummaryRepository();

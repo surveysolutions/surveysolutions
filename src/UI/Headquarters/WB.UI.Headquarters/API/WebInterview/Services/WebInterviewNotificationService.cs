@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
         }
 
-        public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] questions)
+        public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
 
@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             {
                 var entitiesToRefresh = new List<Tuple<string, Identity>>();
 
-                foreach (var entity in questions)
+                foreach (var entity in entities)
                 {
                     var parent = questionnarie.GetParentById(entity.Id);
                     var parentVector = entity.RosterVector;
@@ -167,7 +167,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         private bool IsSupportFilterOptionCondition(IComposite documentEntity)
-            => !string.IsNullOrWhiteSpace(((IQuestion) documentEntity)?.Properties.OptionsFilterExpression);
+        {
+            var question = documentEntity as IQuestion;
+            if (question != null && !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression))
+                return true;
 
         public virtual void RefreshEntitiesWithFilteredOptions(Guid interviewId)
         {

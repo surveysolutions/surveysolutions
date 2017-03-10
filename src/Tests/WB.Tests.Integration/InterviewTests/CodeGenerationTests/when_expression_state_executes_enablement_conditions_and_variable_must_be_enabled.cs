@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -24,13 +26,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.Group(id: groupId, enablementCondition:"true", children: new IComposite[]
+                        Create.Entity.Group(groupId, enablementCondition: "true", children: new IComposite[]
                         {
-                            Create.TextQuestion(id: questionId, variable: "txt"),
-                            Create.Variable(id: variableId, expression: "txt.Length")
+                            Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                            Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                         })
                     });
                 IInterviewExpressionStateV9 state =
@@ -48,8 +50,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (long?)variables.ChangedVariableValues[Create.Identity(variableId)],
-                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(Create.Identity(variableId))
+                    IntVariableResult = (long?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)],
+                    IsVariableEnabled = enablementConditions.VariablesToBeEnabled.Contains(Abc.Create.Identity(variableId))
                 };
             });
 

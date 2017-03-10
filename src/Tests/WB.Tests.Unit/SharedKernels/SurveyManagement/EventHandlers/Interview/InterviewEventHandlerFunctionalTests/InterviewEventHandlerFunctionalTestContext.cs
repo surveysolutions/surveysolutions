@@ -29,14 +29,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var questionnaireMock = new Mock<IQuestionnaire>();
-            var questionnaireDocumentMock = new QuestionnaireDocument();
+            var questionnaireDocumentMock = questionnaireDocument ?? new QuestionnaireDocument();
 
-            var rostrerStructureService = new Mock<IRostrerStructureService>();
+            var rostrerStructureService = new Mock<IRosterStructureService>();
             rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(scopes);
             
             var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock);
+            questionnaireRosterStructureMockStorage.Setup(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
+            questionnaireRosterStructureMockStorage.Setup(
+                x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock);
+
             var userDocumentMockStorage = new Mock<IUserViewFactory>();
             userDocumentMockStorage.Setup(x => x.GetUser(It.IsAny<UserViewInputModel>())).Returns(user);
 

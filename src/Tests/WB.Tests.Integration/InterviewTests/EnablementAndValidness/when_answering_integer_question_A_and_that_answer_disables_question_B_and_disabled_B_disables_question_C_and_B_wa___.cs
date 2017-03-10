@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -30,26 +31,28 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(questionAId, "a"),
-                    Create.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
-                    Create.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionCId, "c", enablementCondition: "b > 0")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        Create.Identity(questionAId),
-                        Create.Identity(questionBId),
-                        Create.Identity(questionCId)
+                        Abc.Create.Identity(questionAId),
+                        Abc.Create.Identity(questionBId),
+                        Abc.Create.Identity(questionCId)
                     }),
-                    Create.Event.NumericIntegerQuestionAnswered(questionBId, 0)
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
+                        questionBId, null, 0, null, null
+                    )
                 });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionAId, Empty.RosterVector, answerTime, 0);
+                    interview.AnswerNumericIntegerQuestion(userId, questionAId, RosterVector.Empty, answerTime, 0);
 
                     return new InvokeResults
                     {

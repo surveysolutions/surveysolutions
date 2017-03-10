@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Tests.Abc;
 using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 

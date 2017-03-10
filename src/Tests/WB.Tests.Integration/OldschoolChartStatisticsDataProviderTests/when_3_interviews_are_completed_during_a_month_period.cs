@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
     {
         Establish context = () =>
         {
-            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString,
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
                 new[] {typeof (CumulativeReportStatusChangeMap)});
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
@@ -29,9 +29,9 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             cumulativeReportStatusChangeStorage =
                 new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>(), "EntryId");
 
-            var cumulativeReportStatusChangeBegin = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
-            var cumulativeReportStatusChangeInBetween = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);
-            var cumulativeReportStatusChangeEnd = Create.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, endDate);
+            var cumulativeReportStatusChangeBegin = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
+            var cumulativeReportStatusChangeInBetween = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);
+            var cumulativeReportStatusChangeEnd = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, endDate);
 
             ExecuteInCommandTransaction(() =>
             {

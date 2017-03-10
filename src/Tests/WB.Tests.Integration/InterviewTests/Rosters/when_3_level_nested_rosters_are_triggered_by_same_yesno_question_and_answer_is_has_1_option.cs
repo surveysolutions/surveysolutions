@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -30,29 +31,29 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster2Id = Guid.Parse("22222222222222222222222222222222");
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, options: new List<Answer>
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true, options: new List<Answer>
                     {
-                        Create.Option(value: "20", text: "A"),
-                        Create.Option(value: "30", text: "B")
+                        Abc.Create.Entity.Option(value: "20", text: "A"),
+                        Abc.Create.Entity.Option(value: "30", text: "B")
                     }),
 
-                    Create.Roster(
-                        id: roster1Id,
+                    Abc.Create.Entity.Roster(
+                        rosterId: roster1Id,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         variable: "first",
                         children: new IComposite[]
                         {
-                            Create.Roster(
-                                id: roster2Id,
+                            Abc.Create.Entity.Roster(
+                                rosterId: roster2Id,
                                 rosterSizeSourceType: RosterSizeSourceType.Question,
                                 rosterSizeQuestionId: rosterSizeQuestionId,
                                 variable: "second",
                                 children: new IComposite[]
                                 {
-                                    Create.Roster(
-                                        id: roster3Id,
+                                    Abc.Create.Entity.Roster(
+                                        rosterId: roster3Id,
                                         rosterSizeSourceType: RosterSizeSourceType.Question,
                                         rosterSizeQuestionId: rosterSizeQuestionId,
                                         variable: "third",
@@ -68,11 +69,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(30)));
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, answeredOptions: new [] { Yes(30) }));
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(20)));
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, answeredOptions: new[] { Yes(20) }));
 
                     var deletedRosters = eventContext.GetSingleEvent<RosterInstancesRemoved>().Instances;
                     var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;

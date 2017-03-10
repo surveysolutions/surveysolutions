@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
@@ -71,9 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 
         It should_return_specified_valid_static_texts = () =>
         {
-            result.ValidStaticTexts.Count.ShouldEqual(4);
-            result.ValidStaticTexts.ShouldEachConformTo(sttid =>
-                sttid == validStaticText1Id || sttid == validStaticText2Id || sttid == disabledStaticText1Id ||sttid == disabledStaticText2Id);
+            result.ValidStaticTexts.Count.ShouldEqual(0);
         };
 
         It should_return_specified_invalid_static_texts = () =>

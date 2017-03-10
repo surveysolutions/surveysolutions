@@ -41,14 +41,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
-        private readonly IRostrerStructureService rosterStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public PreloadedDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IRostrerStructureService rosterStructureService)
+            IRosterStructureService rosterStructureService)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;

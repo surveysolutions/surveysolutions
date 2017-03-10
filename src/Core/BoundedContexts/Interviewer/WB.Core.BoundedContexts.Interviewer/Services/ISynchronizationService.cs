@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -18,6 +16,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task SendClientInfoAsync(ClientInfoApiView info, CancellationToken? token = null);
         Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
@@ -28,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
-        Task SendTabletInformationAsync(string filePath, CancellationToken token);
+        Task SendBackupAsync(string filePath, CancellationToken token);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
 
@@ -41,5 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<AttachmentContent> GetAttachmentContentAsync(string contentId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken);
         Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);
+
+        Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);
     }
 }

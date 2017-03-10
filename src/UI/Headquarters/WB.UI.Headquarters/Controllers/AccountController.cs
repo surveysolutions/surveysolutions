@@ -10,10 +10,11 @@ using Microsoft.AspNet.Identity.Owin;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -24,9 +25,13 @@ namespace WB.UI.Headquarters.Controllers
         public AccountController(
             ICommandService commandService, 
             ILogger logger,
-            IIdentityManager identityManager)
+            IIdentityManager identityManager,
+            ICaptchaProvider captchaProvider, 
+            ICaptchaService captchaService)
             : base(commandService, logger, identityManager)
         {
+            this.captchaProvider = captchaProvider;
+            this.captchaService = captchaService;
         }
 
         [HttpGet]
@@ -54,10 +59,14 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AllowAnonymous]
         public ActionResult LogOn(string returnUrl)
-        {
+        {   
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
-            return this.View();
+
+            return this.View(new LogOnModel
+            {
+                RequireCaptcha = this.captchaService.ShouldShowCaptcha(null)
+            });
         }
 
         [HttpPost]
@@ -65,10 +74,15 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
-            this.ViewBag.ReturnUrl = returnUrl;
+            model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
-            if (!ModelState.IsValid)
+            if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))
             {
+                this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
+                return this.View(model);
+            }
+
+            if (!ModelState.IsValid)            {
                 return View(model);
             }
             
@@ -76,9 +90,12 @@ namespace WB.UI.Headquarters.Controllers
             switch (signInResult)
             {
                 case SignInStatus.Success:
+                    this.captchaService.ResetFailedLogin(model.UserName);
                     return RedirectToLocal(returnUrl);
                 default:
-                    ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
+                    this.captchaService.RegisterFailedLogin(model.UserName);
+                    model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
+                    this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
                     return View(model);
             }
         }
@@ -89,14 +106,14 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect("~/");
         }
 
-        [Authorize(Roles = @"Administrator, Headquarter")]
+        [Authorize]
         public ActionResult Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
             var currentUser = this.identityManager.CurrentUser;
 
-            return View(new UserEditModel()
+            return View(new ManageAccountModel()
             {
                 Id = currentUser.Id,
                 Email = currentUser.Email,
@@ -108,9 +125,18 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> Manage(UserEditModel model)
+        public async Task<ActionResult> Manage(ManageAccountModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                bool isPasswordValid = Membership.ValidateUser(this.GlobalInfo.GetCurrentUser().Name, this.passwordHasher.Hash(model.OldPassword));
+                if (!isPasswordValid)
+                {
+                    this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
+                }
+            }
 
             if (this.ModelState.IsValid)
             {

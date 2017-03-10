@@ -5,7 +5,9 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -34,28 +36,28 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var textQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(id: rosterSizeIntQuestionId, variable:"numeric"),
-                    Create.Roster(
-                        id: numericRosterId, 
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeIntQuestionId, variable:"numeric"),
+                    Abc.Create.Entity.Roster(
+                        rosterId: numericRosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeIntQuestionId,
                         variable: "numRoster",
                         children: new IComposite[]
                         {
-                            Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
+                            Abc.Create.Entity.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
                             {
-                                Create.Option(value: "1", text: "Hello"),
-                                Create.Option(value: "2", text: "World")
+                                Abc.Create.Entity.Option(value: "1", text: "Hello"),
+                                Abc.Create.Entity.Option(value: "2", text: "World")
                             }),
-                            Create.Roster(
-                                id: nestedMultiRosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: nestedMultiRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.Question,
                                 rosterSizeQuestionId: rosterSizeMultiQuestionId,
                                 variable: "multiRoster",
                                 children: new IComposite[]
                                 {
-                                    Create.TextQuestion(textQuestionId, variable: "text")
+                                    Abc.Create.Entity.TextQuestion(questionId: textQuestionId, variable: "text")
                                 })
                         })
                 );
@@ -64,24 +66,24 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 2);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, RosterVector.Empty, DateTime.Now, 2);
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Create.RosterVector(0), DateTime.Now, new [] { 1, 2 });
-                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(0, 1), DateTime.Now, "aaa");
-                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(0, 2), DateTime.Now, "bbb");
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Abc.Create.Entity.RosterVector(new[] {0}), DateTime.Now, new [] { 1, 2 });
+                interview.AnswerTextQuestion(userId, textQuestionId, Abc.Create.Entity.RosterVector(new[] {0, 1}), DateTime.Now, "aaa");
+                interview.AnswerTextQuestion(userId, textQuestionId, Abc.Create.Entity.RosterVector(new[] {0, 2}), DateTime.Now, "bbb");
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Create.RosterVector(1), DateTime.Now, new [] { 1, 2 });
-                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(1, 1), DateTime.Now, "ccc");
-                interview.AnswerTextQuestion(userId, textQuestionId, Create.RosterVector(1, 2), DateTime.Now, "ddd");
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, Abc.Create.Entity.RosterVector(new[] {1}), DateTime.Now, new [] { 1, 2 });
+                interview.AnswerTextQuestion(userId, textQuestionId, Abc.Create.Entity.RosterVector(new[] {1, 1}), DateTime.Now, "ccc");
+                interview.AnswerTextQuestion(userId, textQuestionId, Abc.Create.Entity.RosterVector(new[] {1, 2}), DateTime.Now, "ddd");
 
                 using (var eventContext = new EventContext())
                 {                    
-                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 1);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
-                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 1))));
-                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(0, 2))));
-                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(1, 1))));
-                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Create.RosterVector(1, 2))));
+                    result.HasRemoveAnswerInPosition_0_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Abc.Create.Entity.RosterVector(new[] {0, 1}))));
+                    result.HasRemoveAnswerInPosition_0_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Abc.Create.Entity.RosterVector(new[] {0, 2}))));
+                    result.HasRemoveAnswerInPosition_1_1 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Abc.Create.Entity.RosterVector(new[] {1, 1}))));
+                    result.HasRemoveAnswerInPosition_1_2 = eventContext.AnyEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == textQuestionId && q.RosterVector.Identical(Abc.Create.Entity.RosterVector(new[] {1, 2}))));
                 }
 
                 return result;

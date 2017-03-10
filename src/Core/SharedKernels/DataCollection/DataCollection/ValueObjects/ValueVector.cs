@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             return 0;
         }
 
-        public int Length { get { return this.values.Count; }}
+        public int Length => this.values.Count;
 
         public int IndexOf(T item)
         {
@@ -100,9 +100,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             return this.values.Remove(item);
         }
 
-        public int Count { get { return values.Count; } }
+        public int Count => this.values.Count;
 
-        public bool IsReadOnly { get { return false; }}
+        public bool IsReadOnly => false;
 
         public override string ToString()
         {

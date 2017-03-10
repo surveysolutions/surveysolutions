@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.MaintenanceFilterTests

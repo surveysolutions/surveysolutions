@@ -150,4 +150,10 @@
   <data name="PLU0011" xml:space="preserve">
     <value> Supervisor column must be empty for user in "Supervisor" role</value>
   </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>Person name should not contain more than 100 characters</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>Phone number should not contain more than 15 characters</value>
+  </data>
 </root>

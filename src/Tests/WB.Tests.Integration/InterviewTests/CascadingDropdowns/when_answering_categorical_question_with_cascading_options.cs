@@ -33,46 +33,52 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var nonAnsweredCombo = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var comboShouldNotBeRemoved = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
                         }),
-                    Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                    Abc.Create.Entity.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "grand child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "grand child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "grand child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "grand child 1 for parent option 2", parentValue: "2"),
                         }),
-                    Create.SingleQuestion(nonAnsweredCombo, "q4", options: new List<Answer>
+                    Abc.Create.Entity.SingleQuestion(nonAnsweredCombo, "q4", options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "parent option 1"),
-                        Create.Option(value: "2", text: "parent option 2")
+                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
+                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
                     }),
-                    Create.SingleQuestion(comboShouldNotBeRemoved, "q5", cascadeFromQuestionId: nonAnsweredCombo,
+                    Abc.Create.Entity.SingleQuestion(comboShouldNotBeRemoved, "q5", cascadeFromQuestionId: nonAnsweredCombo,
                         options: new List<Answer>
                         {
-                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
-                            Create.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
+                            Abc.Create.Entity.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                            Abc.Create.Entity.Option(value: "2", text: "child 1 for parent option 2", parentValue: "2"),
                         })
                     );
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { }),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
-                    Create.Event.AnswersDeclaredInvalid(Create.Identity(childCascadedComboboxId)),
-                    Create.Event.SingleOptionQuestionAnswered(questionId: childCascadedComboboxId, answer: 1, propagationVector: new decimal[] { }),
-                    Create.Event.QuestionsEnabled(Create.Identity(grandChildCascadedComboboxId)),
-                    Create.Event.AnswersDeclaredValid(Create.Identity(childCascadedComboboxId)),
-                    Create.Event.SingleOptionQuestionAnswered(questionId: grandChildCascadedComboboxId, answer: 1, propagationVector: new decimal[] { }),
+                    Abc.Create.Event.SingleOptionQuestionAnswered(
+                        parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
+                    ),
+                    Abc.Create.Event.QuestionsEnabled(Abc.Create.Identity(childCascadedComboboxId)),
+                    Abc.Create.Event.AnswersDeclaredInvalid(new[] {Abc.Create.Identity(childCascadedComboboxId)}),
+                    Abc.Create.Event.SingleOptionQuestionAnswered(
+                        childCascadedComboboxId, new decimal[] { }, 1, null, null
+                    ),
+                    Abc.Create.Event.QuestionsEnabled(Abc.Create.Identity(grandChildCascadedComboboxId)),
+                    Abc.Create.Event.AnswersDeclaredValid(new[] {Abc.Create.Identity(childCascadedComboboxId)}),
+                    Abc.Create.Event.SingleOptionQuestionAnswered(
+                        grandChildCascadedComboboxId, new decimal[] { }, 1, null, null
+                    ),
                 });
 
                 using (var eventContext = new EventContext())

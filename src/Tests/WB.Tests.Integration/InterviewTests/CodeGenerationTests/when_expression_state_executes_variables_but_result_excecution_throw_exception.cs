@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -23,11 +25,11 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id:questionId, variable:"num"),
-                        Create.Variable(id: variableId, expression: "1/(int)num.Value")
+                        Create.Entity.NumericIntegerQuestion(id:questionId, variable:"num"),
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "1/(int)num.Value")
                     });
                 IInterviewExpressionStateV9 state =
                     GetInterviewExpressionState(questionnaireDocument, version: 16) as
@@ -39,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 return new InvokeResults()
                 {
-                    IntVariableResult = (int?)variables.ChangedVariableValues[Create.Identity(variableId)]
+                    IntVariableResult = (int?)variables.ChangedVariableValues[Abc.Create.Identity(variableId)]
                 };
             });
 

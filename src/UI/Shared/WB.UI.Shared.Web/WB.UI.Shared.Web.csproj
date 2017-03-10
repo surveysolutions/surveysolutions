@@ -38,6 +38,10 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -85,6 +89,10 @@
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -152,6 +160,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
+    <Compile Include="Captcha\ICaptchaService.cs" />
+    <Compile Include="Captcha\NoCaptchaProvider.cs" />
+    <Compile Include="Captcha\HostedCaptchaProvider.cs" />
+    <Compile Include="Captcha\ICaptchaProvider.cs" />
+    <Compile Include="Captcha\ReCaptchaProvider.cs" />
+    <Compile Include="Captcha\Extensions.cs" />
+    <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
@@ -212,12 +227,17 @@
     <Compile Include="Membership\IMembershipWebUser.cs" />
     <Compile Include="Membership\IMembershipUserService.cs" />
     <Compile Include="Membership\MembershipUserService.cs" />
+    <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
-    <Compile Include="Modules\ModulesFactory.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Captcha.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -226,7 +246,6 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
-    <Compile Include="Settings\StoreProviders.cs" />
     <Compile Include="Versions\ProductVersion.cs" />
     <Compile Include="Versions\ProductVersionHistory.cs" />
     <Compile Include="Versions\ProductVersionModule.cs" />
@@ -254,10 +273,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Captcha.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
   </ItemGroup>

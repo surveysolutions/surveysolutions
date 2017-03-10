@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests

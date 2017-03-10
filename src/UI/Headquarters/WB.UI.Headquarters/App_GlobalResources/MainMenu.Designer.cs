@@ -241,6 +241,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        internal static string Troubleshooting {
+            get {
+                return ResourceManager.GetString("Troubleshooting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Batch User Upload.
         /// </summary>
         internal static string UserBatchUpload {

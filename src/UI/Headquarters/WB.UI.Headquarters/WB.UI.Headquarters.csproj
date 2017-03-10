@@ -61,6 +61,10 @@
       <HintPath>..\..\..\..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -253,8 +257,8 @@
       <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
@@ -677,6 +681,11 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
     <EmbeddedResource Include="Resources\Strings.pt.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
@@ -763,6 +772,9 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -988,7 +1000,6 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
-    <Content Include="Views\ControlPanel\EventStore.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
@@ -1074,6 +1085,9 @@
     <Content Include="Views\WebInterview\Finish.cshtml" />
     <Content Include="Views\WebInterview\Error.cshtml" />
     <Content Include="Views\Shared\QueueIndicator.cshtml" />
+    <Content Include="Views\Troubleshooting\Index.cshtml" />
+    <Content Include="Views\Troubleshooting\CensusInterviews.cshtml" />
+    <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1094,6 +1108,7 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\BaseApiServiceController.cs" />
     <Compile Include="API\ExportController.cs" />
+    <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
@@ -1529,6 +1544,7 @@
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
@@ -1635,6 +1651,7 @@
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\ManageAccountModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -1739,6 +1756,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Troubleshooting.Designer.cs">
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\TabletSyncMessages.Designer.cs">
       <AutoGen>True</AutoGen>

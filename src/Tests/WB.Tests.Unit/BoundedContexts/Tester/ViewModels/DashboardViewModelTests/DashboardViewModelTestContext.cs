@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
@@ -56,7 +57,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                         new DashboardLastUpdate { Id = userName, LastUpdateDate = DateTime.Now }
                     }.ToReadOnlyCollection());
 
-            return new DashboardViewModel(principal: mockOfPrincipal.Object,
+            return new DashboardViewModel(
+                principal: mockOfPrincipal.Object,
                 designerApiService: designerApiService,
                 commandService: commandService,
                 questionnaireImportService: questionnaireImportService,
@@ -68,7 +70,17 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 logger: logger ?? Mock.Of<ILogger>(),
                 attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
-                translationsStorage: translationsStorage ?? Mock.Of<IPlainStorage<TranslationInstance>>());
+                questionnaireDownloader: new QuestionnaireDownloadViewModel(
+                    principal: mockOfPrincipal.Object,
+                    designerApiService: designerApiService,
+                    commandService: commandService,
+                    questionnaireImportService: questionnaireImportService,
+                    viewModelNavigationService: viewModelNavigationService,
+                    friendlyErrorMessageService: friendlyErrorMessageService,
+                    userInteractionService: userInteractionService,
+                    logger: logger ?? Mock.Of<ILogger>(),
+                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>()
+                ));
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

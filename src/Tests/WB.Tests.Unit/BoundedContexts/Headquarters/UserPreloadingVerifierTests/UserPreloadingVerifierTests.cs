@@ -15,6 +15,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 {
@@ -50,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0001", 1, "Login", userName));
-            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, 9));
+            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, Moq.It.IsAny<int>()));
         }
 
         [Test]
@@ -265,6 +267,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
             userPreloadingServiceMock.Verify(x => x.FinishValidationProcessWithError(userPreloadingProcess.UserPreloadingProcessId, Moq.It.IsAny<string>()));
+        }
+
+        [Test]
+        public void when_person_full_name_has_more_than_allowed_length_Should_return_error()
+        {
+            var fullName = new string('a', 101);
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(fullName: fullName));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0012", 1, "FullName", fullName));
+        }
+
+        [Test]
+        public void when_phone_number_more_than_allowed_length_Should_return_error()
+        {
+            var phone = new string('1', 16);
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(phoneNumber: phone));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0013", 1, "PhoneNumber", phone));
         }
 
         private UserPreloadingVerifier CreateUserPreloadingVerifier(

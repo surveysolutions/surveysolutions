@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -28,13 +25,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
-                    Create.Roster(id: roster1Id, fixedTitles: new []
+                    Abc.Create.Entity.Roster(rosterId: roster1Id, fixedRosterTitles: new []
                     {
-                        Create.FixedTitle(1),
-                        Create.FixedTitle(2),
-                        Create.FixedTitle(3),
+                        IntegrationCreate.FixedTitle(1),
+                        IntegrationCreate.FixedTitle(2),
+                        IntegrationCreate.FixedTitle(3),
                     })
                 });
 
@@ -45,9 +42,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     ILatestInterviewExpressionState expressionState = GetInterviewExpressionState(questionnaireDocument);
 
                     var interview = new StatefulInterview(
-                        Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument),
+                        Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                            questionnaireIdentity.QuestionnaireId,
+                            Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                            questionnaireIdentity.Version
+                        ),
                         Stub<IInterviewExpressionStatePrototypeProvider>.Returning(expressionState),
-                        Create.SubstitionTextFactory());
+                        Create.Service.SubstitionTextFactory());
 
                     interview.CreateInterviewOnClient(questionnaireIdentity, Guid.NewGuid(), DateTime.Now, Guid.NewGuid());
 

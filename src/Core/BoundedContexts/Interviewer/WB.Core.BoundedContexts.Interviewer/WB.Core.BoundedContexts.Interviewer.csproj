@@ -153,6 +153,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.zh-CN.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CompanyLogoInfo.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
@@ -169,9 +170,11 @@
     <Compile Include="Services\IBackupRestoreService.cs" />
     <Compile Include="Services\RestorePackageInfo.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
+    <Compile Include="Services\Synchronization\CompanyLogoSynchronizer.cs" />
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
+    <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
@@ -201,7 +204,7 @@
     <Compile Include="Views\ApplicationSettingsView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
-    <Compile Include="Views\SendTabletInformationViewModel.cs" />
+    <Compile Include="Views\BackupViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />

@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         Establish context = () =>
         {
-            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -79,7 +79,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         ResponsibleId = expectedCommand.UserId,
                         InterviewStatus = expectedCommand.InterviewStatus,
                         IsCensusInterview = expectedCommand.CreatedOnClient,
-                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray())
+                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     }));
         };
 

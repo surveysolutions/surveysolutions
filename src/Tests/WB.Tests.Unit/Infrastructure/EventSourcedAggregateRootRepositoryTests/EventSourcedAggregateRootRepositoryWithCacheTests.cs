@@ -9,6 +9,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 {

@@ -12,34 +12,34 @@ namespace WB.UI.Tester.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class PrefilledQuestionsActivity : BasePrefilledQuestionsActivity<PrefilledQuestionsViewModel>
     {
-        protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;
-        protected override int OriginalLanguageMenuItemId => Resource.Id.interview_language_original;
-        protected override int LanguagesMenuItemId => Resource.Id.interview_language;
-        protected override int MenuId => Resource.Menu.interview;
+        protected override int LanguagesMenuGroupId => Resource.Id.prefilled_questions_languages;
+        protected override int OriginalLanguageMenuItemId => Resource.Id.prefilled_questions_language_original;
+        protected override int LanguagesMenuItemId => Resource.Id.prefilled_questions_language;
+        protected override int MenuId => Resource.Menu.prefilled_questions;
 
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
-                Resource.Id.interview_dashboard,
+                Resource.Id.prefilled_questions_dashboard,
                 TesterUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
             },
             {
-                Resource.Id.interview_settings,
+                Resource.Id.prefilled_questions_settings,
                 TesterUIResources.MenuItem_Title_Settings,
                 this.ViewModel.NavigateToSettingsCommand
             },
             {
-                Resource.Id.interview_signout,
+                Resource.Id.prefilled_questions_signout,
                 TesterUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand
             },
             {
-                Resource.Id.interview_language,
+                Resource.Id.prefilled_questions_language,
                 TesterUIResources.MenuItem_Title_Language
             },
             {
-                Resource.Id.interview_language_original,
+                Resource.Id.prefilled_questions_language_original,
                 TesterUIResources.MenuItem_Title_Language_Original
             },
         };
