@@ -58,19 +58,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         #region [Interviewer Api]
-        public async Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
-                credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
-
+            return this.TryGetRestResponseOrThrowAsync(() => 
+                this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
+                credentials: credentials ?? this.restCredentials, token: token));
         }
         #endregion
 
         #region [Device Api]
 
-        public async Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"),
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
@@ -80,9 +80,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 string url = string.Concat(interviewerApiUrl, "compatibility/", this.interviewerSettings.GetDeviceId(), "/",
                     this.syncProtocolVersionProvider.GetProtocolVersion());
-                var respose = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+
+                var respose = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
                     url: url,
-                    credentials: credentials ?? this.restCredentials, token: token));
+                    credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
+
                 string response = await respose.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (response == null || response.Trim('"') != "449634775")
                 {
@@ -92,31 +94,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             catch (SynchronizationException ex)
             {
                 if ((ex.InnerException as RestException)?.StatusCode == HttpStatusCode.NotFound)
-                    await this.OldCanSynchronizeAsync(credentials, token);
+                    await this.OldCanSynchronizeAsync(credentials, token).ConfigureAwait(false);
                 else throw;
             }
         }
 
-        public async Task SendClientInfoAsync(ClientInfoApiView info, CancellationToken? token = null)
+        public Task SendClientInfoAsync(ClientInfoApiView info, CancellationToken? token = null)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.devicesController}/info",
                 request: info,
                 credentials: this.restCredentials,
-                token: token)).ConfigureAwait(false);
+                token: token));
         }
 
         [Obsolete("Since v5.10")]
         private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+            await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
                 url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: credentials ?? this.restCredentials, token: token));
+                credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
         }
 
-        public async Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.devicesController, "/link/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
@@ -126,10 +128,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         #region [Questionnaire Api]
 
 
-        public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/assembly",
@@ -137,42 +139,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
                 return restFile.Content;
-            }).ConfigureAwait(false);
+            });
         }
 
 
 
-        public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             var questionnaireContentVersion = this.interviewerSettings.GetSupportedQuestionnaireContentVersion().Major;
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<QuestionnaireApiView>(
+
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<QuestionnaireApiView>(
                 url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/{questionnaireContentVersion}",
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token,
-                credentials: this.restCredentials)).ConfigureAwait(false);
+                credentials: this.restCredentials));
         }
 
-        public async Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
+        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.questionnairesController, "/census"),
-                credentials: this.restCredentials, token: token)).ConfigureAwait(false);
+                credentials: this.restCredentials, token: token));
         }
 
-        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
+        public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
               url: string.Concat(this.questionnairesController, "/list"),
-              credentials: this.restCredentials, token: cancellationToken)).ConfigureAwait(false);
+              credentials: this.restCredentials, token: cancellationToken));
         }
 
-        public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {
             var url = $"{this.translationsController}/{questionnaireIdentity}";
 
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<TranslationDto>>(
+            return this.TryGetRestResponseOrThrowAsync(() =>  this.restService.GetAsync<List<TranslationDto>>(
                 url: url,
-                credentials: this.restCredentials, token: cancellationToken)).ConfigureAwait(false);
+                credentials: this.restCredentials, token: cancellationToken));
         }
 
         public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
@@ -184,7 +187,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
                 credentials: this.restCredentials)).ConfigureAwait(false);
         }
@@ -193,86 +196,84 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [Interview Api]
 
-        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
-                await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController,
-                    credentials: this.restCredentials, token: token)).ConfigureAwait(false);
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController,
+                    credentials: this.restCredentials, token: token));
         }
 
-        public async Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
+        public Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/", interviewId, "/logstate"),
-                credentials: this.restCredentials)).ConfigureAwait(false);
+                credentials: this.restCredentials));
         }
 
-        public async Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             try
             {
-                var interviewDetailsApiView = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerInterviewApiView>(
-                    url: string.Concat(this.interviewsController, "/", interviewId),
-                    credentials: this.restCredentials,
-                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
-                    token: token)).ConfigureAwait(false);
-                return interviewDetailsApiView;
+                return this.TryGetRestResponseOrThrowAsync(
+                    () => this.restService.GetAsync<InterviewerInterviewApiView>(
+                        url: string.Concat(this.interviewsController, "/", interviewId),
+                        credentials: this.restCredentials,
+                        onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                        token: token));
             }
             catch (SynchronizationException exception)
             {
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
-                    return null;
+                    return Task.FromResult<InterviewerInterviewApiView>(null);
 
                 this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
                 throw;
             }
         }
 
-        public async Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
-                token: token)).ConfigureAwait(false);
+                token: token));
         }
 
-        public async Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
+             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/", interviewId, "/image"),
-                request: new PostFileRequest()
+                request: new PostFileRequest
                 {
                     InterviewId = interviewId,
                     FileName = fileName,
                     Data = Convert.ToBase64String(fileData)
                 },
                 credentials: this.restCredentials,
-                token: token)).ConfigureAwait(false);
+                token: token));
         }
-
-
 
         #endregion
         
         #region Attachments
-        public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
+        public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
             Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
-                await this.restService.GetAsync<List<string>>(
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<List<string>>(
                     url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/attachments",
                     credentials: this.restCredentials,
-                    token: token)).ConfigureAwait(false);
+                    token: token));
         }
 
-        public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
+        public Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
             Action<decimal, long, long> onDownloadProgressChanged, 
             CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: $"{this.attachmentContentController}/{contentId}",
@@ -288,15 +289,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Size = restFile.ContentLength ?? restFile.Content.Length
                 };
                 return attachmentContent;
-            }).ConfigureAwait(false);
+            });
         } 
         #endregion
 
         #region [Application Api]
 
-        public async Task<byte[]> GetApplicationAsync(CancellationToken token)
+        public Task<byte[]> GetApplicationAsync(CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
@@ -305,12 +306,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             });
         }
 
-        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
+        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
                     url: string.Concat(interviewerApiUrl, "/latestversion"),
-                    credentials: this.restCredentials, token: token).ConfigureAwait(false)).ConfigureAwait(false);
+                    credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
         public async Task SendBackupAsync(string filePath, CancellationToken token)
@@ -480,11 +481,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
         {
-            var response = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
                 url: this.logoController,
                 credentials: this.restCredentials,
                 customHeaders: !string.IsNullOrEmpty(storedClientEtag) ? new Dictionary<string, string> {{"If-None-Match", storedClientEtag }} : null,
-                token: cancellationToken));
+                token: cancellationToken)).ConfigureAwait(false);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
                 return new CompanyLogoInfo {HasCustomLogo = false};
@@ -495,7 +496,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 HasCustomLogo = true,
                 LogoNeedsToBeUpdated = true,
-                Logo = await response.Content.ReadAsByteArrayAsync(),
+                Logo = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false),
                 Etag = response.Headers.ETag.Tag
             };
         }

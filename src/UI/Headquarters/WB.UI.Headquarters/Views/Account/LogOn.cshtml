@@ -14,9 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQ Login</title>
-
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
-
     <!-- cssLibs:css -->
     <!-- endinject -->
     <!-- cssApp:css -->
@@ -63,22 +61,12 @@
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="retina headquarter">Survey Solutions Headquarters</div>
-                                if (ViewData.ModelState.ContainsKey("InvalidCredentials") && ViewData.ModelState["InvalidCredentials"].Errors.Any())
+                                if (ViewData.ModelState.Any(s => s.Value.Errors.Any()))
                                 {
                                     <div class="form-group has-error">
                                         <p>
                                             <span class="help-block">
-                                                @Html.ValidationMessage("InvalidCredentials")
-                                            </span>
-                                        </p>
-                                    </div>
-                                }
-                                if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
-                                {
-                                    <div class="form-group has-error">
-                                        <p>
-                                            <span class="help-block">
-                                                @Html.ValidationMessage("InvalidCaptcha")
+                                                @Html.ValidationMessage(ViewData.ModelState.Keys.First(f => ViewData.ModelState[f].Errors.Any()))
                                             </span>
                                         </p>
                                     </div>
@@ -133,7 +121,6 @@
                 {
                     <span id="build-config">[.NET Debug]</span>
                 }
-
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
@@ -143,8 +130,6 @@
             </div>
         </div>
     </footer>
-
-
     @Html.Partial("Clickjacking")
     <!-- jsLibs:js -->
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
@@ -152,7 +137,6 @@
 
     <!-- jsApp:js -->
     <!-- endinject -->
-
     <script type="text/javascript">
     $("<img/>")
         .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
