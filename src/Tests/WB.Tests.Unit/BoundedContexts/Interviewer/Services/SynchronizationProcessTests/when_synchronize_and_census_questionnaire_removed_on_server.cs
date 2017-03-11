@@ -60,13 +60,25 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 );
         };
 
+        private static readonly ManualResetEventSlim progressWaiter = new ManualResetEventSlim();
+
         private static void ProgressInfo_ProgressChanged(object sender, SyncProgressInfo e)
-            => totalDeletedInterviewsCount = e.Statistics.TotalDeletedInterviewsCount;
+        {
+            totalDeletedInterviewsCount = e.Statistics.TotalDeletedInterviewsCount;
+
+            if (totalDeletedInterviewsCount > 0)
+            {
+                progressWaiter.Set();
+            }
+        }
 
         Because of = () => viewModel.SyncronizeAsync(progressInfo, CancellationToken.None).WaitAndUnwrapException();
 
-        It should_progress_report_1_deleted_interview = () =>
+        private It should_progress_report_1_deleted_interview = () =>
+        {
+            progressWaiter.Wait(TimeSpan.FromSeconds(5));
             totalDeletedInterviewsCount.ShouldEqual(1);
+        };
 
         It should_remove_1_interview_from_local_storage = () =>
             mockOFInterviewAccessor.Verify(_=>_.RemoveInterview(interviewId), Times.Once);
