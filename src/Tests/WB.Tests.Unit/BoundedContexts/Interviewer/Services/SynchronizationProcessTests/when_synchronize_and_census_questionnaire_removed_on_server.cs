@@ -35,10 +35,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     QuestionnaireId = "questionnaire id"
                 }
             });
-
-            progressInfo = new Progress<SyncProgressInfo>();
-            progressInfo.ProgressChanged += ProgressInfo_ProgressChanged;
-
+            totalDeletedInterviewsCount = 0;
+            progressInfo = new Mock<IProgress<SyncProgressInfo>>();
+            progressInfo.Setup(pi => pi.Report(Moq.It.IsAny<SyncProgressInfo>()))
+                .Callback<SyncProgressInfo>(spi => totalDeletedInterviewsCount = spi.Statistics.TotalDeletedInterviewsCount);
+           
             synchronizationService = Mock.Of<ISynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
                 && x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>())
@@ -60,41 +61,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 );
         };
 
-        private static readonly ManualResetEventSlim progressWaiter = new ManualResetEventSlim();
+        Because of = () => viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None).WaitAndUnwrapException();
 
-        private static void ProgressInfo_ProgressChanged(object sender, SyncProgressInfo e)
-        {
-            totalDeletedInterviewsCount = e.Statistics.TotalDeletedInterviewsCount;
-
-            if (totalDeletedInterviewsCount > 0)
-            {
-                progressWaiter.Set();
-            }
-        }
-
-        Because of = () => viewModel.SyncronizeAsync(progressInfo, CancellationToken.None).WaitAndUnwrapException();
-
-        private It should_progress_report_1_deleted_interview = () =>
-        {
-            progressWaiter.Wait(TimeSpan.FromSeconds(5));
-            totalDeletedInterviewsCount.ShouldEqual(1);
-        };
+        private It should_progress_report_1_deleted_interview = () => totalDeletedInterviewsCount.ShouldEqual(1);
 
         It should_remove_1_interview_from_local_storage = () =>
             mockOFInterviewAccessor.Verify(_=>_.RemoveInterview(interviewId), Times.Once);
-
-        private Cleanup stuff = () =>
-        {
-            progressInfo.ProgressChanged -= ProgressInfo_ProgressChanged;
-            progressInfo = null;
-        };
-
+        
         static SynchronizationProcess viewModel;
         static ISynchronizationService synchronizationService;
         static IInterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
         static Mock<IInterviewerInterviewAccessor> mockOFInterviewAccessor;
-        static Progress<SyncProgressInfo> progressInfo;
-        static int totalDeletedInterviewsCount;
+        static Mock<IProgress<SyncProgressInfo>> progressInfo;
         static Guid interviewId;
+        private static int totalDeletedInterviewsCount;
     }
 }
