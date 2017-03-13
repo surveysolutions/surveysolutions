@@ -213,9 +213,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
 
-        private IMvxCommand loadQuestionnaireCommand;
+        private IMvxAsyncCommand loadQuestionnaireCommand;
 
-        public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
+        public IMvxAsyncCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
             = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
 
         private IMvxAsyncCommand refreshQuestionnairesCommand;
