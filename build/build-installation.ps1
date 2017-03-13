@@ -46,7 +46,6 @@ Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 
 
 Set-Location $workdir
-Remove-Item $setupProject -Force
 
 if (!($noDestCleanup)) {
 	Remove-Item $HQsitePath -Force -Recurse
