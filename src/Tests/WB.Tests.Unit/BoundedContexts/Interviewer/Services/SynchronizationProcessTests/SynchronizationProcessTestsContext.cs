@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
@@ -31,13 +32,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             IMvxMessenger messenger = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
-            IAttachmentContentStorage attachmentContentStorage = null)
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IInterviewerSettings interviewerSettings = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
             return new SynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
@@ -46,9 +48,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
-                new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),  
+                new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                interviewerSettings ?? Mock.Of<IInterviewerSettings>(_ => _.GetDeviceInfo() == new DeviceInfo
+                {
+                    RAMInfo = new RAMInfo(),
+                    StorageInfo = new StorageInfo(),
+                    DeviceLocation = new LocationAddress()
+                }));
         }
     }
 }

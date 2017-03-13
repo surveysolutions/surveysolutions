@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/tabletInfoAsFile", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
             config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}", c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
+            config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
 

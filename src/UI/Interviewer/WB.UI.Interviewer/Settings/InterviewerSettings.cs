@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
+using Android.Locations;
+using Android.Net;
 using Android.OS;
+using Android.Telephony;
+using Android.Telephony.Gsm;
+using Android.Views;
 using Plugin.DeviceInfo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -15,10 +22,13 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Utils;
 using Environment = System.Environment;
+using Java.Util;
+using Plugin.Permissions.Abstractions;
+using Permission = Plugin.Permissions.Abstractions.Permission;
 
 namespace WB.UI.Interviewer.Settings
 {
-    internal class InterviewerSettings : IInterviewerSettings
+    internal class InterviewerSettings : IInterviewerSettings, IDisposable
     {
         private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -27,6 +37,25 @@ namespace WB.UI.Interviewer.Settings
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IDeviceOrientation deviceOrientation;
+        private readonly IBattery battery;
+        private readonly IPermissions permissions;
+        private readonly GsmSignalStrengthListener gsmSignalStrengthListener;
+
+        private PackageInfo appPackageInfo =>
+            Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, PackageInfoFlags.MetaData);
+
+        private ActivityManager activityManager
+            => Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
+
+        private ConnectivityManager connectivityManager
+            => Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
+
+        private TelephonyManager telephonyManager
+            => Application.Context.GetSystemService(Context.TelephonyService) as TelephonyManager;
+
+        private LocationManager locationManager
+            => Application.Context.GetSystemService(Context.LocationService) as LocationManager;
 
         public InterviewerSettings(
             IPlainStorage<ApplicationSettingsView> settingsStorage, 
@@ -36,6 +65,9 @@ namespace WB.UI.Interviewer.Settings
             IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
+            IDeviceOrientation deviceOrientation,
+            IBattery battery,
+            IPermissions permissions,
             string backupFolder, 
             string restoreFolder)
         {
@@ -46,8 +78,13 @@ namespace WB.UI.Interviewer.Settings
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.deviceOrientation = deviceOrientation;
+            this.battery = battery;
+            this.permissions = permissions;
             this.BackupFolder = backupFolder;
             this.RestoreFolder = restoreFolder;
+
+            gsmSignalStrengthListener = new GsmSignalStrengthListener(this.telephonyManager);
         }
 
         private ApplicationSettingsView CurrentSettings => this.settingsStorage.FirstOrDefault() ?? new ApplicationSettingsView
@@ -100,12 +137,7 @@ namespace WB.UI.Interviewer.Settings
                 return _userAgent;
             }
         }
-
-        public string GetApplicationVersionName()
-        {
-            var packageInfo = Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0);
-            return packageInfo.VersionName;
-        }
+        public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
         public string GetDeviceTechnicalInformation()
         {
@@ -133,11 +165,11 @@ namespace WB.UI.Interviewer.Settings
                    $"InterviewsList:{interviewIds}";
         }
 
-        private string GetDeviceModel() => CrossDeviceInfo.Current.Model;
+        public string GetDeviceModel() => CrossDeviceInfo.Current.Model;
 
-        private string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
+        public string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
 
-        private string GetAndroidVersion() => Android.OS.Build.VERSION.Release;
+        public string GetAndroidVersion() => Build.VERSION.Release;
 
         public void SetEventChunkSize(int eventChunkSize)
         {
@@ -147,10 +179,7 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public int GetApplicationVersionCode()
-        {
-            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
-        }
+        public int GetApplicationVersionCode() => this.appPackageInfo.VersionCode;
 
         public void SetEndpoint(string endpoint)
         {
@@ -232,7 +261,116 @@ namespace WB.UI.Interviewer.Settings
         private string GetDiskInformation()
             => AndroidInformationUtils.GetDiskInformation();
 
-        private string GetDataBaseSize() => 
+        public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
+
+        public DeviceInfo GetDeviceInfo() => new DeviceInfo
+        {
+            DeviceId = this.GetDeviceId(),
+            DeviceModel = this.GetDeviceModel(),
+            DeviceType = this.GetDeviceType(),
+            DeviceDate = DateTime.Now,
+            DeviceLanguage = Locale.Default.DisplayLanguage,
+            DeviceLocation = this.GetDeviceLocationAsync().Result,
+            AndroidVersion = this.GetAndroidVersion(),
+            AndroidSdkVersion = (int)Build.VERSION.SdkInt,
+            AppVersion = this.GetAppVersion(),
+            LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToLocalTime(),
+            AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
+            BatteryChargePercent = this.battery.GetRemainingChargePercent(),
+            BatteryPowerSource = this.battery.GetPowerSource().ToString(),
+            MobileOperator = this.telephonyManager?.NetworkOperatorName,
+            MobileSignalStrength = this.gsmSignalStrengthListener.SignalStrength,
+            NetworkType = this.connectivityManager?.ActiveNetworkInfo?.TypeName,
+            NetworkSubType = this.connectivityManager?.ActiveNetworkInfo?.SubtypeName,
+            DBSizeInfo = this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()),
+            RAMInfo = this.GetRAMInfo(),
+            StorageInfo = this.GetStorageInfo()
+        };
+
+        private async Task<LocationAddress> GetDeviceLocationAsync()
+        {
+            var locationPermissionsStatus = await this.permissions.CheckPermissionStatusAsync(Permission.Location);
+            if (locationPermissionsStatus != PermissionStatus.Granted) return null;
+
+            var locationProvider = this.locationManager.GetBestProvider(new Criteria(), true);
+            Location location = this.locationManager.GetLastKnownLocation(locationProvider);
+            
+            var geocoder = new Geocoder(Application.Context);
+            IList<Address> addressList = await geocoder.GetFromLocationAsync(location.Latitude, location.Longitude, 10).ConfigureAwait(false);
+            Address address = addressList?.FirstOrDefault();
+
+            return address == null ? null : new LocationAddress
+            {
+                Latitude = address.Latitude,
+                Longitude = address.Longitude,
+                Address = ToLocationAddress(address).ToArray()
+            };
+        }
+
+        private IEnumerable<string> ToLocationAddress(Address address)
+        {
+            for (int i = 0; i < address.MaxAddressLineIndex; i++)
+                yield return address.GetAddressLine(i);
+        }
+
+        private Version GetAppVersion()
+            => new Version($"{this.GetApplicationVersionName()}.{this.GetApplicationVersionCode()}");
+
+        private RAMInfo GetRAMInfo()
+        {
+            if (this.activityManager == null)
+                return null;
+
+            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+            activityManager.GetMemoryInfo(mi);
+
+            return new RAMInfo
+            {
+                Total = mi.TotalMem,
+                Free = mi.AvailMem
+            };
+        }
+
+        private StorageInfo GetStorageInfo()
+        {
+            StatFs stat = new StatFs(Android.OS.Environment.DataDirectory.Path);
+
+            return new StorageInfo
+            {
+                Free = stat.AvailableBlocksLong * stat.BlockSizeLong,
+                Total = stat.BlockCountLong * stat.BlockSizeLong
+            };
+        }
+
+        public void Dispose()
+        {
+            this.gsmSignalStrengthListener.Dispose();
+        }
+    }
+
+    public class LocationListener : ILocationListener
+    {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IntPtr Handle { get; }
+        public void OnLocationChanged(Location location)
+        {
+        }
+
+        public void OnProviderDisabled(string provider)
+        {
+        }
+
+        public void OnProviderEnabled(string provider)
+        {
+        }
+
+        public void OnStatusChanged(string provider, Availability status, Bundle extras)
+        {
+        }
     }
 }

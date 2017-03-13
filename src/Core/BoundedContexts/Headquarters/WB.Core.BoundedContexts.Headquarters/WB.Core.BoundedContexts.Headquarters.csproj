@@ -366,6 +366,7 @@
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
     <Compile Include="Mappings\SupportedQuestionnaireVersionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
+    <Compile Include="Mappings\DeviceSyncInfoMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
     <Compile Include="Mappings\UserDocumentMap.cs" />
@@ -524,6 +525,7 @@
     <Compile Include="Views\DataExport\QuestionSubType.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
+    <Compile Include="Views\Device\DeviceSyncInfo.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
