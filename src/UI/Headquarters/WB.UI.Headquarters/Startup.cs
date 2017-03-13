@@ -20,18 +20,20 @@ using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
+using NHibernate.Cfg.ConfigurationSchema;
+using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
+using NLog;
 using Owin;
-using Prometheus;
 using Quartz;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -41,7 +43,7 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        private static readonly Counter ExceptionsLogged = Prometheus.Metrics.CreateCounter(@"exceptions_raised", @"Total exceptions raised");
+        internal static InitializationException InitException { get; set; }
 
         private static void SetupNConfig()
             => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
@@ -53,35 +55,32 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            var ninjectKernel = NinjectConfig.CreateKernel();
+            try
+            {
+                var config = new HttpConfiguration();
 
-            ConfigureAuth(app);
+                InitializeMVC(config);
 
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
+                var kernel = NinjectConfig.CreateKernel();
+                app.Use(RemoveServerNameFromHeaders)
+                    .Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler)
+                    .UseNinjectMiddleware(() => kernel)
+                    .UseNinjectWebApi(config)
+                    .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
 
-            logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
+                ConfigureAuth(app);
 
-            InitializeAppShutdown(app);
-            UpdateAppVersion();
-            HealthCheck();
+                var logger = LogManager.GetCurrentClassLogger();
+                logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
 
-            InitializeMVC();
-
-
-            var config = new HttpConfiguration();
-            config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
-
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            WebApiConfig.Register(config);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            app.Use(RemoverServerName)
-                .Use(SetSessionStateBehavior)
-                .UseStageMarker(PipelineStage.MapHandler)
-                .UseNinjectMiddleware(() => ninjectKernel)
-                .UseNinjectWebApi(config)
-                .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+                InitializeAppShutdown(app);
+                UpdateAppVersion();
+                HealthCheck();
+            }
+            catch (InitializationException e)
+            {
+                InitException = e;
+            }
         }
 
         public void ConfigureAuth(IAppBuilder app)
@@ -118,7 +117,7 @@ namespace WB.UI.Headquarters
             return next();
         }
 
-        private static Task RemoverServerName(IOwinContext context, Func<Task> next)
+        private static Task RemoveServerNameFromHeaders(IOwinContext context, Func<Task> next)
         {
             context.Response.Headers.Remove(@"Server");
             return next.Invoke();
@@ -134,7 +133,7 @@ namespace WB.UI.Headquarters
 
         private static void OnShutdown()
         {
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
+            var logger = LogManager.GetCurrentClassLogger();
 
             logger.Info(@"Ending application.");
             logger.Info(@"ShutdownReason: " + HostingEnvironment.ShutdownReason);
@@ -166,14 +165,12 @@ namespace WB.UI.Headquarters
             logger.Info(@"ShutDownStack: " + shutDownStack);
         }
 
-        private static void InitializeMVC()
+        private static void InitializeMVC(HttpConfiguration config)
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
             MvcHandler.DisableMvcResponseHeader = true;
 
             AreaRegistration.RegisterAllAreas();
-
+            
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterWebApiFilters(GlobalConfiguration.Configuration.Filters);
@@ -183,23 +180,14 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-        }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            try
-            {
-                var exception = (Exception) e.ExceptionObject;
-                logger.Error(@"Global Unhandled:", exception);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
 
-                ExceptionsLogged.Inc();
-            }
-            catch
-            {
-                // ignored
-            }
+            config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
+            WebApiConfig.Register(config);
         }
 
         private static void UpdateAppVersion()
@@ -227,12 +215,11 @@ namespace WB.UI.Headquarters
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new CustomErrorFilter());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
-            filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
             filters.Add(new InstallationAttribute(), 100);
-            
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
