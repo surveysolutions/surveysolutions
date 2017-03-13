@@ -18,7 +18,7 @@ if ($HQSourcePath -eq "") {
 	$sourceCleanup = $True
 }
 
-Set-Location $HQSourcePath
+#Set-Location $HQSourcePath
 $sitePatha = (Get-ChildItem -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "PackageTmp"}).FullName
 
 $HQsitePath = Join-path $workdir "HQwork"
