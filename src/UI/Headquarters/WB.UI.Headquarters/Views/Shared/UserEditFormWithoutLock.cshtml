@@ -34,7 +34,7 @@
 <div class="form-group @Html.HasErrorClassFor(x => x.PhoneNumber)">
     @Html.LabelFor(x => x.PhoneNumber, new { @class = "col-sm-4 control-label" })
     <div class="col-sm-8">
-        @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })
+        @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control", maxlength = UserModel.PhoneNumberLength })
         @Html.ValidationMessageFor(x => x.PhoneNumber, null, new { @class = "help-block" })
     </div>
 </div>
