@@ -31,7 +31,7 @@ Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 
 
 
-    & (GetPathToMSBuild) $InstallationProject '/t:Build' '/p:HarvestDir=$HQsitePath' "/p:Configuration=$BuildConfiguration" | Write-Host
+    & (GetPathToMSBuild) $InstallationProject '/t:Build' '/p:HarvestDir=$HQsitePath' "/p:Configuration=Relaese" "/p:Platform=x64" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
