@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters.Injections
             var useBackgroundJobForProcessingPackages = WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false);
             var interviewDetailsDataLoaderSettings =
                 new SyncPackagesProcessorBackgroundJobSetting(useBackgroundJobForProcessingPackages,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    ApplicationSettings.InterviewDetailsDataSchedulerSynchronizationInterval,
                     synchronizationBatchCount:
                     WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
                     synchronizationParallelExecutorsCount:
