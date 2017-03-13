@@ -99,9 +99,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        public Task SendClientInfoAsync(ClientInfoApiView info, CancellationToken? token = null)
+        public async Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.devicesController}/info",
                 request: info,
                 credentials: this.restCredentials,

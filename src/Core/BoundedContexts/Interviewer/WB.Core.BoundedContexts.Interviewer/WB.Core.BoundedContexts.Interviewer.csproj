@@ -154,6 +154,8 @@
       <DependentUpon>InterviewerUIResources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CompanyLogoInfo.cs" />
+    <Compile Include="Services\IBattery.cs" />
+    <Compile Include="Services\IDeviceOrientation.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
+    <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\LoadingViewModel.cs" />
+    <Compile Include="Views\LocationAddress.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />
     <Compile Include="Views\ApplicationSettingsView.cs" />

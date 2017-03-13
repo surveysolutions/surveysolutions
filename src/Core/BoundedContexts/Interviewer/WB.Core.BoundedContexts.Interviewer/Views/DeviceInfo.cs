@@ -1,0 +1,40 @@
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Interviewer.Views
+{
+    public class DeviceInfo
+    {
+        public string DeviceId { get; set; }
+        public string DeviceModel { get; set; }
+        public string DeviceType { get; set; }
+        public DateTime DeviceDate { get; set; }
+        public LocationAddress DeviceLocation { get; set; }
+        public string DeviceLanguage { get; set; }
+        public string AndroidVersion { get; set; }
+        public int AndroidSdkVersion { get; set; }
+        public Version AppVersion { get; set; }
+        public DateTime LastAppUpdatedDate { get; set; }
+        public string NetworkType { get; set; }
+        public string NetworkSubType { get; set; }
+        public string MobileOperator { get; set; }
+        public string AppOrientation { get; set; }
+        public string BatteryPowerSource { get; set; }
+        public int BatteryChargePercent { get; set; }
+        public int MobileSignalStrength { get; set; }
+        public StorageInfo StorageInfo { get; set; }
+        public RAMInfo RAMInfo { get; set; }
+        public long DBSizeInfo { get; set; }
+    }
+
+    public class RAMInfo
+    {
+        public long Total { get; set; }
+        public long Free { get; set; }
+    }
+
+    public class StorageInfo
+    {
+        public long Total { get; set; }
+        public long Free { get; set; }
+    }
+}

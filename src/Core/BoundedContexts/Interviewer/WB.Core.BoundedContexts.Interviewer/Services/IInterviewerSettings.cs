@@ -1,4 +1,5 @@
 using System;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -21,5 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         string BackupFolder { get; }
         string RestoreFolder { get; }
+
+        DeviceInfo GetDeviceInfo();
     }
 }
