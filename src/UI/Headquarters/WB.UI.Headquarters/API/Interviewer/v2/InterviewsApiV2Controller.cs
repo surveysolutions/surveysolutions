@@ -77,8 +77,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
-        public void Post(InterviewPackageApiView package)
+        public IHttpActionResult Post(InterviewPackageApiView package)
         {
+            if (string.IsNullOrEmpty(package.Events))
+                return this.BadRequest("Server cannot accept empty package content.");
+
             var interviewPackage = new InterviewPackage
             {
                 InterviewId = package.InterviewId,
@@ -92,6 +95,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             };
 
             this.interviewPackagesService.StoreOrProcessPackage(interviewPackage);
+
+            return this.Ok ();
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
