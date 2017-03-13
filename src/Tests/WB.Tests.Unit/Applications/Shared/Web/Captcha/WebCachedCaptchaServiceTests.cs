@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using Machine.Specifications;
 using NUnit.Framework;
 using WB.Tests.Abc;
@@ -15,17 +14,11 @@ namespace WB.Tests.Unit.Applications.Shared.Web.Captcha
         [SetUp]
         public void Setup()
         {
-            var configurator = Create.Service.ConfigurationManager(new NameValueCollection
-            {
-                {"CountOfFailedLoginAttemptsBeforeCaptcha", NumberOfAttempts.ToString()},
-                {"TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", "5"},
-            });
-
-            this.Subject = new WebCacheBasedCaptchaService(configurator);
+            this.Subject = Create.Service.WebCacheBasedCaptchaService(NumberOfAttempts);
         }
 
         [Test]
-        public void ShouldNotRequireCaptchaForFirst5Attempts()
+        public void When_FailingLogins_Should_NotRequireCaptchaForFirst5Attempts()
         {
             var userName = Guid.NewGuid().ToString();
 
@@ -42,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Shared.Web.Captcha
         }
 
         [Test]
-        public void ShouldResetCaptchaRequirementOnSucessLogin()
+        public void When_ResetFailedLogin_Should_ResetCaptchaRequirement()
         {
             var userName = Guid.NewGuid().ToString();
             
