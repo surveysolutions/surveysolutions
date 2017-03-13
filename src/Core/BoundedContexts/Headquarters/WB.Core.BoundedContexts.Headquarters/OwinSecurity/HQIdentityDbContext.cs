@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
-        public HQIdentityDbContext() : base(WebConfigurationManager.ConnectionStrings[0].Name)
+        public HQIdentityDbContext() : base("Postgres")
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQIdentityDbContext, Configuration>());
         }
