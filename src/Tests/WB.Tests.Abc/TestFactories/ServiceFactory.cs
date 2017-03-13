@@ -61,6 +61,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -332,6 +333,15 @@ namespace WB.Tests.Abc.TestFactories
         public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null, NameValueCollection membershipSettings = null)
         {
             return new ConfigurationManager(appSettings ?? new NameValueCollection(), membershipSettings ?? new NameValueCollection());
+        }
+
+        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5, int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
+        {
+            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(new NameValueCollection
+            {
+                { "CountOfFailedLoginAttemptsBeforeCaptcha", (failedLoginsCount ?? 5).ToString() },
+                { "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", (timeSpanForLogins ?? 5).ToString() },
+            }));
         }
     }
 }
