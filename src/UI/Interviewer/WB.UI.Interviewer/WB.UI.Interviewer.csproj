@@ -426,6 +426,9 @@
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />
     <Compile Include="Services\SyncServiceBinder.cs" />
+    <Compile Include="Settings\AndroidDeviceOrientation.cs" />
+    <Compile Include="Settings\AndroidBattery.cs" />
+    <Compile Include="Settings\GsmSignalStrengthListener.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

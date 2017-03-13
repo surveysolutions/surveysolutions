@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class DevicesControllerBase : ApiController
     {
-        private readonly IIdentityManager identityManager;
+        protected readonly IIdentityManager identityManager;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryReader<TabletDocument> devicesRepository;

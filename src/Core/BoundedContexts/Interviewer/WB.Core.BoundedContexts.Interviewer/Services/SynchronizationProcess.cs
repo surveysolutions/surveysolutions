@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Exceptions;
-using MvvmCross.Platform.Platform;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -15,7 +14,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -46,7 +44,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-        
+        private readonly IInterviewerSettings interviewerSettings;
+
         private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
@@ -62,7 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
             CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IInterviewerSettings interviewerSettings)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -107,6 +108,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.UpdatePasswordOfInterviewer(this.restCredentials.Password);
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
+                var deviceInfo = this.interviewerSettings.GetDeviceInfo();
+                await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
@@ -518,5 +522,58 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewersPlainStorage.Store(localInterviewer);
             this.principal.SignIn(localInterviewer.Name, localInterviewer.Password, true);
         }
+
+        private DeviceInfoApiView ToDeviceInfoApiView(DeviceInfo info) => new DeviceInfoApiView
+        {
+            DeviceId = info.DeviceId,
+            DeviceModel = info.DeviceModel,
+            DeviceType = info.DeviceType,
+            DeviceDate = info.DeviceDate,
+            DeviceLanguage = info.DeviceLanguage,
+            DeviceLocation = ToLocationAddressApiView(info.DeviceLocation),
+
+            AndroidVersion = info.AndroidVersion,
+            AndroidSdkVersion = info.AndroidSdkVersion,
+
+            AppVersion = info.AppVersion,
+            AppOrientation = info.AppOrientation,
+            LastAppUpdatedDate = info.LastAppUpdatedDate,
+
+            BatteryChargePercent = info.BatteryChargePercent,
+            BatteryPowerSource = info.BatteryPowerSource,
+            
+            MobileOperator = info.MobileOperator,
+            MobileSignalStrength = info.MobileSignalStrength,
+            NetworkType = info.NetworkType,
+            NetworkSubType = info.NetworkSubType,
+
+            NumberOfStartedInterviews = this.interviewViewRepository.Count(interview=>interview.StartedDateTime != null && interview.CompletedDateTime == null),
+            
+            DBSizeInfo = info.DBSizeInfo,
+            StorageInfo = ToStorageInfoApiView(info.StorageInfo),
+            RAMInfo = ToRAMInfoApiView(info.RAMInfo)
+        };
+
+        private LocationAddressApiView ToLocationAddressApiView(LocationAddress locationAddress)
+        {
+            return new LocationAddressApiView
+            {
+                Longitude = locationAddress.Longitude,
+                Latitude = locationAddress.Latitude,
+                Address = locationAddress.Address
+            };
+        }
+
+        private RAMInfoApiView ToRAMInfoApiView(RAMInfo ramInfo) => new RAMInfoApiView
+        {
+            Free = ramInfo.Free,
+            Total = ramInfo.Total
+        };
+
+        private StorageInfoApiView ToStorageInfoApiView(StorageInfo storageInfo) => new StorageInfoApiView
+        {
+            Free = storageInfo.Free,
+            Total = storageInfo.Total
+        };
     }
 }
