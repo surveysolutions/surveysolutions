@@ -1,5 +1,6 @@
 using System;
 using System.Data.Entity;
+using System.Web.Configuration;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
@@ -7,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
-        public HQIdentityDbContext() : base(@"DefaultConnection")
+        public HQIdentityDbContext() : base(WebConfigurationManager.ConnectionStrings[0].Name)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQIdentityDbContext, Configuration>());
         }
