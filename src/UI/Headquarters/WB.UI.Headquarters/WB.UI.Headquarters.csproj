@@ -594,6 +594,7 @@
     <Content Include="Dependencies\js\ajax.js" />
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
+    <Content Include="ErrorPages\genericError.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -611,6 +612,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ErrorPages\databaseError.html" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1506,7 +1508,7 @@
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
-    <Compile Include="Code\LegacyOptions.cs" />
+    <Compile Include="Code\ApplicationSettings.cs" />
     <Compile Include="Code\LocalizationExtensions.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
