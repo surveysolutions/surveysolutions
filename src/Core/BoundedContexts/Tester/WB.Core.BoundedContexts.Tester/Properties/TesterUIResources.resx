@@ -147,9 +147,6 @@
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>Saving questionnaire to local storage</value>
   </data>
-  <data name="Interview_QuestionnaireReload_Confirm" xml:space="preserve">
-    <value>All data you entered will be lost and new version of the questionnaire will be downloaded from the server.</value>
-  </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
   </data>

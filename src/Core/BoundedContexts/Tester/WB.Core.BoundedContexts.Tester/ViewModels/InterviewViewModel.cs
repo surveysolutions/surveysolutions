@@ -84,9 +84,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
             try
             {
-                if (!await this.userInteractionService.ConfirmAsync(TesterUIResources.Interview_QuestionnaireReload_Confirm))
-                    return;
-
                 var interview = this.interviewRepository.Get(this.interviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
