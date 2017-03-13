@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!LegacyOptions.WebInterviewEnabled)
+            if (!ApplicationSettings.WebInterviewEnabled)
             {
                 filterContext.Result = new HttpNotFoundResult("Web interview feature is not enabled");
             }
