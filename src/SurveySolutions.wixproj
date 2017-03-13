@@ -10,7 +10,10 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <Name>SurveySolutions</Name>
+    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.0.0.0</NodeVersion>
+	<HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</NodeVersion>
+	<HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</NodeVersion>	
+	<Name>SurveySolutions</Name>
     <EnableProjectHarvesting>True</EnableProjectHarvesting>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -18,22 +21,22 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;HarvestDir=harvest</DefineConstants>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>HarvestDir=harvest</DefineConstants>
+    <DefineConstants>HarvestDir=$(HarvestDir)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;HarvestDir=harvest</DefineConstants>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>HarvestDir=harvest</DefineConstants>
+    <DefineConstants>HarvestDir=$(HarvestDir)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
@@ -76,9 +79,7 @@
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
     <Error Text="The WiX Toolset build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
-  <PropertyGroup>
-    <HarvestDirectory>harvest</HarvestDirectory>
-  </PropertyGroup>
+
   <Target Name="BeforeBuild">
     <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLSITEFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" />
   </Target>
