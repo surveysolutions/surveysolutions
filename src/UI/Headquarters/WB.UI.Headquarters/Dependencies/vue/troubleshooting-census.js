@@ -1,8 +1,10 @@
-﻿import Vue from 'vue'
+﻿﻿import Vue from 'vue'
 import VueResource from 'vue-resource'
 import UserSelector from './UserSelector.vue'
 import DatePicker from './DatePicker.vue'
+import VeeValidate from 'vee-validate';
 
+Vue.use(VeeValidate);
 Vue.use(VueResource);
 
 Vue.component('Flatpickr', DatePicker);
@@ -12,7 +14,8 @@ var app = new Vue({
     data: {
         interviewerId: null,
         questionnaireId: null,
-        dateStr: null,
+        dateFrom: null,
+        dateTo: null,
         dateRangePickerOptions: {
             mode: "range",
             maxDate: "today",
@@ -26,11 +29,23 @@ var app = new Vue({
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue;
         },
-        rangeSelected(textValue, left, right) {
-            console.log(textValue);
-            console.log("left:" + left);
-            console.log("right:" + right);
+        rangeSelected(textValue, from, to) {
+            this.dateFrom = from;
+            this.dateTo = to;
+        },
+        validateForm() {
+            this.$validator.validateAll().then(result => {
+                if (result) {
+                    this.findInterviews();
+                }
+            });
+        },
+        findInterviews() {
+            document.querySelector("main").classList.remove("search-wasnt-started");
         }
+    },
+    mounted: function() {
+        document.querySelector("main").classList.remove("hold-transition");
     }
 });
 

@@ -538,7 +538,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\**\*.*" />
+    <Content Include="Dependencies\build\dist\*.*" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
@@ -1141,6 +1141,7 @@
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
+    <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
