@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 

@@ -47,6 +47,7 @@ var config = {
     bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
+    buildDistDir: './build/dist',
     filesToInject: [
         {
             file: "LogOn.cshtml",
@@ -112,7 +113,7 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
         .pipe(cssnano().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('watch-vue', wrapPipe(function (success, error) {
@@ -140,7 +141,7 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.uglify().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('bowerCss', wrapPipe(function (success, error) {
@@ -152,14 +153,14 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(cssnano().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (success, error) {
     if (config.production) {
-        var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
-        var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
-        var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
+        var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
+        var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
+        var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
 
         var tasks = config.filesToInject.map(function (fileToInject) {
             var target = gulp.src(fileToInject.folder + fileToInject.file);
@@ -204,7 +205,7 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (succes
 }));
 
 gulp.task('clean', function () {
-    return gulp.src(config.buildDir + '/*').pipe(plugins.clean());
+    return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
