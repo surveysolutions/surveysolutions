@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -18,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     internal class when_synchronize_and_census_questionnaire_removed_on_server : SynchronizationProcessTestsContext
     {
         [Test]
-        public void should_progress_report_1_deleted_interview()
+        public async Task should_progress_report_1_deleted_interview()
         {
             var principal = Setup.InterviewerPrincipal("name", "pass");
 
@@ -71,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 totalDeletedInterviewsCount = info.Statistics.TotalDeletedInterviewsCount;
                 progressChangedEventRaised.Set();
             };
-            viewModel.SyncronizeAsync(progressInfo, CancellationToken.None).WaitAndUnwrapException();
+            await viewModel.SyncronizeAsync(progressInfo, CancellationToken.None);
             progressChangedEventRaised.WaitOne();
 
             mockOFInterviewAccessor.Verify(_ => _.RemoveInterview(interviewId), Times.Once);
