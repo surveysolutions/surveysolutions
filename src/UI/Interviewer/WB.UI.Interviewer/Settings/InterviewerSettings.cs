@@ -264,38 +264,49 @@ namespace WB.UI.Interviewer.Settings
         public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
 
-        public DeviceInfo GetDeviceInfo() => new DeviceInfo
+        public async Task<DeviceInfo> GetDeviceInfoAsync()
         {
-            DeviceId = this.GetDeviceId(),
-            DeviceModel = this.GetDeviceModel(),
-            DeviceType = this.GetDeviceType(),
-            DeviceDate = DateTime.Now,
-            DeviceLanguage = Locale.Default.DisplayLanguage,
-            DeviceLocation = this.GetDeviceLocationAsync().Result,
-            AndroidVersion = this.GetAndroidVersion(),
-            AndroidSdkVersion = (int)Build.VERSION.SdkInt,
-            AppVersion = this.GetAppVersion(),
-            LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToLocalTime(),
-            AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
-            BatteryChargePercent = this.battery.GetRemainingChargePercent(),
-            BatteryPowerSource = this.battery.GetPowerSource().ToString(),
-            MobileOperator = this.telephonyManager?.NetworkOperatorName,
-            MobileSignalStrength = this.gsmSignalStrengthListener.SignalStrength,
-            NetworkType = this.connectivityManager?.ActiveNetworkInfo?.TypeName,
-            NetworkSubType = this.connectivityManager?.ActiveNetworkInfo?.SubtypeName,
-            DBSizeInfo = this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()),
-            RAMInfo = this.GetRAMInfo(),
-            StorageInfo = this.GetStorageInfo()
-        };
+            var info = new DeviceInfo();
+            info.DeviceId = this.GetDeviceId();
+            info.DeviceModel = this.GetDeviceModel();
+            info.DeviceType = this.GetDeviceType();
+            info.DeviceDate = DateTime.Now;
+            info.DeviceLanguage = Locale.Default.DisplayLanguage;
+            info.DeviceLocation = await this.GetDeviceLocationAsync().ConfigureAwait(false);
+            info.AndroidVersion = this.GetAndroidVersion();
+            info.AndroidSdkVersion = (int) Build.VERSION.SdkInt;
+            info.AppVersion = this.GetAppVersion();
+            info.LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToLocalTime();
+            info.AppOrientation = this.deviceOrientation.GetOrientation().ToString();
+            info.BatteryChargePercent = this.battery.GetRemainingChargePercent();
+            info.BatteryPowerSource = this.battery.GetPowerSource().ToString();
+            info.MobileOperator = this.telephonyManager?.NetworkOperatorName;
+            info.MobileSignalStrength = this.gsmSignalStrengthListener.SignalStrength;
+            info.NetworkType = this.connectivityManager?.ActiveNetworkInfo?.TypeName;
+            info.NetworkSubType = this.connectivityManager?.ActiveNetworkInfo?.SubtypeName;
+            info.DBSizeInfo = this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory());
+            info.RAMInfo = this.GetRAMInfo();
+            info.StorageInfo = this.GetStorageInfo();
+            return info;
+        }
 
         private async Task<LocationAddress> GetDeviceLocationAsync()
         {
             var locationPermissionsStatus = await this.permissions.CheckPermissionStatusAsync(Permission.Location);
             if (locationPermissionsStatus != PermissionStatus.Granted) return null;
 
-            var locationProvider = this.locationManager.GetBestProvider(new Criteria(), true);
+            var locationProvider = this.locationManager.GetBestProvider(new Criteria
+            {
+                AltitudeRequired = false,
+                PowerRequirement = Power.Low,
+                SpeedRequired = false,
+                Accuracy = Accuracy.Low,
+                BearingRequired = false
+            }, true);
             Location location = this.locationManager.GetLastKnownLocation(locationProvider);
-            
+
+            if (location == null) return null;
+
             var geocoder = new Geocoder(Application.Context);
             IList<Address> addressList = await geocoder.GetFromLocationAsync(location.Latitude, location.Longitude, 10).ConfigureAwait(false);
             Address address = addressList?.FirstOrDefault();
