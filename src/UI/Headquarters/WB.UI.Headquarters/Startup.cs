@@ -53,25 +53,34 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            var config = new HttpConfiguration();
-
-            InitializeMVC(config);
+            var ninjectKernel = NinjectConfig.CreateKernel();
 
             ConfigureAuth(app);
 
-            var kernel = NinjectConfig.CreateKernel();
-            app.Use(RemoveServerNameFromHeaders)
-                .Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler)
-                .UseNinjectMiddleware(() => kernel)
-                .UseNinjectWebApi(config)
-                .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
 
-            var logger = LogManager.GetCurrentClassLogger();
             logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
 
             InitializeAppShutdown(app);
             UpdateAppVersion();
             HealthCheck();
+
+            InitializeMVC();
+
+            var config = new HttpConfiguration();
+            config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
+
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            WebApiConfig.Register(config);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            app.Use(RemoveServerNameFromHeaders)
+                .Use(SetSessionStateBehavior)
+                .UseStageMarker(PipelineStage.MapHandler)
+                .UseNinjectMiddleware(() => ninjectKernel)
+                .UseNinjectWebApi(config)
+                .MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
         }
 
         public void ConfigureAuth(IAppBuilder app)
@@ -156,12 +165,12 @@ namespace WB.UI.Headquarters
             logger.Info(@"ShutDownStack: " + shutDownStack);
         }
 
-        private static void InitializeMVC(HttpConfiguration config)
+        private static void InitializeMVC()
         {
             MvcHandler.DisableMvcResponseHeader = true;
 
             AreaRegistration.RegisterAllAreas();
-            
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterWebApiFilters(GlobalConfiguration.Configuration.Filters);
@@ -171,15 +180,8 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
-            WebApiConfig.Register(config);
         }
+
 
         private static void UpdateAppVersion()
             => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
