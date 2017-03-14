@@ -56,10 +56,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
         };
 
 
-        private static ApplicationUser headquarter1;
-        private static ApplicationUser supervisor1;
-        private static ApplicationUser supervisor2;
-        private static ApplicationUser supervisor3;
+        private static HqUser headquarter1;
+        private static HqUser supervisor1;
+        private static HqUser supervisor2;
+        private static HqUser supervisor3;
         private static InterviewersView result;
         private static IUserViewFactory interviewersViewFactory;
         private static Guid headquarter1Id = Guid.Parse("77777777777777777777777777777777");

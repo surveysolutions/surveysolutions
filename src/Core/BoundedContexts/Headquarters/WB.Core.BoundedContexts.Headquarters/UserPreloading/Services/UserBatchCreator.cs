@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             if (user == null)
             {
-                this.identityManager.CreateUser(new ApplicationUser
+                this.identityManager.CreateUser(new HqUser
                 {
                     Id = Guid.NewGuid(),
                     UserName = supervisorToCreate.Login,

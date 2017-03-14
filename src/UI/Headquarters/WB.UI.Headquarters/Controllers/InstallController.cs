@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                var creationResult = await this.identityManager.CreateUserAsync(new ApplicationUser
+                var creationResult = await this.identityManager.CreateUserAsync(new HqUser
                 {
                     Id = Guid.Parse(@"00000000000000000000000000000001"),
                     FullName = @"Administrator",

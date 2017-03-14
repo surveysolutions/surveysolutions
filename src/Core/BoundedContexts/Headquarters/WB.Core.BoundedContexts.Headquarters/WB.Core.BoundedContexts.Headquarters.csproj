@@ -352,7 +352,6 @@
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\AssemblyInfoMap.cs" />
-    <Compile Include="Mappings\ApplicationUserMap.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
@@ -373,13 +372,12 @@
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
     <Compile Include="OwinSecurityModule.cs" />
-    <Compile Include="OwinSecurity\ApplicationSignInManager.cs" />
-    <Compile Include="OwinSecurity\ApplicationUserManager.cs" />
-    <Compile Include="OwinSecurity\AppUserStore.cs" />
-    <Compile Include="OwinSecurity\AspNetPasswordHasher.cs" />
+    <Compile Include="OwinSecurity\HqSignInManager.cs" />
+    <Compile Include="OwinSecurity\HqUserManager.cs" />
+    <Compile Include="OwinSecurity\HqUserStore.cs" />
+    <Compile Include="OwinSecurity\HqPasswordHasher.cs" />
     <Compile Include="OwinSecurity\Configuration.cs" />
     <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
-    <Compile Include="OwinSecurity\IAppUserStore.cs" />
     <Compile Include="OwinSecurity\IdentityManager.cs" />
     <Compile Include="OwinSecurity\IUserRepository.cs" />
     <Compile Include="OwinSecurity\SchemaBasedHistoryContext.cs" />
@@ -688,9 +686,10 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
-    <Compile Include="Views\User\ApplicationUser.cs" />
+    <Compile Include="Views\User\HqUser.cs" />
     <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserViewFactory.cs" />
+    <Compile Include="Views\User\RoleExtensions.cs" />
     <Compile Include="Views\User\TeamViewFactory.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserViewFactory.cs" />

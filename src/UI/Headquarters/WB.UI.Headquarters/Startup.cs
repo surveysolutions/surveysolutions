@@ -84,8 +84,8 @@ namespace WB.UI.Headquarters
         public void ConfigureAuth(IAppBuilder app)
         {
             app.CreatePerOwinContext(HQIdentityDbContext.Create);
-            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-            app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<HqUserManager>(HqUserManager.Create);
+            app.CreatePerOwinContext<HqSignInManager>(HqSignInManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters
                 Provider = new CookieAuthenticationProvider
                 {
                     OnValidateIdentity = SecurityStampValidator
-                        .OnValidateIdentity<ApplicationUserManager, ApplicationUser, Guid>(
+                        .OnValidateIdentity<HqUserManager, HqUser, Guid>(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
                             getUserIdCallback: (id) => Guid.Parse(id.GetUserId()))

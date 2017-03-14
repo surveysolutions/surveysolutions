@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             };
 
             identityManagerMock.Setup(x => x.GetUserByIdAsync(userId)).Returns(Task.FromResult(Create.Entity.ApplicationUser()));
-            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
+            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
 
             controller = CreateApiUserController(identityManager: identityManagerMock.Object);
         };
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>()), Times.Once);
+            identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
         private static ActionResult actionResult ;

@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             result.Items.Skip(1).First().UserName.ShouldEqual("interviewer12");
         };
 
-        private static ApplicationUser supervisor1;
-        private static ApplicationUser supervisor2;
+        private static HqUser supervisor1;
+        private static HqUser supervisor2;
         private static InterviewersView result;
         private static IUserViewFactory interviewersViewFactory;
         private static readonly Guid supervisor1Id = Guid.Parse("11111111111111111111111111111111");

@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers
             if (ModelState.IsValid)
             {
                 var creationResult = await this.identityManager.CreateUserAsync(
-                            new ApplicationUser
+                            new HqUser
                             {
                                 UserName = model.UserName,
                                 Email = model.Email,
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
             if (ModelState.IsValid)
             {
                 var creationResult = await this.identityManager.CreateUserAsync(
-                            new ApplicationUser
+                            new HqUser
                             {
                                 UserName = model.UserName,
                                 Email = model.Email,
