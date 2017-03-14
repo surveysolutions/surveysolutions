@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System.Threading.Tasks;
+using Machine.Specifications;
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -51,12 +52,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewerSettings ?? Mock.Of<IInterviewerSettings>(_ => _.GetDeviceInfo() == new DeviceInfo
+                interviewerSettings ?? Mock.Of<IInterviewerSettings>(_ => _.GetDeviceInfoAsync() == Task.FromResult(new DeviceInfo
                 {
                     RAMInfo = new RAMInfo(),
                     StorageInfo = new StorageInfo(),
                     DeviceLocation = new LocationAddress()
-                }));
+                })));
         }
     }
 }

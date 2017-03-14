@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                var deviceInfo = this.interviewerSettings.GetDeviceInfo();
+                var deviceInfo = await this.interviewerSettings.GetDeviceInfoAsync();
                 await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
@@ -530,7 +530,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             DeviceType = info.DeviceType,
             DeviceDate = info.DeviceDate,
             DeviceLanguage = info.DeviceLanguage,
-            DeviceLocation = ToLocationAddressApiView(info.DeviceLocation),
+            DeviceLocation = info.DeviceLocation != null ? ToLocationAddressApiView(info.DeviceLocation) : null,
 
             AndroidVersion = info.AndroidVersion,
             AndroidSdkVersion = info.AndroidSdkVersion,
