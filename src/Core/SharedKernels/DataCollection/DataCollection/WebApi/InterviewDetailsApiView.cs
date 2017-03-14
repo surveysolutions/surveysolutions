@@ -9,13 +9,13 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     public class InterviewPackageApiView
     {
         public Guid InterviewId { get; set; }
-        public InterviewMetaInfo MetaInfo { get; set; } 
+        public InterviewMetaInfo MetaInfo { get; set; }
         public string Events { get; set; }
     }
 
     public class InterviewerInterviewApiView
     {
-        public AnsweredQuestionSynchronizationDto[] AnswersOnPrefilledQuestions { get; set; } 
+        public AnsweredQuestionSynchronizationDto[] AnswersOnPrefilledQuestions { get; set; }
         public string Details { get; set; }
     }
 
@@ -38,6 +38,12 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public bool WasCompleted { get; set; }
 
         public string FailedValidationConditions { get; set; }
+    }
+
+    public class LogonInfo
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 
     public class InterviewAnswerApiView

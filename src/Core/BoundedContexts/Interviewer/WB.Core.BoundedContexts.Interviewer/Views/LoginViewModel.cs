@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -86,10 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand SignInCommand => new MvxCommand(this.SignIn);
 
-        public IMvxCommand OnlineSignInCommand
-        {
-            get { return new MvxCommand(async () => await this.RemoteSignInAsync()); }
-        }
+        public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
 
@@ -115,9 +113,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void SignIn()
         {
             var userName = this.UserName;
-            var hashedPassword = this.passwordHasher.Hash(this.Password);
 
-            this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
+            this.IsUserValid = this.principal.SignIn(userName, this.Password, true);
 
             if (!this.IsUserValid)
             {
@@ -132,19 +129,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsUserValid = true;
 
-            var restCredentials = new RestCredentials
-            {
-                Login = this.UserName,
-                Password = this.passwordHasher.Hash(this.Password)
-            };
-
+            var restCredentials = new RestCredentials {Login = this.UserName};
             this.IsInProgress = true;
+
             try
             {
-                await this.synchronizationService.GetInterviewerAsync(restCredentials);
+                await this.synchronizationService.LoginAsync(new LogonInfo
+                {
+                    Username = this.UserName,
+                    Password = this.Password
+                }, restCredentials).ConfigureAwait(false);
+
+                await this.synchronizationService.GetInterviewerAsync(restCredentials).ConfigureAwait(false);
 
                 var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-                localInterviewer.Password = restCredentials.Password;
+                localInterviewer.Token = restCredentials.Token;
 
                 this.interviewersPlainStorage.Store(localInterviewer);
 

@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(HqUser user)
-            => user.GenerateUserIdentityAsync((HqUserManager) this.UserManager);
+            => user.GenerateUserIdentityAsync((HqUserManager)this.UserManager);
 
         public static HqSignInManager Create(IdentityFactoryOptions<HqSignInManager> options, IOwinContext context)
             => new HqSignInManager(context.GetUserManager<HqUserManager>(), context.Authentication);

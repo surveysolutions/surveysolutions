@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -8,18 +9,38 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
     internal class TesterPrincipal : IPrincipal
     {
         private readonly IPlainStorage<TesterUserIdentity> usersStorage;
+        private readonly IPasswordHasher passwordHasher;
         private TesterUserIdentity currentUserIdentity;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage)
+        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage, IPasswordHasher passwordHasher)
         {
             this.usersStorage = usersStorage;
+            this.passwordHasher = passwordHasher;
             this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
-        public bool SignIn(string userName, string passwordHash, bool staySignedIn)
+        public bool SignIn(string userName, string password, bool staySignedIn)
+        {
+            this.currentUserIdentity = new TesterUserIdentity
+            {
+                Name = userName,
+                Password = this.passwordHasher.Hash(password),
+                UserId = Guid.NewGuid(),
+                Id = userName
+            };
+
+            if (staySignedIn)
+            {
+                this.usersStorage.Store(this.currentUserIdentity);
+            }
+
+            return this.IsAuthenticated;
+        }
+
+        public bool SignInWithHash(string userName, string passwordHash, bool staySignedIn)
         {
             this.currentUserIdentity = new TesterUserIdentity
             {
@@ -40,6 +61,12 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
         public void SignOut()
         {
             this.currentUserIdentity = null;
+        }
+
+        public bool SignIn(string userId, bool staySignedIn)
+        {
+            this.currentUserIdentity = this.usersStorage.GetById(userId);
+            return this.IsAuthenticated;
         }
     }
 }

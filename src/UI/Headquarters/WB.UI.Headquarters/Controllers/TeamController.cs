@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return await this.userManager.UpdateUserAsync(appUser, editModel.Password);
         }
 
-        protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
+        protected  Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
             => await this.userManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),

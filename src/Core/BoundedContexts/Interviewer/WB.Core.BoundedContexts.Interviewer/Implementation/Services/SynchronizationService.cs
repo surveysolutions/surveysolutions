@@ -39,7 +39,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
             ? null
-            : new RestCredentials() { Login = this.principal.CurrentUserIdentity.Name, Password = this.principal.CurrentUserIdentity.Password };
+            : new RestCredentials {
+                Login = this.principal.CurrentUserIdentity.Name,
+                Token = this.principal.CurrentUserIdentity.Token };
 
         public SynchronizationService(
             IPrincipal principal, 
@@ -58,6 +60,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         #region [Interviewer Api]
+
+        public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
+        {
+            var passwordHash = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
+                url: string.Concat(this.usersController, "/login"),
+                request: logonInfo,
+                credentials: credentials,
+                token: token)).ConfigureAwait(false);
+
+            if(passwordHash == null){
+                throw new SynchronizationException(SynchronizationExceptionType.Unauthorized);
+            };
+            credentials.Token = passwordHash;
+            return passwordHash;
+        }
+
         public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return this.TryGetRestResponseOrThrowAsync(() => 
@@ -141,8 +159,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 return restFile.Content;
             });
         }
-
-
 
         public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {

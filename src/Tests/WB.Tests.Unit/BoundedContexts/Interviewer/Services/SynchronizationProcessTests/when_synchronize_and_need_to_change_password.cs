@@ -39,6 +39,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.Hash(Moq.It.IsAny<string>()))
                 .Returns<string>(x => x);
 
+            passwordHasherMock
+                .Setup(x => x.VerifyPassword(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Returns<bool>(x => true);
+
             interviewerStorageMock
                 .Setup(x => x.FirstOrDefault())
                 .Returns(interviewerIdentity);
