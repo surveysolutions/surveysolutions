@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
+    <Compile Include="ApiAuthorizationScheme.cs" />
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Services\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SyncStatusCode.cs" />
+    <Compile Include="Tasks\AsyncHelper.cs" />
     <Compile Include="Tasks\ProggressAggregator.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TwoWayDictionaryAdapter.cs" />

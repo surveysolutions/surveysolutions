@@ -53,14 +53,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>(),
                 () => !this.IsInProgress);
 
-        private IMvxCommand relinkCommand;
-        public IMvxCommand RelinkCommand
+        private IMvxAsyncCommand relinkCommand;
+        public IMvxAsyncCommand RelinkCommand
         {
             get
             {
-                return relinkCommand ?? (relinkCommand =
-                    new MvxCommand(async () => await this.RelinkCurrentInterviewerToDeviceAsync(),
-                        () => !this.IsInProgress));
+                return relinkCommand ?? (relinkCommand = new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress));
             }
         }
 
@@ -79,15 +77,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(
-                    credentials: new RestCredentials()
+                    credentials: new RestCredentials
                     {
                         Login = this.userIdentityToRelink.Name,
-                        Password = this.userIdentityToRelink.Password
+                        Token = this.userIdentityToRelink.Token
                     },
-                    token: this.cancellationTokenSource.Token);
+                    token: this.cancellationTokenSource.Token).ConfigureAwait(false);
 
                 this.interviewersPlainStorage.Store(this.userIdentityToRelink);
-                this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
+                this.principal.SignIn(this.userIdentityToRelink.Id, true);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)

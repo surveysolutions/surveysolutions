@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             base.InitFromBundle(parameters);
             if (parameters.Data.ContainsKey("userName") && !this.principal.IsAuthenticated)
             {
-                this.principal.SignIn(parameters.Data["userName"], parameters.Data["passwordHash"], true);
+                this.principal.SignInWithHash(parameters.Data["userName"], parameters.Data["passwordHash"], true);
             }
         }
 
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (this.principal.IsAuthenticated)
             {
                 bundle.Data["userName"] = this.principal.CurrentUserIdentity.Name;
-                bundle.Data["passwordHash"] = this.principal.CurrentUserIdentity.Password;
+                bundle.Data["passwordHash"] = this.principal.CurrentUserIdentity.PasswordHash;
             }
         }
 

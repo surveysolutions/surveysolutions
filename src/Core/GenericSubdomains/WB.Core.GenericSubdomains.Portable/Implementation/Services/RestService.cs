@@ -55,9 +55,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
-            string url, 
+            string url,
             HttpMethod method,
-            object queryString = null, 
+            object queryString = null,
             HttpContent httpContent = null,
             RestCredentials credentials = null,
             bool forceNoCache = false,
@@ -72,14 +72,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 if (!this.networkService.IsNetworkEnabled())
                     throw new RestException("No network", type: RestExceptionType.NoNetwork);
 
-                if(!this.networkService.IsHostReachable(this.restServiceSettings.Endpoint))
+                if (!this.networkService.IsHostReachable(this.restServiceSettings.Endpoint))
                     throw new RestException("Host unreachable", type: RestExceptionType.HostUnreachable);
             }
 
             var requestTimeoutToken = new CancellationTokenSource(this.restServiceSettings.Timeout).Token;
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default(CancellationToken));
-            
+
             var fullUrl = this.restServiceSettings.Endpoint
                 .AppendPathSegment(url)
                 .SetQueryParams(queryString);
@@ -95,7 +95,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 restClient.WithHeader("Cache-Control", "no-cache");
             }
 
-            if (credentials != null)
+            if (credentials?.Token != null)
+            {
+                string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
+                restClient.WithHeader("Authorization", new AuthenticationHeaderValue(ApiAuthorizationScheme.AuthToken.ToString(), base64String));
+            }
+
+            if (credentials?.Password != null && credentials?.Token == null)
             {
                 restClient.WithBasicAuth(credentials.Login, credentials.Password);
             }
@@ -115,7 +121,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             catch (OperationCanceledException ex)
             {
                 // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
-                throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex); 
+                throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
             }
             catch (FlurlHttpException ex)
             {
@@ -123,20 +129,20 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 {
                     if (requestTimeoutToken.IsCancellationRequested)
                     {
-                        throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout, 
+                        throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout,
                             statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
                     }
 
                     if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
                     {
                         throw new RestException("Request canceled by user",
-                               type: RestExceptionType.RequestCanceledByUser, innerException: ex);   
+                               type: RestExceptionType.RequestCanceledByUser, innerException: ex);
                     }
                 }
                 else if (ex.Call.Response != null)
                 {
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
-                           innerException: ex);   
+                           innerException: ex);
                 }
                 else
                 {
@@ -157,15 +163,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, Dictionary<string, string> customHeaders, 
+        public Task<HttpResponseMessage> GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, Dictionary<string, string> customHeaders,
             CancellationToken? token)
         {
-            return this.ExecuteRequestAsync(url: url, 
-                    queryString: queryString, 
+            return this.ExecuteRequestAsync(url: url,
+                    queryString: queryString,
                     credentials: credentials,
                     method: HttpMethod.Get,
                     customHeaders: customHeaders,
-                    forceNoCache: forceNoCache, 
+                    forceNoCache: forceNoCache,
                     userCancellationToken: token,
                     request: null);
         }
@@ -173,7 +179,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public Task<HttpResponseMessage> PostAsync(string url, object request = null, RestCredentials credentials = null,
             CancellationToken? token = null)
         {
-            return this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
+            return this.ExecuteRequestAsync(url: url, credentials: credentials,
+                method: HttpMethod.Post,
+                request: request,
                 userCancellationToken: token);
         }
 
@@ -308,7 +316,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private RestContentType GetContentType(string mediaType)
         {
-            if(mediaType.IndexOf("json", StringComparison.OrdinalIgnoreCase) > -1 || mediaType.IndexOf("javascript", StringComparison.OrdinalIgnoreCase) > -1)
+            if (mediaType.IndexOf("json", StringComparison.OrdinalIgnoreCase) > -1 || mediaType.IndexOf("javascript", StringComparison.OrdinalIgnoreCase) > -1)
                 return RestContentType.Json;
 
             return RestContentType.Unknown;
@@ -321,10 +329,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             if (acceptedEncodings == null) return RestContentCompressionType.None;
 
-            if(acceptedEncodings.Contains("gzip"))
+            if (acceptedEncodings.Contains("gzip"))
                 return RestContentCompressionType.GZip;
 
-            if(acceptedEncodings.Contains("deflate"))
+            if (acceptedEncodings.Contains("deflate"))
                 return RestContentCompressionType.Deflate;
 
             return RestContentCompressionType.None;
@@ -345,6 +353,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
             }
         }
+
 
         private byte[] GetDecompressedContentFromHttpResponseMessage(RestResponse restResponse)
         {
@@ -380,7 +389,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             public string FileName { get; set; }
         }
 
-        internal enum RestContentType{ Unknown, Json }
+        internal enum RestContentType { Unknown, Json }
         internal enum RestContentCompressionType { None, GZip, Deflate }
     }
 }

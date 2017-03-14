@@ -88,13 +88,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                if (await this.designerApiService.Authorize(login: LoginName, password: Password))
+                if (await this.designerApiService.Authorize(login: LoginName, password: Password).ConfigureAwait(false))
                 {
                     this.userStorage.RemoveAll();
                     this.dashboardLastUpdateStorage.RemoveAll();
                     this.questionnairesStorage.RemoveAll();
-
-                    this.principal.SignIn(userName: this.LoginName, passwordHash: this.Password, staySignedIn: this.StaySignedIn);
+                    this.principal.SignIn(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
                     this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
                 }
             }
@@ -119,7 +118,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
 
             if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
+                await this.userInteractionService.AlertAsync(errorMessage).ConfigureAwait(false);
         }
     }
 }

@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updateResult = await this.UpdateAccountAsync(model);
+                var updateResult = await this.UpdateAccountAsync(model).ConfigureAwait(false);
                 if (updateResult.Succeeded)
                 {
                     this.Success(string.Format(Pages.InterviewerController_EditSuccess, model.UserName));
