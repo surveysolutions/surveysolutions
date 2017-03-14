@@ -95,8 +95,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
         {
-            var supervisorRoleId = ((byte)UserRoles.Supervisor).ToGuid();
-            var interviewerRoleId = ((byte)UserRoles.Interviewer).ToGuid();
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
             var allInterviewersAndSupervisors =
                 this.userStorage.Users.Select(x => new

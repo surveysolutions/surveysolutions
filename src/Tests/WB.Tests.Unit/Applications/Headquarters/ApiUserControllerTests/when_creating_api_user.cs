@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            identityManagerMock.Verify(x => x.CreateUserAsync(Moq.It.IsAny<ApplicationUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()), Times.Once);
+            identityManagerMock.Verify(x => x.CreateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()), Times.Once);
 
 
         private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();

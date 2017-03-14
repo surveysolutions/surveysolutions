@@ -1100,10 +1100,10 @@ namespace WB.Tests.Abc.TestFactories
                 Roles = new SortedSet<UserRoles>(new[] {role})
             };
 
-        public ApplicationUser ApplicationUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
+        public HqUser ApplicationUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer, string deviceId = null)
         {
-            var user = new ApplicationUser
+            var user = new HqUser
             {
                 Id = userId ?? Guid.NewGuid(),
                 IsArchived = isArchived ?? false,
@@ -1112,7 +1112,7 @@ namespace WB.Tests.Abc.TestFactories
                 SupervisorId = supervisorId,
                 DeviceId = deviceId
             };
-            user.Roles.Add(new AppUserRole {UserId = user.Id, RoleId = ((byte)role).ToGuid()});
+            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
             return user;
         }

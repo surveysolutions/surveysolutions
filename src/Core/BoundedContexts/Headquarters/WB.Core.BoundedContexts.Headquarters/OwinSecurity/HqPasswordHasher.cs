@@ -2,11 +2,11 @@ using Microsoft.AspNet.Identity;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class AspNetPasswordHasher : IPasswordHasher
+    public class HqPasswordHasher : IPasswordHasher
     {
         private readonly Core.GenericSubdomains.Portable.IPasswordHasher passwordHasher;
 
-        public AspNetPasswordHasher(Core.GenericSubdomains.Portable.IPasswordHasher passwordHasher)
+        public HqPasswordHasher(Core.GenericSubdomains.Portable.IPasswordHasher passwordHasher)
         {
             this.passwordHasher = passwordHasher;
         }

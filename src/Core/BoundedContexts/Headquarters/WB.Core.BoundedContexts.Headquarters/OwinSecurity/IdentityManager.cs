@@ -18,14 +18,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class IdentityManager : IIdentityManager
     {
-        private readonly ApplicationUserManager userManager;
-        private readonly ApplicationSignInManager signInManager;
+        private readonly HqUserManager userManager;
+        private readonly HqSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
 
-        readonly Guid adminRole = ((byte)UserRoles.Administrator).ToGuid();
+        private readonly Guid adminRole = UserRoles.Administrator.ToUserId();
         const string observerClaimType = @"observer";
 
-        public IdentityManager(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
+        public IdentityManager(HqUserManager userManager, HqSignInManager signInManager,
             IAuthenticationManager authenticationManager)
         {
             this.userManager = userManager;
@@ -45,14 +45,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         private bool IsCurrentUserInRole(UserRoles role) => this.authenticationManager.User.IsInRole(role.ToString());
 
-        public ApplicationUser CurrentUser => this.userManager.Users?.FirstOrDefault(user=>user.Id == this.CurrentUserId);
-        public IQueryable<ApplicationUser> Users => this.userManager.Users;
+        public HqUser CurrentUser => this.userManager.Users?.FirstOrDefault(user=>user.Id == this.CurrentUserId);
+        public IQueryable<HqUser> Users => this.userManager.Users;
         public Guid CurrentUserId => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
         public string CurrentUserName => this.authenticationManager.User.Identity.Name;
 
         public string CurrentUserDeviceId => this.authenticationManager.User.FindFirst(@"DeviceId")?.Value;
 
-        public IdentityResult CreateUser(ApplicationUser user, string password, UserRoles role)
+        public IdentityResult CreateUser(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
 
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return creationStatus;
         }
 
-        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, UserRoles role)
+        public async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
             
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return creationStatus;
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user, string password)
+        public async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
                 user.PasswordHash = this.userManager.PasswordHasher.HashPassword(password);
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return await this.userManager.UpdateAsync(user);
         }
 
-        public IdentityResult UpdateUser(ApplicationUser user, string password)
+        public IdentityResult UpdateUser(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
                 user.PasswordHash = this.userManager.PasswordHasher.HashPassword(password);
@@ -99,15 +99,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public void SignOut() => this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-        public async Task<ApplicationUser> GetUserByIdAsync(Guid userId) => await this.userManager.FindByIdAsync(userId);
+        public async Task<HqUser> GetUserByIdAsync(Guid userId) => await this.userManager.FindByIdAsync(userId);
 
-        public ApplicationUser GetUserById(Guid userId) => this.userManager.FindById(userId);
+        public HqUser GetUserById(Guid userId) => this.userManager.FindById(userId);
 
-        public async Task<ApplicationUser> GetUserByNameAsync(string userName) => await this.userManager.FindByNameAsync(userName);
-        public ApplicationUser GetUserByName(string userName) => this.userManager.FindByName(userName);
+        public async Task<HqUser> GetUserByNameAsync(string userName) => await this.userManager.FindByNameAsync(userName);
+        public HqUser GetUserByName(string userName) => this.userManager.FindByName(userName);
 
-        public async Task<ApplicationUser> GetUserByEmailAsync(string email) => await this.userManager.FindByEmailAsync(email);
-        public ApplicationUser GetUserByEmail(string email) => this.userManager.FindByEmail(email);
+        public async Task<HqUser> GetUserByEmailAsync(string email) => await this.userManager.FindByEmailAsync(email);
+        public HqUser GetUserByEmail(string email) => this.userManager.FindByEmail(email);
 
         public IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId)
         {
@@ -159,13 +159,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public async Task SignInAsObserverAsync(string userName)
         {
             var userToObserve = await this.GetUserByNameAsync(userName);
-            userToObserve.Claims.Add(new AppUserClaim
+            userToObserve.Claims.Add(new HqUserClaim
             {
                 UserId = userToObserve.Id,
                 ClaimType = observerClaimType,
                 ClaimValue = this.CurrentUserName
             });
-            userToObserve.Claims.Add(new AppUserClaim
+            userToObserve.Claims.Add(new HqUserClaim
             {
                 UserId = userToObserve.Id,
                 ClaimType = ClaimTypes.Role,

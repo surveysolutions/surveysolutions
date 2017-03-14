@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Headquarters
         public override void Load()
         {
             this.Bind<HQIdentityDbContext>().ToConstant(HQIdentityDbContext.Create());
-            this.Bind<IUserRepository>().To<AppUserStore>();
+            this.Bind<IUserRepository>().To<HqUserStore>();
 
-            this.Bind<IPasswordHasher>().To<AspNetPasswordHasher>();
+            this.Bind<IPasswordHasher>().To<HqPasswordHasher>();
             this.Bind<IOwinContext>().ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext()).InRequestScope();
             this.Bind<IAuthenticationManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Authentication).InRequestScope();
-            this.Bind<ApplicationSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<ApplicationSignInManager>()).InRequestScope();
-            this.Bind<ApplicationUserManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<ApplicationUserManager>()).InRequestScope();
+            this.Bind<HqSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqSignInManager>()).InRequestScope();
+            this.Bind<HqUserManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqUserManager>()).InRequestScope();
             this.Bind<IIdentityManager>().To<IdentityManager>().InRequestScope();
         }
     }

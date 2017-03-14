@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 ConfirmPassword = "12345"
             };
 
-            identityManagerMock.Setup(x => x.GetUserByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<ApplicationUser>(null));
+            identityManagerMock.Setup(x => x.GetUserByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<HqUser>(null));
 
             controller = CreateApiUserController(identityManager: identityManagerMock.Object);
         };

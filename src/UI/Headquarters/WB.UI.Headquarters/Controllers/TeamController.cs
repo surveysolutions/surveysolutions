@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
-            => await this.identityManager.CreateUserAsync(new ApplicationUser
+            => await this.identityManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),
                 IsLockedBySupervisor = false,
