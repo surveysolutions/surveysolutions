@@ -125,7 +125,7 @@
                         ManagedPipelineMode="integrated"
                         Identity="applicationPoolIdentity" />
 
-                    <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutionsSite" Directory="INSTALLFOLDER" ConfigureIfExists="no">
+                    <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutionsSite" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
                         <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
                         <iis:WebDirProperties Id="webSite" AnonymousAccess="no" WindowsAuthentication="yes" />
                         <iis:WebApplication Id="webSite" WebAppPool="SurveySolutionsSiteAppPool" Name="SyrveySolutionsWebApplication" />
