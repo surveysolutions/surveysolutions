@@ -41,8 +41,6 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        internal static InitializationException InitException { get; set; }
-
         private static void SetupNConfig()
             => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
 

@@ -1,13 +1,42 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Error occured</title>
+    <style>
+        #wrapper {
+            margin: auto;
+            width: 300px;
+            margin-top: 200px;
+        }
+
+        h1 {
+            color: #E32102;
+            font-size: 1.5em;
+            padding: 0;
+            margin: 0;
+        }
+
+        .error-content {
+            padding-left: 16px;
+            border-left: 13px #F6D6D0 solid;
+        }
+
+        .description {
+            color: #808080;
+            margin-top: 16px;
+            font-size: 1.1em;
+        }
+    </style>
     <meta charset="utf-8" />
 </head>
 <body>
-    <h1>The application has encountered an unknown error.</h1>
-    <div>
-        Please contact system administrator to resolve this issue.
+    <div id="wrapper">
+        <div class="error-content">
+            <h1>The application has encountered an unknown error.</h1>
+            <div class="description">
+                Please contact system administrator to resolve this issue.
+            </div>
+        </div>
     </div>
 </body>
 </html>
