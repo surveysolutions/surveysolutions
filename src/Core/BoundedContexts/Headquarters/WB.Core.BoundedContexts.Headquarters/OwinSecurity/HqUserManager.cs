@@ -7,24 +7,24 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class ApplicationUserManager : UserManager<ApplicationUser, Guid>
+    public class HqUserManager : UserManager<HqUser, Guid>
     {
-        public ApplicationUserManager(IAppUserStore store)
+        public HqUserManager(IUserStore<HqUser, Guid> store)
             : base(store)
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
+        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options,
             IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new AppUserStore(context.Get<HQIdentityDbContext>()))
+            var manager = new HqUserManager(new HqUserStore(context.Get<HQIdentityDbContext>()))
             {
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
                 UserLockoutEnabledByDefault = false,
                 DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5),
                 MaxFailedAccessAttemptsBeforeLockout = 5
             };
-            manager.UserValidator = new UserValidator<ApplicationUser, Guid>(manager)
+            manager.UserValidator = new UserValidator<HqUser, Guid>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = false

@@ -18,24 +18,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         bool IsCurrentUserHeadquarter { get; }
         bool IsCurrentUserSupervisor { get; }
         bool IsCurrentUserObserver { get; }
-        ApplicationUser CurrentUser { get; }
-        IQueryable<ApplicationUser> Users { get; }
+        HqUser CurrentUser { get; }
+        IQueryable<HqUser> Users { get; }
         Guid CurrentUserId { get; }
         string CurrentUserName { get; }
         string CurrentUserDeviceId { get; }
-        Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, UserRoles role);
-        IdentityResult CreateUser(ApplicationUser user, string password, UserRoles role);
-        Task<IdentityResult> UpdateUserAsync(ApplicationUser user, string password);
-        IdentityResult UpdateUser(ApplicationUser user, string password);
+        Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role);
+        IdentityResult CreateUser(HqUser user, string password, UserRoles role);
+        Task<IdentityResult> UpdateUserAsync(HqUser user, string password);
+        IdentityResult UpdateUser(HqUser user, string password);
         Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false);
         Task<UserRoles> GetRoleForCurrentUserAsync();
         void SignOut();
-        Task<ApplicationUser> GetUserByIdAsync(Guid userId);
-        ApplicationUser GetUserById(Guid userId);
-        Task<ApplicationUser> GetUserByNameAsync(string userName);
-        ApplicationUser GetUserByName(string userName);
-        Task<ApplicationUser> GetUserByEmailAsync(string email);
-        ApplicationUser GetUserByEmail(string email);
+        Task<HqUser> GetUserByIdAsync(Guid userId);
+        HqUser GetUserById(Guid userId);
+        Task<HqUser> GetUserByNameAsync(string userName);
+        HqUser GetUserByName(string userName);
+        Task<HqUser> GetUserByEmailAsync(string email);
+        HqUser GetUserByEmail(string email);
         IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId);
         void LinkDeviceToCurrentInterviewer(string deviceId);
         Task SignInAsObserverAsync(string userName);

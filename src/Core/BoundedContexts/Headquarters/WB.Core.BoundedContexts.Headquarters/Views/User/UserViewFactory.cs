@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserView GetUser(UserViewInputModel input)
         {
-            Func<IQueryable<ApplicationUser>, ApplicationUser> query = users =>
+            Func<IQueryable<HqUser>, HqUser> query = users =>
             {
                 if (input.PublicKey != null)
                     users = users.Where(x => x.Id == input.PublicKey);
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
         {
-            Func<IQueryable<ApplicationUser>, IQueryable<InterviewersItem>> query =
+            Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query =
                 allUsers => ApplyFilter(allUsers, searchBy, role, archived)
                     .Select(x => new InterviewersItem
                     {
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         DeviceId = x.DeviceId
                     });
 
-            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(ApplicationUser.UserName) : orderBy;
+            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool onlyActive = false)
         {
-            Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>> query = users =>
+            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
                 users = ApplyFilter(users, searchBy, UserRoles.Interviewer, onlyActive)
                     .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
 
             var filteredUsers = query
-                .PagedAndOrderedQuery(nameof(ApplicationUser.UserName), 1, pageSize)
+                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
                 .Invoke(this.UserRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, bool? hasDevice, Guid? supervisorId)
         {
-            Func<IQueryable<ApplicationUser>, IQueryable<InterviewersItem>> query = allUsers =>
+            Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
                  var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
 
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 });
             };
 
-            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(ApplicationUser.UserName) : orderBy;
+            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
@@ -164,12 +164,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false)
         {
-            Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>> query = users =>
+            Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
                 ApplyFilter(users, searchBy, UserRoles.Supervisor, false)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
             
             var filteredUsers = query
-                .PagedAndOrderedQuery(nameof(ApplicationUser.UserName), 1, pageSize)
+                .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
                 .Invoke(this.UserRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived)
         {
-            Func<IQueryable<ApplicationUser>, IQueryable<SupervisorsItem>> query =
+            Func<IQueryable<HqUser>, IQueryable<SupervisorsItem>> query =
                 allUsers => ApplyFilter(allUsers, searchBy, UserRoles.Supervisor, archived)
                     .Select(supervisor => new SupervisorsItem
                     {
@@ -201,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.SupervisorId == supervisor.Id && pr.DeviceId == null && pr.IsArchived == false)
                     });
 
-            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(ApplicationUser.UserName) : orderBy;
+            orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
             var filteredUsers = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize).Invoke(this.UserRepository.Users).ToList();
 
@@ -212,9 +212,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<ApplicationUser> ApplyFilter(IQueryable<ApplicationUser> _, string searchBy, UserRoles role, bool archived)
+        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool archived)
         {
-            var selectedRoleId = ((byte)role).ToGuid();
+            var selectedRoleId = role.ToUserId();
 
             var allUsers = _.Where(x => x.IsArchived == archived && x.Roles.FirstOrDefault().RoleId == selectedRoleId);
 

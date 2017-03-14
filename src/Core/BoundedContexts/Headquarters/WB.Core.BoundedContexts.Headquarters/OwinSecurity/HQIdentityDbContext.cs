@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    public class HQIdentityDbContext : IdentityDbContext<ApplicationUser, AppRole, Guid, AppUserLogin, AppUserRole, AppUserClaim>
+    public class HQIdentityDbContext : IdentityDbContext<HqUser, HqRole, Guid, HqUserLogin, HqUserRole, HqUserClaim>
     {
         public HQIdentityDbContext() : base("Postgres")
         {
@@ -19,11 +19,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApplicationUser>().ToTable("users", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<AppRole>().ToTable("roles", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserRole>().ToTable("userroles", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserLogin>().ToTable("userlogins", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<AppUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUser>().ToTable("users", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqRole>().ToTable("roles", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUserRole>().ToTable("userroles", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUserLogin>().ToTable("userlogins", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
         }
 
         public static HQIdentityDbContext Create() => new HQIdentityDbContext();

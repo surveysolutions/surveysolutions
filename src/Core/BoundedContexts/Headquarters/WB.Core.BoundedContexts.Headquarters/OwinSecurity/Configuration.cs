@@ -28,18 +28,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             if (context.Roles.Any()) return;
 
-            foreach (int userRole in Enum.GetValues(typeof(UserRoles)))
+            foreach (UserRoles userRole in Enum.GetValues(typeof(UserRoles)))
             {
-                context.Roles.AddOrUpdate(new AppRole
+                context.Roles.AddOrUpdate(new HqRole
                 {
-                    Id = ((byte)userRole).ToGuid(),
+                    Id = userRole.ToUserId(),
                     Name = Enum.GetName(typeof(UserRoles), userRole)
                 });
             }
 
             foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users=>users.ToList()))
             {
-                context.Users.AddOrUpdate(new ApplicationUser
+                context.Users.AddOrUpdate(new HqUser
                 {
                     Id = oldUser.PublicKey,
                     CreationDate = oldUser.CreationDate,
@@ -56,10 +56,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     SecurityStamp = Guid.NewGuid().FormatGuid(),
                     Roles =
                     {
-                        new AppUserRole
+                        new HqUserRole
                         {
                             UserId = oldUser.PublicKey,
-                            RoleId = ((byte) oldUser.Roles.First()).ToGuid()
+                            RoleId = oldUser.Roles.First().ToUserId()
                         }
                     }
                 });
