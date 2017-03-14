@@ -15,8 +15,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     vueify = require('vueify'),
     glob = require('glob'),
-    es = require('event-stream'),
-    runSequence = require('run-sequence');
+    es = require('event-stream');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -44,7 +43,7 @@ function wrapPipe(taskFn) {
 }
 
 var config = {
-    production: util.env.production,
+    production: !!util.env.production,
     bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
@@ -149,19 +148,23 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
     	.pipe(gulp.dest(config.buildDir));
 }));
 
-gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function(callback){
+gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (success, error) {
     if (config.production) {
         var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
         var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
         var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
 
-        return config.filesToInject.map(function(fileToInject) {
-            return gulp.src(fileToInject.folder + fileToInject.file)
-                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }).on('error', function (error) { callback(error); }))
-                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }).on('error', function (error) { callback(error); }))
-                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }).on('error', function(error) { callback(error); }))
+        var tasks = config.filesToInject.map(function (fileToInject) {
+            var target = gulp.src(fileToInject.folder + fileToInject.file);
+
+            return target
+                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }).on('error', error))
+                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }).on('error', error))
+                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }).on('error', error))
                 .pipe(gulp.dest(fileToInject.folder));
         });
+
+        return tasks;
     }
     // DEV: to include files not in batch
     //else {
@@ -190,13 +193,13 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function(callback){
     //    return tasks;
     //}
 
-    return callback();
-});
+    return util.noop();
+}));
 
 gulp.task('clean', function () {
     return gulp.src(config.buildDir + '/*').pipe(plugins.clean());
 });
 
-gulp.task('default', function(callback) {
-    runSequence('clean', 'vueify', 'vue-libs', 'watch-vue', 'inject', callback);
+gulp.task('default', ['clean'], function () {
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
 });
