@@ -20,8 +20,6 @@ using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using NHibernate.Cfg.ConfigurationSchema;
-using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
@@ -55,32 +53,25 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            try
-            {
-                var config = new HttpConfiguration();
+            var config = new HttpConfiguration();
 
-                InitializeMVC(config);
+            InitializeMVC(config);
 
-                ConfigureAuth(app);
+            ConfigureAuth(app);
 
-                var kernel = NinjectConfig.CreateKernel();
-                app.Use(RemoveServerNameFromHeaders)
-                    .Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler)
-                    .UseNinjectMiddleware(() => kernel)
-                    .UseNinjectWebApi(config)
-                    .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+            var kernel = NinjectConfig.CreateKernel();
+            app.Use(RemoveServerNameFromHeaders)
+                .Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler)
+                .UseNinjectMiddleware(() => kernel)
+                .UseNinjectWebApi(config)
+                .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
 
-                var logger = LogManager.GetCurrentClassLogger();
-                logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
 
-                InitializeAppShutdown(app);
-                UpdateAppVersion();
-                HealthCheck();
-            }
-            catch (InitializationException e)
-            {
-                InitException = e;
-            }
+            InitializeAppShutdown(app);
+            UpdateAppVersion();
+            HealthCheck();
         }
 
         public void ConfigureAuth(IAppBuilder app)
@@ -215,7 +206,6 @@ namespace WB.UI.Headquarters
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new CustomErrorFilter());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new MaintenanceFilter());
