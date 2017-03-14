@@ -61,14 +61,14 @@ namespace WB.UI.Headquarters
 
                 InitializeMVC(config);
 
+                ConfigureAuth(app);
+
                 var kernel = NinjectConfig.CreateKernel();
                 app.Use(RemoveServerNameFromHeaders)
                     .Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler)
                     .UseNinjectMiddleware(() => kernel)
                     .UseNinjectWebApi(config)
                     .MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
-
-                ConfigureAuth(app);
 
                 var logger = LogManager.GetCurrentClassLogger();
                 logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
