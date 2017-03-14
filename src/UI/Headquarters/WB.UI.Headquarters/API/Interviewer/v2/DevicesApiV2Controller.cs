@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -44,6 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [HttpPost]
         public IHttpActionResult Info(DeviceInfoApiView info)
         {
+            var deviceLocation = info.DeviceLocation;
             this.deviceSyncInfoRepository.Store(new DeviceSyncInfo
             {
                 InterviewerId = this.identityManager.CurrentUserId,
@@ -64,14 +66,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 NetworkType = info.NetworkType,
                 BatteryChargePercent = info.BatteryChargePercent,
                 BatteryPowerSource = info.BatteryPowerSource,
-                DeviceLocationLat = info.DeviceLocation?.Latitude,
-                DeviceLocationLong = info.DeviceLocation?.Longitude,
+                DeviceLocationLat = deviceLocation?.Latitude,
+                DeviceLocationLong = deviceLocation?.Longitude,
                 NumberOfStartedInterviews = info.NumberOfStartedInterviews,
                 RAMFreeInBytes = info.RAMInfo?.Free,
                 RAMTotalInBytes = info.RAMInfo?.Total,
                 StorageFreeInBytes = info.StorageInfo?.Free,
                 StorageTotalInBytes = info.StorageInfo?.Total,
-                DeviceLocationAddress = string.Join(Environment.NewLine, info.DeviceLocation?.Address)
+                DeviceLocationAddress = string.Join(Environment.NewLine, deviceLocation?.Address ?? Enumerable.Empty<string>())
             }, Guid.NewGuid().FormatGuid());
 
             return this.Ok();

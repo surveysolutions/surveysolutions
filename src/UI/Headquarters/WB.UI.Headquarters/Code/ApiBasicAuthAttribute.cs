@@ -62,13 +62,17 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
                 return;
             }
-;
+
             var identity = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.Name, userInfo.UserName),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()), 
-                new Claim("DeviceId", userInfo.DeviceId)
+                new Claim("DeviceId", userInfo.DeviceId ?? string.Empty)
             }, @"Basic");
+            foreach (var userRole in userInfo.Roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, userRole.Role.ToString()));
+            }
 
             var principal = new ClaimsPrincipal(identity);
 
