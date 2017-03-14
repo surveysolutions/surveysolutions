@@ -31,7 +31,8 @@
     "jquery-highlight": "^3.3.0",
     "vue": "^2.2.2",
     "vue-resource": "^1.2.1",
-    "flatpickr": "^2.4.4"
+    "flatpickr": "^2.4.4",
+    "vee-validate": "2.0.0-beta.22"
   },
   "devDependencies": {},
   "overrides": {

@@ -306,6 +306,12 @@
         .input-group{
             width: calc(100% + 10px);
         }
+        .combo-box{
+		    width: 100%;
+		.btn-input .dropdown-toggle{
+ 			width: calc(100% + 10px);
+ 		}
+	}
         .open > .dropdown-menu{
             width: 100%;    
         }
@@ -442,7 +448,7 @@
     }
 }
 %combobox{
-    .dropdown-toggle {
+   .dropdown-toggle {
         @extend %field-to-fill;
         height: 40px;
         padding: 11px 38px 11px 10px;
@@ -461,8 +467,7 @@
             z-index: 0;
         }
     }
-    .dropdown-menu{
-        z-index: 2;
+    .btn-input.open > .dropdown-menu{
         width: 100%;
         padding:  5px 10px;
         li{
@@ -480,4 +485,12 @@
     input:checked ~ .btn-clear{
         @extend %visibility-visible;
     }
+    @media (max-width: $screen-md-min){
+        .btn-input.open > .dropdown-menu{
+            width: calc(100% + 10px);
+        }
+        .btn-clear{
+            right: -10px;
+        }
+    }  
 }

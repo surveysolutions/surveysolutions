@@ -6,9 +6,9 @@
 {
     @Scripts.Render("~/js/troubleshooting-census")
 }
-<main id="app">
-    <div class="container">
-        <div class="row">
+<main class="hold-transition search-wasnt-started"  id="app">
+    <div class="container-fluid">
+        <div class="row before-search">
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li><a href="">troubleshooting</a></li>
@@ -18,38 +18,444 @@
                 </h1>
             </div>
         </div>
-        <div class="row extra-margin-bottom">
+        <div class="row before-search">
             <div class="col-sm-7">
                 <p>It will be useful to know enumerator, interview template and timeline. <br /> We will show if there was any errors with synchronizations during selected period.</p>
             </div>
-            <div class="col-sm-6">
-                <div class="block-filter">
-                    <h5>Enumerator</h5>
-                    <user-selector placeholder="Select interviewer" control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
+        </div>
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
-                <div class="block-filter">
-                    <h5>Survey template questionnaire version</h5>
-                    <user-selector placeholder="Select questionnaire" control-id="questionnaireId" :value="questionnaireId" v-on:selected="questionnaireSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
-                </div>
-                <div class="block-filter">
-                    <h5>Time-period when this interview was conducted or synchronized with HQ server (local time)</h5>
-                    <Flatpickr v-on:input="rangeSelected" :options="dateRangePickerOptions"/>
-
-                    <div class="form-date">
-                        <div class='input-group date'>
-                            <label>From: </label>
-                            {{dateStr}}
-                            <span class="input-group-addon">
-                                <span class="calendar"></span>
-                            </span>
-                        </div>
+                <div class="filters-container">
+                    <h4>Filter Range</h4>
+                    <div class="block-filter">
+                        <h5>Enumerator</h5>
+                        <user-selector placeholder="Select interviewer" control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
+                    </div>
+                    <div class="block-filter">
+                        <h5>Survey template (questionnaire version)</h5>
+                        <user-selector placeholder="Select questionnaire" control-id="questionnaireId" :value="questionnaireId" v-on:selected="questionnaireSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
+                    </div>
+                    <div class="block-filter">
+                        <h5>Time-period when this interview was conducted or synchronized with HQ</h5>
+                        <Flatpickr input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
+                    </div>
+                    <div class="block-filter">
+                        <button type="button" class="btn btn-primary btn-lg" id="find-interview">Find interviews</button>
                     </div>
                 </div>
-                <div class="block-filter">
-                    <button type="button" class="btn btn-primary btn-lg">Find interviews</button>
+            </aside>
+            <div class="main-information">
+                <div class="page-header clearfix">
+                    <ol class="breadcrumb">
+                        <li><a href="">troubleshooting</a></li>
+                    </ol>
+                    <h1>
+                        Locating specific census inteview
+                    </h1>
+                </div>
+                <div class="clearfix">
+                    <div class="col-sm-7 ">
+                        <p>It will be useful to know enumerator, interview template and timeline. <br /> We will show if there was any errors with synchronizations during selected period.</p>
+                        <ul class="list-unstyled">
+                            <li><b>There are 3 interviews found during period</b></li>
+                            <li class="error-text"><b>2 error detected during this period</b></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="interviews-info">
+                    <div class="table-wrapper interviews-large-screen">
+                        <div class="wrapper-modal-dropdown">
+                            <button type="button" class="btn btn-strips" data-toggle="modal" data-target="#modal-dropdown">
+                                <span></span>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal" id="modal-dropdown" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-dropdown" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                                            <h3>Show prefield</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="has-comments1" checked />
+                                                    <label for="has-comments1">
+                                                        <span class="tick"></span>Has comments
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="flags" checked />
+                                                    <label for="flags">
+                                                        <span class="tick"></span>Flags
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="status" checked />
+                                                    <label for="status">
+                                                        <span class="tick"></span>Current interview status
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="spent-time" />
+                                                    <label for="spent-time">
+                                                        <span class="tick"></span>Time spent on this interview
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="answered-questions" checked />
+                                                    <label for="answered-questions">
+                                                        <span class="tick"></span>Number of answered questions
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="template" />
+                                                    <label for="template">
+                                                        <span class="tick"></span>Questionnaire template
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="accepted-hq" />
+                                                    <label for="accepted-hq">
+                                                        <span class="tick"></span>Accepted by HQ
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="census" />
+                                                    <label for="census">
+                                                        <span class="tick"></span>Census mode
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="last-update" checked />
+                                                    <label for="last-update">
+                                                        <span class="tick"></span>Last update
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="download-on-device" checked />
+                                                    <label for="download-on-device">
+                                                        <span class="tick"></span>When downloaded on device
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="enumerator" checked />
+                                                    <label for="enumerator">
+                                                        <span class="tick"></span>Enumerator
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <input class="checkbox-filter" type="checkbox" id="number-rejected" />
+                                                    <label for="number-rejected">
+                                                        <span class="tick"></span>Number of times rejected
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
+                            <thead>
+                                <tr>
+                                    <th class=" interview-id title-row">
+                                        Interview id
+                                        <a href="#" class="show-prefield-btn">Show prefilled</a>
+                                    </th>
+                                    <th class="prefield-column enumeration-area">Enumeration area</th>
+                                    <th class="prefield-column">Deelling ZIP</th>
+                                    <th class="prefield-column  without-break  deelling-address">Deelling address</th>
+                                    <th class=" has-comments"><span class="comment-icon responded"></span></th>
+                                    <th class=" uploaded-to-hq">Uploaded to HQ</th>
+                                    <th class=" interview-conducted">interview conducted</th>
+                                    <th class=" flags">Flags</th>
+                                    <th class=" status">current Status</th>
+                                    <th class=" answered-questions">answered questions</th>
+                                    <th class=" left-empty">left empty</th>
+                                    <th class=" errors">errors</th>
+                                    <th class="date last-update">last update</th>
+                                    <th class=" download-on-device">downloaded on device</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#">43-21-23-45-13</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="comment-icon"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="flag">3</span></td>
+                                    <td class="status">Need&nbsp;your&nbsp;descision</td>
+                                    <td class="answered-questions">2048</td>
+                                    <td class="left-empty">12</td>
+                                    <td class="errors">2</td>
+                                    <td class="date last-update">Feb 12, 23:55</td>
+                                    <td class="date download-on-device">Feb 12, 09:12</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#" class=" error-text">54-11-23-45-21</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="comment-icon responded"></span></td>
+                                    <td class="date uploaded-to-hq error-text">Feb 11, 09:12 <div>Error: [02] corrupted data</div></td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="empty"></span></td>
+                                    <td class="status">Completed</td>
+                                    <td class="answered-questions">1956</td>
+                                    <td class="left-empty success-text">No</td>
+                                    <td class="errors success-text">No</td>
+                                    <td class="date last-update">Feb 12, 19:55</td>
+                                    <td class="date download-on-device">Feb 1, 09:12</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#">43-21-23-45-11 i2</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="comment-icon responded"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="flag">1923</span></td>
+                                    <td class="status error-text">HQ&nbsp;rejected</td>
+                                    <td class="answered-questions error-text">No</td>
+                                    <td class="left-empty">1345</td>
+                                    <td class="errors">1922</td>
+                                    <td class="date last-update">Feb 11, 22:55</td>
+                                    <td class="date download-on-device">Feb 6, 10:12</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#" class="error-text">NA</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="empty"></span></td>
+                                    <td class="date uploaded-to-hq error-text">Feb 3, 09:12 <div>Error: [03] Connection time out</div></td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="empty"></span></td>
+                                    <td class="status">Not&nbsp;yet&nbsp;synced</td>
+                                    <td class="answered-questions"><span class="empty"></span></td>
+                                    <td class="left-empty"><span class="empty"></span></td>
+                                    <td class="errors"><span class="empty"></span></td>
+                                    <td class="date last-update">Feb 11, 22:55</td>
+                                    <td class="date download-on-device"><span class="empty"></span></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#">45-63-33-24-67</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="empty"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="empty"></span></td>
+                                    <td class="status">In&nbsp;the&nbsp;field</td>
+                                    <td class="answered-questions"><span class="empty"></span></td>
+                                    <td class="left-empty"><span class="empty"></span></td>
+                                    <td class="errors"><span class="empty"></span></td>
+                                    <td class="date last-update">Feb 11, 22:55</td>
+                                    <td class="date download-on-device">Feb 2, 12:23</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#">45-22-22-34-19</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="comment-icon"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="flag">1</span></td>
+                                    <td class="status error-text">HQ&nbsp;rejected</td>
+                                    <td class="answered-questions">1554</td>
+                                    <td class="left-empty">78</td>
+                                    <td class="errors">1</td>
+                                    <td class="date last-update">Feb 5, 12:15</td>
+                                    <td class="date download-on-device">Feb 1, 10:03</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id not-synced-assign title-row"><a href="#">77-33-25-71-16</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="empty"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="empty"></span></td>
+                                    <td class="status">Not&nbsp;yet&nbsp;assign</td>
+                                    <td class="answered-questions"><span class="empty"></span></td>
+                                    <td class="left-empty"><span class="empty"></span></td>
+                                    <td class="errors"><span class="empty"></span></td>
+                                    <td class="date last-update">Feb 11, 22:55</td>
+                                    <td class="date download-on-device"><span class="empty"></span></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="interview-id title-row"><a href="#">43-82-94-98-95</a></td>
+                                    <td class="prefield-column enumeration-area">North 2</td>
+                                    <td class="prefield-column">24632</td>
+                                    <td class="prefield-column without-break  deelling-address">1257 blane Street, Creve coeur, MC, Buildin 35 25632</td>
+                                    <td class="has-comments"><span class="empty"></span></td>
+                                    <td class="date uploaded-to-hq">Feb 11, 09:12</td>
+                                    <td class="date interview-conducted">Feb 12, 23:44</td>
+                                    <td class="flags"><span class="empty"></span></td>
+                                    <td class="status">Waiting&nbsp;for&nbsp;HQ</td>
+                                    <td class="answered-questions">2001</td>
+                                    <td class="left-empty success-text">No</td>
+                                    <td class="errors success-text">No</td>
+                                    <td class="date last-update">Feb 11, 22:55</td>
+                                    <td class="date download-on-device">Feb 8, 22:55</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="screen-small-resolution">
+                        <div class="row-unit selected">
+                            <div class="header-unit">
+                                <span class="tick"></span>
+                                <span class="title-row">43-21-23-45-15</span>
+                                <b>Need your descision</b>
+                                <span class="comment-icon"></span>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li>Downloaded on device: Feb 12, 23:55</li>
+                                <li>Interview conducted: Feb 11, 09:12</li>
+                                <li>Uploaded to HQ: Feb 11, 09:12</li>
+                            </ul>
+                            <div class="table-min-wrapper clearfix">
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Flags</div>
+                                        <div class="table-td table-header">Answered questions</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td flags"><span class="flag">1</span></div>
+                                        <div class="table-td">1956</div>
+                                    </div>
+                                </div>
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Left empty</div>
+                                        <div class="table-td table-header">erors</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td">78</div>
+                                        <div class="table-td error-text">1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-unit">
+                            <div class="header-unit">
+                                <span class="tick"></span>
+                                <span class="title-row">54-11-23-45-13</span>
+                                <b>Completed</b>
+                                <span class="comment-icon"></span>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li>Downloaded on device: Feb 12, 20:15</li>
+                                <li>Interview conducted: Feb 10, 05:12</li>
+                                <li>Uploaded to HQ: Feb 11, 09:12</li>
+                            </ul>
+                            <div class="table-min-wrapper clearfix">
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Flags</div>
+                                        <div class="table-td table-header">Answered questions</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td flags"><span class="empty"></span></div>
+                                        <div class="table-td">2048</div>
+                                    </div>
+                                </div>
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Left empty</div>
+                                        <div class="table-td table-header">erors</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td success-text">No</div>
+                                        <div class="table-td error-text success-text">No</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-unit">
+                            <div class="header-unit">
+                                <span class="title-row error-text">43-21-23-45-11 i2</span>
+                                <b class="error-text">HQ rejected</b>
+                                <span class="comment-icon responded"></span>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li>Downloaded on device: Feb 12, 20:15</li>
+                                <li>Interview conducted: Feb 10, 05:12</li>
+                                <li class="error-text">Uploaded to HQ: Feb 11, 09:12 <div>Error: [02] corrupted data</div></li>
+                            </ul>
+                            <div class="table-min-wrapper clearfix">
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Flags</div>
+                                        <div class="table-td table-header">Answered questions</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td flags"><span class="flag">1923</span></div>
+                                        <div class="table-td">2048</div>
+                                    </div>
+                                </div>
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Left empty</div>
+                                        <div class="table-td table-header">erors</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td">1342</div>
+                                        <div class="table-td error-text">1922</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-unit">
+                            <div class="header-unit">
+                                <span class="title-row error-text">77-33-25-71-16</span>
+                                <b>Not yet assign</b>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li>Downloaded on device: Feb 05, 09:15</li>
+                                <li>Interview conducted: Feb 01, 05:12</li>
+                                <li class="error-text">Uploaded to HQ: Feb 3, 09:12 <div>Error: [03] Connection time out</div></li>
+                            </ul>
+                            <div class="table-min-wrapper clearfix">
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Flags</div>
+                                        <div class="table-td table-header">Answered questions</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td flags"><span class="empty"></span></div>
+                                        <div class="table-td"><span class="empty"></span></div>
+                                    </div>
+                                </div>
+                                <div class="table-min">
+                                    <div class="table-row">
+                                        <div class="table-td table-header">Left empty</div>
+                                        <div class="table-td table-header">erors</div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-td">2580</div>
+                                        <div class="table-td error-text"><span class="empty"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
-

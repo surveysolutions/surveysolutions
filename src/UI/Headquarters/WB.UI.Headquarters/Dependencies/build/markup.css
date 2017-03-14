@@ -5891,18 +5891,23 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .combo-box .dropdown-toggle:hover, .question-editor .options-group .field .dropdown-toggle:hover, .combo-box .dropdown-toggle:focus, .question-editor .options-group .field .dropdown-toggle:focus, .combo-box .dropdown-toggle:active, .question-editor .options-group .field .dropdown-toggle:active {
     z-index: 0; }
 
-.combo-box .dropdown-menu, .question-editor .options-group .field .dropdown-menu {
-  z-index: 2;
+.combo-box .btn-input.open > .dropdown-menu, .question-editor .options-group .field .btn-input.open > .dropdown-menu {
   width: 100%;
   padding: 5px 10px; }
-  .combo-box .dropdown-menu li, .question-editor .options-group .field .dropdown-menu li {
+  .combo-box .btn-input.open > .dropdown-menu li, .question-editor .options-group .field .btn-input.open > .dropdown-menu li {
     border-bottom: 1px solid #dbdfe2; }
-    .combo-box .dropdown-menu li > input, .question-editor .options-group .field .dropdown-menu li > input {
+    .combo-box .btn-input.open > .dropdown-menu li > input, .question-editor .options-group .field .btn-input.open > .dropdown-menu li > input {
       width: 100%;
       border: none;
       padding: 7px 10px; }
-    .combo-box .dropdown-menu li:last-child, .question-editor .options-group .field .dropdown-menu li:last-child {
+    .combo-box .btn-input.open > .dropdown-menu li:last-child, .question-editor .options-group .field .btn-input.open > .dropdown-menu li:last-child {
       border: none; }
+
+@media (max-width: 1210px) {
+  .combo-box .btn-input.open > .dropdown-menu, .question-editor .options-group .field .btn-input.open > .dropdown-menu {
+    width: calc(100% + 10px); }
+  .combo-box .btn-clear, .question-editor .options-group .field .btn-clear {
+    right: -10px; } }
 
 .table {
   color: #3f3f3f;
@@ -7503,6 +7508,8 @@ input.double-checkbox-white {
     .bootstrap-select.btn-group .dropdown-menu > li > a {
       padding: 10px;
       white-space: normal; }
+      .bootstrap-select.btn-group .dropdown-menu > li > a span.text {
+        display: block !important; }
       .bootstrap-select.btn-group .dropdown-menu > li > a:hover, .bootstrap-select.btn-group .dropdown-menu > li > a:focus, .bootstrap-select.btn-group .dropdown-menu > li > a:active {
         color: #000; }
       .bootstrap-select.btn-group .dropdown-menu > li > a:hover, .bootstrap-select.btn-group .dropdown-menu > li > a:active {
@@ -7665,8 +7672,19 @@ input.double-checkbox-white {
 .combo-box {
   position: relative;
   width: 295px; }
-  .combo-box .dropdown-toggle span {
-    position: static !important; }
+  .combo-box .btn-input .dropdown-toggle {
+    padding: 10px 38px 10px 10px; }
+    .combo-box .btn-input .dropdown-toggle span {
+      position: static !important; }
+    .combo-box .btn-input .dropdown-toggle .dropdown-menu {
+      z-index: 3; }
+
+ul.dropdown-menu li, ul.dropdown-menu li * {
+  word-wrap: break-word;
+  overflow-wrap: break-word; }
+
+.form-date .input-group.date .form-control {
+  z-index: 0; }
 
 .structured-content {
   margin: 0; }
@@ -8024,6 +8042,9 @@ span.image-zoom-box, span.image-option {
         margin-bottom: 0; } }
 
 .filters {
+  transition: width 0.3s linear 0s; }
+
+.filters {
   width: 360px;
   border-right: 3px solid #ececec;
   padding: 100px 5px 50px 5px;
@@ -8117,16 +8138,34 @@ input.checkbox-filter {
         border-left: none;
         border-color: #dbdfe2;
         padding: 3px 10px; }
-        .block-filter .form-date .input-group.date .input-group-addon .calendar {
-          width: 21px;
-          height: 20px;
-          display: inline-block;
-          background: url("../img/calendar.png") no-repeat; }
-          @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-            .block-filter .form-date .input-group.date .input-group-addon .calendar {
-              /* on retina, use image that's scaled by 2 */
-              background-image: url("../img/calendar2k.png");
-              background-size: 21px 20px; } }
+
+.form-date.input-group {
+  max-width: none; }
+
+.form-date .form-control {
+  cursor: pointer;
+  border-right: none;
+  border-color: #dbdfe2;
+  background-color: #fff;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px; }
+
+.form-date .input-group-addon {
+  background-color: transparent;
+  border-left: none;
+  border-color: #dbdfe2;
+  padding: 3px 10px; }
+
+.calendar {
+  width: 21px;
+  height: 20px;
+  display: inline-block;
+  background: url("../img/calendar.png") no-repeat; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    .calendar {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/calendar2k.png");
+      background-size: 21px 20px; } }
 
 .preset-filters-container {
   padding: 30px 25px 20px 30px; }
@@ -8142,6 +8181,11 @@ input.checkbox-filter {
 
 .filters .input-group {
   width: 305px; }
+
+.filters .combo-box {
+  width: 305px; }
+  .filters .combo-box .btn-input .dropdown-toggle {
+    width: 305px; }
 
 @media (max-width: 1300px) {
   .foldback-button {
@@ -8172,6 +8216,10 @@ input.checkbox-filter {
       width: calc(100% + 10px) !important; }
     .filters .input-group {
       width: calc(100% + 10px); }
+    .filters .combo-box {
+      width: 100%; }
+      .filters .combo-box .btn-input .dropdown-toggle {
+        width: calc(100% + 10px); }
     .filters .open > .dropdown-menu {
       width: 100%; }
     .filters .foldback-button {
@@ -10535,6 +10583,10 @@ label.inactive {
       width: calc(100% + 10px) !important; }
     .web-interview-for-supervisor .filters .input-group {
       width: calc(100% + 10px); }
+    .web-interview-for-supervisor .filters .combo-box {
+      width: 100%; }
+      .web-interview-for-supervisor .filters .combo-box .btn-input .dropdown-toggle {
+        width: calc(100% + 10px); }
     .web-interview-for-supervisor .filters .open > .dropdown-menu {
       width: 100%; }
     .web-interview-for-supervisor .filters .foldback-button {
@@ -11705,3 +11757,61 @@ td.errors {
       margin: 0 auto 30px; }
     .graphic-wrapper .graphic-explanation {
       float: none; } }
+
+main .before-search {
+  display: none; }
+
+.search-wasnt-started .before-search {
+  display: block; }
+
+.search-wasnt-started .main-information {
+  display: none; }
+
+.search-wasnt-started .filters {
+  position: static;
+  overflow: visible;
+  border: none;
+  width: 100%;
+  margin: 0;
+  padding: 0; }
+  .search-wasnt-started .filters .foldback-button {
+    display: none; }
+  .search-wasnt-started .filters .filters-container {
+    max-width: 350px;
+    border: none;
+    padding: 0 15px; }
+    .search-wasnt-started .filters .filters-container > h4, .search-wasnt-started .filters .filters-container > .import-progress {
+      display: none; }
+
+.search-wasnt-started + .footer {
+  padding-left: 0 !important; }
+
+.servers-error {
+  width: 350px; }
+
+.error-wrapper {
+  background-image: linear-gradient(to right, rgba(231, 73, 36, 0.2) 0%, rgba(231, 73, 36, 0.2) 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33E74924', endColorstr='#33E74924', GradientType=1);
+  background-repeat: repeat-y;
+  background-size: 12px 100%;
+  padding-left: 30px; }
+  .error-wrapper .alert {
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 15px; }
+  .error-wrapper p {
+    font-size: 14px;
+    line-height: 16px; }
+
+.red-line {
+  width: 100%;
+  height: 12px;
+  background: rgba(231, 73, 36, 0.2); }
+
+@media (max-width: 880px) {
+  html body main .servers-error {
+    max-width: 350px;
+    margin: 0 auto; }
+    html body main .servers-error .centered-box-table {
+      text-align: left; } }

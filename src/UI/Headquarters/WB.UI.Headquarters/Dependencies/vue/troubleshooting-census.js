@@ -3,10 +3,9 @@ import VueResource from 'vue-resource'
 import UserSelector from './UserSelector.vue'
 import DatePicker from './DatePicker.vue'
 
-Vue.component('Flatpickr', DatePicker);
 Vue.use(VueResource);
 
-
+Vue.component('Flatpickr', DatePicker);
 Vue.component("user-selector", UserSelector);
 
 var app = new Vue({
@@ -17,18 +16,20 @@ var app = new Vue({
         dateRangePickerOptions: {
             mode: "range",
             maxDate: "today",
+            minDate: new Date().fp_incr(-30)
         }
     },
     methods: {
-        userSelected(newValue, id) {
+        userSelected(newValue) {
             this.interviewerId = newValue;
         },
-        questionnaireSelected(newValue, id) {
+        questionnaireSelected(newValue) {
             this.questionnaireId = newValue;
         },
-        rangeSelected(newValue, id) {
-            console.log(newValue);
-            console.log(id);
+        rangeSelected(textValue, left, right) {
+            console.log(textValue);
+            console.log("left:" + left);
+            console.log("right:" + right);
         }
     }
 });
