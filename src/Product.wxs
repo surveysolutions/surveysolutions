@@ -29,6 +29,9 @@
         </Condition>
 
         <!--<Property Id="CONNSTRING"/>-->
+        <Property Id="SITEPORT" Value="9700"></Property>
+        
+        <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
         
         <UI>
 
@@ -51,15 +54,17 @@
 
         </UI>
         
-        <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+        
         <UIRef Id="WixUI_InstallDir" />
-
+        
+        <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets"/>
+                
         <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
         <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
         <CustomAction Id="InstallIISSetProperty" 
                       Property="InstallIIS" 
                       Execute="immediate"
-                      Value="&quot;[System64Folder]dism.exe&quot; /Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets" />
+                      Value="&quot;[System64Folder]dism.exe&quot; [IISInstallCommandProperty]" />
         <!-- Call dism.exe quietly (without showing command prompt).
                  (see also http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html) -->
         <CustomAction Id="InstallIIS" 
@@ -121,7 +126,7 @@
                         Identity="applicationPoolIdentity" />
 
                     <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutionsSite" Directory="INSTALLFOLDER" ConfigureIfExists="no">
-                        <iis:WebAddress Id="webSite" Port="9700" />
+                        <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
                         <iis:WebDirProperties Id="webSite" AnonymousAccess="no" WindowsAuthentication="yes" />
                         <iis:WebApplication Id="webSite" WebAppPool="SurveySolutionsSiteAppPool" Name="SyrveySolutionsWebApplication" />
 
@@ -140,57 +145,131 @@
         </ComponentGroup>
         
         <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER">
-<!--            <Component Id="ConfigCreate" Guid="335F0D52-04C7-4DB4-A9C7-C447F405C2EA" >
-                <File Source="Headquarters.Web.config" />
-            </Component>  -->
-                
-            <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA">
+                <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA">
                 <CreateFolder/>
                 <File Source="Headquarters.Web.config" PatchIgnore="yes"/>
+
+                <!--<connectionStrings>
+                           <add name="Postgres" connectionString="Persist Security Info=true;Server=prod-db.mysurvey.solutions;Port=5432;User Id=brpdsa;Password=P@$$w0rd;Database=brpdsa;ApplicationName=brpdsa" />
+                </connectionStrings>-->
+                <util:XmlFile Id="CreateElementConnectionStrings" 
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement" 
+                              ElementPath="//configuration"
+                              Name="connectionStrings" Sequence='1'/>
 
                 <util:XmlFile Id="CreateElementXml1" 
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement" 
-                              ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='1'/>
+                              ElementPath="//configuration/connectionStrings"
+                              Name="add" Sequence='2'/>
                 
                 <util:XmlFile Id="UpdateElementXml1"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
-                              ElementPath="//configuration/appSettings/add"
-                              Name="key"
+                              ElementPath="//configuration/connectionStrings/add"
+                              Name="name"
                               Value="Postgres"
-                              Sequence='2'/>
+                              Sequence='3'/>
                 
                 <util:XmlFile Id="UpdateElementValueXml1"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
-                              ElementPath="//configuration/appSettings/add"
-                              Name="value"
+                              ElementPath="//configuration/connectionStrings/add"
+                              Name="connectionString"
                               Value="[CONNSTRING]"
-                              Sequence='3'/>
+                              Sequence='4'/>
                 
+                <!--<add key="EventStore.Provider" value="Postgres" />-->
                 <util:XmlFile Id="CreateElementXml2"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='4'/>
+                              Name="add" Sequence='5'/>
 
                 <util:XmlFile Id="UpdateElementXml2"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
                               Name="key"
-                              Value="DataStorePath"
-                              Sequence='5'/>
+                              Value="EventStore.Provider"
+                              Sequence='6'/>
 
                 <util:XmlFile Id="UpdateElementValueXml2"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]@key='EventStore.Provider'[\]]"
+                              Name="value"
+                              Value="Postgres"
+                              Sequence='7'/>   
+                    
+                <!--<add key="DataStorePath" value="..." />-->
+                <util:XmlFile Id="CreateElementXml3"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement"
+                              ElementPath="//configuration/appSettings"
+                              Name="add" Sequence='8'/>
+
+                <util:XmlFile Id="UpdateElementXml3"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
+                              Name="key"
+                              Value="DataStorePath"
+                              Sequence='9'/>
+
+                <util:XmlFile Id="UpdateElementValueXml3"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='DataStorePath'[\]]"
                               Name="value"
                               Value="[INSTALLFOLDER]Data_Site"
-                              Sequence='6'/>
+                              Sequence='10'/>
+            
+                <!--<add key="DesignerAddress" value="https://solutions.worldbank.org" />-->
+                <util:XmlFile Id="CreateElementXml4"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement"
+                              ElementPath="//configuration/appSettings"
+                              Name="add" Sequence='11'/>
+
+                <util:XmlFile Id="UpdateElementXml4"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
+                              Name="key"
+                              Value="DesignerAddress"
+                              Sequence="12"/>
+
+                <util:XmlFile Id="UpdateElementValueXml4"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
+                              Name="value"
+                              Value="https://solutions.worldbank.org"
+                              Sequence='13'/>
+                <!--<add key="WebInterviewEnabled" value="true" />-->
+                <util:XmlFile Id="CreateElementXml5"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="createElement"
+                              ElementPath="//configuration/appSettings"
+                              Name="add" Sequence='14'/>
+
+                <util:XmlFile Id="UpdateElementXml5"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
+                              Name="key"
+                              Value="WebInterviewEnabled"
+                              Sequence="15"/>
+
+                <util:XmlFile Id="UpdateElementValueXml5"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
+                              Name="value"
+                              Value="true"
+                              Sequence='16'/>
             </Component>
         </ComponentGroup>
     </Fragment>
