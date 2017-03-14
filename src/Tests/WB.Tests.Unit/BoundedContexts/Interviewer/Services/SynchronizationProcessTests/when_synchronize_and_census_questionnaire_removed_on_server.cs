@@ -38,14 +38,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var synchronizationService = Mock.Of<ISynchronizationService>(
                 x =>
-                    x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) ==
-                    Task.FromResult(new List<QuestionnaireIdentity>())
-                    &&
-                    x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) ==
-                    Task.FromResult(new List<QuestionnaireIdentity>())
-                    &&
-                    x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()) ==
-                    Task.FromResult(new List<InterviewApiView>())
+                    x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&
+                    x.GetServerQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&
+                    x.GetInterviewsAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<InterviewApiView>())
             );
 
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
@@ -62,16 +57,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFactory: mockOFInterviewAccessor.Object
             );
 
-            var progressChangedEventRaised = new ManualResetEvent(false);
-            var progressInfo = new Progress<SyncProgressInfo>();
+            var progressInfo = new Mock<IProgress<SyncProgressInfo>>();
+            progressInfo.Setup(pi => pi.Report(It.IsAny<SyncProgressInfo>()))
+                .Callback<SyncProgressInfo>(spi => totalDeletedInterviewsCount = spi.Statistics.TotalDeletedInterviewsCount);
 
-            progressInfo.ProgressChanged += (sender, info) =>
-            {
-                totalDeletedInterviewsCount = info.Statistics.TotalDeletedInterviewsCount;
-                progressChangedEventRaised.Set();
-            };
-            await viewModel.SyncronizeAsync(progressInfo, CancellationToken.None);
-            progressChangedEventRaised.WaitOne();
+            await viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None);
 
             mockOFInterviewAccessor.Verify(_ => _.RemoveInterview(interviewId), Times.Once);
             Assert.That(totalDeletedInterviewsCount, Is.EqualTo(1));
