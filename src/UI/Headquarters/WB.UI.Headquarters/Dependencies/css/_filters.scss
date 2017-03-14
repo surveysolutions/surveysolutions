@@ -1,4 +1,7 @@
 .filters{
+    @include transition(width, 0.3s);    
+}
+.filters{
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
@@ -111,15 +114,34 @@ input.checkbox-filter{
 				border-left: none;
 				border-color: $gray_form;
 				padding: 3px 10px; 
-				.calendar{
-					@include size(21px, 20px); 
-					display: inline-block;
-					background: url("#{$assetsPath}/img/calendar.png") no-repeat;
-					@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
-				}
 			}
 		}
 	}
+}
+.form-date{
+	&.input-group{
+		max-width: none;
+	}
+	.form-control{
+		cursor: pointer;
+		border-right: none;
+		border-color: $gray_form;
+		background-color: #fff;
+		border-bottom-left-radius: 4px;
+		border-top-left-radius: 4px;
+	}
+	.input-group-addon{
+		background-color: transparent;
+		border-left: none;
+		border-color: $gray_form;
+		padding: 3px 10px; 
+	}
+}
+.calendar{
+	@include size(21px, 20px); 
+	display: inline-block;
+	background: url("#{$assetsPath}/img/calendar.png") no-repeat;
+	@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
 }
 .preset-filters-container{
 	padding: 30px 25px 20px 30px;
@@ -138,6 +160,12 @@ input.checkbox-filter{
 	}
 	.input-group{
 		width: 305px;
+	}
+	 .combo-box{
+		width: 305px;
+		.btn-input .dropdown-toggle{
+ 			width: 305px;
+ 		}
 	}
 }
 @media (max-width: 1300px){

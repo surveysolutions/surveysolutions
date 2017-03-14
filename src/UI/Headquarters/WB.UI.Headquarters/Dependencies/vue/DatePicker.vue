@@ -1,5 +1,10 @@
 ﻿<template>
-    <input type="text" :class="inputClass" :placeholder="placeholder" :value="value" @input="onInput">
+    <div class="form-date input-group">
+        <input type="text" :class="inputClass" :placeholder="placeholder" :value="value" @input="onInput" />
+        <span class="input-group-addon">
+            <span class="calendar"></span>
+        </span>
+    </div>
 </template>
 
 <script>
@@ -44,9 +49,9 @@ export default {
   mounted () {
       const self = this
       const origOnValUpdate = this.options.onValueUpdate
-      this.fp = new Flatpickr(this.$el, Object.assign(this.options, {
+      this.fp = new Flatpickr(this.$el.querySelector('input'), Object.assign(this.options, {
           onValueUpdate () {
-              self.onInput(self.$el.value, self.fp.selectedDates)
+              self.onInput(self.$el.querySelector('input').value)
               if (typeof origOnValUpdate === 'function') {
                   origOnValUpdate()
               }
@@ -59,8 +64,11 @@ export default {
       this.fp = null
   },
     methods: {
-        onInput (e, selectedDates) {
-            typeof e === 'string' ? this.$emit('input', e) : this.$emit('input', e.target.value)
+        onInput (e) {
+            const selectedDates = this.fp.selectedDates || [];
+            const left = selectedDates.length > 0 ? selectedDates[0] : null;
+            const right = selectedDates.length > 1 ? selectedDates[1] : null;
+            this.$emit('input', (typeof e === 'string' ? e : e.target.value), left, right)
         }
     }
 }

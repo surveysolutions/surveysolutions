@@ -37,7 +37,9 @@
   },
   "browserify-shim": {
     "vue": "global:Vue",
-    "vue-resource": "global:VueResource"
+    "vue-resource": "global:VueResource",
+    "vee-validate": "global:VeeValidate"
+
   },
   "browserify": {
     "transform": [
