@@ -32,20 +32,34 @@
                 </div>
                 <div class="filters-container">
                     <h4>Filter Range</h4>
-                    <div class="block-filter">
-                        <h5>Enumerator</h5>
-                        <user-selector placeholder="Select interviewer" control-id="interviewerId" :value="interviewerId" v-on:selected="userSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
+                    <div class="block-filter" v-bind:class="{'has-error': errors.has('questionnaireId')}">
+                        <h5>Survey template (questionnaire version)</h5>
+                        <user-selector
+                            data-vv-name="questionnaireId"
+                            v-validate="'required'"
+                            :has-error="errors.has('questionnaireId')"
+                            placeholder="Select questionnaire"
+                            control-id="questionnaireId"
+                            :value="questionnaireId"
+                            v-on:selected="questionnaireSelected"
+                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
+                        <span v-show="errors.has('questionnaireId')" class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="block-filter">
-                        <h5>Survey template (questionnaire version)</h5>
-                        <user-selector placeholder="Select questionnaire" control-id="questionnaireId" :value="questionnaireId" v-on:selected="questionnaireSelected" fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
+                        <h5>Enumerator</h5>
+                        <user-selector
+                            placeholder="Select interviewer"
+                            control-id="interviewerId"
+                            :value="interviewerId"
+                            v-on:selected="userSelected" 
+                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
                     </div>
                     <div class="block-filter">
                         <h5>Time-period when this interview was conducted or synchronized with HQ</h5>
-                        <Flatpickr input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
+                        <Flatpickr placeholder="Select dates"  input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
                     </div>
                     <div class="block-filter">
-                        <button type="button" class="btn btn-primary btn-lg" id="find-interview">Find interviews</button>
+                        <button type="button" v-on:click="validateForm" class="btn btn-primary btn-lg" id="find-interview">Find interviews</button>
                     </div>
                 </div>
             </aside>
@@ -314,145 +328,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="screen-small-resolution">
-                        <div class="row-unit selected">
-                            <div class="header-unit">
-                                <span class="tick"></span>
-                                <span class="title-row">43-21-23-45-15</span>
-                                <b>Need your descision</b>
-                                <span class="comment-icon"></span>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li>Downloaded on device: Feb 12, 23:55</li>
-                                <li>Interview conducted: Feb 11, 09:12</li>
-                                <li>Uploaded to HQ: Feb 11, 09:12</li>
-                            </ul>
-                            <div class="table-min-wrapper clearfix">
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Flags</div>
-                                        <div class="table-td table-header">Answered questions</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td flags"><span class="flag">1</span></div>
-                                        <div class="table-td">1956</div>
-                                    </div>
-                                </div>
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Left empty</div>
-                                        <div class="table-td table-header">erors</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td">78</div>
-                                        <div class="table-td error-text">1</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-unit">
-                            <div class="header-unit">
-                                <span class="tick"></span>
-                                <span class="title-row">54-11-23-45-13</span>
-                                <b>Completed</b>
-                                <span class="comment-icon"></span>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li>Downloaded on device: Feb 12, 20:15</li>
-                                <li>Interview conducted: Feb 10, 05:12</li>
-                                <li>Uploaded to HQ: Feb 11, 09:12</li>
-                            </ul>
-                            <div class="table-min-wrapper clearfix">
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Flags</div>
-                                        <div class="table-td table-header">Answered questions</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td flags"><span class="empty"></span></div>
-                                        <div class="table-td">2048</div>
-                                    </div>
-                                </div>
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Left empty</div>
-                                        <div class="table-td table-header">erors</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td success-text">No</div>
-                                        <div class="table-td error-text success-text">No</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-unit">
-                            <div class="header-unit">
-                                <span class="title-row error-text">43-21-23-45-11 i2</span>
-                                <b class="error-text">HQ rejected</b>
-                                <span class="comment-icon responded"></span>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li>Downloaded on device: Feb 12, 20:15</li>
-                                <li>Interview conducted: Feb 10, 05:12</li>
-                                <li class="error-text">Uploaded to HQ: Feb 11, 09:12 <div>Error: [02] corrupted data</div></li>
-                            </ul>
-                            <div class="table-min-wrapper clearfix">
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Flags</div>
-                                        <div class="table-td table-header">Answered questions</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td flags"><span class="flag">1923</span></div>
-                                        <div class="table-td">2048</div>
-                                    </div>
-                                </div>
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Left empty</div>
-                                        <div class="table-td table-header">erors</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td">1342</div>
-                                        <div class="table-td error-text">1922</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-unit">
-                            <div class="header-unit">
-                                <span class="title-row error-text">77-33-25-71-16</span>
-                                <b>Not yet assign</b>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li>Downloaded on device: Feb 05, 09:15</li>
-                                <li>Interview conducted: Feb 01, 05:12</li>
-                                <li class="error-text">Uploaded to HQ: Feb 3, 09:12 <div>Error: [03] Connection time out</div></li>
-                            </ul>
-                            <div class="table-min-wrapper clearfix">
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Flags</div>
-                                        <div class="table-td table-header">Answered questions</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td flags"><span class="empty"></span></div>
-                                        <div class="table-td"><span class="empty"></span></div>
-                                    </div>
-                                </div>
-                                <div class="table-min">
-                                    <div class="table-row">
-                                        <div class="table-td table-header">Left empty</div>
-                                        <div class="table-td table-header">erors</div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="table-td">2580</div>
-                                        <div class="table-td error-text"><span class="empty"></span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

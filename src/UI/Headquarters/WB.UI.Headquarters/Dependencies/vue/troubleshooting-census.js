@@ -46,6 +46,8 @@ var app = new Vue({
     },
     mounted: function() {
         document.querySelector("main").classList.remove("hold-transition");
+
+
     }
 });
 
