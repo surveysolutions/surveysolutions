@@ -20,7 +20,7 @@
         </div>
         <div class="row extra-margin-bottom">
             <div class="col-sm-7">
-                <p>It will be useful to know enumerator, interview template and timeline. <br />> We will show if there was any errors with synchronizations during selected period.</p>
+                <p>It will be useful to know enumerator, interview template and timeline. <br /> We will show if there was any errors with synchronizations during selected period.</p>
             </div>
             <div class="col-sm-6">
                 <div class="block-filter">
@@ -33,19 +33,12 @@
                 </div>
                 <div class="block-filter">
                     <h5>Time-period when this interview was conducted or synchronized with HQ server (local time)</h5>
+                    <Flatpickr v-on:input="rangeSelected" :options="dateRangePickerOptions"/>
+
                     <div class="form-date">
-                        <div class='input-group date' id='datetimepicker6'>
+                        <div class='input-group date'>
                             <label>From: </label>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-date">
-                        <div class='input-group date' id='datetimepicker7'>
-                            <label>To: </label>
-                            <input type='text' class="form-control" />
+                            {{dateStr}}
                             <span class="input-group-addon">
                                 <span class="calendar"></span>
                             </span>
