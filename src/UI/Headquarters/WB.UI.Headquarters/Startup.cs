@@ -20,6 +20,7 @@ using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
+using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
@@ -52,7 +53,7 @@ namespace WB.UI.Headquarters
         public void Configuration(IAppBuilder app)
         {
             var ninjectKernel = NinjectConfig.CreateKernel();
-
+            
             ConfigureAuth(app);
 
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
@@ -106,7 +107,7 @@ namespace WB.UI.Headquarters
 
                     OnApplyRedirect = ctx =>
                     {
-                        if (!IsAjaxRequest(ctx.Request))
+                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request))
                         {
                             ctx.Response.Redirect(ctx.RedirectUri);
                         }
@@ -115,6 +116,11 @@ namespace WB.UI.Headquarters
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+        }
+
+        private static bool IsApiRequest(IOwinRequest request)
+        {
+            return request.Headers["User-Agent"]?.Contains("org.worldbank.solutions.interviewer") ?? false;
         }
 
         private static bool IsAjaxRequest(IOwinRequest request)

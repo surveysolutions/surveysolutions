@@ -9,14 +9,18 @@ using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Resources;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Code
 {
+
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
@@ -28,31 +32,48 @@ namespace WB.UI.Headquarters.Code
         public bool TreatPasswordAsPlain { get; set; } = false;
         private readonly UserRoles[] roles;
 
-        public ApiBasicAuthAttribute(UserRoles[] roles)
+        public ApiBasicAuthAttribute(params UserRoles[] roles)
         {
             this.roles = roles;
         }
 
-        public override void OnAuthorization(HttpActionContext actionContext)
+        public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             if (this.readSideStatusService.AreViewsBeingRebuiltNow())
             {
                 this.RespondWithMaintenanceMessage(actionContext);
                 return;
             }
+            var compat = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
+            
+            BasicCredentials basicCredentials = this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.Basic, actionContext)
+                                                ?? this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.AuthToken, actionContext);
 
-            BasicCredentials basicCredentials = ParseCredentials(actionContext);
-            if(basicCredentials == null)
+            if (basicCredentials == null)
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
             }
 
             var userInfo = this.userManager.FindByName(basicCredentials.Username);
-            if (userInfo == null || userInfo.IsArchived)
+
+            switch (basicCredentials.Scheme)
             {
-                this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                return;
+                case ApiAuthorizationScheme.Basic:
+                    if (this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)
+                        || !this.TreatPasswordAsPlain && !CheckHashedPassword(userInfo, basicCredentials))
+                    {
+                        this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                        return;
+                    }
+                    break;
+                case ApiAuthorizationScheme.AuthToken:
+                    if (!await this.userManager.ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password).ConfigureAwait(false))
+                    {
+                        this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                        return;
+                    };
+                    break;
             }
 
             if (userInfo.IsLockedBySupervisor || userInfo.IsLockedByHeadquaters)
@@ -61,8 +82,6 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
-            if ((this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)) ||
-                (!this.TreatPasswordAsPlain && (userInfo.PasswordHash != basicCredentials.Password)))
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
@@ -83,28 +102,40 @@ namespace WB.UI.Headquarters.Code
                 HttpContext.Current.User = principal;
             }
 
-            base.OnAuthorization(actionContext);
+            await base.OnAuthorizationAsync(actionContext, cancellationToken).ConfigureAwait(false);
         }
 
+        private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)
+        {
+            var compatibilityProvider = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
 
-        private static BasicCredentials ParseCredentials(HttpActionContext actionContext)
+            if (compatibilityProvider.IsSHA1Required(userInfo))
+            {
+                return userInfo.PasswordHashSha1 == basicCredentials.Password;
+            }
+
+            return userInfo.PasswordHash != basicCredentials.Password;
+        }
+
+        private BasicCredentials ExtractFromAuthorizationHeader(ApiAuthorizationScheme scheme, HttpActionContext actionContext)
         {
             try
             {
-                if (actionContext.Request.Headers.Authorization != null &&
-                    actionContext.Request.Headers.Authorization.Scheme == "Basic")
-                {
-                    string credentials =
-                        Encoding.ASCII.GetString(
-                            Convert.FromBase64String(actionContext.Request.Headers.Authorization.ToString().Substring(6)));
-                    int splitOn = credentials.IndexOf(':');
+                string schemeString = scheme.ToString();
+                string header = actionContext?.Request.Headers?.Authorization?.ToString();
 
-                    return new BasicCredentials
-                    {
-                        Username = credentials.Substring(0, splitOn),
-                        Password = credentials.Substring(splitOn + 1)
-                    };
-                }
+                if (header == null) return null;
+                if (!header.StartsWith(schemeString, StringComparison.OrdinalIgnoreCase)) return null;
+
+                string credentials = Encoding.ASCII.GetString(Convert.FromBase64String(header.Substring(schemeString.Length + 1)));
+                int splitOn = credentials.IndexOf(':');
+
+                return new BasicCredentials
+                {
+                    Username = credentials.Substring(0, splitOn),
+                    Password = credentials.Substring(splitOn + 1),
+                    Scheme = scheme
+                };
             }
             catch
             {
@@ -117,6 +148,7 @@ namespace WB.UI.Headquarters.Code
         {
             public string Username { get; set; }
             public string Password { get; set; }
+            public ApiAuthorizationScheme Scheme { get; set; }
         }
 
         private void RespondWithMessageThatUserDoesNotExists(HttpActionContext actionContext)
@@ -134,7 +166,6 @@ namespace WB.UI.Headquarters.Code
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = TabletSyncMessages.InvalidUserRole };
         }
-
         private void RespondWithMessageThatUserIsLockedOut(HttpActionContext actionContext)
             => actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) {ReasonPhrase = @"lock"};
     }

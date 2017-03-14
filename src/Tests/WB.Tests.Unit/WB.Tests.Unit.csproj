@@ -418,6 +418,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Infrastructure\Enumerator\DevicePasswordHasher.cs">
+      <Link>GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs</Link>
+    </Compile>
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\ApiUserControllerTestContext.cs" />
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user.cs" />
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user_and_user_does_not_exist.cs" />

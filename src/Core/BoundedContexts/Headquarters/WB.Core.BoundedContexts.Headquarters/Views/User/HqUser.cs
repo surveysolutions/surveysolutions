@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual bool IsLockedBySupervisor{get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
         public virtual DateTime CreationDate { get; set; }
+        public virtual string PasswordHashSha1 { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<HqUser, Guid> manager)
         {

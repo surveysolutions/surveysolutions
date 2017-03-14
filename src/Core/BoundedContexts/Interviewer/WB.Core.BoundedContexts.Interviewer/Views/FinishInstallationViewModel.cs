@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -99,7 +100,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private IMvxCommand signInCommand;
         public IMvxCommand SignInCommand
         {
-            get { return this.signInCommand ?? (this.signInCommand = new MvxCommand(async () => await this.SignInAsync(), () => !IsInProgress)); }
+            get { return this.signInCommand ?? (this.signInCommand = new MvxCommand(async () => await this.SignInAsync().ConfigureAwait(false), () => !IsInProgress)); }
         }
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
@@ -130,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
             {
                 var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
-                if (await this.userInteractionService.ConfirmAsync(message, isHtml: false))
+                if (await this.userInteractionService.ConfirmAsync(message, isHtml: false).ConfigureAwait(false))
                 {
                     this.Endpoint = settingsEndpoint;
                 }
@@ -147,8 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var restCredentials = new RestCredentials
             {
-                Login = this.UserName,
-                Password = this.passwordHasher.Hash(this.Password)
+                Login = this.userName
             };
 
             cancellationTokenSource = new CancellationTokenSource();
@@ -156,25 +156,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             InterviewerIdentity interviewerIdentity = null;
             try
             {
-                var interviewer = await this.synchronizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token);
+                await this.synchronizationService.LoginAsync(new LogonInfo
+                {
+                    Username = this.UserName,
+                    Password = this.Password
+                }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
+               
+                var interviewer = await this.synchronizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
+
                 interviewerIdentity = new InterviewerIdentity
                 {
                     Id = interviewer.Id.FormatGuid(),
                     UserId = interviewer.Id,
                     SupervisorId = interviewer.SupervisorId,
-                    Name = restCredentials.Login,
-                    Password = restCredentials.Password
+                    Name = this.UserName,
+                    PasswordHash = this.passwordHasher.Hash(this.Password),
+                    Token = restCredentials.Token
                 };
-                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token))
+
+                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false))
                 {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
+                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
+                await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
                 
                 this.interviewersPlainStorage.Store(interviewerIdentity);
 
-                this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
+                this.principal.SignIn(restCredentials.Login, this.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)

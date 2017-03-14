@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
 {
+    [Localizable(false)]
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -24,33 +26,9 @@ namespace WB.UI.Headquarters
 
             config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
 
-            config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
-            config.TypedRoute("api/interviewer/v2/tabletInfo", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
-            config.TypedRoute("api/interviewer/v2/tabletInfoAsFile", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
-            config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}", c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
+            RegisterV2Api(config);
+
             config.TypedRoute(@"api/interviewer/v2/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
-            config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
-            config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
-
-            config.TypedRoute("api/interviewer/v2/translations/{id}", c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<CompanyLogoApiV2Controller>(x => x.Get()));
-
-            config.TypedRoute("api/interviewer/v2/questionnaires/census", c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
-            config.TypedRoute("api/interviewer/v2/questionnaires/list", c => c.Action<QuestionnairesApiV2Controller>(x => x.List()));
-            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/{contentVersion:long}", c => c.Action<QuestionnairesApiV2Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
-            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/assembly", c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/logstate", c => c.Action<QuestionnairesApiV2Controller>(x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/assembly/logstate", c => c.Action<QuestionnairesApiV2Controller>(x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/attachments", c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/interviews", c => c.Action<InterviewsApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}", c => c.Action<InterviewsApiV2Controller>(x => x.Details(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate", c => c.Action<InterviewsApiV2Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}", c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image", c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
-            config.TypedRoute("api/interviewer/v2/attachments/{id}", c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
-
 
             config.TypedRoute(@"api/interviewer", c => c.Action<InterviewerApiController>(x => x.Get()));
             config.TypedRoute(@"api/interviewer/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestVersion()));
@@ -90,5 +68,56 @@ namespace WB.UI.Headquarters
 
             #pragma warning restore 4014
         }
+#pragma warning disable 4014
+        private static void RegisterV2Api(HttpConfiguration config)
+        {
+            config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
+            config.TypedRoute("api/interviewer/v2/latestversion",
+                c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/interviewer/v2/tabletInfo",
+                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
+            config.TypedRoute("api/interviewer/v2/tabletInfoAsFile",
+                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
+            config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}",
+                c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}",
+                c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/users/login", c => c.Action<UsersApiV2Controller>(x => x.Login(Param.Any<LogonInfo>())));
+            config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
+            config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
+            config.TypedRoute("api/interviewer/v2/translations/{id}",
+                c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
+            config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<CompanyLogoApiV2Controller>(x => x.Get()));
+            config.TypedRoute("api/interviewer/v2/questionnaires/census",
+                c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
+            config.TypedRoute("api/interviewer/v2/questionnaires/list",
+                c => c.Action<QuestionnairesApiV2Controller>(x => x.List()));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/{contentVersion:long}",
+                c => c.Action<QuestionnairesApiV2Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/assembly",
+                c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/logstate",
+                c =>
+                    c.Action<QuestionnairesApiV2Controller>(
+                        x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/assembly/logstate",
+                c =>
+                    c.Action<QuestionnairesApiV2Controller>(
+                        x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/attachments",
+                c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/interviews", c => c.Action<InterviewsApiV2Controller>(x => x.Get()));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV2Controller>(x => x.Details(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate",
+                c => c.Action<InterviewsApiV2Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image",
+                c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v2/attachments/{id}",
+                c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
+        }
+        #pragma warning restore 4014
     }
 }
