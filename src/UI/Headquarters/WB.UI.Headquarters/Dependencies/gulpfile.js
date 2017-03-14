@@ -74,7 +74,7 @@ gulp.task('vueify', wrapPipe(function (success, error) {
         var tasks = files.map(function (entry) {
             var b = browserify({
                 entries: entry,
-                debug: true
+                debug: !config.production
             });
 
             return b
@@ -90,8 +90,11 @@ gulp.task('vueify', wrapPipe(function (success, error) {
 }));
 
 gulp.task('vue-libs', wrapPipe(function (success, error) {
+    var filter = plugins.filter(['**/vue*.js', '**/vee*.js']);
+
     return gulp.src('./bower.json')
-        .pipe(mainBowerFiles('**/vue*.js').on('error', error))
+        .pipe(mainBowerFiles().on('error', error))
+        .pipe(filter)
         .pipe(concat('vue-libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error));
 }));
@@ -122,11 +125,12 @@ gulp.task('watch-vue', wrapPipe(function (success, error) {
 
 function mainBowerFilesFilter(filePath) {
     if (filePath.includes("\\vue")) return false;
+    if (filePath.includes("\\vee")) return false;
     return !filePath.endsWith(".js");
 }
 
 gulp.task('bowerJs', wrapPipe(function (success, error) {
-    var filter = plugins.filter(['**/*.js', '!**/vue*.js']);
+    var filter = plugins.filter(['**/*.js', '!**/vue*.js', '!**/vee*.js']);
 
     return gulp.src('./bower.json')
         .pipe(mainBowerFiles().on('error', error))

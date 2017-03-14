@@ -239,6 +239,9 @@ input.double-checkbox-white{
 	.dropdown-menu{
 		width: 100%;
 		& > li > a{
+			span.text{
+				display: block !important;
+			}
 			padding: 10px;
 			white-space: normal;
 			&:hover, &:focus, &:active{
@@ -397,11 +400,23 @@ input.double-checkbox-white{
 	position: relative;
 	width: 295px;
 	@extend %combobox;
-	.dropdown-toggle span{
-		position: static !important;
+	.btn-input .dropdown-toggle {
+		padding: 10px 38px 10px 10px;
+		span{
+			position: static !important;
+		}
+		.dropdown-menu{
+			z-index: 3;
+		}
 	}
 	.btn-clear{
 		@extend %visibility-visible;
 	}
 }
-
+ul.dropdown-menu li, ul.dropdown-menu li *{
+	word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.form-date .input-group.date .form-control{
+	z-index: 0;
+}
