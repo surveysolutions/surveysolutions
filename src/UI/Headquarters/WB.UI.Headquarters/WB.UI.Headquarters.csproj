@@ -542,7 +542,6 @@
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
-    <Content Include="Dependencies\build\troubleshooting.js" />
     <Content Include="Dependencies\build\vue-libs.js" />
     <Content Include="Dependencies\css\markup.css">
       <DependentUpon>markup.scss</DependentUpon>
@@ -778,6 +777,7 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
+    <Content Include="Dependencies\vue\DatePicker.vue" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -81,8 +81,8 @@ gulp.task('vueify', wrapPipe(function (success, error) {
             return b
                 .transform(babelify, { presets: ['es2015'] })
                 .transform(vueify)
-            .bundle()
-            .pipe(source(entry))
+            .bundle().on('error', error)
+            .pipe(source(entry).on('error', error))
             .pipe(gulp.dest(config.buildDir).on('error', error));
         });
 
@@ -92,12 +92,9 @@ gulp.task('vueify', wrapPipe(function (success, error) {
 
 gulp.task('vue-libs', wrapPipe(function (success, error) {
     return gulp.src('./bower.json')
-      .pipe(mainBowerFiles('**/vue*.js').on('error', error))
-      .pipe(concat('vue-libs.js').on('error', error))
-      .pipe(gulp.dest(config.buildDir).on('error', error))
-      .pipe(rename({ suffix: '.min' }).on('error', error))
-      .pipe(plugins.uglify().on('error', error))
-      .pipe(gulp.dest(config.buildDir).on('error', error));
+        .pipe(mainBowerFiles('**/vue*.js').on('error', error))
+        .pipe(concat('vue-libs.js').on('error', error))
+        .pipe(gulp.dest(config.buildDir).on('error', error));
 }));
 
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
