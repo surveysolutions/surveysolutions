@@ -112,10 +112,13 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
     	.pipe(gulp.dest(config.buildDir));
 }));
 
-gulp.task('watch-vue', function() {
+gulp.task('watch-vue', wrapPipe(function (success, error) {
+    if (config.production) {
+        return util.noop();
+    }
     gulp.watch('./vue/*.*', ['vueify']);
     gulp.watch(config.cssFilesToWatch, ['styles']);
-});
+}));
 
 function mainBowerFilesFilter(filePath) {
     if (filePath.includes("\\vue")) return false;
