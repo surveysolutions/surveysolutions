@@ -42,7 +42,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private bool IsCurrentUserInRole(UserRoles role) => this.authenticationManager.User.IsInRole(role.ToString());
 
         public HqUser CurrentUser => this.userManager.Users?.FirstOrDefault(user=>user.Id == this.CurrentUserId);
-        public IQueryable<HqUser> Users => this.userManager.Users;
         public Guid CurrentUserId => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
         public string CurrentUserName => this.authenticationManager.User.Identity.Name;
 
@@ -92,8 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             return (UserRoles) Enum.Parse(typeof(UserRoles), userRoles[0]);
         }
-
-        public void SignOut() => this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
         public async Task<HqUser> GetUserByIdAsync(Guid userId) => await this.userManager.FindByIdAsync(userId);
 
