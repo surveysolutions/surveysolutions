@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string DeviceLanguage { get; set; }
         public string AndroidVersion { get; set; }
         public int AndroidSdkVersion { get; set; }
-        public Version AppVersion { get; set; }
+        public string AppVersion { get; set; }
         public DateTime LastAppUpdatedDate { get; set; }
         public string NetworkType { get; set; }
         public string NetworkSubType { get; set; }
