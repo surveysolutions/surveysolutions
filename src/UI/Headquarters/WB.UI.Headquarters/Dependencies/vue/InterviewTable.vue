@@ -28,6 +28,9 @@ export default {
             type: Object,
             default: () => { return {} }
         },
+       fetchUrl: {
+            type: String,
+       }
     },
     data () {
         return {
@@ -41,13 +44,28 @@ export default {
     },
     watch: {
         interviewFilters (newFilters) {
-            const filters = JSON.parse(newFilters)
-            console.log(filters);
+            this.table.ajax.reload();
         }
     },
     mounted () {
         const self = this
-        this.table = $(this.$el).DataTable()
+        this.table = $(this.$el).DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: this.fetchUrl,
+                type: "POST",
+                data: self.filter
+            },
+            searchHighlight: true,
+            rowId: 'id',
+            pagingType: "full_numbers",
+            lengthChange: false, // do not show page size selector
+            pageLength: 50, // page size
+            "order": [[2, 'desc']],
+            dom: "frtp",
+            conditionalPaging: true
+        });
         this.$emit('DataTableRef', this.table)
     },
     destroyed () {
