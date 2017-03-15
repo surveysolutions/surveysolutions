@@ -12,12 +12,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     {
         Establish context = () =>
         {
-            supervisor1 = Create.Entity.ApplicationUser(supervisor1Id, userName: "supervisor1", role: UserRoles.Supervisor);
-            var interviewer11 = Create.Entity.ApplicationUser(interviewer11Id, supervisor1Id, userName: "interviewer11");
-            var interviewer12 = Create.Entity.ApplicationUser(interviewer12Id, supervisor1Id, userName: "interviewer12");
+            supervisor1 = Create.Entity.HqUser(supervisor1Id, userName: "supervisor1", role: UserRoles.Supervisor);
+            var interviewer11 = Create.Entity.HqUser(interviewer11Id, supervisor1Id, userName: "interviewer11");
+            var interviewer12 = Create.Entity.HqUser(interviewer12Id, supervisor1Id, userName: "interviewer12");
 
-            supervisor2 = Create.Entity.ApplicationUser(supervisor2Id, null, userName: "supervisor2", role: UserRoles.Supervisor);
-            var interviewer21 = Create.Entity.ApplicationUser(interviewer21Id, supervisor2Id, userName: "interviewer21");
+            supervisor2 = Create.Entity.HqUser(supervisor2Id, null, userName: "supervisor2", role: UserRoles.Supervisor);
+            var interviewer21 = Create.Entity.HqUser(interviewer21Id, supervisor2Id, userName: "interviewer21");
 
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(
                 supervisor1, supervisor2,

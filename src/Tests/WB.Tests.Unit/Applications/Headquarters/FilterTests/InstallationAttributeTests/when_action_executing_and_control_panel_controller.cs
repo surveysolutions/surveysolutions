@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         Establish context = () =>
         {
-            attribute = Create();
+            attribute = CreateInstallationAttribute();
         };
 
         Because of = () => exception = Catch.Exception(() =>

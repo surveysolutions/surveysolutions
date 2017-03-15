@@ -1,7 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Moq;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using It = Machine.Specifications.It;
@@ -12,9 +10,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         Establish context = () =>
         {
-            var identityManager = Mock.Of<IIdentityManager>(_=>_.HasAdministrator == false);
-
-            attribute = Create(identityManager);
+            attribute = CreateInstallationAttribute();
         };
 
         Because of = () =>
