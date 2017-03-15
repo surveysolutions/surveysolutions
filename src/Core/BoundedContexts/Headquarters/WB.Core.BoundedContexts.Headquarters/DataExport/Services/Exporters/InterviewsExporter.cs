@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
@@ -26,22 +27,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
         private readonly InterviewExportredDataRowReader rowReader;
+        private readonly IProductVersion productVersion;
 
-        protected InterviewsExporter()
+        protected InterviewsExporter(IProductVersion productVersion)
         {
+            this.productVersion = productVersion;
         }
 
         public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
-            InterviewExportredDataRowReader rowReader)
+            InterviewExportredDataRowReader rowReader,
+            IProductVersion productVersion)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
             this.rowReader = rowReader;
+            this.productVersion = productVersion;
         }
 
         public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -94,6 +99,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
             }
+
+            this.fileSystemAccessor.WriteAllText(
+                this.fileSystemAccessor.CombinePath(basePath, "description.txt"),
+                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
         }
 
         private void ExportInterviews(List<Guid> interviewIdsToExport, 
