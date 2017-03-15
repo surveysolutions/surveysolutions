@@ -135,6 +135,8 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Manage(ManageAccountModel model)
         {
+            model.Id = this.identityManager.CurrentUserId;
+
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
             if (!string.IsNullOrEmpty(model.Password))
