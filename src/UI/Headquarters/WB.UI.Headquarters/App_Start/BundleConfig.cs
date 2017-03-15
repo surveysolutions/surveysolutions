@@ -14,7 +14,9 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/troubleshooting-census").Include(
                 "~/Dependencies/build/vue-libs.js",
-                "~/Dependencies/build/vue/troubleshooting-census.js"
+                "~/Dependencies/build/vue/troubleshooting-census.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
+                "~/Dependencies/js/searchHighlight.js"
              ));
 
             bundles.Add(new StyleBundle("~/Content/main").Include(
