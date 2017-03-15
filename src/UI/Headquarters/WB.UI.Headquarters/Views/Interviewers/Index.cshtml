@@ -198,10 +198,10 @@
 
             var table = $('table#interviewers')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt',
-                    function(e, settings, techNote, message) {
-                        //location.reload();
-                    })
+                .on('xhr.dt', function (e, settings, json, xhr) {
+                    if (xhr.status === 401)
+                        location.reload();
+                })
                 .DataTable({
                     processing: true,
                     language:
