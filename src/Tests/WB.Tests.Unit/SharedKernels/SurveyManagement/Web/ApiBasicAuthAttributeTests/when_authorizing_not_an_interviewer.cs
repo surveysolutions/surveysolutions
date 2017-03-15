@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             var mockOfUserManager = new Mock<IUserStore<HqUser, Guid>>();
             mockOfUserManager.Setup(_ => _.FindByNameAsync(Moq.It.IsAny<string>()))
-                .Returns(Task.FromResult(Create.Entity.ApplicationUser(role: UserRoles.Headquarter, passwordHash: "open sesame")));
+                .Returns(Task.FromResult(Create.Entity.HqUser(role: UserRoles.Headquarter, passwordHash: "open sesame")));
 
             attribute = CreateApiBasicAuthAttribute((userName, password) => true, mockOfUserManager.Object);
 

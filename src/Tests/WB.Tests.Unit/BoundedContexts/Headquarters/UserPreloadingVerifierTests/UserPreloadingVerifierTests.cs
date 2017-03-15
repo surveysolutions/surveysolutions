@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_existing_user_Then_record_verification_error_with_code_PLU0001()
         {
             var userName = "nastya";
-            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName));
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -79,8 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             var userName = "nastya";
             var supervisorName = "super";
-            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, supervisorId: Guid.NewGuid(), isArchived: true),
-                Create.Entity.ApplicationUser(userName: supervisorName));
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName, supervisorId: Guid.NewGuid(), isArchived: true),
+                Create.Entity.HqUser(userName: supervisorName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(login: userName, supervisor: supervisorName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_user_in_other_role_Then_record_verification_error_with_code_PLU0004()
         {
             var userName = "nastya";
-            var userStorage = Create.Storage.UserRepository(Create.Entity.ApplicationUser(userName: userName, isArchived: true, role: UserRoles.Supervisor));
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName, isArchived: true, role: UserRoles.Supervisor));
             
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);

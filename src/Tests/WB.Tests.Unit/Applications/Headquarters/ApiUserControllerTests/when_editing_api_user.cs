@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 Id = userId
             };
 
-            identityManagerMock.Setup(x => x.GetUserByIdAsync(userId)).Returns(Task.FromResult(Create.Entity.ApplicationUser()));
+            identityManagerMock.Setup(x => x.GetUserByIdAsync(userId)).Returns(Task.FromResult(Create.Entity.HqUser()));
             identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
 
             controller = CreateApiUserController(identityManager: identityManagerMock.Object);

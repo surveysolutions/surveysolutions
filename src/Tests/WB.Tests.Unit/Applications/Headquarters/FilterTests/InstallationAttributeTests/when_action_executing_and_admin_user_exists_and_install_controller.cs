@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web;
 using Machine.Specifications;
-using Moq;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using Main.Core.Entities.SubEntities;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using It = Machine.Specifications.It;
@@ -13,9 +13,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         Establish context = () =>
         {
-            var identityManager = Mock.Of<IIdentityManager>(_=>_.HasAdministrator == true);
-            
-            attribute = Create(identityManager);
+            attribute = CreateInstallationAttribute(Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator)));
         };
 
         Because of = () =>
