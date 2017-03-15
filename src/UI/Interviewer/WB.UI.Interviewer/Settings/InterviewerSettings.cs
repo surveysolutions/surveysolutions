@@ -274,7 +274,7 @@ namespace WB.UI.Interviewer.Settings
             DeviceLocation = await this.GetDeviceLocationAsync().ConfigureAwait(false),
             AndroidVersion = this.GetAndroidVersion(),
             AndroidSdkVersion = (int) Build.VERSION.SdkInt,
-            AppVersion = this.GetAppVersion(),
+            AppVersion = this.GetApplicationVersionName(),
             LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToLocalTime(),
             AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
             BatteryChargePercent = this.battery.GetRemainingChargePercent(),
@@ -309,9 +309,6 @@ namespace WB.UI.Interviewer.Settings
                 Longitude = location.Longitude
             };
         }
-
-        private Version GetAppVersion()
-            => new Version($"{this.GetApplicationVersionName()}.{this.GetApplicationVersionCode()}");
 
         private RAMInfo GetRAMInfo()
         {

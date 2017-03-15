@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 DBSizeInfo = info.DBSizeInfo,
                 AndroidSdkVersion = info.AndroidSdkVersion,
                 DeviceDate = info.DeviceDate,
-                AppVersion = $@"{info.AppVersion.Major}.{info.AppVersion.Minor}.{info.AppVersion.Revision} ({info.AppVersion.Build})",
+                AppVersion = info.AppVersion,
                 MobileSignalStrength = info.MobileSignalStrength,
                 AppOrientation = info.AppOrientation,
                 MobileOperator = info.MobileOperator,
