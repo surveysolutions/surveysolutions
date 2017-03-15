@@ -47,7 +47,7 @@ var config = {
     bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
-    buildDistDir: './build/dist',
+    buildDistDir: './dist',
     filesToInject: [
         {
             file: "LogOn.cshtml",
