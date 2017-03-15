@@ -15,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.Infrastructure.Versions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
@@ -28,26 +27,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
         private readonly InterviewExportredDataRowReader rowReader;
-        private readonly IProductVersion productVersion;
 
-        protected InterviewsExporter(IProductVersion productVersion)
-        {
-            this.productVersion = productVersion;
-        }
+        protected InterviewsExporter() {}
 
         public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
-            InterviewExportredDataRowReader rowReader,
-            IProductVersion productVersion)
+            InterviewExportredDataRowReader rowReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
             this.rowReader = rowReader;
-            this.productVersion = productVersion;
         }
 
         public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -71,10 +64,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
-            var descriptionBuilder = new StringBuilder();
-            descriptionBuilder.AppendLine(
-                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
-
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 string fileName = this.CreateFormatDataFileName(level.LevelName);
@@ -103,17 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
 
                 this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
-
-                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
-
-                descriptionBuilder.AppendLine();
-                descriptionBuilder.AppendLine(fileName);
-                descriptionBuilder.AppendLine(string.Join(", ", variables));
             }
-
-            this.fileSystemAccessor.WriteAllText(
-                this.fileSystemAccessor.CombinePath(basePath, "description.txt"),
-                descriptionBuilder.ToString());
         }
 
         private void ExportInterviews(List<Guid> interviewIdsToExport, 
