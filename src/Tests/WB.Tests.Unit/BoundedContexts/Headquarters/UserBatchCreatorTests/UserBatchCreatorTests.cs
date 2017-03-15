@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: supervisorName));
             var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.ApplicationUser(role: UserRoles.Supervisor, isArchived: true));
+            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, isArchived: true));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
             var userBatchCreator =
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor:"tttt"));
             var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.ApplicationUser(role: UserRoles.Supervisor, userId: supervisorId));
+            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
 
             var userBatchCreator =
@@ -107,8 +107,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
             var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("inter")).Returns(Create.Entity.ApplicationUser(userName: interviewerName, isArchived: true, supervisorId: supervisorId));
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.ApplicationUser(role: UserRoles.Supervisor, userId: supervisorId));
+            identityManager.Setup(x => x.GetUserByName("inter")).Returns(Create.Entity.HqUser(userName: interviewerName, isArchived: true, supervisorId: supervisorId));
+            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
 
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
             var userBatchCreator = CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: identityManager.Object);

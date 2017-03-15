@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
         {
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new []
             {
-                Create.Entity.ApplicationUser(Id.g1, userName: "b_locked_super", isLockedByHQ: true, role: UserRoles.Supervisor),
-                Create.Entity.ApplicationUser(Id.g2, userName: superAName, role: UserRoles.Supervisor),
-                Create.Entity.ApplicationUser(Id.g3, userName: superCName, role: UserRoles.Supervisor),
-                Create.Entity.ApplicationUser(Id.g4, userName: "inter1", supervisorId: Id.g2),
-                Create.Entity.ApplicationUser(Id.g5, userName: "inter2", supervisorId: Id.g2)
+                Create.Entity.HqUser(Id.g1, userName: "b_locked_super", isLockedByHQ: true, role: UserRoles.Supervisor),
+                Create.Entity.HqUser(Id.g2, userName: superAName, role: UserRoles.Supervisor),
+                Create.Entity.HqUser(Id.g3, userName: superCName, role: UserRoles.Supervisor),
+                Create.Entity.HqUser(Id.g4, userName: "inter1", supervisorId: Id.g2),
+                Create.Entity.HqUser(Id.g5, userName: "inter2", supervisorId: Id.g2)
             });
             
 

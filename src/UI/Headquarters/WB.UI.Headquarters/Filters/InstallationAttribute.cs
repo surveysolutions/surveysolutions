@@ -1,8 +1,11 @@
-﻿using System.Web;
+﻿using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
 
@@ -10,7 +13,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class InstallationAttribute : ActionFilterAttribute
     {
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private IUserRepository userRepository => ServiceLocator.Current.GetInstance<IUserRepository>();
         internal static bool Installed = false;
         
 
@@ -22,8 +25,9 @@ namespace WB.UI.Headquarters.Filters
             if (filterContext.Controller is MaintenanceController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
-
-            Installed = identityManager.HasAdministrator;
+            
+            var adminRole = UserRoles.Administrator.ToUserId();
+            Installed = this.userRepository.Users.Any(user => user.Roles.Any(role => role.RoleId == adminRole));
 
             if (isInstallController && Installed)
                 throw new HttpException(404, string.Empty);

@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     {
         Establish context = () =>
         {
-            var supervisor = Create.Entity.ApplicationUser(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), userName: "Supervisor1", role: UserRoles.Supervisor);
+            var supervisor = Create.Entity.HqUser(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), userName: "Supervisor1", role: UserRoles.Supervisor);
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(supervisor);
 
             supervisorsViewFactory = CreateInterviewersViewFactory(readerWithUsers);

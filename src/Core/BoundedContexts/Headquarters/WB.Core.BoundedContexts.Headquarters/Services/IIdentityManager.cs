@@ -7,13 +7,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IIdentityManager
     {
-        bool HasAdministrator { get; }
         bool IsCurrentUserAdministrator { get; }
         bool IsCurrentUserHeadquarter { get; }
         bool IsCurrentUserSupervisor { get; }

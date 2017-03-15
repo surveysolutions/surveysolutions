@@ -21,8 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private readonly HqUserManager userManager;
         private readonly HqSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
-
-        private readonly Guid adminRole = UserRoles.Administrator.ToUserId();
+        
         const string observerClaimType = @"observer";
 
         public IdentityManager(HqUserManager userManager, HqSignInManager signInManager,
@@ -32,9 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
         }
-
-        public bool HasAdministrator => this.userManager.Users.Any(
-            user => user.Roles.Any(role => role.RoleId == this.adminRole));
 
         public bool IsCurrentUserSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
