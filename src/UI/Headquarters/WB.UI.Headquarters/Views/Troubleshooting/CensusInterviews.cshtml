@@ -4,6 +4,7 @@
 }
 @section scripts
 {
+    @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/troubleshooting-census")
 }
 <main class="hold-transition @*search-wasnt-started*@"  id="app">
@@ -83,7 +84,7 @@
                 </div>
                 <div class="interviews-info">
                     <div class="table-wrapper interviews-large-screen">
-                        <interview-table></interview-table>
+                        <interview-table :filter="tableFilters" />
                     </div>
                 </div>
             </div>
