@@ -4,9 +4,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity.Owin;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -24,17 +26,20 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly ICaptchaProvider captchaProvider;
         private readonly ICaptchaService captchaService;
+        private readonly HqUserManager userManager;
 
         public AccountController(
             ICommandService commandService, 
             ILogger logger,
             IIdentityManager identityManager,
             ICaptchaProvider captchaProvider, 
-            ICaptchaService captchaService)
+            ICaptchaService captchaService,
+            HqUserManager userManager)
             : base(commandService, logger, identityManager)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -134,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!string.IsNullOrEmpty(model.Password))
             {
-                bool isPasswordValid = this.identityManager.IsUserValidWithPassword(this.identityManager.CurrentUserName, model.OldPassword);
+                bool isPasswordValid = await this.userManager.CheckPasswordAsync(this.identityManager.CurrentUser, model.OldPassword);
                 if (!isPasswordValid)
                 {
                     this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
