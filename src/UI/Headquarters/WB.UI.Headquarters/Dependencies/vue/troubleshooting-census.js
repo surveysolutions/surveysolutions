@@ -47,21 +47,22 @@ var app = new Vue({
         },
         findInterviews() {
             this.tableFilters = {
-                interviewerId: this.interviewerId,
-                questionnaireId: this.questionnaireId,
-                changedFrom: this.changedFrom,
-                changedTo: this.changedTo
+                interviewerId: (this.interviewerId || {}).key,
+                questionnaireId: (this.questionnaireId || {}).key,
+                changedFrom: moment(this.changedFrom).format(),
+                changedTo: moment(this.changedTo).format()
             };
             document.querySelector("main").classList.remove("search-wasnt-started");
         }
     },
     mounted: function() {
         document.querySelector("main").classList.remove("hold-transition");
+        document.querySelector("footer").classList.add("footer-adaptive");
     }
 });
 
 window.onload = function () {
     Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
-
+    
     app.$mount('#app');
 }

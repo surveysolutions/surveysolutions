@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -12,6 +15,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
 
+        public bool ReceivedByInterviewer { get; set; }
+    }
+
+    public class InterviewListItem
+    {
+        public Guid InterviewId { get; set; }
+        public string QuestionnaireId { get; set; }
+        public Guid ResponsibleId { get; set; }
+        public string ResponsibleName { get; set; }
+        public UserRoles ResponsibleRole { get; set; }
+        public Guid TeamLeadId { get; set; }
+        public string TeamLeadName { get; set; }
+        public InterviewStatus Status { get; set; }
+        public string UpdateDate { get; set; }
+        public bool WasCreatedOnClient { get; set; }
         public bool ReceivedByInterviewer { get; set; }
     }
 }

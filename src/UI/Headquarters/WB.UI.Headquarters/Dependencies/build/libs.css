@@ -296,7 +296,7 @@ select.selectpicker {
 /*!
  * jQuery contextMenu - Plugin for simple contextMenu handling
  *
- * Version: v2.4.3
+ * Version: v2.4.2
  *
  * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
  * Web: http://swisnl.github.io/jQuery-contextMenu/
@@ -306,7 +306,7 @@ select.selectpicker {
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2017-02-27T20:33:09.168Z
+ * Date: 2017-01-02T09:03:00.383Z
  */
 @keyframes cm-spin {
   0% {
@@ -322,8 +322,8 @@ select.selectpicker {
   font-style: normal; 
   font-weight: normal;
 
-  src: url("font/context-menu-icons.eot?3vjwq");
-  src: url("font/context-menu-icons.eot?3vjwq#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?3vjwq") format("woff2"), url("font/context-menu-icons.woff?3vjwq") format("woff"), url("font/context-menu-icons.ttf?3vjwq") format("truetype");
+  src: url("font/context-menu-icons.eot?3lfph");
+  src: url("font/context-menu-icons.eot?3lfph#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?3lfph") format("woff2"), url("font/context-menu-icons.woff?3lfph") format("woff"), url("font/context-menu-icons.ttf?3lfph") format("truetype");
 }
 
 .context-menu-icon-add:before {

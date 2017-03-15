@@ -1,6 +1,7 @@
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -104,7 +105,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var result = new InterviewsWithoutPrefilledView
             {
                 TotalCount = totalCount,
-                Items = interviews.ToList()
+                Items = interviews.Select(x => new InterviewListItem
+                {
+                    InterviewId = x.InterviewId,
+                    QuestionnaireId = new QuestionnaireIdentity(x.QuestionnaireId, x.QuestionnaireVersion).ToString(),
+                    ResponsibleId = x.ResponsibleId,
+                    ResponsibleName = x.ResponsibleName,
+                    ResponsibleRole = x.ResponsibleRole,
+                    TeamLeadId = x.TeamLeadId,
+                    TeamLeadName = x.TeamLeadName,
+                    Status = x.Status,
+                    UpdateDate = x.UpdateDate.ToLocalTime().FormatDateWithTime(),
+                    WasCreatedOnClient = x.WasCreatedOnClient,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer,
+                }).ToList()
             };
             return result;
         }

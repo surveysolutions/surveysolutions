@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -28,7 +29,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [CamelCase]
-        public DataTableResponse<InterviewSummary> CensusInterviews([FromBody] TroubleshootingCensusInterviewsDataTableRequest request)
+        public DataTableResponse<InterviewListItem> CensusInterviews([FromBody] TroubleshootingCensusInterviewsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
             QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
@@ -37,17 +38,17 @@ namespace WB.UI.Headquarters.API
             {
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
-                //Orders = request.GetSortOrderRequestItems(),
+                Orders = request.GetSortOrderRequestItems(),
                 QuestionnaireId = questionnaireIdentity,
                 CensusOnly = true,
-                ChangedFrom = request.ChangedFrom,
-                ChangedTo = request.ChangedTo,
+                ChangedFrom = request.ChangedFrom ?? DateTime.Now.AddMonths(-1),
+                ChangedTo = request.ChangedTo ?? DateTime.Now,
                 InterviewerId = request.InterviewerId,
             };
 
             var items = this.allInterviewsViewFactory.LoadInterviewsWithoutPrefilled(input);
 
-            return new DataTableResponse<InterviewSummary>
+            return new DataTableResponse<InterviewListItem>
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,

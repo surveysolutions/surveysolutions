@@ -1,6 +1,9 @@
 .two-columns-form, .flex-row{
     display: flex;
 }
+.form-inside{
+    min-height: 500px;
+}
 .two-columns-form{
     width: 810px;
     position: absolute;
