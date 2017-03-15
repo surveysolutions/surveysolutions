@@ -151,9 +151,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return archiveUserResults.ToArray();
         }
 
-        public Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
-            => this.signInManager.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
+        public async Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
+        {
+            var user = await this.GetUserByNameAsync(userName);
+            if (user == null || !await this.userManager.CheckPasswordAsync(user, password))
+                return SignInStatus.Failure;
+            
+            if(user.IsLockedByHeadquaters || user.IsLockedBySupervisor)
+                return SignInStatus.LockedOut;
+
+            return await this.signInManager.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
                 shouldLockout: false);
+        }
 
         public async Task SignInAsObserverAsync(string userName)
         {
