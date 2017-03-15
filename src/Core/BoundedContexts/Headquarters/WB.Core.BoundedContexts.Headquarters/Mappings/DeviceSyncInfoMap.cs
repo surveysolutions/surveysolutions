@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.DeviceType);
             Property(x => x.DeviceLanguage);
             Property(x => x.DeviceDate);
-            Property(x => x.DeviceLocationAddress);
             Property(x => x.DeviceLocationLat);
             Property(x => x.DeviceLocationLong);
             Property(x => x.AndroidSdkVersion);

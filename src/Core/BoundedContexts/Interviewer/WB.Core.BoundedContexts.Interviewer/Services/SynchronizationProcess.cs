@@ -555,14 +555,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         };
 
         private LocationAddressApiView ToLocationAddressApiView(LocationAddress locationAddress)
-        {
-            return new LocationAddressApiView
+            => new LocationAddressApiView
             {
                 Longitude = locationAddress.Longitude,
-                Latitude = locationAddress.Latitude,
-                Address = locationAddress.Address
+                Latitude = locationAddress.Latitude
             };
-        }
 
         private RAMInfoApiView ToRAMInfoApiView(RAMInfo ramInfo) => new RAMInfoApiView
         {
