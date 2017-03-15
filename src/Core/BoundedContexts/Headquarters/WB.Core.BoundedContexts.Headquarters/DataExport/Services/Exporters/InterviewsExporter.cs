@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -27,9 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly InterviewExportredDataRowReader rowReader;
 
-        protected InterviewsExporter()
-        {
-        }
+        protected InterviewsExporter() {}
 
         public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
@@ -67,8 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string dataByTheLevelFilePath =
-                    this.fileSystemAccessor.CombinePath(basePath, CreateFormatDataFileName(level.LevelName));
+                string fileName = this.CreateFormatDataFileName(level.LevelName);
+                string filePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
                 List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
 
@@ -92,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
             }
         }
 

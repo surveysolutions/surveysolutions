@@ -30,7 +30,10 @@
                         }).done(function (data) {
                             self.search();
                         }).fail(function (jqXhr, textStatus, errorThrown) {
-                            if (jqXhr.status === 403) {
+                            if (jqXhr.status === 401) {
+                                location.reload();
+                            }
+                            else if (jqXhr.status === 403) {
                                 if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
                                     self.ShowError(input.settings.messages.forbiddenMessage);
                                 } else {
