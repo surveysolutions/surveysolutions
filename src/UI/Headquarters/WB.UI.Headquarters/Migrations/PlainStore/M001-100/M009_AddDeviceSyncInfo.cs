@@ -28,7 +28,6 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn(nameof(DeviceSyncInfo.DBSizeInfo).ToLower()).AsInt64()
                 .WithColumn(nameof(DeviceSyncInfo.DeviceLocationLat).ToLower()).AsDouble().Nullable()
                 .WithColumn(nameof(DeviceSyncInfo.DeviceLocationLong).ToLower()).AsDouble().Nullable()
-                .WithColumn(nameof(DeviceSyncInfo.DeviceLocationAddress).ToLower()).AsString()
                 .WithColumn(nameof(DeviceSyncInfo.LastAppUpdatedDate).ToLower()).AsDateTime()
                 .WithColumn(nameof(DeviceSyncInfo.MobileOperator).ToLower()).AsString()
                 .WithColumn(nameof(DeviceSyncInfo.MobileSignalStrength).ToLower()).AsInt32()

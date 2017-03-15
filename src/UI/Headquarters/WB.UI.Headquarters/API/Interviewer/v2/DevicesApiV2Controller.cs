@@ -72,8 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 RAMFreeInBytes = info.RAMInfo?.Free,
                 RAMTotalInBytes = info.RAMInfo?.Total,
                 StorageFreeInBytes = info.StorageInfo?.Free,
-                StorageTotalInBytes = info.StorageInfo?.Total,
-                DeviceLocationAddress = string.Join(Environment.NewLine, deviceLocation?.Address ?? Enumerable.Empty<string>())
+                StorageTotalInBytes = info.StorageInfo?.Total
             }, Guid.NewGuid().FormatGuid());
 
             return this.Ok();
