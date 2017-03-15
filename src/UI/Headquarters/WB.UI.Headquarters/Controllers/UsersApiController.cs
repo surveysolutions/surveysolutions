@@ -101,7 +101,8 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Observer")]
         public DataTableResponse<InterviewerListItem> AllHeadquarters([FromBody] DataTableRequest request)
         {
-            return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
+            throw new Exception("blah");
+            //return this.GetUsersInRoleForDataTable(request, UserRoles.Headquarter);
         }
 
         [HttpPost]

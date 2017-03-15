@@ -625,7 +625,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Global.asax" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1508,6 +1507,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.zh.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_Start\NlogExceptionFilter.cs" />
+    <Compile Include="App_Start\NLogExceptionLogger.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
@@ -1578,9 +1579,6 @@
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="App_Start\NinjectConfig.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
