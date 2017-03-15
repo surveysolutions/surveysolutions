@@ -131,12 +131,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.UpdateUser(currentUser, null);
         }
 
-        public bool IsUserValidWithPassword(string userName, string password) =>
-            this.userManager.Find(userName, password) != null;
-
-        public bool IsUserValidWithPasswordHash(string userName, string passwordHash) =>
-            this.Users.Any(user => user.UserName == userName && user.PasswordHash == passwordHash);
-
         public async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive)
         {
             var archiveUserResults = new List<IdentityResult>();

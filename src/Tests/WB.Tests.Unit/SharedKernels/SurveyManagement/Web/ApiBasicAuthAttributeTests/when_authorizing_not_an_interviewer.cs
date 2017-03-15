@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Code;
 using It = Machine.Specifications.It;
@@ -16,12 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     {
         private Establish context = () =>
         {
-            var mockOfIdentityManager = new Mock<IIdentityManager>();
-            mockOfIdentityManager.Setup(_ => _.IsUserValidWithPasswordHash(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(true);
-            mockOfIdentityManager.Setup(_ => _.GetUserByName(Moq.It.IsAny<string>()))
-                .Returns(Create.Entity.ApplicationUser(role: UserRoles.Headquarter));
+            var mockOfUserManager = new Mock<IUserStore<HqUser, Guid>>();
+            mockOfUserManager.Setup(_ => _.FindByNameAsync(Moq.It.IsAny<string>()))
+                .Returns(Task.FromResult(Create.Entity.ApplicationUser(role: UserRoles.Headquarter, passwordHash: "open sesame")));
 
-            attribute = CreateApiBasicAuthAttribute((userName, password) => true, mockOfIdentityManager.Object);
+            attribute = CreateApiBasicAuthAttribute((userName, password) => true, mockOfUserManager.Object);
 
             actionContext = CreateActionContext();
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
