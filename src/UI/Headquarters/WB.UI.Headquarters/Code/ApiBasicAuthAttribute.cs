@@ -3,15 +3,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Resources;
 
@@ -20,7 +20,8 @@ namespace WB.UI.Headquarters.Code
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private HqUserManager userManager => ServiceLocator.Current.GetInstance<HqUserManager>();
+
         private IReadSideStatusService readSideStatusService
             => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
@@ -41,17 +42,21 @@ namespace WB.UI.Headquarters.Code
             }
 
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
-            
-            if (basicCredentials == null ||
-                (this.TreatPasswordAsPlain && !this.identityManager.IsUserValidWithPassword(basicCredentials.Username, basicCredentials.Password)) ||
-                (!this.TreatPasswordAsPlain && !this.identityManager.IsUserValidWithPasswordHash(basicCredentials.Username, basicCredentials.Password)))
+            if(basicCredentials == null)
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
             }
 
-            var userInfo = this.identityManager.GetUserByName(basicCredentials.Username);
+            var userInfo = this.userManager.FindByName(basicCredentials.Username);
             if (userInfo == null || userInfo.IsArchived)
+            {
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
+            }
+
+            if ((this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)) ||
+                (!this.TreatPasswordAsPlain && (userInfo.PasswordHash != basicCredentials.Password)))
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
@@ -63,17 +68,7 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
-            var identity = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Name, userInfo.UserName),
-                new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()), 
-                new Claim("DeviceId", userInfo.DeviceId ?? string.Empty)
-            }, @"Basic");
-            foreach (var userRole in userInfo.Roles)
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Role, userRole.Role.ToString()));
-            }
-
+            var identity = userInfo.GenerateUserIdentityAsync(this.userManager).Result;
             var principal = new ClaimsPrincipal(identity);
 
             Thread.CurrentPrincipal = principal;

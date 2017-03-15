@@ -41,8 +41,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
         RestCredentials GetDesignerUserCredentials();
-        bool IsUserValidWithPassword(string userName, string password);
-        bool IsUserValidWithPasswordHash(string userName, string passwordHash);
         Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive);
     }
 }
