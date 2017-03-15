@@ -7,7 +7,7 @@
     @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/troubleshooting-census")
 }
-<main class="hold-transition @*search-wasnt-started*@"  id="app">
+<main class="hold-transition search-wasnt-started"  id="app">
     <div class="container-fluid">
         <div class="row before-search">
             <div class="page-header">
@@ -37,7 +37,7 @@
                         <h5>Survey template (questionnaire version)</h5>
                         <user-selector
                             data-vv-name="questionnaireId"
-                            @*v-validate="'required'"*@
+                            v-validate="'required'"
                             :has-error="errors.has('questionnaireId')"
                             placeholder="Select questionnaire"
                             control-id="questionnaireId"
