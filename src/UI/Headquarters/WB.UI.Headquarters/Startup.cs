@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        private static void SetupNConfig()
+        internal static void SetupNConfig()
             => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
 
         static Startup()
@@ -176,10 +176,9 @@ namespace WB.UI.Headquarters
             DataAnnotationsConfig.RegisterAdapters();
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new RazorViewEngine());
+            ViewEngines.Engines.Add(new RazorViewEngine()); 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
-
 
         private static void UpdateAppVersion()
             => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
@@ -206,6 +205,7 @@ namespace WB.UI.Headquarters
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new NlogExceptionFilter());
             filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new MaintenanceFilter());

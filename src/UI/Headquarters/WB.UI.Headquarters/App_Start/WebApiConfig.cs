@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
@@ -82,6 +85,8 @@ namespace WB.UI.Headquarters
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             config.MessageHandlers.Add(new EnforceHttpsHandler());
+
+            config.Services.Add(typeof(IExceptionLogger), new NLogExceptionLogger());
 
             #pragma warning restore 4014
         }
