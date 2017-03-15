@@ -718,6 +718,7 @@
                 var variable = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(variable)) return;
                 variable.variableData.name = data.name;
+                variable.variableData.label = data.label;
                 $rootScope.addOrUpdateLocalVariable(data.itemId, data.name);
             });
 
