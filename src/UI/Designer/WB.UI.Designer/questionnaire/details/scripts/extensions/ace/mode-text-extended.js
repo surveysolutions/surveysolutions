@@ -31,11 +31,11 @@ ace.define("ace/mode/text_with_substitutions_highlight_rules", ["require", "expo
                 {
                     token: "support.variable", // String, Array, or Function: the CSS token to apply
                     regex: "\%[a-zA-Z][_a-zA-Z0-9]{0,31}\%" // String or RegExp: the regexp to match
-                },
-                {
-                    token: "variable", // String, Array, or Function: the CSS token to apply
-                    regex: "\%[_a-zA-Z0-9.,\/#!$%\^&\*;:{}=\-_`~()]+\%" // String or RegExp: the regexp to match
                 }
+                //,{
+                //    token: "variable", // String, Array, or Function: the CSS token to apply
+                //    regex: "\%[_a-zA-Z0-9.,\/#!$%\^&\*;:{}=\-_`~()]+\%" // String or RegExp: the regexp to match
+                //}
             ]
         };
     };
