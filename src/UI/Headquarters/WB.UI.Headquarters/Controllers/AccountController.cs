@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaProvider captchaProvider;
         private readonly ICaptchaService captchaService;
         private readonly HqUserManager userManager;
+        private readonly IAuthenticationManager authenticationManager;
 
         public AccountController(
             ICommandService commandService, 
@@ -34,12 +35,14 @@ namespace WB.UI.Headquarters.Controllers
             IIdentityManager identityManager,
             ICaptchaProvider captchaProvider, 
             ICaptchaService captchaService,
-            HqUserManager userManager)
+            HqUserManager userManager,
+            IAuthenticationManager authenticationManager)
             : base(commandService, logger, identityManager)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
             this.userManager = userManager;
+            this.authenticationManager = authenticationManager;
         }
 
         [HttpGet]
@@ -114,7 +117,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LogOff()
         {
-            this.identityManager.SignOut();
+            this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return this.Redirect("~/");
         }
 

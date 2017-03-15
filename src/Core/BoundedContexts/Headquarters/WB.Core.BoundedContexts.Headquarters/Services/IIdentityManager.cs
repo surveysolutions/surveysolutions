@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
@@ -17,7 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         bool IsCurrentUserSupervisor { get; }
         bool IsCurrentUserObserver { get; }
         HqUser CurrentUser { get; }
-        IQueryable<HqUser> Users { get; }
         Guid CurrentUserId { get; }
         string CurrentUserName { get; }
         string CurrentUserDeviceId { get; }
@@ -27,7 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         IdentityResult UpdateUser(HqUser user, string password);
         Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false);
         Task<UserRoles> GetRoleForCurrentUserAsync();
-        void SignOut();
         Task<HqUser> GetUserByIdAsync(Guid userId);
         HqUser GetUserById(Guid userId);
         Task<HqUser> GetUserByNameAsync(string userName);
