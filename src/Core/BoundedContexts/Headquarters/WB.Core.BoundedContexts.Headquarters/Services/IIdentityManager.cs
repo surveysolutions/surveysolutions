@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         HqUser GetUserByName(string userName);
         Task<HqUser> GetUserByEmailAsync(string email);
         HqUser GetUserByEmail(string email);
-        IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId);
+        Task<IEnumerable<IdentityResult>> ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId);
         void LinkDeviceToCurrentInterviewer(string deviceId);
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
