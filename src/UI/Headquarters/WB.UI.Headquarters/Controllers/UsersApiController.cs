@@ -152,9 +152,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public JsonCommandResponse DeleteSupervisor(DeleteSupervisorCommandRequest request)
+        public async Task<JsonCommandResponse> DeleteSupervisor(DeleteSupervisorCommandRequest request)
         {
-            var identityResults = this.identityManager.DeleteSupervisorAndDependentInterviewers(request.SupervisorId).ToList();
+            var identityResults = await this.identityManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
 
             return new JsonCommandResponse
             {

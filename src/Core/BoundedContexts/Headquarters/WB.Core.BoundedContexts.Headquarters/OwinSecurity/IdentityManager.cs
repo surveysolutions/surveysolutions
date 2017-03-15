@@ -109,15 +109,20 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public async Task<HqUser> GetUserByEmailAsync(string email) => await this.userManager.FindByEmailAsync(email);
         public HqUser GetUserByEmail(string email) => this.userManager.FindByEmail(email);
 
-        public IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId)
+        public async Task<IEnumerable<IdentityResult>> ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.userManager.Users.Where(
                 user => user.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
 
-            foreach (var supervisorAndDependentInterviewer in supervisorAndDependentInterviewers)
+            List<IdentityResult> result = new List<IdentityResult>();
+            foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
-                yield return this.userManager.Delete(supervisorAndDependentInterviewer);
+                accountToArchive.IsArchived = true;
+                var archiveResult = await this.UpdateUserAsync(accountToArchive, null).ConfigureAwait(false);
+                result.Add(archiveResult);
             }
+
+            return result;
         }
 
         public void LinkDeviceToCurrentInterviewer(string deviceId)
