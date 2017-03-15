@@ -35,12 +35,19 @@ export default {
         }
     },
     computed: {
+        interviewFilters () {
+            return JSON.stringify(this.filter)
+        }
     },
     watch: {
+        interviewFilters (newFilters) {
+            const filters = JSON.parse(newFilters)
+            console.log(filters);
+        }
     },
     mounted () {
         const self = this
-        this.table = new DataTable(this.$el, {})
+        this.table = $(this.$el).DataTable()
         this.$emit('DataTableRef', this.table)
     },
     destroyed () {

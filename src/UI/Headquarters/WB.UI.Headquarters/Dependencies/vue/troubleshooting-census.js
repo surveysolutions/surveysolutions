@@ -22,7 +22,10 @@ var app = new Vue({
             mode: "range",
             maxDate: "today",
             minDate: new Date().fp_incr(-30)
-        }
+        },
+        tableFilters: {}
+    },
+    computed: {
     },
     methods: {
         userSelected(newValue) {
@@ -43,6 +46,12 @@ var app = new Vue({
             });
         },
         findInterviews() {
+            tableFilters = {
+                interviewerId: this.interviewerId,
+                questionnaireId: this.questionnaireId,
+                dateFrom: this.dateFrom,
+                dateTo: this.dateTo,
+            };
             document.querySelector("main").classList.remove("search-wasnt-started");
         }
     },
