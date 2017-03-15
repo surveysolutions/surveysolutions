@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -70,10 +71,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
+            var descriptionBuilder = new StringBuilder();
+            descriptionBuilder.AppendLine(
+                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
+
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string dataByTheLevelFilePath =
-                    this.fileSystemAccessor.CombinePath(basePath, CreateFormatDataFileName(level.LevelName));
+                string fileName = this.CreateFormatDataFileName(level.LevelName);
+                string filePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
                 List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
 
@@ -97,12 +102,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+
+                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
+
+                descriptionBuilder.AppendLine();
+                descriptionBuilder.AppendLine(fileName);
+                descriptionBuilder.AppendLine(string.Join(", ", variables));
             }
 
             this.fileSystemAccessor.WriteAllText(
                 this.fileSystemAccessor.CombinePath(basePath, "description.txt"),
-                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
+                descriptionBuilder.ToString());
         }
 
         private void ExportInterviews(List<Guid> interviewIdsToExport, 
