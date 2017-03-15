@@ -16,8 +16,8 @@ var app = new Vue({
     data: {
         interviewerId: null,
         questionnaireId: null,
-        dateFrom: null,
-        dateTo: null,
+        changedFrom: null,
+        changedTo: null,
         dateRangePickerOptions: {
             mode: "range",
             maxDate: "today",
@@ -35,8 +35,8 @@ var app = new Vue({
             this.questionnaireId = newValue;
         },
         rangeSelected(textValue, from, to) {
-            this.dateFrom = from;
-            this.dateTo = to;
+            this.changedFrom = from;
+            this.changedTo = to;
         },
         validateForm() {
             this.$validator.validateAll().then(result => {
@@ -46,19 +46,17 @@ var app = new Vue({
             });
         },
         findInterviews() {
-            tableFilters = {
+            this.tableFilters = {
                 interviewerId: this.interviewerId,
                 questionnaireId: this.questionnaireId,
-                dateFrom: this.dateFrom,
-                dateTo: this.dateTo,
+                changedFrom: this.changedFrom,
+                changedTo: this.changedTo
             };
             document.querySelector("main").classList.remove("search-wasnt-started");
         }
     },
     mounted: function() {
         document.querySelector("main").classList.remove("hold-transition");
-
-
     }
 });
 
