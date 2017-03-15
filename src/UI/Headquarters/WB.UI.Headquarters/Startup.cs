@@ -102,11 +102,30 @@ namespace WB.UI.Headquarters
                         .OnValidateIdentity<HqUserManager, HqUser, Guid>(
                             validateInterval: TimeSpan.FromMinutes(30),
                             regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
-                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId()))
+                            getUserIdCallback: (id) => Guid.Parse(id.GetUserId())),
+
+                    OnApplyRedirect = ctx =>
+                    {
+                        if (!IsAjaxRequest(ctx.Request))
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                    }
                 }
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+        }
+
+        private static bool IsAjaxRequest(IOwinRequest request)
+        {
+            IReadableStringCollection query = request.Query;
+            if ((query != null) && (query["X-Requested-With"] == "XMLHttpRequest"))
+            {
+                return true;
+            }
+            IHeaderDictionary headers = request.Headers;
+            return ((headers != null) && (headers["X-Requested-With"] == "XMLHttpRequest"));
         }
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)
