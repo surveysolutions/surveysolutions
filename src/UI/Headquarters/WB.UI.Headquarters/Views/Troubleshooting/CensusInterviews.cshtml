@@ -37,7 +37,7 @@
                         <h5>Survey template (questionnaire version)</h5>
                         <user-selector
                             data-vv-name="questionnaireId"
-                            v-validate="'required'"
+                            @*v-validate="'required'"*@
                             :has-error="errors.has('questionnaireId')"
                             placeholder="Select questionnaire"
                             control-id="questionnaireId"
@@ -84,7 +84,9 @@
                 </div>
                 <div class="interviews-info">
                     <div class="table-wrapper interviews-large-screen">
-                        <interview-table :filter="tableFilters" />
+                        <interview-table 
+                            :filter="tableFilters" 
+                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "CensusInterviews" })" />
                     </div>
                 </div>
             </div>

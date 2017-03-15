@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -16,5 +17,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public long? QuestionnaireVersion { get; set; }
 
         public string SearchBy { get; set; }
+    }
+
+    public class InterviewsWithoutPrefilledInputModel : ListViewModelBase
+    {
+        public QuestionnaireIdentity QuestionnaireId { get; set; }
+
+        public DateTime? ChangedFrom { get; set; }
+
+        public DateTime? ChangedTo { get; set; }
+
+        public Guid? InterviewerId { get; set; }
+
+        public bool CensusOnly { get; set; } = false;
     }
 }

@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public interface IAllInterviewsFactory
     {
         AllInterviewsView Load(AllInterviewsInputModel input);
+        InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input);
     }
 
     public class AllInterviewsFactory : IAllInterviewsFactory
@@ -24,7 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
         {
-
             var interviews = this.reader.Query(_ =>
             {
                 var items = ApplyFilter(input, _);
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Items = interviews.Select(x => new AllInterviewsViewItem
                 {
                     FeaturedQuestions = featuredQuestionAnswers.Where(f => f.InterviewSummary.SummaryId == x.SummaryId)
-                    .Select(a => new InterviewFeaturedQuestion()
+                    .Select(a => new InterviewFeaturedQuestion
                     {
                         Id = a.Questionid,
                         Answer = a.Answer,
@@ -84,6 +84,62 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
+        public InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input)
+        {
+            var interviews = this.reader.Query(_ =>
+            {
+                var items = ApplyFilter(input, _);
+                if (input.Orders != null)
+                {
+                    items = this.DefineOrderBy(items, input);
+                }
+
+                return items.Skip((input.Page - 1) * input.PageSize)
+                    .Take(input.PageSize)
+                    .ToList();
+            });
+
+            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+
+            var result = new InterviewsWithoutPrefilledView
+            {
+                TotalCount = totalCount,
+                Items = interviews.ToList()
+            };
+            return result;
+        }
+
+        private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
+        {
+            var items = _.Where(x => !x.IsDeleted);
+
+            if (input.CensusOnly)
+            {
+                items = items.Where(x => x.WasCreatedOnClient);
+            }
+
+            if (input.InterviewerId.HasValue)
+            {
+                items = items.Where(x => x.ResponsibleId == input.InterviewerId);
+            }
+
+            if (input.QuestionnaireId!=null)
+            {
+                items = items.Where(x => x.QuestionnaireId == input.QuestionnaireId.QuestionnaireId && x.QuestionnaireVersion == input.QuestionnaireId.Version);
+            }
+
+            if (input.ChangedFrom.HasValue)
+            {
+                items = items.Where(x => x.UpdateDate >= input.ChangedFrom.Value);
+            }
+
+            if (input.ChangedTo.HasValue)
+            {
+                items = items.Where(x => x.UpdateDate <= input.ChangedTo.Value);
+            }
+            return items;
+        }
+
         private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
         {
             var items = _.Where(x => !x.IsDeleted);
@@ -115,8 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return items;
         }
 
-        private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query,
-                                                        AllInterviewsInputModel model)
+        private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query, ListViewModelBase model)
         {
             var orderBy = model.Orders.FirstOrDefault();
             if (orderBy == null)
