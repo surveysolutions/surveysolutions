@@ -150,8 +150,11 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                await this.UpdateAccountAsync(model);
-                this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                var updateResult = await this.UpdateAccountAsync(model);
+                if (updateResult.Succeeded)
+                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                else
+                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
             }
             
             return this.View(model);
