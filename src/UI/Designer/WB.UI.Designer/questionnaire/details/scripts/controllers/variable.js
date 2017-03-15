@@ -36,8 +36,9 @@
                         $scope.initialVariable = angular.copy($scope.activeVariable);
                         $rootScope.$emit('variableUpdated', {
                             itemId: $scope.activeVariable.itemId,
-                            name: $scope.activeVariable.variable
-                        });
+                            name: $scope.activeVariable.variable,
+                            label: $scope.activeVariable.label
+                    });
                         if (_.isFunction(callback)) {
                             callback();
                         }
