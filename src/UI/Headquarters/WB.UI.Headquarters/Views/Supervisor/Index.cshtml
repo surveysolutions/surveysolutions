@@ -116,7 +116,7 @@
             <td>
                 @if (isAdminOrObserver)
                 {
-                    <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="Impersonate as this user in read only mode">
+                    <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="@Users.ImpersonateAsUser">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                 }
