@@ -73,12 +73,14 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            app.Use(RemoveServerNameFromHeaders)
-                .Use(SetSessionStateBehavior)
-                .UseStageMarker(PipelineStage.MapHandler)
-                .UseNinjectMiddleware(() => ninjectKernel)
-                .UseNinjectWebApi(config)
-                .MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+
+            app.Use(RemoveServerNameFromHeaders);
+
+            app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
+
+            app.UseNinjectMiddleware(() => ninjectKernel);
+            app.UseNinjectWebApi(config);
         }
 
         public void ConfigureAuth(IAppBuilder app)
