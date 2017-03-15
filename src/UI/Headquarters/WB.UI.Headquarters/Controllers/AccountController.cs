@@ -100,6 +100,10 @@ namespace WB.UI.Headquarters.Controllers
                 case SignInStatus.Success:
                     this.captchaService.ResetFailedLogin(model.UserName);
                     return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    this.captchaService.ResetFailedLogin(model.UserName);
+                    this.ModelState.AddModelError("LockedOut", ErrorMessages.SiteAccessNotAllowed);
+                    return View(model);
                 default:
                     this.captchaService.RegisterFailedLogin(model.UserName);
                     model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
