@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                                            .ExecuteInQueryTransaction(
                                                 () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
 
-                this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIdsStrings.Length;
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
                 this.logger.Debug($"Exported batch of interview comments. Total interview comments processed {totalProcessed:N0} out of {interviewIdsToExport.Count:N0}");
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             commentsHeader.Add("Comment");
 
             this.csvWriter.WriteData(commentsFilePath, new[] {commentsHeader.ToArray()},
-                ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                ExportFileSettings.DataFileSeparator.ToString());
         }
 
         private string[][] QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)

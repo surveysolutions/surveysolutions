@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
         }
 
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         }
 
                         exportBulk[levelName].Add(dataByLevel.EmptyIfNull()
-                            .Split(ExportFileSettings.SeparatorOfExportedDataFile));
+                            .Split(ExportFileSettings.DataFileSeparator));
                     }
                 }
             }
@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 {
                     this.csvWriter.WriteData(dataByTheLevelFilePath,
                         exportBulk[level.LevelName],
-                        ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                        ExportFileSettings.DataFileSeparator.ToString());
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
-            var stringSeparator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
+            var stringSeparator = ExportFileSettings.DataFileSeparator.ToString();
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
             {
                 var recordsByLevel = new List<string>();

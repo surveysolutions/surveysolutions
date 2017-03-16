@@ -3,6 +3,7 @@ using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -29,8 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService = tabularFormatExportService;
         }
 
-        protected void GenerateDescriptionTxt(QuestionnaireIdentity questionnaireIdentity, string directoryPath)
-            => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath);
+        protected void GenerateDescriptionTxt(QuestionnaireIdentity questionnaireIdentity, string directoryPath, string dataFilesExtension)
+            => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath, dataFilesExtension);
 
         protected string[] CreateTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {

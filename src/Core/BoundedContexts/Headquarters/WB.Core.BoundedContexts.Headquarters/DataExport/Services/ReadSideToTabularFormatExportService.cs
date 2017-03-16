@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
 
-        public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath)
+        public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath, string dataFilesExtension)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string fileName = level.LevelName;
+                string fileName = $"{level.LevelName}{dataFilesExtension}";
                 var variables = level.HeaderItems.Values.Select(question => question.VariableName);
 
                 descriptionBuilder.AppendLine();
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
         }
 

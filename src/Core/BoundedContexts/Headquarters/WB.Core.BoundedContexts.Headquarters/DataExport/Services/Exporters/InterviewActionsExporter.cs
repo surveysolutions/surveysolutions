@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
 
-            this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+            this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.DataFileSeparator.ToString());
 
             long totalProcessedCount = 0;
             var stopwatch = Stopwatch.StartNew();
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     x => interviewIdsStrings.Contains(x.InterviewId);
                 var actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
-                this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
                 totalProcessedCount += interviewIdsStrings.Length;
                 progress.Report(totalProcessedCount.PercentOf(interviewIdsToExport.Count));
