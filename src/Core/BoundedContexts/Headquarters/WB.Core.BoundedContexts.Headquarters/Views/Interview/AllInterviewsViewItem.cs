@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewListItem
     {
         public Guid InterviewId { get; set; }
+        public string Key { get; set; }
         public string QuestionnaireId { get; set; }
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
