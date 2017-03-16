@@ -49,12 +49,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath);
+            this.GenerateDescriptionTxt(questionnaireIdentity, directoryPath);
 
             this.tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity, status, directoryPath, progress, cancellationToken);
 
             this.CreateDoFilesForQuestionnaire(questionnaireIdentity, directoryPath, cancellationToken);
         }
+
+        private void GenerateDescriptionTxt(QuestionnaireIdentity questionnaireIdentity, string directoryPath)
+            => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath);
 
         private void CreateDoFilesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
