@@ -4,16 +4,16 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public class InterviewKey
     {
-        public int Key { get; }
+        public int RawValue { get; }
 
-        public InterviewKey(int keyValue)
+        public InterviewKey(int rawValueValue)
         {
-            this.Key = keyValue;
+            this.RawValue = rawValueValue;
         }
 
         public override string ToString()
         {
-            return Key.ToString("00-00-00-00");
+            return this.RawValue.ToString("00-00-00-00");
         }
 
         public static InterviewKey Parse(string value)

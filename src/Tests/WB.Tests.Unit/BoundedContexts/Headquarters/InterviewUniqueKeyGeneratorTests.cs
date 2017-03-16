@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -23,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             Assert.That(interviewKey, Is.Not.Null);
             Assert.That(interviewKey.ToString(), Is.Not.Null);
-            Assert.That(interviewKey.Key, Is.Not.EqualTo(0));
+            Assert.That(interviewKey.RawValue, Is.Not.EqualTo(0));
         }
 
         [Test]
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var interviewKey = generator.Get();
 
-            Assert.That(interviewKey.Key, Is.EqualTo(2));
+            Assert.That(interviewKey.RawValue, Is.EqualTo(2));
         }
 
         [Test]
@@ -57,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var interviewKey = generator.Get();
 
-            Assert.That(interviewKey.Key, Is.EqualTo(31));
+            Assert.That(interviewKey.RawValue, Is.EqualTo(31));
         }
 
         private InterviewUniqueKeyGenerator GetGenerator(
