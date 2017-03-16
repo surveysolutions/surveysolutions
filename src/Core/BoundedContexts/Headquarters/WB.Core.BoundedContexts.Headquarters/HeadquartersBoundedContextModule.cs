@@ -63,6 +63,7 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
+using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -251,6 +252,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
+
+            this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
+            this.Bind<IRandomValuesSource>().To<RandomValuesSource>();
 
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
