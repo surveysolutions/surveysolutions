@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool ReceivedByInterviewer { get; set; }
         public string CurrentLanguage { get; set; }
         public bool IsMissingAssignToInterviewer { get; set; }
+
+        public string InterviewKey { get; set; }
     }
 }
