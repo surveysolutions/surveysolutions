@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc.Storage;
@@ -33,19 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
             QuestionnaireExportStructure questionnaireExportStructure = null,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
-        {
-            return new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                csvWriter ?? Mock.Of<ICsvWriter>(_ => _.OpenCsvWriter(
-                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(_
+                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
                 Mock.Of<ILogger>(),
                 Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 new TestInMemoryWriter<InterviewSummary>(),
                 new InterviewDataExportSettings(),
-                Mock.Of<IQuestionnaireExportStructureStorage>(
-                    _ =>
-                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
-        }
+                Mock.Of<IQuestionnaireExportStructureStorage>(_
+                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                Mock.Of<IProductVersion>());
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
         {
