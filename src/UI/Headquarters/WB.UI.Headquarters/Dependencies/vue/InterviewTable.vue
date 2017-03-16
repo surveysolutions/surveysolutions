@@ -48,7 +48,6 @@ export default {
             language:
             {
                 "url": window.input.settings.config.dataTableTranslationsUrl,
-                searchPlaceholder: "@Pages.Search"
             },
             ajax: {
                 url: this.fetchUrl,
@@ -58,6 +57,9 @@ export default {
                     d.ChangedFrom = self.filter.changedFrom
                     d.ChangedTo = self.filter.changedTo
                     d.InterviewerId = self.filter.interviewerId
+                },
+                complete: function(param){
+
                 }
             },
             columns: [
