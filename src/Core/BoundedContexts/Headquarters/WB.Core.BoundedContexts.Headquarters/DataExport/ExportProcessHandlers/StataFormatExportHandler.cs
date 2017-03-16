@@ -42,6 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
+
+            this.GenerateDescriptionTxt(questionnaireIdentity, directoryPath);
         }
 
         private void CreateStataDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,

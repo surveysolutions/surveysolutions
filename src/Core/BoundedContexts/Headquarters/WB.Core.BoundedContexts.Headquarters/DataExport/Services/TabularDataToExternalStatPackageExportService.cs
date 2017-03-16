@@ -52,8 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.dataQueryFactory = dataQueryFactory;
         }
 
-        private string StataFileNameExtension { get { return ".dta"; } }
-        private string SpssFileNameExtension { get { return ".sav"; } }
+        private static string StataFileNameExtension => ".dta";
+        private static string SpssFileNameExtension => ".sav";
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, 
             long questionnaireVersion,
@@ -92,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var result = new List<string>();
                 string fileExtention = format == DataExportFormat.STATA
-                    ? this.StataFileNameExtension
-                    : this.SpssFileNameExtension;
+                    ? StataFileNameExtension
+                    : SpssFileNameExtension;
                 var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
                 long processdFiles = 0;
 
