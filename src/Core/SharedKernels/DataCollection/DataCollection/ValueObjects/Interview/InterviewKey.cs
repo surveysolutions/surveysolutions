@@ -21,5 +21,23 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             if (value == null) throw new ArgumentNullException(nameof(value));
             return new InterviewKey(int.Parse(value.Replace("-", "")));
         }
+
+        protected bool Equals(InterviewKey other)
+        {
+            return this.RawValue == other.RawValue;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((InterviewKey)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.RawValue;
+        }
     }
 }

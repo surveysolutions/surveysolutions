@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
+        IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
 
@@ -286,6 +287,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.HasErrors = true;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                interview.Key = @event.Payload.Key.ToString();
             });
         }
 
