@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
 
         public SurveySetupController(
             ICommandService commandService,
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewImportService interviewImportService,
             IFileSystemAccessor fileSystemAccessor,
-            IIdentityManager identityManager)
+            IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
             this.preloadingTemplateService = preloadingTemplateService;
@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewImportService = interviewImportService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
 
@@ -305,7 +305,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            var headquartersId = this.identityManager.CurrentUserId;
+            var headquartersId = this.authorizedUser.Id;
 
             Task.Factory.StartNew(() =>
             {

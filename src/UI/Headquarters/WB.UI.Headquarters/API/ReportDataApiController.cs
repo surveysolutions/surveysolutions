@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public ReportDataApiController(
             ICommandService commandService,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             ISurveysAndStatusesReport surveysAndStatusesReport,
             IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISpeedReportFactory speedReport)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.surveysAndStatusesReport = surveysAndStatusesReport;
             this.headquartersTeamsAndStatusesReport = headquartersTeamsAndStatusesReport;
             this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var input = new TeamsAndStatusesInputModel
             {
-                ViewerId = this.identityManager.CurrentUserId,
+                ViewerId = this.authorizedUser.Id,
                 Orders = data.SortOrder,
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             var input = new QuantityByInterviewersReportInputModel
             {
-               SupervisorId = data.SupervisorId ?? this.identityManager.CurrentUserId,
+               SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                Page = data.PageIndex,
                PageSize = data.PageSize,
@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
-                SupervisorId = data.SupervisorId ?? this.identityManager.CurrentUserId,
+                SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 QuestionnaireVersion = data.QuestionnaireVersion,
                 QuestionnaireId = data.QuestionnaireId,
@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
                 EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                SupervisorId = input.SupervisorId ?? this.identityManager.CurrentUserId
+                SupervisorId = input.SupervisorId ?? this.authorizedUser.Id
             };
 
             return this.speedReport.Load(inputParameters);
@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
         {
-            var teamLeadName = this.identityManager.CurrentUserName;
+            var teamLeadName = this.authorizedUser.UserName;
 
             var input = new SurveysAndStatusesReportInputModel
             {

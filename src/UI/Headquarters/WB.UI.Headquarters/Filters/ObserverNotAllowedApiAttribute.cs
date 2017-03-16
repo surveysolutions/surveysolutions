@@ -9,11 +9,11 @@ namespace WB.UI.Headquarters.Filters
 {
     public class ObserverNotAllowedApiAttribute : ActionFilterAttribute
     {
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
         public override void OnActionExecuting(HttpActionContext filterContext)
         {
-            if (this.identityManager.IsCurrentUserObserver)
+            if (this.authorizedUser.IsObserver)
             {
                 filterContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
                 {

@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewTroubleshootFactory troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public InterviewController(
             ICommandService commandService, 
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewTroubleshootFactory troubleshootInterviewViewFactory,
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IInterviewDetailsViewFactory interviewDetailsViewFactory)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.troubleshootInterviewViewFactory = troubleshootInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
@@ -63,8 +63,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return HttpNotFound();
 
             bool isAccessAllowed =
-                this.identityManager.IsCurrentUserHeadquarter || this.identityManager.IsCurrentUserAdministrator ||
-                (this.identityManager.IsCurrentUserSupervisor && this.identityManager.CurrentUserId == interviewSummary.TeamLeadId);
+                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();

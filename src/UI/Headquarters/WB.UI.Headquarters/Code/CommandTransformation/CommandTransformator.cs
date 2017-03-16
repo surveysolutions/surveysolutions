@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
 {
     public class CommandTransformator
     {
-        private static IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private static IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)
             {
-                interviewCommand.UserId = identityManager.CurrentUserId;
+                interviewCommand.UserId = authorizedUser.Id;
             }
 
             var rejectCommand = command as RejectInterviewCommand;
@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             Guid interviewId = Guid.NewGuid();
 
             var resultCommand = new CreateInterviewCommand(interviewId,
-                                                           identityManager.CurrentUserId,
+                                                           authorizedUser.Id,
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,

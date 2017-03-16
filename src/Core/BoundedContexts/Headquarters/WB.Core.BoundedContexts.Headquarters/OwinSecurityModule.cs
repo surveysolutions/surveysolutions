@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAuthenticationManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Authentication).InRequestScope();
             this.Bind<HqSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqSignInManager>()).InRequestScope();
             this.Bind<HqUserManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqUserManager>()).InRequestScope();
-            this.Bind<IIdentityManager>().To<IdentityManager>().InRequestScope();
+            this.Bind<IAuthorizedUser>().To<AuthorizedUser>().InRequestScope();
         }
     }
 }

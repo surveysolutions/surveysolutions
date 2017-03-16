@@ -5,7 +5,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Extensions
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @functions{
@@ -59,15 +59,15 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                @if (identityManager.IsCurrentUserAdministrator)
+                @if (authorizedUser.IsAdministrator)
                 {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (identityManager.IsCurrentUserHeadquarter)
+                else if (authorizedUser.IsHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (identityManager.IsCurrentUserObserver)
+                else if (authorizedUser.IsObserver)
                 {
                     @Html.Partial("ObserverMainMenu")
                 }
@@ -80,7 +80,7 @@
     </nav>
 </header>
     
-    @if (ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver)
+    @if (authorizedUser.IsObserver)
     {
         <div class="panel panel-warning view-mood">
             <div class="panel-heading">

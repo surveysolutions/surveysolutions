@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -19,8 +20,9 @@ namespace WB.UI.Headquarters.Controllers
     {
         public ApiUserController(ICommandService commandService,
             ILogger logger,
-            IIdentityManager identityManager)
-            : base(commandService, logger, identityManager)
+            IAuthorizedUser authorizedUser,
+            HqUserManager userManager)
+            : base(commandService, logger, authorizedUser, userManager)
         {
         }
 
@@ -63,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            var user = await this.identityManager.GetUserByIdAsync(id);
+            var user = await this.userManager.FindByIdAsync(id);
 
             if (user == null) throw new HttpException(404, string.Empty);
 

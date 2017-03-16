@@ -6,18 +6,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class DesignerUserCredentials
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
 
         public DesignerUserCredentials() { }
-        public DesignerUserCredentials(IIdentityManager identityManager)
+        public DesignerUserCredentials(IAuthorizedUser authorizedUser)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
         }
 
         public virtual RestCredentials Get()
-            => (RestCredentials)HttpContext.Current.Session[this.identityManager.CurrentUserName];
+            => (RestCredentials)HttpContext.Current.Session[this.authorizedUser.UserName];
 
         public void Set(RestCredentials credentials)
-            => HttpContext.Current.Session[this.identityManager.CurrentUserName] = credentials;
+            => HttpContext.Current.Session[this.authorizedUser.UserName] = credentials;
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -15,18 +16,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [LimitsFilter]
     public class TeamController : BaseController
     {
-        protected readonly IIdentityManager identityManager;
+        protected readonly IAuthorizedUser authorizedUser;
+        protected readonly HqUserManager userManager;
 
-        public TeamController(ICommandService commandService, ILogger logger, IIdentityManager identityManager)
+        public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
+            this.userManager = userManager;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
         protected async Task<IdentityResult> UpdateAccountAsync(UserEditModel editModel)
         {
-            var appUser = await this.identityManager.GetUserByIdAsync(editModel.Id);
+            var appUser = await this.userManager.FindByIdAsync(editModel.Id);
 
             if(appUser == null)
                 return IdentityResult.Failed(@"Could not update user information because current user does not exist");
@@ -35,16 +38,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
             appUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
-            appUser.IsLockedByHeadquaters = this.identityManager.IsCurrentUserAdministrator ||
-                                            this.identityManager.IsCurrentUserHeadquarter
+            appUser.IsLockedByHeadquaters = this.authorizedUser.IsAdministrator ||
+                                            this.authorizedUser.IsHeadquarter
                 ? editModel.IsLocked
                 : appUser.IsLockedByHeadquaters;
 
-            return await this.identityManager.UpdateUserAsync(appUser, editModel.Password);
+            return await this.userManager.UpdateUserAsync(appUser, editModel.Password);
         }
 
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
-            => await this.identityManager.CreateUserAsync(new HqUser
+            => await this.userManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),
                 IsLockedBySupervisor = false,

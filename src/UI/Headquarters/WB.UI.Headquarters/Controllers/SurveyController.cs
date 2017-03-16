@@ -18,19 +18,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
 
         private readonly ITeamUsersAndQuestionnairesFactory
             teamUsersAndQuestionnairesFactory;
 
         public SurveyController(
             ICommandService commandService, 
-            IIdentityManager identityManager, 
+            IAuthorizedUser authorizedUser, 
             ILogger logger,
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }
 
@@ -46,8 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.ViewBag.ActivePage = MenuItem.Docs;
             this.ViewBag.CurrentUser = new UsersViewItem
             {
-                UserId = this.identityManager.CurrentUserId,
-                UserName = this.identityManager.CurrentUserName
+                UserId = this.authorizedUser.Id,
+                UserName = this.authorizedUser.UserName
             };
             return this.View(this.Filters());
         }
@@ -56,20 +56,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Summary;
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.identityManager.CurrentUserId));
+                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.authorizedUser.Id));
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor);
-            Guid viewerId = this.identityManager.CurrentUserId;
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
+            Guid viewerId = this.authorizedUser.Id;
 
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));

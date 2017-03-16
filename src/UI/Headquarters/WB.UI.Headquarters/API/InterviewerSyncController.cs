@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.API
     public class InterviewerSyncController : BaseApiController
     { 
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API
 
 
         public InterviewerSyncController(ICommandService commandService,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.API
             IAndroidPackageReader androidPackageReader)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.plainFileRepository = plainFileRepository;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
@@ -75,7 +75,7 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         [ApiBasicAuth(new[] {UserRoles.Interviewer})]
         public bool CheckExpectedDevice(string deviceId) =>
-            string.IsNullOrEmpty(this.identityManager.CurrentUserDeviceId) || this.identityManager.CurrentUserDeviceId == deviceId;
+            string.IsNullOrEmpty(this.authorizedUser.DeviceId) || this.authorizedUser.DeviceId == deviceId;
 
         [HttpPost]
         [ApiBasicAuth(new[] { UserRoles.Interviewer })]

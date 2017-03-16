@@ -9,11 +9,11 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Pages.Interviewers_Title;
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
-@{ bool isVisibleSupervisorColumn = identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator; }
-@{ bool isAdmin = identityManager.IsCurrentUserAdministrator; }
+@{ bool isVisibleSupervisorColumn = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator; }
+@{ bool isAdmin = authorizedUser.IsAdministrator; }
 
 
 @section scripts

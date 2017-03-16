@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
         protected static IQuestionnaireImportService CreateIQuestionnaireImportService(
       ICommandService commandService = null,
-      IIdentityManager identityManager = null,
+      IAuthorizedUser authorizedUser = null,
       IStringCompressor zipUtils = null,
       ILogger logger = null,
       IRestService restService = null,
@@ -159,7 +159,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
       DesignerUserCredentials designerUserCredentials = null)
         {
             var service = restService ?? Mock.Of<IRestService>();
-            var globalInfoProvider = identityManager ?? new Mock<IIdentityManager> { DefaultValue = DefaultValue.Mock }.Object;
+            var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
 
             if (designerUserCredentials == null)
             {

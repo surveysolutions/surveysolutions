@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
 
 
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ITranslationManagementService translationManagementService,
             ICommandService commandService,
             ILogger logger,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             DesignerUserCredentials designerUserCredentials)
         {
             this.supportedVersionProvider = supportedVersionProvider;
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.translationManagementService = translationManagementService;
             this.commandService = commandService;
             this.logger = logger;
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
         }
 
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
                 
                 this.commandService.Execute(new ImportFromDesigner(
-                    this.identityManager.CurrentUserId,
+                    this.authorizedUser.Id,
                     questionnaire,
                     isCensusMode,
                     questionnaireAssembly,

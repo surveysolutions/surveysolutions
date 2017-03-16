@@ -13,7 +13,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var interviewQuestions = Model.FilteredEntities.OfType<InterviewQuestionView>();
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 @section styles
 {
@@ -39,7 +39,7 @@
 
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
-        settings.Urls.Interviews = '@(identityManager.IsCurrentUserSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
+        settings.Urls.Interviews = '@(authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
         settings.Urls.InterviewersToAssign = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
 
         var filter = { filteredBy: '@Model.Filter' };
@@ -118,13 +118,13 @@
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
                 @{
-                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
-                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
+                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
+                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
 
-                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
-                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
+                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
+                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
 
-                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator);
+                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
                 }
 
                 @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
@@ -240,11 +240,11 @@ if (filter == Model.Filter)
 
         private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
         {
-            var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
-            if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
+            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+            if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && authorizedUser.IsSupervisor && entityView.IsEnabled &&
                 entityView.QuestionType == QuestionType.MultyOption)
             {
-                if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && entityView.IsEnabled &&
+                if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && authorizedUser.IsSupervisor && entityView.IsEnabled &&
                     entityView.QuestionType == QuestionType.MultyOption)
                 {
                     var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;

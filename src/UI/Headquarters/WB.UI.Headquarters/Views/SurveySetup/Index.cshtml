@@ -9,9 +9,9 @@
 }
 
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
-    var isObserver = identityManager.IsCurrentUserObserver;
-    var isAdmin = identityManager.IsCurrentUserAdministrator;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var isObserver = authorizedUser.IsObserver;
+    var isAdmin = authorizedUser.IsAdministrator;
 
 }
 @section scripts
