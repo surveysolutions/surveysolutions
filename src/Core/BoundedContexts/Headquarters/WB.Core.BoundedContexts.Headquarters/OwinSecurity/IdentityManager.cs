@@ -185,8 +185,5 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             await this.signInManager.SignInAsync(observer, true, true);
         }
-
-        public RestCredentials GetDesignerUserCredentials()
-            => (RestCredentials) HttpContext.Current.Session[this.CurrentUserName];
     }
 }

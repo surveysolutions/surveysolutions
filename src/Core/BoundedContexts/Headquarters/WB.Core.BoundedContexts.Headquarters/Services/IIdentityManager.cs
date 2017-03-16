@@ -35,7 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void LinkDeviceToCurrentInterviewer(string deviceId);
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
-        RestCredentials GetDesignerUserCredentials();
         Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive);
     }
 }
