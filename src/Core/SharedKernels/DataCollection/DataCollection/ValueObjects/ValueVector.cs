@@ -7,6 +7,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
+    public static class ValueVector
+    {
+        public static ValueVector<T> Create<T>(params T[] values) where T : struct => new ValueVector<T>(values);
+    }
+
     public class ValueVector<T> : IList<T> where T : struct
     {
         private readonly List<T> values;

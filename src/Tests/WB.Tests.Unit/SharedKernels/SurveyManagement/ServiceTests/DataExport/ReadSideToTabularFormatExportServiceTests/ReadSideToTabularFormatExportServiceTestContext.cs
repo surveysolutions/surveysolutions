@@ -5,6 +5,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -20,67 +21,110 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.ReadSideToTabularFormatExportServiceTests
 {
+    [TestFixture]
+    [TestOf(typeof(ReadSideToTabularFormatExportService))]
+    internal class ReadSideToTabularFormatExportServiceTests : ReadSideToTabularFormatExportServiceTestContext
+    {
+        [Test]
+        public void When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
+        {
+            // arrange
+            string description = null;
+            IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
+
+            Mock.Get(fileSystemAccessor)
+                .Setup(accessor => accessor.CombinePath(@"x:\", "description.txt"))
+                .Returns(@"x:\description.txt");
+            Mock.Get(fileSystemAccessor)
+                .Setup(accessor => accessor.WriteAllText(@"x:\description.txt", It.IsAny<string>()))
+                .Callback<string, string>((file, content) => description = content);
+
+            var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
+            {
+                CreateHeaderStructureForLevel("questionnaire", headerItems: new []
+                {
+                    CreateExportedHeaderItem(variableName: "x"),
+                    CreateExportedHeaderItem(variableName: "y"),
+                }),
+                CreateHeaderStructureForLevel("roster", levelScopeVector: ValueVector.Create(Guid.NewGuid()), headerItems: new []
+                {
+                    CreateExportedHeaderItem(variableName: "name"),
+                    CreateExportedHeaderItem(variableName: "age"),
+                }),
+            });
+
+            var exportService = Create.Service.ReadSideToTabularFormatExportService(
+                fileSystemAccessor: fileSystemAccessor,
+                questionnaireExportStructure: questionnaireExportStructure);
+
+            // act
+            exportService.GenerateDescriptionFile(Create.Entity.QuestionnaireIdentity(), @"x:\", ".xlsx");
+
+            // assert
+            Assert.That(description, Is.Not.Empty);
+            var lines = description.Split(new [] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            CollectionAssert.AreEqual(lines.Skip(1), new[]
+            {
+                "questionnaire.xlsx",
+                "x, y",
+                "roster.xlsx",
+                "name, age",
+            });
+        }
+    }
+
     [Subject(typeof(ReadSideToTabularFormatExportService))]
     internal class ReadSideToTabularFormatExportServiceTestContext
     {
-        protected static ReadSideToTabularFormatExportService CreateReadSideToTabularFormatExportService(
-            IFileSystemAccessor fileSystemAccessor = null,
-            ICsvWriterService csvWriterService = null,
-            ICsvWriter csvWriter = null,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
-            => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                csvWriter ?? Mock.Of<ICsvWriter>(_
-                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                Mock.Of<ILogger>(),
-                Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                new TestInMemoryWriter<InterviewSummary>(),
-                new InterviewDataExportSettings(),
-                Mock.Of<IQuestionnaireExportStructureStorage>(_
-                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
-                Mock.Of<IProductVersion>());
-
-        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
+        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(
+            string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null,
+            IEnumerable<ExportedHeaderItem> headerItems = null)
         {
-            return new HeaderStructureForLevel()
+            return new HeaderStructureForLevel
             {
                 LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
                 LevelName = levelName,
                 LevelIdColumnName = "Id",
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
-                HeaderItems =
-                    new Dictionary<Guid, ExportedHeaderItem>
+                HeaderItems = headerItems?.ToDictionary(item => item.PublicKey, item => item)
+                    ?? new Dictionary<Guid, ExportedHeaderItem>
                     {
                         { Guid.NewGuid(), CreateExportedHeaderItem() },
                         { Guid.NewGuid(), CreateExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }
-                    }
+                    },
             };
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
-        {
-            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type };
-        }
-
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid questionnaireId, long version, params HeaderStructureForLevel[] levels)
-        {
-            var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
-            if (levels != null && levels.Length > 0)
+        protected static ExportedHeaderItem CreateExportedHeaderItem(
+            QuestionType type = QuestionType.Text, string[] columnNames = null, string variableName = "varname")
+            => new ExportedHeaderItem
             {
-                header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
-            }
-            return new QuestionnaireExportStructure()
+                PublicKey = Guid.NewGuid(),
+                ColumnNames = columnNames ?? new[] { "1" },
+                Titles = columnNames ?? new[] { "1" },
+                QuestionType = type,
+                VariableName = variableName,
+            };
+
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(
+            Guid? questionnaireId = null, long? version = null, params HeaderStructureForLevel[] levels)
+        {
+            var header = levels != null && levels.Length > 0
+                ? levels.ToDictionary(i => i.LevelScopeVector, i => i)
+                : new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
+
+            return new QuestionnaireExportStructure
             {
                 HeaderToLevelMap = header,
-                QuestionnaireId = questionnaireId,
-                Version = version
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                Version = version ?? 777,
             };
         }
 

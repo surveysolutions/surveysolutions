@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.IO;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -11,6 +12,7 @@ using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -22,7 +24,9 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -46,6 +50,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -343,5 +348,24 @@ namespace WB.Tests.Abc.TestFactories
                 { "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", (timeSpanForLogins ?? 5).ToString() },
             }));
         }
+
+        public ReadSideToTabularFormatExportService ReadSideToTabularFormatExportService(
+            IFileSystemAccessor fileSystemAccessor = null,
+            ICsvWriterService csvWriterService = null,
+            ICsvWriter csvWriter = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null,
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(_
+                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                Mock.Of<ILogger>(),
+                Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
+                new TestInMemoryWriter<InterviewSummary>(),
+                new InterviewDataExportSettings(),
+                Mock.Of<IQuestionnaireExportStructureStorage>(_
+                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                Mock.Of<IProductVersion>());
+
     }
 }
