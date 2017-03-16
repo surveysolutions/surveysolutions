@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -15,16 +15,19 @@ namespace WB.UI.Headquarters.Controllers
     public class InstallController : BaseController
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
-        private readonly IIdentityManager identityManager;
+        private readonly HqSignInManager signInManager;
+        public readonly HqUserManager userManager;
 
         public InstallController(ICommandService commandService,
                                  ISupportedVersionProvider supportedVersionProvider,
                                  ILogger logger,
-                                 IIdentityManager identityManager)
+                                 HqSignInManager identityManager,
+                                 HqUserManager userManager)
             : base(commandService, logger)
         {
+            this.userManager = userManager;
             this.supportedVersionProvider = supportedVersionProvider;
-            this.identityManager = identityManager;
+            this.signInManager = identityManager;
         }
 
         public ActionResult Finish()
@@ -39,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                var creationResult = await this.identityManager.CreateUserAsync(new HqUser
+                var creationResult = await this.userManager.CreateUserAsync(new HqUser
                 {
                     Id = Guid.Parse(@"00000000000000000000000000000001"),
                     FullName = @"Administrator",
@@ -49,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (creationResult.Succeeded)
                 {
-                    await this.identityManager.SignInAsync(model.UserName, model.Password, isPersistent: false);
+                    await this.signInManager.SignInAsync(model.UserName, model.Password, isPersistent: false);
 
                     this.supportedVersionProvider.RememberMinSupportedVersion();
 

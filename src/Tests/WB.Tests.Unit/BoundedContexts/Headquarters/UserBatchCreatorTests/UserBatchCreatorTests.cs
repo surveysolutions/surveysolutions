@@ -8,11 +8,14 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 {
@@ -40,15 +43,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var supervisorName = "super";
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: supervisorName));
-            var identityManager = new Mock<IIdentityManager>();
+            var userManager = new Mock<TestHqUserManager>();
 
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
-            var userBatchCreator = CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager.Object);
+            var userBatchCreator = CreateUserBatchCreator(userPreloadingServiceMock.Object, userManager.Object);
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            identityManager.Verify(x =>
+            userManager.Verify(x =>
                 x.CreateUser(
                     Moq.It.Is<HqUser>(c => c.UserName == supervisorName),
                     Moq.It.IsAny<string>(),
@@ -64,16 +67,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var supervisorName = "super";
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: supervisorName));
-            var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, isArchived: true));
+            var userManager = new Mock<TestHqUserManager>();
+            userManager.Setup(x => x.FindByNameAsync("tttt")).ReturnsAsync(Create.Entity.HqUser(role: UserRoles.Supervisor, isArchived: true));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
             var userBatchCreator =
-                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: identityManager.Object);
+                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: userManager.Object);
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            identityManager.Verify(x => x.CreateUser(Moq.It.Is<HqUser>(c => c.UserName == supervisorName), Moq.It.IsAny<string>(), UserRoles.Supervisor));
+            userManager.Verify(x => x.CreateUser(Moq.It.Is<HqUser>(c => c.UserName == supervisorName), Moq.It.IsAny<string>(), UserRoles.Supervisor));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -85,16 +88,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var supervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor:"tttt"));
-            var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
+            var userManager = new Mock<TestHqUserManager>();
+            userManager.Setup(x => x.FindByNameAsync("tttt")).ReturnsAsync(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
 
             var userBatchCreator =
-                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: identityManager.Object);
+                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: userManager.Object);
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            identityManager.Verify(x => x.CreateUser(Moq.It.Is<HqUser>(c => c.UserName == interviewerName), Moq.It.IsAny<string>(), UserRoles.Interviewer));
+            userManager.Verify(x => x.CreateUser(Moq.It.Is<HqUser>(c => c.UserName == interviewerName), Moq.It.IsAny<string>(), UserRoles.Interviewer));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -106,16 +109,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var supervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
-            var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.GetUserByName("inter")).Returns(Create.Entity.HqUser(userName: interviewerName, isArchived: true, supervisorId: supervisorId));
-            identityManager.Setup(x => x.GetUserByName("tttt")).Returns(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
+            var userManager = new Mock<TestHqUserManager>();
+            userManager.Setup(x => x.FindByNameAsync("inter")).ReturnsAsync(Create.Entity.HqUser(userName: interviewerName, isArchived: true, supervisorId: supervisorId));
+            userManager.Setup(x => x.FindByNameAsync("tttt")).ReturnsAsync(Create.Entity.HqUser(role: UserRoles.Supervisor, userId: supervisorId));
 
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Interviewer);
-            var userBatchCreator = CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: identityManager.Object);
+            var userBatchCreator = CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: userManager.Object);
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-            identityManager.Verify(x => x.UpdateUser(Moq.It.Is<HqUser>(c => c.UserName == interviewerName), Moq.It.IsAny<string>()));
+            userManager.Verify(x => x.UpdateUser(Moq.It.Is<HqUser>(c => c.UserName == interviewerName), Moq.It.IsAny<string>()));
             userPreloadingServiceMock.Verify(x => x.FinishPreloadingProcess(userPreloadingProcess.UserPreloadingProcessId));
         }
 
@@ -127,13 +130,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             var supervisorName = "super";
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords:
                 Create.Entity.UserPreloadingDataRecord(login: supervisorName));
-            var identityManager = new Mock<IIdentityManager>();
-            identityManager.Setup(x => x.CreateUser(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()))
+            var userManager = new Mock<TestHqUserManager>();
+            userManager.Setup(x => x.CreateUser(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()))
                 .Throws<NullReferenceException>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
 
             var userBatchCreator =
-                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: identityManager.Object);
+                CreateUserBatchCreator(userPreloadingServiceMock.Object, identityManager: userManager.Object);
 
             userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
@@ -142,12 +145,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
         private UserBatchCreator CreateUserBatchCreator(
            IUserPreloadingService userPreloadingService = null,
-           IIdentityManager identityManager = null)
+           HqUserManager identityManager = null)
         {
             return new UserBatchCreator(
                 userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                 Mock.Of<ILogger>(),
-                identityManager ?? Mock.Of<IIdentityManager>());
+                identityManager ?? Mock.Of<TestHqUserManager>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)

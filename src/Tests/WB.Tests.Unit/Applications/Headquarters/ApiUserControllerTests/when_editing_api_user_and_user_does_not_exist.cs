@@ -5,10 +5,12 @@ using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Shared.Web.Extensions;
 using It = Machine.Specifications.It;
@@ -26,9 +28,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 ConfirmPassword = "12345"
             };
 
-            identityManagerMock.Setup(x => x.GetUserByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<HqUser>(null));
+            userManagerMock.Setup(x => x.FindByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<HqUser>(null));
 
-            controller = CreateApiUserController(identityManager: identityManagerMock.Object);
+            controller = CreateApiUserController(userManager: userManagerMock.Object);
         };
 
         Because of = () =>
@@ -43,7 +45,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).ShouldContain("Could not update user information because current user does not exist");
 
 
-        private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
+        private static Mock<TestHqUserManager> userManagerMock = new Mock<TestHqUserManager>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;

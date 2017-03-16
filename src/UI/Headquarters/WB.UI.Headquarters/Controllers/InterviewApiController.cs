@@ -17,20 +17,20 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize]
     public class InterviewApiController : BaseApiController
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly ITeamInterviewsFactory teamInterviewViewFactory;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
-        public InterviewApiController(ICommandService commandService, IIdentityManager identityManager, ILogger logger,
+        public InterviewApiController(ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
             ITeamInterviewsFactory teamInterviewViewFactory,
             IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Controllers
                 SearchBy = data.SearchBy,
                 Status = data.Status,
                 ResponsibleName = data.ResponsibleName,
-                ViewerId = this.identityManager.CurrentUserId
+                ViewerId = this.authorizedUser.Id
             };
 
             var teamInterviews =  this.teamInterviewViewFactory.Load(input);

@@ -379,7 +379,7 @@
     <Compile Include="OwinSecurity\HqPasswordHasher.cs" />
     <Compile Include="OwinSecurity\Configuration.cs" />
     <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
-    <Compile Include="OwinSecurity\IdentityManager.cs" />
+    <Compile Include="OwinSecurity\AuthorizedUser.cs" />
     <Compile Include="OwinSecurity\IUserRepository.cs" />
     <Compile Include="OwinSecurity\SchemaBasedHistoryContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -443,7 +443,7 @@
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IFileNameService.cs" />
-    <Compile Include="Services\IIdentityManager.cs" />
+    <Compile Include="Services\IAuthorizedUser.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />

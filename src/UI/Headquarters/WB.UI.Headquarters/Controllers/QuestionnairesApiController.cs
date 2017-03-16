@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private const int DEFAULTPAGESIZE = 12;
         private const string DEFAULTEMPTYQUERY = "";
 
@@ -33,12 +33,12 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
-            ICommandService commandService, IIdentityManager identityManager, ILogger logger,
+            ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
         }
@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.identityManager.CurrentUserId);
+            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
             return new JsonCommandResponse() { IsSuccess = true };
         }

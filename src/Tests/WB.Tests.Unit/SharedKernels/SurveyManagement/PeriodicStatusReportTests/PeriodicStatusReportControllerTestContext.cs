@@ -13,10 +13,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     [Subject(typeof(PeriodicStatusReportController))]
     internal class PeriodicStatusReportControllerTestContext
     {
-        protected static PeriodicStatusReportController CreatePeriodicStatusReportController(IIdentityManager identityManager=null)
+        protected static PeriodicStatusReportController CreatePeriodicStatusReportController(IAuthorizedUser authorizedUser = null)
         {
             return new PeriodicStatusReportController(Mock.Of<ICommandService>(),
-                identityManager ?? Mock.Of<IIdentityManager>(), Mock.Of<ILogger>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(), Mock.Of<ILogger>(),
                 Mock.Of<IAllUsersAndQuestionnairesFactory>(
                     _ =>
                         _.Load(Moq.It.IsAny<AllUsersAndQuestionnairesInputModel>()) ==

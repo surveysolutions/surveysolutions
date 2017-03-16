@@ -5,7 +5,7 @@
 @using WB.UI.Headquarters.Resources
 @model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 <tr id="@getInterviewItemIdWithPostfix(Model.Id, "answerRow")" class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
@@ -21,7 +21,7 @@
         </div>
     </td>
     <td class="question-answer">
-        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && identityManager.IsCurrentUserSupervisor && Model.IsEnabled)
+        @if (!Model.IsReadOnly && Model.Scope == QuestionScope.Supervisor && authorizedUser.IsSupervisor && Model.IsEnabled)
         {
             @Html.Partial("EditableSupervisorsQuestionPartialView", Model)
         }

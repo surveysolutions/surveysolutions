@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
 
             teamInterviewViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<TeamInterviewsInputModel>())).Returns(interviewSummary);
 
-            var identityManager =
-                Mock.Of<IIdentityManager>(g => g.CurrentUserId == Guid.Parse("A1111111111111111111111111111111"));
+            var authorizedUser =
+                Mock.Of<IAuthorizedUser>(g => g.Id == Guid.Parse("A1111111111111111111111111111111"));
 
             controller = CreateController(teamInterviewViewFactory: teamInterviewViewFactoryMock.Object, 
-                identityManager : identityManager);
+                authorizedUser : authorizedUser);
         };
 
         Because of = () =>

@@ -30,14 +30,14 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
         public HQController(ICommandService commandService, 
-            IIdentityManager identityManager, 
+            IAuthorizedUser authorizedUser, 
             ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireVersionProvider questionnaireVersionProvider)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;
@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.CommandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.identityManager.CurrentUserId));
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id));
             }
             catch (QuestionnaireException exception)
             {
@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult TakeNew(Guid id, long? version)
         {
             Guid key = id;
-            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, this.identityManager.CurrentUserId));
+            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, this.authorizedUser.Id));
             return this.View(model);
         }
 
@@ -163,12 +163,12 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.identityManager.IsCurrentUserSupervisor);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

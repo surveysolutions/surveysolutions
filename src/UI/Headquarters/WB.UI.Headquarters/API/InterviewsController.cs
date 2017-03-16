@@ -32,14 +32,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
 
         private readonly ICommandService commandService;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
             IInterviewDetailsViewFactory interviewDetailsViewFactory, 
             IInterviewHistoryFactory interviewHistoryViewFactory,
             ICommandService commandService,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences)
             : base(logger)
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.commandService = commandService;
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.interviewReferences = interviewReferences;
         }
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.identityManager.CurrentUserId, userInfo.PublicKey, DateTime.UtcNow));
+            return TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment, DateTime.UtcNow));
+            return TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new RejectInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment, DateTime.UtcNow));
+            return TryExecuteCommand(new RejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
+            return TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
 
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
+            return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
 
@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.identityManager.CurrentUserId, request.Comment));
+            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
         [HttpPost]
@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.identityManager.CurrentUserId));
+            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.authorizedUser.Id));
         }
 
         [HttpPost]
@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
             
-            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.identityManager.CurrentUserId, userInfo.PublicKey));
+            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey));
         }
 
         #endregion

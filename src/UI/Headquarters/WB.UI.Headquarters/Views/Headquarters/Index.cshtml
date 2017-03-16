@@ -4,7 +4,7 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Users.Headquarters;
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @section scripts
@@ -32,7 +32,7 @@
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
-            @if (identityManager.IsCurrentUserObserver)
+            @if (authorizedUser.IsObserver)
             {
                 <text>
                 var impersonateAsUser = function (key, opt) {
@@ -74,7 +74,7 @@
                         $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
                     }
                 });
-                @if (identityManager.IsCurrentUserObserver)
+                @if (authorizedUser.IsObserver)
                 {
                     <text>
                     $.contextMenu(self.contextMenuOptions);
@@ -155,7 +155,7 @@
             <div class="page-header clearfix">
                 <div>
                     <h1>@Users.Headquarters</h1>
-                    @if (identityManager.IsCurrentUserAdministrator)
+                    @if (authorizedUser.IsAdministrator)
                     {
                         <a class="btn btn-success" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">@Users.AddHeadquarters</a>
                     }

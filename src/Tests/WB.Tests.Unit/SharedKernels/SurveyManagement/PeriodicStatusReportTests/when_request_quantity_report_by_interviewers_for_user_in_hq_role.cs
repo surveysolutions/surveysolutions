@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
     {
         private Establish context = () =>
         {
-            var identityManager = Mock.Of<IIdentityManager>(x => x.IsCurrentUserHeadquarter == true);
-            periodicStatusReportController = CreatePeriodicStatusReportController(identityManager: identityManager);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
+            periodicStatusReportController = CreatePeriodicStatusReportController(authorizedUser: authorizedUser);
         };
 
         Because of = () =>

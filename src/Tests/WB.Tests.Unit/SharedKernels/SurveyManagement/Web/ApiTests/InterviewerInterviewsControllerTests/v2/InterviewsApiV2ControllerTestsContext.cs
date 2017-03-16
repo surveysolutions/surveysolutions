@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         public static InterviewsApiV2Controller CreateInterviewerInterviewsController(
             IPlainInterviewFileStorage plainInterviewFileStorage = null,
-            IIdentityManager identityManager = null,
+            IAuthorizedUser authorizedUser = null,
             IInterviewInformationFactory interviewsFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             ICommandService commandService = null,
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         {
             return new InterviewsApiV2Controller(
                 plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),
-                identityManager: identityManager ?? Mock.Of<IIdentityManager>(),
+                authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),
                 incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),

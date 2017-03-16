@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
@@ -19,36 +21,39 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class UsersApiController : BaseApiController
     {
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory usersFactory;
+        private readonly HqUserManager userManager;
 
         public UsersApiController(
             ICommandService commandService,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
-            IUserViewFactory usersFactory)
+            IUserViewFactory usersFactory,
+            HqUserManager userManager)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
+            this.userManager = userManager;
         }
 
 
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<DataTableResponse<InterviewerListItem>> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
+        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
         {
             Guid? supervisorId = null;
 
             if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
-                supervisorId = (await this.identityManager.GetUserByNameAsync(filter.SupervisorName))?.Id;
+                supervisorId = this.userManager.FindByName(filter.SupervisorName)?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
+            var currentUserRole = this.authorizedUser.Role;
             if (currentUserRole == UserRoles.Supervisor)
-                supervisorId = this.identityManager.CurrentUserId;
+                supervisorId = this.authorizedUser.Id;
 
             var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.GetSortOrder(),
                 filter.Search.Value, filter.Archived, filter.ConnectedToDevice, supervisorId);
@@ -154,7 +159,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<JsonCommandResponse> DeleteSupervisor(DeleteSupervisorCommandRequest request)
         {
-            var identityResults = await this.identityManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
+            var identityResults = await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
 
             return new JsonCommandResponse
             {
@@ -167,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
-            var archiveResults = await this.identityManager.ArchiveUsersAsync(request.UserIds, request.Archive);
+            var archiveResults = await this.userManager.ArchiveUsersAsync(request.UserIds, request.Archive);
 
             return new JsonBundleCommandResponse
             {
