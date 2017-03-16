@@ -445,9 +445,12 @@
     <Compile Include="Services\IFileNameService.cs" />
     <Compile Include="Services\IAuthorizedUser.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
+    <Compile Include="Services\IInterviewUniqueKeyGenerator.cs" />
+    <Compile Include="Services\Internal\InterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
+    <Compile Include="Services\IRandomValuesSource.cs" />
     <Compile Include="Services\IRosterStructureService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
@@ -462,6 +465,7 @@
     <Compile Include="Services\QuestionnaireAssemblyAccessor.cs" />
     <Compile Include="Services\QuestionnaireImportResult.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
+    <Compile Include="Services\Internal\RandomValuesSource.cs" />
     <Compile Include="Services\WebInterview\IWebInterviewNotificationService.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\SyncPackagesProcessorBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />

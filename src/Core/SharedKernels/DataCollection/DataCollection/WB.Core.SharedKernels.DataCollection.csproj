@@ -87,6 +87,7 @@
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedLinkedToListOptions.cs" />
     <Compile Include="Events\Interview\InterviewAnswersFromSyncPackageRestored.cs" />
+    <Compile Include="Events\Interview\InterviewKeyAssigned.cs" />
     <Compile Include="Events\Interview\LinkedToListOptionsChanged.cs" />
     <Compile Include="Events\Interview\TranslationSwitched.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />
@@ -311,6 +312,7 @@
     <Compile Include="Utils\RosterInstanceExtensions.cs" />
     <Compile Include="Utils\RosterVectorAsCoordinatesComparer.cs" />
     <Compile Include="Utils\RosterVectorConvertor.cs" />
+    <Compile Include="ValueObjects\Interview\InterviewKey.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Interview\QuestionState.cs" />
