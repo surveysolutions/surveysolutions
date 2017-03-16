@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IMapReport>().To<MapReport>();
 
             this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
-            this.Bind<IRandomValuesSource>().To<RandomValuesSource>();
+            this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
 
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();

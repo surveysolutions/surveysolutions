@@ -63,13 +63,16 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 .ToDictionary(a => a.Key, a => a.Value);
 
             Guid interviewId = Guid.NewGuid();
+            var interviewKey = ServiceLocator.Current.GetInstance<IInterviewUniqueKeyGenerator>().Get();
 
             var resultCommand = new CreateInterviewCommand(interviewId,
                                                            authorizedUser.Id,
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,
-                                                           command.SupervisorId, command.QuestionnaireVersion);
+                                                           command.SupervisorId, 
+                                                           command.QuestionnaireVersion,
+                                                           interviewKey);
             return resultCommand;
         }
 

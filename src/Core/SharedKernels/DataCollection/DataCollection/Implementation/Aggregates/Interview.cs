@@ -1281,13 +1281,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewerAssigned(command.UserId, command.InterviewerId.Value, command.AnswersTime));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
+
+            AssignInterviewKey(command.InterviewKey);
         }
 
-        public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
-            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+        public void CreateInterview(Guid questionnaireId, 
+            long questionnaireVersion, 
+            Guid supervisorId,
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, 
+            DateTime answersTime, 
+            Guid userId)
         {
             this.CreateInterview(new CreateInterviewCommand(this.EventSourceId, userId, questionnaireId, 
-                answersToFeaturedQuestions, answersTime, supervisorId, questionnaireVersion));
+                answersToFeaturedQuestions, answersTime, supervisorId, questionnaireVersion, null));
         }
 
         public void CreateInterview(CreateInterviewCommand command)
@@ -1323,6 +1329,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.AssignInterviewKey(command.InterviewKey);
+        }
+
+        private void AssignInterviewKey(InterviewKey key)
+        {
+            if (this.interviewKey == null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(key));
+            }
         }
 
         //todo should respect changes calculated in ExpressionState
@@ -1661,11 +1676,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(synchronizedEvent);
             }
 
-            if (this.interviewKey == null)
-            {
-                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
-            }
-
+            this.AssignInterviewKey(command.InterviewKey);
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 
