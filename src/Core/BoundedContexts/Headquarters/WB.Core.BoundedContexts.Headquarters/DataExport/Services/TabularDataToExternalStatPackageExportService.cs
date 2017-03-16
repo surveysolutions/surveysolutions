@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -52,8 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.dataQueryFactory = dataQueryFactory;
         }
 
-        private static string StataFileNameExtension => ".dta";
-        private static string SpssFileNameExtension => ".sav";
+        private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
+        private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, 
             long questionnaireVersion,

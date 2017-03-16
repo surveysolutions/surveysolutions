@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var records = new List<string[]>();
             try
             {
-                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(data, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(data, ExportFileSettings.DataFileSeparator.ToString());
                 records = recordsAccessor.Records.ToList();
             }
             catch (Exception e)

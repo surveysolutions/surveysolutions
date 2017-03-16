@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         private const string FolderName = "PreLoadedData";
         private const string UnzippedFoldername = "Unzipped";
         private readonly string path;
-        private readonly string[] permittedFileExtensions = { ExportFileSettings.ExtensionOfExportedDataFile, ".txt" };
+        private readonly string[] permittedFileExtensions = { ExportFileSettings.DataFileExtension, ".txt" };
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FilebasedPreloadedDataRepository>();
 
         public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory)
@@ -245,7 +245,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             {
                 using (var fileStream = this.fileSystemAccessor.ReadFile(fileInDirectory))
                 {
-                    var recordAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(fileStream, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                    var recordAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(fileStream, ExportFileSettings.DataFileSeparator.ToString());
 
                     foreach (var record in recordAccessor.Records.ToList())
                     {
