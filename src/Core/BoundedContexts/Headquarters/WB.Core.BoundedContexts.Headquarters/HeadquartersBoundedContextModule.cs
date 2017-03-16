@@ -347,6 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IRosterStructureService>().To<RosterStructureService>();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
+            this.Bind<DesignerUserCredentials>().ToSelf();
 
             this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();

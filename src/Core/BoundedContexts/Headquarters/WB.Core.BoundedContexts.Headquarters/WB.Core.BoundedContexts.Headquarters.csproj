@@ -321,6 +321,7 @@
     <Compile Include="Implementation\Services\AssemblyService.cs" />
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
+    <Compile Include="Implementation\Services\DesignerUserCredentials.cs" />
     <Compile Include="Implementation\Services\FileNameService.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />

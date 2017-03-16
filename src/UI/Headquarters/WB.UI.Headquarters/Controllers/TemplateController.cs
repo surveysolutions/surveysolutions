@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -23,18 +24,21 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IIdentityManager identityManager;
         private readonly IRestService designerQuestionnaireApiRestService;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-        private IQuestionnaireImportService importService;
+        private readonly IQuestionnaireImportService importService;
+        private readonly DesignerUserCredentials designerUserCredentials;
 
-        public TemplateController(ICommandService commandService, IIdentityManager identityManager, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService)
+        public TemplateController(ICommandService commandService, ILogger logger,
+            IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService,
+            DesignerUserCredentials designerUserCredentials)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.importService = importService;
+            this.designerUserCredentials = designerUserCredentials;
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -44,28 +48,20 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-
-        private RestCredentials designerUserCredentials
-        {
-            get { return (RestCredentials)this.Session[this.identityManager.CurrentUserName]; }
-
-            set { this.Session[this.identityManager.CurrentUserName] = value; }
-        }
-
         public ActionResult Import()
         {
-            if (this.designerUserCredentials == null)
+            if (this.designerUserCredentials.Get() == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            return this.View(new ImportQuestionnaireListModel { DesignerUserName = this.designerUserCredentials.Login });
+            return this.View(new ImportQuestionnaireListModel { DesignerUserName = this.designerUserCredentials.Get().Login });
         }
 
       
         public async Task<ActionResult> ImportMode(Guid id)
         {
-            if (this.designerUserCredentials == null)
+            if (this.designerUserCredentials.Get() == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
@@ -79,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         public async Task<ActionResult> ImportMode(Guid id, string name, string importMode)
         {
-            if (this.designerUserCredentials == null)
+            if (this.designerUserCredentials.Get() == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
@@ -102,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var questionnaireInfo = await this.designerQuestionnaireApiRestService
                     .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
-                        credentials: this.designerUserCredentials);
+                        credentials: this.designerUserCredentials.Get());
 
                 model.QuestionnaireInfo = questionnaireInfo;
                 model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
@@ -128,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LogoutFromDesigner()
         {
-            this.designerUserCredentials = null;
+            this.designerUserCredentials.Set(null);
             return this.RedirectToAction("LoginToDesigner");
         }
 
@@ -148,7 +144,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login", credentials: designerUserCredentials);
 
-                this.designerUserCredentials = designerUserCredentials;
+                this.designerUserCredentials.Set(designerUserCredentials);
 
                 return this.RedirectToAction("Import");
             }

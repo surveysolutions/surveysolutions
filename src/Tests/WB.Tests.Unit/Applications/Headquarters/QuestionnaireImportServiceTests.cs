@@ -155,11 +155,19 @@ namespace WB.Tests.Unit.Applications.Headquarters
       ISupportedVersionProvider supportedVersionProvider = null,
       IAttachmentContentService attachmentContentService = null,
       IPlainStorageAccessor<TranslationInstance> translationInstances = null,
-      IQuestionnaireVersionProvider questionnaireVersionProvider = null
-      )
+      IQuestionnaireVersionProvider questionnaireVersionProvider = null,
+      DesignerUserCredentials designerUserCredentials = null)
         {
             var service = restService ?? Mock.Of<IRestService>();
             var globalInfoProvider = identityManager ?? new Mock<IIdentityManager> { DefaultValue = DefaultValue.Mock }.Object;
+
+            if (designerUserCredentials == null)
+            {
+                var mockOfUserCredentials = new Mock<DesignerUserCredentials>();
+                mockOfUserCredentials.Setup(x => x.Get()).Returns(new RestCredentials());
+                designerUserCredentials = mockOfUserCredentials.Object;
+            }
+
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 service,
@@ -169,8 +177,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ITranslationManagementService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
-                globalInfoProvider
-            );
+                globalInfoProvider,
+                designerUserCredentials);
             return questionnaireImportService;
         }
     }
