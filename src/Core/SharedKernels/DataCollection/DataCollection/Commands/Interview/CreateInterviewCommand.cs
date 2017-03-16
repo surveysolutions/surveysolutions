@@ -14,7 +14,13 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public Dictionary<Guid, AbstractAnswer> AnswersToFeaturedQuestions { get; private set; }
         public DateTime AnswersTime { get; private set; }
 
-        public CreateInterviewCommand(Guid interviewId, Guid userId, Guid questionnaireId, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid supervisorId, long questionnaireVersion)
+        public CreateInterviewCommand(Guid interviewId,
+            Guid userId,
+            Guid questionnaireId,
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions,
+            DateTime answersTime,
+            Guid supervisorId,
+            long questionnaireVersion)
             : base(interviewId, userId)
         {
             this.QuestionnaireVersion = questionnaireVersion;

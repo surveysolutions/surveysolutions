@@ -1286,15 +1286,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            this.CreateInterview(new CreateInterviewCommand(this.EventSourceId, userId, questionnaireId, 
+                answersToFeaturedQuestions, answersTime, supervisorId, questionnaireVersion));
+        }
+
+        public void CreateInterview(CreateInterviewCommand command)
+        {
+            var userId = command.UserId;
+
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
-            this.ValidatePrefilledAnswers(this.Tree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
+            this.ValidatePrefilledAnswers(this.Tree, questionnaire, command.AnswersToFeaturedQuestions, RosterVector.Empty);
 
-            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
+            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = command.AnswersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
             {
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
@@ -1308,12 +1316,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
@@ -1653,7 +1661,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(synchronizedEvent);
             }
 
-            if (this.interviewKey != null)
+            if (this.interviewKey == null)
             {
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
             }
