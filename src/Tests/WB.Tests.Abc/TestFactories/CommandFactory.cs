@@ -164,7 +164,7 @@ namespace WB.Tests.Abc.TestFactories
                 Guid.NewGuid());
 
         public CreateInterviewCommand CreateInterviewCommand()
-            => new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now, Guid.NewGuid(), 1);
+            => new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now, Guid.NewGuid(), 1, Create.Entity.InterviewKey());
 
         public CreateInterviewControllerCommand CreateInterviewControllerCommand()
             => new CreateInterviewControllerCommand
@@ -225,7 +225,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(PreloadedLevelDto[] data = null)
         {
-            return new CreateInterviewWithPreloadedData(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null);
+            return new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
+                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null, null);
         }
 
         public SynchronizeInterviewCommand Synchronize(Guid userId, InterviewSynchronizationDto synchronizationDto)

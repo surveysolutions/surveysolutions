@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -60,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter filter, Identity currentGroupIdentity)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-            var interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
+            InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
             var interviewData = this.interviewDataRepository.GetById(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interviewSummary.QuestionnaireId,
                 interviewSummary.QuestionnaireVersion);
@@ -96,7 +97,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 },
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = interviewId}),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
-                Translations = questionnaire.Translations.Select(ToTranslationView).ToReadOnlyCollection()
+                Translations = questionnaire.Translations.Select(ToTranslationView).ToReadOnlyCollection(),
+                InterviewKey = interviewSummary.Key,
+                QuestionnaireName = questionnaire.Title,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion
             };
         }
 

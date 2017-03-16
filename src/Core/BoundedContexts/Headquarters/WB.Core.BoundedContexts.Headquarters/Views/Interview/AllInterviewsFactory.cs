@@ -79,7 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer
+                    ReceivedByInterviewer = x.ReceivedByInterviewer,
+                    Key = x.Key
                 }).ToList()
             };
             return result;
@@ -160,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
             }
 
             if (input.Status.HasValue)

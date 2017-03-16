@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
 
+        public string Key { get; set; }
+
         public bool ReceivedByInterviewer { get; set; }
     }
 

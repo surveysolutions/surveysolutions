@@ -153,6 +153,9 @@
   <data name="PrefilledQuestions" xml:space="preserve">
     <value>Pre-filled Questions</value>
   </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Interview Key</value>
+  </data>
   <data name="LastUpdate" xml:space="preserve">
     <value>Last Update</value>
   </data>
