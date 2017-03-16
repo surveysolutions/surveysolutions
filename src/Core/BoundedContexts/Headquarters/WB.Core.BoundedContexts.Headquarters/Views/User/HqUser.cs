@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             userIdentity.AddClaims(new []
             {
-                new Claim("DeviceId", this.DeviceId ?? string.Empty)
+                new Claim(AuthorizedUser.DeviceClaimType, this.DeviceId ?? string.Empty)
             });
 
             return userIdentity;
