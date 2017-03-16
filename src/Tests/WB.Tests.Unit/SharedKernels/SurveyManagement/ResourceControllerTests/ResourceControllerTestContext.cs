@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
     internal class ResourceControllerTestContext
     {
         protected static ResourceController CreateController(ICommandService commandService = null,
-            IIdentityManager globalInfoProvider = null,
+            IAuthorizedUser globalInfoProvider = null,
             ILogger logger = null, IPlainInterviewFileStorage plainInterviewFileStorage = null)
         {
             return new ResourceController(

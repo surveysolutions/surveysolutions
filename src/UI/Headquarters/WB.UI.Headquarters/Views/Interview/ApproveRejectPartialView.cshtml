@@ -3,7 +3,7 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.UI.Headquarters.Resources
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewDetailsView
@@ -12,13 +12,13 @@
     InterviewStatus status = Model.Status;
     bool isNotAssignedToInterviewer = !Model.IsAssignedToInterviewer;
 
-    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
-    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
+    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
+    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
 
-    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && identityManager.IsCurrentUserSupervisor);
-    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator));
+    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
+    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
 
-    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator);
+    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
 
     bool isShowInterviewerSelectForRejectBySupervisor = isSupervisorRedjectSupport && isNotAssignedToInterviewer;
 }
@@ -38,7 +38,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-success" data-bind="click: @(identityManager.IsCurrentUserSupervisor ? "approveInterview" : "hQApproveInterview")">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                    <button class="btn btn-success" data-bind="click: @(authorizedUser.IsSupervisor ? "approveInterview" : "hQApproveInterview")">@Pages.ApproveRejectPartialView_ApproveAction</button>
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-danger" data-bind="click: @(identityManager.IsCurrentUserSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
+                    <button class="btn btn-danger" data-bind="click: @(authorizedUser.IsSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
                 </div>
             </div>
         </div>

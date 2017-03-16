@@ -26,29 +26,30 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly ICaptchaProvider captchaProvider;
         private readonly ICaptchaService captchaService;
-        private readonly HqUserManager userManager;
+        private readonly HqSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
 
         public AccountController(
             ICommandService commandService, 
             ILogger logger,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ICaptchaProvider captchaProvider, 
             ICaptchaService captchaService,
             HqUserManager userManager,
+            HqSignInManager signInManager,
             IAuthenticationManager authenticationManager)
-            : base(commandService, logger, identityManager)
+            : base(commandService, logger, authorizedUser, userManager)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
-            this.userManager = userManager;
+            this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var roleForCurrentUser = await this.identityManager.GetRoleForCurrentUserAsync();
+            var roleForCurrentUser = this.authorizedUser.Role;
 
             switch (roleForCurrentUser)
             {
@@ -97,7 +98,7 @@ namespace WB.UI.Headquarters.Controllers
                 return View(model);
             }
             
-            var signInResult = await this.identityManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
+            var signInResult = await this.signInManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
             switch (signInResult)
             {
                 case SignInStatus.Success:
@@ -126,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var currentUser = this.identityManager.CurrentUser;
+            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
             return View(new ManageAccountModel()
             {
@@ -142,13 +143,14 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Manage(ManageAccountModel model)
         {
-            model.Id = this.identityManager.CurrentUserId;
+            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
             if (!string.IsNullOrEmpty(model.Password))
             {
-                bool isPasswordValid = await this.userManager.CheckPasswordAsync(this.identityManager.CurrentUser, model.OldPassword);
+                bool isPasswordValid = await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
                 if (!isPasswordValid)
                 {
                     this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
@@ -174,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers
             if (string.IsNullOrEmpty(personName))
                 throw new HttpException(404, string.Empty);
 
-            var user = await this.identityManager.GetUserByNameAsync(personName);
+            var user = await this.userManager.FindByNameAsync(personName);
             if (user == null)
                 throw new HttpException(404, string.Empty);
 
@@ -182,9 +184,9 @@ namespace WB.UI.Headquarters.Controllers
                 throw new HttpException(404, string.Empty);
 
             //do not forget pass current user to display you are observing
-            await this.identityManager.SignInAsObserverAsync(personName);
+            await this.signInManager.SignInAsObserverAsync(personName);
 
-            return this.identityManager.IsCurrentUserHeadquarter ?
+            return this.authorizedUser.IsHeadquarter ?
                 this.RedirectToAction("SurveysAndStatuses", "HQ") :
                 this.RedirectToAction("Index", "Survey");
         }
@@ -192,15 +194,15 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
         {
-            if (!this.identityManager.IsCurrentUserObserver)
+            if (!this.authorizedUser.IsObserver)
                 throw new HttpException(404, string.Empty);
 
-            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
+            var currentUserRole = this.authorizedUser.Role;
 
             if (new[] { UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer }.Contains(currentUserRole))
                 throw new HttpException(404, string.Empty);
 
-            await this.identityManager.SignInBackFromObserverAsync();
+            await this.signInManager.SignInBackFromObserverAsync();
             return this.RedirectToAction("Index", "Headquarters");
         }
 

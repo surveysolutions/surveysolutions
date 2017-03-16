@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         protected readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -36,14 +36,14 @@ namespace WB.UI.Headquarters.API.Interviewer
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader,
             ISyncProtocolVersionProvider syncVersionProvider,
-            IIdentityManager identityManager)
+            IAuthorizedUser authorizedUser)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
             this.androidPackageReader = androidPackageReader;
             this.syncVersionProvider = syncVersionProvider;
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
         }
 
         [HttpGet]
@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             
-            return this.identityManager.CurrentUserDeviceId != deviceId
+            return this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
                 : this.Request.CreateResponse(HttpStatusCode.OK, "449634775");
         }

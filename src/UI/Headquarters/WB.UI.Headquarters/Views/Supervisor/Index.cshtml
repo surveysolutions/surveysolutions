@@ -3,10 +3,10 @@
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
-    var isAdmin = identityManager.IsCurrentUserAdministrator;
-    var isAdminOrObserver = isAdmin || identityManager.IsCurrentUserObserver;
-    var isAdminOrHeadquarters = isAdmin || identityManager.IsCurrentUserHeadquarter;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var isAdmin = authorizedUser.IsAdministrator;
+    var isAdminOrObserver = isAdmin || authorizedUser.IsObserver;
+    var isAdminOrHeadquarters = isAdmin || authorizedUser.IsHeadquarter;
 }
 
 @section scripts

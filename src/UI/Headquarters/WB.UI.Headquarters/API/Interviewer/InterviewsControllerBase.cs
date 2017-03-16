@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     public class InterviewsControllerBase : ApiController
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService interviewPackagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         public InterviewsControllerBase(
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService interviewPackagesService,
             ICommandService commandService,
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IJsonAllTypesSerializer synchronizationSerializer)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.interviewsFactory = interviewsFactory;
             this.interviewPackagesService = interviewPackagesService;
             this.commandService = commandService;
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public virtual HttpResponseMessage Get()
         {
-            var resultValue = this.interviewsFactory.GetInProgressInterviews(this.identityManager.CurrentUserId)
+            var resultValue = this.interviewsFactory.GetInProgressInterviews(this.authorizedUser.Id)
                 .Select(interview => new InterviewApiView()
                 {
                     Id = interview.Id,
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         public virtual void LogInterviewAsSuccessfullyHandled(Guid id)
         {
-            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.identityManager.CurrentUserId));
+            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
         }
         
         public virtual void PostImage(PostFileRequest request)

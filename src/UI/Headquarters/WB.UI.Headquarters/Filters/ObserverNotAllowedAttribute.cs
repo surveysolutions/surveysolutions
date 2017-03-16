@@ -8,11 +8,11 @@ namespace WB.UI.Headquarters.Filters
 {
     public class ObserverNotAllowedAttribute : ActionFilterAttribute
     {
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (this.identityManager.IsCurrentUserObserver)
+            if (this.authorizedUser.IsObserver)
                 filterContext.Result = new HttpForbiddenResult(Strings.ObserverNotAllowed);
             else
                 base.OnActionExecuting(filterContext);

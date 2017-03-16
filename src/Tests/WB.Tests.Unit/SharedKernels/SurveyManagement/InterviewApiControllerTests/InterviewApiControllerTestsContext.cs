@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
     internal class InterviewApiControllerTestsContext
     {
         protected static InterviewApiController CreateController(ICommandService commandService = null,
-            IIdentityManager identityManager = null, ILogger logger = null,
+            IAuthorizedUser authorizedUser = null, ILogger logger = null,
             IAllInterviewsFactory allInterviewsViewFactory = null,
             ITeamInterviewsFactory teamInterviewViewFactory = null,
             IChangeStatusFactory changeStatusFactory = null,
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         {
             return new InterviewApiController(
                 commandService ?? Mock.Of<ICommandService>(),
-                identityManager ?? Mock.Of<IIdentityManager>(), 
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(), 
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewFactory ?? Stub<IAllInterviewsFactory>.WithNotEmptyValues,
                 teamInterviewViewFactory ?? Stub<ITeamInterviewsFactory>.WithNotEmptyValues,

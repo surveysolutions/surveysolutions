@@ -2,14 +2,14 @@
 @using WB.Core.BoundedContexts.Headquarters.Services
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @Html.Partial("UserEditFormWithoutLock")
 <div class="form-group">
     @Html.LabelFor(x => x.IsLocked, new { @class = "col-sm-4 control-label" })
     <div class="col-sm-8">
-        @Html.CheckBoxFor(x => x.IsLocked,  (identityManager.IsCurrentUserHeadquarter || identityManager.IsCurrentUserAdministrator) ?  (object)new {} :  (object)new { @disabled = "disabled" })
+        @Html.CheckBoxFor(x => x.IsLocked,  (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator) ?  (object)new {} :  (object)new { @disabled = "disabled" })
         @Html.ValidationMessageFor(x => x.IsLocked, null, new {@class = "help-block"})
     </div>
 </div>

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
     {
         private readonly IUserPreloadingService userPreloadingService;
         private readonly ILogger logger;
-        private readonly IIdentityManager identityManager;
+        private readonly HqUserManager userManager;
 
         private IPlainTransactionManager plainTransactionManager
             => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
@@ -26,11 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public UserBatchCreator(
             IUserPreloadingService userPreloadingService,
             ILogger logger,
-            IIdentityManager identityManager)
+            HqUserManager identityManager)
         {
             this.userPreloadingService = userPreloadingService;
             this.logger = logger;
-            this.identityManager = identityManager;
+            this.userManager = identityManager;
         }
 
         public void CreateUsersFromReadyToBeCreatedQueue()
@@ -111,11 +112,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void CreateUserOrUnarchiveAndUpdate(UserPreloadingDataRecord supervisorToCreate, UserRoles role, Guid? supervisorId = null)
         {
-            var user = this.identityManager.GetUserByName(supervisorToCreate.Login);
+            var user = this.userManager.FindByName(supervisorToCreate.Login);
 
             if (user == null)
             {
-                this.identityManager.CreateUser(new HqUser
+                this.userManager.CreateUser(new HqUser
                 {
                     Id = Guid.NewGuid(),
                     UserName = supervisorToCreate.Login,
@@ -139,13 +140,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 user.PhoneNumber = supervisorToCreate.PhoneNumber;
                 user.IsArchived = false;
 
-                this.identityManager.UpdateUser(user, supervisorToCreate.Password);
+                this.userManager.UpdateUser(user, supervisorToCreate.Password);
             }
         }
 
         void CreateInterviewerOrUnarchiveAndUpdate(UserPreloadingDataRecord interviewerToCreate)
         {
-            var supervisor = this.identityManager.GetUserByName(interviewerToCreate.Supervisor);
+            var supervisor = this.userManager.FindByName(interviewerToCreate.Supervisor);
             if(supervisor == null)
                 throw new UserPreloadingException($"supervisor '{interviewerToCreate.Supervisor}' not found");
 

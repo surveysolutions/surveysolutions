@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Code
         private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
 
-        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
+        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 
         private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
             => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
@@ -54,9 +54,9 @@ namespace WB.UI.Headquarters.Code
             {
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.identityManager.CurrentUserDeviceId,
-                    InterviewerId = this.identityManager.CurrentUserId,
-                    InterviewerName = this.identityManager.CurrentUserName,
+                    DeviceId = this.authorizedUser.DeviceId,
+                    InterviewerId = this.authorizedUser.Id,
+                    InterviewerName = this.authorizedUser.UserName,
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };

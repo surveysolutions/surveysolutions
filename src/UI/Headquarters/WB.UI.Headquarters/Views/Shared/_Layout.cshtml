@@ -4,7 +4,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Extensions
 @{
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 <!DOCTYPE html>
 <html>
@@ -28,15 +28,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (identityManager.IsCurrentUserAdministrator)
+                @if (authorizedUser.IsAdministrator)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
-                else if (identityManager.IsCurrentUserHeadquarter)
+                else if (authorizedUser.IsHeadquarter)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
-                else if (identityManager.IsCurrentUserObserver)
+                else if (authorizedUser.IsObserver)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
                 }
@@ -46,15 +46,15 @@
                 }
             </div>
             <div class="collapse navbar-collapse">
-                @if (identityManager.IsCurrentUserAdministrator)
+                @if (authorizedUser.IsAdministrator)
             {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (identityManager.IsCurrentUserHeadquarter)
+                else if (authorizedUser.IsHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (identityManager.IsCurrentUserObserver)
+                else if (authorizedUser.IsObserver)
                 {
                     @Html.Partial("ObserverMainMenu")
                 }
@@ -66,7 +66,7 @@
 
         </div>
     </div>
-    @if (identityManager.IsCurrentUserObserver)
+    @if (authorizedUser.IsObserver)
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
             @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
@@ -153,7 +153,7 @@
                         "#IncomingPackagesQueueIndicator").load();
                 }
 
-                @if (identityManager.IsCurrentUserObserver)
+                @if (authorizedUser.IsObserver)
             {
                 <text>
                 $('button[type="submit"]').attr("disabled", "disabled");

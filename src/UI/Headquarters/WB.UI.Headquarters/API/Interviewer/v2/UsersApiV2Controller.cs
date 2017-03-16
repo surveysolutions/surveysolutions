@@ -14,9 +14,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class UsersApiV2Controller : UsersControllerBase
     {
         public UsersApiV2Controller(
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory) : base(
-                identityManager: identityManager,
+                authorizedUser: authorizedUser,
                 userViewFactory: userViewFactory)
         {
         }

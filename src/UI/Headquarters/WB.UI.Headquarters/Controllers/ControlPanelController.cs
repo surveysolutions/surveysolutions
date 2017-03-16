@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,22 +25,22 @@ namespace WB.UI.Headquarters.Controllers
     public class ControlPanelController : BaseController
     {
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
+        private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
-        private readonly IIdentityManager identityManager;
         private readonly ISettingsProvider settingsProvider;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
             ICommandService commandService,
-            IIdentityManager identityManager,
+            HqUserManager userManager,
             ILogger logger,
             ISettingsProvider settingsProvider,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
              : base(commandService: commandService, logger: logger)
         {
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
+            this.userManager = userManager;
             this.serviceLocator = serviceLocator;
-            this.identityManager = identityManager;
             this.settingsProvider = settingsProvider;
         }
 
@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                var creationResult = await this.identityManager.CreateUserAsync(
+                var creationResult = await this.userManager.CreateUserAsync(
                             new HqUser
                             {
                                 UserName = model.UserName,
@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                var creationResult = await this.identityManager.CreateUserAsync(
+                var creationResult = await this.userManager.CreateUserAsync(
                             new HqUser
                             {
                                 UserName = model.UserName,
@@ -132,8 +132,8 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await this.identityManager.GetUserByNameAsync(model.UserName);
-                var updateResult = await this.identityManager.UpdateUserAsync(user, model.Password);
+                var user = await this.userManager.FindByNameAsync(model.UserName);
+                var updateResult = await this.userManager.UpdateUserAsync(user, model.Password);
 
                 if (updateResult.Succeeded)
                 {

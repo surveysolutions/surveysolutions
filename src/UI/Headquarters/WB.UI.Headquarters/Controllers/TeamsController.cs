@@ -16,19 +16,19 @@ namespace WB.UI.Headquarters.Controllers
         private const string DEFAULTEMPTYQUERY = "";
         private const bool DEFAULT_SHOW_LOCKED = false;
 
-        private readonly IIdentityManager identityManager;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly ITeamViewFactory teamViewFactory;
         private readonly IUserViewFactory userViewFactory;
 
         public TeamsController(
             ICommandService commandService,
-            IIdentityManager identityManager,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             ITeamViewFactory teamViewFactory,
             IUserViewFactory userViewFactory)
             : base(commandService, logger)
         {
-            this.identityManager = identityManager;
+            this.authorizedUser = authorizedUser;
             this.teamViewFactory = teamViewFactory;
             this.userViewFactory = userViewFactory;
         }
@@ -47,13 +47,13 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Supervisor")]
         public UsersView AsigneeInterviewersBySupervisor(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query,
-                supervisorId: this.identityManager.CurrentUserId);
+                supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
-                    supervisorId: this.identityManager.CurrentUserId);
+                    supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]

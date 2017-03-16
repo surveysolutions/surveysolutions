@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IAllInterviewsFactory allInterviewsViewViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
-            IIdentityManager identityManager = null,
+            IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
         {
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                identityManager ?? Mock.Of<IIdentityManager>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 

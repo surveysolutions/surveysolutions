@@ -4,10 +4,12 @@ using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc;
+using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
@@ -27,10 +29,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 Id = userId
             };
 
-            identityManagerMock.Setup(x => x.GetUserByIdAsync(userId)).Returns(Task.FromResult(Create.Entity.HqUser()));
-            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
+            identityManagerMock.Setup(x => x.FindByIdAsync(userId)).ReturnsAsync(Create.Entity.HqUser());
+            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
-            controller = CreateApiUserController(identityManager: identityManagerMock.Object);
+            controller = CreateApiUserController(userManager: identityManagerMock.Object);
         };
 
         Because of = () => actionResult = controller.Edit(inputModel).Result;
@@ -41,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
         It should_execute_CreateUserCommand_onece = () =>
             identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>()), Times.Once);
 
-        private static Mock<IIdentityManager> identityManagerMock = new Mock<IIdentityManager>();
+        private static Mock<TestHqUserManager> identityManagerMock = new Mock<TestHqUserManager>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;

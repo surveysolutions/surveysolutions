@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Documents;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,12 +27,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ISyncProtocolVersionProvider syncVersionProvider,
             ICommandService commandService,
             IReadSideRepositoryReader<TabletDocument> devicesRepository,
-            IIdentityManager identityManager,
-            IPlainStorageAccessor<DeviceSyncInfo> deviceSyncInfoRepository) : base(
-                identityManager: identityManager,
+            IAuthorizedUser authorizedUser,
+            IPlainStorageAccessor<DeviceSyncInfo> deviceSyncInfoRepository,
+            HqUserManager userManager) : base(
+                authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
                 commandService: commandService,
-                devicesRepository: devicesRepository)
+                devicesRepository: devicesRepository,
+                userManager: userManager)
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
         }
@@ -48,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             var deviceLocation = info.DeviceLocation;
             this.deviceSyncInfoRepository.Store(new DeviceSyncInfo
             {
-                InterviewerId = this.identityManager.CurrentUserId,
+                InterviewerId = this.authorizedUser.Id,
                 DeviceId = info.DeviceId,
                 LastAppUpdatedDate = info.LastAppUpdatedDate,
                 DeviceModel = info.DeviceModel,

@@ -4,8 +4,8 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Dashboard.Questionnaires;
-    var identityManager = ServiceLocator.Current.GetInstance<IIdentityManager>();
-    var isAdmin = identityManager.IsCurrentUserAdministrator;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var isAdmin = authorizedUser.IsAdministrator;
 }
 
 @section scripts
@@ -42,7 +42,7 @@
         </div>
         <div class="well well-sm">
             <div class="btn-group">
-                @if (!(ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver))
+                @if (!(authorizedUser.IsObserver))
                 {
                     <div class="form-inline">
                         <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">

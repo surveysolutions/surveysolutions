@@ -3,7 +3,7 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    var isCurrentUserObserver = ServiceLocator.Current.GetInstance<IIdentityManager>().IsCurrentUserObserver;
+    var isCurrentUserObserver = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsObserver;
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
