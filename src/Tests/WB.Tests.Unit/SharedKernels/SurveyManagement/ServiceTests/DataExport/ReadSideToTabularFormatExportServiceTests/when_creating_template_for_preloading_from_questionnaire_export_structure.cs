@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.ReadSideToTabularFormatExportServiceTests
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 x => x.WriteData(Moq.It.IsAny<string>(), Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()))
                 .Callback<string, IEnumerable<string[]>, string>((filePath, data, delimiter) => { rows.Add(data); });
 
-            readSideToTabularFormatExportService = CreateReadSideToTabularFormatExportService(csvWriter: csvWriterMock.Object, 
+            readSideToTabularFormatExportService = Create.Service.ReadSideToTabularFormatExportService(csvWriter: csvWriterMock.Object,
                 questionnaireExportStructure: questionnaireExportStructure);
         };
 
