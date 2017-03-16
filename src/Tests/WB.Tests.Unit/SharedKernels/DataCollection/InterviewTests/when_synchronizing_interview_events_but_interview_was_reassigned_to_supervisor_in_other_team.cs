@@ -1,12 +1,11 @@
 ﻿using System;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -31,6 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(new InterviewerAssigned(interviewerId, interviewerId, DateTime.Now));
             interview.Apply(new SupervisorAssigned(supervisorId, supervisorId));
             interview.Apply(new InterviewerAssigned(supervisorId, null, DateTime.Now));
+            command = Create.Command.SynchronizeInterviewEventsCommand(
+               userId: Guid.NewGuid(),
+               questionnaireId: questionnaireId,
+               questionnaireVersion: questionnaireVersion,
+               synchronizedEvents: eventsToPublish,
+               createdOnClient: false);
         };
 
         Cleanup stuff = () =>
@@ -40,9 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>
-               interview.SynchronizeInterviewEvents(Guid.NewGuid(), questionnaireId, questionnaireVersion,
-               InterviewStatus.Completed, eventsToPublish, false));
+            exception = Catch.Only<InterviewException>(() => interview.SynchronizeInterviewEvents(command));
 
         It should_raise_InterviewException = () =>
            exception.ShouldNotBeNull();
@@ -50,16 +53,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewException_with_type_OtherUserIsResponsible = () =>
             exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.OtherUserIsResponsible);
 
-        private static EventContext eventContext;
-        private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
-        private static Guid interviewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid supervisorId  = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static long questionnaireVersion = 18;
+        static EventContext eventContext;
+        static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
+        static Guid interviewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static Guid supervisorId  = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static long questionnaireVersion = 18;
 
-        private static Interview interview;
+        static Interview interview;
 
-        private static InterviewException exception;
+        static InterviewException exception;
 
-        private static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        static SynchronizeInterviewEventsCommand command;
     }
 }

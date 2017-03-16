@@ -419,7 +419,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? teamLeadId = null,
             string responsibleName = null,
             string teamLeadName = null,
-            UserRoles role = UserRoles.Interviewer)
+            UserRoles role = UserRoles.Interviewer,
+            string key = null)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -430,7 +431,8 @@ namespace WB.Tests.Abc.TestFactories
                 ResponsibleName = string.IsNullOrWhiteSpace(responsibleName) ? responsibleId.FormatGuid() : responsibleName,
                 TeamLeadId = teamLeadId.GetValueOrDefault(),
                 TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
-                ResponsibleRole = role
+                ResponsibleRole = role,
+                Key = key
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
@@ -1460,6 +1462,11 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return hqCompanyLogo;
+        }
+
+        public InterviewKey InterviewKey(int key = 289)
+        {
+            return new InterviewKey(key);
         }
     }
 }

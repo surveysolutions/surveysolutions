@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
@@ -32,8 +31,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        Because of = () => interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
-               InterviewStatus.Completed, eventsToPublish, true);
+        Because of = () => interview.SynchronizeInterviewEvents(
+            Create.Command.SynchronizeInterviewEventsCommand(userId: userId,
+                questionnaireId: questionnaireId, 
+                questionnaireVersion: questionnaireVersion, 
+                synchronizedEvents: eventsToPublish));
 
         It should_raise_InterviewOnClientCreated_event = () =>
           eventContext.ShouldContainEvent<InterviewOnClientCreated>(@event => @event.UserId == userId);
@@ -44,13 +46,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_all_passed_events = () =>
              eventsToPublish.All(x => eventContext.Events.Any(publishedEvent => publishedEvent.Payload.Equals(x)));
 
-        private static EventContext eventContext;
-        private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
-        private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static long questionnaireVersion = 18;
+       static EventContext eventContext;
+       static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
+       static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+       static int questionnaireVersion = 18;
 
-        private static StatefulInterview interview;
+       static StatefulInterview interview;
 
-        private static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+       static readonly IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
     }
 }

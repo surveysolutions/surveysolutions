@@ -1597,6 +1597,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewKey.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
