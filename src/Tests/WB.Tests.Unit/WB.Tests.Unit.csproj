@@ -529,6 +529,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_apply_SubstitutionTitlesChanged_for_question_from_deleted_roster_instance.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_census_interview_for_the_first_time.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_interview_events_of_interview_with_key_assigned.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_VariablesChanged_event_for_deleted_variable.cs" />
