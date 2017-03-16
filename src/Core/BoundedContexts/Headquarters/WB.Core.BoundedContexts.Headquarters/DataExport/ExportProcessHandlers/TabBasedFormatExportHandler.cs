@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService = tabularFormatExportService;
         }
 
+        protected void GenerateDescriptionTxt(QuestionnaireIdentity questionnaireIdentity, string directoryPath)
+            => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath);
+
         protected string[] CreateTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
