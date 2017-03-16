@@ -76,6 +76,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly ISubstitionTextFactory substitionTextFactory;
 
+        private InterviewKey interviewKey;
+
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitionTextFactory substitionTextFactory)
@@ -86,6 +88,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         #region Apply (state restore) methods
+
+        public virtual void Apply(InterviewKeyAssigned @event)
+        {
+            this.interviewKey = @event.Key;
+        }
 
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
@@ -1619,32 +1626,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
         }
 
-        public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
+        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
-            bool isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
+            bool isInterviewNeedToBeCreated = command.CreatedOnClient && this.Version == 0;
 
             if (isInterviewNeedToBeCreated)
             {
-                this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
+                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion));
             }
             else
             {
-                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
+                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
 
                 if (this.properties.Status == InterviewStatus.Deleted)
-                    this.Restore(userId);
+                    this.Restore(command.UserId);
                 else
-                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
             }
 
-            foreach (IEvent synchronizedEvent in synchronizedEvents)
+            foreach (IEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 this.ApplyEvent(synchronizedEvent);
+            }
+
+            if (this.interviewKey != null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
             }
 
             this.ApplyEvent(new InterviewReceivedBySupervisor());

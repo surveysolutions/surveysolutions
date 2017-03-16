@@ -187,10 +187,27 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireContentVersion,
                 2);
         
-        public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
-            => new SynchronizeInterviewEventsCommand(
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new IEvent[0], InterviewStatus.Completed, true);
-        
+        public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand(
+            Guid? interviewId = null,
+            Guid? userId = null,
+            Guid? questionnaireId = null,
+            long? questionnaireVersion = null,
+            IEvent[] synchronizedEvents = null,
+            InterviewStatus interviewStatus = InterviewStatus.Completed,
+            bool createdOnClient = true,
+            InterviewKey interviewKey = null
+            )
+        {
+            return new SynchronizeInterviewEventsCommand(interviewId ?? Guid.NewGuid(), 
+                userId ?? Guid.NewGuid(), 
+                questionnaireId ?? Guid.NewGuid(), 
+                questionnaireVersion ?? 15,
+                synchronizedEvents ?? new IEvent[0], 
+                interviewStatus, 
+                createdOnClient,
+                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()));
+        }
+
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
             return new DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);

@@ -8,7 +8,9 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
+using NHibernate.Util;
 using NSubstitute;
+using System.Linq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -347,6 +349,14 @@ namespace WB.Tests.Abc.TestFactories
                 { "CountOfFailedLoginAttemptsBeforeCaptcha", (failedLoginsCount ?? 5).ToString() },
                 { "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", (timeSpanForLogins ?? 5).ToString() },
             }));
+        }
+
+        public IRandomValuesSource RandomValuesSource(params int[] sequence)
+        {
+            var result = Substitute.For<IRandomValuesSource>();
+            if (sequence?.Length > 0) result.Next(0).ReturnsForAnyArgs(sequence.First(), sequence.Skip(1).ToArray());
+            else result.Next(0).ReturnsForAnyArgs(1, 2, 3, 4, 5, 7, 8, 9, 10);
+            return result;
         }
 
         public ReadSideToTabularFormatExportService ReadSideToTabularFormatExportService(

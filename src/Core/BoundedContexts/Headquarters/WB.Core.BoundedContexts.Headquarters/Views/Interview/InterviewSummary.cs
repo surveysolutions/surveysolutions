@@ -43,6 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 base.InterviewId = value;
             }
         }
+
+        public string Key { get; set; }
         
         public virtual string SummaryId { get; set; }
         public virtual string QuestionnaireTitle { get; set; }
@@ -80,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override int GetHashCode()
         {
-            return (this.SummaryId != null ? this.SummaryId.GetHashCode() : 0);
+            return SummaryId?.GetHashCode() ?? 0;
         }
     }
 }

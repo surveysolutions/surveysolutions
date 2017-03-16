@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ICommandService commandService;
+        private readonly IInterviewUniqueKeyGenerator uniqueKeyGenerator;
         private readonly SyncSettings syncSettings;
 
         public InterviewPackagesService(
@@ -29,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             ILogger logger, 
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
+            IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings)
         {
             this.interviewPackageStorage = interviewPackageStorage;
@@ -36,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.logger = logger;
             this.serializer = serializer;
             this.commandService = commandService;
+            this.uniqueKeyGenerator = uniqueKeyGenerator;
             this.syncSettings = syncSettings;
         }
 
@@ -165,6 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     questionnaireVersion: interview.QuestionnaireVersion,
                     interviewStatus: interview.InterviewStatus,
                     createdOnClient: interview.IsCensusInterview,
+                    interviewKey: this.uniqueKeyGenerator.Get(),
                     synchronizedEvents: serializedEvents), this.syncSettings.Origin);
             }
             catch (Exception exception)
