@@ -7,10 +7,14 @@
 
 @section scripts
 {
+    @Scripts.Render("~/js/common")
+
     <script type="text/javascript">
         'use strict';
 
         $(function () {
+            var notifier = new Notifier();
+
             var questionnaireListUrl = "@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })";
             var questionnaireImportModeUrl = "@Url.Action("ImportMode", "Template")";
 
@@ -38,6 +42,8 @@
                 .on('xhr.dt', function (e, settings, json, xhr) {
                     if (xhr.status === 401)
                         location.reload();
+                    else if (xhr.status !== 200)
+                        notifier.showError("Operation failed", "Error occurred please try again later.");
                 })
                 .DataTable({
                     processing: true,
