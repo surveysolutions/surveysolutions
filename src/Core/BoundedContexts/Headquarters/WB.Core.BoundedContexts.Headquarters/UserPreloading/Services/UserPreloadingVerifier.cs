@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     UserId = x.Id,
                     UserName = x.UserName,
                     IsArchived = x.IsArchived,
-                    SupervisorId = x.SupervisorId,
+                    SupervisorId = x.Profile.SupervisorId,
                     IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
                     IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
                 }).ToArray();

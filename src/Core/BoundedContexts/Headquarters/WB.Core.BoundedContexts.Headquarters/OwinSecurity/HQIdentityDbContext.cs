@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             modelBuilder.Entity<HqUserRole>().ToTable("userroles", OwinSecurity.Configuration.SchemaName);
             modelBuilder.Entity<HqUserLogin>().ToTable("userlogins", OwinSecurity.Configuration.SchemaName);
             modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", OwinSecurity.Configuration.SchemaName);
         }
 
         public static HQIdentityDbContext Create() => new HQIdentityDbContext();

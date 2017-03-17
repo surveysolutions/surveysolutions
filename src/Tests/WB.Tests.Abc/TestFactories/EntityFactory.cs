@@ -1111,9 +1111,12 @@ namespace WB.Tests.Abc.TestFactories
                 IsArchived = isArchived ?? false,
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
-                SupervisorId = supervisorId,
-                PasswordHash = passwordHash,
-                DeviceId = deviceId
+                Profile = new HqUserProfile
+                {
+                    SupervisorId = supervisorId,
+                    DeviceId = deviceId
+                },
+                PasswordHash = passwordHash
             };
             user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
