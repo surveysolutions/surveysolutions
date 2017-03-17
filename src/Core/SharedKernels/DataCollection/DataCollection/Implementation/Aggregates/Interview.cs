@@ -1334,7 +1334,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void AssignInterviewKey(InterviewKey key)
         {
-            if (this.interviewKey == null && key != null && this.interviewKey != key)
+            if (key != null && !key.Equals(this.interviewKey))
             {
                 this.ApplyEvent(new InterviewKeyAssigned(key));
             }
