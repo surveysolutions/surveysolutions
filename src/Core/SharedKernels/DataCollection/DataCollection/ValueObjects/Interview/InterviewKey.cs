@@ -6,9 +6,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
     {
         public int RawValue { get; }
 
-        public InterviewKey(int rawValueValue)
+        public InterviewKey(int rawValue)
         {
-            this.RawValue = rawValueValue;
+            this.RawValue = rawValue;
         }
 
         public override string ToString()
