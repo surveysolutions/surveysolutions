@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             synchronizationServiceMock
                 .Setup(x => x.LoginAsync(
                     Moq.It.IsAny<LogonInfo>(),
-                    Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken>()))
+                    Moq.It.IsAny<RestCredentials>(), null))
                 .Returns(Task.FromResult("new token"));
 
             synchronizationServiceMock

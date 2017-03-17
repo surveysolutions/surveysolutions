@@ -1103,7 +1103,8 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public HqUser HqUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
-            string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer, string deviceId = null, string passwordHash = null)
+            string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
+            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null)
         {
             var user = new HqUser
             {
@@ -1116,7 +1117,8 @@ namespace WB.Tests.Abc.TestFactories
                     SupervisorId = supervisorId,
                     DeviceId = deviceId
                 },
-                PasswordHash = passwordHash
+                PasswordHash = passwordHash,
+                PasswordHashSha1 = passwordHashSha1
             };
             user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
