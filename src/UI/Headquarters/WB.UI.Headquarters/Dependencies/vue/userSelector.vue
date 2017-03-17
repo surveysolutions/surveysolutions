@@ -29,7 +29,7 @@
 <script>
     module.exports = {
         name: 'user-selector',
-        props: ['fetchUrl', 'controlId', 'value', 'placeholder'],
+        props: ['fetchUrl', 'controlId', 'value', 'placeholder', 'ajaxParams'],
         data: function () {
             return {
                 options: [],
@@ -71,9 +71,9 @@
                 }
             },
             fetchOptions: function (filter = "") {
-                console.log(`filter: {filter}`);
                 this.isLoading = true;
-                this.$http.get(this.fetchUrl, {params: { query: filter }})
+                var requestParams = Object.assign({ query: filter }, this.ajaxParams);
+                this.$http.get(this.fetchUrl, {params: requestParams})
                     .then(response => {
                         this.options = response.body.options || [];
                         this.isLoading = false;

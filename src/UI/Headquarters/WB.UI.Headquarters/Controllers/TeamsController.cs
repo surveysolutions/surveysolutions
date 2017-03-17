@@ -62,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize]
         [CamelCase]
         public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {

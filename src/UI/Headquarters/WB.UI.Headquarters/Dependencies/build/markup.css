@@ -8042,7 +8042,7 @@ span.image-zoom-box, span.image-option {
         margin-bottom: 0; } }
 
 .filters {
-  transition: width 0.3s linear 0s; }
+  transition: width 0.5s linear 0s; }
 
 .filters {
   width: 360px;
@@ -8838,15 +8838,25 @@ table tr th .census-icon, table tr td .census-icon {
   color: #fff; }
 
 .census-icon {
-  text-transform: capitalize;
   display: inline-block;
-  padding: 3px 5px 3px 4px;
+  width: 20px;
+  height: 20px;
   border-radius: 100%;
   background-color: #2a81cb;
-  color: #fff !important;
-  font: 13px/13px Arial, sans-serif;
-  font-style: italic;
-  font-weight: bold; }
+  position: relative;
+  bottom: -2px; }
+  .census-icon:after {
+    content: "C";
+    display: block;
+    font: 12px/12px Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    color: #fff !important; }
   .census-icon:hover, .census-icon:focus, .census-icon:active {
     color: #fff !important; }
 
@@ -9116,6 +9126,9 @@ table tr th .census-icon, table tr td .census-icon {
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
   display: flex; }
+
+.form-inside {
+  min-height: 500px; }
 
 .two-columns-form {
   width: 810px;
@@ -9425,6 +9438,9 @@ main .flex-row {
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
   display: flex; }
+
+.form-inside {
+  min-height: 500px; }
 
 .two-columns-form {
   width: 810px;
@@ -11803,6 +11819,11 @@ main .before-search {
   .error-wrapper p {
     font-size: 14px;
     line-height: 16px; }
+
+header > .red-line {
+  position: absolute;
+  top: 0;
+  right: 0; }
 
 .red-line {
   width: 100%;
