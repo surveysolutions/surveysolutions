@@ -11,9 +11,9 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.0.0.0</SurveySolutionsVersion>
-	<HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
-	<HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>	
-	<Name>SurveySolutions</Name>
+    <HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
+    <HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>
+    <Name>SurveySolutions</Name>
     <EnableProjectHarvesting>True</EnableProjectHarvesting>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -45,7 +45,6 @@
   <ItemGroup>
     <Content Include="Configuration.wxi" />
     <Content Include="Headquarters.Web.config" />
-    <Content Include="license.rtf" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -79,7 +78,6 @@
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
     <Error Text="The WiX Toolset build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
-
   <Target Name="BeforeBuild">
     <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLSITEFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" />
   </Target>
