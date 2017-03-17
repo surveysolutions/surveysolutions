@@ -301,15 +301,23 @@ table{
 	color: #fff;
 }
 .census-icon{
-	text-transform: capitalize;
 	display: inline-block;
-    padding: 3px 5px 3px 4px;
+    @include square(20px);
     border-radius: 100%;
     background-color: $blue;
-    color: #fff !important;
-    font: 13px/13px Arial, sans-serif;
-    font-style: italic;
-    font-weight: bold;
+	position: relative;
+	bottom: -2px;
+	&:after{
+		content: "C";
+		display: block;
+		font: 12px/12px Arial, sans-serif;
+		font-style: italic;
+    	font-weight: bold;
+		width: 100%;
+		text-align: center;
+		@include absolute(4px, 0);
+		color: #fff !important;
+	}
 	&:hover, &:focus, &:active{
     	color: #fff !important;		
 	}
