@@ -16,11 +16,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         private readonly HqUserManager userManager;
 
         public UsersApiV2Controller(
-            IAuthorizedUser authorizedUser,
+            IAuthorizedUser authorizedUser, HqUserManager userManager,
             IUserViewFactory userViewFactory) : base(
                 authorizedUser: authorizedUser,
             userViewFactory: userViewFactory)
         {
+            
             this.userManager = userManager;
         }
 
@@ -39,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
             if (await this.userManager.CheckPasswordAsync(hqUser, userLogin.Password).ConfigureAwait(false))
             {
-                return await this.identityManager.GenerateInterviewerTokenAsync(userLogin.Username).ConfigureAwait(false);
+                return await this.userManager.GenerateApiAuthTokenAsync(hqUser.Id).ConfigureAwait(false);
             }
 
             return null;

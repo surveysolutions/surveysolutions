@@ -14,8 +14,9 @@ namespace WB.Tests.Abc.TestFactories
 {
     public class TestHqUserManager : HqUserManager
     {
-        public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IAuthorizedUser>()) { }
+        public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IAuthorizedUser>(), Mock.Of<IHashCompatibilityProvider>()) { }
     }
+
     public class StorageFactory
     {
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
@@ -26,7 +27,7 @@ namespace WB.Tests.Abc.TestFactories
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
 
-        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null, IAuthorizedUser authorizedUser = null)
-            => new HqUserManager(userStore, authorizedUser);
+        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null, IAuthorizedUser authorizedUser = null, IHashCompatibilityProvider hashCompatibilityProvider = null)
+            => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(), authorizedUser, hashCompatibilityProvider);
     }
 }

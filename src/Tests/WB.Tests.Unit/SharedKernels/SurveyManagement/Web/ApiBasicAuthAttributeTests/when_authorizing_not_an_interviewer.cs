@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Code;
@@ -28,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
         };
 
-        Because of = () => attribute.OnAuthorization(actionContext);
+        Because of = () => attribute.OnAuthorizationAsync(actionContext, CancellationToken.None).WaitAndUnwrapException();
 
         It should_be_unauthorized_response_status_code = () =>
             actionContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);

@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
+using Nito.AsyncEx.Synchronous;
 using WB.UI.Headquarters.Code;
 using It = Machine.Specifications.It;
 
@@ -17,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "aaaaaaaa");
         };
 
-        Because of = () => attribute.OnAuthorization(actionContext);
+        Because of = () => attribute.OnAuthorizationAsync(actionContext, CancellationToken.None).WaitAndUnwrapException();
 
         It should_response_not_be_null = () =>
             actionContext.Response.ShouldNotBeNull();
