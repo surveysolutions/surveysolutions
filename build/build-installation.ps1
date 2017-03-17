@@ -29,8 +29,10 @@ if (!(Test-Path $HQsitePath)) {
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 
+	$file = (Get-ChildItem -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "WB.UI.Headquarters.dll"})
+	$version = [System.Reflection.Assembly]::ReflectionOnlyLoadFrom($file).ImageRuntimeVersion;
 
-    & (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" | Write-Host
+    & (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" "/p:SurveySolutionsVersion=$version" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
