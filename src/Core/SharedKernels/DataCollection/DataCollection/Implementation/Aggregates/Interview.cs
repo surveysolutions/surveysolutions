@@ -1282,7 +1282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
 
-            AssignInterviewKey(command.InterviewKey);
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
         public void CreateInterview(Guid questionnaireId, 
@@ -1329,10 +1329,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-            this.AssignInterviewKey(command.InterviewKey);
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
-        private void AssignInterviewKey(InterviewKey key)
+        private void ApplyInterviewKey(InterviewKey key)
         {
             if (this.interviewKey == null && key != null)
             {
@@ -1676,7 +1676,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(synchronizedEvent);
             }
 
-            this.AssignInterviewKey(command.InterviewKey);
+            this.ApplyInterviewKey(command.InterviewKey);
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 
