@@ -41,6 +41,8 @@
                 .on('xhr.dt', function (e, settings, json, xhr) {
                     if (xhr.status === 401)
                         location.reload();
+                    else if (xhr.status !== 200)
+                        notifier.showError("Operation failed", "Error occurred please try again later.");
                 })
                 .DataTable({
                     processing: true,
