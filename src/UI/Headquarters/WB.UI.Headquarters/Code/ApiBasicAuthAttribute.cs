@@ -86,12 +86,7 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMessageThatUserIsLockedOut(actionContext);
                 return;
             }
-
-            {
-                this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                return;
-            }
-
+            
             if (!this.roles.Contains(userInfo.Roles.First().Role))
             {
                 this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
