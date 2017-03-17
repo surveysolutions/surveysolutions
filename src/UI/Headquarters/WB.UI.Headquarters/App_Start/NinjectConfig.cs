@@ -237,16 +237,7 @@ namespace WB.UI.Headquarters.Injections
             ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
-
-            var memebershipConfigSection =
-                (MembershipConfigSection)WebConfigurationManager.GetSection(@"memebership");
-            kernel.Bind<IPasswordPolicy>().ToMethod(_ => new PasswordPolicy
-            {
-                MinRequiredNonAlphanumericCharacters = memebershipConfigSection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
-                PasswordMinimumLength = memebershipConfigSection.PasswordPolicy.PasswordMinimumLength,
-                PasswordStrengthRegularExpression = memebershipConfigSection.PasswordPolicy.PasswordStrengthRegularExpression
-            }).InSingletonScope();
-
+            
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
             kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>()

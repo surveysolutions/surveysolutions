@@ -55,6 +55,12 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
+            if (userInfo.IsLockedBySupervisor || userInfo.IsLockedByHeadquaters)
+            {
+                this.RespondWithMessageThatUserIsLockedOut(actionContext);
+                return;
+            }
+
             if ((this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)) ||
                 (!this.TreatPasswordAsPlain && (userInfo.PasswordHash != basicCredentials.Password)))
             {
@@ -129,5 +135,7 @@ namespace WB.UI.Headquarters.Code
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = TabletSyncMessages.InvalidUserRole };
         }
 
+        private void RespondWithMessageThatUserIsLockedOut(HttpActionContext actionContext)
+            => actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) {ReasonPhrase = @"lock"};
     }
 }
