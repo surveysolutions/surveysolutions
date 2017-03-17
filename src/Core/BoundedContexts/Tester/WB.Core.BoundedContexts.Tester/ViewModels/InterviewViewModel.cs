@@ -87,8 +87,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var interview = this.interviewRepository.Get(this.interviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
-                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
+                bool succeeded = await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
                     questionnaireId, this.QuestionnaireTitle, new Progress<string>(), CancellationToken.None);
+
+                if (!succeeded) return;
 
                 this.Dispose();
             }
