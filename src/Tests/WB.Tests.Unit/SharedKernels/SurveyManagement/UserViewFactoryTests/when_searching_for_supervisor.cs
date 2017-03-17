@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 
         It should_use_case_insensative_search = () => searchResult.Items.Count().ShouldEqual(1);
 
-        static IUserViewFactory supervisorsViewFactory;
+        static UserViewFactory supervisorsViewFactory;
         static SupervisorsView searchResult;
     }
 }

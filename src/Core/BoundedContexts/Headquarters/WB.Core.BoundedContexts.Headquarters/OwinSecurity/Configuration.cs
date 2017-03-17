@@ -1,4 +1,5 @@
 using System;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -22,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 (connection, defaultSchema) => new SchemaBasedHistoryContext(connection, defaultSchema, SchemaName));
         }
 
+        public DbSet<HqUserProfile> UserProfiles { get; set; }
+
         protected override void Seed(HQIdentityDbContext context)
         {
             //  This method will be called after migrating to the latest version.
@@ -36,34 +40,42 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     Name = Enum.GetName(typeof(UserRoles), userRole)
                 });
             }
+            var transactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
-            foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users=>users.ToList()))
+            transactionManager.ExecuteInPlainTransaction(() =>
             {
-                context.Users.AddOrUpdate(new HqUser
+                foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users => users.ToList()))
                 {
-                    Id = oldUser.PublicKey,
-                    CreationDate = oldUser.CreationDate,
-                    DeviceId = oldUser.DeviceId,
-                    Email = oldUser.Email,
-                    IsArchived = oldUser.IsArchived,
-                    IsLockedByHeadquaters = oldUser.IsLockedByHQ,
-                    IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
-                    FullName = oldUser.PersonName,
-                    PhoneNumber = oldUser.PhoneNumber,
-                    SupervisorId = oldUser.Supervisor?.Id,
-                    UserName = oldUser.UserName,
-                    PasswordHash = oldUser.Password,
-                    SecurityStamp = Guid.NewGuid().FormatGuid(),
-                    Roles =
+                    context.Users.AddOrUpdate(new HqUser
                     {
-                        new HqUserRole
+                        Id = oldUser.PublicKey,
+                        CreationDate = oldUser.CreationDate,
+                        Email = oldUser.Email,
+                        IsArchived = oldUser.IsArchived,
+                        IsLockedByHeadquaters = oldUser.IsLockedByHQ,
+                        IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
+                        FullName = oldUser.PersonName,
+                        PhoneNumber = oldUser.PhoneNumber,
+                        UserName = oldUser.UserName,
+                        PasswordHash = oldUser.Password,
+                        SecurityStamp = Guid.NewGuid().FormatGuid(),
+                        Profile = oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId) ? new HqUserProfile
                         {
-                            UserId = oldUser.PublicKey,
-                            RoleId = oldUser.Roles.First().ToUserId()
+                            DeviceId = oldUser.DeviceId,
+                            SupervisorId = oldUser.Supervisor?.Id,
+                        } : null,
+                        Roles =
+                        {
+                            new HqUserRole
+                            {
+                                UserId = oldUser.PublicKey,
+                                RoleId = oldUser.Roles.First().ToUserId()
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+
+            });
         }
     }
 }

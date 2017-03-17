@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -30,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 else if (!string.IsNullOrEmpty(input.UserEmail))
                     users = users.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
                 else if (!string.IsNullOrEmpty(input.DeviceId))
-                    users = users.Where(x => x.DeviceId == input.DeviceId);
+                    users = users.Where(x => x.Profile.DeviceId == input.DeviceId);
 
                 return users.FirstOrDefault();
             };
@@ -39,9 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             if (user == null) return null;
 
-            UserLight supervisor = user.SupervisorId.HasValue
-                ? new UserLight(user.SupervisorId.Value,
-                    this.UserRepository.FindByIdAsync(user.SupervisorId.Value).Result.UserName)
+            UserLight supervisor = user.Profile?.SupervisorId != null
+                ? new UserLight(user.Profile.SupervisorId.Value,
+                    this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value).Result.UserName)
                 : null;
 
             return new UserView
@@ -56,7 +55,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 PersonName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 IsArchived = user.IsArchived,
-                DeviceChangingHistory = new HashSet<DeviceInfo>(new[] { new DeviceInfo { DeviceId = user.DeviceId } }),
                 Roles = new HashSet<UserRoles>(new[] {user.Roles.First().Role})
             };
         }
@@ -73,8 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         IsLockedBySupervisor = x.IsLockedBySupervisor,
                         IsLockedByHQ = x.IsLockedByHeadquaters,
                         UserName = x.UserName,
-                        SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.SupervisorId).UserName,
-                        DeviceId = x.DeviceId
+                        SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
+                        DeviceId = x.Profile.DeviceId
                     });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
@@ -101,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
 
                 if (supervisorId.HasValue)
-                    users = users.Where(user => user.SupervisorId == supervisorId);
+                    users = users.Where(user => user.Profile.SupervisorId == supervisorId);
 
                 return users;
             };
@@ -130,10 +128,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                  var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
 
                 if (hasDevice.HasValue)
-                    interviewers = interviewers.Where(x => (x.DeviceId != null) == hasDevice.Value);
+                    interviewers = interviewers.Where(x => (x.Profile.DeviceId != null) == hasDevice.Value);
 
                 if (supervisorId.HasValue)
-                    interviewers = interviewers.Where(x => x.SupervisorId != null && x.SupervisorId == supervisorId);
+                    interviewers = interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
 
                 return interviewers.Select(x => new InterviewersItem
                 {
@@ -143,8 +141,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsLockedBySupervisor = x.IsLockedBySupervisor,
                     IsLockedByHQ = x.IsLockedByHeadquaters,
                     UserName = x.UserName,
-                    SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.SupervisorId).UserName,
-                    DeviceId = x.DeviceId
+                    SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
+                    DeviceId = x.Profile.DeviceId
                 });
             };
 
@@ -197,8 +195,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
                         IsLockedByHQ = supervisor.IsLockedByHeadquaters,
                         UserName = supervisor.UserName,
-                        InterviewersCount = allUsers.Count(pr => pr.SupervisorId == supervisor.Id && pr.IsArchived == false),
-                        NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.SupervisorId == supervisor.Id && pr.DeviceId == null && pr.IsArchived == false)
+                        InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
+                        NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
                     });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
