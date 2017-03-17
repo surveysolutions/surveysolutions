@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-        public async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_CheckConnectionToServer);
@@ -83,12 +83,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     var interviewId = await this.CreateInterview(dummyQuestionnaireIdentity, progress);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+
+                    return true;
                 }
             }
             catch (RestException ex)
             {
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
-                    return;
+                    return false;
 
                 string errorMessage;
                 switch (ex.StatusCode)
@@ -116,6 +118,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.logger.Error("Import questionnaire exception. ", ex);
             }
+
+            return false;
         }
 
         private static QuestionnaireIdentity GenerateDummyQuestionnaireIdentity(string questionnaireId)
