@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
@@ -67,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate =  x.CreationDate.ToString(@"MMM dd, YYYY HH:mm"),
+                    CreationDate =  x.CreationDate.FormatDateWithTime(),
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId
@@ -148,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate.ToString(@"MMM dd, YYYY HH:mm"),
+                    CreationDate = x.CreationDate.FormatDateWithTime(),
                     Email = x.Email,
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor
                 })
