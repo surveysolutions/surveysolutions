@@ -44,7 +44,6 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMaintenanceMessage(actionContext);
                 return;
             }
-            var compat = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
             
             BasicCredentials basicCredentials = this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.Basic, actionContext)
                                                 ?? this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.AuthToken, actionContext);
@@ -55,7 +54,13 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
-            var userInfo = this.userManager.FindByName(basicCredentials.Username);
+            var userInfo = await this.userManager.FindByNameAsync(basicCredentials.Username).ConfigureAwait(false);
+
+            if (userInfo == null || userInfo.IsArchived)
+            {
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
+            }
 
             switch (basicCredentials.Scheme)
             {
@@ -114,7 +119,7 @@ namespace WB.UI.Headquarters.Code
                 return userInfo.PasswordHashSha1 == basicCredentials.Password;
             }
 
-            return userInfo.PasswordHash != basicCredentials.Password;
+            return userInfo.PasswordHash == basicCredentials.Password;
         }
 
         private BasicCredentials ExtractFromAuthorizationHeader(ApiAuthorizationScheme scheme, HttpActionContext actionContext)

@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         protected async Task<IdentityResult> UpdateAccountAsync(UserEditModel editModel)
         {
-            var appUser = await this.userManager.FindByIdAsync(editModel.Id);
+            var appUser = await this.userManager.FindByIdAsync(editModel.Id).ConfigureAwait(false);
 
             if(appUser == null)
                 return IdentityResult.Failed(@"Could not update user information because current user does not exist");
@@ -43,11 +43,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ? editModel.IsLocked
                 : appUser.IsLockedByHeadquaters;
 
-            return await this.userManager.UpdateUserAsync(appUser, editModel.Password);
+            return await this.userManager.UpdateUserAsync(appUser, editModel.Password).ConfigureAwait(false);
         }
 
-        protected  Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
-            => await this.userManager.CreateUserAsync(new HqUser
+        protected Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
+            => this.userManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),
                 IsLockedBySupervisor = false,

@@ -225,9 +225,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     {
                         Username = this.restCredentials.Login,
                         Password = newPassword
-                    }, this.restCredentials);
+                    }, this.restCredentials).ConfigureAwait(false);
                     
                     this.restCredentials.Password = newPassword;
+                    this.restCredentials.Token = token;
                     await this.SyncronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }

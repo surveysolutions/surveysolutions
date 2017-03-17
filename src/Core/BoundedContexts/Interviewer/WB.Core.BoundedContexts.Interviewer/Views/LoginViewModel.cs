@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                await this.synchronizationService.LoginAsync(new LogonInfo
+                var token = await this.synchronizationService.LoginAsync(new LogonInfo
                 {
                     Username = this.UserName,
                     Password = this.Password
@@ -143,8 +143,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.synchronizationService.GetInterviewerAsync(restCredentials).ConfigureAwait(false);
 
                 var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-                localInterviewer.Token = restCredentials.Token;
-
+                localInterviewer.Token = token;
+                localInterviewer.PasswordHash = this.passwordHasher.Hash(this.Password);
                 this.interviewersPlainStorage.Store(localInterviewer);
 
                 this.SignIn();
