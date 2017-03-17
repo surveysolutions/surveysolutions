@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public DateTime LastChangeDate { get; set; }
         public string DeviceId { get; set; }
         public ISet<UserRoles> Roles { get; set; } = new HashSet<UserRoles>();
-        public ISet<DeviceInfo> DeviceChangingHistory { get; set; } = new HashSet<DeviceInfo>();
         public string PersonName { get; set; }
         public string PhoneNumber { get; set; }
 

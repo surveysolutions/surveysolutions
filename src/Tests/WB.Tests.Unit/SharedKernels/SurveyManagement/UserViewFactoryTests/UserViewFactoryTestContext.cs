@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     [Subject(typeof(UserViewFactory))]
     internal class UserViewFactoryTestContext
     {
-        protected static IUserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
+        protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
             => new UserViewFactory(userRepository);
 
         protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers(params HqUser[] users)

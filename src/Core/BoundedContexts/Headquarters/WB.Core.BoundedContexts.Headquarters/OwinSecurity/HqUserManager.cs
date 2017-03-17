@@ -27,20 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             IOwinContext context)
         {
             var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-            var manager = new HqUserManager(new HqUserStore(context.Get<HQIdentityDbContext>()), authorizedUser)
+            return new HqUserManager(new HqUserStore(context.Get<HQIdentityDbContext>()), authorizedUser)
             {
-                PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
-                UserLockoutEnabledByDefault = false,
-                DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5),
-                MaxFailedAccessAttemptsBeforeLockout = 5
+                PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>()
             };
-            manager.UserValidator = new UserValidator<HqUser, Guid>(manager)
-            {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = false
-            };
-
-            return manager;
         }
 
         public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role)
@@ -84,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IEnumerable<IdentityResult>> ArchiveSupervisorAndDependentInterviewersAsync(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.Users.Where(
-                user => user.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
+                user => user.Profile != null && user.Profile.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
 
             List<IdentityResult> result = new List<IdentityResult>();
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
@@ -103,8 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new AuthenticationException(@"Only interviewer can be linked to device");
 
             var currentUser = this.Users?.FirstOrDefault(user => user.Id == this.authorizedUser.Id);
-            
-            currentUser.DeviceId = deviceId;
+            currentUser.Profile.DeviceId = deviceId;
 
             this.UpdateUser(currentUser, null);
         }

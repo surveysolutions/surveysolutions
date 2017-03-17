@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Email = user.Email,
                 UserName = user.UserName,
                 PhoneNumber = user.PhoneNumber,
-                SupervisorId = supervisorId
+                Profile = supervisorId.HasValue ? new HqUserProfile {SupervisorId = supervisorId} : null
             }, user.Password, role);
     }
 }

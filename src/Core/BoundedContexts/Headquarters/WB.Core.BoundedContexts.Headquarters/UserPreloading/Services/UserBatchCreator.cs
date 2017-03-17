@@ -123,7 +123,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     FullName = supervisorToCreate.FullName,
                     Email = supervisorToCreate.Email,
                     PhoneNumber = supervisorToCreate.PhoneNumber,
-                    SupervisorId = supervisorId,
+                    Profile = supervisorId.HasValue ? new HqUserProfile
+                    {
+                        SupervisorId = supervisorId
+                    } : null,
                 }, supervisorToCreate.Password, role);
                 
             }
