@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+        ITransactionManager readSideTransactionManager => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
         IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
         public void Execute(IJobExecutionContext context)
@@ -49,8 +50,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        this.plainTransactionManager.ExecuteInQueryTransaction(() => {
-                            this.ExecuteInPlainTransaction(() => this.interviewPackagesService.ProcessPackage(packageId));
+                        this.ExecuteInPlainTransaction(() =>
+                        {
+                            readSideTransactionManager.ExecuteInQueryTransaction(() => this.interviewPackagesService.ProcessPackage(packageId));
                         });
                     });
 
