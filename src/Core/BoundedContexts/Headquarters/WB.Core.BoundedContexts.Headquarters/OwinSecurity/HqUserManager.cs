@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -16,15 +17,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     public class HqUserManager : UserManager<HqUser, Guid>
     {
         private readonly IAuthorizedUser authorizedUser;
-
-        public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser)
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, IApiTokenProvider<Guid> tokenProvider = null)
+        public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser, 
+            IHashCompatibilityProvider hashCompatibilityProvider, IApiTokenProvider<Guid> tokenProvider = null)
             : base(store)
         {
             this.authorizedUser = authorizedUser;
+            this.hashCompatibilityProvider = hashCompatibilityProvider;
             this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(this);
         }
 
@@ -75,22 +76,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, IOwinContext context)
         {
             var store = new HqUserStore(context.Get<HQIdentityDbContext>());
-          
+            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
             var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
             
-            var manager = new HqUserManager(store, hashCompatibility)
+            var manager = new HqUserManager(store, authorizedUser, hashCompatibility)
             {
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>()
-                MaxFailedAccessAttemptsBeforeLockout = 5,
-                PasswordValidator = new PasswordValidator
-                {
-                    RequireDigit = false,
-                    RequireLowercase = false,
-                    RequireNonLetterOrDigit = false,
-                    RequireUppercase = false,
-                    RequiredLength = 1
-                }
             };
+
+            return manager;
         }
 
         public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role)
@@ -108,19 +102,19 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             user.CreationDate = DateTime.UtcNow;
 
-            var creationStatus = await this.CreateAsync(user, password);
+            var creationStatus = await this.CreateAsync(user, password).ConfigureAwait(false);
             if (creationStatus.Succeeded)
-                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
+                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role)).ConfigureAwait(false);
 
             return creationStatus;
         }
 
-        public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
+        public virtual Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
                 user.PasswordHash = this.PasswordHasher.HashPassword(password);
 
-            return await this.UpdateAsync(user);
+            return this.UpdateAsync(user);
         }
 
         public virtual IdentityResult UpdateUser(HqUser user, string password)
@@ -136,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var supervisorAndDependentInterviewers = this.Users.Where(
                 user => user.Profile != null && user.Profile.SupervisorId == supervisorId || user.Id == supervisorId).ToList();
 
-            List<IdentityResult> result = new List<IdentityResult>();
+            var result = new List<IdentityResult>();
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
                 accountToArchive.IsArchived = true;
@@ -166,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             foreach (var userToArchive in usersToArhive)
             {
                 userToArchive.IsArchived = archive;
-                var archiveResult = await this.UpdateUserAsync(userToArchive, null);
+                var archiveResult = await this.UpdateUserAsync(userToArchive, null).ConfigureAwait(false);
                 archiveUserResults.Add(archiveResult);
             }
 
