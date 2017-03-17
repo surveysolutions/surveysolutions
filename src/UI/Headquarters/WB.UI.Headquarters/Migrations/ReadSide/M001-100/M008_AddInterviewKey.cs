@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json;
+using NLog;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -38,7 +40,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
         public override void Up()
         {
-            Random random = new Random();
+            Random random = new Random((int)DateTime.Now.Ticks);
 
             Alter.Table("interviewsummaries").AddColumn("key")
                 .AsString(12).Nullable().Unique("interviewsummaries_unique_key");
@@ -48,19 +50,28 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             {
                 List<dynamic> existingInterviewIds = con.Query("select interviewid from readside.interviewsummaries").ToList();
                 long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
+                var currentClassLogger = LogManager.GetCurrentClassLogger();
+                currentClassLogger.Info("Starting add of interview keys. Total interviews count: {0} current global sequence: {1}", existingInterviewIds.Count, globalSequence);
 
-                HashSet<InterviewKey> uniqueKeys = new HashSet<InterviewKey>();
+                HashSet<int> uniqueKeys = new HashSet<int>();
+                Stopwatch watch = Stopwatch.StartNew();
                 while (uniqueKeys.Count != existingInterviewIds.Count)
                 {
-                    var next = random.Next(99999999);
-                    uniqueKeys.Add(new InterviewKey(next));
+                    var maxUniqueKeyValue = 99999999;
+                    var next = random.Next(maxUniqueKeyValue);
+                    while (uniqueKeys.Contains(next))
+                    {
+                        next++;
+                        if (next > maxUniqueKeyValue) next = 0;
+                    }
+                    uniqueKeys.Add(next);
                 }
-
+                currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                 var keysList = uniqueKeys.ToList();
 
                 for (int i = 0; i < existingInterviewIds.Count; i++)
                 {
-                    var interviewKeyTouse = keysList[i];
+                    var interviewKeyTouse = new InterviewKey(keysList[i]);
                     var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
                         Formatting.Indented,
                         EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
