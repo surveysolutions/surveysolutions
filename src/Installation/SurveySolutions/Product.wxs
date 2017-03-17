@@ -31,7 +31,7 @@
         <!--<Property Id="CONNSTRING"/>-->
         <Property Id="SITEPORT" Value="9700"></Property>
         
-        <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+        <Property Id="CONNSTRING" Value="Server=127.0.0.1;Port=5432;User Id=postgres;Password=Password;Database=SuperHQ;"></Property>
         
         <UI>
 
@@ -40,7 +40,12 @@
 
             <DialogRef Id="ConnectionStringDlg" />
 
-            <!--Override original step-->
+            <!--Override original steps-->
+            <!--Remove license agreement step-->
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">NOT Installed</Publish>
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+            
+            <!--Redirect to new connection string step-->
             <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
 
             <!--Custom step-->
