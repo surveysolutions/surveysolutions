@@ -33,13 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         }
 
         private List<InterviewKey> GetRandomSequence()
-        {
-            List<InterviewKey> potentialRandomKeys = new List<InterviewKey>();
-            for (int i = 0; i < 30; i++)
-            {
-                potentialRandomKeys.Add(new InterviewKey(this.randomValuesSource.Next(maxInterviewKeyValue)));
-            }
-            return potentialRandomKeys;
-        }
+            => Enumerable.Range(1, 30).Select(_ => new InterviewKey(this.randomValuesSource.Next(maxInterviewKeyValue))).ToList();
     }
 }
