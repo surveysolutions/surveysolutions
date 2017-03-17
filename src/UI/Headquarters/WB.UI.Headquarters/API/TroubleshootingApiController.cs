@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,14 +19,16 @@ namespace WB.UI.Headquarters.API
     public class TroubleshootingApiController : BaseApiController
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
+        private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
 
         public TroubleshootingApiController(
             IAllInterviewsFactory allInterviewsViewFactory, 
             ICommandService commandService, 
-            ILogger logger) 
+            ILogger logger, IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory) 
             : base(commandService, logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
+            this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
         }
 
         [HttpPost]
@@ -34,6 +38,8 @@ namespace WB.UI.Headquarters.API
             QuestionnaireIdentity questionnaireIdentity = null;
             QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
 
+            var changedFrom = request.ChangedFrom ?? DateTime.Now.AddMonths(-1);
+            var changedTo = request.ChangedTo ?? DateTime.Now;
             var input = new InterviewsWithoutPrefilledInputModel
             {
                 Page = request.PageIndex,
@@ -41,19 +47,29 @@ namespace WB.UI.Headquarters.API
                 Orders = request.GetSortOrderRequestItems(),
                 QuestionnaireId = questionnaireIdentity,
                 CensusOnly = true,
-                ChangedFrom = request.ChangedFrom ?? DateTime.Now.AddMonths(-1),
-                ChangedTo = request.ChangedTo ?? DateTime.Now,
+                ChangedFrom = changedFrom,
+                ChangedTo = changedTo,
                 InterviewerId = request.InterviewerId,
             };
 
             var items = this.allInterviewsViewFactory.LoadInterviewsWithoutPrefilled(input);
 
-            return new DataTableResponse<InterviewListItem>
+            BrokenInterviewPackagesView brokenItems = this.brokenInterviewPackagesViewFactory.GetFilteredItems(new BrokenInterviewPackageFilter
+            {
+                QuestionnaireIdentity = request.QuestionnaireId,
+                FromProcessingDateTime = changedFrom,
+                ToProcessingDateTime = changedTo,
+                ResponsibleId = request.InterviewerId
+            });
+
+            return new TroubleshootingCensusInterviewsDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,
                 RecordsFiltered = items.TotalCount,
-                Data = items.Items.ToList()
+                Data = items.Items.ToList(),
+                BrokenPackagesCount = brokenItems.TotalCount,
+                CensusInterviewsCount = items.TotalCount
             };
         }
     }

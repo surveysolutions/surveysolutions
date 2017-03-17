@@ -109,7 +109,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 PageSize = pageSize,
                 Filter = query,
-                IsAdminMode = true
+                IsAdminMode = true,
+                OnlyCensus = censusOnly
             });
 
             return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.TotalCount);

@@ -6,6 +6,124 @@
 {
     @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/troubleshooting-census")
+    <script type="text/javascript">
+        var app = new Vue({
+            data: {
+                interviewerId: null,
+                questionnaireId: null,
+                changedFrom: null,
+                changedTo: null,
+                dateRangePickerOptions: {
+                    mode: "range",
+                    maxDate: "today",
+                    minDate: new Date().fp_incr(-30)
+                },
+                questionnaireParams: { censusOnly: true },
+                wasInitialized: false,
+                totalCensusInterviews: 0,
+                totalBrokenPackages: 0,
+                isLoading: false,
+                tableFilters: {},
+                tableOptions: {
+                    rowId: 'key',
+                    order: [[2, 'desc']],
+                    deferLoading: 0,
+                    columns: [
+                        {
+                            data: "key",
+                            name: "Key", // case-sensitive!
+                            "class": "interview-id title-row",
+                            render: function(data, type, row) {
+                                return (row.wasCreatedOnClient === true ? "<span class='census-icon'></span>" : "") + '<a href="@Url.Action("Details", "Interview")/' + row.interviewId + '">' + data + '</a>';
+                            },
+                            title: "Interview id"
+                        },
+                        {
+                            data: "responsibleName",
+                            name: "ResponsibleName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "enumerator",
+                            render: function(data, type, row) {
+                                return '<span class="interviewer">' + data + '</span>';
+                            },
+                            title: "enumerator"
+                        },
+                        {
+                            data: "updateDate",
+                            name: "UpdateDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "date",
+                            title: "last update"
+                        },
+                        {
+                            data: "status",
+                            name: "Status", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            title: "Status"
+                        }
+                    ],
+                    ajax: {
+                        url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "CensusInterviews"})",
+                        type: "POST"
+                    }
+                }
+            },
+            methods: {
+                addParamsToRequest(requestData) {
+                    requestData.interviewerId = (this.interviewerId || {}).key;
+                    requestData.questionnaireId = (this.questionnaireId || {}).key;
+                    requestData.changedFrom = moment(this.changedFrom).format();
+                    requestData.changedTo = moment(this.changedTo).format();
+                },
+                responseProcessor(response) {
+                    this.isLoading = false;
+                    this.totalCensusInterviews = response.censusInterviewsCount;
+                    this.totalBrokenPackages = response.brokenPackagesCount;
+                },
+                userSelected(newValue) {
+                    this.interviewerId = newValue;
+                },
+                questionnaireSelected(newValue) {
+                    this.questionnaireId = newValue;
+                },
+                rangeSelected(textValue, from, to) {
+                    this.changedFrom = from;
+                    this.changedTo = to;
+                },
+                findInterviews() {
+                    this.$validator.validateAll().then(result => {
+                        if (result) {
+                            this.reloadTable();
+                            this.startWatchers(['interviewerId', 'questionnaireId', 'changedFrom', 'changedTo'], this.reloadTable.bind(this));
+                            document.querySelector("main").classList.remove("search-wasnt-started");
+                            this.wasInitialized = true;
+                        }
+                    });
+                },
+                startWatchers(props, watcher) {
+                    var iterator = function(prop) {
+                        this.$watch(prop, watcher);
+                    };
+                    props.forEach(iterator, this);
+                },
+                reloadTable() {
+                    this.$validator.validateAll().then(result => {
+                        if (result && (this.changedFrom !== null && this.changedTo !== null) || (this.changedFrom == null && this.changedTo == null)) {
+                            this.isLoading = true;
+                            this.$refs.table.reload(this.reloadTable);
+                        }
+                    });
+                }
+            },
+            mounted: function() {
+                document.querySelector("main").classList.remove("hold-transition");
+                document.querySelector("footer").classList.add("footer-adaptive");
+            }
+        });
+
+        window.onload = function() {
+            Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
+
+            app.$mount('#app');
+        }
+    </script>
 }
 <main class="hold-transition search-wasnt-started"  id="app">
     <div class="container-fluid">
@@ -21,7 +139,8 @@
         </div>
         <div class="row before-search">
             <div class="col-sm-7">
-                <p>It will be useful to know enumerator, interview template and timeline. <br /> We will show if there was any errors with synchronizations during selected period.</p>
+                <p>To locate an interview, please provide name of the questionnaire.
+                Select an interviewer and timeframe to narrow down your search results</p>
             </div>
         </div>
         <div class="row">
@@ -32,35 +151,38 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>Filter Range</h4>
+                    <h4>Filter Conditions</h4>
                     <div class="block-filter" v-bind:class="{'has-error': errors.has('questionnaireId')}">
-                        <h5>Survey template (questionnaire version)</h5>
+                        <h5>Questionnaire</h5>
                         <user-selector
                             data-vv-name="questionnaireId"
                             v-validate="'required'"
                             :has-error="errors.has('questionnaireId')"
                             placeholder="Select questionnaire"
                             control-id="questionnaireId"
+                            :ajax-params="questionnaireParams"
                             :value="questionnaireId"
                             v-on:selected="questionnaireSelected"
                             fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
                         <span v-show="errors.has('questionnaireId')" class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="block-filter">
-                        <h5>Enumerator</h5>
+                        <h5>Interviewer</h5>
                         <user-selector
                             placeholder="Select interviewer"
                             control-id="interviewerId"
                             :value="interviewerId"
+                            :ajax-params="{ supervisorId: 'aaaa' }"
                             v-on:selected="userSelected" 
                             fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
                     </div>
                     <div class="block-filter">
-                        <h5>Time-period when this interview was conducted or synchronized with HQ</h5>
+                        <h5>Search interviews syncronized between two dates</h5>
                         <Flatpickr placeholder="Select dates"  input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
                     </div>
                     <div class="block-filter">
-                        <button type="button" v-on:click="validateForm" class="btn btn-primary btn-lg" id="find-interview">Find interviews</button>
+                        <button type="button" v-if="wasInitialized === false" v-on:click="findInterviews" 
+                                class="btn btn-primary btn-lg" id="find-interview">Search</button>
                     </div>
                 </div>
             </aside>
@@ -75,18 +197,23 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-7 ">
-                        <p>It will be useful to know enumerator, interview template and timeline. <br /> We will show if there was any errors with synchronizations during selected period.</p>
-                        <ul class="list-unstyled">
-                            <li><b>There are 3 interviews found during period</b></li>
-                            <li class="error-text"><b>2 error detected during this period</b></li>
+                        <ul class="list-unstyled" v-if="isLoading == false">
+                            <li v-if="totalBrokenPackages == 0"><b>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization.</b></li>
+                            <li v-else class="error-text"><b>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team.</b></li>
+                        </ul>
+                        <ul class="list-unstyled" v-if="isLoading == false">
+                            <li v-if="totalCensusInterviews > 1"><b>{{totalCensusInterviews}} interviews satisfy filter conditions</b></li>
+                            <li v-else-if="totalCensusInterviews == 1"><b>{{totalCensusInterviews}} interview satisfies filter conditions</b></li>
+                            <li v-else><b>No interviews satisfy filter conditions</b></li>
                         </ul>
                     </div>
                 </div>
                 <div class="interviews-info">
                     <div class="table-wrapper interviews-large-screen">
-                        <interview-table 
-                            :filter="tableFilters" 
-                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "CensusInterviews" })" />
+                        <interview-table ref="table"
+                                         :add-params-to-request="addParamsToRequest"
+                                         :response-processor="responseProcessor"
+                                         :table-options="tableOptions" />
                     </div>
                 </div>
             </div>

@@ -109,6 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Items = interviews.Select(x => new InterviewListItem
                 {
                     InterviewId = x.InterviewId,
+                    Key = x.Key,
                     QuestionnaireId = new QuestionnaireIdentity(x.QuestionnaireId, x.QuestionnaireVersion).ToString(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
