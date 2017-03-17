@@ -49,7 +49,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        this.ExecuteInTransaction(() => this.interviewPackagesService.ProcessPackage(packageId));
+                        this.plainTransactionManager.ExecuteInQueryTransaction(() => {
+                            this.ExecuteInPlainTransaction(() => this.interviewPackagesService.ProcessPackage(packageId));
+                        });
                     });
 
                 this.logger.Info($"Interview packages job: Processed {packageIds.Count} packages. Took {stopwatch.Elapsed:g}.");
@@ -74,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             }
         }
 
-        private void ExecuteInTransaction(Action query)
+        private void ExecuteInPlainTransaction(Action query)
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
             try
