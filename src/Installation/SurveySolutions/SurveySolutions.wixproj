@@ -21,22 +21,22 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;HarvestDir=$(HarvestDir)</DefineConstants>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>HarvestDir=$(HarvestDir)</DefineConstants>
+    <DefineConstants>HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;HarvestDir=$(HarvestDir)</DefineConstants>
+    <DefineConstants>Debug;HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>HarvestDir=$(HarvestDir)</DefineConstants>
+    <DefineConstants>HarvestDir=$(HarvestDir);SurveySolutionsVersion=$(SurveySolutionsVersion)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
