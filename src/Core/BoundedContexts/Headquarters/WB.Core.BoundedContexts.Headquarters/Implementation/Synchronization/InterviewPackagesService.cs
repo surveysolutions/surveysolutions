@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     questionnaireVersion: interview.QuestionnaireVersion,
                     interviewStatus: interview.InterviewStatus,
                     createdOnClient: interview.IsCensusInterview,
-                    interviewKey: this.uniqueKeyGenerator.Get(),
+                    interviewKey: interview.IsCensusInterview ? this.uniqueKeyGenerator.Get() : null,
                     synchronizedEvents: serializedEvents), this.syncSettings.Origin);
             }
             catch (Exception exception)
