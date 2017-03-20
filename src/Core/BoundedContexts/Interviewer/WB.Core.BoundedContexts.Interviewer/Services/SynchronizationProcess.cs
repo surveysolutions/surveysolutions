@@ -257,15 +257,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken).ConfigureAwait(false);
             var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
 
-            var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
-                questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
-
-            foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                this.questionnairesAccessor.RemoveQuestionnaire(censusQuestionnaireIdentity);
-            }
-
             var processedQuestionnaires = 0;
             var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities.Except(localCensusQuestionnaireIdentities).ToList();
             foreach (var censusQuestionnaireIdentity in notExistingLocalCensusQuestionnaireIdentities)
@@ -304,11 +295,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
                     Description = string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description, 
-                        removedQuestionnairesCounter.ToString(), 
-                        questionnairesToRemove.Count.ToString()),
+                        removedQuestionnairesCounter, questionnairesToRemove.Count),
                     Statistics = staciStatistics,
                     Status = SynchronizationStatus.Download
                 });
+
+                var questionnaireId = questionnaireIdentity.ToString();
+
+                var removedInterviews = this.interviewViewRepository
+                    .Where(interview => interview.QuestionnaireId == questionnaireId)
+                    .Select(interview => interview.InterviewId)
+                    .ToList();
+                this.RemoveInterviews(removedInterviews, staciStatistics, progress);
 
                 this.questionnairesAccessor.RemoveQuestionnaire(questionnaireIdentity);
             }
@@ -372,10 +370,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private async Task DownloadInterviewsAsync(SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
-            var localCensusQuestionnaireIds =
-                this.questionnairesAccessor.GetCensusQuestionnaireIdentities()
-                    .Select(questionnaireIdentity => questionnaireIdentity.ToString());
-
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken).ConfigureAwait(false);
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
@@ -384,9 +378,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
-            var localInterviewsToRemove = localInterviews.Where(interview =>
-                !remoteInterviewIds.Contains(interview.InterviewId) &&
-                (!interview.CanBeDeleted || (interview.CanBeDeleted && !localCensusQuestionnaireIds.Contains(interview.QuestionnaireId))));
+            var localInterviewsToRemove = localInterviews.Where(
+                 interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
 
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId).ToList();
 
@@ -399,7 +392,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private void RemoveInterviews(List<Guid> interviewIds, SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress)
         {
-            statistics.TotalDeletedInterviewsCount = interviewIds.Count;
+            statistics.TotalDeletedInterviewsCount += interviewIds.Count;
 
             foreach (var interviewId in interviewIds)
             {
