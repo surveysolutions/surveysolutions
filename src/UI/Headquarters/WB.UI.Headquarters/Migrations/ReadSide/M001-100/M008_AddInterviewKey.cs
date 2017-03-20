@@ -45,64 +45,71 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Alter.Table("interviewsummaries").AddColumn("key")
                 .AsString(12).Nullable().Unique("interviewsummaries_unique_key");
 
-
-            Execute.WithConnection((con, transaction) =>
+            if (Schema.Schema("events").Exists())
             {
-                List<dynamic> existingInterviewIds = con.Query("select interviewid from readside.interviewsummaries").ToList();
-                long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
-                var currentClassLogger = LogManager.GetCurrentClassLogger();
-                currentClassLogger.Info("Starting add of interview keys. Total interviews count: {0} current global sequence: {1}", existingInterviewIds.Count, globalSequence);
-
-                HashSet<int> uniqueKeys = new HashSet<int>();
-                Stopwatch watch = Stopwatch.StartNew();
-                while (uniqueKeys.Count != existingInterviewIds.Count)
+                Execute.WithConnection((con, transaction) =>
                 {
-                    var maxUniqueKeyValue = 99999999;
-                    var next = random.Next(maxUniqueKeyValue);
-                    while (uniqueKeys.Contains(next))
+                    List<dynamic> existingInterviewIds =
+                        con.Query("select interviewid from readside.interviewsummaries").ToList();
+                    long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
+                    var currentClassLogger = LogManager.GetCurrentClassLogger();
+                    currentClassLogger.Info(
+                        "Starting add of interview keys. Total interviews count: {0} current global sequence: {1}",
+                        existingInterviewIds.Count, globalSequence);
+
+                    HashSet<int> uniqueKeys = new HashSet<int>();
+                    Stopwatch watch = Stopwatch.StartNew();
+                    while (uniqueKeys.Count != existingInterviewIds.Count)
                     {
-                        next++;
-                        if (next > maxUniqueKeyValue) next = 0;
+                        var maxUniqueKeyValue = 99999999;
+                        var next = random.Next(maxUniqueKeyValue);
+                        while (uniqueKeys.Contains(next))
+                        {
+                            next++;
+                            if (next > maxUniqueKeyValue) next = 0;
+                        }
+                        uniqueKeys.Add(next);
                     }
-                    uniqueKeys.Add(next);
-                }
-                currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
-                var keysList = uniqueKeys.ToList();
+                    currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
+                    var keysList = uniqueKeys.ToList();
 
-                for (int i = 0; i < existingInterviewIds.Count; i++)
-                {
-                    var interviewKeyTouse = new InterviewKey(keysList[i]);
-                    var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
-                        Formatting.Indented,
-                        EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                    for (int i = 0; i < existingInterviewIds.Count; i++)
+                    {
+                        var interviewKeyTouse = new InterviewKey(keysList[i]);
+                        var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
+                            Formatting.Indented,
+                            EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
-                    Guid existingInterviewId = existingInterviewIds[i].interviewid;
-                    var existingSequence =
-                        con.ExecuteScalar<int>("select MAX(eventsequence) from events.events WHERE eventsourceid = @id",
-                            new { id = existingInterviewId });
+                        Guid existingInterviewId = existingInterviewIds[i].interviewid;
+                        var existingSequence =
+                            con.ExecuteScalar<int>(
+                                "select MAX(eventsequence) from events.events WHERE eventsourceid = @id",
+                                new { id = existingInterviewId });
 
-                    con.Execute(
-                        @"INSERT INTO events.events(id, origin, ""timestamp"", eventsourceid, globalsequence, value, eventsequence, eventtype)
+                        con.Execute(
+                            @"INSERT INTO events.events(id, origin, ""timestamp"", eventsourceid, globalsequence, value, eventsequence, eventtype)
                           VALUES(@id, @origin, @timestamp, @eventSourceId, @globalSequence, @value, @eventSequence, @eventType)",
-                        new
-                        {
-                            id = Guid.NewGuid(),
-                            origin = (string)null,
-                            timestamp = DateTime.UtcNow,
-                            eventsourceid = existingInterviewId,
-                            globalSequence = ++globalSequence,
-                            value = new JsonString(eventString),
-                            eventSequence = ++existingSequence,
-                            eventType = nameof(InterviewKeyAssigned)
-                        });
-                    con.Execute("UPDATE readside.interviewsummaries SET key = @key WHERE interviewid = @interviewId",
-                        new
-                        {
-                            key = interviewKeyTouse.ToString(),
-                            interviewId = existingInterviewId
-                        });
-                }
-            });
+                            new
+                            {
+                                id = Guid.NewGuid(),
+                                origin = (string) null,
+                                timestamp = DateTime.UtcNow,
+                                eventsourceid = existingInterviewId,
+                                globalSequence = ++globalSequence,
+                                value = new JsonString(eventString),
+                                eventSequence = ++existingSequence,
+                                eventType = nameof(InterviewKeyAssigned)
+                            });
+                        con.Execute(
+                            "UPDATE readside.interviewsummaries SET key = @key WHERE interviewid = @interviewId",
+                            new
+                            {
+                                key = interviewKeyTouse.ToString(),
+                                interviewId = existingInterviewId
+                            });
+                    }
+                });
+            }
         }
 
         public override void Down()
