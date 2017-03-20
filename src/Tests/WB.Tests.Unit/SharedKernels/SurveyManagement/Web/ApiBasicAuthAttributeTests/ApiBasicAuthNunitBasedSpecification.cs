@@ -26,12 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.Because();
         }
 
-        protected virtual void Context()
-        {
-
-        }
-
-        protected virtual void Because() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None).WaitAndUnwrapException();
+        protected virtual void Context() { }
+        protected virtual void Because() { }
 
         protected ApiBasicAuthAttribute attribute;
         protected HttpActionContext actionContext;

@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IInterviewerSettings interviewerSettings;
 
         private RestCredentials restCredentials;
+        private bool remoteLoginRequired = false;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
@@ -100,7 +101,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Token = this.principal.CurrentUserIdentity.Token
                 };
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
+                if (this.remoteLoginRequired)
+                {
+                    var token = await this.synchronizationService.LoginAsync(new LogonInfo
+                    {
+                        Username = this.restCredentials.Login,
+                        Password = this.restCredentials.Password
+                    }, this.restCredentials);
+
+                    this.restCredentials.Password = this.restCredentials.Password;
+                    this.restCredentials.Token = token;
+
+                    this.remoteLoginRequired = false;
+                }
+
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
@@ -220,14 +235,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
                 else
                 {
-                    var token = await this.synchronizationService.LoginAsync(new LogonInfo
-                    {
-                        Username = this.restCredentials.Login,
-                        Password = newPassword
-                    }, this.restCredentials).ConfigureAwait(false);
-                    
+                    this.remoteLoginRequired = true;
                     this.restCredentials.Password = newPassword;
-                    this.restCredentials.Token = token;
                     await this.SyncronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
