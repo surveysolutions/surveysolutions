@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "title";
+    ViewBag.Title = Troubleshooting.MissingCensusInterviews_PageHeader;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @section scripts
@@ -33,30 +33,30 @@
                             data: "key",
                             name: "Key", // case-sensitive!
                             "class": "interview-id title-row",
-                            render: function(data, type, row) {
+                            render: function (data, type, row) {
                                 return (row.wasCreatedOnClient === true ? "<span class='census-icon'></span>" : "") + '<a href="@Url.Action("Details", "Interview")/' + row.interviewId + '">' + data + '</a>';
                             },
-                            title: "Interview id"
+                            title: "@Troubleshooting.TableTitle_InterviewId"
                         },
                         {
                             data: "responsibleName",
                             name: "ResponsibleName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             "class": "enumerator",
-                            render: function(data, type, row) {
+                            render: function (data, type, row) {
                                 return '<span class="interviewer">' + data + '</span>';
                             },
-                            title: "enumerator"
+                            title: "@Troubleshooting.TableTitle_Enumerator"
                         },
                         {
                             data: "updateDate",
                             name: "UpdateDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                             "class": "date",
-                            title: "last update"
+                            title: "@Troubleshooting.TableTitle_LastUpdate"
                         },
                         {
                             data: "status",
                             name: "Status", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                            title: "Status"
+                            title: "@Troubleshooting.TableTitle_Status"
                         }
                     ],
                     ajax: {
@@ -98,7 +98,7 @@
                     });
                 },
                 startWatchers(props, watcher) {
-                    var iterator = function(prop) {
+                    var iterator = function (prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
@@ -112,13 +112,13 @@
                     });
                 }
             },
-            mounted: function() {
+            mounted: function () {
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
             }
         });
 
-        window.onload = function() {
+        window.onload = function () {
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
@@ -130,17 +130,16 @@
         <div class="row before-search">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li><a href="">troubleshooting</a></li>
+                    <li><a href="">@Troubleshooting.Title</a></li>
                 </ol>
                 <h1>
-                    Locating specific census inteview
+                    @Troubleshooting.MissingCensusInterviews_PageHeader
                 </h1>
             </div>
         </div>
         <div class="row before-search">
             <div class="col-sm-7">
-                <p>To locate an interview, please provide name of the questionnaire.
-                Select an interviewer and timeframe to narrow down your search results</p>
+                <p>@Troubleshooting.MissingCensusInterviews_Instructions</p>
             </div>
         </div>
         <div class="row">
@@ -151,14 +150,14 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>Filter Conditions</h4>
+                    <h4>@Troubleshooting.MissingCensusInterviews_FiltersTitle</h4>
                     <div class="block-filter" v-bind:class="{'has-error': errors.has('questionnaireId')}">
-                        <h5>Questionnaire</h5>
+                        <h5>@Troubleshooting.MissingCensusInterviews_Filters_Questionnaire</h5>
                         <user-selector
                             data-vv-name="questionnaireId"
                             v-validate="'required'"
                             :has-error="errors.has('questionnaireId')"
-                            placeholder="Select questionnaire"
+                            placeholder="@Troubleshooting.MissingCensusInterviews_Filters_QuestionnairePlaceholder"
                             control-id="questionnaireId"
                             :ajax-params="questionnaireParams"
                             :value="questionnaireId"
@@ -167,9 +166,9 @@
                         <span v-show="errors.has('questionnaireId')" class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="block-filter">
-                        <h5>Interviewer</h5>
+                        <h5>@Troubleshooting.MissingCensusInterviews_Filters_Interviewer</h5>
                         <user-selector
-                            placeholder="Select interviewer"
+                            placeholder="@Troubleshooting.MissingCensusInterviews_Filters_InterviewerPlaceholder"
                             control-id="interviewerId"
                             :value="interviewerId"
                             :ajax-params="{ supervisorId: 'aaaa' }"
@@ -177,34 +176,34 @@
                             fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
                     </div>
                     <div class="block-filter">
-                        <h5>Search interviews syncronized between two dates</h5>
-                        <Flatpickr placeholder="Select dates"  input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
+                        <h5>@Troubleshooting.MissingCensusInterviews_Filters_Dates</h5>
+                        <Flatpickr placeholder="@Troubleshooting.MissingCensusInterviews_Filters_DatesPlaceholder"  input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
                     </div>
                     <div class="block-filter">
                         <button type="button" v-if="wasInitialized === false" v-on:click="findInterviews" 
-                                class="btn btn-primary btn-lg" id="find-interview">Search</button>
+                                class="btn btn-primary btn-lg" id="find-interview">@Troubleshooting.MissingCensusInterviews_Filters_Search</button>
                     </div>
                 </div>
             </aside>
             <div class="main-information">
                 <div class="page-header clearfix">
                     <ol class="breadcrumb">
-                        <li><a href="">troubleshooting</a></li>
+                        <li><a href="">@Troubleshooting.Title</a></li>
                     </ol>
                     <h1>
-                        Locating specific census inteview
+                        @Troubleshooting.MissingCensusInterviews_PageHeader
                     </h1>
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-7 ">
                         <ul class="list-unstyled" v-if="isLoading == false">
-                            <li v-if="totalBrokenPackages == 0"><b>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization.</b></li>
-                            <li v-else class="error-text"><b>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team.</b></li>
+                            <li v-if="totalBrokenPackages == 0"><b>@Troubleshooting.MissingCensusInterviews_NoBrokenPackages_Message</b></li>
+                            <li v-else class="error-text"><b>@Troubleshooting.MissingCensusInterviews_SomeBrokenPackages_Message</b></li>
                         </ul>
                         <ul class="list-unstyled" v-if="isLoading == false">
-                            <li v-if="totalCensusInterviews > 1"><b>{{totalCensusInterviews}} interviews satisfy filter conditions</b></li>
-                            <li v-else-if="totalCensusInterviews == 1"><b>{{totalCensusInterviews}} interview satisfies filter conditions</b></li>
-                            <li v-else><b>No interviews satisfy filter conditions</b></li>
+                            <li v-if="totalCensusInterviews > 1"><b>@string.Format(Troubleshooting.MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format, "{{totalCensusInterviews}}")</b></li>
+                            <li v-else-if="totalCensusInterviews == 1"><b>@Troubleshooting.MissingCensusInterviews_OneInterviewFound_Message</b></li>
+                            <li v-else><b>@Troubleshooting.MissingCensusInterviews_NothingFound_Message</b></li>
                         </ul>
                     </div>
                 </div>

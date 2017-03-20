@@ -36,6 +36,18 @@ export default {
         reload: function(data){
             this.table.ajax.data = data;
             this.table.ajax.reload()
+        },
+        onTableInitComplete: function(){
+            $(this.$el).parent('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+                if (e.target !== this)
+                    return;
+                if ($(this).hasClass("active")) {
+                    $(this).removeClass("active");
+                }
+                else {
+                    $(this).addClass("active");
+                }
+            });
         }
     },
     mounted () {
@@ -63,7 +75,8 @@ export default {
             self.responseProcessor(response.responseJSON);
         };
 
-        this.table = $(this.$el).DataTable(options);
+        this.table = $(this.$el).DataTable(options)
+        this.table.on('init.dt', this.onTableInitComplete);
         this.$emit('DataTableRef', this.table)
     },
     destroyed () {

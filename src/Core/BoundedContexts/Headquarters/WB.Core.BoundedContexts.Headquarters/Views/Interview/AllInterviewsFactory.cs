@@ -129,6 +129,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var items = _.Where(x => !x.IsDeleted);
 
+            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            {
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy));
+            }
+
             if (input.CensusOnly)
             {
                 items = items.Where(x => x.WasCreatedOnClient);

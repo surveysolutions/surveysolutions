@@ -135,4 +135,62 @@
   <data name="SupportSite" xml:space="preserve">
     <value>List of cummon issues and tools of resolving thev for more information check special section on &lt;a href="{0}" target="_blank"&gt;our support site&lt;/a&gt;</value>
   </data>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>Filter Conditions</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>Search interviews syncronized between two dates</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>Select dates</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>Interviewer</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+    <value>Select interviewer</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>Select questionnaire</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>To locate an interview, please provide name of the questionnaire.&lt;br/&gt;
+Select an interviewer and timeframe to narrow down your search result</value>
+  </data>
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>{0} interviews satisfy filter conditions</value>
+  </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization.</value>
+  </data>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>No interviews satisfy filter conditions</value>
+  </data>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>One interview satisfies filter conditions</value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>Locating specific census inteview</value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team.</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>Enumerator</value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>Interview id</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>Last update</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>
