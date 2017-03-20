@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
-            var userInfo = await this.userManager.FindByNameAsync(basicCredentials.Username).ConfigureAwait(false);
+            var userInfo = await this.userManager.FindByNameAsync(basicCredentials.Username);
 
             if (userInfo == null || userInfo.IsArchived)
             {
@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Code
                     }
                     break;
                 case ApiAuthorizationScheme.AuthToken:
-                    if (!await this.userManager.ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password).ConfigureAwait(false))
+                    if (!await this.userManager.ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password))
                     {
                         this.RespondWithMessageThatUserDoesNotExists(actionContext);
                         return;
@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Code
                 HttpContext.Current.User = principal;
             }
 
-            await base.OnAuthorizationAsync(actionContext, cancellationToken).ConfigureAwait(false);
+            await base.OnAuthorizationAsync(actionContext, cancellationToken);
         }
 
         private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)

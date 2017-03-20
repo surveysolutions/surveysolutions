@@ -18,9 +18,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
             this.oldPasswordHasher = oldPasswordHasher;
         }
 
+        private static string firstVersionCache = null;
+
         public bool IsInSha1CompatibilityMode()
         {
-            var firstVersionString = this.productVersion.GetHistory().OrderBy(h => h.UpdateTimeUtc).FirstOrDefault().ProductVersion;
+            var firstVersionString = firstVersionCache ?? (firstVersionCache = this.productVersion.GetHistory().OrderBy(h => h.UpdateTimeUtc).FirstOrDefault().ProductVersion);
 
             if (string.IsNullOrWhiteSpace(firstVersionString)) return false;
 
