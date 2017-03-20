@@ -123,7 +123,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
-            //this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
 
             CommandRegistry.Setup<Tablet>()
                 .InitializesWith<RegisterTabletCommand>(command => command.DeviceId, (command, aggregate) => aggregate.CreateClientDevice(command));
