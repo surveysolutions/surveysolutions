@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
@@ -26,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("AuthToken", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
         }
 
-        protected override void Because() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None).WaitAndUnwrapException();
+        protected override Task BecauseAsync() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None);
 
         [Test]
         public void Should_Authorize_User() => Thread.CurrentPrincipal.ShouldNotBeNull();

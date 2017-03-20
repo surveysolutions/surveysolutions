@@ -1,12 +1,10 @@
 using System;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,18 +18,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     public abstract class ApiBasicAuthNunitBasedSpecification
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task EstablishAsync()
         {
             this.Context();
-            this.Because();
+            await this.BecauseAsync();
         }
 
         protected virtual void Context() { }
-        protected virtual void Because() { }
+
+        protected virtual Task BecauseAsync() => Task.CompletedTask;
 
         protected ApiBasicAuthAttribute attribute;
         protected HttpActionContext actionContext;
         protected HqUserManager userManager;
+
         protected ApiBasicAuthAttribute CreateApiBasicAuthAttribute(IReadSideStatusService readSideStatusService = null)
         {
             this.userManager = new HqUserManager(this.UserStore.Object, Mock.Of<IAuthorizedUser>(), this.HashCompatibilityProvider.Object, this.ApiTokenProviderProvider.Object);
