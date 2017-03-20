@@ -604,4 +604,10 @@
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>interviewer(s) selected</value>
   </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>Error occurred please try again later.</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>Operation failed</value>
+  </data>
 </root>

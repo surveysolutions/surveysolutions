@@ -88,7 +88,7 @@
                     if (xhr.status === 401)
                         location.reload();
                     else if (xhr.status !== 200)
-                        notifier.showError("Operation failed", "Error occurred please try again later.");
+                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
                 })
                 .DataTable({
                     processing: true,
