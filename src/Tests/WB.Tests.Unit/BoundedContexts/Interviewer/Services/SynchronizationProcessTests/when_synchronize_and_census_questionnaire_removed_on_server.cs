@@ -24,6 +24,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var interviewId = Guid.NewGuid();
             int totalDeletedInterviewsCount = 0;
 
+            var removedQuestionnaireIdentity = new QuestionnaireIdentity(
+                Guid.Parse("11111111111111111111111111111111"), 1);
+
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
             interviewViewRepository.Store(new List<InterviewView>
             {
@@ -32,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     Id = interviewId.ToString(),
                     InterviewId = interviewId,
                     CanBeDeleted = true,
-                    QuestionnaireId = "questionnaire id"
+                    QuestionnaireId = removedQuestionnaireIdentity.ToString()
                 }
             });
 
@@ -45,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>()
-                     && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>()
+                     && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { removedQuestionnaireIdentity })
             );
 
             var mockOFInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
