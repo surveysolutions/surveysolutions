@@ -21,7 +21,11 @@
     };
 
     self.unarchiveUser = function (userViewItem) {
-        self.sendUserCommands([userViewItem], unArchiveUserCommad);
+        self.AskConfirmationAndRunActionIfTrue(function (filteredItems) {
+            self.SendCommands({ userIds: [userViewItem.UserId()], archive: false }, function () {
+                setTimeout(function () { self.search(); }, 100);
+            });
+        }, [userViewItem]);
     };
 
     self.unarchiveInterviewers = function () {
