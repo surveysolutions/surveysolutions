@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public interface IHashCompatibilityProvider
     {
-        bool IsSHA1Required(HqUser user);
+        bool IsInSha1CompatibilityMode();
         string GetSHA1HashFor(HqUser user, string password);
     }
 }

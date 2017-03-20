@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             var result = await base.UpdatePassword(passwordStore, user, newPassword).ConfigureAwait(false);
 
-            if (result == IdentityResult.Success && this.hashCompatibilityProvider.IsSHA1Required(user))
+            if (result == IdentityResult.Success && this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
@@ -49,18 +49,30 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        protected override Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
+        protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
-            if (user == null) return Task.FromResult(false);
+            if (user == null) return false;
 
             var result = this.PasswordHasher.VerifyHashedPassword(user.PasswordHash, password) == PasswordVerificationResult.Success;
 
-            if (!result && this.hashCompatibilityProvider.IsSHA1Required(user))
+            if (!result)
+            {
+                // migrating passwords
+                if (!user.IsInRole(UserRoles.Interviewer) 
+                    && user.PasswordHash == user.PasswordHashSha1 
+                    && user.PasswordHash == this.hashCompatibilityProvider.GetSHA1HashFor(user, password))
+                {
+                    user.PasswordHashSha1 = null;
+                    result = await this.ChangePasswordAsync(user, password).ConfigureAwait(false) == IdentityResult.Success;
+                }
+            }
+
+            if (!result && this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
                 result = user.PasswordHashSha1 == this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
             }
 
-            return Task.FromResult(result);
+            return result ;
         }
 
         public Task<string> GenerateApiAuthTokenAsync(Guid userId)
@@ -78,12 +90,19 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var store = new HqUserStore(context.Get<HQIdentityDbContext>());
             var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
             var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
-            
+
             var manager = new HqUserManager(store, authorizedUser, hashCompatibility)
             {
-                PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>()
+                PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
+                PasswordValidator = new PasswordValidator // temporary, untill not fixed globally
+                {
+                    RequiredLength = 1,
+                    RequireUppercase = false,
+                    RequireDigit = false,
+                    RequireLowercase = false,
+                    RequireNonLetterOrDigit = false
+                }
             };
-
             return manager;
         }
 
