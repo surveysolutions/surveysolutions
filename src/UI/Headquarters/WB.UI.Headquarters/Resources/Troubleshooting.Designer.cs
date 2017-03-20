@@ -79,6 +79,142 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search interviews syncronized between two dates.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_Dates {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_Dates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select dates.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_DatesPlaceholder {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_DatesPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_Interviewer {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select interviewer.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_InterviewerPlaceholder {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_InterviewerPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_Questionnaire {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_Questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_QuestionnairePlaceholder {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_QuestionnairePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string MissingCensusInterviews_Filters_Search {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Filters_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Conditions.
+        /// </summary>
+        public static string MissingCensusInterviews_FiltersTitle {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_FiltersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To locate an interview, please provide name of the questionnaire.&lt;br/&gt;
+        ///Select an interviewer and timeframe to narrow down your search result.
+        /// </summary>
+        public static string MissingCensusInterviews_Instructions {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews satisfy filter conditions.
+        /// </summary>
+        public static string MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization..
+        /// </summary>
+        public static string MissingCensusInterviews_NoBrokenPackages_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_NoBrokenPackages_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No interviews satisfy filter conditions.
+        /// </summary>
+        public static string MissingCensusInterviews_NothingFound_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_NothingFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One interview satisfies filter conditions.
+        /// </summary>
+        public static string MissingCensusInterviews_OneInterviewFound_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_OneInterviewFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locating specific census inteview.
+        /// </summary>
+        public static string MissingCensusInterviews_PageHeader {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_PageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team..
+        /// </summary>
+        public static string MissingCensusInterviews_SomeBrokenPackages_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_SomeBrokenPackages_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You will need to know enumerator and census interview template to find interview or it&apos;s status.
         /// </summary>
         public static string MissingCensusInterviewsDescription {
@@ -102,6 +238,42 @@ namespace WB.UI.Headquarters.Resources {
         public static string SupportSite {
             get {
                 return ResourceManager.GetString("SupportSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerator.
+        /// </summary>
+        public static string TableTitle_Enumerator {
+            get {
+                return ResourceManager.GetString("TableTitle_Enumerator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview id.
+        /// </summary>
+        public static string TableTitle_InterviewId {
+            get {
+                return ResourceManager.GetString("TableTitle_InterviewId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last update.
+        /// </summary>
+        public static string TableTitle_LastUpdate {
+            get {
+                return ResourceManager.GetString("TableTitle_LastUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string TableTitle_Status {
+            get {
+                return ResourceManager.GetString("TableTitle_Status", resourceCulture);
             }
         }
         
