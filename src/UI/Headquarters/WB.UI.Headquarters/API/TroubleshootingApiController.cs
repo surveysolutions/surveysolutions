@@ -50,6 +50,8 @@ namespace WB.UI.Headquarters.API
                 ChangedFrom = changedFrom,
                 ChangedTo = changedTo,
                 InterviewerId = request.InterviewerId,
+                SearchBy = request.Search.Value
+                
             };
 
             var items = this.allInterviewsViewFactory.LoadInterviewsWithoutPrefilled(input);

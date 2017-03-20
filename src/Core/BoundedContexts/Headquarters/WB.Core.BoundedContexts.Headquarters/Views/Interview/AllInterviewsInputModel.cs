@@ -30,5 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid? InterviewerId { get; set; }
 
         public bool CensusOnly { get; set; } = false;
+
+        public string SearchBy { get; set; }
     }
 }
