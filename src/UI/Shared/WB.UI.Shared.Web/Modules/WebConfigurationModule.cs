@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Aggregates;
@@ -8,14 +9,17 @@ namespace WB.UI.Shared.Web.Modules
 {
     public class WebConfigurationModule : NinjectModule
     {
+        private readonly NameValueCollection membershipSettings;
+        public WebConfigurationModule(NameValueCollection membershipSettings = null)
+        {
+            this.membershipSettings = membershipSettings;
+        }
+
         public override void Load()
         {
-            var membershipSection = (MembershipSection)WebConfigurationManager.GetSection("system.web/membership");
-            var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
-
             Bind<IConfigurationManager>()
                 .ToConstant(new ConfigurationManager(appSettings: WebConfigurationManager.AppSettings,
-                    membershipSettings: membershipSettings));
+                    membershipSettings: this.membershipSettings));
 
             Bind(typeof(int)).ToMethod(context => 
                     Convert.ToInt32(WebConfigurationManager.AppSettings["MaxCachedAggregateRoots"]))

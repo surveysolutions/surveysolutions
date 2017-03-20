@@ -173,6 +173,7 @@
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\EventBusConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Configuration\OwinSecuritySection.cs" />
     <Compile Include="Controllers\BaseMessageDisplayController.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
