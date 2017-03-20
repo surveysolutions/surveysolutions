@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -116,6 +117,8 @@ namespace WB.UI.Headquarters.Injections
                 cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
+            var owinSecuritySection = (OwinSecuritySection)WebConfigurationManager.GetSection(@"owinSecurity");
+
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
@@ -168,7 +171,7 @@ namespace WB.UI.Headquarters.Injections
                     userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
-                    passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
+                    passwordFormatRegex: owinSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: UserModel.PersonNameMaxLength,
                     phoneNumberMaxLength: UserModel.PhoneNumberLength);
@@ -259,6 +262,13 @@ namespace WB.UI.Headquarters.Injections
                     }
                 }
             }));
+            
+            kernel.Bind<IPasswordPolicy>().ToConstant(new PasswordPolicy
+            {
+                PasswordMinimumLength = owinSecuritySection.PasswordPolicy.PasswordMinimumLength,
+                MinRequiredNonAlphanumericCharacters = owinSecuritySection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
+                PasswordStrengthRegularExpression = owinSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression
+            });
 
             return kernel;
         }
