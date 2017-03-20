@@ -3,7 +3,6 @@ using System.Threading;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
@@ -13,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected override void Context()
         {
             this.SetupInterviwer(Create.Entity.HqUser(role: UserRoles.Interviewer, passwordHashSha1: "open sesame"));
-            this.HashCompatibilityProvider.Setup(h => h.IsSHA1Required(Moq.It.IsAny<HqUser>())).Returns(true);
+            this.HashCompatibilityProvider.Setup(h => h.IsInSha1CompatibilityMode()).Returns(true);
 
             this.attribute = this.CreateApiBasicAuthAttribute();
             this.actionContext = CreateActionContext();

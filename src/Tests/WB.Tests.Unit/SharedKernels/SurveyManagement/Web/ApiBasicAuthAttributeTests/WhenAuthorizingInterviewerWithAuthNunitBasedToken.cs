@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             this.SetupInterviwer(Create.Entity.HqUser(role: UserRoles.Interviewer, passwordHash: "open sesame"));
 
-            this.HashCompatibilityProvider.Setup(h => h.IsSHA1Required(Moq.It.IsAny<HqUser>())).Returns(false);
+            this.HashCompatibilityProvider.Setup(h => h.IsInSha1CompatibilityMode()).Returns(false);
             this.ApiTokenProviderProvider.Setup(p => p.ValidateTokenAsync(Moq.It.IsAny<Guid>(), "open sesame"))
                 .Returns(Task.FromResult(true));
 
