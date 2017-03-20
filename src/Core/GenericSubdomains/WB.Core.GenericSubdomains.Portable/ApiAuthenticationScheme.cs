@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.GenericSubdomains.Portable
 {
-    public enum ApiAuthorizationScheme
+    public enum ApiAuthenticationScheme
     {
         Basic,
         AuthToken

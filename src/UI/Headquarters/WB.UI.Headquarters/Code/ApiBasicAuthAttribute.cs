@@ -45,8 +45,8 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
             
-            BasicCredentials basicCredentials = this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.Basic, actionContext)
-                                                ?? this.ExtractFromAuthorizationHeader(ApiAuthorizationScheme.AuthToken, actionContext);
+            BasicCredentials basicCredentials = this.ExtractFromAuthorizationHeader(ApiAuthenticationScheme.Basic, actionContext)
+                                                ?? this.ExtractFromAuthorizationHeader(ApiAuthenticationScheme.AuthToken, actionContext);
 
             if (basicCredentials == null)
             {
@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.Code
 
             switch (basicCredentials.Scheme)
             {
-                case ApiAuthorizationScheme.Basic:
+                case ApiAuthenticationScheme.Basic:
                     if (this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)
                         || !this.TreatPasswordAsPlain && !CheckHashedPassword(userInfo, basicCredentials))
                     {
@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Code
                         return;
                     }
                     break;
-                case ApiAuthorizationScheme.AuthToken:
+                case ApiAuthenticationScheme.AuthToken:
                     if (!await this.userManager.ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password))
                     {
                         this.RespondWithMessageThatUserDoesNotExists(actionContext);
@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Code
             return userInfo.PasswordHash == basicCredentials.Password;
         }
 
-        private BasicCredentials ExtractFromAuthorizationHeader(ApiAuthorizationScheme scheme, HttpActionContext actionContext)
+        private BasicCredentials ExtractFromAuthorizationHeader(ApiAuthenticationScheme scheme, HttpActionContext actionContext)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace WB.UI.Headquarters.Code
         {
             public string Username { get; set; }
             public string Password { get; set; }
-            public ApiAuthorizationScheme Scheme { get; set; }
+            public ApiAuthenticationScheme Scheme { get; set; }
         }
 
         private void RespondWithMessageThatUserDoesNotExists(HttpActionContext actionContext)
