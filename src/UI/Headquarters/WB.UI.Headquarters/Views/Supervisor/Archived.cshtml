@@ -13,7 +13,7 @@
     @Scripts.Render("~/js/users")
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
-        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchiveUsers" })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchivedSupervisors" })', $commandExecutionUrl);
             ko.applyBindings(model);
