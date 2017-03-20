@@ -109,7 +109,7 @@ namespace WB.UI.Headquarters.Code
         {
             var compatibilityProvider = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
 
-            if (compatibilityProvider.IsSHA1Required(userInfo))
+            if (compatibilityProvider.IsInSha1CompatibilityMode() && userInfo.IsInRole(UserRoles.Interviewer))
             {
                 return userInfo.PasswordHashSha1 == basicCredentials.Password;
             }
