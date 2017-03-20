@@ -61,6 +61,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
         public void SignOut()
         {
             this.currentUserIdentity = null;
+            this.usersStorage.RemoveAll();
         }
 
         public bool SignIn(string userId, bool staySignedIn)
