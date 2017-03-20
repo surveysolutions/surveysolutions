@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -30,6 +31,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual bool IsLockedByHeadquaters { get; set; }
         public virtual DateTime CreationDate { get; set; }
         public virtual string PasswordHashSha1 { get; set; }
+
+        public bool IsInRole(UserRoles role)
+        {
+            return this.Roles.Any(r => r.Role == role);
+        }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<HqUser, Guid> manager)
         {
