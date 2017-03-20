@@ -193,7 +193,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
             catch (Exception ex)
             {
-                Mvx.Trace(ex.ToLongString());
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Fail_Title,
