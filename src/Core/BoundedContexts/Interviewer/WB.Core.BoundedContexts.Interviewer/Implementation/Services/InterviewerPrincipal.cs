@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.interviewersPlainStorage.Store(localInterviewer);
             }
 
-            if (this.passwordHasher.VerifyPassword(localInterviewer.PasswordHash, password))
+            if (localInterviewer.PasswordHash != null && this.passwordHasher.VerifyPassword(localInterviewer.PasswordHash, password))
             {
                 this.currentUserIdentity = localInterviewer;
             }
