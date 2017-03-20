@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -29,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
                 return SignInStatus.Failure;
 
-            if (user.Roles.First().Role == UserRoles.Interviewer || user.IsLockedByHeadquaters || user.IsLockedBySupervisor)
+            if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor)
                 return SignInStatus.LockedOut;
 
             return await this.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
