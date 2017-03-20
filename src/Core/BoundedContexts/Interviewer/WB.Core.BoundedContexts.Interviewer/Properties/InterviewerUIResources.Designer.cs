@@ -1037,7 +1037,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading company logo.
+        ///   Looks up a localized string similar to Downloading logo.
         /// </summary>
         public static string Synchronization_DownloadingLogo {
             get {

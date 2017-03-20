@@ -610,6 +610,6 @@ for further instructions</value>
     <value>Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
-    <value>Downloading company logo</value>
+    <value>Downloading logo</value>
   </data>
 </root>
