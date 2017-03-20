@@ -382,7 +382,6 @@
     <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
     <Compile Include="OwinSecurity\AuthorizedUser.cs" />
     <Compile Include="OwinSecurity\IApiTokenProvider.cs" />
-    <Compile Include="OwinSecurity\IdentityExtensions.cs" />
     <Compile Include="OwinSecurity\IHashCompatibilityProvider.cs" />
     <Compile Include="OwinSecurity\IUserRepository.cs" />
     <Compile Include="OwinSecurity\SchemaBasedHistoryContext.cs" />
