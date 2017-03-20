@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
@@ -18,6 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.actionContext = CreateActionContext();
             this.actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
         }
+
+        protected override Task BecauseAsync() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None);
 
         [Test]
         public void Should_Authorize_User() => Thread.CurrentPrincipal.ShouldNotBeNull();
