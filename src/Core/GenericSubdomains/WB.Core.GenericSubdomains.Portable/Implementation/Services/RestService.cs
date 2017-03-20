@@ -98,7 +98,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             if (credentials?.Token != null)
             {
                 string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
-                restClient.WithHeader("Authorization", new AuthenticationHeaderValue(ApiAuthorizationScheme.AuthToken.ToString(), base64String));
+                restClient.WithHeader("Authorization", new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String));
             }
 
             if (credentials?.Password != null && credentials?.Token == null)
