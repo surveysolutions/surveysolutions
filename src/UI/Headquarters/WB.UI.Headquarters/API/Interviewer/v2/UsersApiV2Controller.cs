@@ -36,11 +36,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [HttpPost]
         public async Task<string> Login(LogonInfo userLogin)
         {
-            var hqUser = await this.userManager.FindByNameAsync(userLogin.Username).ConfigureAwait(false);
+            var hqUser = await this.userManager.FindByNameAsync(userLogin.Username);
 
-            if (await this.userManager.CheckPasswordAsync(hqUser, userLogin.Password).ConfigureAwait(false))
+            if (await this.userManager.CheckPasswordAsync(hqUser, userLogin.Password))
             {
-                return await this.userManager.GenerateApiAuthTokenAsync(hqUser.Id).ConfigureAwait(false);
+                return await this.userManager.GenerateApiAuthTokenAsync(hqUser.Id);
             }
 
             return null;

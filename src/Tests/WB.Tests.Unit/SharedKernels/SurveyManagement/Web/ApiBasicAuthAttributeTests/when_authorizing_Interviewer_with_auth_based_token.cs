@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
 {
-    public class WhenAuthorizingInterviewerWithAuthNunitBasedToken : ApiBasicAuthNunitBasedSpecification
+    public class when_authorizing_Interviewer_with_auth_based_token : ApiBasicAuthNunitBasedSpecification
     {
         protected override void Context()
         {
@@ -25,6 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             this.actionContext = CreateActionContext();
             this.actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("AuthToken", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
         }
+
+        protected override void Because() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None).WaitAndUnwrapException();
 
         [Test]
         public void Should_Authorize_User() => Thread.CurrentPrincipal.ShouldNotBeNull();
