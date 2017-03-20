@@ -1132,6 +1132,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred please try again later..
+        /// </summary>
+        public static string OperationFailedDescription {
+            get {
+                return ResourceManager.GetString("OperationFailedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation failed.
+        /// </summary>
+        public static string OperationFailedTitle {
+            get {
+                return ResourceManager.GetString("OperationFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device Id.
         /// </summary>
         public static string PackagesInfo_DeviceId {
