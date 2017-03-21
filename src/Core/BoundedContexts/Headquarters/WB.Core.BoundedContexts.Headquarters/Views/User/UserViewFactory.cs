@@ -91,11 +91,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool onlyActive = false)
+        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool active = false)
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
-                users = ApplyFilter(users, searchBy, UserRoles.Interviewer, !onlyActive)
+                users = ApplyFilter(users, searchBy, UserRoles.Interviewer, !active)
                     .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
 
                 if (supervisorId.HasValue)
