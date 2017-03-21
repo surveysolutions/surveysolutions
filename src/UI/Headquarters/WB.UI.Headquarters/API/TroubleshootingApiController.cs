@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -38,8 +39,8 @@ namespace WB.UI.Headquarters.API
             QuestionnaireIdentity questionnaireIdentity = null;
             QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
 
-            var changedFrom = request.ChangedFrom ?? DateTime.Now.AddMonths(-1);
-            var changedTo = request.ChangedTo ?? DateTime.Now;
+            var changedFrom = (request.ChangedFrom ?? DateTime.Now.AddMonths(-1));
+            var changedTo = (request.ChangedTo ?? DateTime.Now).AddDays(1); 
             var input = new InterviewsWithoutPrefilledInputModel
             {
                 Page = request.PageIndex,
