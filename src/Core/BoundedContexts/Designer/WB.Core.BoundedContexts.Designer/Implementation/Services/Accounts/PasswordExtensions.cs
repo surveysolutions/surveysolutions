@@ -1,5 +1,7 @@
 ﻿
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
+
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 {
     /// <summary>
     /// Extension methods for <seealso cref="IMembershipAccount"/>

@@ -3,9 +3,10 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
-using MembershipProvider = WB.UI.Shared.Web.MembershipProvider.Accounts.MembershipProvider;
+using MembershipProvider = WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.MembershipProvider;
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests

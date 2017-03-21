@@ -26,10 +26,16 @@
             </label><br/>
         </div>
         <div class="form-group">
-            @Html.CheckBoxFor(x => x.IsLockedOut, new { @id = "is-locked", @class = "wb-checkbox" })
+            @Html.CheckBoxFor(x => x.IsLockedOut, new {@id = "is-locked", @class = "wb-checkbox"})
             <label for="is-locked">
                 <span></span>Is Locked Out
             </label><br/>
+        </div>
+        <div class="form-group">
+            @Html.CheckBoxFor(x => x.CanImportOnHq, new { @id = "can-import", @class = "wb-checkbox" })
+            <label for="can-import">
+                <span></span>Can import on HQ
+            </label><br />
         </div>
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="Update"/>

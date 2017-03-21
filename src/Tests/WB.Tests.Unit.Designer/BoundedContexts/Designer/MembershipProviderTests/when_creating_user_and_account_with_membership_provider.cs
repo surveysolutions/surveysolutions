@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 using it = Moq.It;

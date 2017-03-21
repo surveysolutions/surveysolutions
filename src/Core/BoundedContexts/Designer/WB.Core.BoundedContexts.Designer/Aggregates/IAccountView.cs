@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
