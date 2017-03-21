@@ -1,11 +1,13 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts.PasswordStrategies
-{
-    using System;
-    using System.Security;
-    using System.Security.Cryptography;
-    using System.Text;
-    using System.Web.Security;
+﻿using System;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies
+{
     /// <summary>
     /// Encrypts the password by using triple des.
     /// </summary>

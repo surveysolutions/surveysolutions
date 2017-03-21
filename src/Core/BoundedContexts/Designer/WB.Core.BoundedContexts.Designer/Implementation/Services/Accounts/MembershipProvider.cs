@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Configuration.Provider;
 using System.Security.Cryptography;
 using System.Web;
-using System.Web.Mvc;
 using System.Web.Security;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WebMatrix.WebData;
 
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 {
-
-
     public class MembershipProvider : ExtendedMembershipProvider
     {
         private const int TokenSizeInBytes = 16;
@@ -20,93 +20,27 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 
         public override string ApplicationName { get; set; }
 
-        public override string Description
-        {
-            get
-            {
-                return "A more friendly membership provider.";
-            }
-        }
+        public override string Description => "A more friendly membership provider.";
 
-        public override bool EnablePasswordReset
-        {
-            get
-            {
-                return this.PasswordPolicy.IsPasswordResetEnabled;
-            }
-        }
+        public override bool EnablePasswordReset => this.PasswordPolicy.IsPasswordResetEnabled;
 
-        public override bool EnablePasswordRetrieval
-        {
-            get
-            {
-                return this.PasswordStrategy.IsPasswordsDecryptable && this.PasswordPolicy.IsPasswordRetrievalEnabled;
-            }
-        }
-        
-        public override int MaxInvalidPasswordAttempts
-        {
-            get
-            {
-                return this.PasswordPolicy.MaxInvalidPasswordAttempts;
-            }
-        }
+        public override bool EnablePasswordRetrieval => this.PasswordStrategy.IsPasswordsDecryptable && this.PasswordPolicy.IsPasswordRetrievalEnabled;
 
-        public override int MinRequiredNonAlphanumericCharacters
-        {
-            get
-            {
-                return this.PasswordPolicy.MinRequiredNonAlphanumericCharacters;
-            }
-        }
+        public override int MaxInvalidPasswordAttempts => this.PasswordPolicy.MaxInvalidPasswordAttempts;
 
-        public override int MinRequiredPasswordLength
-        {
-            get
-            {
-                return this.PasswordPolicy.PasswordMinimumLength;
-            }
-        }
+        public override int MinRequiredNonAlphanumericCharacters => this.PasswordPolicy.MinRequiredNonAlphanumericCharacters;
 
-        public override int PasswordAttemptWindow
-        {
-            get
-            {
-                return this.PasswordPolicy.PasswordAttemptWindow;
-            }
-        }
+        public override int MinRequiredPasswordLength => this.PasswordPolicy.PasswordMinimumLength;
 
-        public override MembershipPasswordFormat PasswordFormat
-        {
-            get
-            {
-                return this.PasswordStrategy.PasswordFormat;
-            }
-        }
+        public override int PasswordAttemptWindow => this.PasswordPolicy.PasswordAttemptWindow;
 
-        public override string PasswordStrengthRegularExpression
-        {
-            get
-            {
-                return this.PasswordPolicy.PasswordStrengthRegularExpression;
-            }
-        }
+        public override MembershipPasswordFormat PasswordFormat => this.PasswordStrategy.PasswordFormat;
 
-        public override bool RequiresQuestionAndAnswer
-        {
-            get
-            {
-                return this.PasswordPolicy.IsPasswordQuestionRequired;
-            }
-        }
+        public override string PasswordStrengthRegularExpression => this.PasswordPolicy.PasswordStrengthRegularExpression;
 
-        public override bool RequiresUniqueEmail
-        {
-            get
-            {
-                return this.AccountRepository.IsUniqueEmailRequired;
-            }
-        }
+        public override bool RequiresQuestionAndAnswer => this.PasswordPolicy.IsPasswordQuestionRequired;
+
+        public override bool RequiresUniqueEmail => this.AccountRepository.IsUniqueEmailRequired;
 
         protected IAccountRepository AccountRepository
         {
@@ -114,7 +48,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             {
                 if (this.userService == null)
                 {
-                    this.userService = DependencyResolver.Current.GetService<IAccountRepository>();
+                    this.userService = ServiceLocator.Current.GetInstance<IAccountRepository>();
                     if (this.userService == null)
                     {
                         throw new InvalidOperationException(
@@ -132,7 +66,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             {
                 if (this.passwordPolicy == null)
                 {
-                    this.passwordPolicy = DependencyResolver.Current.GetService<IPasswordPolicy>();
+                    this.passwordPolicy = ServiceLocator.Current.GetInstance<IPasswordPolicy>();
                     if (this.passwordPolicy == null)
                     {
                         throw new InvalidOperationException(
@@ -150,7 +84,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             {
                 if (this.passwordStrategy == null)
                 {
-                    this.passwordStrategy = DependencyResolver.Current.GetService<IPasswordStrategy>();
+                    this.passwordStrategy = ServiceLocator.Current.GetInstance<IPasswordStrategy>();
                     if (this.passwordStrategy == null)
                     {
                         throw new InvalidOperationException(
@@ -509,7 +443,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
         public override void UpdateUser(MembershipUser user)
         {
             IMembershipAccount account = this.AccountRepository.GetByProviderKey(user.ProviderUserKey);
-            this.Merge(user, account);
+            this.Merge((DesignerMembershipUser)user, account);
             this.AccountRepository.Update(account);
         }
 
@@ -533,9 +467,9 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             return HttpServerUtility.UrlTokenEncode(tokenBytes);
         }
 
-        protected MembershipUser CloneUser(IMembershipAccount account)
+        protected DesignerMembershipUser CloneUser(IMembershipAccount account)
         {
-            return new MembershipUser(
+            return new DesignerMembershipUser(
                 this.Name, 
                 account.UserName, 
                 account.ProviderUserKey, 
@@ -548,7 +482,8 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
                 account.LastLoginAt, 
                 account.LastActivityAt, 
                 account.LastPasswordChangeAt, 
-                account.LastLockedOutAt);
+                account.LastLockedOutAt,
+                account.CanImportOnHq);
         }
 
         private static string GenerateToken()
@@ -625,14 +560,13 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             this.AccountRepository.Update(account, MembershipEventType.LockUser);
         }
 
-        private void Merge(MembershipUser user, IMembershipAccount account)
+        private void Merge(DesignerMembershipUser user, IMembershipAccount account)
         {
             string userNameByEmail = this.AccountRepository.GetUserNameByEmail(user.Email);
 
             if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(userNameByEmail) && userNameByEmail != account.UserName)
             {
-                throw new ProviderException(string.Format(
-                    "User with e-mail '{0}' already exists. Please enter a different e-mail address.", user.Email));
+                throw new ProviderException($"User with e-mail '{user.Email}' already exists. Please enter a different e-mail address.");
             }
 
             account.Comment = user.Comment;
@@ -647,6 +581,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             account.LastPasswordChangeAt = user.LastPasswordChangedDate;
             account.ProviderUserKey = Guid.Parse(user.ProviderUserKey.ToString());
             account.UserName = user.UserName;
+            account.CanImportOnHq = user.CanImportOnHq;
         }
 
         private void UpdateOnlineState(bool userIsOnline, IMembershipAccount user)

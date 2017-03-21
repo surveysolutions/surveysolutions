@@ -1,8 +1,10 @@
 
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
-{
-    using System.Web.Security;
+using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
+namespace WB.Core.BoundedContexts.Designer.Services.Accounts
+{
     /// <summary>
     /// Used to handle passwords.
     /// </summary>

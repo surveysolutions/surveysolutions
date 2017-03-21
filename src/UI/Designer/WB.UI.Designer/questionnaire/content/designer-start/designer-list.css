@@ -420,7 +420,7 @@ table#user-table-header tr td:nth-child(2),
 table#user-table-content tr td:nth-child(2),
 table#user-table-header tr th:nth-child(2),
 table#user-table-content tr th:nth-child(2) {
-  width: 30%;
+  width: 20%;
 }
 table#user-table-header tr td:nth-child(3),
 table#user-table-content tr td:nth-child(3),
@@ -438,6 +438,12 @@ table#user-table-header tr td:nth-child(5),
 table#user-table-content tr td:nth-child(5),
 table#user-table-header tr th:nth-child(5),
 table#user-table-content tr th:nth-child(5) {
+  width: 10%;
+}
+table#user-table-header tr td:nth-child(6),
+table#user-table-content tr td:nth-child(6),
+table#user-table-header tr th:nth-child(6),
+table#user-table-content tr th:nth-child(6) {
   width: 10%;
 }
 table#user-table-header tr td:last-child,
@@ -492,6 +498,11 @@ table.table-content tr th:last-child {
   display: inline-block;
   margin-left: 30px;
 }
+
+#user-table-header #frmSearch {
+    margin-left: 20px;
+}
+
 #frmSearch .btn {
   border: 1px solid #dbdfe2;
 }

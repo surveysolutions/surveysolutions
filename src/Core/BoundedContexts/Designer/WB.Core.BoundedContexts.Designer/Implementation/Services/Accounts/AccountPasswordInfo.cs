@@ -1,5 +1,5 @@
 ﻿
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 {
     /// <summary>
     /// Information used by the password strategies.
