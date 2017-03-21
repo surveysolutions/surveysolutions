@@ -155,7 +155,7 @@
 
             var allInterviewersApiUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
-            var editUrl = '@Url.Action("Edit", "Interviewer", new {area = string.Empty})';
+            var editUrl = '@Url.Action("Profile", "Interviewer", new {area = string.Empty})';
 
 
             var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
