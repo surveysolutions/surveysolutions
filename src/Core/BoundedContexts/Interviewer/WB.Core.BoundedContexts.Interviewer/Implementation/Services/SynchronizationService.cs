@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token)).ConfigureAwait(false);
 
             if(passwordHash == null){
-                throw new SynchronizationException(SynchronizationExceptionType.Unauthorized);
+                throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_Online_SignIn_Failed);
             };
             credentials.Token = passwordHash;
             return passwordHash;
