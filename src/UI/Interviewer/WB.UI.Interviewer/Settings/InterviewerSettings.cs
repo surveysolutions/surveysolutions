@@ -144,25 +144,25 @@ namespace WB.UI.Interviewer.Settings
             var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.LoadAll().Select(i => i.InterviewId));
             var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Id));
 
-            return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
-                   $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
-                   $"User:{GetUserInformation()} {Environment.NewLine}" +
-                   $"Device model:{this.GetDeviceModel()} {Environment.NewLine}" +
-                   $"Device type:{this.GetDeviceType()} {Environment.NewLine}" +
-                   $"Android version:{GetAndroidVersion()} {Environment.NewLine}" +
-                   $"DeviceId:{this.GetDeviceId()} {Environment.NewLine}" +
-                   $"RAM:{GetRAMInformation()} {Environment.NewLine}" +
-                   $"Disk:{GetDiskInformation()} {Environment.NewLine}" +
-                   $"DBSize:{GetDataBaseSize()} {Environment.NewLine}" +
-                   $"Endpoint:{this.Endpoint}{Environment.NewLine}" +
-                   $"AcceptUnsignedSslCertificate:{this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
-                   $"BufferSize:{this.BufferSize} {Environment.NewLine}" +
-                   $"Timeout:{this.Timeout} {Environment.NewLine}" +
-                   $"CurrentDataTime:{DateTime.Now} {Environment.NewLine}" +
-                   $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" + 
-                   $"EventChunkSize:{this.EventChunkSize} {Environment.NewLine}" +
-                   $"VibrateOnError:{this.VibrateOnError} {Environment.NewLine}" +
-                   $"InterviewsList:{interviewIds}";
+            return $"Version: {this.GetApplicationVersionName()} {Environment.NewLine}" +
+                   $"SyncProtocolVersion: {this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
+                   $"User: {GetUserInformation()} {Environment.NewLine}" +
+                   $"Device model: {this.GetDeviceModel()} {Environment.NewLine}" +
+                   $"Device type: {this.GetDeviceType()} {Environment.NewLine}" +
+                   $"Android version: {GetAndroidVersion()} {Environment.NewLine}" +
+                   $"DeviceId: {this.GetDeviceId()} {Environment.NewLine}" +
+                   $"RAM: {GetRAMInformation()} {Environment.NewLine}" +
+                   $"Disk: {GetDiskInformation()} {Environment.NewLine}" +
+                   $"DBSize: {GetDataBaseSize()} {Environment.NewLine}" +
+                   $"Endpoint: {this.Endpoint}{Environment.NewLine}" +
+                   $"AcceptUnsignedSslCertificate: {this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
+                   $"BufferSize: {this.BufferSize} {Environment.NewLine}" +
+                   $"Timeout: {this.Timeout} {Environment.NewLine}" +
+                   $"CurrentDataTime: {DateTime.Now} {Environment.NewLine}" +
+                   $"QuestionnairesList: {questionnaireIds} {Environment.NewLine}" + 
+                   $"EventChunkSize: {this.EventChunkSize} {Environment.NewLine}" +
+                   $"VibrateOnError: {this.VibrateOnError} {Environment.NewLine}" +
+                   $"InterviewsList: {interviewIds}";
         }
 
         public string GetDeviceModel() => CrossDeviceInfo.Current.Model;
