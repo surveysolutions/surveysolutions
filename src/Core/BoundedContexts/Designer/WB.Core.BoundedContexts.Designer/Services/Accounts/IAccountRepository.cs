@@ -1,8 +1,9 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts
-{
-    using System.Collections.Generic;
-    using System.Web.Security;
+﻿using System.Collections.Generic;
+using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 
+namespace WB.Core.BoundedContexts.Designer.Services.Accounts
+{
     /// <summary>
     /// Repository for user accounts
     /// </summary>

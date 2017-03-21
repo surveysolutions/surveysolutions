@@ -1,8 +1,9 @@
 
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
-{
-    using System;
+using System;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
+namespace WB.Core.BoundedContexts.Designer.Services.Accounts
+{
     /// <summary>
     /// Account information for a user 
     /// </summary>
@@ -126,5 +127,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
         /// A token that can be sent to the user to confirm the account.
         /// </summary>
         string ConfirmationToken { get; set; }
+
+        bool CanImportOnHq { get; set; }
     }
 }

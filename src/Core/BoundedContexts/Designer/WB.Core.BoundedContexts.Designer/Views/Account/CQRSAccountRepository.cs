@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
@@ -189,7 +189,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         passwordQuestion: account.PasswordQuestion, 
                         email: account.Email, 
                         isConfirmed: account.IsConfirmed, 
-                        comment: account.Comment);
+                        comment: account.Comment,
+                        canImportOnHq: account.CanImportOnHq);
                     break;
                 case MembershipEventType.FailedLogin:
                     command = new RegisterFailedLogin(accountPublicKey);

@@ -113,6 +113,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
       <Private>True</Private>
@@ -215,6 +216,10 @@
       <HintPath>..\..\..\..\..\packages\System.Xml.XPath.XDocument.4.0.1\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\User.cs" />
@@ -299,6 +304,15 @@
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="Implementation\Services\Accounts\AccountPasswordInfo.cs" />
+    <Compile Include="Implementation\Services\Accounts\DesignerMembershipUser.cs" />
+    <Compile Include="Implementation\Services\Accounts\MembershipEventType.cs" />
+    <Compile Include="Implementation\Services\Accounts\MembershipProvider.cs" />
+    <Compile Include="Implementation\Services\Accounts\PasswordExtensions.cs" />
+    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\ClearTextStrategy.cs" />
+    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
+    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\PasswordPolicyExtensions.cs" />
+    <Compile Include="Implementation\Services\Accounts\PasswordStrategies\TripleDesStrategy.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />
@@ -307,14 +321,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewExpressionStateTemplateV10.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs" >
-	  <AutoGen>True</AutoGen>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
+    <Compile Include="Services\Accounts\IAccountRepository.cs" />
+    <Compile Include="Services\Accounts\IMembershipAccount.cs" />
+    <Compile Include="Services\Accounts\IPasswordStrategy.cs" />
     <Compile Include="ValueObjects\RosterScope.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />

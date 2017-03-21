@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public virtual bool IsLockedOut { get; set; }
 
+        public virtual bool CanImportOnHq { get; set; }
+
         public virtual bool IsOnline { get; set; }
 
         public virtual DateTime LastActivityAt { get; set; }
@@ -144,12 +146,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.Password = password;
         }
 
-        public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment)
+        public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment, bool canImportOnHq)
         {
             this.Comment = comment;
             this.Email = email;
             this.PasswordQuestion = passwordQuestion;
             this.UserName = GetNormalizedUserName(userName);
+            this.CanImportOnHq = canImportOnHq;
 
             if (!this.IsConfirmed && isConfirmed)
             {

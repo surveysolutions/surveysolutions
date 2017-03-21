@@ -1,5 +1,7 @@
-﻿@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+﻿@using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
 @using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Models.AccountViewModel
 
@@ -8,7 +10,7 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 <div id="edit-form">
-    <h1>Account: @Model.UserName</h1>
+    <h1>Account: @Model.UserName <a class="btn btn-default" href="@Url.Action("Edit","Admin", new { id = Model.Id })">Edit</a></h1>
     <div class="form-group">
         <b>Email:</b> @Model.Email
     </div>
@@ -19,10 +21,16 @@
         </label><br/>
     </div>
     <div class="form-group">
-        @Html.CheckBoxFor(x => x.IsLockedOut, new { @id = "is-locked", @class = "wb-checkbox", @disabled = "disabled" })
+        @Html.CheckBoxFor(x => x.IsLockedOut, new {@id = "is-locked", @class = "wb-checkbox", @disabled = "disabled"})
         <label for="is-locked">
             <span></span>Is Locked Out
         </label><br/>
+    </div>
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.CanImportOnHq, new { @id = "is-locked", @class = "wb-checkbox", @disabled = "disabled" })
+        <label for="is-locked">
+            <span></span>Can import on HQ
+        </label><br />
     </div>
     <h4>Questionnaires:</h4>
         <table class="table table-content ">
@@ -40,11 +48,11 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var listViewModel in Model.Questionnaires)
+            @foreach (QuestionnaireListViewModel listViewModel in Model.Questionnaires)
             {
                 <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                     <td class="search-value">
-                        @listViewModel.Title
+                        <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
                     </td>
                     <td class="date">
                         @listViewModel.LastEntryDate.FormatDate()

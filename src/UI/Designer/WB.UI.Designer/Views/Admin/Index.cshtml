@@ -19,8 +19,9 @@
             @ShowTableHeaderCell("UserName", "Login", true)
             @ShowTableHeaderCell("Email", "Email")
             @ShowTableHeaderCell("CreatedAt", "Created date")
-            @ShowTableHeaderCell("IsConfirmed", "APPROVED?")
-            @ShowTableHeaderCell("IsLockedOut", "LOCKED?")
+            @ShowTableHeaderCell("IsConfirmed", "APPROVED")
+            @ShowTableHeaderCell("IsLockedOut", "LOCKED")
+            @ShowTableHeaderCell("CanImportOnHq", "Can Import On HQ")
             <th>
             </th>
         </tr>
@@ -38,9 +39,10 @@
                 <tbody>
                     @foreach (var user in Model)
                     {
+                        var routevalues = user.GetIdValue();
                         <tr>
                             <td class="search-value">
-                                @user.UserName
+                                @Html.ActionLink(user.UserName, "Details", controller, routevalues, null)
                             </td>
                             <td class="email">
                                 @FormatEmail(user.Email)
@@ -55,21 +57,21 @@
                                 @(user.IsLockedOut ? "Yes" : "No")
                             </td>
                             <td>
+                                @(user.CanImportOnHq ? "Yes" : "No")
+                            </td>
+                            <td>
                                 <div class="btn-group pull-right">
                                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                                         Action
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        @{
-                        var routevalues = user.GetIdValue();
-
-                        <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                                            <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
-                                        }
+                                    @{
+                                        <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                        <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                                    }
                                     </ul>
                                 </div>
-
                             </td>
                         </tr>
                     }

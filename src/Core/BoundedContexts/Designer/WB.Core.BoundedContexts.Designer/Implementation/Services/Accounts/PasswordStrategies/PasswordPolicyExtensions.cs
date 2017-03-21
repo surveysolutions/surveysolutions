@@ -1,8 +1,9 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts.PasswordStrategies
-{
-    using System;
-    using System.Linq;
+﻿using System;
+using System.Linq;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies
+{
     /// <summary>
     /// Extension methods for password policies.
     /// </summary>

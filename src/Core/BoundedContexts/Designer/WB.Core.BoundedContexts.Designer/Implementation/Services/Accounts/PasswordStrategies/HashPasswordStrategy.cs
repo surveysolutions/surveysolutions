@@ -1,15 +1,18 @@
-﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts.PasswordStrategies
+﻿using System;
+using System.Configuration.Provider;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies
 {
-    using System;
-    using System.Web.Security;
-
     /// <summary>
-    /// Strategy that do nothing with the passwords.
+    /// Hash a password using a salt.
     /// </summary>
-    public class ClearTextStrategy : IPasswordStrategy
+    public class HashPasswordStrategy : IPasswordStrategy
     {
-        private Random _random = new Random();
-
         #region Implementation of IPasswordStrategy
 
         /// <summary>
@@ -21,8 +24,15 @@
         /// </returns>
         public string Encrypt(AccountPasswordInfo account)
         {
-            return account.Password;
+            if (account.PasswordSalt == null)
+                account.PasswordSalt = this.CreateSalt(10);
+            var saltAndPwd = String.Concat(account.Password, account.PasswordSalt);
+            var bytes = Encoding.Default.GetBytes(saltAndPwd);
+            var sha1 = SHA1.Create();
+            var computedHash = sha1.ComputeHash(bytes);
+            return Convert.ToBase64String(computedHash);
         }
+
 
         /// <summary>
         /// Decrypt a password
@@ -31,7 +41,7 @@
         /// <returns>Decrypted password if decryption is possible; otherwise null.</returns>
         public string Decrypt(string password)
         {
-            return password;
+            throw new ProviderException("Password decryption is not allowed/possible.");
         }
 
         /// <summary>
@@ -44,6 +54,7 @@
             return policy.GeneratePassword();
         }
 
+
         /// <summary>
         /// Compare if the specified password matches the encrypted password
         /// </summary>
@@ -54,7 +65,10 @@
         /// </returns>
         public bool Compare(AccountPasswordInfo account, string clearTextPassword)
         {
-            return account.Password.Equals(clearTextPassword);
+            var clearTextInfo = new AccountPasswordInfo(account.UserName, clearTextPassword)
+                                    {PasswordSalt = account.PasswordSalt};
+            var password = this.Encrypt(clearTextInfo);
+            return account.Password == password;
         }
 
         /// <summary>
@@ -62,7 +76,7 @@
         /// </summary>
         public bool IsPasswordsDecryptable
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
@@ -70,7 +84,7 @@
         /// </summary>
         public MembershipPasswordFormat PasswordFormat
         {
-            get { return MembershipPasswordFormat.Clear; }
+            get { return MembershipPasswordFormat.Hashed; }
         }
 
         /// <summary>
@@ -82,6 +96,22 @@
         public bool IsValid(string password, IPasswordPolicy passwordPolicy)
         {
             return passwordPolicy.IsPasswordValid(password);
+        }
+
+        /// <summary>
+        /// Create a salt and convert it to base64
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <returns>Base64 generated salt.</returns>
+        protected string CreateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            var rng = new RNGCryptoServiceProvider();
+            var buff = new byte[size];
+            rng.GetBytes(buff);
+
+            // Return a Base64 string representation of the random number.
+            return Convert.ToBase64String(buff);
         }
 
         #endregion

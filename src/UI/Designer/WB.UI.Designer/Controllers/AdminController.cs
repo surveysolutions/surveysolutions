@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -382,7 +383,7 @@ namespace WB.UI.Designer.Controllers
             };
             return new FileStreamResult(this.zipUtils.Compress(this.serializer.Serialize(questionnaireDocumentWithLookUpTables)), "application/octet-stream")
             {
-                FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
+                FileDownloadName = $"{questionnaireView.Title.ToValidFileName()}.tmpl"
             };
         }
 
@@ -492,15 +493,15 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Guid id)
         {
-            MembershipUser user = this.GetUser(id);
+            MembershipUser user = Membership.GetUser(id, false);
             if (user == null)
             {
-                this.Error(string.Format("User \"{0}\" doesn't exist", id));
+                this.Error($"User \"{id}\" doesn't exist");
             }
             else
             {
                 Membership.DeleteUser(user.UserName);
-                this.Success(string.Format("User \"{0}\" successfully deleted", user.UserName));
+                this.Success($"User \"{user.UserName}\" successfully deleted");
             }
 
             return this.RedirectToAction("Index");
@@ -508,7 +509,7 @@ namespace WB.UI.Designer.Controllers
 
         public ViewResult Details(Guid id)
         {
-            MembershipUser account = this.GetUser(id);
+            DesignerMembershipUser account = (DesignerMembershipUser)Membership.GetUser(id, false);
 
             var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id,
                     isAdmin: this.UserHelper.WebUser.IsAdmin);
@@ -528,6 +529,7 @@ namespace WB.UI.Designer.Controllers
                             Email = account.Email,
                             IsApproved = account.IsApproved,
                             IsLockedOut = account.IsLockedOut,
+                            CanImportOnHq = account.CanImportOnHq,
                             LastLoginDate = account.LastLoginDate.ToUIString(),
                             UserName = account.UserName,
                             LastLockoutDate = account.LastLockoutDate.ToUIString(),
@@ -539,7 +541,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            MembershipUser intUser = this.GetUser(id);
+            DesignerMembershipUser intUser = (DesignerMembershipUser)Membership.GetUser(id, false);
             return
                 this.View(
                     new UpdateAccountModel
@@ -548,7 +550,8 @@ namespace WB.UI.Designer.Controllers
                             IsApproved = intUser.IsApproved, 
                             IsLockedOut = intUser.IsLockedOut, 
                             UserName = intUser.UserName, 
-                            Id = id
+                            Id = id,
+                            CanImportOnHq = intUser.CanImportOnHq
                         });
         }
 
@@ -558,13 +561,13 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                MembershipUser intUser = this.GetUser(user.Id);
+                DesignerMembershipUser intUser = (DesignerMembershipUser)Membership.GetUser(user.Id, false);
                 if (intUser != null)
                 {
                     try
                     {
                         Membership.UpdateUser(
-                            new MembershipUser(
+                            new DesignerMembershipUser(
                                 providerName: intUser.ProviderName,
                                 name: intUser.UserName,
                                 providerUserKey: intUser.ProviderUserKey,
@@ -577,7 +580,8 @@ namespace WB.UI.Designer.Controllers
                                 lastLoginDate: intUser.LastLoginDate,
                                 lastActivityDate: intUser.LastActivityDate,
                                 lastPasswordChangedDate: intUser.LastPasswordChangedDate,
-                                lastLockoutDate: intUser.LastLockoutDate));
+                                lastLockoutDate: intUser.LastLockoutDate,
+                                canImportOnHq: user.CanImportOnHq));
 
                         return this.RedirectToAction("Index");
                     }
@@ -587,7 +591,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        logger.Error("User update exception", e);
+                        this.logger.Error("User update exception", e);
                         this.Error("Could not update user information. Please, try again later.");
                     }
                 }
@@ -607,7 +611,7 @@ namespace WB.UI.Designer.Controllers
 
             if (so.ToBool())
             {
-                sb = string.Format("{0} Desc", sb);
+                sb = $"{sb} Desc";
             }
             var users = accountListViewFactory.Load(new AccountListViewInputModel()
             {
@@ -617,13 +621,9 @@ namespace WB.UI.Designer.Controllers
                 Order = sb ?? string.Empty,
             });
 
-            Func<IAccountView, bool> editAction =
-                (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
+            Func<IAccountView, bool> editAction = (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
-            IEnumerable<AccountListViewItemModel> retVal =
-                users.Items
-                     .Select(
-                         x =>
+            IEnumerable<AccountListViewItemModel> retVal = users.Items.Select(x =>
                          new AccountListViewItemModel
                              {
                                  Id = x.ProviderUserKey.AsGuid(), 
@@ -635,14 +635,11 @@ namespace WB.UI.Designer.Controllers
                                  CanEdit = editAction(x), 
                                  CanOpen = false,
                                  CanDelete = false, 
-                                 CanPreview = editAction(x)
+                                 CanPreview = editAction(x),
+                                 CanImportOnHq = x.CanImportOnHq
                              });
-            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
-        }
 
-        private MembershipUser GetUser(Guid id)
-        {
-            return Membership.GetUser(id, false);
+            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
         }
     }
 }
