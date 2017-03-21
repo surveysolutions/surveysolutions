@@ -75,7 +75,7 @@
                 <td>
                     @if (isAdminOrHeadquarters)
                     {
-                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?Archived=true&supervisor=' + UserName() }">
+                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?archived=true&supervisor=' + UserName() }">
                             <i class="glyphicon glyphicon-user"></i> @Users.Interviewers
                         </a>
                     }
