@@ -231,4 +231,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>New Version Available:</value>
+  </data>
 </root>
