@@ -44,6 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             transactionManager.ExecuteInPlainTransaction(() =>
             {
+                context.Configuration.AutoDetectChangesEnabled = false;
+                context.Configuration.ProxyCreationEnabled = false;
                 foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users => users.ToList()))
                 {
                     context.Users.AddOrUpdate(new HqUser
@@ -58,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                         PhoneNumber = oldUser.PhoneNumber,
                         UserName = oldUser.UserName,
                         PasswordHash = oldUser.Password,
-                    PasswordHashSha1 = oldUser.Password,
+                        PasswordHashSha1 = oldUser.Password,
                         SecurityStamp = Guid.NewGuid().FormatGuid(),
                         Profile = oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId) ? new HqUserProfile
                         {
