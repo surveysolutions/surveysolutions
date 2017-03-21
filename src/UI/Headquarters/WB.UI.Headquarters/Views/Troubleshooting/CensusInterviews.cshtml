@@ -66,48 +66,50 @@
                 }
             },
             methods: {
-                addParamsToRequest(requestData) {
+                addParamsToRequest: function(requestData) {
                     requestData.interviewerId = (this.interviewerId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                     requestData.changedFrom = moment(this.changedFrom).format();
                     requestData.changedTo = moment(this.changedTo).format();
                 },
-                responseProcessor(response) {
+                responseProcessor: function (response) {
                     this.isLoading = false;
                     this.totalCensusInterviews = response.censusInterviewsCount;
                     this.totalBrokenPackages = response.brokenPackagesCount;
                 },
-                userSelected(newValue) {
+                userSelected: function (newValue) {
                     this.interviewerId = newValue;
                 },
-                questionnaireSelected(newValue) {
+                questionnaireSelected: function (newValue) {
                     this.questionnaireId = newValue;
                 },
-                rangeSelected(textValue, from, to) {
+                rangeSelected: function (textValue, from, to) {
                     this.changedFrom = from;
                     this.changedTo = to;
                 },
-                findInterviews() {
-                    this.$validator.validateAll().then(result => {
+                findInterviews: function () {
+                    var self = this;
+                    this.$validator.validateAll().then(function (result) {
                         if (result) {
-                            this.reloadTable();
-                            this.startWatchers(['interviewerId', 'questionnaireId', 'changedFrom', 'changedTo'], this.reloadTable.bind(this));
+                            self.reloadTable();
+                            self.startWatchers(['interviewerId', 'questionnaireId', 'changedFrom', 'changedTo'], self.reloadTable.bind(self));
                             document.querySelector("main").classList.remove("search-wasnt-started");
-                            this.wasInitialized = true;
+                            self.wasInitialized = true;
                         }
                     });
                 },
-                startWatchers(props, watcher) {
+                startWatchers: function (props, watcher) {
                     var iterator = function (prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
                 },
-                reloadTable() {
-                    this.$validator.validateAll().then(result => {
-                        if (result && (this.changedFrom !== null && this.changedTo !== null) || (this.changedFrom == null && this.changedTo == null)) {
-                            this.isLoading = true;
-                            this.$refs.table.reload(this.reloadTable);
+                reloadTable: function () {
+                    var self = this;
+                    this.$validator.validateAll().then(function(result) {
+                        if (result && (self.changedFrom !== null && self.changedTo !== null) || (self.changedFrom == null && self.changedTo == null)) {
+                            self.isLoading = true;
+                            self.$refs.table.reload(self.reloadTable);
                         }
                     });
                 }
@@ -177,7 +179,7 @@
                     </div>
                     <div class="block-filter">
                         <h5>@Troubleshooting.MissingCensusInterviews_Filters_Dates</h5>
-                        <Flatpickr placeholder="@Troubleshooting.MissingCensusInterviews_Filters_DatesPlaceholder"  input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions" />
+                        <Flatpickr placeholder="@Troubleshooting.MissingCensusInterviews_Filters_DatesPlaceholder" input-class="form-control" v-on:input="rangeSelected" :options="dateRangePickerOptions"></Flatpickr>
                     </div>
                     <div class="block-filter">
                         <button type="button" v-if="wasInitialized === false" v-on:click="findInterviews" 
@@ -212,7 +214,7 @@
                         <interview-table ref="table"
                                          :add-params-to-request="addParamsToRequest"
                                          :response-processor="responseProcessor"
-                                         :table-options="tableOptions" />
+                                         :table-options="tableOptions"></interview-table>
                     </div>
                 </div>
             </div>
