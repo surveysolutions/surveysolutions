@@ -42,7 +42,7 @@
             function (filteredItems) {
 
                 var request = {
-                    userIds: filteredItems.map(user=>user.UserId()),
+                    userIds: filteredItems.map(function(user) { return user.UserId() }),
                     archive: archive
                 };
 
