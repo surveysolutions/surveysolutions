@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Web.Mvc;
-using System.Web.Security;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
@@ -11,7 +10,6 @@ using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests
 {
-
     internal class when_updating_user_with_email_that_used_by_another_user_with_membership_provider : MembershipProviderTestsContext
     {
         Establish context = () =>
@@ -30,16 +28,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             var passwordPolicy = Mock.Of<IPasswordPolicy>();
             var passwordStrategy =
                 Mock.Of<IPasswordStrategy>(x => x.IsValid(it.IsAny<string>(), it.IsAny<IPasswordPolicy>()) == true);
-            
-            var dependencyResolver =
-                Mock.Of<IDependencyResolver>(x => x.GetService(typeof (IAccountRepository)) == accountRepository &&
-                    x.GetService(typeof (IPasswordPolicy)) == passwordPolicy &&
-                    x.GetService(typeof (IPasswordStrategy)) == passwordStrategy);
 
-            DependencyResolver.SetResolver(dependencyResolver);
+            Setup.InstanceToMockedServiceLocator<IAccountRepository>(accountRepository);
+            Setup.InstanceToMockedServiceLocator<IPasswordPolicy>(passwordPolicy);
+            Setup.InstanceToMockedServiceLocator<IPasswordStrategy>(passwordStrategy);
+
             membershipProvider = CreateMembershipProvider();
 
-            membershipUser = Mock.Of<MembershipUser>(x => x.Email == validatedUserEmail && (Guid)x.ProviderUserKey == userIdWithExistingEmail);
+            membershipUser = Mock.Of<DesignerMembershipUser>(x => x.Email == validatedUserEmail && (Guid)x.ProviderUserKey == userIdWithExistingEmail);
         };
 
         Because of = () => exception =
@@ -54,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
         It should_throw_exception_with_message_containting__exists__ = () =>
             exception.Message.ToLower().ShouldContain("exists");
 
-        private static MembershipUser membershipUser;
+        private static DesignerMembershipUser membershipUser;
         private static MembershipProvider membershipProvider;
         private static string validatedUserEmail;
         private static IAccountRepository accountRepository;
