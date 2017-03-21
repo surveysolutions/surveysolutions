@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locating specific census inteview.
+        ///   Looks up a localized string similar to Locating specific census interview.
         /// </summary>
         public static string MissingCensusInterviews_PageHeader {
             get {

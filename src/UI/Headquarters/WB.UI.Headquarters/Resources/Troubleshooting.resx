@@ -176,7 +176,7 @@ Select an interviewer and timeframe to narrow down your search result</value>
     <value>One interview satisfies filter conditions</value>
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
-    <value>Locating specific census inteview</value>
+    <value>Locating specific census interview</value>
   </data>
   <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
     <value>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team.</value>
