@@ -421,4 +421,7 @@
   <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
     <value>1 интервью не удалось создать</value>
   </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Только файлы с расширением {0} или {1} разрешены для загрузки.</value>
+  </data>
 </root>

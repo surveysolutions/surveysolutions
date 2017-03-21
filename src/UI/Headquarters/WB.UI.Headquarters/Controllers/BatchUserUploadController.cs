@@ -1,7 +1,9 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -44,11 +46,11 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult NewUserBatchUpload()
         {
             this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
-            return
-                this.View(new UserBatchUploadModel
-                {
-                    AvaliableDataColumnNames = userPreloadingService.GetAvaliableDataColumnNames()
-                });
+
+            return this.View(new UserBatchUploadModel
+            {
+                AvaliableDataColumnNames = this.userPreloadingService.GetAvaliableDataColumnNames()
+            });
         }
 
         [HttpPost]
@@ -59,8 +61,14 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.UserBatchUpload;
 
             if (!this.ModelState.IsValid)
-            {
                 return this.View(model);
+
+            var fileExtension = Path.GetExtension(model.File.FileName).ToLower();
+            var extensionAccepted = fileExtension == ".txt" || fileExtension == ".tab";
+            if (!extensionAccepted)
+            {
+                this.Error(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, ".tab", ".txt"));
+                return this.RedirectToAction(nameof(NewUserBatchUpload));
             }
 
             try
@@ -68,15 +76,12 @@ namespace WB.UI.Headquarters.Controllers
                 var preloadedDataId = this.userPreloadingService.CreateUserPreloadingProcess(model.File.InputStream,
                     model.File.FileName);
                 
-                return this.RedirectToAction("ImportUserDetails", new { id = preloadedDataId });
+                return this.RedirectToAction(nameof(ImportUserDetails), new { id = preloadedDataId });
             }
             catch (Exception e)
             {
                 this.Error(e.Message);
-                return this.View(new UserBatchUploadModel()
-                {
-                    AvaliableDataColumnNames = userPreloadingService.GetAvaliableDataColumnNames()
-                });
+                return this.RedirectToAction(nameof(NewUserBatchUpload));
             }
         }
        
@@ -90,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception e)
             {
                 this.Error(e.Message);
-                return RedirectToAction("UserBatchUploads");
+                return RedirectToAction(nameof(UserBatchUploads));
             }
         }
 
@@ -107,12 +112,12 @@ namespace WB.UI.Headquarters.Controllers
                 
                 this.RunVerificationInSeparateTask();
 
-                return this.RedirectToAction("UserPreloadigVerificationDetails", new {id});
+                return this.RedirectToAction(nameof(UserPreloadigVerificationDetails), new {id});
             }
             catch (Exception e)
             {
                 this.Error(e.Message);
-                return RedirectToAction("UserBatchUploads");
+                return RedirectToAction(nameof(UserBatchUploads));
             }
         }
 
@@ -124,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             try
             {
                 this.RunVerificationInSeparateTask();
-                return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
+                return this.RedirectToAction(nameof(UserPreloadigVerificationDetails), new { id });
             }
             catch (Exception e)
             {
@@ -157,7 +162,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult UserPreloadigVerificationDetails(string id)
         {
-            return this.View("UserPreloadigVerificationDetails", null, id);
+            return this.View(nameof(UserPreloadigVerificationDetails), null, id);
         }
 
         [HttpPost]
@@ -173,12 +178,12 @@ namespace WB.UI.Headquarters.Controllers
 
                 this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
 
-                return this.RedirectToAction("UserCreationProcessDetails", new {id});
+                return this.RedirectToAction(nameof(UserCreationProcessDetails), new {id});
             }
             catch (Exception e)
             {
                 this.Error(e.Message);
-                return RedirectToAction("UserBatchUploads");
+                return RedirectToAction(nameof(UserBatchUploads));
             }
         }
 
@@ -190,19 +195,19 @@ namespace WB.UI.Headquarters.Controllers
             try
             {
                 this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue();
-                return this.RedirectToAction("UserCreationProcessDetails", new { id });
+                return this.RedirectToAction(nameof(UserCreationProcessDetails), new { id });
             }
             catch (Exception e)
             {
                 Logger.Error("Error on user verification ", e);
-                return RedirectToAction("UserBatchUploads");
+                return RedirectToAction(nameof(UserBatchUploads));
             }
         }
 
         [ObserverNotAllowed]
         public ActionResult UserCreationProcessDetails(string id)
         {
-            return this.View("UserCreationProcessDetails", null, id);
+            return this.View(nameof(UserCreationProcessDetails), null, id);
         }
     }
 }
