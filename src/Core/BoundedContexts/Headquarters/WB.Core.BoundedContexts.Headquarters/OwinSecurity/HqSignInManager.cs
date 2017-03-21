@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
                 return SignInStatus.Failure;
 
-            if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor)
+            if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
 
             return await this.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
