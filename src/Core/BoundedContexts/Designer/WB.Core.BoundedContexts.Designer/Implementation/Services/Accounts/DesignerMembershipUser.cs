@@ -5,6 +5,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 {
     public class DesignerMembershipUser : MembershipUser
     {
+        protected DesignerMembershipUser() { }
+
         public DesignerMembershipUser(
             string providerName,
             string name,

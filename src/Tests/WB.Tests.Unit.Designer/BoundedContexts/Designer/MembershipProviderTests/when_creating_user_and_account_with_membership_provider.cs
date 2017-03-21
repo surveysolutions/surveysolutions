@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
@@ -31,12 +30,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             var passwordStrategy =
                 Mock.Of<IPasswordStrategy>(x => x.IsValid(it.IsAny<string>(), it.IsAny<IPasswordPolicy>()) == true);
             
-            var dependencyResolver =
-                Mock.Of<IDependencyResolver>(x => x.GetService(typeof (IAccountRepository)) == accountRepositoryMock.Object &&
-                    x.GetService(typeof (IPasswordPolicy)) == passwordPolicy &&
-                    x.GetService(typeof (IPasswordStrategy)) == passwordStrategy);
+            Setup.InstanceToMockedServiceLocator<IAccountRepository>(accountRepositoryMock.Object);
+            Setup.InstanceToMockedServiceLocator<IPasswordPolicy>(passwordPolicy);
+            Setup.InstanceToMockedServiceLocator<IPasswordStrategy>(passwordStrategy);
 
-            DependencyResolver.SetResolver(dependencyResolver);
             membershipProvider = CreateMembershipProvider();
         };
 
