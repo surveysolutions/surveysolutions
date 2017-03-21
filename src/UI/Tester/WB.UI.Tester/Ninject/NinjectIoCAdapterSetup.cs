@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using MvvmCross.Platform.IoC;
 using WB.Core.BoundedContexts.Tester;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -30,7 +31,7 @@ namespace WB.UI.Tester.Ninject
 
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new EnumeratorSharedKernelModule(),
-                new EnumeratorInfrastructureModule(),
+                new EnumeratorInfrastructureModule(typeof(PasswordHasher)),
 
                 new TesterBoundedContextModule().AsNinject(),
                 new TesterInfrastructureModule(),
