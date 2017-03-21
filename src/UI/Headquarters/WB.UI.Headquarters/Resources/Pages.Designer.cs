@@ -250,6 +250,105 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to done interviews (completed and aproved by hq).
+        /// </summary>
+        public static string EnumeratorProfile_Approved {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (assigned to {1}).
+        /// </summary>
+        public static string EnumeratorProfile_AssignedToFormat {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_AssignedToFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mail: {0}.
+        /// </summary>
+        public static string EnumeratorProfile_EmailFormat {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_EmailFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerators.
+        /// </summary>
+        public static string EnumeratorProfile_Enumerators {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_Enumerators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full name: {0}.
+        /// </summary>
+        public static string EnumeratorProfile_FullNameFormat {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_FullNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit personal info.
+        /// </summary>
+        public static string EnumeratorProfile_Info {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to new assignments on device.
+        /// </summary>
+        public static string EnumeratorProfile_NewOnDevice {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_NewOnDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number: {0}.
+        /// </summary>
+        public static string EnumeratorProfile_PhoneFormat {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_PhoneFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rejected assignments again on device.
+        /// </summary>
+        public static string EnumeratorProfile_Rejected {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerator: {0}.
+        /// </summary>
+        public static string EnumeratorProfile_TitleFormat {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to waiting for approval.
+        /// </summary>
+        public static string EnumeratorProfile_WaitingForApproval {
+            get {
+                return ResourceManager.GetString("EnumeratorProfile_WaitingForApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while processing your request..
         /// </summary>
         public static string Error_Description {
