@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
-                users = ApplyFilter(users, searchBy, UserRoles.Interviewer, onlyActive)
+                users = ApplyFilter(users, searchBy, UserRoles.Interviewer, !onlyActive)
                     .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
 
                 if (supervisorId.HasValue)
