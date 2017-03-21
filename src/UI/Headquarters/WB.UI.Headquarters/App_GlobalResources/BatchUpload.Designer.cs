@@ -1008,6 +1008,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only files with {0} and {1} extensions are allowed for upload..
+        /// </summary>
+        internal static string UploadUsers_NotAllowedExtension {
+            get {
+                return ResourceManager.GetString("UploadUsers_NotAllowedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List of files with preloaded users.
         /// </summary>
         internal static string UploadUsers_Title {
