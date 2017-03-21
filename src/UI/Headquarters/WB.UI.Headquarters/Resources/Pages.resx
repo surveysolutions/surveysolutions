@@ -357,6 +357,39 @@
   <data name="InterviewerCreate_Team" xml:space="preserve">
     <value>team</value>
   </data>
+  <data name="EnumeratorProfile_TitleFormat" xml:space="preserve">
+    <value>Enumerator: {0}</value>
+  </data>
+  <data name="EnumeratorProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (assigned to {1})</value>
+  </data>
+  <data name="EnumeratorProfile_EmailFormat" xml:space="preserve">
+    <value>E-mail: {0}</value>
+  </data>
+  <data name="EnumeratorProfile_FullNameFormat" xml:space="preserve">
+    <value>Full name: {0}</value>
+  </data>
+  <data name="EnumeratorProfile_PhoneFormat" xml:space="preserve">
+    <value>Phone number: {0}</value>
+  </data>
+  <data name="EnumeratorProfile_Info" xml:space="preserve">
+    <value>Edit personal info</value>
+  </data>
+  <data name="EnumeratorProfile_Enumerators" xml:space="preserve">
+    <value>Enumerators</value>
+  </data>
+  <data name="EnumeratorProfile_NewOnDevice" xml:space="preserve">
+    <value>new assignments on device</value>
+  </data>
+  <data name="EnumeratorProfile_Rejected" xml:space="preserve">
+    <value>rejected assignments again on device</value>
+  </data>
+  <data name="EnumeratorProfile_WaitingForApproval" xml:space="preserve">
+    <value>waiting for approval</value>
+  </data>
+  <data name="EnumeratorProfile_Approved" xml:space="preserve">
+    <value>done interviews (completed and aproved by hq)</value>
+  </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Interviewer: {0}</value>
   </data>
