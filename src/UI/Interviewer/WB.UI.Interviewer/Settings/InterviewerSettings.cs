@@ -158,7 +158,7 @@ namespace WB.UI.Interviewer.Settings
                    $"AcceptUnsignedSslCertificate: {this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
                    $"BufferSize: {this.BufferSize} {Environment.NewLine}" +
                    $"Timeout: {this.Timeout} {Environment.NewLine}" +
-                   $"CurrentDataTime: {DateTime.Now} {Environment.NewLine}" +
+                   $"CurrentDateTime: {DateTime.Now} {Environment.NewLine}" +
                    $"QuestionnairesList: {questionnaireIds} {Environment.NewLine}" + 
                    $"EventChunkSize: {this.EventChunkSize} {Environment.NewLine}" +
                    $"VibrateOnError: {this.VibrateOnError} {Environment.NewLine}" +
