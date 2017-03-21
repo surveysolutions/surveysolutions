@@ -1,8 +1,8 @@
-﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Headquarters.Code
 @using WB.UI.Shared.Web.Extensions
 @{
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
@@ -109,6 +109,12 @@
                 }
                 <span>|</span>
                 <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString != ServiceLocator.Current.GetInstance<IProductVersion>().ToString()))
+                {
+                    <div>
+                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString) </span>
+                    </div>
+                }
             </div>
         </div>
     </footer>
