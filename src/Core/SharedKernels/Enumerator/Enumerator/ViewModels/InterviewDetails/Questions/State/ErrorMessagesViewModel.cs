@@ -17,13 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
-        private string interviewId;
-        private Identity entityIdentity;
-
         public void Init(string interviewId, Identity entityIdentity)
         {
-            this.interviewId = interviewId;
-            this.entityIdentity = entityIdentity;
         }
 
         private string caption;

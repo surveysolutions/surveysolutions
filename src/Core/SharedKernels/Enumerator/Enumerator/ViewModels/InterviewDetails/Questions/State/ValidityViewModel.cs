@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -9,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<StaticTextsDeclaredValid>,
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<SubstitutionTitlesChanged>,
         ICompositeEntity,
         IDisposable
     {
@@ -133,6 +134,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+
+        public void Handle(SubstitutionTitlesChanged @event)
+        {
+            if (@event.Questions.Contains(this.entityIdentity) || @event.StaticTexts.Contains(this.entityIdentity))
+            {
+                this.UpdateValidState();
+            }
+        }
         public virtual void ProcessException(Exception exception)
         {
             if (exception is InterviewException)
