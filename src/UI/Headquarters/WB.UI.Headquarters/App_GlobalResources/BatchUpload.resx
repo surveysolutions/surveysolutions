@@ -482,4 +482,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Only files with {0} and {1} extensions are allowed for upload.</value>
+  </data>
 </root>
