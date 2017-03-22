@@ -46,6 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
 
+            user.SecurityStamp = Guid.NewGuid().ToString();
+
             return result;
         }
 
@@ -131,7 +133,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
+            {
                 user.PasswordHash = this.PasswordHasher.HashPassword(password);
+                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
+                user.SecurityStamp = Guid.NewGuid().ToString();
+            }
 
             return this.UpdateAsync(user);
         }
@@ -139,7 +145,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual IdentityResult UpdateUser(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
+            {
                 user.PasswordHash = this.PasswordHasher.HashPassword(password);
+                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
+                user.SecurityStamp = Guid.NewGuid().ToString();
+            }
 
             return this.Update(user);
         }
