@@ -16,7 +16,7 @@
 
             <MsiPackage Id="SurveySolutionsPackage"
               Cache="no"
-              Compressed="no"
+              Compressed="yes"
               DisplayInternalUI="yes"
               Vital="yes"
               InstallCondition="VersionNT64"
