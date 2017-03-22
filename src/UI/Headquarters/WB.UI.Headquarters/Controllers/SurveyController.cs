@@ -15,7 +15,7 @@ using WB.UI.Headquarters.Controllers;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Supervisor, Observer")]
+    [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
         private readonly IAuthorizedUser authorizedUser;

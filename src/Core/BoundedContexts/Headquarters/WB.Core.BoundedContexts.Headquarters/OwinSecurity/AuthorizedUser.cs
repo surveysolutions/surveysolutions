@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public bool IsSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
-        public bool IsObserver => this.authenticationManager.User.HasClaim(claim => claim.Type == ObserverClaimType);
+        public bool IsObserver => this.IsCurrentUserInRole(UserRoles.Observer);
+        public bool IsObserving => this.authenticationManager.User.HasClaim(claim => claim.Type == ObserverClaimType);
 
         public bool IsAdministrator => this.IsCurrentUserInRole(UserRoles.Administrator);
         public bool IsHeadquarter => this.IsCurrentUserInRole(UserRoles.Headquarter);
