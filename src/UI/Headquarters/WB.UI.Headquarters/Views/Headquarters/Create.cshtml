@@ -25,6 +25,7 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger" } })
             <fieldset class="form-horizontal">
                 @{
                     this.Html.RenderPartial("UserCreateForm");
