@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         private readonly string schemaName;
         public SchemaBasedHistoryContext(DbConnection dbConnection, string defaultSchema, string schemaName)
-            : base(dbConnection, defaultSchema)
+            : base(dbConnection, schemaName)
         {
             this.schemaName = schemaName;
         }

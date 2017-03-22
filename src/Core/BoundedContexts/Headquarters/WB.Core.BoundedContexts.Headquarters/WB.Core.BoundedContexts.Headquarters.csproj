@@ -366,7 +366,6 @@
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
     <Compile Include="Mappings\SupportedQuestionnaireVersionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
-    <Compile Include="Mappings\DeviceSyncInfoMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
     <Compile Include="Mappings\UserDocumentMap.cs" />
@@ -397,6 +396,10 @@
     <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
     <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
+    <Compile Include="Repositories\DbConfiguration.cs" />
+    <Compile Include="Repositories\DeviceSyncInfoRepository.cs" />
+    <Compile Include="Repositories\HQPlainStorageDbContext.cs" />
+    <Compile Include="Repositories\IDeviceSyncInfoRepository.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
     <Compile Include="Resources\CommandValidatorsMessages.Designer.cs">

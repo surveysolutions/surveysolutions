@@ -57,6 +57,8 @@ namespace WB.UI.Interviewer.Settings
         private LocationManager locationManager
             => Application.Context.GetSystemService(Context.LocationService) as LocationManager;
 
+        private PowerManager powerManager => Application.Context.GetSystemService(Context.PowerService) as PowerManager;
+
         public InterviewerSettings(
             IPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
@@ -272,13 +274,18 @@ namespace WB.UI.Interviewer.Settings
             DeviceDate = DateTime.Now,
             DeviceLanguage = Locale.Default.DisplayLanguage,
             DeviceLocation = await this.GetDeviceLocationAsync().ConfigureAwait(false),
+            DeviceManufacturer = Build.Manufacturer,
+            DeviceBuildNumber = Build.Display,
+            DeviceSerialNumber = Build.Serial,
             AndroidVersion = this.GetAndroidVersion(),
             AndroidSdkVersion = (int) Build.VERSION.SdkInt,
+            AndroidSdkVersionName = Build.VERSION.SdkInt.ToString(),
             AppVersion = this.GetApplicationVersionName(),
-            LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToLocalTime(),
+            LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToUniversalTime(),
             AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
             BatteryChargePercent = this.battery.GetRemainingChargePercent(),
             BatteryPowerSource = this.battery.GetPowerSource().ToString(),
+            IsPowerInSaveMode = this.powerManager.IsPowerSaveMode,
             MobileOperator = this.telephonyManager?.NetworkOperatorName,
             MobileSignalStrength = this.gsmSignalStrengthListener.SignalStrength,
             NetworkType = this.connectivityManager?.ActiveNetworkInfo?.TypeName,
@@ -339,31 +346,6 @@ namespace WB.UI.Interviewer.Settings
         public void Dispose()
         {
             this.gsmSignalStrengthListener.Dispose();
-        }
-    }
-
-    public class LocationListener : ILocationListener
-    {
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IntPtr Handle { get; }
-        public void OnLocationChanged(Location location)
-        {
-        }
-
-        public void OnProviderDisabled(string provider)
-        {
-        }
-
-        public void OnProviderEnabled(string provider)
-        {
-        }
-
-        public void OnStatusChanged(string provider, Availability status, Bundle extras)
-        {
         }
     }
 }

@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string DeviceLanguage { get; set; }
         public string AndroidVersion { get; set; }
         public int AndroidSdkVersion { get; set; }
+        public string AndroidSdkVersionName { get; set; }
         public string AppVersion { get; set; }
         public DateTime LastAppUpdatedDate { get; set; }
         public string NetworkType { get; set; }
@@ -20,10 +21,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string AppOrientation { get; set; }
         public string BatteryPowerSource { get; set; }
         public int BatteryChargePercent { get; set; }
+        public bool IsPowerInSaveMode { get; set; }
         public int MobileSignalStrength { get; set; }
         public StorageInfo StorageInfo { get; set; }
         public RAMInfo RAMInfo { get; set; }
         public long DBSizeInfo { get; set; }
+        public string DeviceManufacturer { get; set; }
+        public string DeviceBuildNumber { get; set; }
+        public string DeviceSerialNumber { get; set; }
     }
 
     public class RAMInfo

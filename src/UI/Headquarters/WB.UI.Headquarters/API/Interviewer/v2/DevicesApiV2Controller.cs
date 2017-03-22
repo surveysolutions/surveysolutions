@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -21,14 +20,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class DevicesApiV2Controller : DevicesControllerBase
     {
-        private readonly IPlainStorageAccessor<DeviceSyncInfo> deviceSyncInfoRepository;
+        private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
 
         public DevicesApiV2Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
             ICommandService commandService,
             IReadSideRepositoryReader<TabletDocument> devicesRepository,
             IAuthorizedUser authorizedUser,
-            IPlainStorageAccessor<DeviceSyncInfo> deviceSyncInfoRepository,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository,
             HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
@@ -49,8 +48,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public IHttpActionResult Info(DeviceInfoApiView info)
         {
             var deviceLocation = info.DeviceLocation;
-            this.deviceSyncInfoRepository.Store(new DeviceSyncInfo
+            this.deviceSyncInfoRepository.AddOrUpdate(new DeviceSyncInfo
             {
+                SyncDate = DateTime.UtcNow,
                 InterviewerId = this.authorizedUser.Id,
                 DeviceId = info.DeviceId,
                 LastAppUpdatedDate = info.LastAppUpdatedDate,
@@ -58,8 +58,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 DeviceType = info.DeviceType,
                 AndroidVersion = info.AndroidVersion,
                 DeviceLanguage = info.DeviceLanguage,
+                DeviceBuildNumber = info.DeviceBuildNumber,
+                DeviceSerialNumber = info.DeviceSerialNumber,
+                DeviceManufacturer = info.DeviceManufacturer,
                 DBSizeInfo = info.DBSizeInfo,
                 AndroidSdkVersion = info.AndroidSdkVersion,
+                AndroidSdkVersionName = info.AndroidSdkVersionName,
                 DeviceDate = info.DeviceDate,
                 AppVersion = info.AppVersion,
                 MobileSignalStrength = info.MobileSignalStrength,
@@ -69,14 +73,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 NetworkType = info.NetworkType,
                 BatteryChargePercent = info.BatteryChargePercent,
                 BatteryPowerSource = info.BatteryPowerSource,
+                IsPowerInSaveMode = info.IsPowerInSaveMode,
                 DeviceLocationLat = deviceLocation?.Latitude,
                 DeviceLocationLong = deviceLocation?.Longitude,
                 NumberOfStartedInterviews = info.NumberOfStartedInterviews,
-                RAMFreeInBytes = info.RAMInfo?.Free,
-                RAMTotalInBytes = info.RAMInfo?.Total,
-                StorageFreeInBytes = info.StorageInfo?.Free,
-                StorageTotalInBytes = info.StorageInfo?.Total
-            }, Guid.NewGuid().FormatGuid());
+                RAMFreeInBytes = info.RAMInfo?.Free ?? 0,
+                RAMTotalInBytes = info.RAMInfo?.Total ?? 0,
+                StorageFreeInBytes = info.StorageInfo?.Free ?? 0,
+                StorageTotalInBytes = info.StorageInfo?.Total ?? 0
+            });
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult Statistics(SyncStatisticsApiView statistics)
+        {
+            var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(this.authorizedUser.Id);
+            deviceInfo.Statistics = new SyncStatistics
+            {
+                DownloadedInterviewsCount = statistics.DownloadedInterviewsCount,
+                DownloadedQuestionnairesCount = statistics.DownloadedQuestionnairesCount,
+                UploadedInterviewsCount = statistics.UploadedInterviewsCount,
+                NewInterviewsOnDeviceCount = statistics.NewInterviewsOnDeviceCount,
+                RejectedInterviewsOnDeviceCount = statistics.RejectedInterviewsOnDeviceCount,
+                SyncFinishDate = DateTime.UtcNow
+            };
+            this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
 
             return this.Ok();
         }
