@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         public override void Load()
         {
-            this.Bind<HQIdentityDbContext>().ToMethod(c => HQIdentityDbContext.Create()).InRequestScope();
+            this.Bind<HQIdentityDbContext>().ToMethod(c => HQIdentityDbContext.Create());
             this.Bind<IUserRepository>().To<HqUserStore>();
             this.Bind<IHashCompatibilityProvider>().To<HashCompatibilityProvider>();
             this.Bind<IPasswordHasher>().To<PasswordHasher>();
