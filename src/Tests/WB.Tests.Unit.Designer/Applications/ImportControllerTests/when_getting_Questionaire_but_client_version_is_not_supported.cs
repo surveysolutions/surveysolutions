@@ -3,13 +3,13 @@ using System.Net;
 using System.Web.Http;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Api.Headquarters;
-using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests

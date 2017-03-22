@@ -1,6 +1,6 @@
 ﻿using WebMatrix.WebData;
 
-namespace WB.UI.Shared.Web.Membership
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 {
     public class MembershipUserService : IMembershipUserService
     {
@@ -17,37 +17,13 @@ namespace WB.UI.Shared.Web.Membership
             this.webServiceUser = webServiceUser;
         }
 
-        public string ADMINROLENAME
-        {
-            get
-            {
-                return this.helper.ADMINROLENAME;
-            }
-        }
+        public string ADMINROLENAME => this.helper.ADMINROLENAME;
 
-        public IMembershipWebServiceUser WebServiceUser
-        {
-            get
-            {
-                return this.webServiceUser;
-            }
-        }
+        public IMembershipWebServiceUser WebServiceUser => this.webServiceUser;
 
-        public IMembershipWebUser WebUser
-        {
-            get
-            {
-                return this.user;
-            }
-        }
+        public IMembershipWebUser WebUser => this.user;
 
-        public string USERROLENAME
-        {
-            get
-            {
-                return this.helper.USERROLENAME;
-            }
-        }
+        public string USERROLENAME => this.helper.USERROLENAME;
 
         public void Logout()
         {

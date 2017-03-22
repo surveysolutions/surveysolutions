@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -27,7 +28,6 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {

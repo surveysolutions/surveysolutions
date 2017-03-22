@@ -1,12 +1,11 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
-using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientNotifier;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;

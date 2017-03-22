@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Shared.Web.Membership
+﻿namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 {
     public interface IMembershipHelper
     {
