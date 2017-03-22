@@ -22,10 +22,8 @@
         </Condition>
             
         
-        <Condition Message="This application only runs in Windows Server 2008 R2  or higher.">
-            <![CDATA[Installed OR (VersionNT >= 602)]]> <!--for dev win 10 supported-->
-            
-            <!--<![CDATA[Installed OR ((VersionNT = v6.1 AND ServicePackLevel >= 1 AND NTProductType <= 3) OR (VersionNT = v6.2 AND NTProductType <= 3) OR (VersionNT = v6.3 AND NTProductType <= 3))]]>-->
+        <Condition Message="This application only runs in Windows Server 2008 R2 or higher.">
+            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]> 
         </Condition>
 
         <!--<Property Id="CONNSTRING"/>-->
