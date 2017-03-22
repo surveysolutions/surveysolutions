@@ -6,7 +6,7 @@
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
     <Product Id="EE5F1DD2-13D8-442C-9978-8E8918EA789D" 
-             Name="SurveySolutions" 
+             Name="SurveySolutionsSite" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
              Manufacturer="The World Bank" 
@@ -22,7 +22,7 @@
         </Condition>
             
         
-        <Condition Message="This application only runs in Windows Server 2008 R2 or higher.">
+        <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
             <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]> 
         </Condition>
 
