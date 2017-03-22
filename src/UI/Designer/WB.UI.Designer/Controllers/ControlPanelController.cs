@@ -1,7 +1,10 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Models.ControlPanel;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.Settings;
@@ -12,11 +15,16 @@ namespace WB.UI.Designer.Controllers
     public class ControlPanelController : BaseController
     {
         readonly ISettingsProvider settingsProvider;
+        private readonly IAllowedAddressService allowedAddressService;
 
-        public ControlPanelController(IMembershipUserService userHelper, ISettingsProvider settingsProvider)
+        public ControlPanelController(
+            IMembershipUserService userHelper, 
+            ISettingsProvider settingsProvider, 
+            IAllowedAddressService allowedAddressService)
             : base(userHelper)
         {
             this.settingsProvider = settingsProvider;
+            this.allowedAddressService = allowedAddressService;
         }
 
         public ActionResult Settings() => this.View(this.settingsProvider.GetSettings().OrderBy(setting => setting.Name));
@@ -28,6 +36,64 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Versions() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
+
+        public ActionResult AllowesAddresses() => this.View(this.allowedAddressService.GetAddresses());
+
+
+        [HttpPost]
+        public ActionResult RemoveAllowesAddress(int id)
+        {
+            this.allowedAddressService.Remove(id);
+            return RedirectToAction("AllowesAddresses");
+        }
+
+        public ActionResult AddAllowesAddress()
+        {
+            return this.View(new AllowedAddressModel());
+        }
+
+        [HttpPost]
+        public ActionResult AddAllowesAddress(AllowedAddressModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.allowedAddressService.Add(new AllowedAddress
+                {
+                    Description = model.Description,
+                    Address = IPAddress.Parse(model.Address)
+                });
+                return RedirectToAction("AllowesAddresses");
+            }
+            return this.View(model);
+        }
+
+        public ActionResult EditAllowesAddress(int id)
+        {
+            var address = this.allowedAddressService.GetAddressById(id);
+            return this.View(new AllowedAddressModel
+            {
+                Id = address.Id,
+                Description = address.Description,
+                Address = address.Address.ToString()
+            });
+        }
+
+        [HttpPost]
+        public ActionResult EditAllowesAddress(AllowedAddressModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.allowedAddressService.Update(new AllowedAddress
+                {
+                    Id = model.Id,
+                    Description = model.Description,
+                    Address = IPAddress.Parse(model.Address)
+                });
+                return RedirectToAction("AllowesAddresses");
+            }
+            return this.View(model);
+        }
+
 
         [HttpPost]
         public ActionResult MakeAdmin(MakeAdminViewModel model)
