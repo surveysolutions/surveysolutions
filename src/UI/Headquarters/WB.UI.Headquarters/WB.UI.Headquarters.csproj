@@ -1575,7 +1575,7 @@
     <Compile Include="Code\WebInterviewAccessException.cs" />
     <Compile Include="Filters\NewVersionAvailableFilter.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="Code\VersionCheckingInfo.cs" />
+    <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
