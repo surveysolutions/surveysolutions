@@ -1,8 +1,8 @@
-﻿namespace WB.UI.Shared.Web.Membership
+﻿using System;
+using System.Web.Security;
+
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 {
-    using System;
-    using System.Web.Security;
-  
     public class MembershipWebUser : IMembershipWebUser
     {
         private readonly IMembershipHelper helper;
@@ -12,12 +12,14 @@
             this.helper = helper;
         }
 
-        public MembershipUser MembershipUser => Membership.GetUser();
+        public DesignerMembershipUser MembershipUser => (DesignerMembershipUser)System.Web.Security.Membership.GetUser();
 
         public Guid UserId => Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
 
-        public string UserName => MembershipUser.UserName;
+        public string UserName => this.MembershipUser.UserName;
 
         public bool IsAdmin => Roles.IsUserInRole(this.helper.ADMINROLENAME);
+
+        public bool CanImportOnHq => this.MembershipUser.CanImportOnHq;
     }
 }

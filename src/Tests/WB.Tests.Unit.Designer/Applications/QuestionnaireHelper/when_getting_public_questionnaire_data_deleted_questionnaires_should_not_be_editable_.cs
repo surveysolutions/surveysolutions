@@ -1,10 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper

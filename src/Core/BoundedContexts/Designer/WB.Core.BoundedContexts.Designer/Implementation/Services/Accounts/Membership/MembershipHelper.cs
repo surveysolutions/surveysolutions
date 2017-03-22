@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.UI.Shared.Web.Membership
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 {
     public class MembershipHelper : IMembershipHelper
     {

@@ -269,6 +269,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to perform this action. Please contact support.
+        /// </summary>
+        internal static string UserNeedToContactSupport {
+            get {
+                return ResourceManager.GetString("UserNeedToContactSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first. We&apos;ve sent a confirmation link to {0}..
         /// </summary>
         internal static string UserNotApproved {

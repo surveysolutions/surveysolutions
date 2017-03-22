@@ -193,6 +193,7 @@
       <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Text.Encoding.CodePages, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\System.Text.Encoding.CodePages.4.0.1\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
       <Private>True</Private>
@@ -312,6 +313,14 @@
     <Compile Include="Implementation\Services\Accounts\DesignerMembershipUser.cs" />
     <Compile Include="Implementation\Services\Accounts\MembershipEventType.cs" />
     <Compile Include="Implementation\Services\Accounts\MembershipProvider.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipHelper.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipUserService.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipWebServiceUser.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\IMembershipWebUser.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\MembershipHelper.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\MembershipUserService.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\MembershipWebServiceUser.cs" />
+    <Compile Include="Implementation\Services\Accounts\Membership\MembershipWebUser.cs" />
     <Compile Include="Implementation\Services\Accounts\PasswordExtensions.cs" />
     <Compile Include="Implementation\Services\Accounts\PasswordStrategies\ClearTextStrategy.cs" />
     <Compile Include="Implementation\Services\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
@@ -503,7 +512,7 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\AllowedAddresses\AllowedAddress.cs" />
-    <Compile Include="Views\AllowedAddresses\AllowedAddressFactory.cs" />
+    <Compile Include="Views\AllowedAddresses\AllowedAddressService.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />

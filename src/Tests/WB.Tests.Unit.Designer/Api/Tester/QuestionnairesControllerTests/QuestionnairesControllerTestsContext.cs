@@ -1,10 +1,10 @@
 ﻿using NSubstitute;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.UI.Designer.Api.Tester;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
 {
