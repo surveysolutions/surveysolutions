@@ -1,4 +1,3 @@
-using System;
 using Flurl.Http;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
@@ -27,13 +26,6 @@ namespace WB.Infrastructure.Shared.Enumerator
 {
     public class EnumeratorInfrastructureModule : NinjectModule
     {
-        private readonly Type passwordHasherImplementation;
-
-        public EnumeratorInfrastructureModule(Type passwordHasherImplementation = null)
-        {
-            this.passwordHasherImplementation = passwordHasherImplementation ?? typeof(DevicePasswordHasher);
-        }
-
         public override void Load()
         {
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.Kernel));
@@ -61,8 +53,7 @@ namespace WB.Infrastructure.Shared.Enumerator
 
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
-            
-            this.Bind<IPasswordHasher>().To(passwordHasherImplementation).InSingletonScope();
+            this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
         }
     }
 }

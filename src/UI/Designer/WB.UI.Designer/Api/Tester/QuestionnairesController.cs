@@ -7,7 +7,6 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Shared.Web.Membership;
