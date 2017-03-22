@@ -1,9 +1,9 @@
 using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
 {

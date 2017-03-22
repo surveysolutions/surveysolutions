@@ -1,10 +1,10 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code.Implementation;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {

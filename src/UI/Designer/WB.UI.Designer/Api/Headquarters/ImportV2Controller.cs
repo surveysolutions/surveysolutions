@@ -3,19 +3,18 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
-    [ApiBasicAuth]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [RoutePrefix("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {

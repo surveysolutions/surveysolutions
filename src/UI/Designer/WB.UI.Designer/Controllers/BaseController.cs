@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.UI.Shared.Web.Controllers;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {

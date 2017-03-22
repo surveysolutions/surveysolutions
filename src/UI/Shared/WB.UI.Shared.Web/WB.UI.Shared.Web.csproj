@@ -208,14 +208,6 @@
     <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
     <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
-    <Compile Include="Membership\IMembershipHelper.cs" />
-    <Compile Include="Membership\MembershipHelper.cs" />
-    <Compile Include="Membership\MembershipWebServiceUser.cs" />
-    <Compile Include="Membership\IMembershipWebServiceUser.cs" />
-    <Compile Include="Membership\MembershipWebUser.cs" />
-    <Compile Include="Membership\IMembershipWebUser.cs" />
-    <Compile Include="Membership\IMembershipUserService.cs" />
-    <Compile Include="Membership\MembershipUserService.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.AllowedAddresses
         void Update(AllowedAddress allowedAddress);
         void Remove(int id);
         void Add(AllowedAddress allowedAddress);
+        bool IsAllowedAddress(IPAddress ip);
     }
 
     public class AllowedAddressService : IAllowedAddressService
@@ -47,6 +49,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.AllowedAddresses
         public void Add(AllowedAddress allowedAddress)
         {
             this.allowedAddressStorage.Store(allowedAddress, Guid.NewGuid().FormatGuid());
+        }
+
+        public bool IsAllowedAddress(IPAddress ip)
+        {
+            var allowedAddresses = allowedAddressStorage.Query(_ => _.Select(x => x.Address).ToList());
+            return allowedAddresses.Any(x => x.Equals(ip));
         }
     }
 }

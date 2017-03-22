@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
@@ -9,23 +10,30 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
+        private readonly bool onlyAllowedAddresses;
         private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
+
+        private IAllowedAddressService allowedAddressService => ServiceLocator.Current.GetInstance<IAllowedAddressService>();
 
         private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private readonly Func<string, string, bool> validateUserCredentials;
 
-        public ApiBasicAuthAttribute()
-            : this(Membership.ValidateUser){}
+        public ApiBasicAuthAttribute(bool onlyAllowedAddresses = false)
+            : this(Membership.ValidateUser)
+        {
+            this.onlyAllowedAddresses = onlyAllowedAddresses;
+        }
 
         internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials)
         {
@@ -37,7 +45,7 @@ namespace WB.UI.Designer.Api.Attributes
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
-                this.ThrowUnathorizedException(actionContext);
+                this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
                 return;
             }
             this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
@@ -45,7 +53,7 @@ namespace WB.UI.Designer.Api.Attributes
             {
                 if (!this.Authorize(credentials.Username, credentials.Password))
                 {
-                    this.ThrowUnathorizedException(actionContext);
+                    this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
                     return;
                 }
 
@@ -70,12 +78,67 @@ namespace WB.UI.Designer.Api.Attributes
                     return;
                 }
 
+                if (this.onlyAllowedAddresses)
+                {
+                    var ip = GetClientIpAddress();
+                    if (!allowedAddressService.IsAllowedAddress(ip) && !this.UserHelper.WebUser.CanImportOnHq)
+                    {
+                        this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                        return;
+                    }
+                }
+
+
                 base.OnAuthorization(actionContext);
             }
             finally
             {
                 this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
+        }
+
+        private IPAddress GetClientIpAddress()
+        {
+            IPAddress ip = null;
+            var userHostAddress = HttpContext.Current.Request.UserHostAddress;
+
+            IPAddress.TryParse(userHostAddress, out ip);
+
+            var xForwardedForKey = HttpContext.Current.Request.ServerVariables.AllKeys.FirstOrDefault(x => x.ToUpper() == "X_FORWARDED_FOR");
+
+            if (string.IsNullOrEmpty(xForwardedForKey))
+                return ip;
+
+            var xForwardedFor = HttpContext.Current.Request.ServerVariables[xForwardedForKey];
+
+            if (string.IsNullOrEmpty(xForwardedFor))
+                return ip;
+
+            return xForwardedFor.Split(',').Select(IPAddress.Parse).LastOrDefault(x => !IsPrivateIpAddress(x));
+        }
+
+        private static bool IsPrivateIpAddress(IPAddress ip)
+        {
+            // http://en.wikipedia.org/wiki/Private_network
+            // Private IP Addresses are: 
+            //  24-bit block: 10.0.0.0 through 10.255.255.255
+            //  20-bit block: 172.16.0.0 through 172.31.255.255
+            //  16-bit block: 192.168.0.0 through 192.168.255.255
+            //  Link-local addresses: 169.254.0.0 through 169.254.255.255 (http://en.wikipedia.org/wiki/Link-local_address)
+
+            var octets = ip.GetAddressBytes();
+
+            var is24BitBlock = octets[0] == 10;
+            if (is24BitBlock) return true; // Return to prevent further processing
+
+            var is20BitBlock = octets[0] == 172 && octets[1] >= 16 && octets[1] <= 31;
+            if (is20BitBlock) return true; // Return to prevent further processing
+
+            var is16BitBlock = octets[0] == 192 && octets[1] == 168;
+            if (is16BitBlock) return true; // Return to prevent further processing
+
+            var isLinkLocalAddress = octets[0] == 169 && octets[1] == 254;
+            return isLinkLocalAddress;
         }
 
         private static BasicCredentials ParseCredentials(HttpActionContext actionContext)
@@ -107,10 +170,10 @@ namespace WB.UI.Designer.Api.Attributes
             public string Password { get; set; }
         }
 
-        private void ThrowUnathorizedException(HttpActionContext actionContext)
+        private void ThrowUnathorizedException(HttpActionContext actionContext, string errorMessage)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.User_Not_authorized };
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = errorMessage };
             actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
         }
 
