@@ -27,7 +27,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             this.currentUserIdentity = new TesterUserIdentity
             {
                 Name = userName,
-                Password = this.passwordHasher.Hash(password),
+                Password = password,
                 UserId = Guid.NewGuid(),
                 Id = userName
             };
