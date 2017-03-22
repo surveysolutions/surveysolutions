@@ -158,6 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 items = items.Where(x => x.UpdateDate <= input.ChangedTo.Value);
             }
+
             return items;
         }
 

@@ -34,6 +34,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -67,6 +68,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
+            this.Bind<IAllowedAddressService>().To<AllowedAddressService>();
             this.Bind<ITranslationsService>().To<TranslationsService>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
 
