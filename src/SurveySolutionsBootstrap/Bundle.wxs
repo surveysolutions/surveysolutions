@@ -4,11 +4,23 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
 
-    <Bundle Name="SurveySolutionsBundle"
+    <Bundle Name="SurveySolutions Installation"
             Version="$(var.SurveySolutionsVersion)"
             Manufacturer="The World Bank"
             UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
-        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+        <bal:Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again. You may get it here: https://www.microsoft.com/en-us/download/details.aspx?id=53345">
+            <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
+        </bal:Condition>
+
+        <bal:Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
+            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]>
+        </bal:Condition>
+        
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
+            <bal:WixStandardBootstrapperApplication
+               LicenseUrl="http://go.worldbank.org/OS6V7NIUD0"/>
+        </BootstrapperApplicationRef>
         <Chain>
             <PackageGroupRef Id="NetFx462Web"/>
 
