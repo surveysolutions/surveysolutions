@@ -25,7 +25,7 @@
                     <li>@string.Format(Pages.EnumeratorProfile_EmailFormat, Model.Email)</li>
                     <li>@string.Format(Pages.EnumeratorProfile_FullNameFormat, Model.FullName)</li>
                     <li>@string.Format(Pages.EnumeratorProfile_PhoneFormat, Model.Phone)</li>
-                    @if (!Model.IsArchived)
+                    @if (this.User.IsInRole("Administrator, Headquarter, Supervisor") && !Model.IsArchived)
                     {
                         <li><a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.EnumeratorProfile_Info</a></li>
                     }
