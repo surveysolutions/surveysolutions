@@ -33,10 +33,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             int nextIndexToUse = Interlocked.Increment(ref randomValueIndex);
 
             List<string> idsStrings = stringKeys.Where(x => !usedIds.Contains(x)).ToList();
-
-            string uniqueIdString = idsStrings[nextIndexToUse % idsStrings.Count];
-
-            if (uniqueIdString != null) return InterviewKey.Parse(uniqueIdString);
+            if (idsStrings.Count > 0)
+            {
+                string uniqueIdString = idsStrings[nextIndexToUse % idsStrings.Count];
+                if (uniqueIdString != null) return InterviewKey.Parse(uniqueIdString);
+            }
 
             return this.Get();
         }
