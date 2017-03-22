@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserViewFactory : IUserViewFactory
     {
+        private object lockObject = new object();
         protected readonly IUserRepository UserRepository;
 
         public UserViewFactory(IUserRepository UserRepository)
@@ -20,8 +21,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserView GetUser(UserViewInputModel input)
         {
-            Func<IQueryable<HqUser>, HqUser> query = users =>
+            HqUser user;
+            lock (lockObject)
             {
+                var users = this.UserRepository.Users;
                 if (input.PublicKey != null)
                     users = users.Where(x => x.Id == input.PublicKey);
                 else if (!string.IsNullOrEmpty(input.UserName))
@@ -31,18 +34,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 else if (!string.IsNullOrEmpty(input.DeviceId))
                     users = users.Where(x => x.Profile.DeviceId == input.DeviceId);
 
-                return users.FirstOrDefault();
-            };
-
-            var user = query.Invoke(this.UserRepository.Users);
+                user = users.FirstOrDefault();
+            }
 
             if (user == null) return null;
 
-            UserLight supervisor = user.Profile?.SupervisorId != null
-                ? new UserLight(user.Profile.SupervisorId.Value,
-                    this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value).Result.UserName)
-                : null;
+            UserLight supervisor;
+            lock (lockObject)
+            {
+                supervisor = user.Profile?.SupervisorId != null
+                    ? new UserLight(user.Profile.SupervisorId.Value,
+                        this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value).Result.UserName)
+                    : null;
+            }
 
+            HashSet<UserRoles> userRole;
+            lock (lockObject)
+            {
+                userRole = new HashSet<UserRoles>(new[] { user.Roles.First().Role });
+            }
             return new UserView
             {
                 CreationDate = user.CreationDate,
@@ -55,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 PersonName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 IsArchived = user.IsArchived,
-                Roles = new HashSet<UserRoles>(new[] {user.Roles.First().Role})
+                Roles = userRole
             };
         }
 
@@ -125,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
-                 var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
+                var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
 
                 if (hasDevice.HasValue)
                     interviewers = interviewers.Where(x => (x.Profile.DeviceId != null) == hasDevice.Value);
@@ -165,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
                 ApplyFilter(users, searchBy, UserRoles.Supervisor, false)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
-            
+
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
                 .Invoke(this.UserRepository.Users)
