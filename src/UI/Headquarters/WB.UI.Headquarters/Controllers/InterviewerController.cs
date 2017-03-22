@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
         [ActionName("Profile")]
         public async Task<ActionResult> EnumeratorProfile(Guid id)
         {
