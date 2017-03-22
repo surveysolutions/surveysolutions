@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
-$InstallationProject = 'src\Installation\SurveySolutions\SurveySolutions.wixproj'
+$InstallationProject = 'src\Installation\SurveySolutions\\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
 
 $sourceCleanup = $False
 
