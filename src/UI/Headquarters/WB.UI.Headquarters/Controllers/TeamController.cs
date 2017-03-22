@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if(appUser == null)
                 return IdentityResult.Failed(@"Could not update user information because current user does not exist");
+            if(appUser.IsArchived)
+                return IdentityResult.Failed(@"Could not update user information because current user is archived");
 
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
