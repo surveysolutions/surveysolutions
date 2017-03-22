@@ -31,6 +31,8 @@
 
     <form class="form-horizontal" method="POST">
         @Html.AntiForgeryToken()
+        
+        @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger"} })
 
         @Html.HiddenFor(x => x.IsShowSupervisorSelector)
 
