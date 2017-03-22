@@ -126,6 +126,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
+        public async Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
+        {
+            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.devicesController}/statistics",
+                request: statistics,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
         [Obsolete("Since v5.10")]
         private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {

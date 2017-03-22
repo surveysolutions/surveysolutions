@@ -139,6 +139,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken).ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await this.synchronizationService.SendSyncStatisticsAsync(statistics: ToSyncStatisticsApiView(statistics), 
+                    token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
 
                 progress.Report(new SyncProgressInfo
                 {
@@ -252,7 +256,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 isTextInputPassword: true);
         }
 
-        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics staciStatistics, CancellationToken cancellationToken)
+        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken).ConfigureAwait(false);
             var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
@@ -270,7 +274,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         notExistingLocalCensusQuestionnaireIdentities.Count,
                         InterviewerUIResources.Synchronization_Questionnaires)
                 });
-                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken).ConfigureAwait(false);
+                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics).ConfigureAwait(false);
 
                 processedQuestionnaires++;
             }
@@ -278,7 +282,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             progress.Report(new SyncProgressInfo
             {
                 Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
-                Statistics = staciStatistics,
+                Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
 
@@ -296,7 +300,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
                     Description = string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description, 
                         removedQuestionnairesCounter, questionnairesToRemove.Count),
-                    Statistics = staciStatistics,
+                    Statistics = statistics,
                     Status = SynchronizationStatus.Download
                 });
 
@@ -306,7 +310,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     .Where(interview => interview.QuestionnaireId == questionnaireId)
                     .Select(interview => interview.InterviewId)
                     .ToList();
-                this.RemoveInterviews(removedInterviews, staciStatistics, progress);
+                this.RemoveInterviews(removedInterviews, statistics, progress);
 
                 this.questionnairesAccessor.RemoveQuestionnaire(questionnaireIdentity);
             }
@@ -320,7 +324,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken, SychronizationStatistics statistics)
         {
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
@@ -365,6 +369,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     questionnaireApiView.AllowCensus, translationDtos);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity).ConfigureAwait(false);
+                statistics.SuccessfullyDownloadedQuestionnairesCount++;
             }
         }
 
@@ -432,7 +437,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             InterviewerUIResources.Synchronization_Interviews)
                     });
 
-                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken).ConfigureAwait(false);
+                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics).ConfigureAwait(false);
 
                     var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
                         interviewId: interview.Id,
@@ -539,6 +544,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
 
+        private SyncStatisticsApiView ToSyncStatisticsApiView(SychronizationStatistics statistics)
+        {
+            return new SyncStatisticsApiView
+            {
+                DownloadedInterviewsCount = statistics.NewInterviewsCount,
+                UploadedInterviewsCount = statistics.SuccessfullyUploadedInterviewsCount,
+                DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
+                RejectedInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
+                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned)
+            };
+        }
+
         private DeviceInfoApiView ToDeviceInfoApiView(DeviceInfo info) => new DeviceInfoApiView
         {
             DeviceId = info.DeviceId,
@@ -547,9 +564,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             DeviceDate = info.DeviceDate,
             DeviceLanguage = info.DeviceLanguage,
             DeviceLocation = info.DeviceLocation != null ? ToLocationAddressApiView(info.DeviceLocation) : null,
+            DeviceManufacturer = info.DeviceManufacturer,
+            DeviceBuildNumber = info.DeviceBuildNumber,
+            DeviceSerialNumber = info.DeviceSerialNumber,
 
             AndroidVersion = info.AndroidVersion,
             AndroidSdkVersion = info.AndroidSdkVersion,
+            AndroidSdkVersionName = info.AndroidSdkVersionName,
 
             AppVersion = info.AppVersion,
             AppOrientation = info.AppOrientation,
@@ -557,14 +578,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             BatteryChargePercent = info.BatteryChargePercent,
             BatteryPowerSource = info.BatteryPowerSource,
-            
+            IsPowerInSaveMode = info.IsPowerInSaveMode,
+
             MobileOperator = info.MobileOperator,
             MobileSignalStrength = info.MobileSignalStrength,
             NetworkType = info.NetworkType,
             NetworkSubType = info.NetworkSubType,
 
-            NumberOfStartedInterviews = this.interviewViewRepository.Count(interview=>interview.StartedDateTime != null && interview.CompletedDateTime == null),
-            
+            NumberOfStartedInterviews = this.interviewViewRepository.Count(
+                interview => interview.StartedDateTime != null && interview.CompletedDateTime == null),
+
             DBSizeInfo = info.DBSizeInfo,
             StorageInfo = ToStorageInfoApiView(info.StorageInfo),
             RAMInfo = ToRAMInfoApiView(info.RAMInfo)

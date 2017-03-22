@@ -357,38 +357,119 @@
   <data name="InterviewerCreate_Team" xml:space="preserve">
     <value>team</value>
   </data>
-  <data name="EnumeratorProfile_TitleFormat" xml:space="preserve">
-    <value>Enumerator: {0}</value>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>Interviewer: {0}</value>
   </data>
-  <data name="EnumeratorProfile_AssignedToFormat" xml:space="preserve">
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
     <value>{0} (assigned to {1})</value>
   </data>
-  <data name="EnumeratorProfile_EmailFormat" xml:space="preserve">
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
     <value>E-mail: {0}</value>
   </data>
-  <data name="EnumeratorProfile_FullNameFormat" xml:space="preserve">
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
     <value>Full name: {0}</value>
   </data>
-  <data name="EnumeratorProfile_PhoneFormat" xml:space="preserve">
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
     <value>Phone number: {0}</value>
   </data>
-  <data name="EnumeratorProfile_Info" xml:space="preserve">
+  <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Edit personal info</value>
   </data>
-  <data name="EnumeratorProfile_Enumerators" xml:space="preserve">
-    <value>Enumerators</value>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>Interviewers</value>
   </data>
-  <data name="EnumeratorProfile_NewOnDevice" xml:space="preserve">
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
     <value>new assignments on device</value>
   </data>
-  <data name="EnumeratorProfile_Rejected" xml:space="preserve">
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
     <value>rejected assignments again on device</value>
   </data>
-  <data name="EnumeratorProfile_WaitingForApproval" xml:space="preserve">
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
     <value>waiting for approval</value>
   </data>
-  <data name="EnumeratorProfile_Approved" xml:space="preserve">
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
     <value>done interviews (completed and aproved by hq)</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>Number of assignments that have been started, but not completed</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>Storage (available/total)</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>Memory (available/total)</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>Battery status (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, power source: {1}, battery saver is {2}</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>on</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>off</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Survey Solutions version</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Android version</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>Device model</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>Device ID</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>Device serial number</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>Device language</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>Detailed device info</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>Interviewer App version</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>Last Survey Solutions updated date</value>
+  </data>
+  <data name="InterviewerProfile_NumberOrSynchronizations" xml:space="preserve">
+    <value>Total number of synchronizations</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSyncFormat" xml:space="preserve">
+    <value>Last successfull sync: {0} ({1} hours ago)</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSyncFormat" xml:space="preserve">
+    <value>Last failed sync: {0} ({1} hours ago)</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeedFormat" xml:space="preserve">
+    <value>Connection speed: 87Kb/s (Type: {0}, Operator: {1})</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>Connection type</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>Signal strength</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>Device location or last known location</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>Tablet timestamp of beginning of the session</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>Device and connection statistics</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>Last connection statistics</value>
   </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Interviewer: {0}</value>
