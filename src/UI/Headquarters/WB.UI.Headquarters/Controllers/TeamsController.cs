@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
-                    supervisorId: this.authorizedUser.Id);
+                    supervisorId: this.authorizedUser.Id, active: true);
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
