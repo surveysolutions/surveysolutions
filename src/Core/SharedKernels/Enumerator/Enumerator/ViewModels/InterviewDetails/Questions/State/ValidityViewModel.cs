@@ -50,8 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
-            this.Error.Init(interviewId, entityIdentity);
-
             this.liteEventRegistry.Subscribe(this, interviewId);
             this.UpdateValidState();
         }
