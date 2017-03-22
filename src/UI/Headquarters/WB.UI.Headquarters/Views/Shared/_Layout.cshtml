@@ -68,7 +68,7 @@
 
         </div>
     </div>
-    @if (authorizedUser.IsObserver)
+    @if (authorizedUser.IsObserving)
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
             @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>

@@ -30,10 +30,10 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthenticationManager authenticationManager;
 
         public AccountController(
-            ICommandService commandService, 
+            ICommandService commandService,
             ILogger logger,
             IAuthorizedUser authorizedUser,
-            ICaptchaProvider captchaProvider, 
+            ICaptchaProvider captchaProvider,
             ICaptchaService captchaService,
             HqUserManager userManager,
             HqSignInManager signInManager,
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [AllowAnonymous]
         public ActionResult LogOn(string returnUrl)
-        {   
+        {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
 
@@ -94,10 +94,11 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View(model);
             }
 
-            if (!ModelState.IsValid)            {
+            if (!ModelState.IsValid)
+            {
                 return View(model);
             }
-            
+
             var signInResult = await this.signInManager.SignInAsync(model.UserName, model.Password, isPersistent: true);
             switch (signInResult)
             {
@@ -153,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
                 bool isPasswordValid = await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
                 if (!isPasswordValid)
                 {
-                    this.ModelState.AddModelError<ManageAccountModel>(x=> x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
+                    this.ModelState.AddModelError<ManageAccountModel>(x => x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
                 }
             }
 
@@ -165,10 +166,11 @@ namespace WB.UI.Headquarters.Controllers
                 else
                     this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
             }
-            
+
             return this.View(model);
         }
 
+        private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
 
         [Authorize(Roles = "Administrator, Observer")]
         public async Task<ActionResult> ObservePerson(string personName)
@@ -180,16 +182,21 @@ namespace WB.UI.Headquarters.Controllers
             if (user == null)
                 throw new HttpException(404, string.Empty);
 
-            if (!new[] {UserRoles.Headquarter, UserRoles.Supervisor}.Contains(user.Roles.First().Role))
+            if (!ObservableRoles.Contains(user.Roles.First().Role))
                 throw new HttpException(404, string.Empty);
 
             //do not forget pass current user to display you are observing
             await this.signInManager.SignInAsObserverAsync(personName);
 
-            return this.authorizedUser.IsHeadquarter ?
+            return user.IsInRole(UserRoles.Headquarter) ?
                 this.RedirectToAction("SurveysAndStatuses", "HQ") :
                 this.RedirectToAction("Index", "Survey");
         }
+
+        private static readonly UserRoles[] CanReturnFromRoles =
+        {
+            UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer
+        };
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
@@ -199,7 +206,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var currentUserRole = this.authorizedUser.Role;
 
-            if (new[] { UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer }.Contains(currentUserRole))
+            if (CanReturnFromRoles.Contains(currentUserRole))
                 throw new HttpException(404, string.Empty);
 
             await this.signInManager.SignInBackFromObserverAsync();

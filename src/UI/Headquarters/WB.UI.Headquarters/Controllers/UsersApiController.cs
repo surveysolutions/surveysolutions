@@ -37,10 +37,10 @@ namespace WB.UI.Headquarters.Controllers
             this.usersFactory = usersFactory;
             this.userManager = userManager;
         }
-        
+
         [HttpPost]
         [CamelCase]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
         {
             Guid? supervisorId = null;
@@ -85,6 +85,8 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string DeviceId { get; set; }
             public virtual bool IsLocked { get; set; }
         }
+
+
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]

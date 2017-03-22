@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [ActionName("Profile")]
         public async Task<ActionResult> EnumeratorProfile(Guid id)
         {
@@ -117,8 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ApprovedByHqCount = approvedByHqCount
             };
         }
-
-
+        
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> Edit(Guid id)
         {
