@@ -9,16 +9,14 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
     internal class TesterPrincipal : IPrincipal
     {
         private readonly IPlainStorage<TesterUserIdentity> usersStorage;
-        private readonly IPasswordHasher passwordHasher;
         private TesterUserIdentity currentUserIdentity;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage, IPasswordHasher passwordHasher)
+        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage)
         {
             this.usersStorage = usersStorage;
-            this.passwordHasher = passwordHasher;
             this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
