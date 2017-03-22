@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 context.Configuration.ProxyCreationEnabled = false;
                 foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users => users.ToList()))
                 {
-                    context.Users.AddOrUpdate(new HqUser
+                    context.Users.Add(new HqUser
                     {
                         Id = oldUser.PublicKey,
                         CreationDate = oldUser.CreationDate,
@@ -62,11 +62,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                         PasswordHash = oldUser.Password,
                         PasswordHashSha1 = oldUser.Password,
                         SecurityStamp = Guid.NewGuid().FormatGuid(),
-                        Profile = oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId) ? new HqUserProfile
-                        {
-                            DeviceId = oldUser.DeviceId,
-                            SupervisorId = oldUser.Supervisor?.Id,
-                        } : null,
+                        Profile = oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId)
+                            ? new HqUserProfile
+                            {
+                                DeviceId = oldUser.DeviceId,
+                                SupervisorId = oldUser.Supervisor?.Id,
+                            }
+                            : null,
                         Roles =
                         {
                             new HqUserRole

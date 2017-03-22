@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,15 +25,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class InterviewerController : TeamController
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
+        private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
 
         public InterviewerController(ICommandService commandService, 
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager,
-                              IQueryableReadSideRepositoryReader<InterviewSummary>  interviewRepository)
+                              IQueryableReadSideRepositoryReader<InterviewSummary>  interviewRepository,
+                              IDeviceSyncInfoRepository deviceSyncInfoRepository)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.interviewRepository = interviewRepository;
+            this.deviceSyncInfoRepository = deviceSyncInfoRepository;
         }
 
 
@@ -73,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [ActionName("Profile")]
-        public async Task<ActionResult> EnumeratorProfile(Guid id)
+        public async Task<ActionResult> InterviewerProfile(Guid id)
         {
             var enumerator = await this.userManager.FindByIdAsync(id);
             if (enumerator == null || !enumerator.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
@@ -82,7 +86,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (enumerator == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new EnumeratorProfileModel
+            var completedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
+                interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.Completed));
+
+            var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
+                interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters));
+
+            var interviewerProfileModel = new InterviewerProfileModel
             {
                 Id = enumerator.Id,
                 Email = enumerator.Email,
@@ -90,34 +100,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 FullName = enumerator.FullName,
                 Phone = enumerator.PhoneNumber,
                 SupervisorName = supervisor.UserName,
+                WaitingInterviewsForApprovalCount = completedInterviewCount,
+                ApprovedInterviewsByHqCount = approvedByHqCount,
                 IsArchived = enumerator.IsArchived,
-                Assignments = this.ToAssignmentsModel(id)
-            });
-        }
-
-        private AssignmentsInfoModel ToAssignmentsModel(Guid enumeratorId)
-        {
-            var newAssignedCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == enumeratorId && interview.Status == InterviewStatus.InterviewerAssigned));
-
-            var completedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == enumeratorId && interview.Status == InterviewStatus.Completed));
-
-            var rejectedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == enumeratorId && interview.Status == InterviewStatus.RejectedBySupervisor));
-
-            var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
-                interview => interview.ResponsibleId == enumeratorId && interview.Status == InterviewStatus.ApprovedByHeadquarters));
-
-            return new AssignmentsInfoModel
-            {
-                NewOnDeviceCount = newAssignedCount,
-                RejectedCount = rejectedInterviewCount,
-                WaitingForApprovalCount = completedInterviewCount,
-                ApprovedByHqCount = approvedByHqCount
+                LastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id),
+                LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id)
             };
+            return this.View(interviewerProfileModel);
         }
-        
+
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> Edit(Guid id)
         {

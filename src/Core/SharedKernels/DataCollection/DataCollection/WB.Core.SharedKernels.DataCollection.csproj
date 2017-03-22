@@ -343,6 +343,7 @@
     <Compile Include="WebApi\InterviewerApiView.cs" />
     <Compile Include="WebApi\RosterApiView.cs" />
     <Compile Include="WebApi\RosterInstanceApiView.cs" />
+    <Compile Include="WebApi\SyncStatisticsApiView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
