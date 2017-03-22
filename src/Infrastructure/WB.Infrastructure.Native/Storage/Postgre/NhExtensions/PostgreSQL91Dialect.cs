@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Net;
+using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
@@ -16,6 +18,67 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             this.RegisterColumnType(DbType.Object, "numeric[]");
             this.RegisterColumnType(DbType.Object, "integer[]");
         }
+    }
+
+    public class IpAddressAsString : IUserType
+    {
+        bool IUserType.Equals(object x, object y)
+        {
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(object x)
+        {
+            return x?.GetHashCode() ?? 0;
+        }
+
+        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        {
+            object obj = NHibernateUtil.String.NullSafeGet(rs, names);
+            if (obj == null)
+            {
+                return null;
+            }
+            return IPAddress.Parse(obj.ToString());
+        }
+
+        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        {
+            if (value == null)
+            {
+                ((IDataParameter)cmd.Parameters[index]).Value = DBNull.Value;
+            }
+            else
+            {
+                ((IDataParameter)cmd.Parameters[index]).Value = value.ToString();
+            }
+        }
+
+        public object DeepCopy(object value)
+        {
+            return value;
+        }
+
+        public object Replace(object original, object target, object owner)
+        {
+            return original;
+        }
+
+        public object Assemble(object cached, object owner)
+        {
+            return cached;
+        }
+
+        public object Disassemble(object value)
+        {
+            return value;
+        }
+
+        public SqlType[] SqlTypes => new SqlType[] { SqlTypeFactory.GetString(15) };
+
+        public Type ReturnedType => typeof(IPAddress);
+
+        public bool IsMutable { get; private set; }
     }
 
     public class PostgresSqlArrayType<T> : IUserType

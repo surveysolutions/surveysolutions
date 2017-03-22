@@ -305,6 +305,8 @@
     <Compile Include="Migrations\PlainStore\M001-100\M010_Users_indexes.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
@@ -782,6 +784,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
+    <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
+    <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
+    <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
