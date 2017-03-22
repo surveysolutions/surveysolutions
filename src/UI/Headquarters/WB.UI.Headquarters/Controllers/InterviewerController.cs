@@ -90,6 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 FullName = enumerator.FullName,
                 Phone = enumerator.PhoneNumber,
                 SupervisorName = supervisor.UserName,
+                IsArchived = enumerator.IsArchived,
                 Assignments = this.ToAssignmentsModel(id)
             });
         }
@@ -123,7 +124,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var user = await this.userManager.FindByIdAsync(id);
 
-            if(user == null) throw new HttpException(404, string.Empty);
+            if (user == null) throw new HttpException(404, string.Empty);
+            if (user.IsArchived) throw new HttpException(403, string.Empty);
 
             return this.View(new UserEditModel
                 {
