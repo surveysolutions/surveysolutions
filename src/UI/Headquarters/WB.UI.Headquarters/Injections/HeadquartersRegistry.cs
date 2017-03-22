@@ -174,6 +174,9 @@ namespace WB.UI.Headquarters.Injections
             this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
 
+            this.BindFilter<NewVersionAvailableFilter>(FilterScope.Global, null)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
