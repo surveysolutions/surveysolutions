@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.Models
         public string Phone { get; set; }
         public string LoginName { get; set; }
         public string SupervisorName { get; set; }
+        public bool IsArchived { get; set; }
 
         public AssignmentsInfoModel Assignments { get; set; }
     }
