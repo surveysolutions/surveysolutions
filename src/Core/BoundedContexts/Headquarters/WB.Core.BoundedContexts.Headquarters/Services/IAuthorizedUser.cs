@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         bool IsHeadquarter { get; }
         bool IsSupervisor { get; }
         bool IsObserver { get; }
+        bool IsObserving { get; }
+
         Guid Id { get; }
         string UserName { get; }
         string DeviceId { get; }

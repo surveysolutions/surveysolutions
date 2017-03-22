@@ -17,9 +17,10 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 
+
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
     {
         private readonly IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport;
