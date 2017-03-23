@@ -1015,15 +1015,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Up to date.
-        /// </summary>
-        public static string InterviewerProfile_Interviewer {
-            get {
-                return ResourceManager.GetString("InterviewerProfile_Interviewer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interviewer App version.
         /// </summary>
         public static string InterviewerProfile_InterviewerAppVersion {
