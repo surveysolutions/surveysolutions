@@ -39,16 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         
         protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
-            var result = await base.UpdatePassword(passwordStore, user, newPassword).ConfigureAwait(false);
-
-            if (result == IdentityResult.Success && this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
+            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
 
-            user.SecurityStamp = Guid.NewGuid().ToString();
-
-            return result;
+            return await base.UpdatePassword(passwordStore, user, newPassword).ConfigureAwait(false);
         }
 
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
@@ -130,26 +126,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return creationStatus;
         }
 
-        public virtual Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
+        public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
-            {
-                user.PasswordHash = this.PasswordHasher.HashPassword(password);
-                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
-                user.SecurityStamp = Guid.NewGuid().ToString();
-            }
+                await this.ChangePasswordAsync(user, password);
 
-            return this.UpdateAsync(user);
+            return await this.UpdateAsync(user);
         }
 
         public virtual IdentityResult UpdateUser(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
-            {
-                user.PasswordHash = this.PasswordHasher.HashPassword(password);
-                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
-                user.SecurityStamp = Guid.NewGuid().ToString();
-            }
+                this.ChangePasswordAsync(user, password).RunSynchronously();
 
             return this.Update(user);
         }
