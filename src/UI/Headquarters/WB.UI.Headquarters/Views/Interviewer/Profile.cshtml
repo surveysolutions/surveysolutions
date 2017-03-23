@@ -70,7 +70,10 @@
                         <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
                         <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                     }
-                    <li><a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a></li>
+                    @if (!Model.IsArchived)
+                    {
+                        <li><a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a></li>
+                    }
                 </ul>
             </div>
         </div>
