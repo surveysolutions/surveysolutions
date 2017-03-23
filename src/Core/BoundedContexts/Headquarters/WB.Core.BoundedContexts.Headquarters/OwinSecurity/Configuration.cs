@@ -32,55 +32,76 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             if (context.Roles.Any()) return;
 
-            foreach (UserRoles userRole in Enum.GetValues(typeof(UserRoles)))
-            {
-                context.Roles.AddOrUpdate(new HqRole
-                {
-                    Id = userRole.ToUserId(),
-                    Name = Enum.GetName(typeof(UserRoles), userRole)
-                });
-            }
-            var transactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            var userPlainStorageRepository = ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>();
 
-            transactionManager.ExecuteInPlainTransaction(() =>
+            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
-                context.Configuration.AutoDetectChangesEnabled = false;
-                context.Configuration.ProxyCreationEnabled = false;
-                foreach (var oldUser in ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>().Query(users => users.ToList()))
+                try
                 {
-                    context.Users.Add(new HqUser
+                    context.Configuration.AutoDetectChangesEnabled = false;
+                    context.Configuration.ProxyCreationEnabled = false;
+
+                    foreach (UserRoles userRole in Enum.GetValues(typeof(UserRoles)))
                     {
-                        Id = oldUser.PublicKey,
-                        CreationDate = oldUser.CreationDate,
-                        Email = oldUser.Email,
-                        IsArchived = oldUser.IsArchived,
-                        IsLockedByHeadquaters = oldUser.IsLockedByHQ,
-                        IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
-                        FullName = oldUser.PersonName,
-                        PhoneNumber = oldUser.PhoneNumber,
-                        UserName = oldUser.UserName,
-                        PasswordHash = oldUser.Password,
-                        PasswordHashSha1 = oldUser.Password,
-                        SecurityStamp = Guid.NewGuid().FormatGuid(),
-                        Profile = oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId)
-                            ? new HqUserProfile
-                            {
-                                DeviceId = oldUser.DeviceId,
-                                SupervisorId = oldUser.Supervisor?.Id,
-                            }
-                            : null,
-                        Roles =
+                        context.Roles.AddOrUpdate(new HqRole
                         {
-                            new HqUserRole
+                            Id = userRole.ToUserId(),
+                            Name = Enum.GetName(typeof(UserRoles), userRole)
+                        });
+                    }
+
+                    plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    {
+                        foreach (var oldUser in userPlainStorageRepository.Query(users => users.ToList()))
+                        {
+                            HqUserProfile hqUserProfile = null;
+                            if (oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId))
+                                hqUserProfile = new HqUserProfile
+                                {
+                                    DeviceId = oldUser.DeviceId,
+                                    SupervisorId = oldUser.Supervisor?.Id,
+                                };
+
+                            var hqUser = new HqUser
                             {
-                                UserId = oldUser.PublicKey,
-                                RoleId = oldUser.Roles.First().ToUserId()
-                            }
+                                Id = oldUser.PublicKey,
+                                CreationDate = oldUser.CreationDate,
+                                Email = oldUser.Email,
+                                IsArchived = oldUser.IsArchived,
+                                IsLockedByHeadquaters = oldUser.IsLockedByHQ,
+                                IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
+                                FullName = oldUser.PersonName,
+                                PhoneNumber = oldUser.PhoneNumber,
+                                UserName = oldUser.UserName,
+                                PasswordHash = oldUser.Password,
+                                PasswordHashSha1 = oldUser.Password,
+                                SecurityStamp = Guid.NewGuid().FormatGuid(),
+                                Profile = hqUserProfile
+                            };
+
+                            foreach (var oldUserRole in oldUser.Roles)
+                                hqUser.Roles.Add(new HqUserRole
+                                {
+                                    UserId = oldUser.PublicKey,
+                                    RoleId = oldUserRole.ToUserId()
+                                });
+
+                            context.Users.Add(hqUser);
                         }
                     });
-                }
 
-            });
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

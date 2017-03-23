@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.Injections
                 cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
-            var owinSecuritySection = (OwinSecuritySection)WebConfigurationManager.GetSection(@"owinSecurity");
+            var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
@@ -171,7 +171,7 @@ namespace WB.UI.Headquarters.Injections
                     userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
-                    passwordFormatRegex: owinSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
+                    passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: UserModel.PersonNameMaxLength,
                     phoneNumberMaxLength: UserModel.PhoneNumberLength);
@@ -265,9 +265,9 @@ namespace WB.UI.Headquarters.Injections
             
             kernel.Bind<IPasswordPolicy>().ToConstant(new PasswordPolicy
             {
-                PasswordMinimumLength = owinSecuritySection.PasswordPolicy.PasswordMinimumLength,
-                MinRequiredNonAlphanumericCharacters = owinSecuritySection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
-                PasswordStrengthRegularExpression = owinSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression
+                PasswordMinimumLength = applicationSecuritySection.PasswordPolicy.PasswordMinimumLength,
+                MinRequiredNonAlphanumericCharacters = applicationSecuritySection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
+                PasswordStrengthRegularExpression = applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression
             });
 
             return kernel;

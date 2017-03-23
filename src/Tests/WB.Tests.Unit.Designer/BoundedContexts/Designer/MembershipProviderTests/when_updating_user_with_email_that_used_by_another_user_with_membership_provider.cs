@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 using MembershipProvider = WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.MembershipProvider;

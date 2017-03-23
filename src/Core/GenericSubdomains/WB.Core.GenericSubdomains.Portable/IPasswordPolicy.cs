@@ -1,5 +1,5 @@
 
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+namespace WB.Core.GenericSubdomains.Portable
 {
     /// <summary>
     /// Policy which defines how passwords should be handled in the membership provider.
