@@ -53,12 +53,12 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
-                    supervisorId: this.authorizedUser.Id, active: true);
+                    supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null, active: true);
+            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
 
 
         [HttpGet]
@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, active: true, supervisorId: null);
+            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
             var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
             return new ComboboxModel(options, users.TotalCountByQuery);
         }
