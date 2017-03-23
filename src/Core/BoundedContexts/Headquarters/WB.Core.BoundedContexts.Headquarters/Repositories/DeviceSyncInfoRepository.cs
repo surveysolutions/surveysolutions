@@ -19,48 +19,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         }
 
         public DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId)
-        {
-            using (var dbContext = new HQPlainStorageDbContext())
-            {
-                return dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                    .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
-            }
-        }
+            => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
 
         public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
-        {
-            using (var dbContext = new HQPlainStorageDbContext())
-            {
-                return dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                    .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
-            }
-        }
+            => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
-        {
-            using (var dbContext = new HQPlainStorageDbContext())
-            {
-                return dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                    .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
-            }
-        }
+            => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
 
         public int GetSuccessSynchronizationsCount(Guid interviewerId)
-        {
-            using (var dbContext = new HQPlainStorageDbContext())
-            {
-                return dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                    .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
-            }
-        }
+            => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
 
         public int GetFailedSynchronizationsCount(Guid interviewerId)
-        {
-            using (var dbContext = new HQPlainStorageDbContext())
-            {
-                return dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                    .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
-            }
-        }
+            => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
     }
 }
