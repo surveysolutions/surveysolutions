@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -68,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync(id);
 
             if (user == null) throw new HttpException(404, string.Empty);
+            if (!user.IsInRole(UserRoles.ApiUser)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel
             {

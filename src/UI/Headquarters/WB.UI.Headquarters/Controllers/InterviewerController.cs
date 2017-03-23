@@ -6,6 +6,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -142,6 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (user == null) throw new HttpException(404, string.Empty);
             if (user.IsArchived) throw new HttpException(403, string.Empty);
+            if (!user.IsInRole(UserRoles.Interviewer)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel
                 {
