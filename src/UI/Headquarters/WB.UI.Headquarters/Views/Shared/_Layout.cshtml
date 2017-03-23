@@ -121,7 +121,7 @@
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 <text>|</text>
-                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+                <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
                  
                 @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString != ServiceLocator.Current.GetInstance<IProductVersion>().ToString()))
                 {

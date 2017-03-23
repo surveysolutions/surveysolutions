@@ -5,7 +5,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
 {
-    /// <see cref="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm"/>
+    // https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
     internal class when_detecting_cycles_in_directed_graph_with_self_reference_vertex
     {
         Establish context = () =>
