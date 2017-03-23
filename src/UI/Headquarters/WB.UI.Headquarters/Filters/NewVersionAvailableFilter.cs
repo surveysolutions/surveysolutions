@@ -7,7 +7,6 @@ using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
 
@@ -27,9 +26,6 @@ namespace WB.UI.Headquarters.Filters
         private IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage =>
             ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>();
 
-        private ITransactionManagerProvider TransactionManagerProvider => 
-            ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
-
         private IPlainTransactionManager PlainTransactionManager =>
             ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
@@ -38,34 +34,35 @@ namespace WB.UI.Headquarters.Filters
             base.OnResultExecuting(filterContext);
 
             var viewResult = filterContext.Result as ViewResult;
-            if (viewResult != null)
+            if (viewResult == null) return;
+
+            if (ApplicationSettings.NewVersionCheckEnabled && !string.IsNullOrEmpty(ApplicationSettings.NewVersionCheckUrl))
             {
-                if (ApplicationSettings.NewVersionCheckEnabled && !string.IsNullOrEmpty(ApplicationSettings.NewVersionCheckUrl))
+                if (AvailableVersion == null)
                 {
-                        if (AvailableVersion == null)
-                        {
-                            AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.StorageKey);
-                        }
+                    AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.StorageKey);
+                }
 
-                        viewResult.ViewBag.LastAvailableApplicationVersion = AvailableVersion;
+                viewResult.ViewBag.LastAvailableApplicationVersion = AvailableVersion;
 
-                        if (!IsCheckingNow && (LastLoadedAt == null || (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid))
+                var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
+
+                if (!IsCheckingNow && (LastLoadedAt == null || isCacheExpired))
+                {
+                    var isErrorDelayExpired = ErrorOccuredAt != null && (DateTime.Now - ErrorOccuredAt)?.Seconds > DelayOnErrorInSeconds;
+
+                    if ((ErrorOccuredAt == null) || isErrorDelayExpired)
+                    {
+                        Task.Run(async () =>
                         {
-                            if ((ErrorOccuredAt == null) ||
-                                (ErrorOccuredAt != null &&
-                                 (DateTime.Now - ErrorOccuredAt)?.Seconds > DelayOnErrorInSeconds))
-                            {
-                                Task.Run(async () =>
-                                {
-                                    await UpdateVersion(ApplicationSettings.NewVersionCheckUrl);
-                                });
-                            }
-                        }
+                            await this.UpdateVersion();
+                        });
+                    }
                 }
             }
         }
 
-        private async Task UpdateVersion(string uri)
+        private async Task UpdateVersion()
         {
             try
             {
@@ -77,18 +74,17 @@ namespace WB.UI.Headquarters.Filters
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
 
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                 try
                 {
-                    this.TransactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.PlainTransactionManager.ExecuteInPlainTransaction(
-                            () => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey)));
-
+                    this.PlainTransactionManager.BeginTransaction();
+                    this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey);
+                    this.PlainTransactionManager.CommitTransaction();
                 }
-                finally
+                catch 
                 {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    this.PlainTransactionManager.RollbackTransaction();
                 }
+                
             }
             catch (Exception)
             {
