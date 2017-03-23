@@ -13,6 +13,12 @@ namespace WB.UI.Designer
             bundles.IgnoreList.Ignore("*intellisense.js");
 
             bundles.Add(
+               new StyleBundle("~/layout/css").Include(
+                   "~/questionnaire/content/designer-start/bootstrap-custom.css",
+                   "~/questionnaire/vendor/perfect-scrollbar/css/perfect-scrollbar.css",
+                   "~/questionnaire/content/designer-start/designer-list.css"));
+
+            bundles.Add(
                 new StyleBundle("~/content/css").Include(
                     "~/questionnaire/vendor/bootstrap/dist/bootstrap.css",
                     "~/Content/font-awesome.min.css",
