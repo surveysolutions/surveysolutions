@@ -117,73 +117,80 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API пользователи</value>
-  </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>График</value>
-  </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>Экспорт данных</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Хедквотеры</value>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>Справка</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Интервьюеры</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Интервью</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Карта</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Наблюдатели </value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Количество</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Настройка обследований</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Количество синхронизированных, но пока необработанных интервью</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Отчеты</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Скорость</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Супервизоры</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Обследования и статусы</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Команды и роли</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Группы и роли</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Команды и статусы</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Загрузка пользователей</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Пользователи</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Члены команды и статусы</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
+  <data name="Title" xml:space="preserve">
     <value>Устранение неполадок</value>
+  </data>
+  <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+    <value>Укажите ключ или ID интервью для поиска. Вы также можете окрыть интервью и нажать кнопку "Устранить проблему".</value>
+  </data>
+  <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+    <value>Интервьювер утверждает, что интервью было закончино и синхронизировано, но я не вижу данных на сервере.</value>
+  </data>
+  <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+    <value>Вам потребуется выбрать название опросника, логина интервьювера и диапазон дат</value>
+  </data>
+  <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+    <value>Я не могу найти собранное в cesus режиме интервью</value>
+  </data>
+  <data name="SupportSite" xml:space="preserve">
+    <value>Перейдите по ссылке, описывающую вашу проблему, чтобы увидеть предлагаемые решения. Если проблема, с которой вы столкнулись не описана ниже, перейдите на  &lt;a href="{0}" target="_blank"&gt;сайт поддержки&lt;/a&gt; Survey Solutions. </value>
+  </data>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>Условия поиска</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>Найти интервью, синхронизированные между двумя датами</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>Выберите даты</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>Интервьювер</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+    <value>Выберите интервьювера</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>Выберите опросник</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>Чтобы найти интервью, выберите название опросника.&lt;br/&gt;
+Выберите интервьювера и диапазон дат, чтобы ограничить результаты поиска</value>
+  </data>
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>{0} интервью удовлетворяют условиям поиска</value>
+  </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которое вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию.</value>
+  </data>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>Нет интервью, удовлетворяющих критериям поиска</value>
+  </data>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>Одно интервью удовлетворяет критериям поиска</value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>Поиск интервью, собранных в census режиме </value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которые вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию и повторите поиск заново. Если и после этого вы не увидите интервью в списке, то обратитесь в службу поддержки.</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>Интервьювер</value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>Id интервью</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>Дата последнего обновления</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
+    <value>Статус</value>
   </data>
 </root>
