@@ -121,19 +121,19 @@
     <value>Troubleshooting</value>
   </data>
   <data name="InterviewDataIsMissingDescription" xml:space="preserve">
-    <value>You can see interview but it is impossible to open it or it contains corrupted data</value>
+    <value>Specify an interview key or interivew id to search. Alternatively, open the interview details page and press "Troubleshoot"  button.</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>Can't view data on collected interview</value>
+    <value>An interviewer claims an interview was completed and syncronized, but I see no data for that interivew on the server</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
-    <value>You will need to know enumerator and census interview template to find interview or it's status</value>
+    <value>Provide an interviewer login name, name of a questionnaire and a date range</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>I need to locate census interview</value>
+    <value>I need to locate an interview in a cesus mode</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
-    <value>List of cummon issues and tools of resolving thev for more information check special section on &lt;a href="{0}" target="_blank"&gt;our support site&lt;/a&gt;</value>
+    <value>Click on the link of an issue you want to resolve. For the problems not listed below, visit Survey Solutions &lt;a href="{0}" target="_blank"&gt;support site&lt;/a&gt;.</value>
   </data>
   <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
     <value>Filter Conditions</value>

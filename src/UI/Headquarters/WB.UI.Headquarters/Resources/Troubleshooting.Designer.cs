@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can see interview but it is impossible to open it or it contains corrupted data.
+        ///   Looks up a localized string similar to Specify an interview key or interivew id to search. Alternatively, open the interview details page and press &quot;Troubleshoot&quot;  button..
         /// </summary>
         public static string InterviewDataIsMissingDescription {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t view data on collected interview.
+        ///   Looks up a localized string similar to An interviewer claims an interview was completed and syncronized, but I see no data for that interivew on the server.
         /// </summary>
         public static string InterviewDataIsMissingTitle {
             get {
@@ -215,7 +215,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You will need to know enumerator and census interview template to find interview or it&apos;s status.
+        ///   Looks up a localized string similar to Provide an interviewer login name, name of a questionnaire and a date range.
         /// </summary>
         public static string MissingCensusInterviewsDescription {
             get {
@@ -224,7 +224,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I need to locate census interview.
+        ///   Looks up a localized string similar to I need to locate an interview in a cesus mode.
         /// </summary>
         public static string MissingCensusInterviewsTitle {
             get {
@@ -233,7 +233,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of cummon issues and tools of resolving thev for more information check special section on &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;our support site&lt;/a&gt;.
+        ///   Looks up a localized string similar to Click on the link of an issue you want to resolve. For the problems not listed below, visit Survey Solutions &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;support site&lt;/a&gt;..
         /// </summary>
         public static string SupportSite {
             get {
