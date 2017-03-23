@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             bool? hasDevice, Guid? supervisorId);
         SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived);
         UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false);
-        UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool active = false);
+        UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool archived = false);
         UserView GetUser(UserViewInputModel input);
     }
 }
