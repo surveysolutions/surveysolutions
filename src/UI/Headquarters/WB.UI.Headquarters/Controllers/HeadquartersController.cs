@@ -74,6 +74,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
+            if (!user.IsInRole(UserRoles.Headquarter)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel()
                 {
