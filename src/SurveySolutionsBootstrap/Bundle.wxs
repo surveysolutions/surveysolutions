@@ -10,8 +10,10 @@
             UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
 
         <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
-            (VersionNT64 &gt;= v6.3) OR WixBundleAction = 3
+            (VersionNT64 &gt;= v6.3) 
         </bal:Condition>
+        
+        <!--OR WixBundleAction = 3-->
         
         <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
             <bal:WixStandardBootstrapperApplication 
@@ -19,8 +21,8 @@
                 LogoFile="img\logo.png"
                 LogoSideFile="img\logo.png"
                 ShowVersion="yes"/>
-            
         </BootstrapperApplicationRef>
+        
         <Chain>
             <PackageGroupRef Id="NetFx462Web"/>
 
@@ -33,6 +35,7 @@
               Vital="yes"
               InstallCondition="VersionNT64"
               SourceFile="$(var.SurveySolutions.TargetPath)" />
+            
         </Chain>
     </Bundle>
 </Wix>
