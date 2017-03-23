@@ -420,7 +420,9 @@ namespace WB.Tests.Abc.TestFactories
             string responsibleName = null,
             string teamLeadName = null,
             UserRoles role = UserRoles.Interviewer,
-            string key = null)
+            string key = null,
+            DateTime? updateDate = null,
+            bool? wasCreatedOnClient= null)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -432,7 +434,9 @@ namespace WB.Tests.Abc.TestFactories
                 TeamLeadId = teamLeadId.GetValueOrDefault(),
                 TeamLeadName = string.IsNullOrWhiteSpace(teamLeadName) ? teamLeadId.FormatGuid() : teamLeadName,
                 ResponsibleRole = role,
-                Key = key
+                Key = key,
+                UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
+                WasCreatedOnClient = wasCreatedOnClient ?? false
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
