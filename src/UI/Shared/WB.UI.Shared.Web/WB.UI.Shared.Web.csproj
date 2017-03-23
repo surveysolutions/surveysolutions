@@ -173,7 +173,7 @@
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\EventBusConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
-    <Compile Include="Configuration\OwinSecuritySection.cs" />
+    <Compile Include="Configuration\HqSecuritySection.cs" />
     <Compile Include="Controllers\BaseMessageDisplayController.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
@@ -201,7 +201,6 @@
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
-    <Compile Include="MembershipProvider\Accounts\IPasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
     <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
