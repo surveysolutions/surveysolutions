@@ -201,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     .Select(supervisor => new SupervisorsItem
                     {
                         UserId = supervisor.Id,
-                        CreationDate = supervisor.CreationDate,
+                        CreationDate = supervisor.CreationDate.FormatDateWithTime(),
                         Email = supervisor.Email,
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
                         IsLockedByHQ = supervisor.IsLockedByHeadquaters,
