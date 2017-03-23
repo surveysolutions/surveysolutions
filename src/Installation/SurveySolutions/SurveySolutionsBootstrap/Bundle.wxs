@@ -9,13 +9,13 @@
             Manufacturer="The World Bank"
             UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
 
-       <bal:Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-            <![CDATA[Installed OR (VersionNT >= 602)]]>
+        <bal:Condition Message="This application requires Windows Server 2012 R2.">
+            (VersionNT64 &gt;= v6.3) OR WixBundleAction = 3
         </bal:Condition>
         
         <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
-            <bal:WixStandardBootstrapperApplication
-               LicenseUrl="http://go.worldbank.org/OS6V7NIUD0"/>
+            <bal:WixStandardBootstrapperApplication 
+                LicenseUrl=""/>
         </BootstrapperApplicationRef>
         <Chain>
             <PackageGroupRef Id="NetFx462Web"/>
