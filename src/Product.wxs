@@ -17,13 +17,13 @@
         <!--not supported in wix 3.10 should be in 3.11 and 4-->
         <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" />
         
-        <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again. You may get it here: https://www.microsoft.com/en-us/download/details.aspx?id=53345">
+        <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again.">
             <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
         </Condition>
             
         
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]> 
+            <![CDATA[Installed OR (VersionNT >= 602)]]> 
         </Condition>
 
         <!--<Property Id="CONNSTRING"/>-->
