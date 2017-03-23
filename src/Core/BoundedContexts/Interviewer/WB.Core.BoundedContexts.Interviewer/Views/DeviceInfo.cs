@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int AndroidSdkVersion { get; set; }
         public string AndroidSdkVersionName { get; set; }
         public string AppVersion { get; set; }
+        public int AppBuildVersion { get; set; }
         public DateTime LastAppUpdatedDate { get; set; }
         public string NetworkType { get; set; }
         public string NetworkSubType { get; set; }

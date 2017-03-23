@@ -1129,6 +1129,7 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\BaseApiServiceController.cs" />
     <Compile Include="API\ExportController.cs" />
+    <Compile Include="API\InterviewerApkInfo.cs" />
     <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />

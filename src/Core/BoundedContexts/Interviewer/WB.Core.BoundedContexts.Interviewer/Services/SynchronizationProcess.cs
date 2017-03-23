@@ -573,6 +573,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             AndroidSdkVersionName = info.AndroidSdkVersionName,
 
             AppVersion = info.AppVersion,
+            AppBuildVersion = info.AppBuildVersion,
             AppOrientation = info.AppOrientation,
             LastAppUpdatedDate = info.LastAppUpdatedDate,
 

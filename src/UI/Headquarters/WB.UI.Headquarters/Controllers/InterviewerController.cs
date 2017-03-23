@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
@@ -10,10 +11,12 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -26,17 +29,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
+        private readonly IAndroidPackageReader androidPackageReader;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public InterviewerController(ICommandService commandService, 
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager,
                               IQueryableReadSideRepositoryReader<InterviewSummary>  interviewRepository,
-                              IDeviceSyncInfoRepository deviceSyncInfoRepository)
+                              IDeviceSyncInfoRepository deviceSyncInfoRepository,
+                              IAndroidPackageReader androidPackageReader,
+                              IFileSystemAccessor fileSystemAccessor)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
+            this.androidPackageReader = androidPackageReader;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
 
@@ -92,6 +101,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
                 interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters));
 
+            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id);
+
             var interviewerProfileModel = new InterviewerProfileModel
             {
                 Id = enumerator.Id,
@@ -100,13 +111,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 FullName = enumerator.FullName,
                 Phone = enumerator.PhoneNumber,
                 SupervisorName = supervisor.UserName,
+                HasUpdateForInterviewerApp = this.HasUpdateForInterviewerApp(lastSuccessDeviceInfo.AppBuildVersion),
                 WaitingInterviewsForApprovalCount = completedInterviewCount,
                 ApprovedInterviewsByHqCount = approvedByHqCount,
-                IsArchived = enumerator.IsArchived,
-                LastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id),
+                TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(id),
+                TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(id),
+                LastSuccessDeviceInfo = lastSuccessDeviceInfo,
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id)
             };
             return this.View(interviewerProfileModel);
+        }
+
+        private bool HasUpdateForInterviewerApp(int appBuildVersion)
+        {
+            string pathToInterviewerApp =
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+
+            int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+
+            return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > appBuildVersion);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]

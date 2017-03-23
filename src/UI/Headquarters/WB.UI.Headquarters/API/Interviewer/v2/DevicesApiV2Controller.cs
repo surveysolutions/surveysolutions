@@ -66,6 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 AndroidSdkVersionName = info.AndroidSdkVersionName,
                 DeviceDate = info.DeviceDate,
                 AppVersion = info.AppVersion,
+                AppBuildVersion = info.AppBuildVersion,
                 MobileSignalStrength = info.MobileSignalStrength,
                 AppOrientation = info.AppOrientation,
                 MobileOperator = info.MobileOperator,
