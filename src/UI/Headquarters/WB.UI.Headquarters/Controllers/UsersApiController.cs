@@ -84,6 +84,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string Email { get; set; }
             public virtual string DeviceId { get; set; }
             public virtual bool IsLocked { get; set; }
+            public virtual bool IsArchived { get; set; }
         }
 
 
@@ -149,7 +150,8 @@ namespace WB.UI.Headquarters.Controllers
                     UserName = x.UserName,
                     CreationDate = x.CreationDate.FormatDateWithTime(),
                     Email = x.Email,
-                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor
+                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
+                    IsArchived = x.IsArchived
                 })
             };
         }

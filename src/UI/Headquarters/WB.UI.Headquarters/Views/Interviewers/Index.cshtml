@@ -248,8 +248,11 @@
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
-                            render: function(data, type, row) {
-                                return "<a href=" + editUrl + "/" + row.userId + ">" + data + "</a>";
+                            render: function (data, type, row) {
+                                if(!row.isArchived)
+                                    return "<a href=" + editUrl + "/" + row.userId + ">" + data + "</a>";
+                                else
+                                    return "<span>" + data + "</span>";
                             }
                         },
                         {

@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         UserId = x.Id,
                         CreationDate = x.CreationDate,
                         Email = x.Email,
+                        IsArchived = x.IsArchived,
                         IsLockedBySupervisor = x.IsLockedBySupervisor,
                         IsLockedByHQ = x.IsLockedByHeadquaters,
                         UserName = x.UserName,

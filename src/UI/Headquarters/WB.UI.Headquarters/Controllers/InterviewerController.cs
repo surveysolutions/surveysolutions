@@ -88,12 +88,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ActionName("Profile")]
         public async Task<ActionResult> InterviewerProfile(Guid id)
         {
-            var enumerator = await this.userManager.FindByIdAsync(id);
-            if (enumerator == null || !enumerator.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
+            var interviewer = await this.userManager.FindByIdAsync(id);
+            if (interviewer == null || interviewer.IsArchived || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
-            var supervisor = await this.userManager.FindByIdAsync(enumerator.Profile.SupervisorId.Value);
+            var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
-            if (enumerator == null) throw new HttpException(404, string.Empty);
+            if (interviewer == null) throw new HttpException(404, string.Empty);
 
             var completedInterviewCount = this.interviewRepository.Query(interviews => interviews.Count(
                 interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.Completed));
@@ -102,16 +102,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters));
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id);
+            var hasUpdateForInterviewerApp = false;
+
+            if (lastSuccessDeviceInfo != null)
+            {
+                string pathToInterviewerApp =
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+
+                int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                    ? null
+                    : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+
+                hasUpdateForInterviewerApp =  interviewerApkVersion.HasValue && (interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion);
+            }
 
             var interviewerProfileModel = new InterviewerProfileModel
             {
-                Id = enumerator.Id,
-                Email = enumerator.Email,
-                LoginName = enumerator.UserName,
-                FullName = enumerator.FullName,
-                Phone = enumerator.PhoneNumber,
+                Id = interviewer.Id,
+                Email = interviewer.Email,
+                LoginName = interviewer.UserName,
+                FullName = interviewer.FullName,
+                Phone = interviewer.PhoneNumber,
                 SupervisorName = supervisor.UserName,
-                HasUpdateForInterviewerApp = this.HasUpdateForInterviewerApp(lastSuccessDeviceInfo.AppBuildVersion),
+                HasUpdateForInterviewerApp = hasUpdateForInterviewerApp,
                 WaitingInterviewsForApprovalCount = completedInterviewCount,
                 ApprovedInterviewsByHqCount = approvedByHqCount,
                 TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(id),
@@ -120,18 +133,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id)
             };
             return this.View(interviewerProfileModel);
-        }
-
-        private bool HasUpdateForInterviewerApp(int appBuildVersion)
-        {
-            string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
-
-            int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
-
-            return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > appBuildVersion);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
