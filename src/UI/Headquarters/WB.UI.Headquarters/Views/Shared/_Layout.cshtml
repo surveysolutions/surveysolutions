@@ -124,7 +124,7 @@
                 <text>|</text>
                 <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
                  
-                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString != ServiceLocator.Current.GetInstance<IProductVersion>().ToString()))
+                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).Build > ServiceLocator.Current.GetInstance<IProductVersion>().GetBildNumber()))
                 {
                     <div>
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString) </span>
