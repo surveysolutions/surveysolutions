@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId);
         DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId);
         DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId);
+        int GetSuccessSynchronizationsCount(Guid interviewerId);
+        int GetFailedSynchronizationsCount(Guid interviewerId);
     }
 }

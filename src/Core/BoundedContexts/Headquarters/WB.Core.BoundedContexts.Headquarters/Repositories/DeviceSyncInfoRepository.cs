@@ -16,16 +16,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             dbContext.SaveChanges();
         }
 
-        public DeviceSyncInfo GetLastByInterviewerId(Guid enumeratorId)
+        public DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId)
             => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == enumeratorId);
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
 
-        public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid enumeratorId)
+        public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
             => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == enumeratorId && deviceInfo.StatisticsId != null);
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
-        public DeviceSyncInfo GetLastFailedByInterviewerId(Guid enumeratorId)
+        public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
         => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == enumeratorId && deviceInfo.StatisticsId == null);
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
+
+        public int GetSuccessSynchronizationsCount(Guid interviewerId)
+        => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
+
+        public int GetFailedSynchronizationsCount(Guid interviewerId)
+        => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
     }
 }

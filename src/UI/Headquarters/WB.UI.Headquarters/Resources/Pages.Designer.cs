@@ -853,11 +853,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection speed: 87Kb/s (Type: {0}, Operator: {1}).
+        ///   Looks up a localized string similar to Connection: Type: {0} {1}, Operator: {2}.
         /// </summary>
-        public static string InterviewerProfile_ConnectionSpeedFormat {
+        public static string InterviewerProfile_ConnectionMobileFormat {
             get {
-                return ResourceManager.GetString("InterviewerProfile_ConnectionSpeedFormat", resourceCulture);
+                return ResourceManager.GetString("InterviewerProfile_ConnectionMobileFormat", resourceCulture);
             }
         }
         
@@ -867,6 +867,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_ConnectionType {
             get {
                 return ResourceManager.GetString("InterviewerProfile_ConnectionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection: {0}.
+        /// </summary>
+        public static string InterviewerProfile_ConnectionWifiFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ConnectionWifiFormat", resourceCulture);
             }
         }
         
@@ -943,11 +952,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Device orientation.
+        /// </summary>
+        public static string InterviewerProfile_DeviceOrientation {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceOrientation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device serial number.
         /// </summary>
         public static string InterviewerProfile_DeviceSerial {
             get {
                 return ResourceManager.GetString("InterviewerProfile_DeviceSerial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews sent to interviewer.
+        /// </summary>
+        public static string InterviewerProfile_DownloadedInterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DownloadedInterviewsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of questionnaires sent to interviewer.
+        /// </summary>
+        public static string InterviewerProfile_DownloadedQuestionnairesCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DownloadedQuestionnairesCount", resourceCulture);
             }
         }
         
@@ -979,11 +1015,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Up to date.
+        /// </summary>
+        public static string InterviewerProfile_Interviewer {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer App version.
         /// </summary>
         public static string InterviewerProfile_InterviewerAppVersion {
             get {
                 return ResourceManager.GetString("InterviewerProfile_InterviewerAppVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be updated.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerCanBeUpdated {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerCanBeUpdated", resourceCulture);
             }
         }
         
@@ -1006,6 +1060,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Up to date.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerUpToDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Survey Solutions version.
         /// </summary>
         public static string InterviewerProfile_InterviewerVersion {
@@ -1024,7 +1087,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last failed sync: {0} ({1} hours ago).
+        ///   Looks up a localized string similar to Last failed sync: {0} ({1}).
         /// </summary>
         public static string InterviewerProfile_LastFailedSyncFormat {
             get {
@@ -1033,7 +1096,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last successfull sync: {0} ({1} hours ago).
+        ///   Looks up a localized string similar to Last successfull sync: {0} ({1}).
         /// </summary>
         public static string InterviewerProfile_LastSuccessSyncFormat {
             get {
@@ -1060,11 +1123,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total number of synchronizations.
+        ///   Looks up a localized string similar to Total number of failed synchronizations.
         /// </summary>
-        public static string InterviewerProfile_NumberOrSynchronizations {
+        public static string InterviewerProfile_NumberOfFailedSynchronizations {
             get {
-                return ResourceManager.GetString("InterviewerProfile_NumberOrSynchronizations", resourceCulture);
+                return ResourceManager.GetString("InterviewerProfile_NumberOfFailedSynchronizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total number of success synchronizations.
+        /// </summary>
+        public static string InterviewerProfile_NumberOfSuccessSynchronizations {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_NumberOfSuccessSynchronizations", resourceCulture);
             }
         }
         
@@ -1083,6 +1155,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_Rejected {
             get {
                 return ResourceManager.GetString("InterviewerProfile_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server timestamp of beginning of the session.
+        /// </summary>
+        public static string InterviewerProfile_ServerDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ServerDate", resourceCulture);
             }
         }
         
@@ -1119,6 +1200,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_TitleFormat {
             get {
                 return ResourceManager.GetString("InterviewerProfile_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of completed interviews received from interviewer.
+        /// </summary>
+        public static string InterviewerProfile_UploadedInterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_UploadedInterviewsCount", resourceCulture);
             }
         }
         
