@@ -68,13 +68,13 @@
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (authorizedUser.IsObserver)
+                else if (authorizedUser.IsSupervisor)
                 {
-                    @Html.Partial("ObserverMainMenu")
+                    @Html.Partial("SupervisorMainMenu")
                 }
                 else
                 {
-                    @Html.Partial("SupervisorMainMenu")
+                    @Html.Partial("ObserverMainMenu")
                 }
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
