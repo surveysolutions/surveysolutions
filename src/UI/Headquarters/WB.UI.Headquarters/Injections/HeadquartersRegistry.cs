@@ -33,11 +33,11 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Services;
@@ -174,8 +174,9 @@ namespace WB.UI.Headquarters.Injections
             this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
 
-            this.BindFilter<NewVersionAvailableFilter>(FilterScope.Global, null)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
+            if (ApplicationSettings.NewVersionCheckEnabled)
+                this.BindFilter<NewVersionAvailableFilter>(FilterScope.Global, null)
+                    .WhenActionMethodHasNo<NoTransactionAttribute>();
 
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();

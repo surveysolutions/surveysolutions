@@ -39,7 +39,7 @@
 
                 @RenderSection("interviewerlink", false)
                 
-                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString != ServiceLocator.Current.GetInstance<IProductVersion>().ToString()))
+                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).Build > ServiceLocator.Current.GetInstance<IProductVersion>().GetBildNumber()))
                 {
                     <div>
                         <span style="background-color: #ff8;">@Common.NewVersionAvailable @(((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString) </span>
