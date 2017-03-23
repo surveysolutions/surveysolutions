@@ -4,6 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
 {
     public class InterviewersItem
     {
+        public bool IsArchived { get; set; }
         public bool IsLockedBySupervisor { get; set; }
 
         public bool IsLockedByHQ { get; set; }

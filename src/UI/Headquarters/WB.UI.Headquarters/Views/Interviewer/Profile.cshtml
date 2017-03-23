@@ -8,6 +8,7 @@
 @model WB.UI.Headquarters.Models.InterviewerProfileModel
 
 @{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.LoginName);
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     var responsibleOfAssignments = authorizedUser.IsSupervisor ? Model.LoginName : Model.SupervisorName;
