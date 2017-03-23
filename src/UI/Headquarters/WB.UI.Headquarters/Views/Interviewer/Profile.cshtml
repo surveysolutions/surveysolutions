@@ -128,7 +128,7 @@
                         <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
                     </ul>
                     <ul class="list-unstyled">
-                        <li>@string.Format(Pages.InterviewerProfile_LastSuccessSyncFormat, Model.LastSuccessDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastSuccessDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))</li>
+                        <li>@string.Format(Pages.InterviewerProfile_LastSuccessSyncFormat, Model.LastSuccessDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastSuccessDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
                         @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
                         {
                             <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastSuccessDeviceInfo.NetworkType)</li>
@@ -141,7 +141,7 @@
                     @if (Model.LastFailedDeviceInfo != null)
                     {
                         <ul class="list-unstyled">
-                            <li>@string.Format(Pages.InterviewerProfile_LastFailedSyncFormat, Model.LastFailedDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastFailedDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))</li>
+                            <li>@string.Format(Pages.InterviewerProfile_LastFailedSyncFormat, Model.LastFailedDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastFailedDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
                             @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
                             {
                                 <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastFailedDeviceInfo.NetworkType)</li>
