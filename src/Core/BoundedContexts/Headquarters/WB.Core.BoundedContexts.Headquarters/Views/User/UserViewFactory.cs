@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Ninject.Selection;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
@@ -196,15 +197,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived)
         {
-            Func<IQueryable<HqUser>, IQueryable<SupervisorsItem>> query =
+            Func<IQueryable<HqUser>, IQueryable<SupervisorsQueryItem>> query =
                 allUsers => ApplyFilter(allUsers, searchBy, UserRoles.Supervisor, archived)
-                    .Select(supervisor => new SupervisorsItem
+                    .Select(supervisor => new SupervisorsQueryItem
                     {
-                        UserId = supervisor.Id,
-                        CreationDate = supervisor.CreationDate.FormatDateWithTime(),
-                        Email = supervisor.Email,
                         IsLockedBySupervisor = supervisor.IsLockedBySupervisor,
                         IsLockedByHQ = supervisor.IsLockedByHeadquaters,
+                        CreationDate = supervisor.CreationDate,
+                        Email = supervisor.Email,
+                        UserId = supervisor.Id,
                         UserName = supervisor.UserName,
                         InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
                         NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
@@ -212,7 +213,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
-            var filteredUsers = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize).Invoke(this.UserRepository.Users).ToList();
+            List<SupervisorsQueryItem> usersPage = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
+                .Invoke(this.UserRepository.Users)
+                .ToList();
+
+            var filteredUsers = usersPage.Select(x => new SupervisorsItem
+            {
+                IsLockedBySupervisor = x.IsLockedBySupervisor,
+                IsLockedByHQ = x.IsLockedByHQ,
+                CreationDate = x.CreationDate.FormatDateWithTime(),
+                Email = x.Email,
+                UserId = x.UserId,
+                UserName = x.UserName,
+                InterviewersCount = x.InterviewersCount,
+                NotConnectedToDeviceInterviewersCount = x.NotConnectedToDeviceInterviewersCount
+            }).ToList();
 
             return new SupervisorsView
             {
@@ -233,6 +248,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 allUsers = allUsers.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
             }
             return allUsers;
+        }
+
+        public class SupervisorsQueryItem
+        {
+            public int InterviewersCount { get; set; }
+
+            public int NotConnectedToDeviceInterviewersCount { get; set; }
+            public bool IsLockedBySupervisor { get; set; }
+            public bool IsLockedByHQ { get; set; }
+            public DateTime CreationDate { get; set; }
+            public string UserName { get; set; }
+            public Guid UserId { get; set; }
+            public string Email { get; set; }
         }
     }
 }
