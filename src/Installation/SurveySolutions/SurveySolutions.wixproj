@@ -45,6 +45,7 @@
   <ItemGroup>
     <Content Include="Configuration.wxi" />
     <Content Include="Headquarters.Web.config" />
+    <Content Include="img\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -73,6 +74,9 @@
       <Link>WB.UI.Headquarters.csproj</Link>
     </HeatProject>-->
     <EmbeddedResource Include="SurveySolutions_en-us.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="img\" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">

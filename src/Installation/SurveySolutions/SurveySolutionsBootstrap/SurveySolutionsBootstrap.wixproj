@@ -56,6 +56,12 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="img\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="img\logo.png" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
     <Error Text="The WiX Toolset v3 build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
