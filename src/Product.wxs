@@ -269,7 +269,7 @@
                 <util:XmlFile Id="UpdateElementValueXml5"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
-                              ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
+                              ElementPath="//configuration/appSettings/add[\[]@key='WebInterviewEnabled'[\]]"
                               Name="value"
                               Value="true"
                               Sequence='16'/>
