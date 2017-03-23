@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserRepository>().To<HqUserStore>();
             this.Bind<IHashCompatibilityProvider>().To<HashCompatibilityProvider>().InSingletonScope();
             this.Bind<IPasswordHasher>().To<PasswordHasher>();
+            this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
             this.Bind<IOwinContext>().ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext()).InRequestScope();
             this.Bind<IAuthenticationManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Authentication).InRequestScope();
             this.Bind<HqSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqSignInManager>()).InRequestScope();

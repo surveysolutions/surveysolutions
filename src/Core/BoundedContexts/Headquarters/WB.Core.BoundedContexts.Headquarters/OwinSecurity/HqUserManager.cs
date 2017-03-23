@@ -11,6 +11,8 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
+using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
@@ -92,14 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var manager = new HqUserManager(store, authorizedUser, hashCompatibility)
             {
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
-                PasswordValidator = new PasswordValidator // temporary, untill not fixed globally
-                {
-                    RequiredLength = 1,
-                    RequireUppercase = false,
-                    RequireDigit = false,
-                    RequireLowercase = false,
-                    RequireNonLetterOrDigit = false
-                }
+                PasswordValidator = ServiceLocator.Current.GetInstance<IIdentityValidator<string>>()
             };
             return manager;
         }

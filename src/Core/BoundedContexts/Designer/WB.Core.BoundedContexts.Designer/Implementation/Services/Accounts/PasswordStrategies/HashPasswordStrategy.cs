@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies

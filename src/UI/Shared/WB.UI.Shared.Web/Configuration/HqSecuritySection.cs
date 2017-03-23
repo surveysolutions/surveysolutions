@@ -2,7 +2,7 @@
 
 namespace WB.UI.Shared.Web.Configuration
 {
-    public class OwinSecuritySection : ConfigurationSection
+    public class HqSecuritySection : ConfigurationSection
     {
         private const string passwordPolicyElementName = "passwordPolicy";
 
