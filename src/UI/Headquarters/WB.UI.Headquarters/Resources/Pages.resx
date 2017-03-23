@@ -444,9 +444,6 @@
   <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
     <value>Can be updated</value>
   </data>
-  <data name="InterviewerProfile_Interviewer" xml:space="preserve">
-    <value>Up to date</value>
-  </data>
   <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
     <value>Last Survey Solutions updated date</value>
   </data>
