@@ -14,6 +14,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using NHibernate.Engine.Query;
 using Ninject;
 using Ninject.Modules;
 using Ninject.Web.Common;
@@ -22,6 +23,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -97,9 +99,13 @@ namespace WB.UI.Headquarters.Injections
             var basePath = appDataDirectory;
             
             var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
+
+            var dbConnectionStringName = @"Postgres";
+            HQPlainStorageDbContext.ConnectionStringName = dbConnectionStringName;
+
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
                 SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
@@ -135,7 +141,7 @@ namespace WB.UI.Headquarters.Injections
                 new HeadquartersRegistry(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                    WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
                     "readside",
                     new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
                     cacheSettings,
@@ -145,7 +151,7 @@ namespace WB.UI.Headquarters.Injections
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
             var eventStoreSettings = new PostgreConnectionSettings();
-            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString;
             eventStoreSettings.SchemaName = "events";
             var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));

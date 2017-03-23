@@ -3,12 +3,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
-    internal class HQPlainStorageDbContext : DbContext
+    public class HQPlainStorageDbContext : DbContext
     {
+        public static string ConnectionStringName { get; set; }
         public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
 
-        public HQPlainStorageDbContext() : base("Postgres")
+        public HQPlainStorageDbContext() : base(ConnectionStringName)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>());
         }
