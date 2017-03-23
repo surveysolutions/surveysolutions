@@ -11,10 +11,12 @@ namespace WB.UI.Headquarters.Models
         public string Phone { get; set; }
         public string LoginName { get; set; }
         public string SupervisorName { get; set; }
+        public bool HasUpdateForInterviewerApp { get; set; }
         public int WaitingInterviewsForApprovalCount { get; set; }
         public int ApprovedInterviewsByHqCount { get; set; }
         public DeviceSyncInfo LastSuccessDeviceInfo { get; set; }
         public DeviceSyncInfo LastFailedDeviceInfo { get; set; }
-        public bool IsArchived { get; set; }
+        public int TotalSuccessSynchronizationCount { get; set; }
+        public int TotalFailedSynchronizationCount { get; set; }
     }
 }

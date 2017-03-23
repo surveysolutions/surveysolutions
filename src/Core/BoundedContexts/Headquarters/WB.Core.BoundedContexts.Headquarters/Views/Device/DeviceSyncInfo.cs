@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
         public virtual int AndroidSdkVersion { get; set; }
         public string AndroidSdkVersionName { get; set; }
         public virtual string AppVersion { get; set; }
+        public virtual int AppBuildVersion { get; set; }
         public virtual DateTime LastAppUpdatedDate { get; set; }
         public virtual string NetworkType { get; set; }
         public virtual string NetworkSubType { get; set; }

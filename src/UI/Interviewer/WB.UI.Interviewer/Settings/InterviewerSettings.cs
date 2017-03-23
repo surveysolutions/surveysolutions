@@ -281,6 +281,7 @@ namespace WB.UI.Interviewer.Settings
             AndroidSdkVersion = (int) Build.VERSION.SdkInt,
             AndroidSdkVersionName = Build.VERSION.SdkInt.ToString(),
             AppVersion = this.GetApplicationVersionName(),
+            AppBuildVersion = this.GetApplicationVersionCode(),
             LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime).ToUniversalTime(),
             AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
             BatteryChargePercent = this.battery.GetRemainingChargePercent(),

@@ -1,4 +1,6 @@
-﻿@using System.Web.Optimization
+﻿@using System.Globalization
+@using System.Web.Optimization
+@using Humanizer
 @using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
@@ -106,21 +108,47 @@
                     <h3>@Pages.InterviewerProfile_DeviceAndConnectionStatistics</h3>
                     <ul class="list-unstyled">
                         <li><b>@Pages.InterviewerProfile_DeviceId: @Model.LastSuccessDeviceInfo.DeviceType @Model.LastSuccessDeviceInfo.DeviceManufacturer @Model.LastSuccessDeviceInfo.DeviceModel (@Model.LastSuccessDeviceInfo.DeviceBuildNumber)</b></li>
-                        <li><b>@Pages.InterviewerProfile_InterviewerAppVersion: @Model.LastSuccessDeviceInfo.AppVersion — <span class="success-text">Up to date</span></b></li>
+                        <li>
+                            <b>
+                                @Pages.InterviewerProfile_InterviewerAppVersion: @Model.LastSuccessDeviceInfo.AppVersion —
+                                @if (!Model.HasUpdateForInterviewerApp)
+                                {
+                                    <span class="success-text">@Pages.InterviewerProfile_InterviewerUpToDate</span>
+                                }
+                                else
+                                {
+                                    <span class="error-text">@Pages.InterviewerProfile_InterviewerCanBeUpdated</span>
+                                }
+                            </b>
+                        </li>
                     </ul>
                     <ul class="list-unstyled">
-                        <li>@Pages.InterviewerProfile_NumberOrSynchronizations: 231</li>
-                        <li>Total number of failed synchronizations: 8</li>
+                        <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>
+                        <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
                     </ul>
                     <ul class="list-unstyled">
-                        <li>@string.Format(Pages.InterviewerProfile_LastSuccessSyncFormat, Model.LastSuccessDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), (DateTime.UtcNow - Model.LastSuccessDeviceInfo.SyncDate).Hours)</li>
-                        <li>@string.Format(Pages.InterviewerProfile_ConnectionSpeedFormat, string.Format("{0} {1}", Model.LastSuccessDeviceInfo.NetworkType, Model.LastSuccessDeviceInfo.NetworkSubType), Model.LastSuccessDeviceInfo.MobileOperator)</li>
+                        <li>@string.Format(Pages.InterviewerProfile_LastSuccessSyncFormat, Model.LastSuccessDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastSuccessDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))</li>
+                        @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
+                        {
+                            <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastSuccessDeviceInfo.NetworkType)</li>
+                        }
+                        else
+                        {
+                            <li>@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, Model.LastSuccessDeviceInfo.NetworkType, Model.LastSuccessDeviceInfo.NetworkSubType, Model.LastSuccessDeviceInfo.MobileOperator)</li>
+                        }
                     </ul>
                     @if (Model.LastFailedDeviceInfo != null)
                     {
                         <ul class="list-unstyled">
-                            <li>@string.Format(Pages.InterviewerProfile_LastFailedSyncFormat, Model.LastFailedDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), (DateTime.UtcNow - Model.LastFailedDeviceInfo.SyncDate).Hours)</li>
-                            <li>@string.Format(Pages.InterviewerProfile_ConnectionSpeedFormat, string.Format("{0} {1}", Model.LastFailedDeviceInfo.NetworkType, Model.LastFailedDeviceInfo.NetworkSubType), Model.LastFailedDeviceInfo.MobileOperator)</li>
+                            <li>@string.Format(Pages.InterviewerProfile_LastFailedSyncFormat, Model.LastFailedDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastFailedDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))</li>
+                            @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
+                            {
+                                <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastFailedDeviceInfo.NetworkType)</li>
+                            }
+                            else
+                            {
+                                <li>@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, Model.LastFailedDeviceInfo.NetworkType, Model.LastFailedDeviceInfo.NetworkSubType, Model.LastFailedDeviceInfo.MobileOperator)</li>
+                            }
                         </ul>
                     }
                 </div>
@@ -164,6 +192,10 @@
                                 <td id="device-address">@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</td>
                             </tr>
                             <tr>
+                                <td>@Pages.InterviewerProfile_DeviceOrientation</td>
+                                <td>@Model.LastSuccessDeviceInfo.AppOrientation</td>
+                            </tr>
+                            <tr>
                                 <td>@Pages.InterviewerProfile_BatteryStatus</td>
                                 <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.LastSuccessDeviceInfo.BatteryChargePercent, Model.LastSuccessDeviceInfo.BatteryPowerSource, Model.LastSuccessDeviceInfo.IsPowerInSaveMode ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
                             </tr>
@@ -194,7 +226,7 @@
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
-                                <td>Server timestamp of beginning of the session</td>
+                                <td>@Pages.InterviewerProfile_ServerDate</td>
                                 <td>@Model.LastSuccessDeviceInfo.SyncDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                             </tr>
                             <tr>
@@ -205,22 +237,25 @@
                                 <td>@Pages.InterviewerProfile_ConnectionType</td>
                                 <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
                             </tr>
-                        <tr>
-                            <td>@Pages.InterviewerProfile_SignalStrength</td>
-                            <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
-                        </tr>
+                            @if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
+                            {
+                                <tr>
+                                    <td>@Pages.InterviewerProfile_SignalStrength</td>
+                                    <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
+                                </tr>
+                            }
                             @if (Model.LastSuccessDeviceInfo.Statistics != null)
                             {
                                 <tr>
-                                    <td>Number of templates sent to interviewer</td>
+                                    <td>@Pages.InterviewerProfile_DownloadedQuestionnairesCount</td>
                                     <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedQuestionnairesCount</td>
                                 </tr>
                                 <tr>
-                                    <td>Number of assignments sent to interviewer</td>
+                                    <td>@Pages.InterviewerProfile_DownloadedInterviewsCount</td>
                                     <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedInterviewsCount</td>
                                 </tr>
                                 <tr>
-                                    <td>Number of completed questionnaires received from interviewer</td>
+                                    <td>@Pages.InterviewerProfile_UploadedInterviewsCount</td>
                                     <td>@Model.LastSuccessDeviceInfo.Statistics.UploadedInterviewsCount</td>
                                 </tr>
                             }

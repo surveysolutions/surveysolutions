@@ -34,9 +34,6 @@ namespace WB.UI.Headquarters.API
         private readonly IAndroidPackageReader androidPackageReader;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
-        private string CapiFileName = "wbcapi.apk";
-        private string pathToSearchVersions = ("~/Client/");
-
 
         public InterviewerSyncController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
@@ -108,7 +105,7 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(this.pathToSearchVersions), this.CapiFileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -133,7 +130,7 @@ namespace WB.UI.Headquarters.API
         public bool CheckNewVersion(int versionCode)
         {
             string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(this.pathToSearchVersions), this.CapiFileName);
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
             int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
