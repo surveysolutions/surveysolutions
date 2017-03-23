@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -35,6 +36,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
 
@@ -90,6 +92,8 @@ namespace WB.UI.Headquarters
             app.CreatePerOwinContext<HqUserManager>(HqUserManager.Create);
             app.CreatePerOwinContext<HqSignInManager>(HqSignInManager.Create);
 
+            var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
+
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie
@@ -112,7 +116,9 @@ namespace WB.UI.Headquarters
                             ctx.Response.Redirect(ctx.RedirectUri);
                         }
                     }
-                }
+                },
+                ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExperationTime),
+                SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
