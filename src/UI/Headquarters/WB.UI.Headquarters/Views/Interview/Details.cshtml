@@ -198,12 +198,11 @@
     @Html.Partial("CommentTemplatePartialView")
     @Html.Partial("HistoryOfStatusesPartialView", Model.History)
     @Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
-
+</div>
     @helper SetGroupLevelClass(int level)
     {
-    <text>level</text>@level
-
-}
+        <text>level</text>@level
+    }
 
     @helper SetFilterActiveClass(InterviewDetailsFilter filter)
     {
