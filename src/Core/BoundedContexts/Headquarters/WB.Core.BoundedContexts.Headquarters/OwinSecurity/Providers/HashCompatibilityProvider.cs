@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Versions;
 
@@ -18,11 +17,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
             this.oldPasswordHasher = oldPasswordHasher;
         }
 
-        private static string firstVersionCache = null;
+        private string firstVersionCache = null;
 
         public bool IsInSha1CompatibilityMode()
         {
-            var firstVersionString = firstVersionCache ?? (firstVersionCache = this.productVersion.GetHistory().OrderBy(h => h.UpdateTimeUtc).FirstOrDefault().ProductVersion);
+            var firstVersionString = firstVersionCache 
+                ?? (firstVersionCache = this.productVersion.GetHistory().OrderBy(h => h.UpdateTimeUtc).FirstOrDefault()?.ProductVersion);
 
             if (string.IsNullOrWhiteSpace(firstVersionString)) return false;
 
