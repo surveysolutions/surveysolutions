@@ -61,7 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var localInterviewer = this.interviewersPlainStorage
                 .Where(interviewer => interviewer.Name == userName).FirstOrDefault(); // db query
             
-            if (string.Equals(localInterviewer.Password ?? localInterviewer.PasswordHash, passwordHash, StringComparison.Ordinal))
+            if (string.Equals(localInterviewer.Password 
+                ?? localInterviewer.PasswordHash, passwordHash, StringComparison.Ordinal))
             {
                 this.currentUserIdentity = localInterviewer;
             }
