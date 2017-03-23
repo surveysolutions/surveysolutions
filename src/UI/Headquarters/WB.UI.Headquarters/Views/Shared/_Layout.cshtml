@@ -38,13 +38,13 @@
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
+                else if(authorizedUser.IsSupervisor)
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
+                }
                 else if (authorizedUser.IsObserver)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
-                }
-                else
-                {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
             </div>
             <div class="collapse navbar-collapse">
@@ -56,14 +56,15 @@
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
+                else if (authorizedUser.IsSupervisor)
+                {
+                    @Html.Partial("SupervisorMainMenu")
+                }
                 else if (authorizedUser.IsObserver)
                 {
                     @Html.Partial("ObserverMainMenu")
                 }
-                else
-                {
-                    @Html.Partial("SupervisorMainMenu")
-                }
+
             </div>
 
         </div>
