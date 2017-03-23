@@ -90,6 +90,7 @@ namespace WB.UI.Headquarters.Controllers
                 var creationResult = await this.userManager.CreateUserAsync(
                             new HqUser
                             {
+                                Id = Guid.NewGuid(),
                                 UserName = model.UserName,
                                 Email = model.Email,
                                 FullName = model.PersonName,
