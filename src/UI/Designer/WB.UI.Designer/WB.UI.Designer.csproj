@@ -657,7 +657,6 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
-    <Content Include="Content\details.css" />
     <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
