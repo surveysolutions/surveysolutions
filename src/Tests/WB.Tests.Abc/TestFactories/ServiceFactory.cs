@@ -377,5 +377,11 @@ namespace WB.Tests.Abc.TestFactories
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
                 Mock.Of<IProductVersion>());
 
+        public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage, IPasswordHasher passwordHasher)
+        {
+            return new InterviewerPrincipal(
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>());
+        }
     }
 }
