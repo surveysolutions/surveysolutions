@@ -706,6 +706,11 @@
       <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
@@ -1790,6 +1795,11 @@
     </Compile>
     <Compile Include="Resources\Troubleshooting.Designer.cs">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Troubleshooting.ru.Designer.cs">
+      <DependentUpon>Troubleshooting.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
