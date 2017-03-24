@@ -427,8 +427,8 @@
   <data name="Prerequisite_FileOpen" xml:space="preserve">
     <value>Не удаётся открыть загруженный файл. Пожалуйста, убедитесь в правильности его формата.</value>
   </data>
-  <data name="Prerequisite_TabFile" xml:space="preserve">
-    <value>Только файлы с расширением .tab разрешены для загрузки.</value>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>Только файлы с расширением .tab и .txt разрешены для загрузки.</value>
   </data>
   <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
     <value>Следующие файлы не поддерживаются для загрузки: {0}.</value>

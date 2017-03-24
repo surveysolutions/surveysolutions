@@ -737,11 +737,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only .tab files are allowed for upload..
+        ///   Looks up a localized string similar to Only .tab and .txt files are allowed for upload..
         /// </summary>
-        internal static string Prerequisite_TabFile {
+        internal static string Prerequisite_TabOrTxtFile {
             get {
-                return ResourceManager.GetString("Prerequisite_TabFile", resourceCulture);
+                return ResourceManager.GetString("Prerequisite_TabOrTxtFile", resourceCulture);
             }
         }
         
