@@ -135,6 +135,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
+        public async Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
+        {
+            await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.devicesController}/exception",
+                request: exception,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
         [Obsolete("Since v5.10")]
         private async Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {

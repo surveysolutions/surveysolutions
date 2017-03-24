@@ -398,8 +398,10 @@
     <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\DbConfiguration.cs" />
+    <Compile Include="Repositories\DeviceExceptionRepository.cs" />
     <Compile Include="Repositories\DeviceSyncInfoRepository.cs" />
     <Compile Include="Repositories\HQPlainStorageDbContext.cs" />
+    <Compile Include="Repositories\IDeviceExceptionRepository.cs" />
     <Compile Include="Repositories\IDeviceSyncInfoRepository.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireExportStructureStorage.cs" />
@@ -536,6 +538,7 @@
     <Compile Include="Views\DataExport\QuestionSubType.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
+    <Compile Include="Views\Device\DeviceException.cs" />
     <Compile Include="Views\Device\DeviceSyncInfo.cs" />
     <Compile Include="Views\IInterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\IListView.cs" />
