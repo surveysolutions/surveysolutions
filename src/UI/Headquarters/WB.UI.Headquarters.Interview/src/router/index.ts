@@ -46,6 +46,8 @@ const router = new VueRouter({
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             store.dispatch("sectionRequireScroll", { id: (from.params as any).sectionId })
+        } else {
+            return { x: 0, y: 0 }
         }
     }
 })
