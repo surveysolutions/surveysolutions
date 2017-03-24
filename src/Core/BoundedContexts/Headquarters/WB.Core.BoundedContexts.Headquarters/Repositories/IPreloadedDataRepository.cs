@@ -10,9 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id);
         PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id);
         PreloadedDataByFile GetPreloadedDataOfSample(string id);
-        void DeletePreloadedDataOfSample(string id);
         PreloadedDataByFile[] GetPreloadedDataOfPanel(string id);
         void DeletePreloadedDataOfPanel(string id);
-        byte[] GetBytesOfSampleData(string id);
+        void DeletePreloadedDataOfSample(string id);
+        void DeletePreloadedData(string id);
     }
 }

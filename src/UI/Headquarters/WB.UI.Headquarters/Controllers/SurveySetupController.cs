@@ -121,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
             if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
             {
                 return this.View("InterviewImportVerificationErrors",
-                    PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
 
                 return this.View("InterviewImportVerificationErrors",
-                    PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
 
                 return this.View("InterviewImportVerificationErrors",
-                    PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
@@ -224,7 +224,7 @@ namespace WB.UI.Headquarters.Controllers
             if (extension != ".tab" && extension != ".txt")
             {
                 return this.View("InterviewImportVerificationErrors",
-                    PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
@@ -371,6 +371,8 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 finally
                 {
+                    this.preloadedDataRepository.DeletePreloadedData(model.Id);
+
                     ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                 }
             });
