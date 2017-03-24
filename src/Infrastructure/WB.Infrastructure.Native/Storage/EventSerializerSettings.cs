@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConvertor() },
+            Converters = new JsonConverter[] { new StringEnumConverter(), IdentityJsonConverter.Instance, RosterVectorConvertor.Instance },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
