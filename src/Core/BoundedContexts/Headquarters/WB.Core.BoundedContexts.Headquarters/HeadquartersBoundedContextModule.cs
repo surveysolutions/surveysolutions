@@ -356,7 +356,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
             
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
-            this.Bind<IDeviceExceptionRepository>().To<DeviceExceptionRepository>();
         }
     }
 }
