@@ -168,9 +168,6 @@
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>Senha deve ter pelo menos {2} caracteres de comprimento</value>
   </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Nome de entrada é muito longo</value>
-  </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>Nome completo</value>
   </data>

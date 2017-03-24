@@ -29,7 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Identity commonParentRosterIdForLinkedQuestion = null, 
             SubstitionText[] validationMessages = null,
             bool isInterviewerQuestion = true,
-            bool isPrefilled = false)
+            bool isPrefilled = false,
+            bool isSupervisors = false,
+            bool isHidden = false)
             : base(identity)
         {
             this.ValidationMessages = validationMessages ?? new SubstitionText[0];
@@ -37,6 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.VariableName = variableName;
             this.IsInterviewer = isInterviewerQuestion;
             this.IsPrefilled = isPrefilled;
+            this.IsSupervisors = isSupervisors;
+            this.IsHidden = isHidden;
 
             if (questionType == QuestionType.SingleOption)
             {
@@ -132,6 +136,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string VariableName { get; }
         public bool IsInterviewer { get; private set; }
         public bool IsPrefilled { get; private set; }
+        public bool IsSupervisors { get; private set; }
+        public bool IsHidden { get; private set; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
 
@@ -306,8 +312,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
            
             var options = (refQuestion?.IsDisabled() ?? false)
-                ? new decimal[0]
-                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
+                ? EmptyArray<decimal>.Value
+                : refQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? EmptyArray<decimal>.Value;
 
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
@@ -338,22 +344,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleFixedOption) { this.AsSingleFixedOption.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsMultiFixedOption)
             {
-                var answerAsRosterVector = answer as RosterVector;
-                CategoricalFixedMultiOptionAnswer categoricalFixedMultiOptionAnswer = 
-                    (answerAsRosterVector != null) 
-                        ? CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector) 
-                        : CategoricalFixedMultiOptionAnswer.FromDecimalArray((decimal[]) answer);
+                RosterVector answerAsRosterVector = answer as RosterVector;
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArray = answer as int[];
+                    answerAsRosterVector = answerAsIntArray != null
+                        ? new RosterVector(answerAsIntArray)
+                        : new RosterVector(answer as decimal[]);
+                }
+
+                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector);
 
                 this.AsMultiFixedOption.SetAnswer(categoricalFixedMultiOptionAnswer);
                 return;
             }
             if (this.IsSingleLinkedOption)
             {
-                var answerAsRosterVector = answer as RosterVector;
-                CategoricalLinkedSingleOptionAnswer categoricalLinkedSingleOptionAnswer = 
-                    (answerAsRosterVector != null)
-                        ? CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector)
-                        : CategoricalLinkedSingleOptionAnswer.FromRosterVector(new RosterVector((decimal[]) answer));
+                RosterVector answerAsRosterVector = answer as RosterVector;
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArray = answer as int[];
+                    answerAsRosterVector = answerAsIntArray != null 
+                        ? new RosterVector(answerAsIntArray) 
+                        : new RosterVector(answer as decimal[]);
+                }
+                
+                var categoricalLinkedSingleOptionAnswer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector);
 
                 this.AsSingleLinkedOption.SetAnswer(categoricalLinkedSingleOptionAnswer);
                 return;
@@ -361,10 +377,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedOption)
             {
                 var answerAsRosterVector = answer as RosterVector[];
-                CategoricalLinkedMultiOptionAnswer categoricalLinkedMultiOptionAnswer =
-                    (answerAsRosterVector != null)
-                        ? CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector)
-                        : CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray((decimal[][]) answer);
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArrayArray = answer as int[][];
+                    answerAsRosterVector = answerAsIntArrayArray != null
+                        ? answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray()
+                        : (answer as decimal[][]).Select(desimalArray => (RosterVector)desimalArray).ToArray();
+                }
+                var categoricalLinkedMultiOptionAnswer =
+                    CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector);
                     
                 this.AsMultiLinkedOption.SetAnswer(categoricalLinkedMultiOptionAnswer);
                 return;
@@ -464,13 +485,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var linkedLinkedSourceId = this.AsLinked.LinkedSourceId;
                 
-                HashSet<RosterVector> optionsHashSet = new HashSet<RosterVector>(options);
+                var nodes = options.Select(vector => new Identity(linkedLinkedSourceId, vector))
+                    .OrderBy(id => Tree.GetNodeCoordinatesInEnumeratorOrder(id), RosterVectorAsCoordinatesComparer.Instance);
                 
-                return this.Tree.AllNodesInOrderCache
-                    .Where(node => node.Identity.Id == linkedLinkedSourceId && optionsHashSet.Contains(node.Identity.RosterVector))
-                    .Take(options.Length)
-                    .Select(node => node.Identity.RosterVector)
-                    .ToArray();
+                return nodes.Select(n => n.RosterVector).ToArray();
             }
 
             return options;
@@ -948,11 +966,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public Guid LinkedSourceId { get; protected set; }
 
-        public IReadOnlyCollection<decimal> Options { get; protected set; }
+        public decimal[] Options { get; protected set; }
 
         public void SetOptions(IEnumerable<decimal> options)
         {
-            this.Options = options?.ToReadOnlyCollection() ?? new List<decimal>().ToReadOnlyCollection();
+            this.Options = options?.ToArray() ?? EmptyArray<decimal>.Value;
         }
     }
     
@@ -962,7 +980,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeMultiOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
         {
             this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
-            this.Options = new List<decimal>();
+            this.Options = EmptyArray<decimal>.Value;
             LinkedSourceId = linkedToQuestionId;
         }
 
@@ -1000,7 +1018,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeSingleOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
         {
             this.answer = answer == null ? null : CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer));
-            this.Options = new List<decimal>();
+            this.Options = EmptyArray<decimal>.Value;
             LinkedSourceId = linkedToQuestionId;
         }
 

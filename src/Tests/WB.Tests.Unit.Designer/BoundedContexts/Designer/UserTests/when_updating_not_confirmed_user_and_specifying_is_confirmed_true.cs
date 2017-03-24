@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 
         Because of = () =>
             user.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
-                isConfirmed: true);
+                isConfirmed: true, canImportOnHq: true);
 
         It should_set_IsConfirmed_to_true = () =>
                 user.IsConfirmed.ShouldEqual(true);

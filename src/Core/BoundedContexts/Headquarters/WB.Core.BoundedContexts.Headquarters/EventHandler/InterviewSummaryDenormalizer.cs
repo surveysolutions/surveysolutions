@@ -6,15 +6,13 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -39,25 +37,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
+        IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
 
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IPlainStorageAccessor<UserDocument> users;
+        private readonly IUserViewFactory users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IPlainStorageAccessor<UserDocument> users, IQuestionnaireStorage questionnaireStorage)
+            IUserViewFactory users, IQuestionnaireStorage questionnaireStorage)
             : base(interviewSummary)
         {
             this.users = users;
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public override object[] Readers
-        {
-            get { return new object[] { this.users }; }
-        }
+        public override object[] Readers => new object[0];
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
         {
@@ -103,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
-            UserDocument responsible = this.users.GetById(userId.FormatGuid());
+            var responsible = this.users.GetUser(new UserViewInputModel(userId));
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie)
@@ -116,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
-                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
+                ResponsibleRole = responsible.Roles.First()
             };
 
             return interviewSummary;
@@ -180,8 +176,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId.FormatGuid());
-                var supervisorName = userDocument != null ? userDocument.UserName : "<UNKNOWN SUPERVISOR>";
+                var user = this.users.GetUser(new UserViewInputModel(@event.Payload.SupervisorId));
+                var supervisorName = user != null ? user.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = @event.Payload.SupervisorId;
                 interview.ResponsibleName = supervisorName;
@@ -270,7 +266,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                     interview.ResponsibleId = @event.Payload.InterviewerId.Value;
                     interview.ResponsibleName = interviewerName;
-                    interview.ResponsibleRole = UserRoles.Operator;
+                    interview.ResponsibleRole = UserRoles.Interviewer;
                     interview.IsAssignedToInterviewer = true;
 
                     interview.ReceivedByInterviewer = false;
@@ -291,6 +287,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.HasErrors = true;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                interview.Key = @event.Payload.Key.ToString();
             });
         }
 
@@ -318,7 +322,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetById(state.ResponsibleId.FormatGuid());
+                    var responsible = this.users.GetUser(new UserViewInputModel(state.ResponsibleId));
                     if (responsible != null && responsible.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;
@@ -347,7 +351,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var responsible = this.users.GetById(responsibleId.FormatGuid());
+            var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
     }

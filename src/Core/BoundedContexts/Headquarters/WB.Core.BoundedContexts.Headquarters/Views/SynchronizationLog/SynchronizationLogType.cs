@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetAttachmentContent,
         PostInterview,
         PostPackage,
-        GetTranslations
+        GetTranslations,
+        DeviceUnexpectedException
     }
 }

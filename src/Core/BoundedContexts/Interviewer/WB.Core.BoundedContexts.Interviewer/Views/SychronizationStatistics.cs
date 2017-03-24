@@ -2,6 +2,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class SychronizationStatistics
     {
+        public int SuccessfullyDownloadedQuestionnairesCount { get; set; }
         public int NewInterviewsCount { get; set; }
         public int RejectedInterviewsCount { get; set; }
         public int DeletedInterviewsCount { get; set; }

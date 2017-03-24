@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
@@ -59,18 +60,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
-        private readonly IPlainStorageAccessor<UserDocument> userReader;
+        private readonly IUserViewFactory userReader;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
-        private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
+        private readonly ConcurrentDictionary<string, UserView> cacheUserDocument = new ConcurrentDictionary<string, UserView>();
 
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         public InterviewParaDataEventHandler(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
-            IPlainStorageAccessor<UserDocument> userReader,
+            IUserViewFactory userReader,
             InterviewDataExportSettings interviewDataExportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
@@ -454,23 +455,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return cachedQuestionnaireExportStructure;
         }
 
-        private UserDocument GetUserDocument(Guid originatorId)
+        private UserView GetUserDocument(Guid originatorId)
         {
             var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId.FormatGuid(),
-                (key) => this.userReader.GetById(key));
+                (key) => this.userReader.GetUser(new UserViewInputModel(key)));
 
             this.ReduceCacheIfNeeded(this.cacheUserDocument);
 
             return cachedUserDocument;
         }
 
-        private string GetUserName(UserDocument responsible)
+        private string GetUserName(UserView responsible)
         {
             var userName = responsible != null ? responsible.UserName : "";
             return userName;
         }
 
-        private string GetUserRole(UserDocument user)
+        private string GetUserRole(UserView user)
         {
             const string UnknownUserRole = "";
             if (user == null || !user.Roles.Any())
@@ -478,7 +479,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
-                case UserRoles.Operator: return "Interviewer";
+                case UserRoles.Interviewer: return "Interviewer";
                 case UserRoles.Supervisor: return "Supervisor";
                 case UserRoles.Headquarter: return "Headquarter";
             }

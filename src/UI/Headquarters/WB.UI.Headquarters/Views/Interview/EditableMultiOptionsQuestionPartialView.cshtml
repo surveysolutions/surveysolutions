@@ -1,6 +1,5 @@
-﻿@using System.Globalization
-@using WB.Core.BoundedContexts.Headquarters.Views.Interview
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+﻿@using WB.Core.BoundedContexts.Headquarters.Views.Interview
+@model InterviewQuestionView
 
 @{
     var answers = (decimal[])Model.Answer;
@@ -21,9 +20,9 @@
     var optionValue = option.Value.ToString();
     var isChecked = answers != null && answers.Contains(Convert.ToDecimal(option.Value));
 
-    <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
-        <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-               data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id', '@Stringify(Model.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @jsMaxAllowedAnswersValueAsString, '@selectedOptions' )">
+    <label class="checkbox" for="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))">
+        <input type="checkbox" name="@Model.Id" id="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+               data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @jsMaxAllowedAnswersValueAsString, '@selectedOptions' )">
 
         <span>@option.Label</span>
         @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
@@ -31,19 +30,4 @@
             <span class="badge">@(answers.Select((item, index) => new {index, item}).First(_ => _.item ==  Convert.ToDecimal(option.Value)).index + 1)</span>
         }
     </label>
-}
-
-@functions
-{
-
-    public string getInterviewItemIdWithPostfix(Guid questionId, decimal[] rosterVector, string postfix = "")
-    {
-        return string.Format("{0}_{1}_{2}", questionId, Stringify(rosterVector), postfix);
-    }
-
-    public string Stringify(decimal[] array)
-    {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
-    }
-
 }

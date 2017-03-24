@@ -4,7 +4,9 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -30,29 +32,31 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var groupGCId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.NumericIntegerQuestion(questionAId, "a"),
-                    Create.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
-                    Create.Group(groupGCId, enablementCondition: "b > 0", children: new IComposite[] {
-                        Create.NumericIntegerQuestion(questionCId)
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAId, "a"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
+                    Abc.Create.Entity.Group(groupGCId, "Group X", null, "b > 0", false, new IComposite[] {
+                        Abc.Create.Entity.NumericIntegerQuestion(questionCId)
                     })
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(new []
                     {
-                        Create.Identity(questionAId),
-                        Create.Identity(questionBId),
-                        Create.Identity(questionCId)
+                        Abc.Create.Identity(questionAId),
+                        Abc.Create.Identity(questionBId),
+                        Abc.Create.Identity(questionCId)
                     }),
-                    Create.Event.GroupsEnabled(Create.Identity(groupGCId)),
-                    Create.Event.NumericIntegerQuestionAnswered(questionBId, 0)
+                    Abc.Create.Event.GroupsEnabled(new [] { Abc.Create.Entity.Identity(groupGCId) }),
+                    Abc.Create.Event.NumericIntegerQuestionAnswered(
+                        questionBId, null, 0, null, null
+                    )
                 });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionAId, Empty.RosterVector, DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(userId, questionAId, RosterVector.Empty, DateTime.Now, 0);
 
                     return new InvokeResults()
                     {

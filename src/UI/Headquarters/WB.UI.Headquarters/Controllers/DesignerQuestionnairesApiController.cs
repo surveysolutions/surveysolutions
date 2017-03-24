@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Humanizer;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -22,23 +20,19 @@ namespace WB.UI.Headquarters.Controllers
     
         private readonly string apiPrefix = @"/api/hq";
         private readonly string apiVersion = @"v3";
-
-        internal RestCredentials designerUserCredentials
-        {
-            get { return GlobalInfo.GetDesignerUserCredentials(); }
-            set { HttpContext.Current.Session[GlobalInfo.GetCurrentUser().Name] = value; }
-        }
-
+        
         private readonly IRestService restService;
+        private readonly DesignerUserCredentials designerUserCredentials;
 
         public DesignerQuestionnairesApiController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
             ILogger logger, 
-            IRestService restService)
-            : base(commandService, globalInfo, logger)
+            IRestService restService,
+            DesignerUserCredentials designerUserCredentials)
+            : base(commandService, logger)
         {
             this.restService = restService;
+            this.designerUserCredentials = designerUserCredentials;
         }
 
         [HttpPost]
@@ -46,8 +40,8 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<DataTableResponse<QuestionnaireToBeImported>> QuestionnairesList([FromBody] DataTableRequest request)
         {
             var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
-                url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
-                credentials: this.designerUserCredentials,
+                url: $@"{this.apiPrefix}/{this.apiVersion}/questionnaires",
+                credentials: this.designerUserCredentials.Get(),
                 queryString: new
                 {
                     Filter = request.Search.Value,
@@ -81,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (localDate < twoDaysAgoAtNoon)
                 // from Designer
-                return localDate.ToString("d MMM yyyy, HH:mm");
+                return localDate.ToString(@"d MMM yyyy, HH:mm");
             
             return localDate.Humanize(false);
         }

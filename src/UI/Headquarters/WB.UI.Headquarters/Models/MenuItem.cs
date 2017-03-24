@@ -22,6 +22,7 @@
         SpeedOfCompletingInterviews = 17,
         UserBatchUpload = 18,
         ApiUsers = 19,
-        Settings = 20
+        Settings = 20,
+        Troubleshooting = 21
     }
 }

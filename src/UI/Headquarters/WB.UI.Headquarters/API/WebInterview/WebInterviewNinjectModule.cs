@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             pipiline.AddModule(new WebInterviewStateManager(GlobalHost.DependencyResolver.Resolve<IProductVersion>()));
             pipiline.AddModule(new WebInterviewConnectionsCounter());
 
-            this.Bind<IWebInterviewNotificationService>().To<WebInterviewNotificationService>();
+            this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
 
             DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]

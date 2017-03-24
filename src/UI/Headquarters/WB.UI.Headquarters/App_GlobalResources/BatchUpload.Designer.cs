@@ -728,6 +728,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded file cannot be opened. Please check it is in correct format..
+        /// </summary>
+        internal static string Prerequisite_FileOpen {
+            get {
+                return ResourceManager.GetString("Prerequisite_FileOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only .tab and .txt files are allowed for upload..
+        /// </summary>
+        internal static string Prerequisite_TabOrTxtFile {
+            get {
+                return ResourceManager.GetString("Prerequisite_TabOrTxtFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Following files are not supported: {0}..
+        /// </summary>
+        internal static string Prerequisite_UnsupportedFiles {
+            get {
+                return ResourceManager.GetString("Prerequisite_UnsupportedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only .zip files are allowed for upload..
+        /// </summary>
+        internal static string Prerequisite_ZipFile {
+            get {
+                return ResourceManager.GetString("Prerequisite_ZipFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Processing....
         /// </summary>
         internal static string Processing {
@@ -1004,6 +1040,15 @@ namespace Resources {
         internal static string UploadUsersDescription {
             get {
                 return ResourceManager.GetString("UploadUsersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only files with {0} and {1} extensions are allowed for upload..
+        /// </summary>
+        internal static string UploadUsers_NotAllowedExtension {
+            get {
+                return ResourceManager.GetString("UploadUsers_NotAllowedExtension", resourceCulture);
             }
         }
         

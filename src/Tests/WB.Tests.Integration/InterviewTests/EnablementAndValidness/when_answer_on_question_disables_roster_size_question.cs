@@ -23,12 +23,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             rosterId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
             questionWhichDisablesRosterSizeQuestion = Guid.NewGuid();
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
-                    Create.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
-                    Create.Roster(id: rosterId, variable: "ros",
+                    Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),
+                    Abc.Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId, variable: "num_trigger", enablementCondition:"!num_disable.HasValue"),
+                    Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros",
                         rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
                         rosterSizeSourceType: RosterSizeSourceType.Question)
                 });

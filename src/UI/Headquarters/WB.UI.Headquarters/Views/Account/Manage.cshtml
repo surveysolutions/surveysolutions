@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.UI.Headquarters.Resources
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
 
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
@@ -27,6 +27,14 @@
     @Html.AntiForgeryToken()
     <fieldset class="form-horizontal">
         <div class="col-md-6">
+            <div class="form-group @Html.HasErrorClassFor(x => x.OldPassword)">
+                @Html.LabelFor(x => x.OldPassword, new { @class = "col-sm-4 control-label" })
+                <div class="col-sm-8">
+                    @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", autocomplete = "off" })
+                    @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-block" })
+                </div>
+            </div>
+
             @{this.Html.RenderPartial("UserEditFormWithoutLock");}
 
             <div class="form-group">

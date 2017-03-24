@@ -1,0 +1,35 @@
+.servers-error{
+    width: 350px;
+}
+.error-wrapper{
+    @include gradient-horizontal(rgba(231,73,36,0.2), rgba(231,73,36,0.2));
+    background-repeat: repeat-y;
+    background-size: 12px 100%;
+    padding-left: 30px;
+    .alert{
+        font-size: 18px;
+        line-height: 20px;
+        margin-bottom: 15px;
+    }
+    p{
+        font-size: 14px;
+        line-height: 16px;
+    }
+}
+header > .red-line{
+    @include absolute(0,0);
+}
+.red-line{
+    width: 100%;
+    height: 12px;
+    background: rgba(231,73,36,0.2);
+}
+@media (max-width: $screen-sm-min){
+    html body main .servers-error{
+        max-width: 350px;
+        margin: 0 auto;
+        .centered-box-table{
+            text-align: left;
+        }
+    }
+}

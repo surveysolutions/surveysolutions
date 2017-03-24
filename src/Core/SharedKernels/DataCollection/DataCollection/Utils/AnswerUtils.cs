@@ -49,6 +49,15 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     ? string.Join(", ", multiAnswer)
                     : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
             }
+            if (answer is int[])
+            {
+                var multiAnswer = (int[])answer;
+
+                return getCategoricalAnswerOptionText == null
+                    ? string.Join(", ", multiAnswer)
+                    : string.Join(", ", multiAnswer.Select(x => getCategoricalAnswerOptionText(x)));
+            }
+
             if (answer is AnsweredYesNoOption[])
             {
                 var yesNoAnswer = (AnsweredYesNoOption[])answer;
@@ -61,6 +70,11 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (answer is decimal[][])
             {
                 var multiLinkAnswer = (decimal[][])answer;
+                return string.Join("|", multiLinkAnswer.Select(a => string.Join(", ", a)));
+            }
+            if (answer is int[][])
+            {
+                var multiLinkAnswer = (int[][])answer;
                 return string.Join("|", multiLinkAnswer.Select(a => string.Join(", ", a)));
             }
             if (answer is GeoPosition)

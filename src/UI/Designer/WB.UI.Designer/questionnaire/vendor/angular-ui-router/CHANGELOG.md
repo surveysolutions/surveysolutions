@@ -1,3 +1,70 @@
+<a name="0.4.2"></a>
+### 0.4.2 (2017-01-20)
+
+
+#### Bug Fixes
+
+* **state:** avoid promise.catch() in favor of silenceUncaughtInPromise() ([86df71e7](https://github.com/angular-ui/ui-router/commit/86df71e74bcf166847053a3c590991fc774f2100))
+
+
+<a name="0.4.1"></a>
+### 0.4.1 (2017-01-19)
+## [0.4.1](https://github.com/angular-ui/ui-router/compare/0.4.0...0.4.1) (2016-11-03)
+
+#### Bug Fixes
+
+* **resolve:** Fix 'possibly unhandled rejection' in rejected resolves ([f73e5516](https://github.com/angular-ui/ui-router/commit/f73e5516d8232d8307690c70f53d4a20eb486479), closes [#2889](https://github.com/angular-ui/ui-router/issues/2889))
+
+
+<a name="0.4.0"></a>
+## 0.4.0 (2017-01-17)
+## [0.4.0](https://github.com/angular-ui/ui-router/compare/0.3.2...0.4.0) (2016-11-03)
+
+
+#### Bug Fixes
+
+* **$state:** Fix "Possibly unhandled rejection" by catch()ing the transition promise ([f2910e9b](https://github.com/angular-ui/ui-router/commit/f2910e9b00ebcf652abab2af8a405b5b5fbca054), closes [#3246](https://github.com/angular-ui/ui-router/issues/3246), [#2889](https://github.com/angular-ui/ui-router/issues/2889))
+* **ui-sref-active-eq:** Compare parameter values using typed parameters ([67e4997e](https://github.com/angular-ui/ui-router/commit/67e4997eadfc1f7f5af8efd7cb676218cc69129e))
+* **uiView:** do not leave initial view scope undestroyed (fix unhandled rejection) ([5be98e04](https://github.com/angular-ui/ui-router/commit/5be98e047a096012762096922a2756a0a0a0ea60), closes [#3164](https://github.com/angular-ui/ui-router/issues/3164))
+* **urlMatcherFactory:** Check for null in int.is() Fixes message: Cannot read property 'toString' of nul ([61728d71](https://github.com/angular-ui/ui-router/commit/61728d717ab4f7b03a017c4666ab1a5a1ffe4620), closes [#3197](https://github.com/angular-ui/ui-router/issues/3197))
+
+#### Features
+
+* **$templateFactory:** use $templateRequest from AngularJS ([9a1af98](https://github.com/angular-ui/ui-router/commit/9a1af98)), closes [#]
+* **$templateFactory:** refactor to a Provider to have a $http/$templateRequest switch ([7f1dec00](https://github.com/angular-ui/ui-router/commit/7f1dec008e98ae206c53d67268c330846c4d227d))
+
+# BREAKING CHANGE: Use angular 1.3+ `$templateRequest` service to fetch templates
+
+We now fetch templates using `$templateRequest` when it is available (angular 1.3+).
+You can revert to previous template fetching behavior using `$http` by configuring the ui-router `$templateFactoryProvider`.
+
+```js
+.config(function($templateFactoryProvider) {
+  $templateFactoryProvider.shouldUnsafelyUseHttp(true);
+});
+```
+
+There are security ramifications to using `$http` to fetch templates.
+Read
+[Impact on loading templates](https://docs.angularjs.org/api/ng/service/$sce#impact-on-loading-templates)
+for more details.
+
+
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/angular-ui/ui-router/compare/0.3.1...0.3.2) (2016-11-03)
+
+
+### Bug Fixes
+
+* **$state.transitionTo:** trigger $stateChangeCancel appropriately ([#3039](https://github.com/angular-ui/ui-router/issues/3039)) ([ca7c366](https://github.com/angular-ui/ui-router/commit/ca7c366)), closes [#3027](https://github.com/angular-ui/ui-router/issues/3027)
+* **promise:** avoid uncaught in promise errors due to transition rejections ([66ab048](https://github.com/angular-ui/ui-router/commit/66ab048)), closes [#2889](https://github.com/angular-ui/ui-router/issues/2889)
+* **state.includes:** compare param vals using typed parameter (not using `==`) ([6958c24](https://github.com/angular-ui/ui-router/commit/6958c24)), closes [#2696](https://github.com/angular-ui/ui-router/issues/2696)
+* **stateDirective:** using on to attach an event handler instead of bind ([#3036](https://github.com/angular-ui/ui-router/issues/3036)) ([a8aa40a](https://github.com/angular-ui/ui-router/commit/a8aa40a))
+* **urlMatcherFactory:** fix tilde edge case with "string" encoding ([#3021](https://github.com/angular-ui/ui-router/issues/3021)) ([953235a](https://github.com/angular-ui/ui-router/commit/953235a))
+
+
+
+
 <a name="0.3.1"></a>
 ### 0.3.1 (2016-06-03)
 

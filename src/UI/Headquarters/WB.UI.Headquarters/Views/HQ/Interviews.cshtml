@@ -73,6 +73,9 @@
                 <th>
                     <input type="checkbox" data-bind="click: $root.selectAll($element)" />
                 </th>
+                <th>
+                    @Common.InterviewKey
+                </th>
                 <!-- ko if:SelectedTemplate() == '' -->
                 <th>@Common.PrefilledQuestions</th>
                 <!-- /ko -->
@@ -97,6 +100,9 @@
             <tr>
                 <td>
                     <input type="checkbox" data-bind="checked: IsSelected" />
+                </td>
+                <td data-bind="text: Key">
+                    
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>

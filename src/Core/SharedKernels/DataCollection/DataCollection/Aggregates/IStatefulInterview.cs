@@ -81,6 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetRosterTitle(Identity rosterIdentity);
 
         string GetTitleText(Identity entityIdentity);
+        string GetBrowserReadyTitleHtml(Identity entityIdentity);
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity);
 
@@ -105,6 +106,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
+        IEnumerable<IInterviewTreeNode> GetAllNodes();
+        IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
+        InterviewTreeSection FirstSection { get; }
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
@@ -112,7 +116,17 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int CountActiveQuestionsInInterview();
 
         int CountInvalidEntitiesInInterview();
-        
+
+        int CountAllEnabledQuestions();
+
+        int CountAllEnabledAnsweredQuestions();
+
+        int CountAllInvalidEntities();
+
+        int CountEnabledSupervisorQuestions();
+
+        int CountEnabledHiddenQuestions();
+
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();

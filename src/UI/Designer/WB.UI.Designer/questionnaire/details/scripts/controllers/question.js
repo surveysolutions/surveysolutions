@@ -119,9 +119,10 @@
 
             $scope.loadQuestion = function () {
                 questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
-                    .success(function (result) {
-                        $scope.initialQuestion = angular.copy(result);
-                        dataBind(result);
+                    .then(function (result) {
+                        var data = result.data;
+                        $scope.initialQuestion = angular.copy(data);
+                        dataBind(data);
                         utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
 
 
@@ -170,7 +171,7 @@
                 if ($scope.questionForm.$valid) {
                     $scope.showOptionsInList();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
+                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).then(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
 
                         $rootScope.$emit('questionUpdated', {

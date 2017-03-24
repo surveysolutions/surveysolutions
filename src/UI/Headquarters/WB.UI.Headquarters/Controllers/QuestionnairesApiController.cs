@@ -7,12 +7,15 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Shared.Web.Filters;
 
@@ -22,15 +25,20 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
+        private readonly IAuthorizedUser authorizedUser;
+        private const int DEFAULTPAGESIZE = 12;
+        private const string DEFAULTEMPTYQUERY = "";
+
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
 
         public QuestionnairesApiController(
-            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+            ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDeleteQuestionnaireService deleteQuestionnaireService)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
         }
@@ -55,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,
                 RecordsFiltered = items.TotalCount,
-                Data = items.Items.Select(x => new QuestionnaireListItemModel
+                Data = items.Items.ToList().Select(x => new QuestionnaireListItemModel
                 {
                     QuestionnaireId = x.QuestionnaireId,
                     Version = x.Version,
@@ -87,9 +95,25 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.GlobalInfo.GetCurrentUser().Id);
+            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
             return new JsonCommandResponse() { IsSuccess = true };
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public ComboboxModel QuestionnairesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool censusOnly = false)
+        {
+            var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
+            {
+                PageSize = pageSize,
+                Filter = query,
+                IsAdminMode = true,
+                OnlyCensus = censusOnly
+            });
+
+            return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.TotalCount);
         }
     }
 }

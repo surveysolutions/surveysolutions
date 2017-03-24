@@ -21,19 +21,19 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
             linkedQuestionId = Guid.Parse("33222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
 
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
-                    Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
-                    Create.MultyOptionsQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
+                    Abc.Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                    Abc.Create.Entity.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
+                    Abc.Create.Entity.MultyOptionsQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
-                new [] { new decimal[] { 1 }, new decimal[] {0}});
+                new RosterVector[] { new decimal[] { 1 }, new decimal[] {0}});
             eventContext = new EventContext();
         };
 

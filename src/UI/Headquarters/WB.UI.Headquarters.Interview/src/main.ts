@@ -8,8 +8,8 @@ if (process.env.NODE_ENV === "production") {
     __webpack_public_path__ = assetsPath
 }
 
-import * as Vue from "vue"
-import * as Vuex from "vuex"
+import Vue from "vue"
+import Vuex from "vuex"
 
 Vue.use(Vuex)
 
@@ -31,7 +31,7 @@ import App from "./App"
 
 const vueApp = new Vue({
     el: "#app",
-    template: "<App/>",
+    render: h => h(App),
     components: { App },
     store,
     router

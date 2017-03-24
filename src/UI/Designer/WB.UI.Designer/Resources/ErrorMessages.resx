@@ -204,4 +204,7 @@
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
     <value>User has not permissions to access requested questionnaire</value>
   </data>
+  <data name="UserNeedToContactSupport" xml:space="preserve">
+    <value>You are not authorized to perform this action. Please contact support</value>
+  </data>
 </root>

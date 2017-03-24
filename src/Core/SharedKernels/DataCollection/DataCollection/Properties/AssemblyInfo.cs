@@ -38,4 +38,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.UI.Shared.Android")]
 [assembly: InternalsVisibleTo("WB.UI.Interviewer")]
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.Enumerator")]
-[assembly: InternalsVisibleTo("EventStoreToPlainStorageMigrator")]
+[assembly: InternalsVisibleTo("WB.Tests.Abc")]

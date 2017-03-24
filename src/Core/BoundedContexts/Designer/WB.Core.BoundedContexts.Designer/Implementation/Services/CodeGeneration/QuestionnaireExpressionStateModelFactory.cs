@@ -706,7 +706,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         private QuestionTemplateModel CreateQuestionTemplateModel(
-            QuestionnaireDocument questionnaireDoc,
+            QuestionnaireDocument questionnaire,
             IQuestion question,
             string rosterScopeName,
             string parentScopeTypeName)
@@ -719,30 +719,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 Id = question.PublicKey,
                 VariableName = varName,
-                TypeName = GenerateQuestionTypeName(question, questionnaireDoc),
+                TypeName = GenerateQuestionTypeName(question, questionnaire),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName
             };
 
             if (question.CascadeFromQuestionId.HasValue)
             {
-                this.FillConditionForCascadingQuestion(questionModel, questionnaireDoc, question.PublicKey);
+                this.FillConditionForCascadingQuestion(questionModel, questionnaire, question.PublicKey);
             }
             else
             {
-                questionModel.Condition = this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaireDoc.Macros.Values);
+                questionModel.Condition = this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaire.Macros.Values);
             }
             
             questionModel.ValidationExpressions = question
                 .ValidationConditions
                 .Select((validationCondition, index)
                     => new ValidationExpressionModel(
-                        this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaireDoc.Macros.Values),
+                        this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaire.Macros.Values),
                         varName,
                         index))
                 .ToList();
 
-            questionModel.OptionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaireDoc.Macros.Values);
+            questionModel.OptionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaire.Macros.Values);
+
+            if (question.LinkedToQuestionId != null && this.IsLinkedToListQuestion(questionnaire, question))
+            {
+                var sourceQuestionVariable = questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value)?.StataExportCaption;
+                questionModel.OptionsFilterExpression = $"IsAnswered({sourceQuestionVariable})";
+            }
 
             if (IsMultiQuestion(question))
             {
@@ -755,6 +761,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             return questionModel;
+        }
+
+        private bool IsLinkedToListQuestion(QuestionnaireDocument questionnaire, IQuestion question)
+        {
+            if (!question.LinkedToQuestionId.HasValue)
+                return false;
+
+            var sourceTextListQuestion = questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value);
+            return sourceTextListQuestion != null;
         }
 
         private static bool IsMultiQuestion(IQuestion question)

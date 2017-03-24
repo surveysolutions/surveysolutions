@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.RosterStructureServiceTests
 {

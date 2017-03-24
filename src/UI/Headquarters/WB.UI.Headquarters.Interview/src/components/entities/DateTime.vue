@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <vue-flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter date" title="Enter date"/>
+                        <vue-flatpickr :options="pickerOpts" :value="answer" class="field-to-fill" placeholder="Enter date" title="Enter date" />
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -18,9 +18,9 @@
                             Record current time
                         </button>
                     </div>
-                    <div>
-                    </div>
                 </div>
+            </div>
+        </div>
     </wb-question>
 </template>
 <script lang="ts">

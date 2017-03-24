@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using FluentAssertions.Events;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -13,8 +11,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Machine.Specifications.It;
 
@@ -51,7 +47,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                         .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
                         {
                             constructedAggregateId = aggregate.EventSourceId;
-                            return Create.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
+                            return IntegrationCreate.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
                         });
 
             eventBusMock
@@ -66,7 +62,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
-            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
         };
 
         Because of = () =>

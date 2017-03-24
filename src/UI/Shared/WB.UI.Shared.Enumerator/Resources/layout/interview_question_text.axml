@@ -6,7 +6,7 @@
                 local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
     <MaskedEditText
       style="@style/Interview_Question_Answer_Text_Editor"
-      local:MvxBind="Hint Hint; 
+      local:MvxBind="Watermark Hint; 
                          Mask Mask; 
                          Text Answer; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 

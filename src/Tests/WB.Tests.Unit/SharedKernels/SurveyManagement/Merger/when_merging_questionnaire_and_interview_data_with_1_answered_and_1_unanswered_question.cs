@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             answeredQuestion.Answer = 5;
             
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
 
             merger = CreateMerger(questionnaire);
         };
@@ -74,24 +75,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         private static InterviewGroupView GetNestedGroup()
         {
-            return mergeResult.Groups.Find(g => g.Id == nestedGroupId);
+            return mergeResult.Groups.Find(g => g.Id.Id == nestedGroupId);
         }
 
         private static InterviewQuestionView GetAnsweredQuestion()
         {
-            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == answeredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == answeredQuestionId);
         }
 
         private static InterviewQuestionView GetUnAnsweredQuestion()
         {
-            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == unAnsweredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == unAnsweredQuestionId);
         }
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
         private static Guid nestedGroupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid answeredQuestionId = Guid.Parse("55555555555555555555555555555555");
         private static Guid unAnsweredQuestionId = Guid.Parse("66666666666666666666666666666666");

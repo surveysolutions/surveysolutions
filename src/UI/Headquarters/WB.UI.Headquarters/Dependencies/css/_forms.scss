@@ -239,6 +239,9 @@ input.double-checkbox-white{
 	.dropdown-menu{
 		width: 100%;
 		& > li > a{
+			span.text{
+				display: block !important;
+			}
 			padding: 10px;
 			white-space: normal;
 			&:hover, &:focus, &:active{
@@ -328,7 +331,6 @@ input.double-checkbox-white{
 		@include absolute(0, null, null, 0);
 		border: none;
 		height: 35px;
-/* 		outline: none; */
 		display: inline-block;
 		padding: 10px;
 	    background: url('#{$assetsPath}/img/search.png') no-repeat;
@@ -336,17 +338,18 @@ input.double-checkbox-white{
 	    background-size: 80px 20px;
 	    @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
 	    cursor: pointer;
-	   /*  @extend %delete-outline; */
+		@include transition(none);
 	    &:hover{
 	    	background-position: -40px 8px;
 	    }
 	}
 	.btn-clear{
 		@include clear(22px);
-		right: -35px;
+		right: -37px;
 		padding: 6px;
-		/* @extend %delete-outline; */
+		@extend %delete-outline;
 		transition: none;
+		background-color: #fff;
 	}
 	.form-control{
 		height: 35px;
@@ -355,7 +358,7 @@ input.double-checkbox-white{
 		padding-right: 0;
 		padding-left: 0;
 		border: none;
-		/* @extend %delete-outline; */
+		@extend %delete-outline;
 	}
 }	
 .active-search{
@@ -388,5 +391,32 @@ input.double-checkbox-white{
 		}
 	}
 }
- 	 
-
+.block-filter {
+	.btn-group.bootstrap-select, .combo-box, .input-group{
+		margin-left: -10px !important;
+	}
+} 
+.combo-box{
+	position: relative;
+	width: 295px;
+	@extend %combobox;
+	.btn-input .dropdown-toggle {
+		padding: 10px 38px 10px 10px;
+		span{
+			position: static !important;
+		}
+		.dropdown-menu{
+			z-index: 3;
+		}
+	}
+	.btn-clear{
+		@extend %visibility-visible;
+	}
+}
+ul.dropdown-menu li, ul.dropdown-menu li *{
+	word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.form-date .input-group.date .form-control{
+	z-index: 0;
+}

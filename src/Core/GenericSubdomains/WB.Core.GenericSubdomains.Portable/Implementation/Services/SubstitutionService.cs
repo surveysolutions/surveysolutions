@@ -8,14 +8,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     public class SubstitutionService : ISubstitutionService
     {
         private const string SubstitutionVariableDelimiter = "%";
-        private readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
+        private static readonly string AllowedSubstitutionVariableNameRegexp = String.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
+        private static readonly Regex AllowedSubstitutionVariableNameRx = new Regex(AllowedSubstitutionVariableNameRegexp);
 
         public string[] GetAllSubstitutionVariableNames(string source)
         {
             if (String.IsNullOrWhiteSpace(source))
                 return new string[0];
 
-            var allOccurenses = Regex.Matches(source, (string)this.AllowedSubstitutionVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+            var allOccurenses = AllowedSubstitutionVariableNameRx.Matches(source).OfType<Match>().Select(m => m.Value).Distinct();
             return allOccurenses.ToArray();
         }
 

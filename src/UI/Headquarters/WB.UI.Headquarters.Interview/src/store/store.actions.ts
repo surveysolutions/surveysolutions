@@ -1,6 +1,6 @@
 import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
-import * as Vue from "vue"
+import Vue from "vue"
 
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import { batchedAction } from "../helpers"

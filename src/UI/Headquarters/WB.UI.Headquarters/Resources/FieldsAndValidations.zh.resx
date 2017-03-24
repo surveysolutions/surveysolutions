@@ -168,9 +168,6 @@
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>密码的长度至少为{2}</value>
   </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>输入的名称太长</value>
-  </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>全名</value>
   </data>

@@ -1,10 +1,4 @@
-﻿@using System.Globalization
-@using Main.Core.Entities.SubEntities
-@using WB.Core.SharedKernels.DataCollection.Commands.Interview
-@using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
-@using WB.Core.SharedKernels.DataCollection.Views.Interview
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
 
 <tr class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td class="answer-status">

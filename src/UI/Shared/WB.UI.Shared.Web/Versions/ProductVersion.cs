@@ -14,5 +14,6 @@ namespace WB.UI.Shared.Web.Versions
         }
 
         public override string ToString() => FileVersionInfo.GetVersionInfo(this.assembly.Location).ProductVersion;
+        public int GetBildNumber() => System.Diagnostics.FileVersionInfo.GetVersionInfo(this.assembly.Location).FilePrivatePart;
     }
 }

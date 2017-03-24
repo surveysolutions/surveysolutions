@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly GroupStateViewModel groupState;
@@ -85,6 +85,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
+        }
+
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
         public abstract void NavigateBack();

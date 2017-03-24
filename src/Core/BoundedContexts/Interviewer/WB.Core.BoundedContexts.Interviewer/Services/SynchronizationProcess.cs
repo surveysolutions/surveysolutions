@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Exceptions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -38,10 +41,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-        
+        private readonly IInterviewerSettings interviewerSettings;
+
         private RestCredentials restCredentials;
+        private bool remoteLoginRequired = false;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
@@ -54,8 +60,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
+            CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IInterviewerSettings interviewerSettings)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -68,8 +76,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
+            this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -88,23 +98,61 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 this.restCredentials = this.restCredentials ?? new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
-                    Password = this.principal.CurrentUserIdentity.Password
+                    Token = this.principal.CurrentUserIdentity.Token
                 };
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: restCredentials);
+                if (this.remoteLoginRequired)
+                {
+                    var token = await this.synchronizationService.LoginAsync(new LogonInfo
+                    {
+                        Username = this.restCredentials.Login,
+                        Password = this.restCredentials.Password
+                    }, this.restCredentials);
+
+                    this.restCredentials.Password = this.restCredentials.Password;
+                    this.restCredentials.Token = token;
+
+                    this.remoteLoginRequired = false;
+
+                    await this.synchronizationService.GetInterviewerAsync(this.restCredentials);
+                }
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    this.UpdatePasswordOfInterviewer(restCredentials.Password);
+                    this.UpdatePasswordOfInterviewer(this.restCredentials);
+                }
+
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+                
+                cancellationToken.ThrowIfCancellationRequested();
+
+                try
+                {
+
+                    var deviceInfo = await this.interviewerSettings.GetDeviceInfoAsync().ConfigureAwait(false);
+                    await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
+                await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.SyncronizeQuestionnairesAsync(progress, statistics, cancellationToken);
+
+                await this.SyncronizeQuestionnairesAsync(progress, statistics, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
+
+                await this.DownloadInterviewsAsync(statistics, progress, cancellationToken).ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken).ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await this.synchronizationService.SendSyncStatisticsAsync(statistics: ToSyncStatisticsApiView(statistics),
+                    token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
 
                 progress.Report(new SyncProgressInfo
                 {
@@ -182,12 +230,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Statistics = statistics
                 });
 
+                await this.TrySendUnexpectedExceptionToServerAsync(ex, cancellationToken);
                 this.logger.Error("Synchronization. Unexpected exception", ex);
             }
 
             if (!cancellationToken.IsCancellationRequested && this.shouldUpdatePasswordOfInterviewer)
             {
-                var newPassword = await this.GetNewPasswordAsync();
+                var newPassword = await this.GetNewPasswordAsync().ConfigureAwait(false);
                 if (newPassword == null)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
@@ -201,34 +250,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
                 else
                 {
-                    this.restCredentials.Password = this.passwordHasher.Hash(newPassword);
-                    await this.SyncronizeAsync(progress, cancellationToken);
+                    this.remoteLoginRequired = true;
+                    this.restCredentials.Password = newPassword;
+                    await this.SyncronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        private async Task<string> GetNewPasswordAsync()
+        private async Task TrySendUnexpectedExceptionToServerAsync(Exception exception, CancellationToken cancellationToken)
         {
-            return await this.userInteractionService.ConfirmWithTextInputAsync(
-                message: InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name),
+            try
+            {
+                await this.synchronizationService.SendUnexpectedExceptionAsync(ToUnexpectedExceptionApiView(exception),
+                    cancellationToken).ConfigureAwait(false);
+            }
+            catch(Exception ex)
+            {
+                this.logger.Error("Synchronization. Exception when send exception to server", ex);
+            }
+        }
+
+        private Task<string> GetNewPasswordAsync()
+        {
+            var message = InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal.CurrentUserIdentity.Name);
+            return this.userInteractionService.ConfirmWithTextInputAsync(
+                message: message,
                 okButton: UIResources.LoginText,
                 cancelButton: InterviewerUIResources.Synchronization_Cancel,
                 isTextInputPassword: true);
         }
 
-        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics staciStatistics, CancellationToken cancellationToken)
+        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
         {
-            var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken);
+            var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken).ConfigureAwait(false);
             var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
-
-            var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
-                questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
-
-            foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                this.questionnairesAccessor.RemoveQuestionnaire(censusQuestionnaireIdentity);
-            }
 
             var processedQuestionnaires = 0;
             var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities.Except(localCensusQuestionnaireIdentities).ToList();
@@ -243,7 +298,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         notExistingLocalCensusQuestionnaireIdentities.Count,
                         InterviewerUIResources.Synchronization_Questionnaires)
                 });
-                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken);
+                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics).ConfigureAwait(false);
 
                 processedQuestionnaires++;
             }
@@ -251,11 +306,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             progress.Report(new SyncProgressInfo
             {
                 Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
-                Statistics = staciStatistics,
+                Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
 
-            var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(cancellationToken);
+            var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(cancellationToken).ConfigureAwait(false);
             var localQuestionnaires = this.questionnairesAccessor.GetAllQuestionnaireIdentities();
             var questionnairesToRemove = localQuestionnaires.Except(serverQuestionnaires).ToList();
             
@@ -267,10 +322,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
-                    Description = string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description, removedQuestionnairesCounter, questionnairesToRemove.Count),
-                    Statistics = staciStatistics,
+                    Description = string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description, 
+                        removedQuestionnairesCounter, questionnairesToRemove.Count),
+                    Statistics = statistics,
                     Status = SynchronizationStatus.Download
                 });
+
+                var questionnaireId = questionnaireIdentity.ToString();
+
+                var removedInterviews = this.interviewViewRepository
+                    .Where(interview => interview.QuestionnaireId == questionnaireId)
+                    .Select(interview => interview.InterviewId)
+                    .ToList();
+                this.RemoveInterviews(removedInterviews, statistics, progress);
 
                 this.questionnairesAccessor.RemoveQuestionnaire(questionnaireIdentity);
             }
@@ -284,7 +348,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
+        private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken, SychronizationStatistics statistics)
         {
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
@@ -329,12 +393,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     questionnaireApiView.AllowCensus, translationDtos);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity).ConfigureAwait(false);
+                statistics.SuccessfullyDownloadedQuestionnairesCount++;
             }
         }
 
         private async Task DownloadInterviewsAsync(SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
-            var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
+            var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken).ConfigureAwait(false);
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
 
@@ -343,7 +408,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
             var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
+                 interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
 
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId).ToList();
 
@@ -351,12 +416,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
-            await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
+            await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken).ConfigureAwait(false);
         }
 
         private void RemoveInterviews(List<Guid> interviewIds, SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress)
         {
-            statistics.TotalDeletedInterviewsCount = interviewIds.Count;
+            statistics.TotalDeletedInterviewsCount += interviewIds.Count;
 
             foreach (var interviewId in interviewIds)
             {
@@ -396,12 +461,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             InterviewerUIResources.Synchronization_Interviews)
                     });
 
-                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken);
+                    await this.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics).ConfigureAwait(false);
 
                     var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
                         interviewId: interview.Id,
                         onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                        token: cancellationToken);
+                        token: cancellationToken).ConfigureAwait(false);
 
                     if (interviewDetails == null)
                     {
@@ -409,8 +474,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         continue;
                     }
 
-                    await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
-                    await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
+                    await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails).ConfigureAwait(false);
+                    await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id).ConfigureAwait(false);
 
                     if (interview.IsRejected)
                         statistics.RejectedInterviewsCount++;
@@ -447,7 +512,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         Status = SynchronizationStatus.Upload
                     });
 
-                    await this.UploadImagesByCompletedInterview(completedInterview.InterviewId, progress, cancellationToken);
+                    await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, progress, cancellationToken).ConfigureAwait(false);
 
                     if (interviewPackage != null)
                     {
@@ -455,7 +520,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             interviewId: completedInterview.InterviewId,
                             completedInterview: interviewPackage,
                             onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                            token: cancellationToken);
+                            token: cancellationToken).ConfigureAwait(false);
                     }
                     else
                     {
@@ -474,7 +539,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        private async Task UploadImagesByCompletedInterview(Guid interviewId, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
 
@@ -487,19 +552,97 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     fileName: imageView.FileName,
                     fileData: fileView.File,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
                 this.interviewFileViewStorage.Remove(fileView.Id);
             }
         }
 
-        private void UpdatePasswordOfInterviewer(string password)
+        private void UpdatePasswordOfInterviewer(RestCredentials credentials)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-            localInterviewer.Password = password;
+            localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
+            localInterviewer.Token = credentials.Token;
 
             this.interviewersPlainStorage.Store(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, localInterviewer.Password, true);
+            this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
+
+        private SyncStatisticsApiView ToSyncStatisticsApiView(SychronizationStatistics statistics)
+        {
+            return new SyncStatisticsApiView
+            {
+                DownloadedInterviewsCount = statistics.NewInterviewsCount,
+                UploadedInterviewsCount = statistics.SuccessfullyUploadedInterviewsCount,
+                DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
+                RejectedInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
+                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned)
+            };
+        }
+
+        private DeviceInfoApiView ToDeviceInfoApiView(DeviceInfo info) => new DeviceInfoApiView
+        {
+            DeviceId = info.DeviceId,
+            DeviceModel = info.DeviceModel,
+            DeviceType = info.DeviceType,
+            DeviceDate = info.DeviceDate,
+            DeviceLanguage = info.DeviceLanguage,
+            DeviceLocation = info.DeviceLocation != null ? ToLocationAddressApiView(info.DeviceLocation) : null,
+            DeviceManufacturer = info.DeviceManufacturer,
+            DeviceBuildNumber = info.DeviceBuildNumber,
+            DeviceSerialNumber = info.DeviceSerialNumber,
+
+            AndroidVersion = info.AndroidVersion,
+            AndroidSdkVersion = info.AndroidSdkVersion,
+            AndroidSdkVersionName = info.AndroidSdkVersionName,
+
+            AppVersion = info.AppVersion,
+            AppBuildVersion = info.AppBuildVersion,
+            AppOrientation = info.AppOrientation,
+            LastAppUpdatedDate = info.LastAppUpdatedDate,
+
+            BatteryChargePercent = info.BatteryChargePercent,
+            BatteryPowerSource = info.BatteryPowerSource,
+            IsPowerInSaveMode = info.IsPowerInSaveMode,
+
+            MobileOperator = info.MobileOperator,
+            MobileSignalStrength = info.MobileSignalStrength,
+            NetworkType = info.NetworkType,
+            NetworkSubType = info.NetworkSubType,
+
+            NumberOfStartedInterviews = this.interviewViewRepository.Count(
+                interview => interview.StartedDateTime != null && interview.CompletedDateTime == null),
+
+            DBSizeInfo = info.DBSizeInfo,
+            StorageInfo = ToStorageInfoApiView(info.StorageInfo),
+            RAMInfo = ToRAMInfoApiView(info.RAMInfo)
+        };
+
+        private LocationAddressApiView ToLocationAddressApiView(LocationAddress locationAddress)
+            => new LocationAddressApiView
+            {
+                Longitude = locationAddress.Longitude,
+                Latitude = locationAddress.Latitude
+            };
+
+        private RAMInfoApiView ToRAMInfoApiView(RAMInfo ramInfo) => new RAMInfoApiView
+        {
+            Free = ramInfo.Free,
+            Total = ramInfo.Total
+        };
+
+        private StorageInfoApiView ToStorageInfoApiView(StorageInfo storageInfo) => new StorageInfoApiView
+        {
+            Free = storageInfo.Free,
+            Total = storageInfo.Total
+        };
+
+        private UnexpectedExceptionApiView ToUnexpectedExceptionApiView(Exception exception)
+            => new UnexpectedExceptionApiView
+            {
+                Message = exception.Message,
+                StackTrace = string.Join(Environment.NewLine,
+                    exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+            };
     }
 }

@@ -207,7 +207,7 @@
   <data name="Observer" xml:space="preserve">
     <value>Observador</value>
   </data>
-  <data name="ObserverAccountCreationDateTooltip" xml:space="preserve">
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
     <value>Data em que foi criada a conta do observador</value>
   </data>
   <data name="ObserverDisclaimerFormat" xml:space="preserve">
