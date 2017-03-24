@@ -8,9 +8,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_DeletePreloadedDataOfPanel_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_DeletePreloadedData_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
         };
 
-        Because of = () => filebasedPreloadedDataRepository.DeletePreloadedDataOfPanel(csvFileId);
-        
-        private It should_call_delete_directory = () =>
+        Because of = () => filebasedPreloadedDataRepository.DeletePreloadedData(csvFileId);
+
+        It should_call_delete_directory = () =>
             fileSystemAccessor.Verify(x => x.DeleteDirectory(path), Times.Once);
             
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
