@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -29,6 +32,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly HqSignInManager signInManager;
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -36,7 +40,8 @@ namespace WB.UI.Headquarters.API.Interviewer
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader,
             ISyncProtocolVersionProvider syncVersionProvider,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            HqSignInManager signInManager)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
@@ -44,6 +49,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             this.androidPackageReader = androidPackageReader;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
@@ -89,12 +95,23 @@ namespace WB.UI.Headquarters.API.Interviewer
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
+            var authHeader = request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             var multipartMemoryStreamProvider = await request.Content.ReadAsMultipartAsync();
             var httpContent = multipartMemoryStreamProvider.Contents.Single();
             var fileContent = await httpContent.ReadAsByteArrayAsync();
 
             var deviceId = this.Request.Headers.GetValues("DeviceId").Single();
-            var user = this.userViewFactory.GetUser(new UserViewInputModel(deviceId));
+            var userId = User.Identity.GetUserId();
+
+            var user = userId != null 
+                ? this.userViewFactory.GetUser(new UserViewInputModel(Guid.Parse(userId))) 
+                : null;
 
             this.tabletInformationService.SaveTabletInformation(
                 content: fileContent,
@@ -104,7 +121,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
+        [ApiBasicAuth(UserRoles.Interviewer)]
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
         public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)

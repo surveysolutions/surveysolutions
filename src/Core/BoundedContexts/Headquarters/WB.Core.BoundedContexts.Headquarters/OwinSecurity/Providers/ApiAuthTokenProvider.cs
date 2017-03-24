@@ -25,13 +25,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers
 
         public async Task<string> GenerateTokenAsync(TKey userId)
         {
-            var securityStamp = await this.manager.GetSecurityStampAsync(userId).ConfigureAwait(false);
+            var securityStamp = await this.manager.GetSecurityStampAsync(userId);
             return this.hasher.HashPassword(securityStamp); 
         }
 
         public async Task<bool> ValidateTokenAsync(TKey userId, string token)
         {
-            var securityStamp = await this.manager.GetSecurityStampAsync(userId).ConfigureAwait(false);
+            var securityStamp = await this.manager.GetSecurityStampAsync(userId);
             return this.hasher.VerifyHashedPassword(token, securityStamp) == PasswordVerificationResult.Success;
         }
     }
