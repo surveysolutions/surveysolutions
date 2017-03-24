@@ -190,7 +190,12 @@
                             </tr>
                             <tr>
                                 <td>@Pages.InterviewerProfile_DeviceLocation</td>
-                                <td id="device-address">@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</td>
+                                <td id="device-address">
+                                    @if (Model.LastSuccessDeviceInfo.DeviceLocationLat.HasValue && Model.LastSuccessDeviceInfo.DeviceLocationLong.HasValue)
+                                    {
+                                        <text>@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</text>
+                                    }
+                                </td>
                             </tr>
                             <tr>
                                 <td>@Pages.InterviewerProfile_DeviceOrientation</td>

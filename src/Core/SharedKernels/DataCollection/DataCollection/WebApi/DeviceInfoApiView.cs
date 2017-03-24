@@ -50,4 +50,10 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
+
+    public class UnexpectedExceptionApiView
+    {
+        public string Message { get; set; }
+        public string StackTrace { get; set; }
+    }
 }

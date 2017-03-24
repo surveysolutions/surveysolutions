@@ -124,12 +124,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                var deviceInfo = await this.interviewerSettings.GetDeviceInfoAsync().ConfigureAwait(false);
 
-                await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken).ConfigureAwait(false);
+                try
+                {
+
+                    var deviceInfo = await this.interviewerSettings.GetDeviceInfoAsync().ConfigureAwait(false);
+                    await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                }
+
                 cancellationToken.ThrowIfCancellationRequested();
-
-                await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken).ConfigureAwait(false);                
+                await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await this.SyncronizeQuestionnairesAsync(progress, statistics, cancellationToken).ConfigureAwait(false);
@@ -141,7 +149,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await this.synchronizationService.SendSyncStatisticsAsync(statistics: ToSyncStatisticsApiView(statistics), 
+                await this.synchronizationService.SendSyncStatisticsAsync(statistics: ToSyncStatisticsApiView(statistics),
                     token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
 
                 progress.Report(new SyncProgressInfo
@@ -220,6 +228,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Statistics = statistics
                 });
 
+                await this.TrySendUnexpectedExceptionToServerAsync(ex, cancellationToken);
                 this.logger.Error("Synchronization. Unexpected exception", ex);
             }
 
@@ -243,6 +252,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.restCredentials.Password = newPassword;
                     await this.SyncronizeAsync(progress, cancellationToken).ConfigureAwait(false);
                 }
+            }
+        }
+
+        private async Task TrySendUnexpectedExceptionToServerAsync(Exception exception, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await this.synchronizationService.SendUnexpectedExceptionAsync(ToUnexpectedExceptionApiView(exception),
+                    cancellationToken).ConfigureAwait(false);
+            }
+            catch(Exception ex)
+            {
+                this.logger.Error("Synchronization. Exception when send exception to server", ex);
             }
         }
 
@@ -612,5 +634,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             Free = storageInfo.Free,
             Total = storageInfo.Total
         };
+
+        private UnexpectedExceptionApiView ToUnexpectedExceptionApiView(Exception exception)
+            => new UnexpectedExceptionApiView
+            {
+                Message = exception.Message,
+                StackTrace = string.Join(Environment.NewLine,
+                    exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+            };
     }
 }
