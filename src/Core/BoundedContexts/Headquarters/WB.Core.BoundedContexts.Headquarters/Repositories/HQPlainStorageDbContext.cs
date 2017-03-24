@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public static string ConnectionStringName { get; set; }
         public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
-        public DbSet<DeviceException> DeviceException { get; set; }
 
         public HQPlainStorageDbContext() : base(ConnectionStringName)
         {
@@ -21,7 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
             modelBuilder.Entity<DeviceSyncInfo>().ToTable("devicesyncinfo", DbConfiguration.SchemaName);
             modelBuilder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", DbConfiguration.SchemaName);
-            modelBuilder.Entity<DeviceException>().ToTable("deviceexceptions", DbConfiguration.SchemaName);
         }
     }
 }

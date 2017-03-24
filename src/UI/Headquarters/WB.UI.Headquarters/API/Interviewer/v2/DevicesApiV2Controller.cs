@@ -7,8 +7,9 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class DevicesApiV2Controller : DevicesControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
-        private readonly IDeviceExceptionRepository deviceExceptionRepository;
+        private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
 
         public DevicesApiV2Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             IReadSideRepositoryReader<TabletDocument> devicesRepository,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
-            IDeviceExceptionRepository deviceExceptionRepository,
+            IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
             HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 userManager: userManager)
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
-            this.deviceExceptionRepository = deviceExceptionRepository;
+            this.syncLogRepository = syncLogRepository;
         }
 
         [HttpGet]
@@ -111,14 +112,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [HttpPost]
         public IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception)
         {
-            this.deviceExceptionRepository.Add(new DeviceException
+            this.syncLogRepository.Store(new SynchronizationLogItem
             {
-                InterviewerId = this.authorizedUser.Id,
                 DeviceId = this.authorizedUser.DeviceId,
-                ExceptionDate = DateTime.UtcNow,
-                Message = exception.Message,
-                StackTrace = exception.StackTrace
-            });
+                InterviewerId = this.authorizedUser.Id,
+                InterviewerName = this.authorizedUser.UserName,
+                LogDate = DateTime.UtcNow,
+                Type = SynchronizationLogType.DeviceUnexpectedException,
+                Log = $@"<font color=""red"">{exception.StackTrace}</font>"
+            }, Guid.NewGuid());
 
             return this.Ok();
         }
