@@ -184,9 +184,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
         }
 
-        public void DeletePreloadedDataOfSample(string id) => this.DeletePreloadedData(id);
-        public void DeletePreloadedDataOfPanel(string id) => this.DeletePreloadedData(id);
-
         public void DeletePreloadedData(string id)
         {
             this.DeleteFolderByName(id);
