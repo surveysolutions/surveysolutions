@@ -117,8 +117,10 @@ namespace WB.UI.Headquarters
                         }
                     }
                 },
-                ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExperationTime),
-                SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration
+                ExpireTimeSpan = TimeSpan.FromHours(applicationSecuritySection.CookieSettings.ExpirationTime),
+                SlidingExpiration = applicationSecuritySection.CookieSettings.SlidingExpiration,
+                CookieName = applicationSecuritySection.CookieSettings.Name,
+                CookieHttpOnly = applicationSecuritySection.CookieSettings.HttpOnly
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
