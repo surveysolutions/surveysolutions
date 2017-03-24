@@ -1,5 +1,8 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+﻿using System.Diagnostics;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
+    [DebuggerDisplay("{FileName}")]
     public class PreloadedFileMetaData
     {
         public PreloadedFileMetaData(string fileName, long fileSize, bool canBeHandled)

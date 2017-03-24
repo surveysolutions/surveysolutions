@@ -113,19 +113,54 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction("BatchUpload", new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
+                return this.RedirectToAction(nameof(BatchUpload), new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
-            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+
+            if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
+            {
+                return this.View("InterviewImportVerificationErrors", PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    model.QuestionnaireId,
+                    model.QuestionnaireVersion,
+                    questionnaireInfo?.Title,
+                    global::Resources.BatchUpload.Prerequisite_ZipFile,
+                    PreloadedContentType.Panel,
+                    model.File.FileName));
+            }
+
+            var preloadedDataId = this.preloadedDataRepository.StorePanelData(model.File.InputStream, model.File.FileName);
             PreloadedContentMetaData preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
             //clean up for security reasons
             if (preloadedMetadata == null)
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+
+                return this.View("InterviewImportVerificationErrors", PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    model.QuestionnaireId,
+                    model.QuestionnaireVersion,
+                    questionnaireInfo?.Title,
+                    global::Resources.BatchUpload.Prerequisite_FileOpen,
+                    PreloadedContentType.Panel,
+                    model.File.FileName));
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+            var unsupportedFiles = preloadedMetadata.FilesMetaInformation.Where(file => !file.CanBeHandled);
+            if (unsupportedFiles.Any())
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+
+                return this.View("InterviewImportVerificationErrors", PreloadedDataVerificationErrorsView.CreatePrerequisitesError(
+                    model.QuestionnaireId,
+                    model.QuestionnaireVersion,
+                    questionnaireInfo?.Title,
+                    string.Format(
+                        global::Resources.BatchUpload.Prerequisite_UnsupportedFiles,
+                        string.Join(", ", unsupportedFiles.Select(file => file.FileName))),
+                    PreloadedContentType.Panel,
+                    model.File.FileName));
+            }
 
             PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(preloadedMetadata.Id);
 
@@ -180,7 +215,7 @@ namespace WB.UI.Headquarters.Controllers
                 return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
-            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedDataId = this.preloadedDataRepository.StoreSampleData(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
 
             //clean up for security reasons
