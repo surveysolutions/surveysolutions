@@ -535,9 +535,6 @@
     <Content Include="questionnaire\content\designer-start\bootstrap-override.min.css">
       <DependentUpon>bootstrap-override.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\designer-start\designer-list.min.css">
-      <DependentUpon>designer-list.css</DependentUpon>
-    </Content>
     <Content Include="questionnaire\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -547,7 +544,7 @@
     <Content Include="questionnaire\details\scripts\directives\matchOptionsPattern.js" />
     <Content Include="questionnaire\details\scripts\services\optionsService.js" />
     <Content Include="questionnaire\content\designer-start\bootstrap-custom.css" />
-    <Content Include="questionnaire\content\designer-start\designer-list.css" />
+    <Content Include="Content\designer-list.css" />
     <Content Include="questionnaire\content\designer-start\designer-start.css">
       <DependentUpon>designer-start.less</DependentUpon>
     </Content>
@@ -737,7 +734,7 @@
     <Content Include="questionnaire\content\designer-start\bootstrap-custom.less" />
     <Content Include="questionnaire\content\designer-start\bootstrap-override.less" />
     <Content Include="questionnaire\content\designer-start\custom-fonts.less" />
-    <Content Include="questionnaire\content\designer-start\designer-list.less" />
+    <Content Include="Content\designer-list.less" />
     <Content Include="questionnaire\content\designer-start\designer-start.less" />
     <Content Include="questionnaire\content\designer-start\font-styles.less" />
     <Content Include="questionnaire\content\designer-start\inputs.less" />
@@ -748,9 +745,6 @@
     </Content>
     <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.css.map">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-start\designer-list.css.map">
-      <DependentUpon>designer-list.css</DependentUpon>
     </Content>
     <Content Include="Views\Shared\_list_search_form.cshtml" />
     <Content Include="questionnaire\content\designer-start\bootstrap-override.css.map">

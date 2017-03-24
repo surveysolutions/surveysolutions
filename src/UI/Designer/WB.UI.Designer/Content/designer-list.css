@@ -139,7 +139,7 @@ input.form-control {
   font-family: 'Roboto-Light';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto300.woff) format('woff');
+  src: local('Roboto Light'), local('Roboto-Light'), url(../questionnaire/fonts/Roboto300.woff) format('woff');
 }
 .checkbox {
   padding-left: 0;
@@ -153,7 +153,7 @@ input.wb-radio ~ label span {
   display: inline-block;
   width: 30px;
   height: 30px;
-  background: transparent url(../i/pretty-checkable-sprites.png) no-repeat;
+  background: transparent url(../questionnaire/content/i/pretty-checkable-sprites.png) no-repeat;
   vertical-align: middle;
 }
 input.wb-checkbox ~ label span {
@@ -207,7 +207,7 @@ body {
   z-index: 2;
 }
 .container-wb-list .header-wb-list header .questionnaire-logo {
-  background: url("../i/logo-questionnaire-designer.png") no-repeat;
+  background: url("../questionnaire/content/i/logo-questionnaire-designer.png") no-repeat;
   width: 366px;
   height: 36px;
   margin: 32px 38px;
@@ -292,7 +292,7 @@ body {
 }
 div#table-message {
   height: 115px;
-  background: #edeff0 url("../i/logo-designer-sm.png") 45px 23px no-repeat;
+  background: #edeff0 url("../questionnaire/content/i/logo-designer-sm.png") 45px 23px no-repeat;
   position: relative;
   border-bottom: 1px solid #dddddd;
 }
@@ -311,7 +311,7 @@ div#table-message a.cross {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: url("../i/cross.png");
+  background: url("../questionnaire/content/i/cross.png");
   height: 40px;
   width: 40px;
 }
@@ -515,7 +515,7 @@ table.table-content tr th:last-child {
   border: none;
   padding: 0;
   display: inline-block;
-  background: transparent url(../i/cross.png) -5px -5px;
+  background: transparent url(../questionnaire/content/i/cross.png) -5px -5px;
 }
 #frmSearch .clear-search:hover {
   background-position: -5px -45px;
