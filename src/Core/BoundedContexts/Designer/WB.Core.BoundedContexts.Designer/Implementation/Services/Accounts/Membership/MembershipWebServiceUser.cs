@@ -25,6 +25,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Memb
         public string UserName => this.userName;
 
         public bool IsAdmin => Roles.IsUserInRole(this.userName, this.hepler.ADMINROLENAME);
-        public bool CanImportOnHq => this.MembershipUser.CanImportOnHq;
     }
 }
