@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public int GetSuccessSynchronizationsCount(Guid interviewerId)
             => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
+                .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
         public int GetFailedSynchronizationsCount(Guid interviewerId)
             => new HQPlainStorageDbContext().DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
