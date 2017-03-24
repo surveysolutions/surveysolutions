@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.Infrastructure
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameHandling = TypeNameHandling.Auto,
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConvertor() },
+            Converters = new JsonConverter[] { new StringEnumConverter(), IdentityJsonConverter.Instance, RosterVectorConvertor.Instance },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }

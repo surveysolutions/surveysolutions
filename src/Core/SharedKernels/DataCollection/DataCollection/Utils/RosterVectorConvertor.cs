@@ -43,5 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         }
 
         private static readonly Type RosterVectorType = typeof(RosterVector);
+
+        private static RosterVectorConvertor instance;
+        public static RosterVectorConvertor Instance => instance ?? (instance = new RosterVectorConvertor());
     }
 }

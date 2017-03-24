@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -15,8 +17,7 @@ namespace WB.Infrastructure.Native.Storage
         {
             return JsonConvert.DeserializeObject<TEntity>(json, BackwardCompatibleJsonSerializerSettings);
         }
-
-
+        
         private static readonly JsonSerializerSettings BackwardCompatibleJsonSerializerSettings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto,
@@ -24,6 +25,7 @@ namespace WB.Infrastructure.Native.Storage
             MissingMemberHandling = MissingMemberHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
+            Converters = new List<JsonConverter> { RosterVectorConvertor.Instance, IdentityJsonConverter.Instance},
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
