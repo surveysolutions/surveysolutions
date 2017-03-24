@@ -44,7 +44,13 @@ namespace WB.UI.Headquarters.Code
                 return;
             }
 
-            var result = await userManager.SignInWithAuthTokenAsync(actionContext.Request.Headers.Authorization.ToString(), TreatPasswordAsPlain, this.roles);
+            if (actionContext.Request.Headers?.Authorization == null)
+            {
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
+            }
+
+            var result = await userManager.SignInWithAuthTokenAsync(actionContext.Request.Headers?.Authorization?.ToString(), TreatPasswordAsPlain, this.roles);
 
             if (!result.Succeeded)
             {
