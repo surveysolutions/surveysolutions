@@ -1,13 +1,9 @@
 ﻿using System;
-using System.IO;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -15,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -41,14 +36,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         protected static UsersController CreateUsersController(
             ILogger logger = null,
-            IInterviewersViewFactory interviewersViewViewFactory = null,
-            IUserListViewFactory userListViewViewFactory = null,
             IUserViewFactory userViewViewFactory = null)
         {
             return new UsersController(
                 logger ?? Mock.Of<ILogger>(),
-                interviewersViewViewFactory ?? Mock.Of<IInterviewersViewFactory>(),
-                userListViewViewFactory ?? Mock.Of<IUserListViewFactory>(),
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>());
         }
 
@@ -70,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IAllInterviewsFactory allInterviewsViewViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
-            IGlobalInfoProvider globalInfoProvider = null,
+            IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
         {
@@ -79,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 

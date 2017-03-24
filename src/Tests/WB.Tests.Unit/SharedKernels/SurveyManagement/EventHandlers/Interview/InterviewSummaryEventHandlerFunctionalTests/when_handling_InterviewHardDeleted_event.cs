@@ -1,6 +1,9 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
@@ -14,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewHardDeleted(userId: responsibleId));
+            updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewHardDeleted(userId: responsibleId.FormatGuid()));
 
         It should_updatedModel_be_marked_as_deleted = () =>
             updatedModel.IsDeleted.ShouldEqual(true);
@@ -22,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         static InterviewSummaryDenormalizer denormalizer;
         static InterviewSummary viewModel;
         static InterviewSummary updatedModel;
-        static string responsibleId = "11111111111111111111111111111111";
+        static Guid responsibleId = Guid.Parse("11111111111111111111111111111111");
         static string responsibleName = "responsible";
     }
 }

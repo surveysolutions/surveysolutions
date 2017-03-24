@@ -33,9 +33,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
 
                 { "roster[1].variable", new[] { "roster", "variable" } },
                 { "roster.First().variable", new[] { "roster", "variable", "First" } },
-                { "roster.First().roster1.First().gps.Latitude > 0", new[] { "roster", "roster1", "gps", "First", "Latitude" } }
-                
+                { "roster.First().roster1.First().gps.Latitude > 0", new[] { "roster", "roster1", "gps", "First", "Latitude" } },
 
+                { "self > System  " +
+                  ".\t \n DateTime \n\n " +
+                  ". Now    \t \n \n ", new [] { "self", "DateTime.Now" } },
+                { "self > System.DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } },
+                { "self > DateTime.Now", new [] { "self", "DateTime.Now" } },
+                { "self > DateTime.Now.AddMonth(1)", new [] { "self", "DateTime.Now", "AddMonth" } }
             };
 
             analyzer = Create.RoslynExpressionProcessor();

@@ -6,8 +6,8 @@
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
                              LongClick QuestionState.ShowCommentEditorCommand">
   
-  <EditText style="@style/Interview_Question_Answer_List_Editor"
-   local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
+  <EditText style="@style/Interview_Question_Answer_Text_Editor"
+            local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
 
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
                local:MvxBind="HideKeyboardOnClick .;Click DeleteListItemCommand;"/>

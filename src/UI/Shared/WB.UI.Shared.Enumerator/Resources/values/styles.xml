@@ -209,8 +209,12 @@
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
     <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorAccent">@color/colorAccent</item>
     <item name="colorPrimaryDark">@color/darkActionBar</item>
 
+    <item name="alertDialogTheme">@style/StyledDialog</item>
+    
     <!-- elements -->
     <item name="checkboxStyle">@style/CheckBoxTheme</item>
     <item name="editTextStyle">@style/EditTextTheme</item>
@@ -221,7 +225,11 @@
     <item name="spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
     <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
   </style>
-
+  <style name="StyledDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/darkActionBar</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
   <style name="GrayAppTheme" parent="AppTheme">
     <item name="colorPrimary">#FF666666</item>
     <item name="android:textColorHighlight">#9936aee5</item>
@@ -296,12 +304,13 @@
     <item name="android:background">@drawable/user_interaction_input_editor</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <!--<item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>-->
+    <item name="android:layout_margin">@dimen/Interview_Confirmation_EditText_margin</item>
   </style>
   
   <style name="Interview_Confirmation_Layout" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
+    <item name="android:paddingBottom">@dimen/Interview_Question_TextAnswer_margin_top</item>
   </style>
 </resources>

@@ -58,7 +58,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
         {
-            this.Finish();
+            if (!this.IsFinishing && !this.IsDestroyed)
+                this.Finish();
         }
 
         protected override void Dispose(bool disposing)

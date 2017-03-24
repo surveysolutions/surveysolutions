@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
                     x =>
                         x.GetSession() == session);
 
-            storage = Create.PostgresReadSideRepository<TestRemoveStartsFrom>(sessionProvider: sessionProvider, idColumnName: "EntityId");
+            storage = IntegrationCreate.PostgresReadSideRepository<TestRemoveStartsFrom>(sessionProvider: sessionProvider, idColumnName: "EntityId");
 
             storage.Store(new TestRemoveStartsFrom { Value = "test1" }, $"{nastya}1");
             storage.Store(new TestRemoveStartsFrom { Value = "test2" }, $"{nastya}2");

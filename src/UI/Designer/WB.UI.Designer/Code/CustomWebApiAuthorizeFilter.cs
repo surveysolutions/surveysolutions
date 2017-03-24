@@ -7,8 +7,8 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.Infrastructure.Transactions;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Code
 {

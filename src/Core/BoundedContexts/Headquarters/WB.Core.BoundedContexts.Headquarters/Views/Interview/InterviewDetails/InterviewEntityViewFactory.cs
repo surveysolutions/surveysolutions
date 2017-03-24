@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -94,8 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewStatus interviewStatus, 
             bool treatAsLinkedToList = false)
         {
-            questionView.Id = question.PublicKey;
-            questionView.RosterVector = rosterVector;
+            questionView.Id = Identity.Create(question.PublicKey, rosterVector);
             questionView.Title = this.GetTextWithSubstitutedVariables(question.QuestionText, answersForTitleSubstitution);
             questionView.QuestionType = question.QuestionType;
             questionView.IsFeatured = question.Featured;
@@ -106,11 +106,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.Scope = question.QuestionScope;
             questionView.LinkedToQuestionId = question.LinkedToQuestionId;
             questionView.LinkedToRosterId = question.LinkedToRosterId;
-
-            var categoricalTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
-            questionView.IsFilteredCategorical =
-                categoricalTypes.Contains(questionView.QuestionType) &&
-                !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression);
 
             bool answersShouldUpdateOptions = question.Answers != null && question.Answers.Count > 0;
 
@@ -232,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewAttachmentViewModel attachment) 
         {
             var staticTextView = new InterviewStaticTextView();
-            staticTextView.Id = staticText.PublicKey;
+            staticTextView.Id = Identity.Create(staticText.PublicKey, RosterVector.Empty);
             staticTextView.Text = this.GetTextWithSubstitutedVariables(staticText.Text, answersForTitleSubstitution); 
             staticTextView.Attachment = attachment;
 

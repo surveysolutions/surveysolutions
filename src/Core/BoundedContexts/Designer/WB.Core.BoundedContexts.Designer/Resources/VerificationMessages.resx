@@ -639,4 +639,7 @@
   <data name="WB0238_BitwiseOr" xml:space="preserve">
     <value>| is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||.</value>
   </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead.</value>
+  </data>
 </root>

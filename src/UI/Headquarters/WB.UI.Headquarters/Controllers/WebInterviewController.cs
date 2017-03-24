@@ -66,7 +66,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
-            IGlobalInfoProvider globalInfo,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -75,7 +74,7 @@ namespace WB.UI.Headquarters.Controllers
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
             ILogger logger, IUserViewFactory usersRepository)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -95,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
             var responsibleId = webInterviewConfig.ResponsibleId;
-            var interviewer = this.usersRepository.Load(new UserViewInputModel(responsibleId));
+            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId));
 
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,

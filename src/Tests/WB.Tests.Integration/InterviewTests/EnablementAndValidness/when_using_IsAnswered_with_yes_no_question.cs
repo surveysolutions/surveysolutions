@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -22,25 +23,25 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 AssemblyContext.SetupServiceLocator();
 
                 var yesNoQuestionVariable = "cat";
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
                     children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(id: yesNoQuestionId, 
+                        Abc.Create.Entity.MultyOptionsQuestion(id: yesNoQuestionId, 
                             variable:yesNoQuestionVariable,
-                            yesNo: true,
+                            yesNoView: true,
                             options: new List<Answer> {
-                                Create.Answer("one", 1),
-                                Create.Answer("two", 2),
+                                Abc.Create.Entity.Answer("one", 1),
+                                Abc.Create.Entity.Answer("two", 2),
                                 }
                         ),
-                        Create.Group(id: groupId, enablementCondition: $"IsAnswered({yesNoQuestionVariable})")
+                        Abc.Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
                     });
 
                 var interview = SetupInterview(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(yesNoQuestionId, RosterVector.Empty, Yes(1)));
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: yesNoQuestionId, answeredOptions: new[] { Yes(1) }));
 
                     return new InvokeResults
                     {

@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -15,16 +16,16 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var triggerQuestionId = Guid.NewGuid();
             var titleQuestionId = Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.MultyOptionsQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
+                Abc.Create.Entity.MultyOptionsQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_multi"),
-                Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Create.Roster(id: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Abc.Create.Entity.Roster(rosterId: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
                     {
-                        Create.NumericRealQuestion(id: titleQuestionId, variable: "multi_link_source")
+                        Abc.Create.Entity.NumericRealQuestion(id: titleQuestionId, variable: "multi_link_source")
                     })
             });
 
@@ -33,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         Because of = () =>
              exception = Catch.Exception(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVectors: answer));
+                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
 
         It should_raise_InterviewException = () =>
            exception.ShouldBeOfExactType<InterviewException>();
@@ -47,6 +48,6 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[][] answer = new[] {new decimal[] {1}};
+        private static RosterVector[] answer = new RosterVector[] {new decimal[] {1}};
     }
 }

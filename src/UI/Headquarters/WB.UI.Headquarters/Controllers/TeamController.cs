@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -17,73 +16,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [LimitsFilter]
     public class TeamController : BaseController
     {
-        protected readonly IUserViewFactory userViewFactory;
-        protected readonly IPasswordHasher passwordHasher;
+        protected readonly IAuthorizedUser authorizedUser;
+        protected readonly HqUserManager userManager;
 
-        public TeamController(ICommandService commandService, 
-                              IGlobalInfoProvider globalInfo, 
-                              ILogger logger,
-                              IUserViewFactory userViewFactory,
-                              IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger)
+        public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
+            : base(commandService, logger)
         {
-            this.userViewFactory = userViewFactory;
-            this.passwordHasher = passwordHasher;
+            this.authorizedUser = authorizedUser;
+            this.userManager = userManager;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
-        protected UserView GetUserById(Guid id)
+        protected async Task<IdentityResult> UpdateAccountAsync(UserEditModel editModel)
         {
-            return this.userViewFactory.Load(new UserViewInputModel(id));
+            var appUser = await this.userManager.FindByIdAsync(editModel.Id).ConfigureAwait(false);
+
+            if(appUser == null)
+                return IdentityResult.Failed(@"Could not update user information because current user does not exist");
+            if(appUser.IsArchived)
+                return IdentityResult.Failed(@"Could not update user information because current user is archived");
+
+            appUser.Email = editModel.Email;
+            appUser.FullName = editModel.PersonName;
+            appUser.PhoneNumber = editModel.PhoneNumber;
+            appUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
+            appUser.IsLockedByHeadquaters = this.authorizedUser.IsAdministrator ||
+                                            this.authorizedUser.IsHeadquarter
+                ? editModel.IsLocked
+                : appUser.IsLockedByHeadquaters;
+
+            return await this.userManager.UpdateUserAsync(appUser, editModel.Password).ConfigureAwait(false);
         }
 
-        protected void CreateInterviewer(UserModel interviewer, Guid supervisorId)
-        {
-            CreateUser(user: interviewer, role: UserRoles.Operator, supervisorId: supervisorId);
-        }
-
-        protected void CreateSupervisor(UserModel supervisorUser)
-        {
-            CreateUser(user: supervisorUser, role: UserRoles.Supervisor);
-        }
-
-        protected void CreateHeadquarters(UserModel headquartersUser)
-        {
-            CreateUser(user: headquartersUser, role: UserRoles.Headquarter);
-        }
-
-        protected void CreateObserver(UserModel observerUser)
-        {
-            CreateUser(user: observerUser, role: UserRoles.Observer);
-        }
-
-        protected void CreateApiWriterUser(UserModel apiUser)
-        {
-            CreateUser(user: apiUser, role: UserRoles.ApiUser);
-        }
-
-        protected void UpdateAccount(UserView user, UserEditModel editModel)
-        {
-            this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, 
-                email: editModel.Email,
-                isLockedBySupervisor: editModel.IsLockedBySupervisor,
-                isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
-                passwordHash:
-                    string.IsNullOrEmpty(editModel.Password)
-                        ? user.Password
-                        : passwordHasher.Hash(editModel.Password), 
-                personName:editModel.PersonName, 
-                phoneNumber:editModel.PhoneNumber, 
-                userId: this.GlobalInfo.GetCurrentUser().Id));
-        }
-
-        private void CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)
-        {
-            this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: user.UserName,
-                password: passwordHasher.Hash(user.Password), email: user.Email, isLockedBySupervisor: false,
-                isLockedByHQ: user.IsLocked, roles: new[] {role},
-                supervsor: supervisorId.HasValue ? this.GetUserById(supervisorId.Value).GetUseLight() : null,
-                personName: user.PersonName, phoneNumber: user.PhoneNumber));
-        }
+        protected Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
+            => this.userManager.CreateUserAsync(new HqUser
+            {
+                Id = Guid.NewGuid(),
+                IsLockedBySupervisor = false,
+                IsLockedByHeadquaters = user.IsLocked,
+                FullName = user.PersonName,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                Profile = supervisorId.HasValue ? new HqUserProfile {SupervisorId = supervisorId} : null
+            }, user.Password, role);
     }
 }

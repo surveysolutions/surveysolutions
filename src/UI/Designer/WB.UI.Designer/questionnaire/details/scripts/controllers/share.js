@@ -1,71 +1,68 @@
-﻿(function() {
-    'use strict';
-    angular.module('designerApp').controller('shareCtrl',
-    [
-        '$scope', '$log', '$uibModalInstance', 'questionnaire', 'shareService',
-        function($scope, $log, $modalInstance, questionnaire, shareService) {
-            $scope.questionnaire = questionnaire;
-            $scope.questionnaire.editedTitle = questionnaire.title;
+﻿angular.module('designerApp').controller('shareCtrl',
+    function ($scope, $log, $uibModalInstance, questionnaire, shareService) {
+        "use strict";
 
-            $scope.viewModel = {
-                shareWith: '',
-                shareForm: {},
-                shareType: 'Edit',
-                doesUserExist: true
-            };
+        $scope.questionnaire = questionnaire;
+        $scope.questionnaire.editedTitle = questionnaire.title;
 
-            $scope.shareTypeOptions = [{ name: "Edit" }, { name: "View" }];
+        $scope.viewModel = {
+            shareWith: '',
+            shareForm: {},
+            shareType: 'Edit',
+            doesUserExist: true
+        };
 
-            $scope.cancel = function () {
-                //$scope.questionnaire.title = $scope.initialTitle;
-                $modalInstance.dismiss();
-            };
+        $scope.shareTypeOptions = [{ name: "Edit" }, { name: "View" }];
 
-            $scope.invite = function() {
-                var request = shareService.findUserByEmail($scope.viewModel.shareWith);
-                request.success(function(data) {
-                    $scope.viewModel.doesUserExist = data.doesUserExist;
+        $scope.cancel = function () {
+            $uibModalInstance.close();
+        };
 
-                    if (data.doesUserExist) {
-                        var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
-                        shareRequest.success(function() {
-                            if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
-                                $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
-                            }
+        $scope.invite = function () {
+            var request = shareService.findUserByEmail($scope.viewModel.shareWith);
+            request.then(function (result) {
+                var data = result.data;
+                $scope.viewModel.doesUserExist = data.doesUserExist;
 
-                            $scope.viewModel.shareWith = '';
-                            $scope.viewModel.doesUserExist = true;
-                        });
-                    }
-                });
-            };
+                if (data.doesUserExist) {
+                    var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
+                    shareRequest.then(function () {
+                        if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
+                            $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
+                        }
 
-            $scope.updateTitle = function() {
-                var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.isPublic);
-                updateRequest.success(function () {
-                    $scope.questionnaire.title = $scope.questionnaire.editedTitle;
-                    $modalInstance.dismiss();
-                });
-            };
+                        $scope.viewModel.shareWith = '';
+                        $scope.viewModel.doesUserExist = true;
+                    });
+                }
+            });
+        };
 
-            $scope.revokeAccess = function(personInfo) {
-                var revokeRequest = shareService.revokeAccess(personInfo.email, $scope.questionnaire.questionnaireId);
+        $scope.updateTitle = function () {
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.isPublic);
+            updateRequest.then(function () {
+                $scope.questionnaire.title = $scope.questionnaire.editedTitle;
+                $uibModalInstance.close();
+            });
+        };
 
-                revokeRequest.success(function() {
-                    $scope.questionnaire.sharedPersons = _.without($scope.questionnaire.sharedPersons,
-                        _.findWhere($scope.questionnaire.sharedPersons, { email: personInfo.email }));
-                });
-            };
+        $scope.revokeAccess = function (personInfo) {
+            var revokeRequest = shareService.revokeAccess(personInfo.email, $scope.questionnaire.questionnaireId);
 
-            $scope.togglePublicity = function() {
-                var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, !$scope.questionnaire.isPublic);
-                updateRequest.success(function() {
-                    $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
-                });
-            };
-            $scope.changeShareType = function(shareType) {
-                $scope.viewModel.shareType = shareType.name;
-            };
-        }
-    ]);
-})();
+            revokeRequest.then(function () {
+                $scope.questionnaire.sharedPersons = _.without($scope.questionnaire.sharedPersons,
+                    _.findWhere($scope.questionnaire.sharedPersons, { email: personInfo.email }));
+            });
+        };
+
+        $scope.togglePublicity = function () {
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, !$scope.questionnaire.isPublic);
+            updateRequest.then(function () {
+                $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
+            });
+        };
+        $scope.changeShareType = function (shareType) {
+            $scope.viewModel.shareType = shareType.name;
+        };
+    }
+);

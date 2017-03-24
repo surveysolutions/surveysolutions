@@ -13,6 +13,12 @@ namespace WB.UI.Designer
             bundles.IgnoreList.Ignore("*intellisense.js");
 
             bundles.Add(
+               new StyleBundle("~/Content/css-list").Include(
+                   "~/questionnaire/content/designer-start/bootstrap-custom.css",
+                   "~/questionnaire/vendor/perfect-scrollbar/css/perfect-scrollbar.css",
+                   "~/Content/designer-list.css"));
+
+            bundles.Add(
                 new StyleBundle("~/content/css").Include(
                     "~/questionnaire/vendor/bootstrap/dist/bootstrap.css",
                     "~/Content/font-awesome.min.css",
@@ -37,7 +43,7 @@ namespace WB.UI.Designer
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
-                    "~/questionnaire/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
+                    "~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
                     "~/Scripts/common.js"));
 
             bundles.Add(

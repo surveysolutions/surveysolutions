@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_calculate_state_of_options_for_linked_question = () =>
         {
             interview.GetMultiOptionLinkedToListQuestion(linkedQuestionIdentity)
-                .Options.Count.ShouldEqual(1);
+                .Options.Length.ShouldEqual(1);
         };
 
         static StatefulInterview interview;

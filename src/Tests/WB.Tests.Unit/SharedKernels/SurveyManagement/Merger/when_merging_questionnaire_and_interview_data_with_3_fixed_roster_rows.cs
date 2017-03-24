@@ -9,9 +9,11 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -49,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 answeredQuestions: new Dictionary<Guid, object>(),
                 rosterTitles: new Dictionary<Guid, string>() {{rosterId, "1"}}, sortIndex: 1);
             
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             merger = CreateMerger(questionnaire);
         };
 
@@ -57,22 +59,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
         It should_return_3_fixed_roster_rows = () =>
-            mergeResult.Groups.Count(g => g.Id==rosterId).ShouldEqual(3);
+            mergeResult.Groups.Count(g => g.Id.Id==rosterId).ShouldEqual(3);
 
         It should_second_group_be_roster_row_with_sort_index_1 = () =>
-            mergeResult.Groups[1].RosterVector.ShouldEqual(new decimal[] { 0 });
+            mergeResult.Groups[1].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(0));
 
         It should_third_group_be_roster_row_with_sort_index_2 = () =>
-            mergeResult.Groups[2].RosterVector.ShouldEqual(new decimal[] { 1 });
+            mergeResult.Groups[2].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(1));
 
         It should_fourth_group_be_roster_row_with_sort_index_3 = () =>
-            mergeResult.Groups[3].RosterVector.ShouldEqual(new decimal[] { 2 });
+            mergeResult.Groups[3].Id.RosterVector.ShouldEqual(Create.Entity.RosterVector(2));
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid rosterId;
         private static Guid interviewId;

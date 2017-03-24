@@ -6,9 +6,9 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class AttributesTestContext
     {
-        public static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials = null)
+        public static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials = null, bool onlyAllowedAddresses = false)
         {
-            return new ApiBasicAuthAttribute(validateUserCredentials ?? ((s, s1) => true) );
+            return new ApiBasicAuthAttribute(validateUserCredentials ?? ((s, s1) => true), onlyAllowedAddresses);
         }
         
         public static string EncodeToBase64(string value)

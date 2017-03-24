@@ -4,9 +4,11 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -24,10 +26,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
-                    Create.TextQuestion(variable: "test", id: questionId, validationExpression: "Quest.IRnd() > 2"),
-                    Create.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
+                    Create.Entity.TextQuestion(questionId: questionId, 
+                        variable: "test",
+                        validationExpression: "Quest.IRnd() > 2"),
+                    Create.Entity.Variable(variableId, VariableType.Double, "v1", "Quest.IRnd()")
                 });
 
                 var userId = Guid.NewGuid();
@@ -36,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
-                    interview.AnswerTextQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, "test");
+                    interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, "test");
 
                     return new InvokeResult
                     {

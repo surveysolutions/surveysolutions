@@ -1,5 +1,5 @@
 import * as toastr from "toastr"
-import * as Vue from "vue"
+import Vue from "vue"
 import { Store } from "vuex"
 import { apiStop } from "../api"
 import modal from "../modal"

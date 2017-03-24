@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
-            commandService = Create.SequentialCommandService(repository: repository);
+            commandService = IntegrationCreate.SequentialCommandService(repository: repository);
         };
 
         Because of = () =>

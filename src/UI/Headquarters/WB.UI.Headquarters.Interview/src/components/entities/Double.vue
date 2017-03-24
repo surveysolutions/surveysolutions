@@ -4,9 +4,9 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field answered">
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter decimal" title="Enter decimal" :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
-                            v-numericFormatting="{aSep: formattingChar, mDec: countOfDecimalPlaces, vMin: '-999999999999999', vMax: '999999999999999', aPad: false }">
-                        <wb-remove-answer />
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter decimal" title="Enter decimal"
+                            :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion" v-numericFormatting="{aSep: groupSeparator, mDec: countOfDecimalPlaces, vMin: '-999999999999999', vMax: '999999999999999', aPad: false }">
+                            <wb-remove-answer />
                     </div>
                 </div>
             </div>
@@ -21,34 +21,34 @@
         name: 'Double',
         mixins: [entityDetails],
         computed: {
-            formattingChar() {
-                return this.$me.useFormatting ? ',' : ''
-            },
-            countOfDecimalPlaces() {
-                return this.$me.countOfDecimalPlaces || 16
+            groupSeparator() {
+                if (this.$me.useFormatting) {
+                    var etalon = 1111
+                    var localizedNumber = etalon.toLocaleString()
+                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                }
+
+                return ''
             }
         },
         methods: {
             answerDoubleQuestion(evnt) {
                 const answerString = $(evnt.target).autoNumeric('get');
-                if (answerString.replace(/[^0-9]/g,"").length > 15)
-                {
+                if (answerString.replace(/[^0-9]/g, "").length > 15) {
                     this.markAnswerAsNotSavedWithMessage('Entered value is bigger. Allow only 15 digits')
                     return
                 }
 
                 const answer = answerString != undefined && answerString != ''
-                                ? parseFloat(answerString)
-                                : null
+                    ? parseFloat(answerString)
+                    : null
 
-                if (answer == null)
-                {
+                if (answer == null) {
                     this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
                     return
                 }
 
-                if (answer > 999999999999999 || answer < -999999999999999)
-                {
+                if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value')
                     return
                 }
@@ -57,4 +57,5 @@
             }
         }
     }
+
 </script>

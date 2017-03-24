@@ -1126,6 +1126,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead..
+        /// </summary>
+        internal static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
+            get {
+                return ResourceManager.GetString("WB0118_ExpressionReferencingForbiddenDateTimeProperies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {

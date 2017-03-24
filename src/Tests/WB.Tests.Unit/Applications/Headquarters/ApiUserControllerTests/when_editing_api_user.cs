@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
-using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Tests.Abc;
+using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.Controllers;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 {
     internal class when_editing_api_user : ApiUserControllerTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var userId = Guid.NewGuid();
 
@@ -28,36 +29,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 Id = userId
             };
 
-            var user = new UserView()
-            {
-                PublicKey = userId,
-                UserName = "apiTest1"
-            };
+            identityManagerMock.Setup(x => x.FindByIdAsync(userId)).ReturnsAsync(Create.Entity.HqUser());
+            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
-            userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
-            globalInfoProvider.Setup(x => x.IsHeadquarter).Returns(false);
-            globalInfoProvider.Setup(x => x.IsSupervisor).Returns(false);
-            globalInfoProvider.Setup(x => x.GetCurrentUser()).Returns(new UserLight(userId, "t"));
-
-            controller = CreateApiUserController(commandService: commandServiceMock.Object,
-                globalInfoProvider: globalInfoProvider.Object,
-                userViewFactory: userViewFactory.Object);
+            controller = CreateApiUserController(userManager: identityManagerMock.Object);
         };
 
-        Because of = () =>
-        {
-            actionResult = controller.Edit(inputModel);
-        };
+        Because of = () => actionResult = controller.Edit(inputModel).Result;
 
         It should_return_ViewResult = () =>
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<ChangeUserCommand>(), Moq.It.IsAny<string>()), Times.Once);
+            identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>()), Times.Once);
 
-        private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
-        private static Mock<IUserViewFactory> userViewFactory = new Mock<IUserViewFactory>();
-        private static Mock<IGlobalInfoProvider> globalInfoProvider = new Mock<IGlobalInfoProvider>();
+        private static Mock<TestHqUserManager> identityManagerMock = new Mock<TestHqUserManager>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;

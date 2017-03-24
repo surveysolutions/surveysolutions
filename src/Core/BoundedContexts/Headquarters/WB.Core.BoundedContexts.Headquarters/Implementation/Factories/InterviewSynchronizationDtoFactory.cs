@@ -24,20 +24,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IRostrerStructureService rostrerStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public InterviewSynchronizationDtoFactory(
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
             IQuestionnaireStorage questionnaireStorage,
-            IRostrerStructureService rostrerStructureService)
+            IRosterStructureService rosterStructureService)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.questionnaireStorage = questionnaireStorage;
-            this.rostrerStructureService = rostrerStructureService;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             if (questionnaire == null)
                 throw new Exception("Questionnaire was not found");
-            var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
+            var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
             
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)
@@ -78,24 +78,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         interviewQuestion.Value.Answer,
                         GetAllComments(interviewQuestion.Value));
 
-                    if (!answeredQuestion.IsEmpty())
+                    if (answeredQuestion.IsAnswered() || answeredQuestion.HasComments())
                     {
                         answeredQuestions.Add(answeredQuestion);
                     }
+
                     if (interviewQuestion.Value.IsDisabled())
                     {
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Value.Id, interviewLevel.RosterVector));
                     }
-
-                    if (interviewQuestion.Value.IsInvalid())
+                    else
                     {
-                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
-                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), 
-                            interviewQuestion.Value.FailedValidationConditions.ToList());
-                    }
-                    if (!interviewQuestion.Value.IsInvalid())
-                    {
-                        validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        if (answeredQuestion.IsAnswered() && interviewQuestion.Value.IsInvalid())
+                        {
+                            invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                            failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector),
+                                interviewQuestion.Value.FailedValidationConditions.ToList());
+                        }
+                        if (!interviewQuestion.Value.IsInvalid())
+                        {
+                            validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        }
                     }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
@@ -105,20 +108,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 foreach (var staticText in interviewLevel.StaticTexts.Values)
                 {
                     var staticTextIdentity = new Identity(staticText.Id, interviewLevel.RosterVector);
-                    if (!staticText.IsEnabled)
+                    if (staticText.IsEnabled)
+                    {
+                        if (staticText.IsInvalid)
+                        {
+                            invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
+                                staticTextIdentity, staticText.FailedValidationConditions.ToList()));
+                        }
+                        
+                    }
+                    else
                     {
                         disabledStaticTexts.Add(staticTextIdentity);
-                    }
-
-                    if (staticText.IsInvalid)
-                    {
-                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
-                            staticTextIdentity, staticText.FailedValidationConditions.ToList()));
-                    }
-
-                    if (!staticText.IsInvalid)
-                    {
-                        validStaticTexts.Add(staticTextIdentity);
                     }
                 }
 
@@ -129,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 var interviewStatusChangeHistory = this.interviewsRepository.GetById(new ChangeStatusInputModel {InterviewId = interview.InterviewId}.InterviewId);
 
-                var commentedStatusHistroyViews = interviewStatusChangeHistory?
+                var commentedStatusHistoryViews = interviewStatusChangeHistory?
                     .InterviewCommentedStatuses
                     .Where(i => i.Status.ConvertToInterviewStatus().HasValue)
                     .Select(x => new CommentedStatusHistroyView
@@ -141,10 +142,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     })
                     .ToList();
 
-                if (commentedStatusHistroyViews != null)
+                if (commentedStatusHistoryViews != null)
                 {
                     var interviewerAssignedStatus =
-                        commentedStatusHistroyViews.OrderBy(interviewStatus => interviewStatus.Date).LastOrDefault(
+                        commentedStatusHistoryViews.OrderBy(interviewStatus => interviewStatus.Date).LastOrDefault(
                             interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
 
                     if (interviewerAssignedStatus != null)

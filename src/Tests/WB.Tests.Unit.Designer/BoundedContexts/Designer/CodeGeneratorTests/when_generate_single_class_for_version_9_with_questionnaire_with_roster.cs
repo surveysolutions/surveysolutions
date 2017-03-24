@@ -34,16 +34,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         Because of = () =>
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
-        It should_generate_class_without_V4_namespaces_included = () =>
-            generatedClassContent.ShouldNotContain("WB.Core.SharedKernels.DataCollection.V4");
-
         It should_generate_class_without_IInterviewExpressionStateV4 = () =>
-            generatedClassContent.ShouldNotContain("IInterviewExpressionStateV4");
+            generatedClassContent.ShouldNotContain("IInterviewExpressionStateV10");
 
-        It should_generate_class_without_AbstractConditionalLevelInstanceV4 = () =>
-            generatedClassContent.ShouldNotContain("AbstractConditionalLevelInstanceV4");
+        It should_generate_class_with_AbstractConditionalLevelInstanceV4 = () =>
+            generatedClassContent.ShouldContain("AbstractInterviewExpressionStateV10");
 
-        private static int version = 9;
+        private static int version = 16;
         private static CodeGenerator generator;
         private static string generatedClassContent;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");

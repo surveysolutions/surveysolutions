@@ -36,9 +36,10 @@
 
             $scope.loadGroup = function () {
                 questionnaireService.getGroupDetailsById($state.params.questionnaireId, $state.params.itemId)
-                    .success(function(result) {
-                            dataBind(result.group);
-                            $scope.activeGroup.breadcrumbs = result.breadcrumbs;
+                    .then(function(result) {
+                            var data = result.data;
+                            dataBind(data.group);
+                            $scope.activeGroup.breadcrumbs = data.breadcrumbs;
                             $scope.initialGroup = angular.copy($scope.activeGroup);
                             
                             var focusId = null;
@@ -60,7 +61,7 @@
 
             $scope.saveGroup = function (callback) {
                 if ($scope.groupForm.$valid) {
-                    commandService.updateGroup($state.params.questionnaireId, $scope.activeGroup).success(function () {
+                    commandService.updateGroup($state.params.questionnaireId, $scope.activeGroup).then(function () {
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,

@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -22,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, Create.Group(groupId, enablementCondition:"1 > 2"));
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, Abc.Create.Entity.Group(groupId, "Group X", null, "1 > 2", false, null));
 
                 using (var eventContext = new EventContext())
                 {

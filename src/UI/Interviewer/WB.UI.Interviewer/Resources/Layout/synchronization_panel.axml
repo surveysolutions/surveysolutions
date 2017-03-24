@@ -52,15 +52,15 @@
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
                       local:MvxBind="Visible And(Not(IsSynchronizationFailOrCanceled(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress), Not(Synchronization.SynchronizationErrorOccured))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.SuccessfullyUploadedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.SuccessfullyUploadedInterviewsCount, 0)" />
 
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                  local:MvxBind="Text Format(Localization('Synchronization_Success_State_DeletedInterviews_Format'), Synchronization.Statistics.TotalDeletedInterviewsCount)" />
+                  local:MvxBind="Text Format(Localization('Synchronization_Success_State_DeletedInterviews_Format'), Synchronization.Statistics.TotalDeletedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalDeletedInterviewsCount, 0)" />
           
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalRejectedInterviewsCount, 0)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount); Visible GreaterThan(Synchronization.Statistics.TotalNewInterviewsCount, 0)" />
 
         </LinearLayout>
 

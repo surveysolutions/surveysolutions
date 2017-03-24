@@ -1,31 +1,50 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
     public class UsersApiV2Controller : UsersControllerBase
     {
+        private readonly HqSignInManager signInManager;
+
         public UsersApiV2Controller(
-            IGlobalInfoProvider globalInfoProvider,
-            IUserViewFactory userViewFactory,
-            IUserWebViewFactory userInfoViewFactory) : base(
-                globalInfoProvider: globalInfoProvider,
-                userViewFactory: userViewFactory,
-                userInfoViewFactory: userInfoViewFactory)
+            IAuthorizedUser authorizedUser, HqSignInManager signInManager,
+            IUserViewFactory userViewFactory) : base(
+                authorizedUser: authorizedUser,
+            userViewFactory: userViewFactory)
         {
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
+        [ApiBasicAuth(UserRoles.Interviewer)]
         public override InterviewerApiView Current() => base.Current();
 
         [HttpGet]
+        [ApiBasicAuth(UserRoles.Interviewer)]
         public override bool HasDevice() => base.HasDevice();
+
+        [HttpPost]
+        public async Task<string> Login(LogonInfo userLogin)
+        {
+            var signinresult = await this.signInManager.SignInInterviewerAsync(userLogin.Username, userLogin.Password);
+
+            if (signinresult == SignInStatus.Success)
+            {
+                return await this.signInManager.GenerateApiAuthTokenAsync(authorizedUser.Id);
+            }
+
+            return null;
+        }
     }
 }

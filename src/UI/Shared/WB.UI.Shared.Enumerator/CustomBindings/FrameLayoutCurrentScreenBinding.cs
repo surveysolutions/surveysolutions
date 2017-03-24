@@ -80,8 +80,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 case NavigationDirection.Outside:
                     return transaction.SetCustomAnimations(
-                        Resource.Animation.zoom_out_to_center,
-                        Resource.Animation.abc_fade_out);
+                        Resource.Animation.abc_fade_in,
+                        Resource.Animation.zoom_out_to_center);
 
                 default:
                     return transaction;
