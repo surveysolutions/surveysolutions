@@ -74,7 +74,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return value;
         }
 
-        public SqlType[] SqlTypes => new SqlType[] { SqlTypeFactory.GetString(15) };
+        public SqlType[] SqlTypes => new SqlType[] { SqlTypeFactory.GetString(40) };
 
         public Type ReturnedType => typeof(IPAddress);
 

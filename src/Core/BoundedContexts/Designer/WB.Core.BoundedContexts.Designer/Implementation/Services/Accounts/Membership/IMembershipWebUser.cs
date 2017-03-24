@@ -11,7 +11,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Memb
         string UserName { get; }
 
         bool IsAdmin { get; }
-
-        bool CanImportOnHq { get; }
     }
 }
