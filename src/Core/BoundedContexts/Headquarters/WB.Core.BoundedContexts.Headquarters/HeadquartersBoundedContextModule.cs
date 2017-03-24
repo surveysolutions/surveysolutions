@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();

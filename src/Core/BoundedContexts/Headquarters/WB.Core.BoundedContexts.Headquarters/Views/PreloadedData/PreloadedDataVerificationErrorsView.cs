@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
-        public static PreloadedDataVerificationErrorsView CreatePrerequisitesError(
+        public static PreloadedDataVerificationErrorsView CreatePrerequisiteError(
             Guid questionnaireId,
             long version,
             string questionnaireTitle,
