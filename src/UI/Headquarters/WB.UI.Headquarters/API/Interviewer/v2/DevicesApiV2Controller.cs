@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class DevicesApiV2Controller : DevicesControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
+        private readonly IDeviceExceptionRepository deviceExceptionRepository;
 
         public DevicesApiV2Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             IReadSideRepositoryReader<TabletDocument> devicesRepository,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
+            IDeviceExceptionRepository deviceExceptionRepository,
             HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
@@ -36,6 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 userManager: userManager)
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
+            this.deviceExceptionRepository = deviceExceptionRepository;
         }
 
         [HttpGet]
@@ -101,6 +104,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 SyncFinishDate = DateTime.UtcNow
             };
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception)
+        {
+            this.deviceExceptionRepository.Add(new DeviceException
+            {
+                InterviewerId = this.authorizedUser.Id,
+                DeviceId = this.authorizedUser.DeviceId,
+                ExceptionDate = DateTime.UtcNow,
+                Message = exception.Message,
+                StackTrace = exception.StackTrace
+            });
 
             return this.Ok();
         }
