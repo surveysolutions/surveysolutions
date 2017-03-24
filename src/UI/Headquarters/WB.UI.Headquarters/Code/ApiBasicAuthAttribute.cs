@@ -13,7 +13,6 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Resources;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,7 +23,7 @@ namespace WB.UI.Headquarters.Code
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private HqUserManager userManager => ServiceLocator.Current.GetInstance<HqUserManager>();
+        private HqSignInManager userManager => ServiceLocator.Current.GetInstance<HqSignInManager>();
 
         private IReadSideStatusService readSideStatusService
             => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
@@ -44,62 +43,30 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMaintenanceMessage(actionContext);
                 return;
             }
-            
-            BasicCredentials basicCredentials = this.ExtractFromAuthorizationHeader(ApiAuthenticationScheme.Basic, actionContext)
-                                                ?? this.ExtractFromAuthorizationHeader(ApiAuthenticationScheme.AuthToken, actionContext);
 
-            if (basicCredentials == null)
+            var result = await userManager.SignInWithAuthTokenAsync(actionContext.Request.Headers.Authorization.ToString(), TreatPasswordAsPlain, this.roles);
+
+            if (!result.Succeeded)
             {
-                this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                return;
-            }
-
-            var userInfo = await this.userManager.FindByNameAsync(basicCredentials.Username);
-
-            if (userInfo == null || userInfo.IsArchived)
-            {
-                this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                return;
-            }
-
-            switch (basicCredentials.Scheme)
-            {
-                case ApiAuthenticationScheme.Basic:
-                    if (this.TreatPasswordAsPlain && !this.userManager.CheckPassword(userInfo, basicCredentials.Password)
-                        || !this.TreatPasswordAsPlain && !CheckHashedPassword(userInfo, basicCredentials))
+                if (result.Errors.Any())
+                {
+                    if (result.Errors.Any(err => err.Contains(@"Role")))
                     {
-                        this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                        RespondWithMessageThatUserIsNoPermittedRole(actionContext);
                         return;
                     }
-                    break;
-                case ApiAuthenticationScheme.AuthToken:
-                    if (!await this.userManager.ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password))
+
+                    if (result.Errors.Any(err => err.Contains(@"Lock")))
                     {
-                        this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                        this.RespondWithMessageThatUserIsLockedOut(actionContext);
                         return;
-                    };
-                    break;
-            }
-
-            if (userInfo.IsLockedBySupervisor || userInfo.IsLockedByHeadquaters)
-            {
-                this.RespondWithMessageThatUserIsLockedOut(actionContext);
-                return;
-            }
-            
-            if (!this.roles.Contains(userInfo.Roles.First().Role))
-            {
-                this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
-                return;
-            }
-
-            var identity = userInfo.GenerateUserIdentityAsync(this.userManager).Result;
-            var principal = new ClaimsPrincipal(identity);
-
-            Thread.CurrentPrincipal = principal;
-            if (HttpContext.Current != null)
-            {
-                HttpContext.Current.User = principal;
+                    }
+                }
+                else
+                {
+                    RespondWithMessageThatUserDoesNotExists(actionContext);
+                    return;
+                }
             }
 
             await base.OnAuthorizationAsync(actionContext, cancellationToken);

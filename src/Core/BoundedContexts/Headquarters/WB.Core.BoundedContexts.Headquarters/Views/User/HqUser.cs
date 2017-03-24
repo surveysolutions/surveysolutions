@@ -2,12 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -35,17 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public bool IsInRole(UserRoles role)
         {
             return this.Roles.Any(r => r.Role == role);
-        }
-
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<HqUser, Guid> manager)
-        {
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie)
-                .ConfigureAwait(false);
-
-            if (this.Profile?.DeviceId != null)
-                userIdentity.AddClaim(new Claim(AuthorizedUser.DeviceClaimType, this.Profile.DeviceId));
-
-            return userIdentity;
         }
     }
 

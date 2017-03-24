@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
@@ -11,7 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
+
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -38,15 +39,25 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             
             return this.UpdatePassword(passwordStore, user, newPassword);
         }
-        
-        protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
+
+        public override async Task<ClaimsIdentity> CreateIdentityAsync(HqUser user, string authenticationType)
+        {
+            var userIdentity = await base.CreateIdentityAsync(user, authenticationType);
+
+            if (user.Profile?.DeviceId != null)
+                userIdentity.AddClaim(new Claim(AuthorizedUser.DeviceClaimType, user.Profile.DeviceId));
+
+            return userIdentity;
+        }
+
+        protected override Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
             if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
 
-            return await base.UpdatePassword(passwordStore, user, newPassword).ConfigureAwait(false);
+            return base.UpdatePassword(passwordStore, user, newPassword);
         }
 
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
@@ -63,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     && user.PasswordHash == this.hashCompatibilityProvider.GetSHA1HashFor(user, password))
                 {
                     user.PasswordHashSha1 = null;
-                    result = await this.ChangePasswordAsync(user, password).ConfigureAwait(false) == IdentityResult.Success;
+                    result = await this.ChangePasswordAsync(user, password) == IdentityResult.Success;
                 }
             }
 
@@ -114,9 +125,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             user.CreationDate = DateTime.UtcNow;
 
-            var creationStatus = await this.CreateAsync(user, password).ConfigureAwait(false);
+            var creationStatus = await this.CreateAsync(user, password);
             if (creationStatus.Succeeded)
-                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role)).ConfigureAwait(false);
+                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
 
             return creationStatus;
         }
@@ -146,7 +157,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
                 accountToArchive.IsArchived = true;
-                var archiveResult = await this.UpdateUserAsync(accountToArchive, null).ConfigureAwait(false);
+                var archiveResult = await this.UpdateUserAsync(accountToArchive, null);
                 result.Add(archiveResult);
             }
 
@@ -172,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             foreach (var userToArchive in usersToArhive)
             {
                 userToArchive.IsArchived = archive;
-                var archiveResult = await this.UpdateUserAsync(userToArchive, null).ConfigureAwait(false);
+                var archiveResult = await this.UpdateUserAsync(userToArchive, null);
                 archiveUserResults.Add(archiveResult);
             }
 

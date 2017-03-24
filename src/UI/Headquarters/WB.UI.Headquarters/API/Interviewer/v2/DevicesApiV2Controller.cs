@@ -17,7 +17,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
+    [ApiBasicAuth(UserRoles.Interviewer)]
     public class DevicesApiV2Controller : DevicesControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
