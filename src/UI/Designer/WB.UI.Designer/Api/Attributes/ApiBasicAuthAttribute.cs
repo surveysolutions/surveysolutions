@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Api.Attributes
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
         private readonly bool onlyAllowedAddresses;
-        private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
+        private IMembershipUserService MembershipService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
         private IAllowedAddressService allowedAddressService => ServiceLocator.Current.GetInstance<IAllowedAddressService>();
 
@@ -80,11 +80,14 @@ namespace WB.UI.Designer.Api.Attributes
 
                 if (this.onlyAllowedAddresses)
                 {
-                    var ip = GetClientIpAddress();
-                    if (!allowedAddressService.IsAllowedAddress(ip) && !this.UserHelper.WebUser.CanImportOnHq)
+                    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
                     {
-                        this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
-                        return;
+                        var clientIpAddress = this.GetClientIpAddress();
+                        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
+                        {
+                            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                            return;
+                        }
                     }
                 }
 
@@ -187,7 +190,7 @@ namespace WB.UI.Designer.Api.Attributes
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
             {
                 ReasonPhrase =
-                    string.Format(ErrorMessages.UserNotApproved, this.UserHelper.WebUser.MembershipUser.Email)
+                    string.Format(ErrorMessages.UserNotApproved, this.MembershipService.WebUser.MembershipUser.Email)
             };
         }
 
@@ -198,12 +201,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         private bool IsAccountLockedOut()
         {
-            return this.UserHelper.WebUser == null || this.UserHelper.WebUser.MembershipUser.IsLockedOut;
+            return this.MembershipService.WebUser == null || this.MembershipService.WebUser.MembershipUser.IsLockedOut;
         }
 
         private bool IsAccountNotApproved()
         {
-            return !this.UserHelper.WebUser.MembershipUser.IsApproved;
+            return !this.MembershipService.WebUser.MembershipUser.IsApproved;
         }
     }
 }

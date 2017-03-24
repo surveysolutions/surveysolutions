@@ -9,7 +9,7 @@ namespace WB.UI.Designer.Models.ControlPanel
         public string Description { get; set; }
 
         [Required]
-        [StringLength(15)]
+        [StringLength(40)]
         [IpAddress]
         public string Address { get; set; }
     }

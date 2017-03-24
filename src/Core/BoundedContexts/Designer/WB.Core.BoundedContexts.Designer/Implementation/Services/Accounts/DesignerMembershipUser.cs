@@ -39,6 +39,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             this.CanImportOnHq = canImportOnHq;
         }
 
-        public bool CanImportOnHq { get; set; }
+        public virtual bool CanImportOnHq { get; set; }
     }
 }

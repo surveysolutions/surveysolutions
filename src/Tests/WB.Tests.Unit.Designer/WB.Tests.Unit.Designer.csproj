@@ -322,6 +322,7 @@
     <Compile Include="Api\Tester\QuestionnairesControllerTests\QuestionnairesControllerTestsContext.cs" />
     <Compile Include="Api\Tester\QuestionnairesControllerTests\when_getting_questionnaire_and_client_has_old_app_version.cs" />
     <Compile Include="Api\Tester\QuestionnairesControllerTests\when_getting_list_of_questionaires_and_client_has_old_app_version.cs" />
+    <Compile Include="Applications\AttributesTests\ApiBasicAttributeTests.cs" />
     <Compile Include="Applications\AttributesTests\AttributesTestContext.cs" />
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved.cs" />
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
