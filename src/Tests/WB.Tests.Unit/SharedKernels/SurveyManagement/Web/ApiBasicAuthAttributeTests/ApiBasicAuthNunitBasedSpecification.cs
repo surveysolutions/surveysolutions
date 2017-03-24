@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -35,8 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected ApiBasicAuthAttribute CreateApiBasicAuthAttribute(IReadSideStatusService readSideStatusService = null)
         {
             this.userManager = new HqUserManager(this.UserStore.Object, Mock.Of<IAuthorizedUser>(), this.HashCompatibilityProvider.Object, this.ApiTokenProviderProvider.Object);
-
-            Setup.InstanceToMockedServiceLocator(this.userManager);
+            var auth = new Mock<IAuthenticationManager>();
+            var hqSignInManager = new HqSignInManager(userManager, auth.Object);
+            Setup.InstanceToMockedServiceLocator(hqSignInManager);
             Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
             Setup.InstanceToMockedServiceLocator(this.HashCompatibilityProvider.Object);
 
