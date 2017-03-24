@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers
             //clean up for security reasons
             if (preloadedMetadata == null)
             {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+                this.preloadedDataRepository.DeletePreloadedData(preloadedDataId);
 
                 return this.View("InterviewImportVerificationErrors",
                     PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Controllers
             var unsupportedFiles = preloadedMetadata.FilesMetaInformation.Where(file => !file.CanBeHandled);
             if (unsupportedFiles.Any())
             {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+                this.preloadedDataRepository.DeletePreloadedData(preloadedDataId);
 
                 return this.View("InterviewImportVerificationErrors",
                     PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
@@ -172,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
             {
-                this.preloadedDataRepository.DeletePreloadedDataOfPanel(preloadedMetadata.Id);
+                this.preloadedDataRepository.DeletePreloadedData(preloadedMetadata.Id);
                 return this.View("InterviewImportVerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId,
                     model.QuestionnaireVersion,
@@ -239,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers
             //clean up for security reasons
             if (preloadedMetadata == null)
             {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+                this.preloadedDataRepository.DeletePreloadedData(preloadedDataId);
             }
 
             PreloadedDataByFile preloadedSample = null;
@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers
             if (verificationStatus.Errors.Any())
             {
                 if (preloadedSample != null)
-                    this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
+                    this.preloadedDataRepository.DeletePreloadedData(preloadedSample.Id);
 
                 return this.View("InterviewImportVerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId,
