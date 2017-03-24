@@ -17,9 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
     {
         protected static FilebasedPreloadedDataRepository CreateFilebasedPreloadedDataRepository(
             IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiveUtils = null,
-            IRecordsAccessorFactory recordsAccessorFactory = null)
+            IRecordsAccessorFactory recordsAccessorFactory = null, string folderPath = "")
         {
-            return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
+            return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), folderPath,
                 archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>());
         }
 
