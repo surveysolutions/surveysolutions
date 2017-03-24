@@ -41,7 +41,9 @@
             <!--Override original steps-->
             <!--Remove license agreement step-->
             <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">NOT Installed</Publish>
-            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+            
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="5">1</Publish>
+
             
             <!--Redirect to new connection string step-->
             <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
