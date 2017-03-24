@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -22,28 +23,30 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Chapter(children: new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId,
+                    Create.Entity.Group(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(numId, variable: "x1")
+                        Create.Entity.NumericIntegerQuestion(numId, variable: "x1")
                     }),
-                    Create.Chapter(enablementCondition: "x1 == 1", children: new IComposite[]
+                    Create.Entity.Group(children: new IComposite[]
                     {
-                        Create.ListQuestion(list1Id, variable: "l1"),
-                        Create.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                        Create.Entity.TextListQuestion(questionId: list1Id, variable: "l1",
+                            enablementCondition: null, validationExpression: null),
+                        Create.Entity.Roster(roster1Id, rosterSizeQuestionId: list1Id, variable: "r1", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                         {
-                            Create.ListQuestion(list2Id, variable: "l2"),
-                            Create.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
+                            Create.Entity.TextListQuestion(questionId: list2Id, variable: "l2",
+                                enablementCondition: null, validationExpression: null),
+                            Create.Entity.Roster(roster2Id, rosterSizeQuestionId: list2Id, variable: "r2", rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                             {
-                                Create.TextQuestion(textId)
+                                Create.Entity.TextQuestion(questionId: textId, variable: null)
                             })
                         })
                     }));
 
-                var preloadedDataDto = Create.PreloadedDataDto(
-                    Create.PreloadedLevelDto(RosterVector.Empty, new Dictionary<Guid, AbstractAnswer> { { list1Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "Hello") }) } }),
-                    Create.PreloadedLevelDto(Create.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
-                    Create.PreloadedLevelDto(Create.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
+                var preloadedDataDto = IntegrationCreate.PreloadedDataDto(
+                    IntegrationCreate.PreloadedLevelDto(RosterVector.Empty, new Dictionary<Guid, AbstractAnswer> { { list1Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "Hello") }) } }),
+                    IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1), new Dictionary<Guid, AbstractAnswer> { { list2Id, TextListAnswer.FromTextListAnswerRows(new List<TextListAnswerRow> { new TextListAnswerRow(1, "World") }) } }),
+                    IntegrationCreate.PreloadedLevelDto(Create.RosterVector(1, 1), new Dictionary<Guid, AbstractAnswer> { { textId, TextAnswer.FromString("text") } }));
 
                 var interview = SetupPreloadedInterview(preloadedDataDto, questionnaireDocument);
 
@@ -52,8 +55,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numId, RosterVector.Empty, DateTime.Now, 1);
                     return new InvokeResults
                     {
-                        TopRosterIsEnabled = interview.IsEnabled(Create.Identity(roster1Id, Create.RosterVector(1))),
-                        NestedRosterIsEnabled = interview.IsEnabled(Create.Identity(roster2Id, Create.RosterVector(1, 1)))
+                        TopRosterIsEnabled = interview.IsEnabled(Create.Identity(roster1Id, 1)),
+                        NestedRosterIsEnabled = interview.IsEnabled(Create.Identity(roster2Id, 1, 1))
                     };
                 }
             });

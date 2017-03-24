@@ -45,7 +45,7 @@
                     itemType: "Chapter"
                 };
 
-                commandService.addChapter($state.params.questionnaireId, newChapter).success(function () {
+                commandService.addChapter($state.params.questionnaireId, newChapter).then(function () {
                     $scope.questionnaire.chapters.push(newChapter);
                     $state.go('questionnaire.chapter.group', { chapterId: newChapter.itemId, itemId: newChapter.itemId });
                     $rootScope.$emit('groupAdded');
@@ -60,20 +60,21 @@
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function () {
+                            .then(function () {
                                 var index = $scope.questionnaire.chapters.indexOf(chapter);
                                 if (index > -1) {
                                     $scope.questionnaire.chapters.splice(index, 1);
                                     $rootScope.$emit('chapterDeleted');
                                 }
 
-                                questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
+                                questionnaireService.getQuestionnaireById($state.params.questionnaireId).then(function (result) {
                                     $scope.questionnaire.chapters = [];
-                                    _.forEach(questionnaire.chapters, function (c) {
+                                    var data = result.data;
+                                    _.forEach(data.chapters, function (c) {
                                         $scope.questionnaire.chapters.push(c);
                                     });
-                                    if (questionnaire.chapters.length > 0) {
-                                        var defaultChapter = _.first(questionnaire.chapters);
+                                    if (data.chapters.length > 0) {
+                                        var defaultChapter = _.first(data.chapters);
                                         var itemId = defaultChapter.itemId;
                                         $scope.currentChapter = defaultChapter;
                                         $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
@@ -94,7 +95,7 @@
                 var newId = utilityService.guid();
 
                 commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId)
-                    .success(function () {
+                    .then(function () {
 
                     var newChapter = {
                         title: "pasting...",

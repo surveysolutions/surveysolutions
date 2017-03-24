@@ -1,9 +1,5 @@
 ﻿using System;
-using FluentAssertions;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using NUnit.Framework;
-using WB.Tests.Unit;
 
 namespace Ncqrs.Tests
 {
@@ -22,7 +18,7 @@ namespace Ncqrs.Tests
             var clock = new DateTimeBasedClock();
             var currentTime = clock.UtcNow();
 
-            currentTime.Kind.Should().Be(DateTimeKind.Utc);
+            Assert.That(currentTime.Kind, Is.EqualTo(DateTimeKind.Utc));
         }
 
         [Test]
@@ -33,7 +29,7 @@ namespace Ncqrs.Tests
             var currentClockTime = clock.UtcNow();
             var currentDateTimeTime = DateTime.UtcNow;
 
-            currentClockTime.Should().BeCloseTo(currentDateTimeTime);
+            Assert.That(currentClockTime, Is.EqualTo(currentDateTimeTime).Within(TimeSpan.FromSeconds(5)));
         }
     }
 }

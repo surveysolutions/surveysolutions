@@ -29,16 +29,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.MultyOptionsQuestion(rosterSwitcherQuestionId, variable: "hwrkyn", 
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.MultyOptionsQuestion(rosterSwitcherQuestionId, variable: "hwrkyn", 
                     options: new List<Answer>
                     {
-                        Create.Option(value: "1", text: "Yes"),
-                        Create.Option(value: "2", text: "No"),
-                        Create.Option(value: "3", text: "Maybe")
+                         Abc.Create.Entity.Option(value: "1", text: "Yes"),
+                         Abc.Create.Entity.Option(value: "2", text: "No"),
+                         Abc.Create.Entity.Option(value: "3", text: "Maybe")
                     }),
                     
-                    Create.Roster(rosterId, variable: "about_jobs", 
+                    Abc.Create.Entity.Roster(rosterId, variable: "about_jobs", 
                         enablementCondition: "@rowindex == 0", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSwitcherQuestionId));
 
                 var interview = SetupInterview(questionnaireDocument);

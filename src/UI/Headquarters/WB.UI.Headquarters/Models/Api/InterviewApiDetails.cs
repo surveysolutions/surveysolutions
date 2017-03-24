@@ -21,11 +21,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
             {
                 foreach (var interviewGroupView in interview.Groups)
                 {
-                    if (interviewGroupView.RosterVector.Length == 0)
+                    if (interviewGroupView.Id.RosterVector.Length == 0)
                         AddQuestionsToRoster(this.Questions, interviewGroupView.Entities.OfType<InterviewQuestionView>());
                     else
                     {
-                        var key = CreateLeveKeyFromPropagationVector(interviewGroupView.RosterVector);
+                        var key = CreateLeveKeyFromPropagationVector(interviewGroupView.Id.RosterVector);
                         RosterApiItem item;
 
                         if (rosters.ContainsKey(key))
@@ -34,9 +34,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                         {
                             item = new RosterApiItem()
                             {
-                                Id = interviewGroupView.Id,
-                                RosterVector = interviewGroupView.RosterVector,
-                                Item = interviewGroupView.RosterVector.Last()
+                                Id = interviewGroupView.Id.Id,
+                                RosterVector = interviewGroupView.Id.RosterVector,
+                                Item = interviewGroupView.Id.RosterVector.Last()
                             };
 
                             rosters.Add(key, item);

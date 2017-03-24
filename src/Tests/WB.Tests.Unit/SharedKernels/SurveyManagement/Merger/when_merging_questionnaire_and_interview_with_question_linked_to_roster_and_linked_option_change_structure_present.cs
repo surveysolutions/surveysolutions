@@ -7,8 +7,10 @@ using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -38,19 +40,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster0" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster0" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster01" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(0, 1).CoordinatesAsDecimals.ToArray(),
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster02" } });
 
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 0).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } });
-            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).ToArray(), rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId }, Create.Entity.RosterVector(1).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { rosterId, "roster1" } });
+
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 0).CoordinatesAsDecimals.ToArray(), 
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster11" } });
+            AddInterviewLevel(interview, new ValueVector<Guid> { rosterId, nestedRosterId }, Create.Entity.RosterVector(1, 1).CoordinatesAsDecimals.ToArray(),
+                rosterTitles: new Dictionary<Guid, string>() { { nestedRosterId, "roster12" } });
 
             interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, Create.Entity.InterviewQuestion(linkedQuestionId, Create.Entity.RosterVector(1).ToArray()));
 
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             interviewLinkedQuestionOptions =
                 Create.Entity.InterviewLinkedQuestionOptions(Create.Entity.ChangedLinkedOptions(linkedQuestionId,
                     options:
@@ -91,7 +100,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
         private static InterviewLinkedQuestionOptions interviewLinkedQuestionOptions;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid linkedQuestionId;
         private static Guid linkedOnNestedRosterQuestionId;

@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         Because of = () =>
         {
             interview.AnswerMultipleOptionsLinkedQuestion(interviewerId, questionId.Id, RosterVector.Empty,
-                DateTime.UtcNow, new[] {new decimal[] {2}, new decimal[] {1}});
+                DateTime.UtcNow, new RosterVector[] {new decimal[] {2}, new decimal[] {1}});
 
             Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
         };

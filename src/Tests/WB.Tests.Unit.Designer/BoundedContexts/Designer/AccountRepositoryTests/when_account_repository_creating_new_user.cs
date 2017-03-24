@@ -1,9 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests

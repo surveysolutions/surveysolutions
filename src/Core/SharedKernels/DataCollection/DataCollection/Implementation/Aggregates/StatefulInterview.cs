@@ -105,9 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             CalculateLinkedToListOptionsOnTree(this.Tree, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
-
-            this.Tree.ActualizeNodesInOrderCache();
-
+            
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
@@ -289,18 +287,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetRoster(rosterIdentity)?.RosterTitle;
 
         public string GetTitleText(Identity entityIdentity)
-        {
-            var question = this.Tree.GetQuestion(entityIdentity);
-            if (question != null) return question.Title.Text;
+            => this.GetTitleSubstitutionText(entityIdentity)?.Text ?? string.Empty;
 
-            var group = this.Tree.GetGroup(entityIdentity);
-            if(group != null) return group.Title.Text;
+        public string GetBrowserReadyTitleHtml(Identity entityIdentity)
+            => this.GetTitleSubstitutionText(entityIdentity)?.BrowserReadyText ?? string.Empty;
 
-            var staticText = this.Tree.GetStaticText(entityIdentity);
-            if (staticText != null) return staticText.Title.Text;
-
-            return string.Empty;
-        }
+        private SubstitionText GetTitleSubstitutionText(Identity entityIdentity)
+            => this.Tree.GetQuestion(entityIdentity)?.Title
+            ?? this.Tree.GetGroup(entityIdentity)?.Title
+            ?? this.Tree.GetStaticText(entityIdentity)?.Title;
 
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
@@ -345,21 +340,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
+        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestions()
             => this.Tree.FindQuestions().Where(question =>
                 !question.IsDisabled() &&
-                (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)) &&
-                question.IsInterviewer);
+                (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
+
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
+            => this.GetEnabledQuestions().Where(question => question.IsInterviewer);
 
         public int CountActiveAnsweredQuestionsInInterview()
             => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
         public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
+        public int CountAllEnabledAnsweredQuestions()
+            => this.GetEnabledQuestions().Count(question => question.IsAnswered());
+        public int CountAllEnabledQuestions() => this.GetEnabledQuestions().Count();
+        public int CountAllInvalidEntities() => this.GetAllInvalidEntitiesInInterview().Count();
+
+        public int CountEnabledSupervisorQuestions()
+            => this.GetEnabledQuestions().Count(question => question.IsSupervisors);
+
+        public int CountEnabledHiddenQuestions() => this.GetEnabledQuestions().Count(question => question.IsHidden);
+
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
+        public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Select(question => question.Identity));
+
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
-            => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
+                    .Select(question => question.Identity));
 
         public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
         {
@@ -373,13 +386,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
-        private IEnumerable<Identity> GetEnabledInvalidQuestions()
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
-                                && question.IsInterviewer)
-                .Select(question => question.Identity);
+                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
@@ -449,10 +460,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
+        public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
+            => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
+
+        public InterviewTreeSection FirstSection => this.Tree.Sections.First();
+
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 
-        
+        public IEnumerable<IInterviewTreeNode> GetAllNodes() => this.Tree.GetAllNodesInEnumeratorOrder();
+
         public bool IsEntityValid(Identity identity)
         {
             var question = this.Tree.GetQuestion(identity);

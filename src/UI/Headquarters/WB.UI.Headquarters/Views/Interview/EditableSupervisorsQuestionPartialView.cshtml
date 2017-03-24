@@ -1,32 +1,30 @@
 ﻿@using Main.Core.Entities.SubEntities
-@using System.Globalization
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
-@using WB.UI.Headquarters.Resources
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+@model InterviewQuestionView
 
 @switch (Model.QuestionType)
 {
     case QuestionType.Text:
         var textQuestionSettings = Model.Settings as TextQuestionSettings;
         <div class="input-group">
-            <input id="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "")" class="form-control mask" type="text" value="@Model.Answer" mask="@(textQuestionSettings.Mask)"/>
+            <input id="@Model.Id" class="form-control mask" type="text" value="@Model.Answer" mask="@(textQuestionSettings.Mask)"/>
             <span class="input-group-btn">
-                <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
+                <button class="btn btn-success" type="button" data-bind="click: saveTextAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector')">@Pages.EditQuestion_Save</button>
             </span>
         </div>
         break;
     case QuestionType.Numeric:
         var numericQuestionSetting = Model.Settings as NumericQuestionSettings;
         <div class="input-group">
-            <input id="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "")" class="form-control numeric" type="text" useFormatting="@numericQuestionSetting.UseFormating.ToString().ToLower()" value="@Model.AnswerString" />
+            <input id="@Model.Id.Id" class="form-control numeric" type="text" useFormatting="@numericQuestionSetting.UseFormating.ToString().ToLower()" value="@Model.AnswerString" />
             <span class="input-group-btn">
                 @if (numericQuestionSetting.IsInteger)
                 {
-                    <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveNumericIntegerAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector')">@Pages.EditQuestion_Save</button>
                 }
                 else
                 {
-                    <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">@Pages.EditQuestion_Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveNumericRealAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector', @(numericQuestionSetting.CountOfDecimalPlaces ?? 0))">@Pages.EditQuestion_Save</button>
                 }
             </span>
         </div>
@@ -36,9 +34,9 @@
         if (singleOptionSettings.IsFilteredCombobox)
         {
             <div class="input-group">
-                <input id="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "")" class="form-control" type="text" value="@Model.Answer"/>
+                <input id="@Model.Id" class="form-control" type="text" value="@Model.Answer"/>
                 <span class="input-group-btn">
-                    <button class="btn btn-success" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector')">@Pages.EditQuestion_Save</button>
                 </span>
             </div>
         }
@@ -49,9 +47,9 @@
                 var optionValue = option.Value.ToString();
                 var isChecked = Model.Answer != null && Convert.ToDecimal(Model.Answer) == Convert.ToDecimal(option.Value);
 
-                <label class="radio" for="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
-                    <input type="radio" name="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "")" id="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-                           data-bind="click: saveCategoricalOneAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">
+                <label class="radio" for="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))">
+                    <input type="radio" name="@Model.Id" id="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
+                           data-bind="click: saveCategoricalOneAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector')">
                     <span>@option.Label</span>
                 </label>
             }

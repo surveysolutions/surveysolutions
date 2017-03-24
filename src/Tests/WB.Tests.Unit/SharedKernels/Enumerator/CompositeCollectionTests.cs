@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator
 {

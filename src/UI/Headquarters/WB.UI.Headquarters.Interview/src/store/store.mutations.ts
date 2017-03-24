@@ -1,6 +1,6 @@
 import * as forEach from "lodash/foreach"
-import * as Vue from "vue"
-import * as Vuex from "vuex"
+import Vue from "vue"
+import Vuex from "vuex"
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {

@@ -1,5 +1,7 @@
 ﻿using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 {
@@ -19,5 +21,29 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
         private static PasswordHasher hasher;
         private static string password = "привет world";
         private static string result;
+    }
+
+    public class WhenHashing_Password_With_PBKDF_Algo
+    {
+        private DevicePasswordHasher subject;
+
+        [OneTimeSetUp]
+        public void Establish()
+        {
+            this.subject = new DevicePasswordHasher();
+        }
+
+        [Test]
+        public void Should_Hash_And_Validate_Password()
+        {
+            var hash = this.subject.Hash("Hello");
+            var anotherHash = this.subject.Hash("Hello");
+
+            Assert.That(hash, Is.Not.EqualTo(anotherHash));
+
+            Assert.True(this.subject.VerifyPassword(hash, "Hello"));
+            Assert.True(this.subject.VerifyPassword(anotherHash, "Hello"));
+            Assert.False(this.subject.VerifyPassword(hash, "NotHello"));
+        }
     }
 }

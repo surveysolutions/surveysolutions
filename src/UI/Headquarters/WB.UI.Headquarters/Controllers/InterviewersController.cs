@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -13,9 +12,9 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class InterviewersController : TeamController
     {
-        public InterviewersController(ICommandService commandService, IGlobalInfoProvider globalInfo, 
-            ILogger logger, IUserViewFactory userViewFactory, IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+        public InterviewersController(ICommandService commandService, 
+            ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
+            : base(commandService, logger, authorizedUser, userManager)
         {
         }
        

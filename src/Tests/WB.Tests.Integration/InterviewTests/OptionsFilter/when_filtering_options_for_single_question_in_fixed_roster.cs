@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
@@ -22,11 +23,11 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
+                        fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "Roster 1"), IntegrationCreate.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
-                            Create.SingleQuestion(q1Id, variable: "q1", optionsFilter: "@optioncode < 10")
+                            Abc.Create.Entity.SingleQuestion(q1Id, variable: "q1", optionsFilter: "@optioncode < 10")
                         })
                     );
 
@@ -36,15 +37,15 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 IEnumerable<CategoricalOption> options = new List<CategoricalOption>()
                 {
-                    Create.CategoricalOption(1, "Option 1"),
-                    Create.CategoricalOption(2, "Option 2"),
-                    Create.CategoricalOption(11, "Option 11"),
-                    Create.CategoricalOption(12, "Option 12"),
+                    Create.Entity.CategoricalQuestionOption(1, "Option 1", null),
+                    Create.Entity.CategoricalQuestionOption(2, "Option 2", null),
+                    Create.Entity.CategoricalQuestionOption(11, "Option 11", null),
+                    Create.Entity.CategoricalQuestionOption(12, "Option 12", null),
                 };
 
                 results = new InvokeResults
                 {
-                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Create.Identity(q1Id, Create.RosterVector(1)), options).Count()
+                    CountOfFilteredOptions = interviewState.FilterOptionsForQuestion(Abc.Create.Identity(q1Id, Abc.Create.Entity.RosterVector(new[] {1})), options).Count()
                 };
                 return results;
             });

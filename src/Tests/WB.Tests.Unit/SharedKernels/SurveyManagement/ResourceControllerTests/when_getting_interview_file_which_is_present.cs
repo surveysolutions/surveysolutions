@@ -4,7 +4,6 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests

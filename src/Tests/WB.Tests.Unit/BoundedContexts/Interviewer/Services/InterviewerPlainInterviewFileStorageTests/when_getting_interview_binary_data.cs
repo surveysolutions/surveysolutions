@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Machine.Specifications;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;

@@ -195,7 +195,7 @@
             /// <param name="selector" type="String">Any valid jQuery selector.</param>
             var $forms = $(selector)
                 .parents("form")
-                .andSelf()
+                .addBack()
                 .add($(selector).find("form"))
                 .filter("form");
 

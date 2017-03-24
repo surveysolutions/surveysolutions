@@ -4,6 +4,7 @@ using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {

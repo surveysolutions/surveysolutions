@@ -7,7 +7,7 @@ namespace WB.Core.GenericSubdomains.Portable
     {
         public static bool Identical(this decimal[] vector1, decimal[] vector2)
         {
-            if (vector1 == null) throw new ArgumentNullException("vector1");
+            if (vector1 == null) throw new ArgumentNullException(nameof(vector1));
             if (vector2 == null) return false;
 
             if (vector1.Length == 0 && vector2.Length == 0 || ReferenceEquals(vector1, vector2))
@@ -15,9 +15,17 @@ namespace WB.Core.GenericSubdomains.Portable
                 return true;
             }
 
-            if (vector1.Length != vector2.Length)
+            return vector1.SequenceEqual(vector2);
+        }
+
+        public static bool Identical(this int[] vector1, int[] vector2)
+        {
+            if (vector1 == null) throw new ArgumentNullException(nameof(vector1));
+            if (vector2 == null) return false;
+
+            if (vector1.Length == 0 && vector2.Length == 0 || ReferenceEquals(vector1, vector2))
             {
-                return false;
+                return true;
             }
 
             return vector1.SequenceEqual(vector2);

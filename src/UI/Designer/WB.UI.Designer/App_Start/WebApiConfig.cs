@@ -7,7 +7,6 @@ using Elmah.Contrib.WebApi;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
-using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer
 {

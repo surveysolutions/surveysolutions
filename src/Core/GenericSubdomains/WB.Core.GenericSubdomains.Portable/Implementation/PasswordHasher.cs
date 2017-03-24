@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 using WB.Core.GenericSubdomains.Portable.Implementation.Crypto;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
@@ -11,10 +10,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         public string Hash(string password)
         {
             var hash = new SHA1();
-
+            
             HashResult result = hash.ComputeString(password + salt, Encoding.UTF8);
 
             return result.ToString().ToLower();
+        }
+
+        public bool VerifyPassword(string hashedPassword, string password)
+        {
+            return hashedPassword == Hash(password);
         }
     }
 }

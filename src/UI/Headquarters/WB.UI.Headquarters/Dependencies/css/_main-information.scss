@@ -13,6 +13,9 @@
 				content: "";
 				clear: both;
 			}
+			&.row-without-padding{
+				padding-right: 0;
+			}
 		}
 	} 
 	.panel-table{
@@ -26,6 +29,34 @@
 	.panel-table{
 		left: $filter-width + 12px;
 	}
+}
+.title-row{
+    .interviewer{
+        font-size: 18px;
+        line-height: 20px;
+        &:before{
+            @include opacity(0.8);
+            margin-right: 5px;
+            top: 0;
+        }
+    }
+    span .interviewer{
+        color: $gray_light;
+        &:before{
+            @include opacity(0.3);
+        }
+    }
+}
+.on-line{
+    color: $green_btn;
+    &:before{
+        content: "";
+        display: inline-block;
+        @include square(7px);
+        border-radius: 100%;
+        background-color: $green_btn;
+        margin-right: 5px;
+    }
 }
 @media (max-width: 1300px){
 	@include fullscreen-hidden-filter('main-information');

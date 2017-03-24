@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                      {
                          return new CommittedEventStream(aggregate.EventSourceId,
                              aggregate.GetUnCommittedChanges()
-                                      .Select(x => Create.CommittedEvent(payload: x.Payload,
+                                      .Select(x => IntegrationCreate.CommittedEvent(payload: x.Payload,
                                                      eventSourceId: x.EventSourceId,
                                                      eventSequence: x.EventSequence)));
                      });
@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
-            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
         };
 
         Because of = () =>

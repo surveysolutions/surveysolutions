@@ -7,6 +7,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
+    public static class ValueVector
+    {
+        public static ValueVector<T> Create<T>(params T[] values) where T : struct => new ValueVector<T>(values);
+    }
+
     public class ValueVector<T> : IList<T> where T : struct
     {
         private readonly List<T> values;
@@ -52,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             return 0;
         }
 
-        public int Length { get { return this.values.Count; }}
+        public int Length => this.values.Count;
 
         public int IndexOf(T item)
         {
@@ -100,9 +105,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             return this.values.Remove(item);
         }
 
-        public int Count { get { return values.Count; } }
+        public int Count => this.values.Count;
 
-        public bool IsReadOnly { get { return false; }}
+        public bool IsReadOnly => false;
 
         public override string ToString()
         {

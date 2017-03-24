@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             Identity identity = Identity.Parse(questionIdentity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(this.GetCallerInterview().Id, commandResponsibleId,
-                identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
+                identity.Id, identity.RosterVector, DateTime.UtcNow, answer.Select(x => new RosterVector(x)).ToArray()));
         }
 
         public void AnswerMultiOptionQuestion(int[] answer, string questionId)

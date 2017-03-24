@@ -4,6 +4,7 @@ using Microsoft;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -42,6 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
+
+            this.GenerateDescriptionTxt(questionnaireIdentity, directoryPath, ExportFileSettings.StataDataFileExtension);
         }
 
         private void CreateStataDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,

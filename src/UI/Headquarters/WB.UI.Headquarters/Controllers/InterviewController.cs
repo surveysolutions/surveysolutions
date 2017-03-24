@@ -9,10 +9,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewTroubleshootFactory troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -31,15 +32,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public InterviewController(
             ICommandService commandService, 
-            IGlobalInfoProvider provider, 
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewTroubleshootFactory troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.troubleshootInterviewViewFactory = troubleshootInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
@@ -47,49 +49,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
 
-        private decimal[] ParseRosterVector(string rosterVectorAsString)
+        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, string currentGroupId)
         {
-            if (string.IsNullOrEmpty(rosterVectorAsString))
-                return new decimal[0];
-
-            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector)).ToArray();
-        }
-
-        public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
-        {
-            if (!filter.HasValue)
-                return this.RedirectToAction("Details",
-                    new
-                    {
-                        id = id,
-                        filter = InterviewDetailsFilter.All,
-                        currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id)
-                    });
-
             this.ViewBag.ActivePage = MenuItem.Docs;
             this.ViewBag.InterviewId = id;
 
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
+            ChangeStatusView interviewInfo =
+                this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = id });
+
+            if (interviewInfo == null || interviewSummary == null || interviewSummary.IsDeleted)
+                return HttpNotFound();
+
             bool isAccessAllowed =
-                this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
-                (this.GlobalInfo.IsSupervisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
 
-            ChangeStatusView interviewInfo =
-                this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
+            var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(interviewId: id,
+                filter: filter ?? InterviewDetailsFilter.All,
+                currentGroupIdentity: string.IsNullOrEmpty(currentGroupId) ? null : Identity.Parse(currentGroupId));
 
-            if (interviewInfo == null || interviewSummary == null)
-                return HttpNotFound();
-
-            var detailsViewModel = interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, 
-                                                                                   currentGroupId: currentGroupId,
-                                                                                   filter: filter, 
-                                                                                   currentGroupRosterVector: this.ParseRosterVector(rosterVector));
-            return
-                View(detailsViewModel);
+            return View(detailsViewModel);
         }
 
         public ActionResult InterviewHistory(Guid id)

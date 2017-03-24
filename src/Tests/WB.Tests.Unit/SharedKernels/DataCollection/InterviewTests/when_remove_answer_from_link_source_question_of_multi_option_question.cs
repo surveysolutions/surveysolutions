@@ -4,9 +4,11 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
@@ -39,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 DateTime.Now, "a");
             interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] { 1 },
              DateTime.Now, "b");
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
-                new decimal[][] {new decimal[] {0}, new decimal[] {1}});
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
+                new RosterVector[] {new decimal[] {0}, new decimal[] {1}});
             eventContext = new EventContext();
         };
 

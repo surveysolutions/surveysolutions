@@ -207,4 +207,7 @@
   <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
     <value>Переменные скрыты</value>
   </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Обновить опросник</value>
+  </data>
 </root>

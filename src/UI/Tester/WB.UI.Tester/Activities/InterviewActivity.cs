@@ -31,6 +31,11 @@ namespace WB.UI.Tester.Activities
                 this.ViewModel.NavigateToSettingsCommand
             },
             {
+                Resource.Id.interview_reload,
+                TesterUIResources.MenuItem_Title_Reload,
+                this.ViewModel.ReloadQuestionnaireCommand
+            },
+            {
                 Resource.Id.interview_signout,
                 TesterUIResources.MenuItem_Title_SignOut,
                 this.ViewModel.SignOutCommand

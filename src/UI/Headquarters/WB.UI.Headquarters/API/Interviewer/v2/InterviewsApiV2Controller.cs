@@ -17,25 +17,24 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewsControllerBase
     {
         public InterviewsApiV2Controller(
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            IGlobalInfoProvider globalInfoProvider,
+            IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
-                globalInfoProvider: globalInfoProvider,
+                authorizedUser: authorizedUser,
                 interviewsFactory: interviewsFactory,
                 interviewPackagesService: incomingSyncPackagesQueue,
                 commandService: commandService,
@@ -78,8 +77,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
-        public void Post(InterviewPackageApiView package)
+        public IHttpActionResult Post(InterviewPackageApiView package)
         {
+            if (string.IsNullOrEmpty(package.Events))
+                return this.BadRequest("Server cannot accept empty package content.");
+
             var interviewPackage = new InterviewPackage
             {
                 InterviewId = package.InterviewId,
@@ -93,6 +95,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             };
 
             this.interviewPackagesService.StoreOrProcessPackage(interviewPackage);
+
+            return this.Ok ();
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);

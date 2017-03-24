@@ -26,6 +26,7 @@ using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
@@ -89,12 +90,16 @@ namespace WB.UI.Designer.App_Start
 
             var deskSettings = (DeskConfigSection)WebConfigurationManager.GetSection("desk");
 
+            var membershipSection = (MembershipSection)WebConfigurationManager.GetSection("system.web/membership");
+            var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new EventFreeInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
-                new WebConfigurationModule(),
+                new WebConfigurationModule(membershipSettings),
+                new CaptchaModule(),
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),

@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             using (var fileStream =
                     this.fileSystemAccessor.OpenOrCreateFile(this.GetPathToInterviewHistoryFile(view.InterviewId, view.QuestionnaireId, view.QuestionnaireVersion), true))
 
-            using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.SeparatorOfExportedDataFile.ToString()))
+            using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
             {
                 foreach (var interviewHistoricalRecordView in view.Records)
                 {

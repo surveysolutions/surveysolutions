@@ -50,6 +50,10 @@ namespace WB.Core.GenericSubdomains.Portable
             }
             return result ?? source;
         }
+        
+        public static Func<IQueryable<TInput>, IQueryable<TOutput>> PagedAndOrderedQuery<TInput, TOutput>(
+            this Func<IQueryable<TInput>, IQueryable<TOutput>> query, string orderBy, int pageIndex, int pageSize) where TInput : class where TOutput: class
+            => filter => query(filter).OrderUsingSortExpression(orderBy).Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
 
         public static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)

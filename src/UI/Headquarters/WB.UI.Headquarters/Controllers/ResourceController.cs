@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -15,9 +14,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        public ResourceController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
+        public ResourceController(ICommandService commandService, ILogger logger,
             IPlainInterviewFileStorage plainFileRepository)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
             this.plainFileRepository = plainFileRepository;
         }

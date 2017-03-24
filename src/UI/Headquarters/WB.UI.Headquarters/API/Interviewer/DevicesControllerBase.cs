@@ -4,40 +4,37 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Documents;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class DevicesControllerBase : ApiController
     {
-        private readonly IGlobalInfoProvider globalInfoProvider;
-        private readonly IUserWebViewFactory userInfoViewFactory;
+        protected readonly IAuthorizedUser authorizedUser;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly ICommandService commandService;
         private readonly IReadSideRepositoryReader<TabletDocument> devicesRepository;
+        private readonly HqUserManager userManager;
 
         public DevicesControllerBase(
-            IGlobalInfoProvider globalInfoProvider,
-            IUserWebViewFactory userInfoViewFactory,
+            IAuthorizedUser authorizedUser,
             ISyncProtocolVersionProvider syncVersionProvider,
             ICommandService commandService,
-            IReadSideRepositoryReader<TabletDocument> devicesRepository)
+            IReadSideRepositoryReader<TabletDocument> devicesRepository,
+            HqUserManager userManager)
         {
-            this.globalInfoProvider = globalInfoProvider;
-            this.userInfoViewFactory = userInfoViewFactory;
+            this.authorizedUser = authorizedUser;
             this.syncVersionProvider = syncVersionProvider;
             this.commandService = commandService;
             this.devicesRepository = devicesRepository;
+            this.userManager = userManager;
         }
         
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
@@ -50,9 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             {
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
-
-            var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
-            return interviewerInfo.DeviceId != id
+            
+            return this.authorizedUser.DeviceId != id
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
                 : this.Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -61,14 +57,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public virtual HttpResponseMessage LinkCurrentInterviewerToDevice(string id, int version)
         {
             var interviewerEngineVersion = version.ToString(CultureInfo.InvariantCulture);
-            var interviewerId = this.globalInfoProvider.GetCurrentUser().Id;
             var deviceId = id.ToGuid();
             var device = this.devicesRepository.GetById(deviceId);
             if (device == null)
             {
-                this.commandService.Execute(new RegisterTabletCommand(deviceId, interviewerId, interviewerEngineVersion, id));
+                this.commandService.Execute(new RegisterTabletCommand(deviceId, this.authorizedUser.Id, interviewerEngineVersion, id));
             }
-            this.commandService.Execute(new LinkUserToDevice(interviewerId, id));
+
+            this.userManager.LinkDeviceToCurrentInterviewer(id);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }

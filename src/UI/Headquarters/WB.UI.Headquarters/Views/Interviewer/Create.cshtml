@@ -1,7 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.GenericSubdomains.Portable
 @using WB.UI.Headquarters.Resources
-@using WebGrease.Css.Ast
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 
 @{
@@ -32,6 +31,8 @@
 
     <form class="form-horizontal" method="POST">
         @Html.AntiForgeryToken()
+        
+        @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger"} })
 
         @Html.HiddenFor(x => x.IsShowSupervisorSelector)
 

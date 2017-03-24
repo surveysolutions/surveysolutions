@@ -177,6 +177,9 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
   </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
   <data name="UserBatchUpload" xml:space="preserve">
     <value>Batch User Upload</value>
   </data>

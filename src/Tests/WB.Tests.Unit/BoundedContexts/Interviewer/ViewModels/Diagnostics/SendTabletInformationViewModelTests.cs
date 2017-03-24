@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             var sendTabletInformationViewModel = this.CreateSendTabletInformationViewModel();
 
-            sendTabletInformationViewModel.CreateTabletInformationCommand.Execute();
+            sendTabletInformationViewModel.CreateBackupCommand.Execute();
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(true));
         }
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             var sendTabletInformationViewModel = this.CreateSendTabletInformationViewModel();
 
-            sendTabletInformationViewModel.SendTabletInformationCommand.Execute();
+            sendTabletInformationViewModel.SendBackupCommand.Execute();
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
             Assert.That(sendTabletInformationViewModel.IsPackageSendingAttemptCompleted, Is.EqualTo(true));
@@ -51,13 +51,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             var exceptionMessage = "message";
             var synchronizationServiceMock = new Mock<ISynchronizationService>();
             synchronizationServiceMock.Setup(
-                x => x.SendTabletInformationAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<CancellationToken>()))
+                x => x.SendBackupAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<CancellationToken>()))
                 .Throws(new SynchronizationException(SynchronizationExceptionType.InternalServerError, exceptionMessage));
 
             var sendTabletInformationViewModel =
                 this.CreateSendTabletInformationViewModel(synchronizationService: synchronizationServiceMock.Object);
 
-            sendTabletInformationViewModel.SendTabletInformationCommand.Execute();
+            sendTabletInformationViewModel.SendBackupCommand.Execute();
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
             Assert.That(sendTabletInformationViewModel.IsPackageSendingAttemptCompleted, Is.EqualTo(true));
@@ -72,16 +72,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 
             sendTabletInformationViewModel.IsPackageBuild = true;
 
-            sendTabletInformationViewModel.DeleteTabletInformationCommand.Execute();
+            sendTabletInformationViewModel.DeleteBackupCommand.Execute();
 
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
         }
 
-        private SendTabletInformationViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
+        private BackupViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
             ISynchronizationService synchronizationService = null)
         {
             return
-                new SendTabletInformationViewModel(
+                new BackupViewModel(
                     backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")),
                     synchronizationService ?? Mock.Of<ISynchronizationService>(), 
                     Mock.Of<ILogger>(), 

@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -23,21 +25,21 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id:questionId, variable:"txt"),
-                        Create.Variable(id: variableId, expression: "txt.Length")
+                        Create.Entity.TextQuestion(questionId: questionId, variable: "txt"),
+                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
                     });
                 IInterviewExpressionStateV9 state =
-                    GetInterviewExpressionState(questionnaireDocument, version: 15) as
+                    GetInterviewExpressionState(questionnaireDocument, version: 16) as
                         IInterviewExpressionStateV9;
                 state.EnableVariables(new [] { Create.Identity(variableId) });
                 state.UpdateTextAnswer(questionId, new decimal[0], "Nastya");
                 state.UpdateVariableValue(Create.Identity(variableId), (long)6);
                  var variables = state.ProcessVariables();
 
-                return new InvokeResults()
+                return new InvokeResults
                 {
                     CountOfChangedVariables = variables.ChangedVariableValues.Count
                 };
@@ -52,8 +54,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             appDomainContext = null;
         };
 
-        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
-        private static InvokeResults results;
+        static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+        static InvokeResults results;
 
         [Serializable]
         public class InvokeResults

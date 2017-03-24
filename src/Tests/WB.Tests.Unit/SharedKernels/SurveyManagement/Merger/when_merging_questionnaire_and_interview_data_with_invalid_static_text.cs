@@ -8,11 +8,13 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -49,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             });
 
 
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
 
             merger = CreateMerger(questionnaire);
         };
@@ -71,19 +73,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         
         private static InterviewGroupView GetNestedGroup()
         {
-            return mergeResult.Groups.Find(g => g.Id == nestedGroupId);
+            return mergeResult.Groups.Find(g => g.Id.Id == nestedGroupId);
         }
 
         private static InterviewStaticTextView GetStaticText()
         {
-            return GetNestedGroup().Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
+            return GetNestedGroup().Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id.Id == staticTextId);
         }
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
         private static Guid nestedGroupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid staticTextId = Guid.Parse("55555555555555555555555555555555");
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");

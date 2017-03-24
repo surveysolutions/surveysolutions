@@ -38,9 +38,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public CommentSynchronizationDto[] AllComments { get; set; }
 
-        public bool IsEmpty()
+        public bool IsAnswered()
         {
-            return this.Answer == null && (this.AllComments == null || this.AllComments.Length == 0);
+            return this.Answer != null;
+        }
+
+        public bool HasComments()
+        {
+            return this.AllComments != null && this.AllComments.Length > 0;
         }
     }
 }

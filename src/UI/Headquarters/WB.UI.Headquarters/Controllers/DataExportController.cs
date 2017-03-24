@@ -20,10 +20,10 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
 
-        public DataExportController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+        public DataExportController(ICommandService commandService, ILogger logger,
             IAllUsersAndQuestionnairesFactory
                 allUsersAndQuestionnairesFactory, InterviewDataExportSettings interviewDataExportSettings)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;
