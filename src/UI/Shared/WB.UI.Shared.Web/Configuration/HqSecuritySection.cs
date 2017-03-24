@@ -53,14 +53,16 @@ namespace WB.UI.Shared.Web.Configuration
 
     public class CookieSettingsElement : ConfigurationElement
     {
-        private const string experationTimeElementName = "experationTime";
+        private const string expirationTimeElementName = "expirationTime";
         private const string slidingExpirationElementName = "slidingExpiration";
+        private const string nameElementName = "name";
+        private const string httpOnlyElementName = "httpOnly";
 
-        [ConfigurationProperty(experationTimeElementName)]
-        public int ExperationTime 
+        [ConfigurationProperty(expirationTimeElementName)]
+        public int ExpirationTime 
         {
-            get { return (int)base[experationTimeElementName]; }
-            set { base[experationTimeElementName] = value; }
+            get { return (int)base[expirationTimeElementName]; }
+            set { base[expirationTimeElementName] = value; }
         }
 
         [ConfigurationProperty(slidingExpirationElementName)]
@@ -68,6 +70,19 @@ namespace WB.UI.Shared.Web.Configuration
         {
             get { return (bool)base[slidingExpirationElementName]; }
             set { base[slidingExpirationElementName] = value; }
+        }
+
+        [ConfigurationProperty(nameElementName)]
+        public string Name
+        {
+            get { return (string)base[nameElementName]; }
+            set { base[nameElementName] = value; }
+        }
+        [ConfigurationProperty(httpOnlyElementName)]
+        public bool HttpOnly
+        {
+            get { return (bool)base[httpOnlyElementName]; }
+            set { base[httpOnlyElementName] = value; }
         }
     }
 }
