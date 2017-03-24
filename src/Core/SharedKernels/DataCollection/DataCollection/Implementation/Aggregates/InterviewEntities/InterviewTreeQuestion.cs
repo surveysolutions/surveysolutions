@@ -344,22 +344,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleFixedOption) { this.AsSingleFixedOption.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsMultiFixedOption)
             {
-                var answerAsRosterVector = answer as RosterVector;
-                CategoricalFixedMultiOptionAnswer categoricalFixedMultiOptionAnswer = 
-                    (answerAsRosterVector != null) 
-                        ? CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector) 
-                        : CategoricalFixedMultiOptionAnswer.FromDecimalArray((decimal[]) answer);
+                RosterVector answerAsRosterVector = answer as RosterVector;
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArray = answer as int[];
+                    answerAsRosterVector = answerAsIntArray != null
+                        ? new RosterVector(answerAsIntArray)
+                        : new RosterVector(answer as decimal[]);
+                }
+
+                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector);
 
                 this.AsMultiFixedOption.SetAnswer(categoricalFixedMultiOptionAnswer);
                 return;
             }
             if (this.IsSingleLinkedOption)
             {
-                var answerAsRosterVector = answer as RosterVector;
-                CategoricalLinkedSingleOptionAnswer categoricalLinkedSingleOptionAnswer = 
-                    (answerAsRosterVector != null)
-                        ? CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector)
-                        : CategoricalLinkedSingleOptionAnswer.FromRosterVector(new RosterVector((int[]) answer));
+                RosterVector answerAsRosterVector = answer as RosterVector;
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArray = answer as int[];
+                    answerAsRosterVector = answerAsIntArray != null 
+                        ? new RosterVector(answerAsIntArray) 
+                        : new RosterVector(answer as decimal[]);
+                }
+                
+                var categoricalLinkedSingleOptionAnswer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector);
 
                 this.AsSingleLinkedOption.SetAnswer(categoricalLinkedSingleOptionAnswer);
                 return;
@@ -367,10 +377,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedOption)
             {
                 var answerAsRosterVector = answer as RosterVector[];
-                CategoricalLinkedMultiOptionAnswer categoricalLinkedMultiOptionAnswer =
-                    (answerAsRosterVector != null)
-                        ? CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector)
-                        : CategoricalLinkedMultiOptionAnswer.FromIntegerArrayArray((int[][]) answer);
+                if (answerAsRosterVector == null)
+                {
+                    var answerAsIntArrayArray = answer as int[][];
+                    answerAsRosterVector = answerAsIntArrayArray != null
+                        ? answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray()
+                        : (answer as decimal[][]).Select(desimalArray => (RosterVector)desimalArray).ToArray();
+                }
+                var categoricalLinkedMultiOptionAnswer =
+                    CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector);
                     
                 this.AsMultiLinkedOption.SetAnswer(categoricalLinkedMultiOptionAnswer);
                 return;
