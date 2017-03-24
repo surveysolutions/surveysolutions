@@ -728,6 +728,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded file cannot be opened. Please check it is in correct format..
+        /// </summary>
+        internal static string Prerequisite_FileOpen {
+            get {
+                return ResourceManager.GetString("Prerequisite_FileOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only .tab files are allowed for upload..
+        /// </summary>
+        internal static string Prerequisite_TabFile {
+            get {
+                return ResourceManager.GetString("Prerequisite_TabFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Following files are not supported: {0}..
+        /// </summary>
+        internal static string Prerequisite_UnsupportedFiles {
+            get {
+                return ResourceManager.GetString("Prerequisite_UnsupportedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only .zip files are allowed for upload..
+        /// </summary>
+        internal static string Prerequisite_ZipFile {
+            get {
+                return ResourceManager.GetString("Prerequisite_ZipFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Processing....
         /// </summary>
         internal static string Processing {

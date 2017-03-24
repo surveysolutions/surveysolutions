@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public interface IPreloadedDataRepository
     {
-        string Store(Stream preloadedDataFile, string fileName);
+        string StoreSampleData(Stream preloadedDataFile, string fileName);
+        string StorePanelData(Stream preloadedDataFile, string fileName);
         PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id);
         PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id);
         PreloadedDataByFile GetPreloadedDataOfSample(string id);

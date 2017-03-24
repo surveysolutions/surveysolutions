@@ -5,6 +5,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
+        public static PreloadedDataVerificationErrorsView CreatePrerequisitesError(
+            Guid questionnaireId,
+            long version,
+            string questionnaireTitle,
+            string error,
+            PreloadedContentType preloadedContentType,
+            string fileName = null)
+            => new PreloadedDataVerificationErrorsView(
+                questionnaireId,
+                version,
+                questionnaireTitle,
+                new[] { new PreloadedDataVerificationError("PL0000", error) },
+                false,
+                null,
+                preloadedContentType,
+                fileName);
+
         public PreloadedDataVerificationErrorsView(
             Guid questionnaireId, 
             long version, 
