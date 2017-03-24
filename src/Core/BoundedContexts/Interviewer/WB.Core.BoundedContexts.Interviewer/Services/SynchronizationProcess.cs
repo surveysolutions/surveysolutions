@@ -113,9 +113,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.restCredentials.Token = token;
 
                     this.remoteLoginRequired = false;
-                }
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+                    await this.synchronizationService.GetInterviewerAsync(this.restCredentials);
+                }
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
@@ -123,6 +123,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.UpdatePasswordOfInterviewer(this.restCredentials);
                 }
 
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+                
                 cancellationToken.ThrowIfCancellationRequested();
 
                 try
