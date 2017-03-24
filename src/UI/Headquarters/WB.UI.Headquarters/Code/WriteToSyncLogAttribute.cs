@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http.Filters;
 using System.Web.Http.Routing;
 using Microsoft.Practices.ServiceLocation;
@@ -13,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
@@ -22,6 +23,7 @@ using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Code
 {
+    [Localizable(false)]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class WriteToSyncLogAttribute : ActionFilterAttribute
     {
@@ -120,11 +122,11 @@ namespace WB.UI.Headquarters.Code
                         break;
                     case SynchronizationLogType.PostInterview:
                         var interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
-                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(context, interviewId.Value) : UnknownStringArgumentValue, interviewId);
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value) : UnknownStringArgumentValue, interviewId);
                         break;
                     case SynchronizationLogType.PostPackage:
                         var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
-                        logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(context, packageId), packageId);
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(packageId), packageId);
                         break;
                     case SynchronizationLogType.GetTranslations:
                         var questionnaireId = context.GetActionArgumentOrDefault<string>("id", null);
@@ -148,7 +150,7 @@ namespace WB.UI.Headquarters.Code
             }
             catch (Exception exception)
             {
-                this.logger.Error("Error updating sync log.", exception);
+                this.logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
             }
         }
 
@@ -156,7 +158,7 @@ namespace WB.UI.Headquarters.Code
         {
             var interviewsApiView = this.GetResponseObject<List<InterviewApiView>>(context);
 
-            var messagesByInterviews = interviewsApiView.Select(x => GetInterviewLink(context, x.Id)).ToList();
+            var messagesByInterviews = interviewsApiView.Select(x => GetInterviewLink(x.Id)).ToList();
 
             var readability = !messagesByInterviews.Any()
                 ? SyncLogMessages.NoNewInterviewPackagesToDownload
@@ -164,31 +166,12 @@ namespace WB.UI.Headquarters.Code
             return SyncLogMessages.GetInterviews.FormatString(readability);
         }
 
-        private static string GetInterviewLink(HttpActionExecutedContext context, Guid interviewId)
+        private static string GetInterviewLink(Guid interviewId)
         {
-            return new UrlHelper(context.Request).Link("Default",
+            var interviewLink = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Details",
                 new { controller = "Interview", action = "Details", id = interviewId });
-        }
 
-        private string GetMessageByInterviewPackageType(HttpActionExecutedContext context, SynchronizationChunkMeta synchronizationChunkMeta)
-        {
-            if (synchronizationChunkMeta.ItemType == SyncItemType.Interview)
-            {
-                return SyncLogMessages.UpdateInterviewPackage.FormatString(synchronizationChunkMeta.InterviewId,
-                    synchronizationChunkMeta.Id, synchronizationChunkMeta.SortIndex,
-                    new UrlHelper(context.Request).Link("Default",
-                        new {controller = "Interview", action = "Details", id = synchronizationChunkMeta.InterviewId}));
-            }
-
-            if (synchronizationChunkMeta.ItemType == SyncItemType.DeleteInterview)
-            {
-                return SyncLogMessages.DeleteInterviewPackage.FormatString(synchronizationChunkMeta.InterviewId,
-                    synchronizationChunkMeta.Id, synchronizationChunkMeta.SortIndex,
-                    new UrlHelper(context.Request).Link("Default",
-                        new { controller = "Interview", action = "Details", id = synchronizationChunkMeta.InterviewId }));
-            }
-
-            return "Unknown interview package type";
+            return $"<a href=\"{interviewLink}\">{interviewId:N}</a>";
         }
 
         private string GetInterviewerLogMessage(HttpActionExecutedContext context)
