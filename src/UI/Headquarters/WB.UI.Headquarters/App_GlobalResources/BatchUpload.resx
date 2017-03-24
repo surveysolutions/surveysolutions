@@ -485,4 +485,16 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
     <value>Only files with {0} and {1} extensions are allowed for upload.</value>
   </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>Uploaded file cannot be opened. Please check it is in correct format.</value>
+  </data>
+  <data name="Prerequisite_TabFile" xml:space="preserve">
+    <value>Only .tab files are allowed for upload.</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>Following files are not supported: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>Only .zip files are allowed for upload.</value>
+  </data>
 </root>
