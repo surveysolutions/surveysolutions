@@ -13,14 +13,18 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HqSignInManager : SignInManager<HqUser, Guid>
     {
-        public HqSignInManager(HqUserManager userManager, IAuthenticationManager authenticationManager)
+        private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
+
+        public HqSignInManager(HqUserManager userManager, IAuthenticationManager authenticationManager, IApiTokenProvider<Guid> tokenProvider = null)
             : base(userManager, authenticationManager)
         {
+            this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(userManager);
         }
 
         public static HqSignInManager Create(IdentityFactoryOptions<HqSignInManager> options, IOwinContext context)
@@ -35,10 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
 
-            return await this.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
-                shouldLockout: false);
+            return await this.PasswordSignInAsync(userName, password, isPersistent: isPersistent, shouldLockout: false);
         }
-
+     
         public async Task SignInAsObserverAsync(string userName)
         {
             var userToObserve = await this.UserManager.FindByNameAsync(userName);
@@ -95,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     }
                     break;
                 case ApiAuthenticationScheme.AuthToken:
-                    if (!await (UserManager as HqUserManager).ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password))
+                    if (!await ValidateApiAuthTokenAsync(userInfo.Id, basicCredentials.Password))
                     {
                         return IdentityResult.Failed();
                     }
@@ -113,16 +116,46 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
 
             var identity = await this.UserManager.CreateIdentityAsync(userInfo, basicCredentials.Scheme.ToString());
+
+            SetPrincipal(identity);
+
+            return IdentityResult.Success;
+        }
+
+        public async Task<SignInStatus> SignInInterviewerAsync(string userName, string password, bool isPersistent = false)
+        {
+            var user = await this.UserManager.FindByNameAsync(userName);
+            if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
+                return SignInStatus.Failure;
+
+            if (!user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
+                return SignInStatus.LockedOut;
             
+            var identity = await this.UserManager.CreateIdentityAsync(user, "Interviewer");
+            SetPrincipal(identity);
+
+            return SignInStatus.Success;
+        }
+        
+        private void SetPrincipal(ClaimsIdentity identity)
+        {
             var principal = new ClaimsPrincipal(identity);
-            
+
             Thread.CurrentPrincipal = principal;
             if (HttpContext.Current != null)
             {
                 HttpContext.Current.User = principal;
             }
+        }
 
-            return IdentityResult.Success;
+        public Task<string> GenerateApiAuthTokenAsync(Guid userId)
+        {
+            return this.ApiTokenProvider.GenerateTokenAsync(userId);
+        }
+
+        public Task<bool> ValidateApiAuthTokenAsync(Guid userId, string token)
+        {
+            return this.ApiTokenProvider.ValidateTokenAsync(userId, token);
         }
 
         private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)
