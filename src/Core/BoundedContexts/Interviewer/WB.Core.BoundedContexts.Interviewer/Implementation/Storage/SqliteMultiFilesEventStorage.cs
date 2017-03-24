@@ -476,7 +476,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 FloatParseHandling = FloatParseHandling.Decimal,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
-                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConvertor() }
+                Converters = new List<JsonConverter> { IdentityJsonConverter.Instance, RosterVectorConvertor.Instance }
             };
 
             private readonly IEventTypeResolver eventTypesResolver;
