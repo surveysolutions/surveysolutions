@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         private readonly string[] permittedFileExtensions = { ExportFileSettings.DataFileExtension, ".txt" };
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FilebasedPreloadedDataRepository>();
 
+        private static readonly HashSet<string> createdFolders = new HashSet<string>();
+
         public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -38,20 +40,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public string StoreSampleData(Stream preloadedDataFile, string fileName) => this.Store(preloadedDataFile, fileName);
         public string StorePanelData(Stream preloadedDataFile, string fileName) => this.Store(preloadedDataFile, fileName);
 
-        private string Store(Stream preloadedDataFile, string fileName)
+        private string Store(Stream stream, string fileName)
         {
-            var currentFolderId = Guid.NewGuid().FormatGuid();
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, currentFolderId);
-            if (this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
+            var folderName = Guid.NewGuid().FormatGuid();
+            var folderPath = this.FolderNameToPath(folderName);
 
-            this.fileSystemAccessor.CreateDirectory(currentFolderPath);
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(this.fileSystemAccessor.CombinePath(currentFolderPath, this.fileSystemAccessor.GetFileName(fileName)),false))
+            if (this.fileSystemAccessor.IsDirectoryExists(folderPath))
+                this.fileSystemAccessor.DeleteDirectory(folderPath);
+
+            this.fileSystemAccessor.CreateDirectory(folderPath);
+
+            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(this.fileSystemAccessor.CombinePath(folderPath, this.fileSystemAccessor.GetFileName(fileName)),false))
             {
-                preloadedDataFile.CopyTo(fileStream);
+                stream.CopyTo(fileStream);
             }
-            return currentFolderId;
+
+            createdFolders.Add(folderName);
+
+            return folderName;
         }
+
+        private string FolderNameToPath(string folderName) => this.fileSystemAccessor.CombinePath(this.path, folderName);
 
         public PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id)
         {
@@ -165,14 +174,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return null;
         }
 
-        public void DeletePreloadedDataOfSample(string id)
-        {
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
-            
-            if (this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
-        }
-
         public PreloadedDataByFile[] GetPreloadedDataOfPanel(string id)
         {
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
@@ -183,9 +184,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
         }
 
-        public void DeletePreloadedDataOfPanel(string id)
+        public void DeletePreloadedDataOfSample(string id) => this.DeletePreloadedData(id);
+        public void DeletePreloadedDataOfPanel(string id) => this.DeletePreloadedData(id);
+
+        public void DeletePreloadedData(string id)
         {
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
+            this.DeleteFolderByName(id);
+
+            this.DeleteOldFolders();
+        }
+
+        /// <summary>
+        /// India security request: delete old folders.
+        /// </summary>
+        private void DeleteOldFolders()
+        {
+            foreach (var folderPath in this.fileSystemAccessor.GetDirectoriesInDirectory(this.path))
+            {
+                if (this.ShouldFolderBeDeleted(folderPath))
+                    this.fileSystemAccessor.DeleteDirectory(folderPath);
+            }
+        }
+
+        private bool ShouldFolderBeDeleted(string folderPath)
+            => !createdFolders.Contains(this.fileSystemAccessor.GetFileName(folderPath));
+
+        private void DeleteFolderByName(string folderName)
+        {
+            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, folderName);
 
             if (this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
                 this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
