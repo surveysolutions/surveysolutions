@@ -21,15 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-        private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
+  
 
         public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser, 
-            IHashCompatibilityProvider hashCompatibilityProvider, IApiTokenProvider<Guid> tokenProvider = null)
+            IHashCompatibilityProvider hashCompatibilityProvider)
             : base(store)
         {
             this.authorizedUser = authorizedUser;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
-            this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(this);
         }
 
         public Task<IdentityResult> ChangePasswordAsync( HqUser user, string newPassword)
@@ -84,16 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
 
             return result ;
-        }
-
-        public Task<string> GenerateApiAuthTokenAsync(Guid userId)
-        {
-            return this.ApiTokenProvider.GenerateTokenAsync(userId);
-        }
-
-        public Task<bool> ValidateApiAuthTokenAsync(Guid userId, string token)
-        {
-            return this.ApiTokenProvider.ValidateTokenAsync(userId, token);
         }
 
         public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, IOwinContext context)
