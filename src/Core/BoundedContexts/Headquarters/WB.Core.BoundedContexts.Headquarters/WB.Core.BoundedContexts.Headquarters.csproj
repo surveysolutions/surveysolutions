@@ -443,6 +443,7 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\Export\IExportQuestionService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
+    <Compile Include="Services\GoogleApiSettings.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
     <Compile Include="Services\IAssemblyService.cs" />

@@ -49,7 +49,7 @@
             }
         </script>
         <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0t1L49YM1TvlCeCZjQQUIHnkxh59foSg&callback=getAddress">
+                src="@string.Format("https://maps.googleapis.com/maps/api/js?key={0}&callback=getAddress", ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
         </script>
     }
 }
@@ -232,7 +232,7 @@
                             </tr>
                             <tr>
                                 <td>@Pages.InterviewerProfile_DeviceDate</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                                <td>@Model.LastSuccessDeviceInfo.DeviceDate.ToUniversalTime().ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                             </tr>
                             <tr>
                                 <td>@Pages.InterviewerProfile_ConnectionType</td>

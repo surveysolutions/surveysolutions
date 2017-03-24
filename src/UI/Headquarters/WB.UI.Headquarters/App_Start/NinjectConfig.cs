@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +13,6 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
-using NHibernate.Engine.Query;
 using Ninject;
 using Ninject.Modules;
 using Ninject.Web.Common;
@@ -23,7 +21,9 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -32,9 +32,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
@@ -42,36 +44,33 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
+using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
+using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
-using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using FilterScope = System.Web.Http.Filters.FilterScope;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Infrastructure.Native;
-using Constants = WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization.Constants;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
-using WB.UI.Shared.Web.Captcha;
 
-namespace WB.UI.Headquarters.Injections
+namespace WB.UI.Headquarters
 {
     public static class NinjectConfig
     {
@@ -263,7 +262,7 @@ namespace WB.UI.Headquarters.Injections
                 {
                     AssembliesToInclude =
                     {
-                        typeof(WebInterview).Assembly,
+                        typeof(API.WebInterview.WebInterview).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }
@@ -275,6 +274,10 @@ namespace WB.UI.Headquarters.Injections
                 MinRequiredNonAlphanumericCharacters = applicationSecuritySection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
                 PasswordStrengthRegularExpression = applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression
             });
+
+            kernel.Bind<GoogleApiSettings>()
+                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"GoogleApiKey"]))
+                .InSingletonScope();
 
             return kernel;
         }
