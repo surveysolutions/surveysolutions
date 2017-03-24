@@ -30,14 +30,14 @@ namespace WB.UI.Designer.Api.Attributes
         private readonly Func<string, string, bool> validateUserCredentials;
 
         public ApiBasicAuthAttribute(bool onlyAllowedAddresses = false)
-            : this(Membership.ValidateUser)
+            : this(Membership.ValidateUser, onlyAllowedAddresses)
         {
-            this.onlyAllowedAddresses = onlyAllowedAddresses;
         }
 
-        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials)
+        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials, bool onlyAllowedAddresses = false)
         {
             this.validateUserCredentials = validateUserCredentials;
+            this.onlyAllowedAddresses = onlyAllowedAddresses;
         }
 
         public override void OnAuthorization(HttpActionContext actionContext)
