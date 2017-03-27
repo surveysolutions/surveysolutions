@@ -73,6 +73,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                     var keysList = uniqueKeys.ToList();
 
+                    watch.Restart();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
@@ -107,6 +108,11 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 key = interviewKeyTouse.ToString(),
                                 interviewId = existingInterviewId
                             });
+
+                        if (i % 1000 == 0)
+                        {
+                            currentClassLogger.Info($"Migrated {i} interviews. Took {watch.Elapsed:g}");
+                        }
                     }
                 });
             }
