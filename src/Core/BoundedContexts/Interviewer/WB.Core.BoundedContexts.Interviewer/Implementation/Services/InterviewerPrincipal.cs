@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,12 +29,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.passwordHasher = passwordHasher;
         }
 
+        private InterviewerIdentity FindIdentityByUsername(string userName)
+        {
+            if (userName == null) return null;
+
+            var localInterviewer = this.interviewersPlainStorage
+              .Where(interviewer => interviewer.Name.ToLower() == userName.ToLower()).FirstOrDefault(); // db query
+
+            return localInterviewer;
+        }
+
         public bool SignIn(string userName, string password, bool staySignedIn)
         {
             this.currentUserIdentity = null;
-
-            var localInterviewer = this.interviewersPlainStorage
-                .Where(interviewer => interviewer.Name == userName).FirstOrDefault(); // db query
+            
+            var localInterviewer = FindIdentityByUsername(userName); // db query
 
             if (localInterviewer == null) return false;
 
@@ -58,8 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             this.currentUserIdentity = null;
 
-            var localInterviewer = this.interviewersPlainStorage
-                .Where(interviewer => interviewer.Name == userName).FirstOrDefault(); // db query
+            var localInterviewer = FindIdentityByUsername(userName); // db query
             
             if (string.Equals(localInterviewer.Password 
                 ?? localInterviewer.PasswordHash, passwordHash, StringComparison.Ordinal))

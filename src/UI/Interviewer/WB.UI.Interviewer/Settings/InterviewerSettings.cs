@@ -268,33 +268,334 @@ namespace WB.UI.Interviewer.Settings
 
         public async Task<DeviceInfo> GetDeviceInfoAsync() => new DeviceInfo
         {
-            DeviceId = this.GetDeviceId(),
-            DeviceModel = this.GetDeviceModel(),
-            DeviceType = this.GetDeviceType(),
+            DeviceId = this.TryGetDeviceId(),
+            DeviceModel = this.TryGetDeviceModel(),
+            DeviceType = this.TryGetDeviceType(),
             DeviceDate = DateTime.Now,
-            DeviceLanguage = Locale.Default.DisplayLanguage,
-            DeviceLocation = await this.GetDeviceLocationAsync().ConfigureAwait(false),
-            DeviceManufacturer = Build.Manufacturer,
-            DeviceBuildNumber = Build.Display,
-            DeviceSerialNumber = Build.Serial,
-            AndroidVersion = this.GetAndroidVersion(),
-            AndroidSdkVersion = (int) Build.VERSION.SdkInt,
-            AndroidSdkVersionName = Build.VERSION.SdkInt.ToString(),
-            AppVersion = this.GetApplicationVersionName(),
-            AppBuildVersion = this.GetApplicationVersionCode(),
-            LastAppUpdatedDate = new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime),
-            AppOrientation = this.deviceOrientation.GetOrientation().ToString(),
-            BatteryChargePercent = this.battery.GetRemainingChargePercent(),
-            BatteryPowerSource = this.battery.GetPowerSource().ToString(),
-            IsPowerInSaveMode = Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop && this.powerManager.IsPowerSaveMode,
-            MobileOperator = this.telephonyManager?.NetworkOperatorName,
-            MobileSignalStrength = this.gsmSignalStrengthListener.SignalStrength,
-            NetworkType = this.connectivityManager?.ActiveNetworkInfo?.TypeName,
-            NetworkSubType = this.connectivityManager?.ActiveNetworkInfo?.SubtypeName,
-            DBSizeInfo = this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()),
-            RAMInfo = this.GetRAMInfo(),
-            StorageInfo = this.GetStorageInfo()
+            DeviceLanguage = this.TryGetDeviceLanguage(),
+            DeviceLocation = await this.TryGetDeviceLocation().ConfigureAwait(false),
+            DeviceManufacturer = this.TryGetDeviceManufacturer(),
+            DeviceBuildNumber = this.TryGetDeviceBuildNumber(),
+            DeviceSerialNumber = this.TryGetDeviceSerialNumber(),
+            AndroidVersion = this.TryGetAndroidVersion(),
+            AndroidSdkVersion = TryGetAndroidSdkVersion(),
+            AndroidSdkVersionName = TryGetAndroidSdkVersionName(),
+            AppVersion = this.TryGetApplicationVersionName(),
+            AppBuildVersion = this.TryGetApplicationVersionCode(),
+            LastAppUpdatedDate = this.TryGetLastAppUpdatedDate(),
+            AppOrientation = this.TryGetAppOrientation(),
+            BatteryChargePercent = this.TryGetRemainingChargePercent(),
+            BatteryPowerSource = this.TryGetBatteryPowerSource(),
+            IsPowerInSaveMode = this.TryGetIsPowerInSaveMode(),
+            MobileOperator = this.TryGetMobileOperatorName(),
+            MobileSignalStrength = this.TryGetMobileSignalStrength(),
+            NetworkType = this.TryGetNetworkType(),
+            NetworkSubType = this.TryGetNetworkSubType(),
+            DBSizeInfo = this.TryGetDirectorySize(),
+            RAMInfo = this.TryGetRamInfo(),
+            StorageInfo = this.TryGetStorageInfo()
         };
+
+        private string TryGetDeviceType()
+        {
+            try
+            {
+                return this.GetDeviceType();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private StorageInfo TryGetStorageInfo()
+        {
+            try
+            {
+                return this.GetStorageInfo();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private RAMInfo TryGetRamInfo()
+        {
+            try
+            {
+                return this.GetRAMInfo();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private long TryGetDirectorySize()
+        {
+            try
+            {
+                return this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory());
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private string TryGetNetworkSubType()
+        {
+            try
+            {
+                return this.connectivityManager?.ActiveNetworkInfo?.SubtypeName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetNetworkType()
+        {
+            try
+            {
+                return this.connectivityManager?.ActiveNetworkInfo?.TypeName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+            
+        }
+
+        private int TryGetMobileSignalStrength()
+        {
+            try
+            {
+                return this.gsmSignalStrengthListener.SignalStrength;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private string TryGetMobileOperatorName()
+        {
+            try
+            {
+                return this.telephonyManager?.NetworkOperatorName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private bool TryGetIsPowerInSaveMode()
+        {
+            try
+            {
+                return Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop && this.powerManager.IsPowerSaveMode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private string TryGetBatteryPowerSource()
+        {
+            try
+            {
+                return this.battery.GetPowerSource().ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private int TryGetRemainingChargePercent()
+        {
+            try
+            {
+                return this.battery.GetRemainingChargePercent();
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private string TryGetAppOrientation()
+        {
+            try
+            {
+                return this.deviceOrientation.GetOrientation().ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private DateTime TryGetLastAppUpdatedDate()
+        {
+            try
+            {
+                return new DateTime(1970, 1, 1).AddMilliseconds(this.appPackageInfo.LastUpdateTime);
+            }
+            catch
+            {
+                return DateTime.MinValue;
+            }
+        }
+
+        private int TryGetApplicationVersionCode()
+        {
+            try
+            {
+                return this.GetApplicationVersionCode();
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private string TryGetApplicationVersionName()
+        {
+            try
+            {
+                return this.GetApplicationVersionName();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static string TryGetAndroidSdkVersionName()
+        {
+            try
+            {
+                return Build.VERSION.SdkInt.ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private int TryGetAndroidSdkVersion()
+        {
+            try
+            {
+                return (int) Build.VERSION.SdkInt;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private string TryGetAndroidVersion()
+        {
+            try
+            {
+                return this.GetAndroidVersion();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetDeviceSerialNumber()
+        {
+            try
+            {
+                return Build.Serial;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetDeviceBuildNumber()
+        {
+            try
+            {
+                return Build.Display;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetDeviceManufacturer()
+        {
+            try
+            {
+                return Build.Manufacturer;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private async Task<LocationAddress> TryGetDeviceLocation()
+        {
+            try
+            {
+                return await this.GetDeviceLocationAsync();
+            }
+            catch
+            {
+                return await Task.FromResult<LocationAddress>(null);
+            }
+        }
+
+        private string TryGetDeviceLanguage()
+        {
+            try
+            {
+                return Locale.Default.DisplayLanguage;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetDeviceModel()
+        {
+            try
+            {
+                return this.GetDeviceModel();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TryGetDeviceId()
+        {
+            try
+            {
+                return this.GetDeviceId();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
 
         private async Task<LocationAddress> GetDeviceLocationAsync()
         {
