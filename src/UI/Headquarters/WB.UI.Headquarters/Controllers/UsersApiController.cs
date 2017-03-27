@@ -69,7 +69,8 @@ namespace WB.UI.Headquarters.Controllers
                     CreationDate =  x.CreationDate.FormatDateWithTime(),
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
-                    DeviceId = x.DeviceId
+                    DeviceId = x.DeviceId,
+                    IsArchived = x.IsArchived
                 })
             };
 
