@@ -1,8 +1,7 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Code
-@using WB.UI.Headquarters.Models.VersionCheck
+@using WB.UI.Headquarters.Services
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,10 +38,10 @@
 
                 @RenderSection("interviewerlink", false)
                 
-                @if (ViewBag.LastAvailableApplicationVersion != null && (((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).Build > ServiceLocator.Current.GetInstance<IProductVersion>().GetBildNumber()))
+                @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
                 {
                     <div>
-                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(((VersionCheckingInfo)ViewBag.LastAvailableApplicationVersion).VersionString) </span>
+                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
             </div>
