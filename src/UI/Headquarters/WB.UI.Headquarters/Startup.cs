@@ -128,7 +128,8 @@ namespace WB.UI.Headquarters
 
         private static bool IsApiRequest(IOwinRequest request)
         {
-            return request.Headers["User-Agent"]?.Contains("org.worldbank.solutions.interviewer") ?? false;
+            var userAgent = request.Headers["User-Agent"];
+            return (userAgent?.Contains("org.worldbank.solutions.interviewer") ?? false) || (userAgent?.Contains("okhttp/") ?? false);
         }
 
         private static bool IsAjaxRequest(IOwinRequest request)
