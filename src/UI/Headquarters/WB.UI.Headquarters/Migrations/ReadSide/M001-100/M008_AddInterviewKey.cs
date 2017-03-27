@@ -76,11 +76,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                     var keysList = uniqueKeys.ToList();
 
-                    var existingSequence =
-                        con.Query<dynamic>("select eventsourceid, MAX(eventsequence) as sequence from events.events GROUP BY eventsourceid")
-                            .ToList()
-                            .ToDictionary(x => (Guid)x.eventsourceid, x => (int)x.sequence);
-
                     watch.Restart();
                     Stopwatch batchWatch = Stopwatch.StartNew();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
@@ -91,6 +86,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
                         Guid existingInterviewId = existingInterviewIds[i].interviewid;
+                        var existingSequence =
+                            con.ExecuteScalar<int>(
+                                "select MAX(eventsequence) from events.events WHERE eventsourceid = @id",
+                                new { id = existingInterviewId });
 
                         con.Execute(
                             @"INSERT INTO events.events(id, origin, ""timestamp"", eventsourceid, globalsequence, value, eventsequence, eventtype)
@@ -103,7 +102,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 eventsourceid = existingInterviewId,
                                 globalSequence = ++globalSequence,
                                 value = new JsonString(eventString),
-                                eventSequence = existingSequence[existingInterviewId] + 1,
+                                eventSequence = existingSequence + 1,
                                 eventType = nameof(InterviewKeyAssigned)
                             });
 
