@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
