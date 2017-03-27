@@ -67,6 +67,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 interviewSummary.QuestionnaireVersion);
             var responsible = this.userStore.GetUser(new UserViewInputModel(interviewSummary.ResponsibleId));
 
+            var rootNode = new InterviewGroupView(Identity.Create(questionnaire.PublicKey, RosterVector.Empty))
+            {
+                Title = questionnaire.Title
+            };
+            var interviewGroupViews = rootNode.ToEnumerable()
+                                              .Concat(interview.GetAllGroupsAndRosters().Select(this.ToGroupView)).ToList();
             return new DetailsViewModel
             {
                 Filter = filter,
@@ -74,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 FilteredEntities = this.GetFileredEntities(interview, interviewData, questionnaire, currentGroupIdentity, filter),
                 InterviewDetails = new InterviewDetailsView
                 {
-                    Groups = interview.GetAllGroupsAndRosters().Select(ToGroupView).ToList(),
+                    Groups = interviewGroupViews,
                     Responsible = new UserLight(interviewSummary.ResponsibleId, responsible?.UserName ?? "<UNKNOWN>"),
                     Title = questionnaire.Title,
                     Description = questionnaire.Description,
@@ -108,8 +114,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewData interviewData, QuestionnaireDocument questionnaire, Identity currentGroupIdentity,
             InterviewDetailsFilter filter)
         {
-            var groupEntities = currentGroupIdentity == null
-                ? interview.FirstSection.Children
+            var groupEntities = (currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.PublicKey)
+                ? interview.GetAllNodes()
                 : interview.GetGroup(currentGroupIdentity).Children;
 
             foreach (var entity in groupEntities.TreeToEnumerable(x => x.Children))
@@ -350,7 +356,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
                 Id = group.Identity,
                 Title = group.Title.Text,
-                Depth = group.Parents?.Count() ?? 0
+                Depth = group.Parents?.Count() + 1 ?? 1
         };
 
         private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, InterviewData interviewData)
