@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-2">
                             <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
-                            @Html.ActionLink(Pages.Cancel, "Back", new { }, new { @class = "btn btn-default" })
+                            @Html.ActionLink(Pages.Cancel, "Profile", new { id = Model.Id }, new { @class = "btn btn-default" })
                         </div>
                     </div>
                 </fieldset>
