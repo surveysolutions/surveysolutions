@@ -223,11 +223,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer failed to login.
+        /// </summary>
+        public static string InterviewerFailedToLogin {
+            get {
+                return ResourceManager.GetString("InterviewerFailedToLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer has device already.
         /// </summary>
         public static string InterviewerHasDevice {
             get {
                 return ResourceManager.GetString("InterviewerHasDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer logged in and aquired AuthToken.
+        /// </summary>
+        public static string InterviewerLoggedIn {
+            get {
+                return ResourceManager.GetString("InterviewerLoggedIn", resourceCulture);
             }
         }
         
