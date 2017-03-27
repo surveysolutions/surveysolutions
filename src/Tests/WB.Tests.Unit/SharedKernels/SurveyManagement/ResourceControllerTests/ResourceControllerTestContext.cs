@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ResourceControllerTests
 {
