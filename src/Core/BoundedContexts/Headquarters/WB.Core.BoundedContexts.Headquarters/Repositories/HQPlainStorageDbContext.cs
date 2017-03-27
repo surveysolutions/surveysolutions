@@ -8,9 +8,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
 
+        public HQPlainStorageDbContext() { }
+
         public HQPlainStorageDbContext(string connectionStringName) : base(connectionStringName)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>(connectionStringName));
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
