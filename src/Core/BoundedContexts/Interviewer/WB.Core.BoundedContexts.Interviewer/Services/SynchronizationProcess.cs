@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
                 catch (Exception e)
                 {
-                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken).ConfigureAwait(false);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -151,8 +151,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await this.synchronizationService.SendSyncStatisticsAsync(statistics: ToSyncStatisticsApiView(statistics),
-                    token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
+                try
+                {
+                    await this.synchronizationService.SendSyncStatisticsAsync(
+                        statistics: ToSyncStatisticsApiView(statistics),
+                        token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken).ConfigureAwait(false);
+                }
 
                 progress.Report(new SyncProgressInfo
                 {
