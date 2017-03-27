@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using NLog;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
@@ -15,6 +17,7 @@ using WB.Infrastructure.Native.Storage;
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
 
+    [Localizable(false)]
     [Migration(8)]
     public class M008_AddInterviewKey : Migration
     {
@@ -43,7 +46,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Random random = new Random((int)DateTime.Now.Ticks);
 
             Alter.Table("interviewsummaries").AddColumn("key")
-                .AsString(12).Nullable().Unique("interviewsummaries_unique_key");
+                .AsString(12).Nullable();
 
             if (Schema.Schema("events").Exists())
             {
@@ -52,7 +55,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     List<dynamic> existingInterviewIds =
                         con.Query("select interviewid from readside.interviewsummaries").ToList();
                     long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
-                    var currentClassLogger = LogManager.GetCurrentClassLogger();
+                    var currentClassLogger = LogManager.GetLogger(nameof(M008_AddInterviewKey));
                     currentClassLogger.Info(
                         "Starting add of interview keys. Total interviews count: {0} current global sequence: {1}",
                         existingInterviewIds.Count, globalSequence);
@@ -73,6 +76,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                     var keysList = uniqueKeys.ToList();
 
+                    watch.Restart();
+                    Stopwatch batchWatch = Stopwatch.StartNew();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
@@ -97,19 +102,28 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 eventsourceid = existingInterviewId,
                                 globalSequence = ++globalSequence,
                                 value = new JsonString(eventString),
-                                eventSequence = ++existingSequence,
+                                eventSequence = existingSequence + 1,
                                 eventType = nameof(InterviewKeyAssigned)
                             });
+
                         con.Execute(
-                            "UPDATE readside.interviewsummaries SET key = @key WHERE interviewid = @interviewId",
+                            "UPDATE readside.interviewsummaries SET key = @key WHERE summaryid = @interviewId",
                             new
                             {
                                 key = interviewKeyTouse.ToString(),
-                                interviewId = existingInterviewId
+                                interviewId = existingInterviewId.FormatGuid()
                             });
+
+                        if (i % 10000 == 0)
+                        {
+                            currentClassLogger.Info($"Migrated {i} interviews. Batch took: {batchWatch.Elapsed:g}. In tootal: {watch.Elapsed:g}");
+                            batchWatch.Restart();
+                        }
                     }
                 });
             }
+
+            Create.Index("interviewsummaries_unique_key").OnTable("interviewsummaries").OnColumn("key").Unique();
         }
 
         public override void Down()
