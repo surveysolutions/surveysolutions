@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Code
                 switch (this.logAction)
                 {
                     case SynchronizationLogType.CanSynchronize:
-                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("deviceId", string.Empty);
                         if (context.Response.IsSuccessStatusCode) 
                             logItem.Log = SyncLogMessages.CanSynchronize;
                         else if (context.Response.StatusCode == HttpStatusCode.UpgradeRequired)
@@ -142,6 +142,12 @@ namespace WB.UI.Headquarters.Code
                             logItem.Log = SyncLogMessages.GetTranslations.FormatString(UnknownStringArgumentValue,
                                 UnknownStringArgumentValue);
                         }
+                        break;
+                    case SynchronizationLogType.InterviewerLogin:
+                        var success = context.Response.Content.ReadAsStringAsync().Result != null;
+                        logItem.Log = success 
+                            ? SyncLogMessages.InterviewerLoggedIn
+                            : SyncLogMessages.InterviewerFailedToLogin;
                         break;
                     default:
                         throw new ArgumentException("logAction");
