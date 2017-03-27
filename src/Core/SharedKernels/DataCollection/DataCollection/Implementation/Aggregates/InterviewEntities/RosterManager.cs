@@ -221,8 +221,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
+            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsYesNo;
+            var newYesNoAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
 
             return this.shouldQuestionRecordAnswersOrder
                 ? this.GetIdentitiesByUserDefinedOrder(parentIdentity, newYesNoAnswer)
