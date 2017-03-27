@@ -20,6 +20,8 @@ namespace WB.Infrastructure.Shared.Enumerator
 
         public bool VerifyPassword(string hashedPassword, string password)
         {
+            if (password == null) return false;
+
             var split = hashedPassword.Split(':');
             if (split.Length != 2) return false;
             var data = Encoding.UTF8.GetBytes(password);
