@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using NLog;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
@@ -15,6 +17,7 @@ using WB.Infrastructure.Native.Storage;
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
 
+    [Localizable(false)]
     [Migration(8)]
     public class M008_AddInterviewKey : Migration
     {
@@ -43,7 +46,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Random random = new Random((int)DateTime.Now.Ticks);
 
             Alter.Table("interviewsummaries").AddColumn("key")
-                .AsString(12).Nullable().Unique("interviewsummaries_unique_key");
+                .AsString(12).Nullable();
 
             if (Schema.Schema("events").Exists())
             {
@@ -52,7 +55,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     List<dynamic> existingInterviewIds =
                         con.Query("select interviewid from readside.interviewsummaries").ToList();
                     long globalSequence = con.ExecuteScalar<long>("select MAX(globalsequence) from events.events");
-                    var currentClassLogger = LogManager.GetCurrentClassLogger();
+                    var currentClassLogger = LogManager.GetLogger(nameof(M008_AddInterviewKey));
                     currentClassLogger.Info(
                         "Starting add of interview keys. Total interviews count: {0} current global sequence: {1}",
                         existingInterviewIds.Count, globalSequence);
@@ -73,12 +76,15 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     currentClassLogger.Info("Generated unique ids for interviews took {0:g}", watch.Elapsed);
                     var keysList = uniqueKeys.ToList();
 
+                    var existingSequence =
+                        con.Query<dynamic>("select eventsourceid, MAX(eventsequence) as sequence from events.events GROUP BY eventsourceid")
+                            .ToList()
+                            .ToDictionary(x => (Guid)x.eventsourceid, x => (int)x.sequence);
+
                     watch.Restart();
                     Stopwatch batchWatch = Stopwatch.StartNew();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
-                        Stopwatch localWatch = Stopwatch.StartNew();
-
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
                         var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
                             Formatting.Indented,
@@ -86,15 +92,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                         Guid existingInterviewId = existingInterviewIds[i].interviewid;
 
-                        var existingSequence =
-                            con.ExecuteScalar<int>(
-                                "select MAX(eventsequence) from events.events WHERE eventsourceid = @id",
-                                new { id = existingInterviewId });
-                        if (i % 1000 == 0)
-                        {
-                            currentClassLogger.Info($"received max sequence. Took {localWatch.Elapsed:g}");
-                            localWatch.Restart();
-                        }
                         con.Execute(
                             @"INSERT INTO events.events(id, origin, ""timestamp"", eventsourceid, globalsequence, value, eventsequence, eventtype)
                           VALUES(@id, @origin, @timestamp, @eventSourceId, @globalSequence, @value, @eventSequence, @eventType)",
@@ -106,30 +103,19 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 eventsourceid = existingInterviewId,
                                 globalSequence = ++globalSequence,
                                 value = new JsonString(eventString),
-                                eventSequence = ++existingSequence,
+                                eventSequence = existingSequence[existingInterviewId] + 1,
                                 eventType = nameof(InterviewKeyAssigned)
                             });
 
-                        if (i % 1000 == 0)
-                        {
-                            currentClassLogger.Info($"inserted event. Took {localWatch.Elapsed:g}");
-                            localWatch.Restart();
-                        }
                         con.Execute(
-                            "UPDATE readside.interviewsummaries SET key = @key WHERE interviewid = @interviewId",
+                            "UPDATE readside.interviewsummaries SET key = @key WHERE summaryid = @interviewId",
                             new
                             {
                                 key = interviewKeyTouse.ToString(),
-                                interviewId = existingInterviewId
+                                interviewId = existingInterviewId.FormatGuid()
                             });
 
-                        if (i % 1000 == 0)
-                        {
-                            currentClassLogger.Info($"updated summaries. Took {localWatch.Elapsed:g}");
-                            localWatch.Restart();
-                        }
-
-                        if (i % 1000 == 0)
+                        if (i % 10000 == 0)
                         {
                             currentClassLogger.Info($"Migrated {i} interviews. Batch took: {batchWatch.Elapsed:g}. In tootal: {watch.Elapsed:g}");
                             batchWatch.Restart();
@@ -137,6 +123,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     }
                 });
             }
+
+            Create.Index("interviewsummaries_unique_key").OnTable("interviewsummaries").OnColumn("key").Unique();
+            Alter.Column("key").OnTable("interviewsummaries").AsString("12").NotNullable();
         }
 
         public override void Down()
