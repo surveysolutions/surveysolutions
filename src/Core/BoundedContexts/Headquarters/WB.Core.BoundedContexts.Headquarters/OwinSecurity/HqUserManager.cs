@@ -12,7 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-
+using WB.Core.GenericSubdomains.Portable.Services;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -69,20 +69,33 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             {
                 // migrating passwords
                 if (!user.IsInRole(UserRoles.Interviewer) 
-                    && user.PasswordHash == user.PasswordHashSha1 
-                    && user.PasswordHash == this.hashCompatibilityProvider.GetSHA1HashFor(user, password))
+                    && string.Equals(user.PasswordHash, user.PasswordHashSha1, StringComparison.Ordinal)
+                    && string.Equals(user.PasswordHash, this.hashCompatibilityProvider.GetSHA1HashFor(user, password), StringComparison.Ordinal))
                 {
-                    user.PasswordHashSha1 = null;
-                    result = await this.ChangePasswordAsync(user, password) == IdentityResult.Success;
+                    var changeResult = await this.ChangePasswordAsync(user, password);
+
+                    if (changeResult != IdentityResult.Success)
+                    {
+                        ServiceLocator.Current.GetInstance<ILogger>()
+                            .Error($"Unable to migrate password for user: {user.UserName}. " +
+                                $"Reason(s): {string.Join("\r\n\r\n", changeResult.Errors)}");
+                    }
+
+                    if (changeResult == IdentityResult.Success)
+                    {
+                        user.PasswordHashSha1 = null;
+                    }
+
+                    result = true;
                 }
             }
 
             if (!result && this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
-                result = user.PasswordHashSha1 == this.hashCompatibilityProvider.GetSHA1HashFor(user, password);
+                result = string.Equals(user.PasswordHashSha1, this.hashCompatibilityProvider.GetSHA1HashFor(user, password), StringComparison.Ordinal);
             }
 
-            return result ;
+            return result;
         }
 
         public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, IOwinContext context)
