@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Services
 
                 var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
 
-                if (!IsCheckingNow && (LastLoadedAt == null || isCacheExpired))
+                if(LastLoadedAt == null || isCacheExpired)
                 {
                     var isErrorDelayExpired = ErrorOccuredAt != null && (DateTime.Now - ErrorOccuredAt)?.Seconds > DelayOnErrorInSeconds;
 
