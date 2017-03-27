@@ -74,6 +74,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     var keysList = uniqueKeys.ToList();
 
                     watch.Restart();
+                    Stopwatch batchWatch = Stopwatch.StartNew();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
@@ -111,7 +112,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                         if (i % 1000 == 0)
                         {
-                            currentClassLogger.Info($"Migrated {i} interviews. Took {watch.Elapsed:g}");
+                            currentClassLogger.Info($"Migrated {i} interviews. Batch took: {batchWatch.Elapsed:g}. In tootal: {watch.Elapsed:g}");
+                            batchWatch.Restart();
                         }
                     }
                 });
