@@ -125,7 +125,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             }
 
             Create.Index("interviewsummaries_unique_key").OnTable("interviewsummaries").OnColumn("key").Unique();
-            Alter.Column("key").OnTable("interviewsummaries").AsString("12").NotNullable();
         }
 
         public override void Down()
