@@ -77,17 +77,24 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     Stopwatch batchWatch = Stopwatch.StartNew();
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
+                        Stopwatch localWatch = Stopwatch.StartNew();
+
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
                         var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
                             Formatting.Indented,
                             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
                         Guid existingInterviewId = existingInterviewIds[i].interviewid;
+
                         var existingSequence =
                             con.ExecuteScalar<int>(
                                 "select MAX(eventsequence) from events.events WHERE eventsourceid = @id",
                                 new { id = existingInterviewId });
-
+                        if (i % 1000 == 0)
+                        {
+                            currentClassLogger.Info($"received max sequence. Took {localWatch.Elapsed:g}");
+                            localWatch.Restart();
+                        }
                         con.Execute(
                             @"INSERT INTO events.events(id, origin, ""timestamp"", eventsourceid, globalsequence, value, eventsequence, eventtype)
                           VALUES(@id, @origin, @timestamp, @eventSourceId, @globalSequence, @value, @eventSequence, @eventType)",
@@ -102,6 +109,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 eventSequence = ++existingSequence,
                                 eventType = nameof(InterviewKeyAssigned)
                             });
+
+                        if (i % 1000 == 0)
+                        {
+                            currentClassLogger.Info($"inserted event. Took {localWatch.Elapsed:g}");
+                            localWatch.Restart();
+                        }
                         con.Execute(
                             "UPDATE readside.interviewsummaries SET key = @key WHERE interviewid = @interviewId",
                             new
@@ -109,6 +122,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 key = interviewKeyTouse.ToString(),
                                 interviewId = existingInterviewId
                             });
+
+                        if (i % 1000 == 0)
+                        {
+                            currentClassLogger.Info($"updated summaries. Took {localWatch.Elapsed:g}");
+                            localWatch.Restart();
+                        }
 
                         if (i % 1000 == 0)
                         {
