@@ -5,11 +5,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public class HQPlainStorageDbContext : DbContext
     {
-        public static string ConnectionStringName { get; set; }
         public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
 
-        public HQPlainStorageDbContext() : base(ConnectionStringName)
+        public HQPlainStorageDbContext(string connectionStringName) : base(connectionStringName)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>());
         }
