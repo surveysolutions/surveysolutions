@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 if (updateResult.Succeeded)
                 {
                     this.Success(string.Format(Pages.InterviewerController_EditSuccess, model.UserName));
-                    return this.Back();
+                    return this.RedirectToAction(nameof(this.Profile), new { id = model.Id });
                 }
                 AddErrors(updateResult);
             }
