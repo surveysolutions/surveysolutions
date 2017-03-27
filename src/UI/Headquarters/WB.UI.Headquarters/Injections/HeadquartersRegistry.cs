@@ -76,6 +76,8 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
             this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
+
+            this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -173,10 +175,6 @@ namespace WB.UI.Headquarters.Injections
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
             this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
-
-            if (ApplicationSettings.NewVersionCheckEnabled)
-                this.BindFilter<NewVersionAvailableFilter>(FilterScope.Global, null)
-                    .WhenActionMethodHasNo<NoTransactionAttribute>();
 
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
