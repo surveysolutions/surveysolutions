@@ -100,7 +100,6 @@ namespace WB.UI.Headquarters
             var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
 
             var dbConnectionStringName = @"Postgres";
-            HQPlainStorageDbContext.ConnectionStringName = dbConnectionStringName;
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
@@ -278,6 +277,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<GoogleApiSettings>()
                 .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"GoogleApiKey"]))
                 .InSingletonScope();
+
+            kernel.Bind<HQPlainStorageDbContext>().ToConstant(new HQPlainStorageDbContext(dbConnectionStringName)).InRequestScope();
 
             return kernel;
         }
