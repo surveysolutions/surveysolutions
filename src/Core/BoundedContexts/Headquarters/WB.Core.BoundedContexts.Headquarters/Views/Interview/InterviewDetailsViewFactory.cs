@@ -9,16 +9,13 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -376,8 +373,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     case InterviewDetailsFilter.Enabled:
                         return !question.IsDisabled();
                     case InterviewDetailsFilter.Flagged:
-                        return interviewData.Levels[InterviewEventHandlerFunctional.CreateLevelIdFromPropagationVector(
-                            question.Identity.RosterVector)].QuestionsSearchCache[question.Identity.Id].IsFlagged();
+                        return GetIsFlagged(question, interviewData);
                     case InterviewDetailsFilter.Invalid:
                         return !question.IsValid;
                     case InterviewDetailsFilter.Supervisors:
