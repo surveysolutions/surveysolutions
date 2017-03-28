@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
-            if (user == null) return false;
+            if (user == null || password == null) return false;
 
             var result = this.PasswordHasher.VerifyHashedPassword(user.PasswordHash, password) == PasswordVerificationResult.Success;
 
