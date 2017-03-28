@@ -147,11 +147,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
 
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
-            this.ErrorsBySubstitutions,
+            ErrorsBySubstitutions,
             ErrorsByMacrosWithDuplicateName,
             ErrorsByAttachmentsWithDuplicateName,
             Critical_LookupTablesWithDuplicateVariableName_WB0026,
@@ -672,6 +673,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool StaticTextIsEmpty(IStaticText staticText)
         {
             return string.IsNullOrWhiteSpace(staticText.Text);
+        }
+
+        private bool IsNotSupportSubstitution(IComposite entity)
+        {
+            var isSupportSubstitution = SupportsSubstitutions(entity);
+            if (isSupportSubstitution)
+                return false;
+
+            var variable = entity as IVariable;
+            if (variable != null)
+                return substitutionService.GetAllSubstitutionVariableNames(variable.Label).Length > 0;
+
+            return false;
         }
 
         private static bool QuestionTypeIsNotAllowed(IQuestion question)
