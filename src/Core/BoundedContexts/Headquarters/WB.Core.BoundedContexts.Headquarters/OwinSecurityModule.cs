@@ -23,8 +23,18 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
             this.Bind<IOwinContext>().ToMethod(context => new HttpContextWrapper(HttpContext.Current).GetOwinContext()).InRequestScope();
             this.Bind<IAuthenticationManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Authentication).InRequestScope();
+
             this.Bind<HqSignInManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqSignInManager>()).InRequestScope();
-            this.Bind<HqUserManager>().ToMethod(context => context.Kernel.Get<IOwinContext>().Get<HqUserManager>()).InRequestScope();
+
+            this.Bind<HqUserManager>().ToMethod(context =>
+            {
+                var ctx = HttpContext.Current == null ? null : context.Kernel.Get<IOwinContext>();
+
+                return ctx == null 
+                ? HqUserManager.Create(null, context.Kernel.Get<HQIdentityDbContext>()) 
+                : ctx.Get<HqUserManager>();
+            }).InRequestScope();
+
             this.Bind<IAuthorizedUser>().To<AuthorizedUser>().InRequestScope();
         }
     }
