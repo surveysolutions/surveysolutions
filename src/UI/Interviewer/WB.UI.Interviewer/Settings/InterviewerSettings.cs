@@ -9,8 +9,6 @@ using Android.Locations;
 using Android.Net;
 using Android.OS;
 using Android.Telephony;
-using Android.Telephony.Gsm;
-using Android.Views;
 using Plugin.DeviceInfo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -40,7 +38,6 @@ namespace WB.UI.Interviewer.Settings
         private readonly IDeviceOrientation deviceOrientation;
         private readonly IBattery battery;
         private readonly IPermissions permissions;
-        private readonly GsmSignalStrengthListener gsmSignalStrengthListener;
 
         private PackageInfo appPackageInfo =>
             Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, PackageInfoFlags.MetaData);
@@ -85,8 +82,6 @@ namespace WB.UI.Interviewer.Settings
             this.permissions = permissions;
             this.BackupFolder = backupFolder;
             this.RestoreFolder = restoreFolder;
-
-            gsmSignalStrengthListener = new GsmSignalStrengthListener(this.telephonyManager);
         }
 
         private ApplicationSettingsView CurrentSettings => this.settingsStorage.FirstOrDefault() ?? new ApplicationSettingsView
@@ -373,7 +368,10 @@ namespace WB.UI.Interviewer.Settings
         {
             try
             {
-                return this.gsmSignalStrengthListener.SignalStrength;
+                using (var gsmSignalStrengthListener = new GsmSignalStrengthListener(this.telephonyManager))
+                {
+                    return gsmSignalStrengthListener.SignalStrength;
+                }
             }
             catch
             {
@@ -647,7 +645,6 @@ namespace WB.UI.Interviewer.Settings
 
         public void Dispose()
         {
-            this.gsmSignalStrengthListener.Dispose();
         }
     }
 }
