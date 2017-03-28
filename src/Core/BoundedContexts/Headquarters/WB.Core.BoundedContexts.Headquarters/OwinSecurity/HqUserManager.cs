@@ -88,6 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                     if (changeResult == IdentityResult.Success)
                     {
                         user.PasswordHashSha1 = null;
+                        await this.UpdateAsync(user);
                     }
 
                     // We should not block user authorization if it's impossible to update SHA1 password to newer.
