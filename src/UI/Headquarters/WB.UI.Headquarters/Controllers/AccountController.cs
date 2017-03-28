@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -151,7 +152,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!string.IsNullOrEmpty(model.Password))
             {
-                bool isPasswordValid = await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
+                bool isPasswordValid = await this.IsOldPasswordValid(model, currentUser);
                 if (!isPasswordValid)
                 {
                     this.ModelState.AddModelError<ManageAccountModel>(x => x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
@@ -169,6 +170,10 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(model);
         }
+
+        private async Task<bool> IsOldPasswordValid(ManageAccountModel model, HqUser currentUser)
+            => !string.IsNullOrEmpty(model.OldPassword)
+            && await this.userManager.CheckPasswordAsync(currentUser, model.OldPassword);
 
         private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
 
