@@ -156,12 +156,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             InterviewerIdentity interviewerIdentity = null;
             try
             {
-                await this.synchronizationService.LoginAsync(new LogonInfo
+                var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
                 {
                     Username = this.UserName,
                     Password = this.Password
                 }, restCredentials, cancellationTokenSource.Token).ConfigureAwait(false);
-               
+
+                restCredentials.Token = authToken;
+
                 var interviewer = await this.synchronizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
 
                 interviewerIdentity = new InterviewerIdentity
