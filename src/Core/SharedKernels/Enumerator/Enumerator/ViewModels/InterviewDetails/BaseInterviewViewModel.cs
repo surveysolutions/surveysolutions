@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = interview.CountCommentedQuestions() > 0;
+            this.HasCommentsFromSupervior = interview.CountCommentedQuestionsVisibledToInterviewer() > 0;
             this.HasPrefilledQuestions = questionnaire
                 .GetPrefilledQuestions()
                 .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);
