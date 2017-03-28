@@ -111,24 +111,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             InterviewData interviewData, QuestionnaireDocument questionnaire, Identity currentGroupIdentity,
             InterviewDetailsFilter filter)
         {
-            var groupEntities = (currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.PublicKey)
-                ? interview.GetAllNodes()
-                : interview.GetGroup(currentGroupIdentity).Children;
+            var groupEntities = currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.PublicKey
+                ? interview.GetAllSections()
+                : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
 
-            foreach (var entity in groupEntities.TreeToEnumerable(x => x.Children))
+            foreach (var entity in groupEntities.TreeToEnumerableDepthFirst(x => x.Children))
             {
                 if (!IsEntityInFilter(filter, entity, interviewData)) continue;
 
-                var group = entity as InterviewTreeGroup;
-                if (group != null) yield return this.ToGroupView(group);
-
-                var staticText = entity as InterviewTreeStaticText;
-                if (staticText != null)
-                    yield return this.ToStaticTextView(staticText, questionnaire);
-
                 var question = entity as InterviewTreeQuestion;
-                if (question != null)
-                    yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
+                var group = entity as InterviewTreeGroup;
+                var staticText = entity as InterviewTreeStaticText;
+
+                if (question != null) yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
+                else if (group != null) yield return this.ToGroupView(group);
+                else if (staticText != null) yield return this.ToStaticTextView(staticText, questionnaire);
             }
         }
 
