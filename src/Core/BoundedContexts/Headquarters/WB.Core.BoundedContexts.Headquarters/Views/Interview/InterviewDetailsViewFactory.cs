@@ -349,9 +349,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private InterviewGroupView ToGroupView(InterviewTreeGroup group) => new InterviewGroupView
         {
                 Id = group.Identity,
-                Title = group.Title.Text,
+                Title = this.ToGroupTitleView(@group),
                 Depth = group.Parents?.Count() + 1 ?? 1
         };
+
+        private string ToGroupTitleView(InterviewTreeGroup group)
+        {
+            var roster = group as InterviewTreeRoster;
+
+            return roster != null ? $"{roster.Title.Text} - {roster.RosterTitle}" : @group.Title.Text;
+        }
 
         private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, InterviewData interviewData)
         {
