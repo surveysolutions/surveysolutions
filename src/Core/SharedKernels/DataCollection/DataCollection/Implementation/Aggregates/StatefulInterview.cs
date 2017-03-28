@@ -412,7 +412,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             return this.Tree.FindQuestions().Where(
-                question => this.IsEnabledWithSupervisorComments(question, questionnaire))
+                question => this.IsEnabledWithSupervisorComments(question))
                 .Select(x => new
                 {
                     Id = x.Identity,
@@ -422,9 +422,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Id);
         }
 
-        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question, IQuestionnaire questionnaire)
+        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
-               questionnaire.IsInterviewierQuestion(question.Identity.Id) &&
                question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
