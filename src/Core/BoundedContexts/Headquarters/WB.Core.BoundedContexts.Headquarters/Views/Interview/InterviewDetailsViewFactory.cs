@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -119,17 +120,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ? interview.GetAllSections()
                 : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
 
+            var stack = new InterviewEntityViewStack();
+
             foreach (var entity in groupEntities.TreeToEnumerableDepthFirst(x => x.Children))
             {
                 if (!IsEntityInFilter(filter, entity, interviewData)) continue;
 
-                var question = entity as InterviewTreeQuestion;
                 var group = entity as InterviewTreeGroup;
-                var staticText = entity as InterviewTreeStaticText;
+                if (group != null)
+                    stack.Push(this.ToGroupView(group));
+                else
+                {
+                    var question = entity as InterviewTreeQuestion;
+                    var staticText = entity as InterviewTreeStaticText;
 
-                if (question != null) yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
-                else if (group != null) yield return this.ToGroupView(group);
-                else if (staticText != null) yield return this.ToStaticTextView(staticText, questionnaire);
+                    if (filter != InterviewDetailsFilter.All)
+                        stack.RemoveEmptyGroupsIfTheyAreNotParents(entity.Parents.Select(x => x.Identity).ToList());
+
+                    if (question != null) stack.Push(this.ToQuestionView(question, questionnaire, interview, interviewData));
+                    else if (staticText != null) stack.Push(this.ToStaticTextView(staticText, questionnaire));
+                }
+            }
+
+            if (filter!= InterviewDetailsFilter.All)
+                stack.RemoveEmptyGroups();
+
+            return stack.GetReversedItems().ToList();
+        }
+
+        private class InterviewEntityViewStack
+        {
+            private readonly Stack<InterviewEntityView> mainStack = new Stack<InterviewEntityView>(); 
+            public void Push(InterviewEntityView entityView)
+            {
+                this.mainStack.Push(entityView);
+            }
+
+            public IEnumerable<InterviewEntityView> GetReversedItems()
+            {
+                var reversedStack =  new Stack<InterviewEntityView>(this.mainStack.ToArray());
+                return reversedStack.ToArray();
+            }
+
+            public void RemoveEmptyGroups()
+            {
+                while (this.mainStack.Any() && this.mainStack.Peek() is InterviewGroupView)
+                {
+                    this.mainStack.Pop();
+                }
+            }
+
+            public void RemoveEmptyGroupsIfTheyAreNotParents(List<Identity> parents)
+            {
+                while (this.mainStack.Any() && this.mainStack.Peek() is InterviewGroupView)
+                {
+                    var groupOnTopOfTheStack = this.mainStack.Peek() as InterviewGroupView;
+                    var isGroupOnTopOfTheStackIsParent = parents.Contains(groupOnTopOfTheStack.Id);
+
+                    if (isGroupOnTopOfTheStackIsParent)
+                        return;
+
+                    this.mainStack.Pop();
+                }
             }
         }
 

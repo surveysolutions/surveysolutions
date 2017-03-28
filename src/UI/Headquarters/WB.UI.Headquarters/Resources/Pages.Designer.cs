@@ -628,6 +628,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items satisfying selected filter.
+        /// </summary>
+        public static string InterviewDetails_NoItems {
+            get {
+                return ResourceManager.GetString("InterviewDetails_NoItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview has pending synchronization packages in queue.
         /// </summary>
         public static string InterviewDetails_PendingPackageLabel {

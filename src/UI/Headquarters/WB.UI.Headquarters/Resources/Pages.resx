@@ -751,4 +751,7 @@
   <data name="OperationFailedTitle" xml:space="preserve">
     <value>Operation failed</value>
   </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>No items satisfying selected filter</value>
+  </data>
 </root>
