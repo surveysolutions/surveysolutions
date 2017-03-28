@@ -399,5 +399,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
             return true;
         }
+
+        public Guid GetFirstChapterId(Guid id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            return interview.FirstSection.Identity.Id;
+        }
     }
 }
