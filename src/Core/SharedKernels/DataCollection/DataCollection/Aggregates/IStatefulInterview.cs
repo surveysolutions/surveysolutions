@@ -139,9 +139,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
 
-        int CountCommentedQuestions();
+        int CountCommentedQuestionsVisibledToInterviewer();
 
-        IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview();
+        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
+
+        IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
 
         string GetLastSupervisorComment();
 

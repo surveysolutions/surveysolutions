@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsInInterview().ToArray();
+            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToArray();
 
         It should_return_2_commented_by_supervisor_questions = () =>
             commentedQuestionsIdentities.Length.ShouldEqual(2);
