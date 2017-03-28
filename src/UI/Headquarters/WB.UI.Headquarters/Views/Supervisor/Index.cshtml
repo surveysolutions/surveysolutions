@@ -6,6 +6,7 @@
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     var isAdmin = authorizedUser.IsAdministrator;
     var isAdminOrObserver = isAdmin || authorizedUser.IsObserver;
+    var isObserving = authorizedUser.IsObserving;
     var isAdminOrHeadquarters = isAdmin || authorizedUser.IsHeadquarter;
 }
 
@@ -114,7 +115,7 @@
                 }
             </td>
             <td>
-                @if (isAdminOrObserver)
+                @if (isAdminOrObserver && !isObserving)
                 {
                     <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }" title="@Users.ImpersonateAsUser">
                         <i class="glyphicon glyphicon-eye-open"></i>
