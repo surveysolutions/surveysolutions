@@ -558,5 +558,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
         }
+
+        public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
+        {
+            return this.Tree.Sections;
+        }
     }
 }

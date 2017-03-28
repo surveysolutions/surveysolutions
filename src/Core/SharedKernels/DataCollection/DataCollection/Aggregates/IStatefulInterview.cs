@@ -159,5 +159,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
         bool AcceptsInterviewerAnswers();
+        IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
     }
 }
