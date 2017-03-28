@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native.Threading;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -21,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-  
+        private readonly ILogger logger;
 
         public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser, 
             IHashCompatibilityProvider hashCompatibilityProvider)
@@ -29,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             this.authorizedUser = authorizedUser;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public Task<IdentityResult> ChangePasswordAsync( HqUser user, string newPassword)
@@ -51,12 +53,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         protected override Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
+            this.UpdateSha1PasswordIfNeeded(user, newPassword);
+
+            return base.UpdatePassword(passwordStore, user, newPassword);
+        }
+
+        [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
+        private void UpdateSha1PasswordIfNeeded(HqUser user, string newPassword)
+        {
             if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
             {
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
-
-            return base.UpdatePassword(passwordStore, user, newPassword);
         }
 
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
@@ -76,8 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
                     if (changeResult != IdentityResult.Success)
                     {
-                        ServiceLocator.Current.GetInstance<ILogger>()
-                            .Error($"Unable to migrate password for user: {user.UserName}. " +
+                        this.logger.Warn($"Unable to migrate password for user: {user.UserName}. " +
                                 $"Reason(s): {string.Join("\r\n\r\n", changeResult.Errors)}");
                     }
 
@@ -86,6 +93,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                         user.PasswordHashSha1 = null;
                     }
 
+                    // We should not block user authorization if it's impossible to update SHA1 password to newer.
+                    // This can happen if current password policy is more strict than provided password
                     result = true;
                 }
             }
@@ -109,31 +118,28 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
                 PasswordValidator = ServiceLocator.Current.GetInstance<IIdentityValidator<string>>()
             };
+
             return manager;
         }
 
-        public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role)
-        {
-            user.CreationDate = DateTime.UtcNow;
-
-            var creationStatus = this.Create(user, password);
-            if (creationStatus.Succeeded)
-                creationStatus = this.AddToRole(user.Id, Enum.GetName(typeof(UserRoles), role));
-
-            return creationStatus;
-        }
+        public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role) => 
+            AsyncHelper.RunSync(() => this.CreateUserAsync(user, password, role));
 
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-
+            
             var creationStatus = await this.CreateAsync(user, password);
+
             if (creationStatus.Succeeded)
+            {
                 creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
+                UpdateSha1PasswordIfNeeded(user, password);
+            }
 
             return creationStatus;
         }
-
+        
         public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
