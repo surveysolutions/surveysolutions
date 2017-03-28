@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -44,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 return await this.signInManager.GenerateApiAuthTokenAsync(authorizedUser.Id);
             }
 
-            return null;
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
     }
 }
