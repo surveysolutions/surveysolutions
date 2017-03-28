@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -164,8 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var result = new List<IdentityResult>();
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
-                accountToArchive.IsArchived = true;
-                var archiveResult = await this.UpdateUserAsync(accountToArchive, null);
+                var archiveResult = await this.ArchiveUserAsync(accountToArchive);
                 result.Add(archiveResult);
             }
 
@@ -190,12 +190,30 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (var userToArchive in usersToArhive)
             {
-                userToArchive.IsArchived = archive;
-                var archiveResult = await this.UpdateUserAsync(userToArchive, null);
+                var archiveResult = archive ? await this.ArchiveUserAsync(userToArchive) : await this.UnarchiveUserAsync(userToArchive);
                 archiveUserResults.Add(archiveResult);
             }
 
             return archiveUserResults.ToArray();
+        }
+
+        private async Task<IdentityResult> UnarchiveUserAsync(HqUser userToUnarchive)
+        {
+            if (userToUnarchive.IsInRole(UserRoles.Interviewer))
+            {
+                var supervisor = await this.FindByIdAsync(userToUnarchive.Profile.SupervisorId.Value);
+                if (supervisor.IsArchived)
+                    return IdentityResult.Failed(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived);
+            }
+
+            userToUnarchive.IsArchived = false;
+            return await this.UpdateUserAsync(userToUnarchive, null);
+        }
+
+        private async Task<IdentityResult> ArchiveUserAsync(HqUser userToArchive)
+        {
+            userToArchive.IsArchived = true;
+            return await this.UpdateUserAsync(userToArchive, null);
         }
     }
 }
