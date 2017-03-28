@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsInInterview();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsInInterview();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsInInterview();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorAllQuestions();
             Assert.That(commentedBySupervisorQuestionsInInterview.Count(), Is.EqualTo(1));
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));
