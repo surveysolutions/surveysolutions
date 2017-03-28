@@ -907,7 +907,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tablet timestamp of beginning of the session.
+        ///   Looks up a localized string similar to Tablet time at the beginning of synchronization.
         /// </summary>
         public static string InterviewerProfile_DeviceDate {
             get {
@@ -979,7 +979,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews sent to interviewer.
+        ///   Looks up a localized string similar to Number of interviews recieved by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedInterviewsCount {
             get {
@@ -988,7 +988,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of questionnaires sent to interviewer.
+        ///   Looks up a localized string similar to Number of questionnaires recieved by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedQuestionnairesCount {
             get {
@@ -1159,7 +1159,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server timestamp of beginning of the session.
+        ///   Looks up a localized string similar to Server time at the beginning of synchronization.
         /// </summary>
         public static string InterviewerProfile_ServerDate {
             get {
@@ -1204,7 +1204,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of completed interviews received from interviewer.
+        ///   Looks up a localized string similar to Number of completed interviews received from Interviewer.
         /// </summary>
         public static string InterviewerProfile_UploadedInterviewsCount {
             get {
