@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -103,5 +102,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public object Value { get; set; }
         public string Label { get; set; }
+
+        public bool IsChecked { get; set; } = false;
+
+        public int Index { get; set; } = 0;
     }
 }

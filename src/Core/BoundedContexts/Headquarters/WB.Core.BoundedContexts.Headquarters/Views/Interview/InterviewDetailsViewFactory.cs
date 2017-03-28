@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Comments = interviewQuestion.AnswerComments.Select(ToCommentView).ToList(),
                 IsEnabled = !interviewQuestion.IsDisabled(),
                 IsReadOnly = !(interviewQuestion.IsSupervisors && interview.Status < InterviewStatus.ApprovedByHeadquarters),
-                Options = ToOptionsView(questionnaireQuestion),
+                Options = ToOptionsView(questionnaireQuestion, interviewQuestion, interview),
                 Answer = ToAnswerView(interviewQuestion),
                 IsFlagged = GetIsFlagged(interviewQuestion, interviewData),
                 FailedValidationMessages = GetFailedValidationMessages(
@@ -278,12 +278,97 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return null;
         }
 
-        private List<QuestionOptionView> ToOptionsView(IQuestion questionnaireQuestion)
-            => questionnaireQuestion.Answers?.Select(a => new QuestionOptionView
+        private List<QuestionOptionView> ToOptionsView(IQuestion questionnaireQuestion, InterviewTreeQuestion interviewQuestion, IStatefulInterview interview)
+        {
+            if ((interviewQuestion.IsSingleFixedOption || interviewQuestion.IsMultiFixedOption) && interviewQuestion.IsAnswered())
             {
-                Value = decimal.Parse(a.AnswerValue),
-                Label = a.AnswerText
-            })?.ToList();
+                var options = questionnaireQuestion.Answers?.Select(a => new QuestionOptionView
+                {
+                    Value = int.Parse(a.AnswerValue),
+                    Label = a.AnswerText
+                })?.ToList() ?? new List<QuestionOptionView>();
+
+                var optionsToMarkAsSelected = new List<int>();
+                if (interviewQuestion.IsSingleFixedOption)
+                {
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
+                }
+                if (interviewQuestion.IsMultiFixedOption)
+                {
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
+                }
+
+                foreach (var selectedValue in optionsToMarkAsSelected)
+                {
+                    var selectedOption = options.FirstOrDefault(x => (int) x.Value == selectedValue);
+                    if (selectedOption == null) continue;
+                    selectedOption.IsChecked = true;
+                    selectedOption.Index = optionsToMarkAsSelected.IndexOf(selectedValue) + 1;
+                }
+
+                return options;
+            }
+
+            if (interviewQuestion.IsLinked)
+            {
+                var optionsToMarkAsSelected = new List<RosterVector>();
+                if (interviewQuestion.IsSingleLinkedOption)
+                {
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue);
+                }
+                if (interviewQuestion.IsMultiLinkedOption)
+                {
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedOption.GetAnswer().CheckedValues);
+                }
+
+                var options = interviewQuestion.AsLinked.Options.Select(x => new QuestionOptionView
+                {
+                    Value = x,
+                    Label = interview.GetLinkedOptionTitle(interviewQuestion.Identity, x),
+                    IsChecked = optionsToMarkAsSelected.Contains(x),
+                    Index = optionsToMarkAsSelected.IndexOf(x) + 1
+                }).ToList();
+
+                return options;
+            }
+
+            if (interviewQuestion.IsLinkedToListQuestion)
+            {
+                var optionsToMarkAsSelected = new List<int>();
+                if (interviewQuestion.IsSingleLinkedToList)
+                {
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue);
+                }
+                if (interviewQuestion.IsMultiLinkedToList)
+                {
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedToList.GetAnswer().CheckedValues);
+                }
+                var listQuestion = interview.FindQuestionInQuestionBranch(interviewQuestion.AsLinkedToList.LinkedSourceId, interviewQuestion.Identity);
+
+                var options = interviewQuestion.AsLinkedToList.Options.Select(x => new QuestionOptionView
+                {
+                    Value = Convert.ToInt32(x),
+                    Label = listQuestion.AsTextList.GetTitleByItemCode(x),
+                    IsChecked = optionsToMarkAsSelected.Contains(Convert.ToInt32(x)),
+                    Index = optionsToMarkAsSelected.IndexOf(Convert.ToInt32(x)) + 1
+                }).ToList();
+
+                return options;
+            }
+
+            if (interviewQuestion.IsTextList)
+            {
+                var options = interviewQuestion.AsTextList.GetAnswer().Rows.Select(x => new QuestionOptionView
+                {
+                    Value = Convert.ToInt32(x.Value),
+                    Label = x.Text
+                }).ToList();
+
+                return options;
+            }
+
+            return new List<QuestionOptionView>();
+        }
 
         private dynamic ToQuestionSettingsView(IQuestion question, QuestionnaireDocument questionnaire)
         {
