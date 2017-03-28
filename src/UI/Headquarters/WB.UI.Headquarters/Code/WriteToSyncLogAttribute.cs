@@ -56,9 +56,9 @@ namespace WB.UI.Headquarters.Code
             {
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.authorizedUser.DeviceId,
-                    InterviewerId = this.authorizedUser.Id,
-                    InterviewerName = this.authorizedUser.UserName,
+                    DeviceId = this.authorizedUser.IsAuthorized ? this.authorizedUser.DeviceId : null,
+                    InterviewerId = this.authorizedUser.IsAuthorized ? this.authorizedUser.Id : Guid.Empty,
+                    InterviewerName = this.authorizedUser.IsAuthorized ? this.authorizedUser.UserName : string.Empty, 
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };
@@ -134,8 +134,7 @@ namespace WB.UI.Headquarters.Code
                         {
                             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
                             var questionnaireInfo = this.questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
-                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title,
-                                questionnaireInfo.Version);
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title, questionnaireInfo.Version);
                         }
                         else
                         {
@@ -144,7 +143,7 @@ namespace WB.UI.Headquarters.Code
                         }
                         break;
                     case SynchronizationLogType.InterviewerLogin:
-                        var success = context.Response.Content.ReadAsStringAsync().Result != null;
+                        var success = context.Response.IsSuccessStatusCode;
                         logItem.Log = success 
                             ? SyncLogMessages.InterviewerLoggedIn
                             : SyncLogMessages.InterviewerFailedToLogin;
