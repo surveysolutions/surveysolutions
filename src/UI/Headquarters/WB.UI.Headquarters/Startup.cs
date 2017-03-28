@@ -33,9 +33,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
-using WB.Infrastructure.Native;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -89,7 +87,7 @@ namespace WB.UI.Headquarters
         public void ConfigureAuth(IAppBuilder app)
         {
             app.CreatePerOwinContext(HQIdentityDbContext.Create);
-            app.CreatePerOwinContext<HqUserManager>(HqUserManager.Create);
+            app.CreatePerOwinContext<HqUserManager>((options, ctx) => HqUserManager.Create(options, ctx.Get<HQIdentityDbContext>()));
             app.CreatePerOwinContext<HqSignInManager>(HqSignInManager.Create);
 
             var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
@@ -128,8 +126,8 @@ namespace WB.UI.Headquarters
 
         private static bool IsApiRequest(IOwinRequest request)
         {
-            var userAgent = request.Headers["User-Agent"];
-            return (userAgent?.Contains("org.worldbank.solutions.interviewer") ?? false) || (userAgent?.Contains("okhttp/") ?? false);
+            var userAgent = request.Headers[@"User-Agent"];
+            return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
         }
 
         private static bool IsAjaxRequest(IOwinRequest request)
