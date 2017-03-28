@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -17,6 +19,7 @@ namespace WB.Infrastructure.Native.Storage
                 TypeNameHandling = TypeNameHandling.All,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
+                Converters = new List<JsonConverter> { IdentityJsonConverter.Instance, RosterVectorConvertor.Instance },
                 Binder = new OldToNewAssemblyRedirectSerializationBinder()
             };
         }
