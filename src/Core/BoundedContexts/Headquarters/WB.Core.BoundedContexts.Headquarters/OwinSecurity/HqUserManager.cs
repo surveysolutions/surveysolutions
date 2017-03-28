@@ -198,7 +198,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             {
                 var supervisor = await this.FindByIdAsync(userToUnarchive.Profile.SupervisorId.Value);
                 if (supervisor.IsArchived)
-                    return IdentityResult.Failed(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived);
+                    return IdentityResult.Failed(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
+                            userToUnarchive.UserName));
             }
 
             userToUnarchive.IsArchived = false;
