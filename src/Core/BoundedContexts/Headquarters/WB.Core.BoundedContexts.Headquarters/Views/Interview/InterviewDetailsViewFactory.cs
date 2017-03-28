@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -29,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
+        private readonly ISubstitutionService substitutionService;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         private class ValidationView
@@ -44,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
-            IReadSideKeyValueStorage<InterviewData>  interviewDataRepository)
+            IReadSideKeyValueStorage<InterviewData>  interviewDataRepository,
+            ISubstitutionService substitutionService)
         {
             this.userStore = userStore;
             this.changeStatusFactory = changeStatusFactory;
@@ -52,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.questionnaireStorage = questionnaireStorage;
             this.interviewSummaryRepository = interviewSummaryRepository;
             this.interviewDataRepository = interviewDataRepository;
+            this.substitutionService = substitutionService;
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
@@ -357,7 +361,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var roster = group as InterviewTreeRoster;
 
-            return roster != null ? $"{roster.Title.Text} - {roster.RosterTitle}" : @group.Title.Text;
+            return roster != null
+                ? $"{roster.Title.Text} - {roster.RosterTitle ?? this.substitutionService.DefaultSubstitutionText}"
+                : @group.Title.Text;
         }
 
         private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, InterviewData interviewData)
