@@ -56,9 +56,9 @@ namespace WB.UI.Headquarters.Code
             {
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.authorizedUser.IsAuthorized ? this.authorizedUser.DeviceId : null,
-                    InterviewerId = this.authorizedUser.IsAuthorized ? this.authorizedUser.Id : Guid.Empty,
-                    InterviewerName = this.authorizedUser.IsAuthorized ? this.authorizedUser.UserName : string.Empty, 
+                    DeviceId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.DeviceId : null,
+                    InterviewerId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.Id : Guid.Empty,
+                    InterviewerName = this.authorizedUser.IsAuthenticated ? this.authorizedUser.UserName : string.Empty, 
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };
