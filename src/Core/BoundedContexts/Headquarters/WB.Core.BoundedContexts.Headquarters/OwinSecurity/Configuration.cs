@@ -2,7 +2,6 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Security.Claims;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -26,80 +25,87 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public DbSet<HqUserProfile> UserProfiles { get; set; }
 
+        private static readonly object onMigration = new object();
+        
         protected override void Seed(HQIdentityDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            if (context.Roles.Any()) return;
-
-            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            var userPlainStorageRepository = ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>();
-
-            using (var dbContextTransaction = context.Database.BeginTransaction())
+            lock (onMigration)
             {
-                try
+                //  This method will be called after migrating to the latest version.
+
+                if (context.Roles.Any()) return;
+
+                var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+                var userPlainStorageRepository = ServiceLocator.Current.GetInstance<IPlainStorageAccessor<UserDocument>>();
+
+                using (var dbContextTransaction = context.Database.BeginTransaction())
                 {
-                    context.Configuration.AutoDetectChangesEnabled = false;
-                    context.Configuration.ProxyCreationEnabled = false;
-
-                    foreach (UserRoles userRole in Enum.GetValues(typeof(UserRoles)))
+                    try
                     {
-                        context.Roles.AddOrUpdate(new HqRole
-                        {
-                            Id = userRole.ToUserId(),
-                            Name = Enum.GetName(typeof(UserRoles), userRole)
-                        });
-                    }
+                        context.Configuration.AutoDetectChangesEnabled = false;
 
-                    plainTransactionManager.ExecuteInPlainTransaction(() =>
-                    {
-                        foreach (var oldUser in userPlainStorageRepository.Query(users => users.ToList()))
+                        foreach (UserRoles userRole in Enum.GetValues(typeof(UserRoles)))
                         {
-                            HqUserProfile hqUserProfile = null;
-                            if (oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId))
-                                hqUserProfile = new HqUserProfile
+                            context.Roles.AddOrUpdate(new HqRole
+                            {
+                                Id = userRole.ToUserId(),
+                                Name = Enum.GetName(typeof(UserRoles), userRole)
+                            });
+                        }
+
+                        plainTransactionManager.ExecuteInPlainTransaction(() =>
+                        {
+                            foreach (var oldUser in userPlainStorageRepository.Query(users => users.ToList()))
+                            {
+                                HqUserProfile hqUserProfile = null;
+                                if (oldUser.Supervisor != null || !string.IsNullOrEmpty(oldUser.DeviceId))
+                                    hqUserProfile = new HqUserProfile
+                                    {
+                                        DeviceId = oldUser.DeviceId,
+                                        SupervisorId = oldUser.Supervisor?.Id,
+                                    };
+
+                                var hqUser = new HqUser
                                 {
-                                    DeviceId = oldUser.DeviceId,
-                                    SupervisorId = oldUser.Supervisor?.Id,
+                                    Id = oldUser.PublicKey,
+                                    CreationDate = oldUser.CreationDate,
+                                    Email = oldUser.Email,
+                                    IsArchived = oldUser.IsArchived,
+                                    IsLockedByHeadquaters = oldUser.IsLockedByHQ,
+                                    IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
+                                    FullName = oldUser.PersonName,
+                                    PhoneNumber = oldUser.PhoneNumber,
+                                    UserName = oldUser.UserName,
+                                    PasswordHash = oldUser.Password,
+                                    PasswordHashSha1 = oldUser.Password,
+                                    SecurityStamp = Guid.NewGuid().FormatGuid(),
+                                    Profile = hqUserProfile
                                 };
 
-                            var hqUser = new HqUser
-                            {
-                                Id = oldUser.PublicKey,
-                                CreationDate = oldUser.CreationDate,
-                                Email = oldUser.Email,
-                                IsArchived = oldUser.IsArchived,
-                                IsLockedByHeadquaters = oldUser.IsLockedByHQ,
-                                IsLockedBySupervisor = oldUser.IsLockedBySupervisor,
-                                FullName = oldUser.PersonName,
-                                PhoneNumber = oldUser.PhoneNumber,
-                                UserName = oldUser.UserName,
-                                PasswordHash = oldUser.Password,
-                                PasswordHashSha1 = oldUser.Password,
-                                SecurityStamp = Guid.NewGuid().FormatGuid(),
-                                Profile = hqUserProfile
-                            };
+                                foreach (var oldUserRole in oldUser.Roles)
+                                    hqUser.Roles.Add(new HqUserRole
+                                    {
+                                        UserId = oldUser.PublicKey,
+                                        RoleId = oldUserRole.ToUserId()
+                                    });
 
-                            foreach (var oldUserRole in oldUser.Roles)
-                                hqUser.Roles.Add(new HqUserRole
-                                {
-                                    UserId = oldUser.PublicKey,
-                                    RoleId = oldUserRole.ToUserId()
-                                });
+                                context.Users.Add(hqUser);
+                            }
+                        });
 
-                            context.Users.Add(hqUser);
-                        }
-                    });
+                        context.SaveChanges();
 
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
-
-                    dbContextTransaction.Commit();
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-                    throw;
+                        dbContextTransaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        context.Configuration.AutoDetectChangesEnabled = true;
+                    }
                 }
             }
         }
