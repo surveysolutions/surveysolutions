@@ -478,10 +478,10 @@
     <value>Device orientation</value>
   </data>
   <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
-    <value>Tablet timestamp of beginning of the session</value>
+    <value>Tablet time at the beginning of synchronization</value>
   </data>
   <data name="InterviewerProfile_ServerDate" xml:space="preserve">
-    <value>Server timestamp of beginning of the session</value>
+    <value>Server time at the beginning of synchronization</value>
   </data>
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Device and connection statistics</value>
@@ -490,13 +490,13 @@
     <value>Last connection statistics</value>
   </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
-    <value>Number of questionnaires sent to interviewer</value>
+    <value>Number of questionnaires recieved by Interviewer</value>
   </data>
   <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Number of interviews sent to interviewer</value>
+    <value>Number of interviews recieved by Interviewer</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
-    <value>Number of completed interviews received from interviewer</value>
+    <value>Number of completed interviews received from Interviewer</value>
   </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Interviewer: {0}</value>
