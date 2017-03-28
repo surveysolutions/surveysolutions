@@ -9,7 +9,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -21,15 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HqUserManager : UserManager<HqUser, Guid>
     {
-        private readonly IAuthorizedUser authorizedUser;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private readonly ILogger logger;
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser, 
-            IHashCompatibilityProvider hashCompatibilityProvider)
+        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider)
             : base(store)
         {
-            this.authorizedUser = authorizedUser;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
@@ -108,13 +104,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, IOwinContext context)
+        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, HQIdentityDbContext dbContext)
         {
-            var store = new HqUserStore(context.Get<HQIdentityDbContext>());
-            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-            var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
+            var store = new HqUserStore(dbContext);
+           var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
 
-            var manager = new HqUserManager(store, authorizedUser, hashCompatibility)
+            var manager = new HqUserManager(store, hashCompatibility)
             {
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
                 PasswordValidator = ServiceLocator.Current.GetInstance<IIdentityValidator<string>>()
@@ -122,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             return manager;
         }
-
+        
         public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role) => 
             AsyncHelper.RunSync(() => this.CreateUserAsync(user, password, role));
 
@@ -172,14 +167,13 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public virtual void LinkDeviceToCurrentInterviewer(string deviceId)
+        public virtual void LinkDeviceToCurrentInterviewer(Guid id, string deviceId)
         {
-            if (this.authorizedUser.Role != UserRoles.Interviewer)
+            var currentUser = this.FindById(id);
+            if(!currentUser.IsInRole(UserRoles.Interviewer))
                 throw new AuthenticationException(@"Only interviewer can be linked to device");
 
-            var currentUser = this.Users?.FirstOrDefault(user => user.Id == this.authorizedUser.Id);
             currentUser.Profile.DeviceId = deviceId;
-
             this.UpdateUser(currentUser, null);
         }
 
