@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             Guid id = Guid.Empty;
-            var vector = new List<decimal>();
+            RosterVector vector = RosterVector.Empty;
 
-            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject && reader.TokenType != JsonToken.EndArray)
             {
                 if (reader.TokenType == JsonToken.PropertyName)
                 {
@@ -40,28 +40,13 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                     if (string.Equals(propertyName, "rosterVector", StringComparison.OrdinalIgnoreCase))
                     {
                         reader.Read();
-
-                        if (reader.TokenType == JsonToken.StartArray)
-                        {
-                            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
-                            {
-                                if (reader.TokenType != JsonToken.Comment)
-                                {
-                                    vector.Add(Convert.ToDecimal(reader.Value));
-                                }
-                            }
-                        }
+                        vector = serializer.Deserialize<RosterVector>(reader);
                         continue;
                     }
                 }
             }
 
-            if (vector.Any())
-            {
-                return new Identity(id, new RosterVector(vector));
-            }
-
-            return new Identity(id, RosterVector.Empty);
+            return new Identity(id, vector);
         }
 
         private static readonly Type IdentityType = typeof(Identity);
