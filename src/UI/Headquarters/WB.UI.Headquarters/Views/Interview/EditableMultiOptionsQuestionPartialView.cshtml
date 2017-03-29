@@ -22,7 +22,7 @@
 
     <label class="checkbox" for="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))">
         <input type="checkbox" name="@Model.Id" id="@Html.InterviewItemIdWithPostfix(Model.Id.Id, Model.Id.RosterVector, string.Format("option{0}", optionValue))" value="@optionValue" @(isChecked ? "checked" : "")
-               data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector)', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @jsMaxAllowedAnswersValueAsString, '@selectedOptions' )">
+               data-bind="click: saveCategoricalMultiAnswer.bind($data, '@Model.Id.Id', '@Model.Id.RosterVector', @(multiQuestionSettings.AreAnswersOrdered.ToString().ToLower()), @jsMaxAllowedAnswersValueAsString, '@selectedOptions' )">
 
         <span>@option.Label</span>
         @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
