@@ -180,6 +180,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual void LinkDeviceToCurrentInterviewer(Guid id, string deviceId)
         {
             var currentUser = this.FindById(id);
+
+            if (currentUser == null || currentUser.IsArchivedOrLocked)
+            {
+                throw new AuthenticationException(@"User not found or locked");
+            }
+
             if(!currentUser.IsInRole(UserRoles.Interviewer))
                 throw new AuthenticationException(@"Only interviewer can be linked to device");
 
