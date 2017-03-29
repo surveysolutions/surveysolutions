@@ -969,9 +969,9 @@ namespace WB.Tests.Unit.Designer
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
                     rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
 
-            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, label));
             }
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
@@ -1041,9 +1041,9 @@ namespace WB.Tests.Unit.Designer
                     isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>());
             }
 
-            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, null), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, label), responsibleId, parentId, index);
             }
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)

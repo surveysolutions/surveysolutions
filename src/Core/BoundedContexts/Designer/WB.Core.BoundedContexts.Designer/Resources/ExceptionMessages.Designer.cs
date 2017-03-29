@@ -302,5 +302,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("ShouldCascadeFromExistingQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not allowed to use substitutins in variable label.
+        /// </summary>
+        public static string VariableLabelContainsSubstitutionReference {
+            get {
+                return ResourceManager.GetString("VariableLabelContainsSubstitutionReference", resourceCulture);
+            }
+        }
     }
 }
