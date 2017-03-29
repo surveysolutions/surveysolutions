@@ -5,6 +5,7 @@
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
+@Html.HiddenFor(x => x.UserName)
 <div class="form-group">
     @Html.LabelFor(x => x.Password, new { @class = "col-sm-4 control-label" })
     <div class="col-sm-8">

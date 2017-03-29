@@ -19,8 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> isUserValid = null, 
             IUserStore<HqUser, Guid> userStore = null, IReadSideStatusService readSideStatusService = null)
         {
-            var hqUserManager = new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(),
-                Mock.Of<IAuthorizedUser>(), Mock.Of<IHashCompatibilityProvider>());
+            var hqUserManager = new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IHashCompatibilityProvider>());
             var auth = new Mock<IAuthenticationManager>();
             var hqSignInManager = new HqSignInManager(hqUserManager, auth.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);

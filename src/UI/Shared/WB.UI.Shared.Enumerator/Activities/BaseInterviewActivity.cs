@@ -7,6 +7,7 @@ using Android.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -58,8 +59,14 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
         {
-            if (!this.IsFinishing && !this.IsDestroyed)
+            try
+            {
                 this.Finish();
+            }
+            catch (ObjectDisposedException e)
+            {
+                Mvx.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Disposing already disposed activity", e);
+            }
         }
 
         protected override void Dispose(bool disposing)

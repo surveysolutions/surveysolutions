@@ -154,41 +154,47 @@
         </div>
         <div id="list">
             <div class="questions">
+
+                @if (!Model.FilteredEntities.Any())
+                {
+                    <p>@Pages.InterviewDetails_NoItems</p>
+                }
+
                 <table class="table table-bordered table-hover">
                     <tbody>
-                        @foreach (var entity in Model.FilteredEntities)
+                    @foreach (var entity in Model.FilteredEntities)
+                    {
+                        InterviewGroupView group = entity as InterviewGroupView;
+                        if (group != null)
                         {
-                            InterviewGroupView group = entity as InterviewGroupView;
-                            if (group != null)
-                            {
-                                <tr>
-                                    <td colspan="4">
-                                        <div id="group-@group.Id" class="group-item-content">
-                                            <h2 class="heading">@group.Title</h2>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                            <tr>
+                                <td colspan="4">
+                                    <div id="group-@group.Id" class="group-item-content">
+                                        <h2 class="heading">@group.Title</h2>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
 
-                            InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
-                            if (entityAsStaticText != null)
-                            {
-                                @Html.Partial("StaticTextPartialView", entityAsStaticText)
-                            }
+                        InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
+                        if (entityAsStaticText != null)
+                        {
+                            @Html.Partial("StaticTextPartialView", entityAsStaticText)
+                        }
 
-                            InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
-                            if (entityAsInterviewQuestionView != null)
+                        InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
+                        if (entityAsInterviewQuestionView != null)
+                        {
+                            if (Model.InterviewDetails.ReceivedByInterviewer)
                             {
-                                if (Model.InterviewDetails.ReceivedByInterviewer)
-                                {
-                                    @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
-                                }
-                                else
-                                {
-                                    @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary {{"InterviewId", Model.InterviewDetails.PublicKey}})
-                                }
+                                @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
+                            }
+                            else
+                            {
+                                @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary {{"InterviewId", Model.InterviewDetails.PublicKey}})
                             }
                         }
+                    }
                     </tbody>
                 </table>
             </div>
@@ -198,7 +204,7 @@
     @Html.Partial("CommentTemplatePartialView")
     @Html.Partial("HistoryOfStatusesPartialView", Model.History)
     @Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
-</div>
+
     @helper SetGroupLevelClass(int level)
     {
         <text>level</text>@level

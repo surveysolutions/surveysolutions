@@ -44,19 +44,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                try
+                var creationResult = await this.CreateUserAsync(model, UserRoles.ApiUser);
+                if (creationResult.Succeeded)
                 {
-                    await this.CreateUserAsync(model, UserRoles.ApiUser);
+                    this.Success("API User was successfully created");
+                    return this.RedirectToAction("Index");
                 }
-                catch (Exception e)
-                {
-                    this.Logger.Error(e.Message, e);
-                    this.Error(e.Message);
-                    return this.View(model);
-                }
-
-                this.Success("API User was successfully created");
-                return this.RedirectToAction("Index");
+                AddErrors(creationResult);
             }
 
             return this.View(model);

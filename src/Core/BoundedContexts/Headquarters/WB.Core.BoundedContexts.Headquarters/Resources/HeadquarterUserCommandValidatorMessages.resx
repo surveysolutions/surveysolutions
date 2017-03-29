@@ -123,8 +123,8 @@
   <data name="UserNameIsTakenFormat" xml:space="preserve">
     <value>User name '{0}' is taken</value>
   </data>
-  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>You can't unarchive interviewer until supervisor is archived</value>
+  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
+    <value>You can't unarchive interviewer {0} until supervisor is archived</value>
   </data>
   <data name="UserDoesNotExist" xml:space="preserve">
     <value>Could not update user information because current user does not exist</value>

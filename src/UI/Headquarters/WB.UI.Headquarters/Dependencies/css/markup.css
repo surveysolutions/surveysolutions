@@ -241,8 +241,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../fonts/glyphicons-halflings-regular.eot");
+  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -9238,15 +9238,25 @@ table tr th .census-icon, table tr td .census-icon {
   color: #fff; }
 
 .census-icon {
-  text-transform: capitalize;
   display: inline-block;
-  padding: 3px 5px 3px 4px;
+  width: 20px;
+  height: 20px;
   border-radius: 100%;
   background-color: #2a81cb;
-  color: #fff !important;
-  font: 13px/13px Arial, sans-serif;
-  font-style: italic;
-  font-weight: bold; }
+  position: relative;
+  bottom: -2px; }
+  .census-icon:after {
+    content: "C";
+    display: block;
+    font: 12px/12px Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    color: #fff !important; }
   .census-icon:hover, .census-icon:focus, .census-icon:active {
     color: #fff !important; }
 

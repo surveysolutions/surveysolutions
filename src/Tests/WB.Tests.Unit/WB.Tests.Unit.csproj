@@ -455,6 +455,7 @@
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewUniqueKeyGeneratorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HashCompatibilityProviderTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\CompanyLogoSynchronizerTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_census_questionnaire_removed_on_server.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\When_Interviewer_SignIn.cs" />
@@ -546,6 +547,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_interview_events_for_interviews_created_before_version_5_15.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\RosterManagersTest.cs" />
     <Compile Include="SharedKernels\DataCollection\SubstitionTextTests.cs" />
     <Compile Include="SharedKernels\DataCollection\SubstitionTextFactoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
@@ -559,6 +561,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level4_and_linked_question_is_on_level4.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_enabled_questions_and_interview_has_prefilled_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_get_rejected_interview__with_linked_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_supervisor_leaves_a_comment.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_for_questionnaire_with_numeric_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\ObservableRangeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_text_contains_special_regex_characters.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
@@ -24,6 +25,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 Password = "12345",
                 ConfirmPassword = "12345"
             };
+            userManagerMock = new Mock<TestHqUserManager>();
+            userManagerMock.Setup(o => o.CreateUserAsync(Moq.It.IsAny<HqUser>(), inputModel.Password, UserRoles.ApiUser))
+                .Returns(() => Task.FromResult(IdentityResult.Success));
             controller = CreateApiUserController(userManager: userManagerMock.Object);
         };
 
@@ -38,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
         It should_user_be_created = () =>
             userManagerMock.Verify(x => x.CreateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()), Times.Once);
 
-        private static Mock<TestHqUserManager> userManagerMock = new Mock<TestHqUserManager>();
+        private static Mock<TestHqUserManager> userManagerMock;
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserModel inputModel;

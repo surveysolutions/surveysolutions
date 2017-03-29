@@ -739,4 +739,7 @@
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
     <value>Количество интервью полученных с устройства</value>
   </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>Нет элементов, удовлетворяющих выбранному фильтру</value>
+  </data>
 </root>

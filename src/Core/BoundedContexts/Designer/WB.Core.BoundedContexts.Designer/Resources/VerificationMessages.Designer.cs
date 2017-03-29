@@ -1637,5 +1637,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0267_QRBarcodeQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You try use substitution for unsupported entity..
+        /// </summary>
+        internal static string WB0268_DoesNotSupportSubstitution {
+            get {
+                return ResourceManager.GetString("WB0268_DoesNotSupportSubstitution", resourceCulture);
+            }
+        }
     }
 }

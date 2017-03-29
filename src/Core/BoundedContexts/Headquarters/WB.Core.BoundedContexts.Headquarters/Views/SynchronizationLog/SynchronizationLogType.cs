@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         PostInterview,
         PostPackage,
         GetTranslations,
-        DeviceUnexpectedException
+        DeviceUnexpectedException,
+        InterviewerLogin
     }
 }
