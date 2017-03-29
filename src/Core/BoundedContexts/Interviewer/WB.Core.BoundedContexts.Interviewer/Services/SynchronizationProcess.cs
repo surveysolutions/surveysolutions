@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Exceptions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -44,7 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IInterviewerSettings interviewerSettings;
 
         private RestCredentials restCredentials;
         private bool remoteLoginRequired = false;
@@ -62,8 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
             CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher,
-            IInterviewerSettings interviewerSettings)
+            IPasswordHasher passwordHasher)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -79,7 +78,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
-            this.interviewerSettings = interviewerSettings;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -129,8 +127,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 try
                 {
+                    DeviceInfo deviceInfo = null;
 
-                    var deviceInfo = await this.interviewerSettings.GetDeviceInfoAsync().ConfigureAwait(false);
+                    using (var deviceInformationService = ServiceLocator.Current.GetInstance<IDeviceInformationService>())
+                    {
+                        deviceInfo = await deviceInformationService.GetDeviceInfoAsync().ConfigureAwait(false);
+                    }
+                    
                     await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
