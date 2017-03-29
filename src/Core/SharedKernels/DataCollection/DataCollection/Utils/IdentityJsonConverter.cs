@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             writer.WritePropertyName("id");
             writer.WriteValue(identity.Id);
             writer.WritePropertyName("rosterVector");
-            serializer.Serialize(writer, identity.RosterVector.Array);
+            serializer.Serialize(writer, identity.RosterVector, typeof(RosterVector));
             writer.WriteEndObject();
         }
 
