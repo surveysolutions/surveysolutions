@@ -5,5 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewEntityView
     {
         public Identity Id { get; set; }
+        public Identity ParentId { get; set; }
     }
 }
