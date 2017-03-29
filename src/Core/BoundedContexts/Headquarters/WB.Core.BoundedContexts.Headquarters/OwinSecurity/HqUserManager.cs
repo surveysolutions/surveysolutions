@@ -130,8 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             if (creationStatus.Succeeded)
             {
-                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
                 UpdateSha1PasswordIfNeeded(user, password);
+                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
             }
 
             return creationStatus;
