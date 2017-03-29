@@ -1576,7 +1576,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
-            
+            this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
+
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
             var variable = new Variable(command.EntityId, command.VariableData);
@@ -1595,6 +1596,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
+            this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
 
             var oldVariable = this.innerDocument.Find<IVariable>(command.EntityId);
 
@@ -2583,6 +2585,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
                     ExceptionMessages.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair);
+            }
+        }
+
+        private void ThrowDomainExceptionIfVariableLabelContainsSubstitution(string variableLabel)
+        {
+            if (this.substitutionService.GetAllSubstitutionVariableNames(variableLabel).Length > 0)
+            {
+                throw new QuestionnaireException(DomainExceptionType.VariableLabelContainsSubstitutionReference,
+                    ExceptionMessages.VariableLabelContainsSubstitutionReference);
             }
         }
 

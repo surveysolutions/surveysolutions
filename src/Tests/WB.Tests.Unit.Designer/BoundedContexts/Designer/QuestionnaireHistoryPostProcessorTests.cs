@@ -786,7 +786,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
 
-            var command = Create.Command.UpdateVariable(questionnaireId, variableId, VariableType.Boolean, variableName, "", responsibleId);
+            var command = Create.Command.UpdateVariable(questionnaireId, variableId, VariableType.Boolean, variableName, "", null, responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
