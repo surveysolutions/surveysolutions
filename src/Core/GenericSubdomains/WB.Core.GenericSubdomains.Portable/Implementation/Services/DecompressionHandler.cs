@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,6 +30,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 {
                     request.Content = await DecompressContentAsync(request.Content, compressor).ConfigureAwait(true);
                 }
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
 
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(true);
