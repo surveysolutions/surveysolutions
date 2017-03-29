@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -144,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ? interview.GetAllSections()
                 : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
 
-            foreach (var entity in groupEntities.TreeToEnumerableDepthFirst(x => x.Children))
+            foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
             {
                 if (!IsEntityInFilter(filter, entity, interviewData)) continue;
 
@@ -155,6 +156,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 if (question != null) yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
                 else if (group != null) yield return this.ToGroupView(group);
                 else if (staticText != null) yield return this.ToStaticTextView(staticText, questionnaire);
+            }
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetQuestionsFirstAndGroupsAfterFrom(IEnumerable<IInterviewTreeNode> groups)
+        {
+            var itemsQueue = new Stack<IInterviewTreeNode>(groups.Reverse());
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentItem = itemsQueue.Pop();
+
+                yield return currentItem;
+
+                IEnumerable<IInterviewTreeNode> childItems = currentItem.Children;
+
+                if (childItems != null)
+                {
+                    var reverseChildItems = childItems.Reverse().ToList();
+                    var childItemsIncOrrectOrder =
+                                reverseChildItems.Where(child => (child as InterviewTreeGroup) != null)
+                        .Concat(reverseChildItems.Where(child => (child as InterviewTreeGroup) == null));
+
+                    foreach (var childItem in childItemsIncOrrectOrder)
+                    {
+                        itemsQueue.Push(childItem);
+                    }
+                }
             }
         }
 
