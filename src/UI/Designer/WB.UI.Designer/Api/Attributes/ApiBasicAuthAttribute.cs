@@ -78,18 +78,18 @@ namespace WB.UI.Designer.Api.Attributes
                     return;
                 }
 
-                if (this.onlyAllowedAddresses)
-                {
-                    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
-                    {
-                        var clientIpAddress = this.GetClientIpAddress();
-                        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
-                        {
-                            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
-                            return;
-                        }
-                    }
-                }
+                //if (this.onlyAllowedAddresses)
+                //{
+                //    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
+                //    {
+                //        var clientIpAddress = this.GetClientIpAddress();
+                //        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
+                //        {
+                //            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                //            return;
+                //        }
+                //    }
+                //}
 
 
                 base.OnAuthorization(actionContext);
