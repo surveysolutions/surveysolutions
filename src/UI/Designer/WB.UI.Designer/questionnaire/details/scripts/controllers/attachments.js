@@ -46,7 +46,7 @@
             };
 
             var dataBind = function (attachment, attachmentDto) {
-                attachment.initialAttachment = angular.copy(attachmentDto);
+                attachment.initialAttachment = _.clone(attachmentDto);
 
                 attachment.attachmentId = attachmentDto.attachmentId;
                 attachment.name = attachmentDto.name;
@@ -123,7 +123,7 @@
 
                 $scope.fileSelected(attachment, file, function() {
                     commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
-                        attachment.initialAttachment = angular.copy(attachment);
+                        attachment.initialAttachment = _.clone(attachment);
                         $scope.attachments.push(attachment);
                         setTimeout(function () { utilityService.focus("focusAttachment" + attachment.attachmentId); }, 500);
                     });
