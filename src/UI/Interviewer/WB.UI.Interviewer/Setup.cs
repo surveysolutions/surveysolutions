@@ -33,8 +33,10 @@ using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
+using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Ninject;
+using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
@@ -158,6 +160,7 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
             kernel.Bind<IBattery>().To<AndroidBattery>();
             kernel.Bind<IDeviceOrientation>().To<AndroidDeviceOrientation>();
+            kernel.Bind<IDeviceInformationService>().To<DeviceInformationService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
