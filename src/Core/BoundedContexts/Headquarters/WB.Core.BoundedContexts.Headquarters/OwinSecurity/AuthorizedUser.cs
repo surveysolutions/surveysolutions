@@ -35,10 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             get
             {
                 var userId = this.authenticationManager.User?.Identity.GetUserId();
-
-                return userId == null
-                    ? Guid.Parse(this.authenticationManager.User.Identity.GetUserId())
-                    : Guid.Empty;
+                return userId != null ? Guid.Parse(userId) : Guid.Empty;
             }
         }
 
