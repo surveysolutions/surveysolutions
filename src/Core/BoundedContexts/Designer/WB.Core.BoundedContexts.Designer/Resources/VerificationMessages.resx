@@ -643,6 +643,6 @@
     <value>Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead.</value>
   </data>
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
-    <value>You try use substitution for unsupported entity.</value>
+    <value>You try to use substitution for unsupported entity.</value>
   </data>
 </root>
