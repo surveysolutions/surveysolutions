@@ -7,12 +7,13 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserViewFactory : IUserViewFactory
     {
-        private object lockObject = new object();
+        private readonly object lockObject = new object();
         protected readonly IUserRepository UserRepository;
 
         public UserViewFactory(IUserRepository UserRepository)
@@ -40,13 +41,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             if (user == null) return null;
 
-            UserLight supervisor;
+            UserLight supervisor = null;
             lock (lockObject)
             {
-                supervisor = user.Profile?.SupervisorId != null
-                    ? new UserLight(user.Profile.SupervisorId.Value,
-                        this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value).Result.UserName)
-                    : null;
+                var superVisorId = user.Profile?.SupervisorId;
+                if (superVisorId != null)
+                {
+                    var supervisorUser = AsyncHelper.RunSync(() => this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value));
+
+                    supervisor = new UserLight(superVisorId.Value, supervisorUser?.UserName);
+                }
             }
 
             HashSet<UserRoles> userRole;

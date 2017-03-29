@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could create interviewer. Selected supervior do not exist.
+        /// </summary>
+        internal static string SupervisorNotFound {
+            get {
+                return ResourceManager.GetString("SupervisorNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not update user information because user does not exist.
         /// </summary>
         internal static string UserNotExists {

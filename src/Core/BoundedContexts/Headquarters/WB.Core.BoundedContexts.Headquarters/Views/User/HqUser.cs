@@ -22,9 +22,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual HqUserProfile Profile { get; set; }
 
         public virtual string FullName { get; set; }
+
         public virtual bool IsArchived { get; set; }
         public virtual bool IsLockedBySupervisor{get; set; }
         public virtual bool IsLockedByHeadquaters { get; set; }
+
+        public bool IsArchivedOrLocked => IsArchived || IsLockedByHeadquaters || IsLockedBySupervisor;
+
         public virtual DateTime CreationDate { get; set; }
         public virtual string PasswordHashSha1 { get; set; }
 
