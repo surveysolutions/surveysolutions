@@ -33,8 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             IMvxMessenger messenger = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
-            IAttachmentContentStorage attachmentContentStorage = null,
-            IInterviewerSettings interviewerSettings = null)
+            IAttachmentContentStorage attachmentContentStorage = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
             return new SynchronizationProcess(
@@ -51,13 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewerSettings ?? Mock.Of<IInterviewerSettings>(_ => _.GetDeviceInfoAsync() == Task.FromResult(new DeviceInfo
-                {
-                    RAMInfo = new RAMInfo(),
-                    StorageInfo = new StorageInfo(),
-                    DeviceLocation = new LocationAddress()
-                })));
+                passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
     }
 }
