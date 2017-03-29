@@ -311,7 +311,7 @@
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
     <Compile Include="Utils\RosterInstanceExtensions.cs" />
     <Compile Include="Utils\RosterVectorAsCoordinatesComparer.cs" />
-    <Compile Include="Utils\RosterVectorConvertor.cs" />
+    <Compile Include="Utils\RosterVectorConverter.cs" />
     <Compile Include="ValueObjects\Interview\InterviewKey.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
