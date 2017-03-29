@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
@@ -14,14 +15,14 @@ namespace WB.UI.Headquarters.Services
     {
         private static VersionCheckingInfo AvailableVersion = null;
         private static DateTime? LastLoadedAt = null;
-        private static int SecondsForCacheIsValid = 60 * 60;
+        private static readonly int SecondsForCacheIsValid = 60 * 60;
 
         private static DateTime? ErrorOccuredAt = null;
-        private static int DelayOnErrorInSeconds = 3 * 60;
+        private static readonly int DelayOnErrorInSeconds = 3 * 60;
 
-        private IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage;
-        private IPlainTransactionManager plainTransactionManager;
-        private IProductVersion productVersion;
+        private readonly IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage;
+        private readonly IPlainTransactionManager plainTransactionManager;
+        private readonly IProductVersion productVersion;
 
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage,
             IPlainTransactionManager plainTransactionManager,
@@ -66,16 +67,13 @@ namespace WB.UI.Headquarters.Services
 
                     if ((ErrorOccuredAt == null) || isErrorDelayExpired)
                     {
-                        Task.Run(async () =>
-                        {
-                            await this.UpdateVersion();
-                        });
+                        Task.Run(this.UpdateVersionAsync);
                     }
                 }
             }
         }
 
-        private async Task UpdateVersion()
+        private async Task UpdateVersionAsync()
         {
             try
             {
@@ -84,18 +82,8 @@ namespace WB.UI.Headquarters.Services
                 AvailableVersion = versionInfo;
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
-
-                try
-                {
-                    this.plainTransactionManager.BeginTransaction();
-                    this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey);
-                    this.plainTransactionManager.CommitTransaction();
-                }
-                catch
-                {
-                    this.plainTransactionManager.RollbackTransaction();
-                }
-
+                
+                this.plainTransactionManager.ExecuteInPlainTransaction(() => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey));
             }
             catch (Exception)
             {
