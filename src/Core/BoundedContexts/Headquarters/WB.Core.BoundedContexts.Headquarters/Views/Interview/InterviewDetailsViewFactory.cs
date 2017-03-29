@@ -75,11 +75,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
             var interviewGroupViews = rootNode.ToEnumerable()
                                               .Concat(interview.GetAllGroupsAndRosters().Select(this.ToGroupView)).ToList();
+
+            var interviewEntityViews = this.GetFilteredEntities(interview, interviewData, questionnaire, currentGroupIdentity, filter);
+            if (filter != InterviewDetailsFilter.All)
+                interviewEntityViews = this.GetEntitiesWithoutEmptyGroupsAndRosters(interviewEntityViews);
+
             return new DetailsViewModel
             {
                 Filter = filter,
                 SelectedGroupId = currentGroupIdentity,
-                FilteredEntities = this.GetFileredEntities(interview, interviewData, questionnaire, currentGroupIdentity, filter),
+                FilteredEntities = interviewEntityViews,
                 InterviewDetails = new InterviewDetailsView
                 {
                     Groups = interviewGroupViews,
@@ -112,7 +117,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private IEnumerable<InterviewEntityView> GetFileredEntities(IStatefulInterview interview,
+        private IEnumerable<InterviewEntityView> GetEntitiesWithoutEmptyGroupsAndRosters(IEnumerable<InterviewEntityView> interviewEntityViews)
+        {
+            var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
+            var staticTextViews = interviewEntityViews.OfType<InterviewStaticTextView>().ToList();
+
+            foreach (var interviewEntityView in interviewEntityViews)
+            {
+                if (interviewEntityView is InterviewStaticTextView || interviewEntityView is InterviewQuestionView)
+                    yield return interviewEntityView;
+
+                var groupView = interviewEntityView as InterviewGroupView;
+                if (groupView == null) continue;
+
+                if (questionViews.Any(question => question.ParentId == groupView.Id) ||
+                    staticTextViews.Any(staticText => staticText.ParentId == groupView.Id))
+                    yield return groupView;
+            }
+        }
+
+        private IEnumerable<InterviewEntityView> GetFilteredEntities(IStatefulInterview interview,
             InterviewData interviewData, QuestionnaireDocument questionnaire, Identity currentGroupIdentity,
             InterviewDetailsFilter filter)
         {
@@ -120,68 +144,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ? interview.GetAllSections()
                 : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
 
-            var stack = new InterviewEntityViewStack();
-
             foreach (var entity in groupEntities.TreeToEnumerableDepthFirst(x => x.Children))
             {
                 if (!IsEntityInFilter(filter, entity, interviewData)) continue;
 
+                var question = entity as InterviewTreeQuestion;
                 var group = entity as InterviewTreeGroup;
-                if (group != null)
-                    stack.Push(this.ToGroupView(group));
-                else
-                {
-                    var question = entity as InterviewTreeQuestion;
-                    var staticText = entity as InterviewTreeStaticText;
+                var staticText = entity as InterviewTreeStaticText;
 
-                    if (filter != InterviewDetailsFilter.All)
-                        stack.RemoveEmptyGroupsIfTheyAreNotParents(entity.Parents.Select(x => x.Identity).ToList());
-
-                    if (question != null) stack.Push(this.ToQuestionView(question, questionnaire, interview, interviewData));
-                    else if (staticText != null) stack.Push(this.ToStaticTextView(staticText, questionnaire));
-                }
-            }
-
-            if (filter!= InterviewDetailsFilter.All)
-                stack.RemoveEmptyGroups();
-
-            return stack.GetReversedItems().ToList();
-        }
-
-        private class InterviewEntityViewStack
-        {
-            private readonly Stack<InterviewEntityView> mainStack = new Stack<InterviewEntityView>(); 
-            public void Push(InterviewEntityView entityView)
-            {
-                this.mainStack.Push(entityView);
-            }
-
-            public IEnumerable<InterviewEntityView> GetReversedItems()
-            {
-                var reversedStack =  new Stack<InterviewEntityView>(this.mainStack.ToArray());
-                return reversedStack.ToArray();
-            }
-
-            public void RemoveEmptyGroups()
-            {
-                while (this.mainStack.Any() && this.mainStack.Peek() is InterviewGroupView)
-                {
-                    this.mainStack.Pop();
-                }
-            }
-
-            public void RemoveEmptyGroupsIfTheyAreNotParents(List<Identity> parents)
-            {
-                while (this.mainStack.Any() && this.mainStack.Peek() is InterviewGroupView)
-                {
-                    var groupOnTopOfTheStack = this.mainStack.Peek() as InterviewGroupView;
-                    var isGroupOnTopOfTheStackIsParent = parents.Contains(groupOnTopOfTheStack.Id);
-
-                    if (isGroupOnTopOfTheStackIsParent)
-                        return;
-
-                    this.mainStack.Pop();
-                }
+                if (question != null) yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
+                else if (group != null) yield return this.ToGroupView(group);
+                else if (staticText != null) yield return this.ToStaticTextView(staticText, questionnaire);
             }
         }
 
@@ -209,6 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return new InterviewQuestionView
             {
                 Id = interviewQuestion.Identity,
+                ParentId = interviewQuestion.Parent.Identity,
                 Title = interviewQuestion.Title.Text,
                 IsAnswered = interviewQuestion.IsAnswered(),
                 IsValid = interviewQuestion.IsValid,
@@ -447,6 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return new InterviewStaticTextView
             {
                 Id = interviewStaticText.Identity,
+                ParentId = interviewStaticText.Parent.Identity,
                 Text = interviewStaticText.Title.Text,
                 IsEnabled = !interviewStaticText.IsDisabled(),
                 IsValid = interviewStaticText.IsValid,
