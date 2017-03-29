@@ -364,6 +364,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }).ToList();
             }
 
+            if (interviewQuestion.IsYesNo)
+            {
+                var options = questionnaireQuestion.Answers?.Select(a => new QuestionOptionView
+                {
+                    Value = int.Parse(a.AnswerValue),
+                    Label = a.AnswerText
+                })?.ToList() ?? new List<QuestionOptionView>();
+
+                return options;
+            }
+
             return new List<QuestionOptionView>();
         }
 
