@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -21,14 +22,11 @@ namespace WB.UI.Headquarters.Services
         private static readonly int DelayOnErrorInSeconds = 3 * 60;
 
         private readonly IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage;
-        private readonly IPlainTransactionManager plainTransactionManager;
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
         private readonly IProductVersion productVersion;
 
-        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage,
-            IPlainTransactionManager plainTransactionManager,
-            IProductVersion productVersion)
+        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage, IProductVersion productVersion)
         {
-            this.plainTransactionManager = plainTransactionManager;
             this.versionCheckInfoStorage = versionCheckInfoStorage;
             this.productVersion = productVersion;
         }
@@ -83,7 +81,8 @@ namespace WB.UI.Headquarters.Services
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
                 
-                this.plainTransactionManager.ExecuteInPlainTransaction(() => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey));
+                this.plainTransactionManager.ExecuteInPlainTransaction(() 
+                    => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey));
             }
             catch (Exception)
             {
