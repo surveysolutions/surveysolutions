@@ -158,7 +158,8 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
+            ISubstitutionService substitutionService = null)
         {
             var userView = Create.Entity.UserView();
             return new InterviewDetailsViewFactory(
@@ -168,7 +169,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                interviewStore ?? new TestInMemoryWriter<InterviewData>());
+                interviewStore ?? new TestInMemoryWriter<InterviewData>(),
+                substitutionService ?? this.SubstitutionService());
         }
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(

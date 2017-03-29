@@ -17,21 +17,19 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
     {
         private readonly IUserPreloadingService userPreloadingService;
         private readonly ILogger logger;
-        private readonly HqUserManager userManager;
+        private readonly Func<HqUserManager> userManagerFactory;
+        private HqUserManager userManager;
 
         private IPlainTransactionManager plainTransactionManager
             => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         private bool IsWorking;
 
-        public UserBatchCreator(
-            IUserPreloadingService userPreloadingService,
-            ILogger logger,
-            HqUserManager identityManager)
+        public UserBatchCreator(IUserPreloadingService userPreloadingService, ILogger logger, Func<HqUserManager> userManagerFactory)
         {
             this.userPreloadingService = userPreloadingService;
             this.logger = logger;
-            this.userManager = identityManager;
+            this.userManagerFactory = userManagerFactory;
         }
 
         public void CreateUsersFromReadyToBeCreatedQueue()
@@ -39,46 +37,49 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (IsWorking)
                 return;
 
-            IsWorking = true;
-            try
+            using (userManager = this.userManagerFactory())
             {
-                while (IsWorking)
+                IsWorking = true;
+                try
                 {
-                    string preloadingProcessIdToCreate = this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
-
-                    if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
-                        break;
-
-                    var preloadingProcessDataToCreate =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
-                                    .UserPrelodingData.ToList());
-                    try
+                    while (IsWorking)
                     {
-                        this.CreateUsersFromPreloadedData(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(
-                            string.Format("preloading process with id {0} finished with error",
-                                preloadingProcessIdToCreate), e);
+                        string preloadingProcessIdToCreate = this.plainTransactionManager.ExecuteInPlainTransaction(
+                            () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
+
+                        if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
+                            break;
+
+                        var preloadingProcessDataToCreate =
+                            this.plainTransactionManager.ExecuteInPlainTransaction(
+                                () =>
+                                    userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
+                                        .UserPrelodingData.ToList());
+                        try
+                        {
+                            this.CreateUsersFromPreloadedData(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(
+                                string.Format("preloading process with id {0} finished with error",
+                                    preloadingProcessIdToCreate), e);
+
+                            this.plainTransactionManager.ExecuteInPlainTransaction(
+                                () =>
+                                    userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
+                                        e.Message));
+                            return;
+                        }
 
                         this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
-                                    e.Message));
-                        return;
+                            () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
                     }
-
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
                 }
-            }
-            finally
-            {
-                IsWorking = false;
+                finally
+                {
+                    IsWorking = false;
+                }
             }
         }
 

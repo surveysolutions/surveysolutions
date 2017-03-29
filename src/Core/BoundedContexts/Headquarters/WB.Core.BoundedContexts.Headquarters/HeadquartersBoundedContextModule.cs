@@ -61,6 +61,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
@@ -309,8 +310,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
-            this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
 
+            this.Bind<IUserBatchCreator>().To<UserBatchCreator>().InSingletonScope()
+                .WithConstructorArgument(typeof(Func<HqUserManager>), c => (Func<HqUserManager>)(() => c.Kernel.Get<HqUserManager>()));
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 

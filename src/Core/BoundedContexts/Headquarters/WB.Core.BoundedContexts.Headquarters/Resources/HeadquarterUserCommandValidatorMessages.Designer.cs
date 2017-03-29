@@ -89,11 +89,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t unarchive interviewer until supervisor is archived.
+        ///   Looks up a localized string similar to You can&apos;t unarchive interviewer {0} until supervisor is archived.
         /// </summary>
-        public static string YouCantUnarchiveInterviewerUntilSupervisorIsArchived {
+        public static string YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat {
             get {
-                return ResourceManager.GetString("YouCantUnarchiveInterviewerUntilSupervisorIsArchived", resourceCulture);
+                return ResourceManager.GetString("YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat", resourceCulture);
             }
         }
     }

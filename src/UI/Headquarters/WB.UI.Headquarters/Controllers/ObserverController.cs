@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -45,19 +46,13 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                try
+                var creationResult = await this.CreateUserAsync(model, UserRoles.Observer);
+                if (creationResult.Succeeded)
                 {
-                    await this.CreateUserAsync(model, UserRoles.Observer);
+                    this.Success(HQ.ObserverCreated);
+                    return this.RedirectToAction("Index");
                 }
-                catch (Exception e)
-                {
-                    this.Logger.Error(e.Message, e);
-                    this.Error(e.Message);
-                    return this.View(model);
-                }
-                
-                this.Success(HQ.ObserverCreated);
-                return this.RedirectToAction("Index");
+                AddErrors(creationResult);
             }
 
             return this.View(model);
