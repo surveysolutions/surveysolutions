@@ -289,17 +289,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 })?.ToList() ?? new List<QuestionOptionView>();
 
                 var optionsToMarkAsSelected = new List<int>();
+                if (interviewQuestion.IsSingleFixedOption && interviewQuestion.AsSingleFixedOption.IsAnswered)
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
 
-                if (interviewQuestion.IsAnswered())
+                if (interviewQuestion.IsMultiFixedOption && interviewQuestion.AsMultiFixedOption.IsAnswered)
                 {
-                    if (interviewQuestion.IsSingleFixedOption)
-                    {
-                        optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
-                    }
-                    if (interviewQuestion.IsMultiFixedOption)
-                    {
-                        optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
-                    }
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
                 }
 
                 foreach (var selectedValue in optionsToMarkAsSelected)
@@ -316,11 +311,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interviewQuestion.IsLinked)
             {
                 var optionsToMarkAsSelected = new List<RosterVector>();
-                if (interviewQuestion.IsSingleLinkedOption)
+                if (interviewQuestion.IsSingleLinkedOption && interviewQuestion.AsSingleLinkedOption.IsAnswered)
                 {
                     optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue);
                 }
-                if (interviewQuestion.IsMultiLinkedOption)
+                if (interviewQuestion.IsMultiLinkedOption && interviewQuestion.AsMultiLinkedOption.IsAnswered)
                 {
                     optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedOption.GetAnswer().CheckedValues);
                 }
@@ -339,11 +334,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interviewQuestion.IsLinkedToListQuestion)
             {
                 var optionsToMarkAsSelected = new List<int>();
-                if (interviewQuestion.IsSingleLinkedToList)
+                if (interviewQuestion.IsSingleLinkedToList && interviewQuestion.AsSingleLinkedToList.IsAnswered)
                 {
                     optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue);
                 }
-                if (interviewQuestion.IsMultiLinkedToList)
+                if (interviewQuestion.IsMultiLinkedToList && interviewQuestion.AsMultiLinkedToList.IsAnswered)
                 {
                     optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedToList.GetAnswer().CheckedValues);
                 }
@@ -360,15 +355,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return options;
             }
 
-            if (interviewQuestion.IsTextList)
+            if (interviewQuestion.IsTextList && interviewQuestion.AsTextList.IsAnswered)
             {
-                var options = interviewQuestion.AsTextList.GetAnswer().Rows.Select(x => new QuestionOptionView
+                return interviewQuestion.AsTextList.GetAnswer().Rows.Select(x => new QuestionOptionView
                 {
                     Value = Convert.ToInt32(x.Value),
                     Label = x.Text
                 }).ToList();
-
-                return options;
             }
 
             return new List<QuestionOptionView>();
