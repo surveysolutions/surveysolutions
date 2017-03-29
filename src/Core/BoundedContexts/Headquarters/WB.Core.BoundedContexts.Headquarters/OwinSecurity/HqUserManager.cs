@@ -64,6 +64,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             }
         }
 
+        [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
+        private void UpdateSha1PasswordIfNeeded(HqUser user, string newPassword, UserRoles futureRole)
+        {
+            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && (user.IsInRole(UserRoles.Interviewer) || futureRole == UserRoles.Interviewer))
+            {
+                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
+            }
+        }
+
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
             if (user == null || password == null) return false;
@@ -130,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             if (creationStatus.Succeeded)
             {
-                UpdateSha1PasswordIfNeeded(user, password);
+                UpdateSha1PasswordIfNeeded(user, password, role);
                 creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
             }
 
