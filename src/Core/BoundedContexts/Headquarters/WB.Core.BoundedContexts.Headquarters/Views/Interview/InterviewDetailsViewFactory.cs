@@ -120,19 +120,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private IEnumerable<InterviewEntityView> GetEntitiesWithoutEmptyGroupsAndRosters(IEnumerable<InterviewEntityView> interviewEntityViews)
         {
-            var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
-            var staticTextViews = interviewEntityViews.OfType<InterviewStaticTextView>().ToList();
+            var allEntities = interviewEntityViews.ToList();
+            var parentsOfQuestions = allEntities.OfType<InterviewQuestionView>().Select(x => x.ParentId).ToHashSet();
+            var parentsOfStaticTexts = allEntities.OfType<InterviewStaticTextView>().Select(x => x.ParentId).ToHashSet();
 
-            foreach (var interviewEntityView in interviewEntityViews)
+            foreach (var interviewEntityView in allEntities)
             {
-                if (interviewEntityView is InterviewStaticTextView || interviewEntityView is InterviewQuestionView)
+                var groupView = interviewEntityView as InterviewGroupView;
+                if (groupView == null)
                     yield return interviewEntityView;
 
-                var groupView = interviewEntityView as InterviewGroupView;
-                if (groupView == null) continue;
-
-                if (questionViews.Any(question => question.ParentId == groupView.Id) ||
-                    staticTextViews.Any(staticText => staticText.ParentId == groupView.Id))
+                if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
                     yield return groupView;
             }
         }
