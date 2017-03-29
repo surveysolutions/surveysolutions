@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,6 +52,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? filter, string currentGroupId)
         {
+            if (!filter.HasValue)
+                return this.RedirectToAction("Details",
+                    new
+                    {
+                        id = id,
+                        filter = InterviewDetailsFilter.All,
+                        currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id).FormatGuid()
+                    });
+
             this.ViewBag.ActivePage = MenuItem.Docs;
             this.ViewBag.InterviewId = id;
 

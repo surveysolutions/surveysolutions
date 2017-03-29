@@ -63,17 +63,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
-            var passwordHash = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
-                url: string.Concat(this.usersController, "/login"),
-                request: logonInfo,
-                credentials: credentials,
-                token: token)).ConfigureAwait(false);
+            try
+            {
+                var passwordHash = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
+                    url: string.Concat(this.usersController, "/login"),
+                    request: logonInfo,
+                    credentials: credentials,
+                    token: token));
 
-            if(passwordHash == null){
-                throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_Online_SignIn_Failed);
-            };
-            credentials.Token = passwordHash;
-            return passwordHash;
+                if (passwordHash != null)
+                {
+                    credentials.Token = passwordHash;
+                }
+
+                return passwordHash;
+            }
+            catch (RestException ex)
+            {
+                throw this.CreateSynchronizationExceptionByRestException(ex);
+            }
         }
 
         public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)

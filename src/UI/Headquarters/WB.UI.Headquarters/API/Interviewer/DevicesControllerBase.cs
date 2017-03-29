@@ -58,13 +58,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         {
             var interviewerEngineVersion = version.ToString(CultureInfo.InvariantCulture);
             var deviceId = id.ToGuid();
+
             var device = this.devicesRepository.GetById(deviceId);
             if (device == null)
             {
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, this.authorizedUser.Id, interviewerEngineVersion, id));
             }
 
-            this.userManager.LinkDeviceToCurrentInterviewer(id);
+            this.userManager.LinkDeviceToCurrentInterviewer(this.authorizedUser.Id, id);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }

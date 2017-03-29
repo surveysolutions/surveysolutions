@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var vector = (RosterVector)value;
-            serializer.Serialize(writer, vector.Array);
+            serializer.Serialize(writer, vector.CoordinatesAsDecimals);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

@@ -5,121 +5,80 @@
 
 
 @switch (Model.QuestionType)
+{
+    case QuestionType.SingleOption:
+        var singleOptionSetting = Model.Settings as SingleQuestionSettings;
+        if (singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
+        {
+            @Model.AnswerString
+        }
+        else
+        {
+            foreach (var option in Model.Options)
             {
-                case QuestionType.SingleOption:
-                    var singleOptionSetting = Model.Settings as SingleQuestionSettings;
-                    if (singleOptionSetting.IsLinkedToListQuestion || singleOptionSetting.IsCascade || singleOptionSetting.IsFilteredCombobox)
+                <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", option.Value))">
+                    <input type="radio" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", option.Value))" @(option.IsChecked ? "checked" : "") disabled="disabled">
+                    <span>@option.Label</span>
+                </label>
+            }
+        }
+        break;
+
+    case QuestionType.MultyOption:
+        var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
+
+        if (multiQuestionSettings.YesNoQuestion)
+        {
+            @Html.Partial("ReadOnlyYesNoQuestionPartialView", Model)
+        } 
+        else
+        {
+            foreach (var option in Model.Options)
+            {
+                <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", option.Value))">
+                <input type="checkbox" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", option.Value))" @(option.IsChecked ? "checked" : "") disabled="disabled">
+                <span>@option.Label</span>
+                    @if (multiQuestionSettings.AreAnswersOrdered && option.IsChecked)
                     {
-                        @Model.AnswerString
+                        <span class="badge">@option.Index</span>
                     }
-                    else
-                    {
-                        foreach (var option in Model.Options)
-                        {
-                            string optionValue = option.Value.ToString();
-                            bool isChecked;
-                            if (singleOptionSetting.IsLinkedToRoster)
-                            {
-                                isChecked = Model.Answer != null && ((decimal[]) Model.Answer).SequenceEqual((decimal[]) option.Value);
-                            }
-                            else
-                            {
-                                isChecked = Model.Answer != null && Convert.ToDecimal(Model.Answer) == Convert.ToDecimal(option.Value);
-                            }
+                </label>
+            }
+        }
+    break;
 
-                            <label class="radio" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))">
-                                <input type="radio" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-                                <span>@option.Label</span>
-                            </label>
-                        }
-                    }
-                    break;
+    case QuestionType.DateTime:
+    case QuestionType.Numeric:
+    case QuestionType.Text:
+    case QuestionType.QRBarcode:
+        @Model.AnswerString
+        break;
+    case QuestionType.GpsCoordinates:
+        if (Model.Answer != null)
+        {
+            var geoLocationAnswer = Model.Answer as GeoPosition;
 
-                case QuestionType.MultyOption:
-                    var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
-
-                    if (multiQuestionSettings.YesNoQuestion)
-                    {
-                        @Html.Partial("ReadOnlyYesNoQuestionPartialView", Model)
-                    } else if (multiQuestionSettings.IsLinkedToListQuestion) {
-                        @Model.AnswerString
-                    }
-                    else
-                    {
-                        foreach (var option in Model.Options)
-                        {
-                            string optionValue = option.Value.ToString();
-                            bool isChecked = false;
-                            int orderIndex = 0;
-                            if (multiQuestionSettings.IsLinkedToRoster)
-                            {
-                                if (Model.Answer != null)
-                                {
-                                    var answers = (decimal[][])Model.Answer;
-                                    isChecked = answers.Any(answer => answer.SequenceEqual((decimal[])option.Value));
-                                    if (isChecked)
-                                    {
-                                        orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (Model.Answer != null)
-                                {
-                                    var answers = (decimal[])Model.Answer;
-                                    isChecked = answers.Contains(Convert.ToDecimal(option.Value));
-                                    if (isChecked)
-                                    {
-                                        orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
-                                    }
-                                }
-                            }
-                            <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))">
-                            <input type="checkbox" name="@Model.Id" id="@getInterviewItemIdWithPostfix(Model.Id, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-
-                            <span>@option.Label</span>
-                            @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
-                                {
-                                    <span class="badge">@orderIndex</span>
-                                }
-                            </label>
-                        }
-                    }
-                break;
-
-                case QuestionType.DateTime:
-                case QuestionType.Numeric:
-                case QuestionType.Text:
-                case QuestionType.QRBarcode:
-                    @Model.AnswerString
-                    break;
-                case QuestionType.GpsCoordinates:
-                    if (Model.Answer != null)
-                    {
-                        var geoLocationAnswer = Model.Answer as GeoPosition;
-
-                        <a class="geo-nav" title="show on map" target="_blank" href="@string.Format("https://www.google.com/maps?q={0},{1}", geoLocationAnswer.Latitude, geoLocationAnswer.Longitude)">
-                            <span class="icon-maps"></span>
-                        </a>
+            <a class="geo-nav" title="show on map" target="_blank" href="@string.Format("https://www.google.com/maps?q={0},{1}", geoLocationAnswer.Latitude, geoLocationAnswer.Longitude)">
+                <span class="icon-maps"></span>
+            </a>
                         
-                        <div style="display: inline-block">
-                            <div>@Pages.GPS_latitude : <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
-                            <div>@Pages.GPS_longitude : <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
-                            <div>@Pages.GPS_accuracy : <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
-                            <div>@Pages.GPS_altitude : <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
-                        </div>
-                    }
-                    break;
-                case QuestionType.TextList:
-                    foreach (var option in Model.Options)
-                    {
-                        <div><span>@option.Label</span></div>
-                    }
-                    break;
-                case QuestionType.Multimedia:
-                    <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.AnswerString})" width="100%" height="auto" />
-                    break;  
+            <div style="display: inline-block">
+                <div>@Pages.GPS_latitude : <span>@Math.Round(geoLocationAnswer.Latitude, 5)</span></div>
+                <div>@Pages.GPS_longitude : <span>@Math.Round(geoLocationAnswer.Longitude, 5)</span></div>
+                <div>@Pages.GPS_accuracy : <span>@Math.Round(geoLocationAnswer.Accuracy, 2)</span></div>
+                <div>@Pages.GPS_altitude : <span>@Math.Round(geoLocationAnswer.Altitude, 5)</span></div>
+            </div>
+        }
+        break;
+    case QuestionType.TextList:
+        foreach (var option in Model.Options)
+        {
+            <div><span>@option.Label</span></div>
+        }
+        break;
+    case QuestionType.Multimedia:
+        <img src="@Url.RouteUrl("Default", new {httproute = "", controller = "Resource", action = "InterviewFile", interviewid = ViewData["InterviewId"], filename = Model.AnswerString})" width="100%" height="auto" />
+        break;  
 }
 
 @functions

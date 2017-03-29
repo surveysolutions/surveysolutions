@@ -56,9 +56,9 @@ namespace WB.UI.Headquarters.Code
             {
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.authorizedUser.DeviceId,
-                    InterviewerId = this.authorizedUser.Id,
-                    InterviewerName = this.authorizedUser.UserName,
+                    DeviceId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.DeviceId : null,
+                    InterviewerId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.Id : Guid.Empty,
+                    InterviewerName = this.authorizedUser.IsAuthenticated ? this.authorizedUser.UserName : string.Empty, 
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };
@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Code
                 switch (this.logAction)
                 {
                     case SynchronizationLogType.CanSynchronize:
-                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("deviceId", string.Empty);
                         if (context.Response.IsSuccessStatusCode) 
                             logItem.Log = SyncLogMessages.CanSynchronize;
                         else if (context.Response.StatusCode == HttpStatusCode.UpgradeRequired)
@@ -134,14 +134,19 @@ namespace WB.UI.Headquarters.Code
                         {
                             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
                             var questionnaireInfo = this.questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
-                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title,
-                                questionnaireInfo.Version);
+                            logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title, questionnaireInfo.Version);
                         }
                         else
                         {
                             logItem.Log = SyncLogMessages.GetTranslations.FormatString(UnknownStringArgumentValue,
                                 UnknownStringArgumentValue);
                         }
+                        break;
+                    case SynchronizationLogType.InterviewerLogin:
+                        var success = context.Response.IsSuccessStatusCode;
+                        logItem.Log = success 
+                            ? SyncLogMessages.InterviewerLoggedIn
+                            : SyncLogMessages.InterviewerFailedToLogin;
                         break;
                     default:
                         throw new ArgumentException("logAction");

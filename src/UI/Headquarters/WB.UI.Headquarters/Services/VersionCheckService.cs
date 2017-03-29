@@ -2,40 +2,55 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
+using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
 
-namespace WB.UI.Headquarters.Filters
+namespace WB.UI.Headquarters.Services
 {
-    public class NewVersionAvailableFilter : ActionFilterAttribute
+    public class VersionCheckService : IVersionCheckService
     {
         private static VersionCheckingInfo AvailableVersion = null;
-        private static bool IsCheckingNow;
-
         private static DateTime? LastLoadedAt = null;
-        private static int SecondsForCacheIsValid = 60*60;
+        private static int SecondsForCacheIsValid = 60 * 60;
 
         private static DateTime? ErrorOccuredAt = null;
-        private static int DelayOnErrorInSeconds = 3*60;
+        private static int DelayOnErrorInSeconds = 3 * 60;
 
-        private IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage =>
-            ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>();
+        private IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage;
+        private IPlainTransactionManager plainTransactionManager;
+        private IProductVersion productVersion;
 
-        private IPlainTransactionManager PlainTransactionManager =>
-            ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
+        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage,
+            IPlainTransactionManager plainTransactionManager,
+            IProductVersion productVersion)
         {
-            base.OnResultExecuting(filterContext);
+            this.plainTransactionManager = plainTransactionManager;
+            this.versionCheckInfoStorage = versionCheckInfoStorage;
+            this.productVersion = productVersion;
+        }
 
-            var viewResult = filterContext.Result as ViewResult;
-            if (viewResult == null) return;
+        public bool DoesNewVersionExist()
+        {
+            if (!ApplicationSettings.NewVersionCheckEnabled)
+            {
+                return false;
+            }
 
+            this.SetVersion();
+            
+            return AvailableVersion?.Build > productVersion.GetBildNumber();
+        }
+
+        public string GetNewVersionString()
+        {
+            return AvailableVersion?.VersionString;
+        }
+
+        private void SetVersion()
+        {
             if (ApplicationSettings.NewVersionCheckEnabled && !string.IsNullOrEmpty(ApplicationSettings.NewVersionCheckUrl))
             {
                 if (AvailableVersion == null)
@@ -43,11 +58,9 @@ namespace WB.UI.Headquarters.Filters
                     AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.StorageKey);
                 }
 
-                viewResult.ViewBag.LastAvailableApplicationVersion = AvailableVersion;
-
                 var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
 
-                if (!IsCheckingNow && (LastLoadedAt == null || isCacheExpired))
+                if(LastLoadedAt == null || isCacheExpired)
                 {
                     var isErrorDelayExpired = ErrorOccuredAt != null && (DateTime.Now - ErrorOccuredAt)?.Seconds > DelayOnErrorInSeconds;
 
@@ -66,8 +79,6 @@ namespace WB.UI.Headquarters.Filters
         {
             try
             {
-                IsCheckingNow = true;
-
                 var versionInfo = await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
 
                 AvailableVersion = versionInfo;
@@ -76,23 +87,19 @@ namespace WB.UI.Headquarters.Filters
 
                 try
                 {
-                    this.PlainTransactionManager.BeginTransaction();
+                    this.plainTransactionManager.BeginTransaction();
                     this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey);
-                    this.PlainTransactionManager.CommitTransaction();
+                    this.plainTransactionManager.CommitTransaction();
                 }
-                catch 
+                catch
                 {
-                    this.PlainTransactionManager.RollbackTransaction();
+                    this.plainTransactionManager.RollbackTransaction();
                 }
-                
+
             }
             catch (Exception)
             {
                 ErrorOccuredAt = DateTime.Now;
-            }
-            finally
-            {
-                IsCheckingNow = false;
             }
         }
 
@@ -101,8 +108,8 @@ namespace WB.UI.Headquarters.Filters
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-               
-                var  jsonData = await httpClient.GetStringAsync(uri);
+
+                var jsonData = await httpClient.GetStringAsync(uri);
                 return JsonConvert.DeserializeObject<T>(jsonData);
             }
         }

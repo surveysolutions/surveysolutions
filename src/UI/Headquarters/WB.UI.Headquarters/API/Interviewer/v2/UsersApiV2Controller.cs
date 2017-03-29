@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public override bool HasDevice() => base.HasDevice();
 
         [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.InterviewerLogin)]
         public async Task<string> Login(LogonInfo userLogin)
         {
             var signinresult = await this.signInManager.SignInInterviewerAsync(userLogin.Username, userLogin.Password);
@@ -44,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 return await this.signInManager.GenerateApiAuthTokenAsync(authorizedUser.Id);
             }
 
-            return null;
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
     }
 }

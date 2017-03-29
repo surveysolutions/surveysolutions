@@ -150,7 +150,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
             return new UserBatchCreator(
                 userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                 Mock.Of<ILogger>(),
-                identityManager ?? Mock.Of<TestHqUserManager>());
+                () => identityManager ?? Mock.Of<TestHqUserManager>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)

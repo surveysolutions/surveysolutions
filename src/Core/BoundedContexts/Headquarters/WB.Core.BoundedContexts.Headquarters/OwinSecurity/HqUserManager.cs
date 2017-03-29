@@ -9,26 +9,25 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native.Threading;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HqUserManager : UserManager<HqUser, Guid>
     {
-        private readonly IAuthorizedUser authorizedUser;
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-  
+        private readonly ILogger logger;
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, IAuthorizedUser authorizedUser, 
-            IHashCompatibilityProvider hashCompatibilityProvider)
+        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider)
             : base(store)
         {
-            this.authorizedUser = authorizedUser;
             this.hashCompatibilityProvider = hashCompatibilityProvider;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public Task<IdentityResult> ChangePasswordAsync( HqUser user, string newPassword)
@@ -51,17 +50,23 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         protected override Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
-            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
-            {
-                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
-            }
+            this.UpdateSha1PasswordIfNeeded(user, newPassword);
 
             return base.UpdatePassword(passwordStore, user, newPassword);
         }
 
+        [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
+        private void UpdateSha1PasswordIfNeeded(HqUser user, string newPassword)
+        {
+            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && user.IsInRole(UserRoles.Interviewer))
+            {
+                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
+            }
+        }
+
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
-            if (user == null) return false;
+            if (user == null || password == null) return false;
 
             var result = this.PasswordHasher.VerifyHashedPassword(user.PasswordHash, password) == PasswordVerificationResult.Success;
 
@@ -76,16 +81,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
                     if (changeResult != IdentityResult.Success)
                     {
-                        ServiceLocator.Current.GetInstance<ILogger>()
-                            .Error($"Unable to migrate password for user: {user.UserName}. " +
+                        this.logger.Warn($"Unable to migrate password for user: {user.UserName}. " +
                                 $"Reason(s): {string.Join("\r\n\r\n", changeResult.Errors)}");
                     }
 
                     if (changeResult == IdentityResult.Success)
                     {
                         user.PasswordHashSha1 = null;
+                        await this.UpdateAsync(user);
                     }
 
+                    // We should not block user authorization if it's impossible to update SHA1 password to newer.
+                    // This can happen if current password policy is more strict than provided password
                     result = true;
                 }
             }
@@ -98,42 +105,38 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, IOwinContext context)
+        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, HQIdentityDbContext dbContext)
         {
-            var store = new HqUserStore(context.Get<HQIdentityDbContext>());
-            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-            var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
+            var store = new HqUserStore(dbContext);
+           var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
 
-            var manager = new HqUserManager(store, authorizedUser, hashCompatibility)
+            var manager = new HqUserManager(store, hashCompatibility)
             {
                 PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
                 PasswordValidator = ServiceLocator.Current.GetInstance<IIdentityValidator<string>>()
             };
+
             return manager;
         }
-
-        public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role)
-        {
-            user.CreationDate = DateTime.UtcNow;
-
-            var creationStatus = this.Create(user, password);
-            if (creationStatus.Succeeded)
-                creationStatus = this.AddToRole(user.Id, Enum.GetName(typeof(UserRoles), role));
-
-            return creationStatus;
-        }
+        
+        public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role) => 
+            AsyncHelper.RunSync(() => this.CreateUserAsync(user, password, role));
 
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-
+            
             var creationStatus = await this.CreateAsync(user, password);
+
             if (creationStatus.Succeeded)
+            {
                 creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
+                UpdateSha1PasswordIfNeeded(user, password);
+            }
 
             return creationStatus;
         }
-
+        
         public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
         {
             if (!string.IsNullOrWhiteSpace(password))
@@ -158,22 +161,20 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var result = new List<IdentityResult>();
             foreach (var accountToArchive in supervisorAndDependentInterviewers)
             {
-                accountToArchive.IsArchived = true;
-                var archiveResult = await this.UpdateUserAsync(accountToArchive, null);
+                var archiveResult = await this.ArchiveUserAsync(accountToArchive);
                 result.Add(archiveResult);
             }
 
             return result;
         }
 
-        public virtual void LinkDeviceToCurrentInterviewer(string deviceId)
+        public virtual void LinkDeviceToCurrentInterviewer(Guid id, string deviceId)
         {
-            if (this.authorizedUser.Role != UserRoles.Interviewer)
+            var currentUser = this.FindById(id);
+            if(!currentUser.IsInRole(UserRoles.Interviewer))
                 throw new AuthenticationException(@"Only interviewer can be linked to device");
 
-            var currentUser = this.Users?.FirstOrDefault(user => user.Id == this.authorizedUser.Id);
             currentUser.Profile.DeviceId = deviceId;
-
             this.UpdateUser(currentUser, null);
         }
 
@@ -184,12 +185,31 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (var userToArchive in usersToArhive)
             {
-                userToArchive.IsArchived = archive;
-                var archiveResult = await this.UpdateUserAsync(userToArchive, null);
+                var archiveResult = archive ? await this.ArchiveUserAsync(userToArchive) : await this.UnarchiveUserAsync(userToArchive);
                 archiveUserResults.Add(archiveResult);
             }
 
             return archiveUserResults.ToArray();
+        }
+
+        private async Task<IdentityResult> UnarchiveUserAsync(HqUser userToUnarchive)
+        {
+            if (userToUnarchive.IsInRole(UserRoles.Interviewer))
+            {
+                var supervisor = await this.FindByIdAsync(userToUnarchive.Profile.SupervisorId.Value);
+                if (supervisor.IsArchived)
+                    return IdentityResult.Failed(string.Format(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat,
+                            userToUnarchive.UserName));
+            }
+
+            userToUnarchive.IsArchived = false;
+            return await this.UpdateUserAsync(userToUnarchive, null);
+        }
+
+        private async Task<IdentityResult> ArchiveUserAsync(HqUser userToArchive)
+        {
+            userToArchive.IsArchived = true;
+            return await this.UpdateUserAsync(userToArchive, null);
         }
     }
 }

@@ -407,12 +407,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasUnansweredQuestions(Identity group) 
             => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
-        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer()
         {
+            var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            return this.Tree.FindQuestions().Where(
-                question => this.IsEnabledWithSupervisorComments(question, questionnaire))
+            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
+        }
+
+        public IEnumerable<Identity> GetCommentedBySupervisorAllQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(this.IsEnabledWithSupervisorComments)
                 .Select(x => new
                 {
                     Id = x.Identity,
@@ -422,9 +428,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Id);
         }
 
-        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question, IQuestionnaire questionnaire)
+        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
-               questionnaire.IsInterviewierQuestion(question.Identity.Id) &&
                question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
@@ -544,7 +549,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
-        public int CountCommentedQuestions() => this.GetCommentedBySupervisorQuestionsInInterview().Count();
+        public int CountCommentedQuestionsVisibledToInterviewer() => this.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Count();
 
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
@@ -557,6 +562,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool AcceptsInterviewerAnswers()
         {
             return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
+        }
+
+        public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
+        {
+            return this.Tree.Sections;
         }
     }
 }

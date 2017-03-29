@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -14,7 +13,7 @@ namespace WB.Tests.Abc.TestFactories
 {
     public class TestHqUserManager : HqUserManager
     {
-        public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IAuthorizedUser>(), Mock.Of<IHashCompatibilityProvider>()) { }
+        public TestHqUserManager() : base(Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IHashCompatibilityProvider>()) { }
     }
 
     public class StorageFactory
@@ -27,7 +26,7 @@ namespace WB.Tests.Abc.TestFactories
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
 
-        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null, IAuthorizedUser authorizedUser = null, IHashCompatibilityProvider hashCompatibilityProvider = null)
-            => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(), authorizedUser, hashCompatibilityProvider);
+        public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null, IHashCompatibilityProvider hashCompatibilityProvider = null)
+            => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(), hashCompatibilityProvider);
     }
 }
