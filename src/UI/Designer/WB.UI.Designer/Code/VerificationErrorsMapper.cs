@@ -61,13 +61,13 @@ namespace WB.UI.Designer.Code
             {
                 if (reference.Type == QuestionnaireVerificationReferenceType.Attachment)
                 {
-                    var attachment = questionnaireDocument.Attachments.Single(x => x.AttachmentId == reference.Id);
+                    var attachment = questionnaireDocument.Attachments.SingleOrDefault(x => x.AttachmentId == reference.Id);
                     yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = QuestionnaireVerificationReferenceType.Attachment,
-                        Variable = attachment.Name,
-                        Title = attachment.Name
+                        Variable = attachment?.Name,
+                        Title = attachment?.Name
                     };
                     continue;
                 }
