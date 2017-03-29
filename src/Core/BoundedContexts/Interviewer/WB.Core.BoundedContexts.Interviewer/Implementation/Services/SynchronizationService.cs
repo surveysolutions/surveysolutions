@@ -65,18 +65,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             try
             {
-                var passwordHash = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
+                var authToken = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
                     url: string.Concat(this.usersController, "/login"),
                     request: logonInfo,
                     credentials: credentials,
                     token: token));
-
-                if (passwordHash != null)
-                {
-                    credentials.Token = passwordHash;
-                }
-
-                return passwordHash;
+                
+                return authToken;
             }
             catch (RestException ex)
             {

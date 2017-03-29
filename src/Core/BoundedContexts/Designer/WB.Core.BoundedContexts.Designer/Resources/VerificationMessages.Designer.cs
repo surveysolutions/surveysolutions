@@ -1639,7 +1639,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You try use substitution for unsupported entity..
+        ///   Looks up a localized string similar to You try to use substitution for unsupported entity..
         /// </summary>
         internal static string WB0268_DoesNotSupportSubstitution {
             get {

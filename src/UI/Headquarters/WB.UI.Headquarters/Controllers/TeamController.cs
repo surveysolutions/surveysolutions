@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -48,8 +49,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return await this.userManager.UpdateUserAsync(appUser, editModel.Password).ConfigureAwait(false);
         }
 
-        protected Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
-            => this.userManager.CreateUserAsync(new HqUser
+        protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
+        {
+            if (supervisorId != null)
+            {
+                var supervisor = await this.userManager.FindByIdAsync(supervisorId.Value);
+                if (supervisor == null || !supervisor.IsInRole(UserRoles.Supervisor) || supervisor.IsArchivedOrLocked)
+                {
+                    return IdentityResult.Failed(HQ.SupervisorNotFound);
+                }
+            }
+
+            return await this.userManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),
                 IsLockedBySupervisor = false,
@@ -60,5 +71,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 PhoneNumber = user.PhoneNumber,
                 Profile = supervisorId.HasValue ? new HqUserProfile {SupervisorId = supervisorId} : null
             }, user.Password, role);
+        }
     }
 }
