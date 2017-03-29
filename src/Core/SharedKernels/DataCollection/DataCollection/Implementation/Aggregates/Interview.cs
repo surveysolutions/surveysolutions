@@ -1332,7 +1332,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewKey(command.InterviewKey);
         }
 
-        private void ApplyInterviewKey(InterviewKey key)
+        protected void ApplyInterviewKey(InterviewKey key)
         {
             if (this.interviewKey == null && key != null)
             {
