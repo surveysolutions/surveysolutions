@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return interviewQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions().ToArray();
 
             if (interviewQuestion.IsMultiFixedOption)
-                return interviewQuestion.AsMultiFixedOption.GetAnswer().ToDecimals();
+                return interviewQuestion.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray();
 
             if (interviewQuestion.IsMultiLinkedOption)
                 return interviewQuestion.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray();
@@ -280,7 +280,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private List<QuestionOptionView> ToOptionsView(IQuestion questionnaireQuestion, InterviewTreeQuestion interviewQuestion, IStatefulInterview interview)
         {
-            if ((interviewQuestion.IsSingleFixedOption || interviewQuestion.IsMultiFixedOption) && interviewQuestion.IsAnswered())
+            if ((interviewQuestion.IsSingleFixedOption || interviewQuestion.IsMultiFixedOption))
             {
                 var options = questionnaireQuestion.Answers?.Select(a => new QuestionOptionView
                 {
@@ -289,13 +289,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 })?.ToList() ?? new List<QuestionOptionView>();
 
                 var optionsToMarkAsSelected = new List<int>();
-                if (interviewQuestion.IsSingleFixedOption)
+
+                if (interviewQuestion.IsAnswered())
                 {
-                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
-                }
-                if (interviewQuestion.IsMultiFixedOption)
-                {
-                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
+                    if (interviewQuestion.IsSingleFixedOption)
+                    {
+                        optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
+                    }
+                    if (interviewQuestion.IsMultiFixedOption)
+                    {
+                        optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
+                    }
                 }
 
                 foreach (var selectedValue in optionsToMarkAsSelected)
