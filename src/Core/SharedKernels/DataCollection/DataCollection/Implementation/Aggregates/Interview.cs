@@ -2245,6 +2245,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 optionTitle = sourceQuestion.GetAnswerAsString();
             }
 
+            if (sourceNode == null) return string.Empty;
+
             InterviewTreeRoster[] sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
             InterviewTreeRoster[] linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
 
