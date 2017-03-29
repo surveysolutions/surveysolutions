@@ -30,7 +30,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         private bool IsCurrentUserInRole(UserRoles role) => this.authenticationManager.User.IsInRole(role.ToString());
         
-        public Guid Id => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
+        public Guid Id
+        {
+            get
+            {
+                var userId = this.authenticationManager.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                return userId != null ? Guid.Parse(userId) : Guid.Empty;
+            }
+        }
+       
         public string UserName => this.authenticationManager.User.Identity.Name;
 
         public string DeviceId => this.authenticationManager.User.FindFirst(DeviceClaimType)?.Value;

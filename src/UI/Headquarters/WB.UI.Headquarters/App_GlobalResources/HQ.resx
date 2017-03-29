@@ -123,6 +123,9 @@
   <data name="UserNotExists" xml:space="preserve">
     <value>Could not update user information because user does not exist</value>
   </data>
+  <data name="SupervisorNotFound" xml:space="preserve">
+    <value>Could create interviewer. Selected supervior do not exist</value>
+  </data>
   <data name="NoPermission" xml:space="preserve">
     <value>Could not update user information because you don't have permission to perform this operation.</value>
   </data>

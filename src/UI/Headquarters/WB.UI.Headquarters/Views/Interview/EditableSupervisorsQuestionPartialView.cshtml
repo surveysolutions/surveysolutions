@@ -1,5 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
+@using WB.Core.GenericSubdomains.Portable
 @model InterviewQuestionView
 
 @switch (Model.QuestionType)
@@ -16,7 +17,7 @@
     case QuestionType.Numeric:
         var numericQuestionSetting = Model.Settings as NumericQuestionSettings;
         <div class="input-group">
-            <input id="@Model.Id.Id" class="form-control numeric" type="text" useFormatting="@numericQuestionSetting.UseFormating.ToString().ToLower()" value="@Model.AnswerString" />
+            <input id="@Model.Id" class="form-control numeric" type="text" useFormatting="@numericQuestionSetting.UseFormating.ToString().ToLower()" value="@Model.AnswerString" />
             <span class="input-group-btn">
                 @if (numericQuestionSetting.IsInteger)
                 {
