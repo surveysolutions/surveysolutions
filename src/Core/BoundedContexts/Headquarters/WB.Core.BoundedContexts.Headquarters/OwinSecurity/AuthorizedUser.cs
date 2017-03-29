@@ -34,11 +34,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             get
             {
-                var userId = this.authenticationManager.User?.Identity.GetUserId();
+                var userId = this.authenticationManager.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 return userId != null ? Guid.Parse(userId) : Guid.Empty;
             }
         }
-
        
         public string UserName => this.authenticationManager.User.Identity.Name;
 
