@@ -69,6 +69,8 @@
                             case 'ValidationMessage':
                                 focusId = 'validation-message-' + $state.params.indexOfEntityInProperty;
                                 break;
+                            case 'AttachmentName':
+                                focusId = 'edit-static-attachment-name';
                             default:
                                 break;
                         }

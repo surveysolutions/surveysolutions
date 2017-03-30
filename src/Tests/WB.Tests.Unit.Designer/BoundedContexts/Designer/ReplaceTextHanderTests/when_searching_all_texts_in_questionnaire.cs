@@ -4,7 +4,6 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -18,7 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id, staticTextId, $"static text title with {searchFor}", responsibleId, chapterId));
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id, 
+                staticTextId, 
+                $"static text title with {searchFor}", 
+                responsibleId, 
+                chapterId));
             
             questionnaire.AddTextQuestion(questionId,
                 chapterId,
@@ -80,6 +83,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name",
                 $"macro content {searchFor}", "desc", responsibleId));
+
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id,
+                staticTextWithAttachmentId,
+                $"static text title",
+                responsibleId,
+                chapterId));
+
+            questionnaire.UpdateStaticText(Create.Command.UpdateStaticText(questionnaire.Id,
+                staticTextWithAttachmentId,
+                "title",
+                $"attachment {searchFor}",
+                responsibleId,
+                null));
         };
 
         Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor, true, false, false);
@@ -127,6 +143,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                                                x.Property == QuestionnaireVerificationReferenceProperty.Option &&
                                                x.IndexOfEntityInProperty == 1);
 
+        It should_find_attachment_name_in_static_text = () =>
+            foundReferences.ShouldContain(x => x.Id == staticTextWithAttachmentId &&
+                                               x.Property == QuestionnaireVerificationReferenceProperty.AttachmentName);
+
         It should_not_include_references_to_filtered_combobox_options = () => 
             foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);
 
@@ -145,6 +165,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        static readonly Guid staticTextWithAttachmentId = Guid.Parse("66666666666666666666666666666666");
+        
         const string searchFor = "to_replace";
 
         private static IEnumerable<QuestionnaireNodeReference> foundReferences;
