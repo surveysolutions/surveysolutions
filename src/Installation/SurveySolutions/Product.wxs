@@ -177,20 +177,29 @@
                               Value="Postgres"
                               Sequence='3'/>
                 
+               <util:XmlFile Id="UpdateConnectionStringProviderName"
+                              File="[CONFIGFOLDER]\Headquarters.Web.config"
+                              Action="setValue"
+                              ElementPath="//configuration/connectionStrings/add"
+                              Name="providerName"
+                              Value="Npgsql"
+                              Sequence='4'/>
+
                 <util:XmlFile Id="UpdateElementValueXml1"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/connectionStrings/add"
                               Name="connectionString"
                               Value="[CONNSTRING]"
-                              Sequence='4'/>
+                              Sequence='5'/>
                 
                 <!--<add key="EventStore.Provider" value="Postgres" />-->
                 <util:XmlFile Id="CreateElementXml2"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='5'/>
+                              Name="add" 
+                              Sequence='6'/>
 
                 <util:XmlFile Id="UpdateElementXml2"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -198,7 +207,7 @@
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
                               Name="key"
                               Value="EventStore.Provider"
-                              Sequence='6'/>
+                              Sequence='7'/>
 
                 <util:XmlFile Id="UpdateElementValueXml2"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -206,14 +215,14 @@
                               ElementPath="//configuration/appSettings/add[\[]@key='EventStore.Provider'[\]]"
                               Name="value"
                               Value="Postgres"
-                              Sequence='7'/>   
+                              Sequence='8'/>   
                     
                 <!--<add key="DataStorePath" value="..." />-->
                 <util:XmlFile Id="CreateElementXml3"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='8'/>
+                              Name="add" Sequence='9'/>
 
                 <util:XmlFile Id="UpdateElementXml3"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -221,7 +230,7 @@
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
                               Name="key"
                               Value="DataStorePath"
-                              Sequence='9'/>
+                              Sequence='10'/>
 
                 <util:XmlFile Id="UpdateElementValueXml3"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -229,14 +238,14 @@
                               ElementPath="//configuration/appSettings/add[\[]@key='DataStorePath'[\]]"
                               Name="value"
                               Value="[INSTALLFOLDER]Data_Site"
-                              Sequence='10'/>
+                              Sequence='11'/>
             
                 <!--<add key="DesignerAddress" value="https://solutions.worldbank.org" />-->
                 <util:XmlFile Id="CreateElementXml4"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='11'/>
+                              Name="add" Sequence='12'/>
 
                 <util:XmlFile Id="UpdateElementXml4"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -244,7 +253,7 @@
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
                               Name="key"
                               Value="DesignerAddress"
-                              Sequence="12"/>
+                              Sequence="13"/>
 
                 <util:XmlFile Id="UpdateElementValueXml4"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -252,13 +261,13 @@
                               ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
                               Name="value"
                               Value="https://solutions.worldbank.org"
-                              Sequence='13'/>
+                              Sequence='14'/>
                 <!--<add key="WebInterviewEnabled" value="true" />-->
                 <util:XmlFile Id="CreateElementXml5"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
-                              Name="add" Sequence='14'/>
+                              Name="add" Sequence='15'/>
 
                 <util:XmlFile Id="UpdateElementXml5"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -266,7 +275,7 @@
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
                               Name="key"
                               Value="WebInterviewEnabled"
-                              Sequence="15"/>
+                              Sequence="16"/>
 
                 <util:XmlFile Id="UpdateElementValueXml5"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
@@ -274,7 +283,7 @@
                               ElementPath="//configuration/appSettings/add[\[]@key='WebInterviewEnabled'[\]]"
                               Name="value"
                               Value="true"
-                              Sequence='16'/>
+                              Sequence='17'/>
             </Component>
         </ComponentGroup>
     </Fragment>

@@ -21,11 +21,13 @@
                 LogoFile="img\logo.png"
                 LogoSideFile="img\logo.png"
                 ShowVersion="yes"
-                SuppressOptionsUI="yes"/>
+                SuppressOptionsUI="yes"
+                SuppressRepair="yes"/>
+            
         </BootstrapperApplicationRef>
         
         <Chain>
-            <PackageGroupRef Id="NetFx462Web"/>
+            <PackageGroupRef Id="NetFx462Web" />
 
             <RollbackBoundary />
 
