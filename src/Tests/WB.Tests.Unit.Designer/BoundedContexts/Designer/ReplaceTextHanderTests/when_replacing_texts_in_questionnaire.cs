@@ -54,6 +54,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 variableExpression: $"var expression {searchFor}",
                 parentId: chapterId);
 
+            questionnaire.UpdateVariable(Create.Command.UpdateVariable(
+                questionnaire.Id,
+                variableId,
+                VariableType.String,
+                "name",
+                expression: $"var expression {searchFor}",
+                label: $"label {searchFor}",
+                userId: responsibleId
+                ));
+
             questionnaire.AddGroup(groupId, chapterId, 
                 title: $"group title with {searchFor}",
                 enablingCondition: $"group enablement {searchFor}", responsibleId: responsibleId);
@@ -116,6 +126,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         It should_repalce_variable_expressions = () => 
             questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
+
+        It should_repalce_variable_lablel = () =>
+        questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Label.ShouldEqual($"label {replaceWith}");
 
         It should_replace_variable_names = () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");

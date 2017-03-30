@@ -327,9 +327,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var questionnaireVariable = questionnaireItem as IVariable;
-                if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                if (questionnaireVariable != null)
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
+                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
+                    {
+                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
+                    }
+
+                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                    {
+                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
+                    }
                 }
 
                 var staticText = questionnaireItem as IStaticText;
@@ -429,6 +437,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var questionnaireVariable = questionnaireItem as IVariable;
                 if (questionnaireVariable != null)
                 {
+                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
+                    {
+                        replacedAny = true;
+                        questionnaireVariable.Label = ReplaceUsingSearchTerm(questionnaireVariable.Label, searchRegex, command.ReplaceWith);
+                    }
+
                     if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                     {
                         replacedAny = true;

@@ -85,6 +85,9 @@
                             case 'VariableContent':
                                 focusId = "edit-group-condition";
                                 break;
+                            case 'VariableLabel':
+                                focusId = "edit-variable-title-highlight";
+                                break;
                             default:
                                 break;
                         }
