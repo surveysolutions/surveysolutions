@@ -241,8 +241,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../fonts/glyphicons-halflings-regular.eot");
+  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -8799,6 +8799,8 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
         border-top-color: #e4b9c0; }
       .alerts .alert.alert-danger .alert-link {
         color: #c33615; }
+    .alerts .alert.alert-dismissible {
+      padding-right: 35px; }
 
 .error-text {
   color: #e74924 !important; }
@@ -8851,11 +8853,9 @@ table tr th .census-icon, table tr td .census-icon {
     font: 12px/12px Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
-    width: 100%;
-    text-align: center;
     position: absolute;
     top: 4px;
-    right: 0;
+    right: 6px;
     color: #fff !important; }
   .census-icon:hover, .census-icon:focus, .census-icon:active {
     color: #fff !important; }
