@@ -249,6 +249,9 @@ h5{
 		&.alert-danger {
 		  @include alert-variant($alert-danger-bg, $alert-danger-border, $alert-danger-text);
 		}
+		&.alert-dismissible{
+			padding-right: 35px;
+		}
 	}
 }
 .error-text{
@@ -313,9 +316,7 @@ table{
 		font: 12px/12px Arial, sans-serif;
 		font-style: italic;
     	font-weight: bold;
-		width: 100%;
-		text-align: center;
-		@include absolute(4px, 0);
+		@include absolute(4px, 6px);
 		color: #fff !important;
 	}
 	&:hover, &:focus, &:active{
