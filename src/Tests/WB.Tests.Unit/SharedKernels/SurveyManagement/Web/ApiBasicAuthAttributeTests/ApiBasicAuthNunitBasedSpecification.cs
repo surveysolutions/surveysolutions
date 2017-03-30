@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
 
         protected ApiBasicAuthAttribute CreateApiBasicAuthAttribute(IReadSideStatusService readSideStatusService = null)
         {
-            this.userManager = new HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
+            this.userManager = Create.Storage.HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
             var auth = new Mock<IAuthenticationManager>();
             var hqSignInManager = new HqSignInManager(userManager, auth.Object, this.ApiTokenProviderProvider.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);

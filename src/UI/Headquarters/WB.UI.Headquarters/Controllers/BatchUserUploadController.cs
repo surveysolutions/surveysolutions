@@ -176,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers
                 plainTransactionManager.ExecuteInPlainTransaction(() =>
                    this.userPreloadingService.EnqueueForUserCreation(id));
 
-                Task.Run(() => this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue());
+                Task.Run(() => this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueueAsync());
 
                 return this.RedirectToAction(nameof(UserCreationProcessDetails), new {id});
             }
@@ -194,7 +194,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
-                Task.Run(() => this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueue());
+                Task.Run(() => this.userBatchCreator.CreateUsersFromReadyToBeCreatedQueueAsync());
                 return this.RedirectToAction(nameof(UserCreationProcessDetails), new { id });
             }
             catch (Exception e)
