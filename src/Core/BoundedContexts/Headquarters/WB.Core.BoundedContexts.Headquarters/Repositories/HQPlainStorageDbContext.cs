@@ -10,15 +10,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         
         public HQPlainStorageDbContext(): base("Postgres")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, HQPlainStorageDbMigrationsConfiguration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DeviceSyncInfo>().ToTable("devicesyncinfo", HQPlainStorageDbMigrationsConfiguration.SchemaName);
-            modelBuilder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", HQPlainStorageDbMigrationsConfiguration.SchemaName);
+            modelBuilder.Entity<DeviceSyncInfo>().ToTable("devicesyncinfo", DbConfiguration.SchemaName);
+            modelBuilder.Entity<SyncStatistics>().ToTable("devicesyncstatistics", DbConfiguration.SchemaName);
         }
     }
 }

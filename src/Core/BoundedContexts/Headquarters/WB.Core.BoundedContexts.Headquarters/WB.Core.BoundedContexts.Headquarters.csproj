@@ -378,7 +378,7 @@
     <Compile Include="OwinSecurity\HqSignInManager.cs" />
     <Compile Include="OwinSecurity\HqUserManager.cs" />
     <Compile Include="OwinSecurity\HqUserStore.cs" />
-    <Compile Include="OwinSecurity\HQIdentityDbMigrationsConfiguration.cs" />
+    <Compile Include="OwinSecurity\Configuration.cs" />
     <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
     <Compile Include="OwinSecurity\AuthorizedUser.cs" />
     <Compile Include="OwinSecurity\IApiTokenProvider.cs" />
@@ -397,7 +397,7 @@
     <Compile Include="Questionnaires\Translations\TranslationInstanceMap.cs" />
     <Compile Include="Questionnaires\Translations\Impl\TranslationManagementService.cs" />
     <Compile Include="QuestionnaireUpgraderModule.cs" />
-    <Compile Include="Repositories\HQPlainStorageDbMigrationsConfiguration.cs" />
+    <Compile Include="Repositories\DbConfiguration.cs" />
     <Compile Include="Repositories\DeviceSyncInfoRepository.cs" />
     <Compile Include="Repositories\HQPlainStorageDbContext.cs" />
     <Compile Include="Repositories\IDeviceSyncInfoRepository.cs" />
