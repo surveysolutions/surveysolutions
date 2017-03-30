@@ -496,6 +496,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 catch (Exception exception)
                 {
                     statistics.FailedToCreateInterviewsCount++;
+
+                    await this.TrySendUnexpectedExceptionToServerAsync(exception, cancellationToken).ConfigureAwait(false);
                     this.logger.Error($"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}", exception);
                 }
             }
@@ -545,6 +547,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 catch (Exception syncException)
                 {
                     statistics.FailedToUploadInterviwesCount++;
+                    await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken).ConfigureAwait(false);
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
             }
