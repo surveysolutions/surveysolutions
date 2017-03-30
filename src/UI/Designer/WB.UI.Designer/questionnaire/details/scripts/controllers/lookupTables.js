@@ -30,11 +30,11 @@
                     return;
 
                 _.each($scope.questionnaire.lookupTables, function (lookupTableDto) {
-                    var lookupTable = { initial: {} };
+                    var lookupTable = { checkpoint: {} };
                     if (!_.any($scope.lookupTables, function(elem) { return elem.itemId === lookupTableDto.itemId; }))
                     {
                         dataBind(lookupTable, lookupTableDto);
-                        dataBind(lookupTable.initial, lookupTableDto);
+                        dataBind(lookupTable.checkpoint, lookupTableDto);
                         $scope.lookupTables.push(lookupTable);
                     }
                 });
@@ -54,9 +54,9 @@
                 };
 
                 commandService.addLookupTable($state.params.questionnaireId, newLookupTable).then(function () {
-                    var lookupTable = { initial: {} };
+                    var lookupTable = { checkpoint: {} };
                     dataBind(lookupTable, newLookupTable);
-                    dataBind(lookupTable.initial, newLookupTable);
+                    dataBind(lookupTable.checkpoint, newLookupTable);
                     $scope.lookupTables.push(lookupTable);
                 });
             };
@@ -74,7 +74,7 @@
             }
             $scope.saveLookupTable = function (lookupTable) {
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function () {
-                    dataBind(lookupTable.initial, lookupTable);
+                    dataBind(lookupTable.checkpoint, lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
                 }).catch(function() {
@@ -83,7 +83,7 @@
             };
 
             $scope.cancel = function(lookupTable) {
-                dataBind(lookupTable, lookupTable.initial);
+                dataBind(lookupTable, lookupTable.checkpoint);
                 lookupTable.form.$setPristine();
             };
 

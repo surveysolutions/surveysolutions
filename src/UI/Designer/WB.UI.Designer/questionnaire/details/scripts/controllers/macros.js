@@ -29,10 +29,10 @@
                     return;
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
-                    var macro = { initial: {} };
+                    var macro = { checkpoint: {} };
                     if (!_.any($scope.macros, function (elem) { return elem.itemId === macroDto.itemId; })) {
                         dataBind(macro, macroDto);
-                        dataBind(macro.initial, macroDto);
+                        dataBind(macro.checkpoint, macroDto);
                         $scope.macros.push(macro);
                     }
                 });
@@ -52,22 +52,22 @@
                 };
 
                 commandService.addMacro($state.params.questionnaireId, newMacro).then(function () {
-                    var macro = { initial: {} };
+                    var macro = { checkpoint: {} };
                     dataBind(macro, newMacro);
-                    dataBind(macro.initial, newMacro);
+                    dataBind(macro.checkpoint, newMacro);
                     $scope.macros.push(macro);
                 });
             };
 
             $scope.saveMacro = function (macro) {
                 commandService.updateMacro($state.params.questionnaireId, macro).then(function () {
-                    dataBind(macro.initial, macro);
+                    dataBind(macro.checkpoint, macro);
                     macro.form.$setPristine();
                 });
             };
 
             $scope.cancel = function (macro) {
-                dataBind(macro, macro.initial);
+                dataBind(macro, macro.checkpoint);
                 macro.form.$setPristine();
             };
 

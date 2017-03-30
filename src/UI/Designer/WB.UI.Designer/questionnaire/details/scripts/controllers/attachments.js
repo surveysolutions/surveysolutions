@@ -80,10 +80,10 @@
                     return;
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
-                    var attachment = { initial: {} };
+                    var attachment = { checkpoint: {} };
                     if (!_.any($scope.attachments, function(elem) { return elem.attachmentId === attachmentDto.attachmentId;})) {
                         dataBind(attachment, attachmentDto);
-                        dataBind(attachment.initial, attachmentDto);
+                        dataBind(attachment.checkpoint, attachmentDto);
                         $scope.attachments.push(attachment);
                     }
                 });
@@ -118,11 +118,11 @@
                     return;
                 }
 
-                var attachment = { attachmentId: utilityService.guid(), initial: {} };
+                var attachment = { attachmentId: utilityService.guid(), checkpoint: {} };
 
                 $scope.fileSelected(attachment, file, function() {
                     commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
-                        dataBind(attachment.initial, attachment);
+                        dataBind(attachment.checkpoint, attachment);
                         $scope.attachments.push(attachment);
                         setTimeout(function () { utilityService.focus("focusAttachment" + attachment.attachmentId); }, 500);
                     });
@@ -180,7 +180,7 @@
                 commandService.updateAttachment($state.params.questionnaireId, newAttachmentId, attachment).then(function () {
                     // only if request didn't fail, we update id of attachment with new value to not loose connection with content id.
                     attachment.attachmentId = newAttachmentId;
-                    dataBind(attachment.initial, attachment);
+                    dataBind(attachment.checkpoint, attachment);
                     attachment.form.$setPristine();
                 });
             };
@@ -196,7 +196,7 @@
             });
 
             $scope.cancel = function (attachment) {
-                dataBind(attachment, attachment.initial);
+                dataBind(attachment, attachment.checkpoint);
                 attachment.form.$setPristine();
             };
 
