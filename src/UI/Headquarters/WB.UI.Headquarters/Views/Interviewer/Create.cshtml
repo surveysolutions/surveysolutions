@@ -23,6 +23,7 @@
     </script>
 }
 <div class="main">
+    @Html.Partial("_notice")
     @Html.Partial("_alerts")
     <div class="page-header">
         <h2> @Pages.InterviewerCreate_CreateIn <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> @Pages.InterviewerCreate_Team</h2>
