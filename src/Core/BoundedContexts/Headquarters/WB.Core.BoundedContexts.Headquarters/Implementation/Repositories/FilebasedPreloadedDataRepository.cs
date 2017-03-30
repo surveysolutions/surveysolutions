@@ -199,7 +199,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             foreach (var folderPath in this.fileSystemAccessor.GetDirectoriesInDirectory(this.path))
             {
                 if (this.ShouldFolderBeDeleted(folderPath))
-                    this.fileSystemAccessor.DeleteDirectory(folderPath);
+                {
+                    try
+                    {
+                        this.fileSystemAccessor.DeleteDirectory(folderPath);
+                    }
+                    catch (Exception exception)
+                    {
+                        Logger.Warn($"Failed to delete old folder '{folderPath}'. Will try next time.", exception);
+                    }
+                }
             }
         }
 
@@ -211,7 +220,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, folderName);
 
             if (this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
+            {
+                try
+                {
+                    this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
+                }
+                catch (Exception exception)
+                {
+                    Logger.Warn($"Failed to delete folder '{currentFolderPath}'. Will try next time.", exception);
+                }
+            }
         }
 
         private IEnumerable<string> GetFiles(string id)
