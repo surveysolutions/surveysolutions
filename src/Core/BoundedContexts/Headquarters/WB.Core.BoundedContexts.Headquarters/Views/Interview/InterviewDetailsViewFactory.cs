@@ -129,8 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var groupView = interviewEntityView as InterviewGroupView;
                 if (groupView == null)
                     yield return interviewEntityView;
-
-                if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
+                else if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
                     yield return groupView;
             }
         }
