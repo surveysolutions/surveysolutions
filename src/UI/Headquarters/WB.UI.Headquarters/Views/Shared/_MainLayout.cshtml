@@ -15,7 +15,6 @@
         AntiForgery.GetTokens(null, out cookieToken, out formToken);
         return cookieToken + ":" + formToken;
     }
-
 }
 
 <!DOCTYPE html>
@@ -88,9 +87,14 @@
             </div>
         </div>
     }
-
+    @if (ViewBag.GlobalNotice != null)
+    {
+        <div class="alert alert-info alert-dismissible text-center " role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @ViewBag.GlobalNotice
+        </div>
+    }
 @RenderBody()
-    
     <footer class="footer">
         <div class="container-fluid">
             <div class="text-left">
