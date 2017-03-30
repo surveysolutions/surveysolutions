@@ -1114,6 +1114,7 @@
     <Content Include="Views\Troubleshooting\CensusInterviews.cshtml" />
     <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
+    <Content Include="Views\Shared\_notice.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
