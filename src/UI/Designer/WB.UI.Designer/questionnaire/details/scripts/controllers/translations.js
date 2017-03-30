@@ -21,8 +21,6 @@
             $scope.translations = [];
 
             var dataBind = function (translation, translationDto) {
-                translation.initialTranslation = _.clone(translationDto);
-
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
 
@@ -51,9 +49,10 @@
                     return;
 
                 _.each($scope.questionnaire.translations, function (translationDto) {
-                    var translation = {};
+                    var translation = { initial: {} };
                     if (!_.any($scope.translations, function (elem) { return elem.translationId === translationDto.translationId; })) {
                         dataBind(translation, translationDto);
+                        dataBind(translation.initial, translationDto);
                         $scope.translations.push(translation);
                     }
                 });
@@ -80,7 +79,7 @@
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                        translation.initialTranslation = _.clone(translation);
+                        dataBind(translation.initial, translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
@@ -127,7 +126,7 @@
 
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                    translation.initialTranslation = _.clone(translation);
+                    dataBind(translation.initial, translation);
                     translation.form.$setPristine();
                 });
             };
@@ -143,8 +142,7 @@
             });
 
             $scope.cancel = function (translation) {
-                var temp = _.clone(translation.initialTranslation);
-                dataBind(translation, temp);
+                dataBind(translation, translation.initial);
                 translation.form.$setPristine();
             };
 
