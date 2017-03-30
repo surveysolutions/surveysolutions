@@ -12,10 +12,10 @@ using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
-    internal sealed class HQIdentityDbMigrationsConfiguration : DbMigrationsConfiguration<HQIdentityDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<HQIdentityDbContext>
     {
         public const string SchemaName = "users";
-        public HQIdentityDbMigrationsConfiguration()
+        public Configuration()
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
