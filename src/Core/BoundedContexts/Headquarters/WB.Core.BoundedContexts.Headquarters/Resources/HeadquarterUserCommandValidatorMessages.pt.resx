@@ -126,7 +126,4 @@
   <data name="UserNameIsTakenFormat" xml:space="preserve">
     <value>Nome de usuário '{0}' é tomado</value>
   </data>
-  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>Você não pode Desarquivar o entrevistador até que o supervisor seja arquivado</value>
-  </data>
 </root>

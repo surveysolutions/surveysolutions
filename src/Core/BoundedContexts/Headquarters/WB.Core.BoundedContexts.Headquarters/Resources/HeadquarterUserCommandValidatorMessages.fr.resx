@@ -126,7 +126,4 @@
   <data name="UserNameIsTakenFormat" xml:space="preserve">
     <value>Nom de l’utilisateur « {0} » est déjà prise</value>
   </data>
-  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>Impossible de désarchiver l'enquêteur avant de désarchiver son superviseur</value>
-  </data>
 </root>
