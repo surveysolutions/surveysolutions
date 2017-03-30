@@ -22,7 +22,6 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -277,8 +276,6 @@ namespace WB.UI.Headquarters
             kernel.Bind<GoogleApiSettings>()
                 .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"GoogleApiKey"]))
                 .InSingletonScope();
-
-            kernel.Bind<HQPlainStorageDbContext>().ToConstant(new HQPlainStorageDbContext(dbConnectionStringName)).InRequestScope();
 
             return kernel;
         }

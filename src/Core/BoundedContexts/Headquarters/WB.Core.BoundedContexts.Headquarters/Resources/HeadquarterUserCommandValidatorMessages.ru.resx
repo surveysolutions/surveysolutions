@@ -126,7 +126,7 @@
   <data name="UserNameIsTakenFormat" xml:space="preserve">
     <value>Имя «{0}» уже используется</value>
   </data>
-  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>Интервьюер не может быть разархивирован, до тех пор, пока супервизор заархивирован</value>
+  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchivedFormat" xml:space="preserve">
+    <value>Интервьюер {0} не может быть разархивирован, до тех пор, пока супервизор заархивирован</value>
   </data>
 </root>

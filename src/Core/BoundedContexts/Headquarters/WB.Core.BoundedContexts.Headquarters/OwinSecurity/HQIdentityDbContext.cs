@@ -1,6 +1,5 @@
 using System;
 using System.Data.Entity;
-using System.Web.Configuration;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
@@ -14,7 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         }
 
         // Here you define your own DbSet's
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,7 +24,5 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
             modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", OwinSecurity.Configuration.SchemaName);
         }
-
-        public static HQIdentityDbContext Create() => new HQIdentityDbContext();
     }
 }
