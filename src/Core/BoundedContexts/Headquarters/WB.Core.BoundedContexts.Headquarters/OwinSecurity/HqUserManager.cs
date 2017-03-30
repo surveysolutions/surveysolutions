@@ -158,9 +158,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public virtual void LinkDeviceToCurrentInterviewer(Guid id, string deviceId)
+        public virtual void LinkDeviceToInterviewer(Guid interviewerId, string deviceId)
         {
-            var currentUser = this.FindById(id);
+            var currentUser = this.FindById(interviewerId);
 
             if (currentUser == null || currentUser.IsArchivedOrLocked)
             {
