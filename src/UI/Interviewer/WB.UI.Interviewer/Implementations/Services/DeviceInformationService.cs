@@ -41,7 +41,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.permissions = permissions;
             this.logger = logger;
 
-            this.TryToCreateGsmSignalStrengthListener();
+            //this.TryToCreateGsmSignalStrengthListener();
         }
 
         private void TryToCreateGsmSignalStrengthListener()
@@ -455,7 +455,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void Dispose()
         {
-            this.gsmSignalStrengthListener?.Dispose();
+            //this.gsmSignalStrengthListener?.Dispose();
         }
     }
 }
