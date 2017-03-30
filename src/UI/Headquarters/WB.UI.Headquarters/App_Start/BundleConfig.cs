@@ -179,8 +179,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/knockout/ko.extenders.js",
                 "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js",
-                "~/Scripts/pages/import-interviews.js"
+                "~/Scripts/knockout/ko.spin.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews").Include(
