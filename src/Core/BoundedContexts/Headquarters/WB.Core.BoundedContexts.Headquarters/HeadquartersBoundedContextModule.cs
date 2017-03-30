@@ -311,8 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
 
-            this.Bind<IUserBatchCreator>().To<UserBatchCreator>().InSingletonScope()
-                .WithConstructorArgument(typeof(Func<HqUserManager>), c => (Func<HqUserManager>)(() => c.Kernel.Get<HqUserManager>()));
+            this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 

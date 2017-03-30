@@ -7,12 +7,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
-
-        public HQPlainStorageDbContext() { }
-
-        public HQPlainStorageDbContext(string connectionStringName) : base(connectionStringName)
+        
+        public HQPlainStorageDbContext(): base("Postgres")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>(connectionStringName));
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQPlainStorageDbContext, DbConfiguration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

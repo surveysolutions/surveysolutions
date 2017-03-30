@@ -21,7 +21,7 @@ using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using Ninject;
+using Ninject.Web.Common;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
@@ -42,8 +42,7 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        internal static void SetupNConfig()
-            => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        internal static void SetupNConfig() => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
 
         static Startup()
         {
@@ -52,20 +51,43 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            var ninjectKernel = NinjectConfig.CreateKernel();
-            
-            ConfigureAuth(app);
-
+            ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
-
-            logger.Info($"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-
-            InitializeAppShutdown(app);
+            logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
             UpdateAppVersion();
             HealthCheck();
-
+            ConfigureAuth(app);
+            InitializeAppShutdown(app);
             InitializeMVC();
+            ConfigureWebApi(app);
+        }
 
+        private void ConfigureNinject(IAppBuilder app)
+        {
+            var perRequestModule = new OnePerRequestHttpModule();
+
+            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
+
+                    await next();
+                }
+                finally
+                {
+                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
+                }
+            });
+
+            var kernel = NinjectConfig.CreateKernel();
+            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
+            app.UseNinjectMiddleware(() => kernel);
+        }
+
+        private void ConfigureWebApi(IAppBuilder app)
+        {
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
 
@@ -75,21 +97,14 @@ namespace WB.UI.Headquarters
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
-
             app.Use(RemoveServerNameFromHeaders);
-
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
-            app.UseNinjectMiddleware(() => ninjectKernel);
             app.UseNinjectWebApi(config);
         }
 
-        public void ConfigureAuth(IAppBuilder app)
+        private void ConfigureAuth(IAppBuilder app)
         {
-            app.CreatePerOwinContext(HQIdentityDbContext.Create);
-            app.CreatePerOwinContext<HqUserManager>((options, ctx) => HqUserManager.Create(options, ctx.Get<HQIdentityDbContext>()));
-            app.CreatePerOwinContext<HqSignInManager>(HqSignInManager.Create);
-
             var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
 
             // Enable the application to use a cookie to store information for the signed in user
@@ -210,7 +225,7 @@ namespace WB.UI.Headquarters
             DataAnnotationsConfig.RegisterAdapters();
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new RazorViewEngine()); 
+            ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
