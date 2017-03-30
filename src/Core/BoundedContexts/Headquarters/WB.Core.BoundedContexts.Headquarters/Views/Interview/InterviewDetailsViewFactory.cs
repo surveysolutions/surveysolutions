@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -18,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -129,8 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var groupView = interviewEntityView as InterviewGroupView;
                 if (groupView == null)
                     yield return interviewEntityView;
-
-                if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
+                else if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
                     yield return groupView;
             }
         }
@@ -212,7 +211,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Title = interviewQuestion.Title.Text,
                 IsAnswered = interviewQuestion.IsAnswered(),
                 IsValid = interviewQuestion.IsValid,
-                AnswerString = interviewQuestion.GetAnswerAsString(),
+                AnswerString = GetAnswerAsString(interviewQuestion, questionnaire), 
                 QuestionType = questionnaireQuestion.QuestionType,
                 IsFeatured = interviewQuestion.IsPrefilled,
                 LinkedToQuestionId = questionnaireQuestion.LinkedToQuestionId,
@@ -231,6 +230,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         (x, index) => ToValidationView(interviewQuestion.ValidationMessages, x, index)),
                     questionnaireQuestion.ValidationConditions).ToList()
             };
+        }
+
+        private string GetAnswerAsString(InterviewTreeQuestion interviewQuestion, QuestionnaireDocument questionnaire)
+        {
+            if (!interviewQuestion.IsAnswered())
+                return string.Empty;
+
+            if (interviewQuestion.IsInteger)
+            {
+                var numericQuestion = questionnaire.Find<NumericQuestion>(interviewQuestion.Identity.Id);
+                var integerValue = interviewQuestion.AsInteger.GetAnswer().Value;
+                return numericQuestion.UseFormatting
+                    ? integerValue.ToString("N0", CultureInfo.InvariantCulture)
+                    : integerValue.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (interviewQuestion.IsDouble)
+            {
+                var numericQuestion = questionnaire.Find<NumericQuestion>(interviewQuestion.Identity.Id);
+                var doubleValue = interviewQuestion.AsDouble.GetAnswer().Value;
+                return numericQuestion.UseFormatting
+                    ? $"{doubleValue:0,0.#################}"
+                    : doubleValue.ToString(CultureInfo.InvariantCulture);
+            }
+
+            return interviewQuestion.GetAnswerAsString();
         }
 
         private static bool GetIsFlagged(InterviewTreeQuestion interviewQuestion, InterviewData interviewData)
