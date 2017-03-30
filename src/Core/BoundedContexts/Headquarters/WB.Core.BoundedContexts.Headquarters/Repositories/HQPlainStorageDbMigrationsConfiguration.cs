@@ -3,10 +3,10 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
-    internal class DbConfiguration : DbMigrationsConfiguration<HQPlainStorageDbContext>
+    internal class HQPlainStorageDbMigrationsConfiguration : DbMigrationsConfiguration<HQPlainStorageDbContext>
     {
         public const string SchemaName = "plainstore";
-        public DbConfiguration()
+        public HQPlainStorageDbMigrationsConfiguration()
         {
             this.AutomaticMigrationsEnabled = true;
             this.AutomaticMigrationDataLossAllowed = true;
