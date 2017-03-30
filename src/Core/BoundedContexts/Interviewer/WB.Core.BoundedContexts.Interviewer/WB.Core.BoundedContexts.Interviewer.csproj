@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="Services\CompanyLogoInfo.cs" />
     <Compile Include="Services\IBattery.cs" />
+    <Compile Include="Services\IDeviceInformationService.cs" />
     <Compile Include="Services\IDeviceOrientation.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -35,6 +37,30 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             Assert.That(deserializedValue.Length, Is.EqualTo(2));
             Assert.That(deserializedValue[1], Is.EqualTo(rosterVector));
+        }
+
+        [Test]
+        public void Should_be_able_to_serialize_KeyValuePair_of_validation_conditions()
+        {
+            Dictionary<Identity, IList<FailedValidationCondition>> conditions =  new Dictionary<Identity, IList<FailedValidationCondition>>();
+            var identity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), 1, 2, 3);
+            var failedValidationCondition = Create.Entity.FailedValidationCondition(1);
+            conditions[identity] = new List<FailedValidationCondition> {failedValidationCondition};
+
+            JsonAllTypesSerializer serializer = new JsonAllTypesSerializer();
+
+            IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> keyValuePairs = conditions.ToList();
+
+            var serialize = serializer.Serialize(keyValuePairs);
+
+            Assert.That(serialize, Is.Not.Empty);
+
+            List<KeyValuePair<Identity, IList<FailedValidationCondition>>> deserialized =
+                serializer.Deserialize<List<KeyValuePair<Identity, IList<FailedValidationCondition>>>>(serialize);
+
+            Assert.That(deserialized.Count, Is.EqualTo(1));
+            Assert.That(deserialized[0].Key, Is.EqualTo(identity));
+            Assert.That(deserialized[0].Value[0], Is.EqualTo(failedValidationCondition));
         }
     }
 }
