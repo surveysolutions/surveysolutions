@@ -58,8 +58,9 @@ namespace WB.Tests.Unit.Infrastructure
             var identity = new Identity(Guid.Parse("b4eb6b8b-aeed-488d-9521-ddcdf77c626e"), new RosterVector(new List<int> { 1, 2, 3 }));
 
             var json = JsonConvert.SerializeObject(identity, JsonSettings);
+            var deserialized = JsonConvert.DeserializeObject<Identity>(json, JsonSettings);
 
-            Assert.That(json, Is.EqualTo(@"{""id"":""b4eb6b8b-aeed-488d-9521-ddcdf77c626e"",""rosterVector"":[1,2,3]}"));
+            Assert.That(deserialized, Is.EqualTo(identity));
         }
 
         [Test]

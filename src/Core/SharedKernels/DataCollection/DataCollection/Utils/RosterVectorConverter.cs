@@ -37,26 +37,39 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var vector = new List<decimal>();
-            while (reader.Read() && reader.TokenType != JsonToken.EndObject && reader.TokenType != JsonToken.EndArray)
+
+            if (reader.TokenType == JsonToken.StartObject)
             {
-                if (reader.TokenType == JsonToken.StartArray)
+                while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+                    if (reader.TokenType == JsonToken.PropertyName && reader.Value.ToString() == "$values")
                     {
-                        if (reader.TokenType != JsonToken.Comment)
-                        {
-                            vector.Add(Convert.ToDecimal(reader.Value));
-                        }
+                        reader.Read();
+                        vector = ParseArray(reader);
                     }
                 }
             }
-
-            if (vector.Any())
+            else if (reader.TokenType == JsonToken.StartArray)
             {
-                return new RosterVector(vector);
+                vector = ParseArray(reader);
             }
 
-            return RosterVector.Empty;
+            return new RosterVector(vector);
+        }
+
+        private static List<decimal> ParseArray(JsonReader reader)
+        {
+            List<decimal> vector = new List<decimal>();
+
+            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+            {
+                if (reader.TokenType != JsonToken.Comment)
+                {
+                    vector.Add(Convert.ToDecimal(reader.Value));
+                }
+            }
+
+            return vector;
         }
 
         public override bool CanConvert(Type objectType)

@@ -301,7 +301,6 @@
     <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_plain_aggregate_root_does_not_exist_in_repository.cs" />
     <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
     <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
-    <Compile Include="EntitySerializerTests\when_deserrialize_legacy_InterviewLinkedQuestionOptions.cs" />
     <Compile Include="IntegrationCreate.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
@@ -598,6 +597,9 @@
   <ItemGroup>
     <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EntitySerializerTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

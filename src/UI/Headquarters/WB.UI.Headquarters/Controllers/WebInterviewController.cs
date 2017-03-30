@@ -42,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
+        private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
@@ -73,7 +74,8 @@ namespace WB.UI.Headquarters.Controllers
             IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
-            ILogger logger, IUserViewFactory usersRepository)
+            ILogger logger, IUserViewFactory usersRepository,
+            IInterviewUniqueKeyGenerator keyGenerator)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -86,6 +88,7 @@ namespace WB.UI.Headquarters.Controllers
             this.connectionLimiter = connectionLimiter;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.usersRepository = usersRepository;
+            this.keyGenerator = keyGenerator;
         }
 
         private string CreateInterview(QuestionnaireIdentity questionnaireId)
@@ -99,7 +102,8 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, questionnaireId, DateTime.UtcNow,
-                interviewer.Supervisor.Id);
+                interviewer.Supervisor.Id,
+                this.keyGenerator.Get());
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

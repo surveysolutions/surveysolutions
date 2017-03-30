@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -119,19 +120,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private IEnumerable<InterviewEntityView> GetEntitiesWithoutEmptyGroupsAndRosters(IEnumerable<InterviewEntityView> interviewEntityViews)
         {
-            var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
-            var staticTextViews = interviewEntityViews.OfType<InterviewStaticTextView>().ToList();
+            var allEntities = interviewEntityViews.ToList();
+            var parentsOfQuestions = allEntities.OfType<InterviewQuestionView>().Select(x => x.ParentId).ToHashSet();
+            var parentsOfStaticTexts = allEntities.OfType<InterviewStaticTextView>().Select(x => x.ParentId).ToHashSet();
 
-            foreach (var interviewEntityView in interviewEntityViews)
+            foreach (var interviewEntityView in allEntities)
             {
-                if (interviewEntityView is InterviewStaticTextView || interviewEntityView is InterviewQuestionView)
+                var groupView = interviewEntityView as InterviewGroupView;
+                if (groupView == null)
                     yield return interviewEntityView;
 
-                var groupView = interviewEntityView as InterviewGroupView;
-                if (groupView == null) continue;
-
-                if (questionViews.Any(question => question.ParentId == groupView.Id) ||
-                    staticTextViews.Any(staticText => staticText.ParentId == groupView.Id))
+                if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
                     yield return groupView;
             }
         }
@@ -144,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ? interview.GetAllSections()
                 : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
 
-            foreach (var entity in groupEntities.TreeToEnumerableDepthFirst(x => x.Children))
+            foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
             {
                 if (!IsEntityInFilter(filter, entity, interviewData)) continue;
 
@@ -155,6 +154,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 if (question != null) yield return this.ToQuestionView(question, questionnaire, interview, interviewData);
                 else if (group != null) yield return this.ToGroupView(group);
                 else if (staticText != null) yield return this.ToStaticTextView(staticText, questionnaire);
+            }
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetQuestionsFirstAndGroupsAfterFrom(IEnumerable<IInterviewTreeNode> groups)
+        {
+            var itemsQueue = new Stack<IInterviewTreeNode>(groups.Reverse());
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentItem = itemsQueue.Pop();
+
+                yield return currentItem;
+
+                IEnumerable<IInterviewTreeNode> childItems = currentItem.Children;
+
+                if (childItems != null)
+                {
+                    var reverseChildItems = childItems.Reverse().ToList();
+                    var childItemsIncOrrectOrder =
+                                reverseChildItems.Where(child => (child as InterviewTreeGroup) != null)
+                        .Concat(reverseChildItems.Where(child => (child as InterviewTreeGroup) == null));
+
+                    foreach (var childItem in childItemsIncOrrectOrder)
+                    {
+                        itemsQueue.Push(childItem);
+                    }
+                }
             }
         }
 
@@ -336,6 +362,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Value = Convert.ToInt32(x.Value),
                     Label = x.Text
                 }).ToList();
+            }
+
+            if (interviewQuestion.IsYesNo)
+            {
+                var options = questionnaireQuestion.Answers?.Select(a => new QuestionOptionView
+                {
+                    Value = int.Parse(a.AnswerValue),
+                    Label = a.AnswerText
+                })?.ToList() ?? new List<QuestionOptionView>();
+
+                return options;
             }
 
             return new List<QuestionOptionView>();
