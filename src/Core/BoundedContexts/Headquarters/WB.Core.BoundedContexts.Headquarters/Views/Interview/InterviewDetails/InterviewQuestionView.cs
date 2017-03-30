@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsLinkedToRoster { get; set; }
 
-        public bool IsLinkedToListQuestion { get; set; }
+        //public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class SingleQuestionSettings
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsLinkedToRoster { get; set; }
 
-        public bool IsLinkedToListQuestion { get; set; }
+        //public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class InterviewQuestionCommentView
