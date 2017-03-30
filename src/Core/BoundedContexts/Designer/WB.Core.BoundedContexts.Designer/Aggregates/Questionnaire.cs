@@ -480,6 +480,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     }
                 }
 
+                var staticText = questionnaireItem as IStaticText;
+                if (staticText != null)
+                {
+                    if (MatchesSearchTerm(staticText.AttachmentName, searchRegex))
+                    {
+                        replacedAny = true;
+                        staticText.AttachmentName = ReplaceUsingSearchTerm(staticText.AttachmentName, searchRegex, command.ReplaceWith);
+                    }
+                }
+
                 if (replacedAny)
                 {
                     this.affectedByReplaceEntries++;
