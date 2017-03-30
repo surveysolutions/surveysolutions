@@ -18,16 +18,18 @@
         <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
             <bal:WixStandardBootstrapperApplication 
                 LicenseUrl=""
-                LogoFile="img\logo.png"
-                LogoSideFile="img\logo.png"
+                LogoFile="img\logo-50.png"
+                LogoSideFile="img\logo-50.png"
                 ShowVersion="yes"
                 SuppressOptionsUI="yes"
                 SuppressRepair="yes"/>
             
+        <!--SuppressRepair="yes"-->
+        
         </BootstrapperApplicationRef>
         
         <Chain>
-            <PackageGroupRef Id="NetFx462Web" />
+            <PackageGroupRef Id="NetFx462Redist" />
 
             <RollbackBoundary />
 

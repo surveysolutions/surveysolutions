@@ -47,7 +47,10 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions.wixproj">
+    <Folder Include="img\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveySolutionsProduct\SurveySolutions.wixproj">
       <Name>SurveySolutions</Name>
       <Project>{c575970b-d09a-4c43-95b8-0867a617ddb8}</Project>
       <Private>True</Private>
@@ -57,10 +60,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="img\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="img\logo.png" />
+    <Content Include="img\logo-50.png" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
