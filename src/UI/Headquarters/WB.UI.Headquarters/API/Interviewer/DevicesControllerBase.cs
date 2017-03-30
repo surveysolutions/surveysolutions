@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, this.authorizedUser.Id, interviewerEngineVersion, id));
             }
 
-            this.userManager.LinkDeviceToCurrentInterviewer(this.authorizedUser.Id, id);
+            this.userManager.LinkDeviceToInterviewer(this.authorizedUser.Id, id);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
