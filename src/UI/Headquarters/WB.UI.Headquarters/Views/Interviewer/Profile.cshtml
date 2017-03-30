@@ -243,13 +243,13 @@
                                 <td>@Pages.InterviewerProfile_ConnectionType</td>
                                 <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
                             </tr>
-                            @if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
+                            @*@if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
                             {
                                 <tr>
                                     <td>@Pages.InterviewerProfile_SignalStrength</td>
                                     <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
                                 </tr>
-                            }
+                            }*@
                             @if (Model.LastSuccessDeviceInfo.Statistics != null)
                             {
                                 <tr>
