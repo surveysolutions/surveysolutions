@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer
             var attachmentServiceMock = new Mock<IAttachmentService>();
 
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(questionnaireId))
-                .Returns(attachments.Select(y => new AttachmentSize {Size = y.Content.Size}).ToList());
+                .Returns(attachments.Select(y => new AttachmentSize { AttachmentId = y.Meta.AttachmentId, Size = y.Content.Size}).ToList());
             
             return attachmentServiceMock.Object;
         }

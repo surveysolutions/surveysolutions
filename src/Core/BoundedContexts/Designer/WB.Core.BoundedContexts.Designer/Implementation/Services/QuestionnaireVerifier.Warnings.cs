@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, MultiLanguageQuestionnaireDocument questionnaire) 
-            => attachmentSize.Size > 5*1024*1024;
+            => questionnaire.Attachments.Any(x => x.AttachmentId == attachmentSize.AttachmentId) && attachmentSize.Size > 5*1024*1024;
 
         private static bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
             => !questionnaire
