@@ -78,9 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         }
 
         private static readonly Type RosterVectorType = typeof(RosterVector);
-
-        private static RosterVectorConverter instance;
+        
         private static readonly string FullRosterVectorTypeName = typeof(RosterVector).FullName + ", " + typeof(RosterVector).GetTypeInfo().Assembly.GetName().Name;
-        public static RosterVectorConverter Instance => instance ?? (instance = new RosterVectorConverter());
     }
 }
