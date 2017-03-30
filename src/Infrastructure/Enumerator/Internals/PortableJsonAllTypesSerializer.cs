@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
                 FloatParseHandling = FloatParseHandling.Decimal,
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                 Binder = new PortableOldToNewAssemblyRedirectSerializationBinder(),
-                Converters = new List<JsonConverter> { IdentityJsonConverter.Instance, RosterVectorConverter.Instance }
+                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() }
             };
 #pragma warning restore 612, 618
     }
