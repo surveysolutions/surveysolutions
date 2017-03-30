@@ -6,7 +6,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Code;
@@ -19,13 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> isUserValid = null, 
             IUserStore<HqUser, Guid> userStore = null, IReadSideStatusService readSideStatusService = null)
         {
-            var hqUserManager = new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(), Mock.Of<IHashCompatibilityProvider>());
+            var hqUserManager = Create.Storage.HqUserManager(userStore);
             var auth = new Mock<IAuthenticationManager>();
             var hqSignInManager = new HqSignInManager(hqUserManager, auth.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);
             Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
-            return new ApiBasicAuthAttribute(new [] {UserRoles.Interviewer});
+            return new ApiBasicAuthAttribute(UserRoles.Interviewer);
         }
 
         protected static HttpActionContext CreateActionContext()

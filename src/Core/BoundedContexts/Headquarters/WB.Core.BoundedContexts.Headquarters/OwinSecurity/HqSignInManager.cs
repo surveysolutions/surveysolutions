@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -26,9 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(userManager);
         }
-
-        public static HqSignInManager Create(IdentityFactoryOptions<HqSignInManager> options, IOwinContext context)
-            => new HqSignInManager(context.GetUserManager<HqUserManager>(), context.Authentication);
 
         public async Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
         {
