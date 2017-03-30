@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -15,10 +13,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(attachments: new[] { Create.Attachment() });
+            Guid attachmentId = Guid.Parse("11111111111111111111111111111111");
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(attachments: new[] { Create.Attachment(attachmentId: attachmentId) });
 
             attachmentServiceMock = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey,
-                Create.AttachmentView(size: 6*1024*1024));
+                Create.AttachmentView(id: attachmentId, size: 6*1024*1024));
 
             verifier = CreateQuestionnaireVerifier(attachmentService: attachmentServiceMock);
         };

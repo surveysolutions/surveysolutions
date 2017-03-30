@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.Designer
             return new AttachmentView
             {
                 AttachmentId = (id ?? Guid.NewGuid()).FormatGuid(),
-                Meta = new AttachmentMeta {},
+                Meta = new AttachmentMeta { AttachmentId = id ?? Guid.NewGuid() },
                 Content = new AttachmentContent
                 {
                     Size = size ?? 10
