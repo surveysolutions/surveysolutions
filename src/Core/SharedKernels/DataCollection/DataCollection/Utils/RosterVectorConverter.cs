@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 writer.WriteValue(FullRosterVectorTypeName);
                 writer.WritePropertyName("$values");
                 writer.WriteStartArray();
-                foreach (var coordinate in vector.CoordinatesAsDecimals)
+                foreach (var coordinate in vector.Coordinates)
                 {
                     writer.WriteValue(coordinate);
                 }
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             else
             {
-                serializer.Serialize(writer, vector.CoordinatesAsDecimals);
+                serializer.Serialize(writer, vector.Coordinates);
             }
         }
 
