@@ -6,14 +6,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Infrastructure.Native.Threading;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -23,14 +18,17 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private readonly ILogger logger;
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider)
+        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, 
+            IPasswordHasher passwordHasher, IIdentityValidator<string> identityValidator, ILoggerProvider logger)
             : base(store)
         {
             this.hashCompatibilityProvider = hashCompatibilityProvider;
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.PasswordHasher = passwordHasher;
+            this.PasswordValidator = identityValidator;
+            this.logger = logger.GetFor<HqUserManager>();
         }
 
-        public Task<IdentityResult> ChangePasswordAsync( HqUser user, string newPassword)
+        public Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
         {
             var passwordStore = this.Store as IUserPasswordStore<HqUser, Guid>;
             if (passwordStore == null) throw new NotImplementedException();
@@ -82,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (!result)
             {
                 // migrating passwords
-                if (!user.IsInRole(UserRoles.Interviewer) 
+                if (!user.IsInRole(UserRoles.Interviewer)
                     && string.Equals(user.PasswordHash, user.PasswordHashSha1, StringComparison.Ordinal)
                     && string.Equals(user.PasswordHash, this.hashCompatibilityProvider.GetSHA1HashFor(user, password), StringComparison.Ordinal))
                 {
@@ -113,24 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             return result;
         }
-
-        public static HqUserManager Create(IdentityFactoryOptions<HqUserManager> options, HQIdentityDbContext dbContext)
-        {
-            var store = new HqUserStore(dbContext);
-           var hashCompatibility = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
-
-            var manager = new HqUserManager(store, hashCompatibility)
-            {
-                PasswordHasher = ServiceLocator.Current.GetInstance<IPasswordHasher>(),
-                PasswordValidator = ServiceLocator.Current.GetInstance<IIdentityValidator<string>>()
-            };
-
-            return manager;
-        }
         
-        public virtual IdentityResult CreateUser(HqUser user, string password, UserRoles role) => 
-            AsyncHelper.RunSync(() => this.CreateUserAsync(user, password, role));
-
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
