@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is not allowed to use substitutins in variable label.
+        ///   Looks up a localized string similar to It is not allowed to use substitutions in variable label.
         /// </summary>
         public static string VariableLabelContainsSubstitutionReference {
             get {
