@@ -329,9 +329,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var questionnaireVariable = questionnaireItem as IVariable;
                 if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableContent);
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
                 }
-             
+
+                var staticText = questionnaireItem as IStaticText;
+                if (staticText != null && MatchesSearchTerm(staticText.AttachmentName, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
+                }
             }
 
             foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
