@@ -587,7 +587,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 UploadedInterviewsCount = statistics.SuccessfullyUploadedInterviewsCount,
                 DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
                 RejectedInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
-                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.Census)
+                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted)
             };
         }
 
