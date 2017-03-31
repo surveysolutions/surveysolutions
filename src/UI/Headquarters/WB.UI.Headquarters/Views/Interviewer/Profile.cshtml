@@ -83,11 +83,11 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="interviews-information clearfix">
-                    <a href="@Url.Action("Interviews", interviewsControllerOfAssignments, new { status = InterviewStatus.InterviewerAssigned, responsible = responsibleOfAssignments })" class="number-information">
+                    <a href="#" class="number-information">
                         <div class="amount-of-questionnaires">@newInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
                     </a>
-                    <a href="@Url.Action("Interviews", interviewsControllerOfAssignments, new { status = InterviewStatus.RejectedBySupervisor, responsible = responsibleOfAssignments })" class="number-information">
+                    <a href="#" class="number-information">
                         <div class="amount-of-questionnaires">@rejectedInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_Rejected</div>
                     </a>
@@ -222,10 +222,6 @@
                                 <td>@Pages.InterviewerProfile_DatabaseInfo</td>
                                 <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.DBSizeInfo)</td>
                             </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_StartedAssignments</td>
-                                <td>@Model.LastSuccessDeviceInfo.NumberOfStartedInterviews</td>
-                            </tr>
                         </tbody>
                     </table>
 
@@ -270,6 +266,10 @@
                                     <td>@Model.LastSuccessDeviceInfo.Statistics.UploadedInterviewsCount</td>
                                 </tr>
                             }
+                            <tr>
+                                <td>@Pages.InterviewerProfile_StartedAssignments</td>
+                                <td>@Model.LastSuccessDeviceInfo.NumberOfStartedInterviews</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
