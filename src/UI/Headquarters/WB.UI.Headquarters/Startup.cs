@@ -51,6 +51,7 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
+            app.Use(RemoveServerNameFromHeaders);
             ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
@@ -97,7 +98,6 @@ namespace WB.UI.Headquarters
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
-            app.Use(RemoveServerNameFromHeaders);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
