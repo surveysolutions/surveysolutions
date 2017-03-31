@@ -138,13 +138,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     Username = this.UserName,
                     Password = this.Password
-                }, restCredentials).ConfigureAwait(false);
+                }, restCredentials);
 
-                await this.synchronizationService.GetInterviewerAsync(restCredentials).ConfigureAwait(false);
+                restCredentials.Token = token;
+
+                await this.synchronizationService.GetInterviewerAsync(restCredentials);
 
                 var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
                 localInterviewer.Token = token;
                 localInterviewer.PasswordHash = this.passwordHasher.Hash(this.Password);
+
                 this.interviewersPlainStorage.Store(localInterviewer);
 
                 this.SignIn();
