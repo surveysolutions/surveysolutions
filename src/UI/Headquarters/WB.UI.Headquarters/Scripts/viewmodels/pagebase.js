@@ -110,6 +110,7 @@
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
         $.ajax({
+            cache: false,
             url: requestUrl,
             type: allowGet === true ? 'get' : 'post',
             data: args,
