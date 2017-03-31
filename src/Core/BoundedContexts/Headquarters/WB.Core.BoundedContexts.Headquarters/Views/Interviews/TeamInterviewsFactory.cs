@@ -43,7 +43,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
             });
 
             var selectedSummaries = interviewsPage.Select(x => x.SummaryId).ToArray();
-            var answersToFeaturedQuestions = this.featuredQuestionAnswersReader.Query(_ => _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId)).ToList());
+            var answersToFeaturedQuestions = this.featuredQuestionAnswersReader.Query(_ => 
+                                                        _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId))
+                                                        .OrderBy(x => x.Position)
+                                                        .ToList());
 
             var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
