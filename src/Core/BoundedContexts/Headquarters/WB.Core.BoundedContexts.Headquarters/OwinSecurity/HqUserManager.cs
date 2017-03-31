@@ -174,15 +174,29 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.UpdateUser(currentUser, null);
         }
 
-        public virtual async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive)
+        public virtual async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds)
         {
             var archiveUserResults = new List<IdentityResult>();
 
             var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
             foreach (var userToArchive in usersToArhive)
             {
-                var archiveResult = archive ? await this.ArchiveUserAsync(userToArchive) : await this.UnarchiveUserAsync(userToArchive);
+                var archiveResult = await this.ArchiveUserAsync(userToArchive);
                 archiveUserResults.Add(archiveResult);
+            }
+
+            return archiveUserResults.ToArray();
+        }
+
+        public virtual async Task<IdentityResult[]> UnarchiveUsersAsync(Guid[] userIds)
+        {
+            var archiveUserResults = new List<IdentityResult>();
+
+            var usersToUnarhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            foreach (var userToUnarchive in usersToUnarhive)
+            {
+                var unArchiveResult = await this.UnarchiveUserAsync(userToUnarchive);
+                archiveUserResults.Add(unArchiveResult);
             }
 
             return archiveUserResults.ToArray();

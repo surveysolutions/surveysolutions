@@ -174,7 +174,9 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
-            var archiveResults = await this.userManager.ArchiveUsersAsync(request.UserIds, request.Archive);
+            var archiveResults = request.Archive
+                ? await this.userManager.ArchiveUsersAsync(request.UserIds)
+                : await this.userManager.UnarchiveUsersAsync(request.UserIds);
 
             return new JsonBundleCommandResponse
             {
