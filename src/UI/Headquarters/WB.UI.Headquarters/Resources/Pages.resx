@@ -388,7 +388,7 @@
     <value>waiting for approval</value>
   </data>
   <data name="InterviewerProfile_Approved" xml:space="preserve">
-    <value>done interviews (completed and aproved by hq)</value>
+    <value>done interviews (completed and approved by hq)</value>
   </data>
   <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
     <value>Number of assignments that have been started, but not completed</value>

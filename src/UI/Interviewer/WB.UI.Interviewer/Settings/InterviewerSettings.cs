@@ -203,6 +203,7 @@ namespace WB.UI.Interviewer.Settings
         public string BackupFolder { get; }
 
         public string RestoreFolder { get; }
+        public string BandwidthTestUri { get; } = @"Dependencies/img/logo.png";
 
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
