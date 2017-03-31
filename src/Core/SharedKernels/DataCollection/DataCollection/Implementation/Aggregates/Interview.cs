@@ -573,8 +573,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            //itemsCount = itemsCount > 200 ? 200 : itemsCount;
-
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
