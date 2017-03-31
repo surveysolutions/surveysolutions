@@ -21,6 +21,13 @@
         rejectedInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.RejectedInterviewsOnDeviceCount;
     }
 
+    string linkToCompletedInterviews = "#";
+
+    if (authorizedUser.IsSupervisor)
+    {
+        linkToCompletedInterviews = Url.Action("Interviews", interviewsControllerOfAssignments, new { status = InterviewStatus.Completed, responsible = responsibleOfAssignments });
+    }
+
 }
 @section scripts
 {
@@ -86,17 +93,14 @@
                         <div class="amount-of-questionnaires">@rejectedInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_Rejected</div>
                     </a>
-                    <a href="@Url.Action("Interviews", interviewsControllerOfAssignments, new { status = InterviewStatus.Completed, responsible = responsibleOfAssignments })" class="number-information">
+                    <a href="@linkToCompletedInterviews" class="number-information">
                         <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
                         <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
                     </a>
-                    @if (!authorizedUser.IsSupervisor)
-                    {
-                        <a href="@Url.Action("Interviews", interviewsControllerOfAssignments, new {status = InterviewStatus.ApprovedByHeadquarters, responsible = responsibleOfAssignments})" class="number-information">
-                            <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
-                            <div class="description">@Pages.InterviewerProfile_Approved</div>
-                        </a>
-                    }
+                    <a href="#" class="number-information">
+                        <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
+                        <div class="description">@Pages.InterviewerProfile_Approved</div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -240,12 +244,12 @@
                                 <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
                             </tr>
                             @*@if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
-                            {
-                                <tr>
-                                    <td>@Pages.InterviewerProfile_SignalStrength</td>
-                                    <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
-                                </tr>
-                            }*@
+                                {
+                                    <tr>
+                                        <td>@Pages.InterviewerProfile_SignalStrength</td>
+                                        <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
+                                    </tr>
+                                }*@
                             @if (Model.LastSuccessDeviceInfo.Statistics != null)
                             {
                                 <tr>
