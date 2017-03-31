@@ -7,15 +7,15 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class BandwidthTestViewModel : MvxNotifyPropertyChanged
     {
         private readonly INetworkService networkService;
+        private readonly IInterviewerSettings interviewerSettings;
         private readonly IRestService restService;
-        private readonly int countOfPingAttemps = 5;
+        private const int countOfPingAttemps = 5;
         
         private bool isConnectionAbsent;
         private bool isBandwidthTested;
@@ -27,9 +27,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public BandwidthTestViewModel(
             INetworkService networkService,
+            IInterviewerSettings interviewerSettings,
             IRestService restService)
         {
             this.networkService = networkService;
+            this.interviewerSettings = interviewerSettings;
             this.restService = restService;
         }
 
@@ -75,14 +77,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.ping, value); }
         }
 
-        public IMvxCommand TestConnectionCommand
-        {
-            get { return new MvxCommand(async () => await this.TestConnection()); }
-        }
+        public IMvxAsyncCommand TestConnectionCommand => new MvxAsyncCommand(this.TestConnectionAsync);
 
-        private async Task TestConnection()
+        private async Task TestConnectionAsync()
         {
-
             this.IsBandwidthTested = false;
             this.IsConnectionAbsent = false;
 
@@ -96,17 +94,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             this.IsInProgress = true;
             
-            var pingsInMilliseconds = new List<double>();
+            var pingsInMilliseconds = new double[countOfPingAttemps];
             int countOfFailedPingAttemps = 0;
-            for (int pingIndex = 0; pingIndex < this.countOfPingAttemps; pingIndex++)
+            for (int pingIndex = 0; pingIndex < countOfPingAttemps; pingIndex++)
             {
                 try
                 {
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    await this.restService.GetAsync(string.Empty);
+                    await this.restService.GetAsync(this.interviewerSettings.BandwidthTestUri);
                     stopwatch.Stop();
-                    pingsInMilliseconds.Add(stopwatch.ElapsedMilliseconds);
+                    pingsInMilliseconds[pingIndex] = stopwatch.ElapsedMilliseconds;
                 }
                 catch
                 {
@@ -116,13 +114,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (pingsInMilliseconds.Any())
             {
-                this.Ping = (int) pingsInMilliseconds.Average() + "ms";
+                this.Ping = Convert.ToInt32(pingsInMilliseconds.Average()) + "ms";
             }
 
             this.ConnectionType = this.networkService.GetNetworkType();
             this.NetworkName = this.networkService.GetNetworkName();
 
-            this.IsConnectionAbsent = countOfFailedPingAttemps == this.countOfPingAttemps;
+            this.IsConnectionAbsent = countOfFailedPingAttemps == countOfPingAttemps;
             this.ConnectionDescription = this.IsConnectionAbsent
                 ? this.ConnectionDescription =
                     InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
