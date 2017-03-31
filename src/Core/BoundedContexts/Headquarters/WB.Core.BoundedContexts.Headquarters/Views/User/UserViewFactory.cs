@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Ninject.Selection;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserViewFactory : IUserViewFactory
     {
-        private readonly object lockObject = new object();
         protected readonly IUserRepository UserRepository;
 
         public UserViewFactory(IUserRepository UserRepository)
@@ -23,55 +20,53 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserView GetUser(UserViewInputModel input)
         {
-            HqUser user;
-            lock (lockObject)
+            var query = this.UserRepository.Users.Select(user => new UserQueryItem
             {
-                var users = this.UserRepository.Users;
-                if (input.PublicKey != null)
-                    users = users.Where(x => x.Id == input.PublicKey);
-                else if (!string.IsNullOrEmpty(input.UserName))
-                    users = users.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
-                else if (!string.IsNullOrEmpty(input.UserEmail))
-                    users = users.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
-                else if (!string.IsNullOrEmpty(input.DeviceId))
-                    users = users.Where(x => x.Profile.DeviceId == input.DeviceId);
-
-                user = users.FirstOrDefault();
-            }
-
-            if (user == null) return null;
-
-            UserLight supervisor = null;
-            lock (lockObject)
-            {
-                var superVisorId = user.Profile?.SupervisorId;
-                if (superVisorId != null)
-                {
-                    var supervisorUser = AsyncHelper.RunSync(() => this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value));
-
-                    supervisor = new UserLight(superVisorId.Value, supervisorUser?.UserName);
-                }
-            }
-
-            HashSet<UserRoles> userRole;
-            lock (lockObject)
-            {
-                userRole = new HashSet<UserRoles>(new[] { user.Roles.First().Role });
-            }
-            return new UserView
-            {
-                CreationDate = user.CreationDate,
+                PublicKey = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
-                IsLockedBySupervisor = user.IsLockedBySupervisor,
-                IsLockedByHQ = user.IsLockedByHeadquaters,
-                PublicKey = user.Id,
-                Supervisor = supervisor,
                 PersonName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 IsArchived = user.IsArchived,
-                Roles = userRole
+                IsLockedByHQ = user.IsLockedByHeadquaters,
+                IsLockedBySupervisor = user.IsLockedBySupervisor,
+                CreationDate = user.CreationDate,
+                RoleId = user.Roles.FirstOrDefault().RoleId,
+                DeviceId = user.Profile.DeviceId,
+                SupervisorId = user.Profile.SupervisorId,
+                SupervisorName = this.UserRepository.Users.Select(x => new {Id = x.Id, Name = x.UserName})
+                    .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
+                    .Name
+            });
+
+            if (input.PublicKey != null)
+                query = query.Where(x => x.PublicKey == input.PublicKey);
+            else if (!string.IsNullOrEmpty(input.UserName))
+                query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
+            else if (!string.IsNullOrEmpty(input.UserEmail))
+                query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
+            else if (!string.IsNullOrEmpty(input.DeviceId))
+                query = query.Where(x => x.DeviceId == input.DeviceId);
+
+            var dbUser = query.FirstOrDefault();
+            
+            return new UserView
+            {
+                PublicKey = dbUser.PublicKey,
+                UserName = dbUser.UserName,
+                Email = dbUser.Email,
+                PersonName = dbUser.PersonName,
+                PhoneNumber = dbUser.PhoneNumber,
+                IsArchived = dbUser.IsArchived,
+                IsLockedByHQ = dbUser.IsLockedByHQ,
+                IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
+                CreationDate = dbUser.CreationDate,
+                Supervisor = dbUser.SupervisorId.HasValue
+                        ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
+                        : null,
+                Roles = new HashSet<UserRoles>(new[] {dbUser.RoleId.ToUserRole()})
             };
+
         }
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
@@ -266,6 +261,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             public string UserName { get; set; }
             public Guid UserId { get; set; }
             public string Email { get; set; }
+        }
+
+        public class UserQueryItem
+        {
+            public DateTime CreationDate { get; set; }
+            public string Email { get; set; }
+            public bool IsLockedByHQ { get; set; }
+            public bool IsArchived { get; set; }
+            public bool IsLockedBySupervisor { get; set; }
+            public Guid PublicKey { get; set; }
+            public string UserName { get; set; }
+            public Guid RoleId { get; set; }
+            public string PersonName { get; set; }
+            public string PhoneNumber { get; set; }
+            public Guid? SupervisorId { get; set; }
+            public string SupervisorName { get; set; }
+            public string DeviceId { get; set; }
         }
     }
 }

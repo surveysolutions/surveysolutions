@@ -1102,7 +1102,6 @@ namespace WB.Tests.Abc.TestFactories
                 UserName = userName,
                 IsLockedByHQ = isLockedByHQ,
                 Supervisor = new UserLight(supervisorId ?? Guid.NewGuid(), "supervisor"),
-                DeviceId = deviceId,
                 Roles = new SortedSet<UserRoles>(new[] {role})
             };
 
