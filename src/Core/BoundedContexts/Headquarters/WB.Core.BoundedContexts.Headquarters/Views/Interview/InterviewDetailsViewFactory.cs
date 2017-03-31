@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Comments = interviewQuestion.AnswerComments.Select(ToCommentView).ToList(),
                 IsEnabled = !interviewQuestion.IsDisabled(),
                 IsReadOnly = !(interviewQuestion.IsSupervisors && interview.Status < InterviewStatus.ApprovedByHeadquarters),
-                Options = ToOptionsView(interviewQuestion, interview, questionnaire),
+                Options = ToOptionsView(interviewQuestion, interview),
                 Answer = ToAnswerView(interviewQuestion),
                 IsFlagged = GetIsFlagged(interviewQuestion, interviewData),
                 FailedValidationMessages = GetFailedValidationMessages(
@@ -300,17 +300,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return null;
         }
 
-        private List<QuestionOptionView> ToOptionsView(InterviewTreeQuestion interviewQuestion, 
-            IStatefulInterview interview, IQuestionnaire questionnaire)
+        private List<QuestionOptionView> ToOptionsView(InterviewTreeQuestion interviewQuestion, IStatefulInterview interview)
         {
             if (interviewQuestion.IsSingleFixedOption || interviewQuestion.IsMultiFixedOption)
             {
-                if (interviewQuestion.IsSingleFixedOption && (questionnaire.IsQuestionFilteredCombobox(interviewQuestion.Identity.Id) || interviewQuestion.IsCascading))
-                {
-                    return new List<QuestionOptionView>();
-                }
-
-                var options = interview.GetTopFilteredOptionsForQuestion(interviewQuestion.Identity, null, null, 200)?.Select(a => new QuestionOptionView
+                var options = interview.GetTopFilteredOptionsForQuestion(interviewQuestion.Identity, null, null, int.MaxValue)?.Select(a => new QuestionOptionView
                               {
                                   Value = a.Value,
                                   Label = a.Title
