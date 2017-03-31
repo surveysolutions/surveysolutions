@@ -21,15 +21,14 @@
                 LogoFile="img\logo-50.png"
                 LogoSideFile="img\logo-50.png"
                 ShowVersion="yes"
-                SuppressOptionsUI="yes"
-                SuppressRepair="yes"/>
+                SuppressOptionsUI="yes"/>
             
         <!--SuppressRepair="yes"-->
         
         </BootstrapperApplicationRef>
         
         <Chain>
-            <PackageGroupRef Id="NetFx462Redist" />
+            <PackageGroupRef Id="NetFx462WebLocal" />
 
             <RollbackBoundary />
 
@@ -40,7 +39,38 @@
               Vital="yes"
               InstallCondition="VersionNT64"
               SourceFile="$(var.SurveySolutions.TargetPath)" />
-            
         </Chain>
     </Bundle>
+    
+    <?define NetFx462MinRelease = 394802 ?>
+    
+    <Fragment>
+        <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
+        <Property Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Secure="yes" />
+        <SetProperty Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Value="1" After="AppSearch">
+            WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx462MinRelease)"
+        </SetProperty>
+    </Fragment>
+
+    <Fragment>
+        <WixVariable Id="NetFx462WebDetectCondition" Value="NETFRAMEWORK45 &gt;= $(var.NetFx462MinRelease)" Overridable="yes" />
+    
+        <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
+    
+        <PackageGroup Id="NetFx462WebLocal">
+            <ExePackage Id="NetFx462WebLocal"
+                   InstallCommand="/q /norestart /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
+                    RepairCommand="/q /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
+                    UninstallCommand="/uninstall /q /norestart /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
+                    PerMachine="yes"
+                    Cache="no"
+                    Compressed="yes"
+                    Permanent="yes"
+                    Vital="yes"
+                    Name="NDP462-KB3151802-Web.exe"
+                    SourceFile="redist\NDP462-KB3151802-Web.exe"
+                    DetectCondition="!(wix.NetFx462WebDetectCondition)"
+                     />     
+        </PackageGroup>
+    </Fragment>
 </Wix>

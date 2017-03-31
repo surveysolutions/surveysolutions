@@ -37,6 +37,10 @@
     <Compile Include="Bundle.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
@@ -48,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
+    <Folder Include="redist\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SurveySolutionsProduct\SurveySolutions.wixproj">
@@ -61,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\logo-50.png" />
+    <Content Include="redist\NDP462-KB3151802-Web.exe" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
