@@ -808,7 +808,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to done interviews (completed and aproved by hq).
+        ///   Looks up a localized string similar to done interviews (completed and approved by hq).
         /// </summary>
         public static string InterviewerProfile_Approved {
             get {
