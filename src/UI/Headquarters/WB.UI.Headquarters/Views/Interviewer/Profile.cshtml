@@ -21,13 +21,6 @@
         rejectedInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.RejectedInterviewsOnDeviceCount;
     }
 
-    string linkToCompletedInterviews = "#";
-
-    if (authorizedUser.IsSupervisor)
-    {
-        linkToCompletedInterviews = Url.Action("Interviews", interviewsControllerOfAssignments, new { status = InterviewStatus.Completed, responsible = responsibleOfAssignments });
-    }
-
 }
 @section scripts
 {
@@ -93,7 +86,7 @@
                         <div class="amount-of-questionnaires">@rejectedInterviewsOnDeviceCount</div>
                         <div class="description">@Pages.InterviewerProfile_Rejected</div>
                     </a>
-                    <a href="@linkToCompletedInterviews" class="number-information">
+                    <a href="#" class="number-information">
                         <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
                         <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
                     </a>
