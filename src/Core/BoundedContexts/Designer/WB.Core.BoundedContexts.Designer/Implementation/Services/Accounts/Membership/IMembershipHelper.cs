@@ -2,9 +2,9 @@
 {
     public interface IMembershipHelper
     {
-        string ADMINROLENAME { get; }
+        string AdminRoleName { get; }
 
       
-        string USERROLENAME { get; }
+        string UserRoleName { get; }
     }
 }
