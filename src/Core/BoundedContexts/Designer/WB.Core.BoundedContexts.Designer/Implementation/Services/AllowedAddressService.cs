@@ -2,21 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Designer.Views.AllowedAddresses
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    public interface IAllowedAddressService
-    {
-        IEnumerable<AllowedAddress> GetAddresses();
-        AllowedAddress GetAddressById(int id);
-        void Update(AllowedAddress allowedAddress);
-        void Remove(int id);
-        void Add(AllowedAddress allowedAddress);
-        bool IsAllowedAddress(IPAddress ip);
-    }
-
     public class AllowedAddressService : IAllowedAddressService
     {
         private readonly IPlainStorageAccessor<AllowedAddress> allowedAddressStorage;
@@ -28,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.AllowedAddresses
 
         public IEnumerable<AllowedAddress> GetAddresses()
         {
-            return allowedAddressStorage.Query(_ => _.ToList());
+            return this.allowedAddressStorage.Query(_ => _.ToList());
         }
 
         public AllowedAddress GetAddressById(int id)
@@ -53,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.AllowedAddresses
 
         public bool IsAllowedAddress(IPAddress ip)
         {
-            var allowedAddresses = allowedAddressStorage.Query(_ => _.Select(x => x.Address).ToList());
+            var allowedAddresses = this.allowedAddressStorage.Query(_ => _.Select(x => x.Address).ToList());
             return allowedAddresses.Any(x => x.Equals(ip));
         }
     }
