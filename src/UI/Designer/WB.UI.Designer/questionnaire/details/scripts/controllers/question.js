@@ -92,7 +92,7 @@
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = question.isPreFilled ? 'Prefilled' : question.questionScope;
+                $scope.activeQuestion.questionScope = question.isPreFilled ? 'Identifying' : question.questionScope;
 
                 $scope.setQuestionType(question.type);
 
@@ -230,7 +230,7 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Prefilled';
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
@@ -247,7 +247,7 @@
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
-                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Prefilled') {
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -380,7 +380,7 @@
 
             $scope.changeQuestionScope = function (scope) {
                 $scope.activeQuestion.questionScope = scope.text;
-                if ($scope.activeQuestion.questionScope === 'Prefilled') {
+                if ($scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 markFormAsChanged();
@@ -395,12 +395,12 @@
 
                 return allScopes.filter(function (o) {
                     if (currentQuestion.type == 'MultyOption')
-                        return o.value !== 'Prefilled';
+                        return o.value !== 'Identifying';
 
                     if (currentQuestion.type == 'GpsCoordinates')
                         return o.value !== 'Supervisor';
 
-                    return o.value !== 'Prefilled' && o.value !== 'Supervisor';
+                    return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
 
@@ -483,7 +483,7 @@
 
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Prefilled')
+                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 

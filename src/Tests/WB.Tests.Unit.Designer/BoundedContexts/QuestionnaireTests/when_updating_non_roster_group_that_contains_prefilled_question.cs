@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("roster");
 
         It should_throw_exception_with_message_containting__prefilled__ = () =>
-            exception.Message.ToLower().ShouldContain("pre-filled");
+            exception.Message.ToLower().ShouldContain("identifying");
 
         It should_throw_exception_with_message_containting__question__ = () =>
             exception.Message.ToLower().ShouldContain("question");

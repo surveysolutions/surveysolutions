@@ -145,7 +145,7 @@
     <value>Linked question references a question not in a roster.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Question with title substitution cannot be marked as prefilled.</value>
+    <value>Question with title substitution cannot be marked as identifying.</value>
   </data>
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
     <value>Question with title substitution cannot reference itself.</value>
@@ -163,7 +163,7 @@
     <value>Max number of answers is greater than number of question's options.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
-    <value>Question of this type cannot be prefilled.</value>
+    <value>Question of this type cannot be identifying.</value>
   </data>
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
     <value>Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used.</value>
@@ -175,7 +175,7 @@
     <value>Options filter expression has length more than 10,000 characters.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Prefilled questions cannot be inside a roster.</value>
+    <value>Identifying questions cannot be inside a roster.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
     <value>Roster where roster size source is question could not have fixed set of items.</value>
@@ -199,7 +199,7 @@
     <value>Fixed set of items roster cannot have more than {0} rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
-    <value>List question cannot be prefilled.</value>
+    <value>List question cannot be identifying.</value>
   </data>
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
     <value>List  question cannot be filled by supervisor.</value>
@@ -220,7 +220,7 @@
     <value>Barcode question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
-    <value>Barcode question cannot be prefilled.</value>
+    <value>Barcode question cannot be identifying.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
@@ -358,7 +358,7 @@
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Only one GPS question could be marked as prefilled</value>
+    <value>Only one GPS question could be marked as identifying</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Multi select yes/no question can't be linked</value>
@@ -382,7 +382,7 @@
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Question with options filter expression cannot be prefilled.</value>
+    <value>Question with options filter expression cannot be identifying.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
     <value>Items with the same name found.</value>
@@ -565,7 +565,7 @@
     <value>You have a barcode question. Tablets must support autofocus to be used with this questionnaire.</value>
   </data>
   <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
-    <value>No prefilled (identifying) questions are defined. Define at least one prefilled question.</value>
+    <value>No identifying (identifying) questions are defined. Define at least one identifying question.</value>
   </data>
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
     <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
@@ -583,7 +583,7 @@
     <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
   </data>
   <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
-    <value>Single-choice question is marked as prefilled. Consider using a text question.</value>
+    <value>Single-choice question is marked as identifying. Consider using a text question.</value>
   </data>
   <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
     <value>Section contains less than five questions. Consider joining with other sections.</value>

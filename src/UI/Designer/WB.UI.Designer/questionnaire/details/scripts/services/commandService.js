@@ -183,7 +183,7 @@
                     }
                 };
 
-                var isPrefilledScopeSelected = question.questionScope === 'Prefilled';
+                var isPrefilledScopeSelected = question.questionScope === 'Identifying';
                 command.isPreFilled = isPrefilledScopeSelected;
                 command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
