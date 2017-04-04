@@ -2059,7 +2059,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
             if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException("Question inside roster sub-section can not be pre-filled.");
+                throw new QuestionnaireException("Question inside roster sub-section can not be identifying");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
@@ -2355,7 +2355,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                    "Question that linked to another question can not be pre-filled");
+                    "Question that linked to another question can not be identifying");
             }
         }
 
@@ -2632,7 +2632,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.substitutionService.GetAllSubstitutionVariableNames(text).Length > 0  && prefilled)
             {
                 throw new QuestionnaireException(DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "It is not allowed to use substitutins in Prefilled question title");
+                    "It is not allowed to use substitutins in identifying question title");
             }    
 
             this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(text, variableName, questionId, parentGroup);
@@ -2941,7 +2941,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This sub-section can't become a roster because contains pre-filled questions: {0}. Toggle off pre-filled property for that questions to complete this operation",
+                    "This sub-section can't become a roster because contains identifying questions: {0}. Toggle off identifying property for that questions to complete this operation",
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
