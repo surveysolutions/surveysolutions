@@ -225,6 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
             this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
 
+            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
             this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();

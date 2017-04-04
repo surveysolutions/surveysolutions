@@ -350,6 +350,7 @@
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Implementation\Services\TroubleshootingService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\AssemblyInfoMap.cs" />
@@ -463,6 +464,7 @@
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
+    <Compile Include="Services\ITroubleshootingService.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />

@@ -53,16 +53,18 @@
         var app = new Vue({
             data: {
                 interviewId: '@(Model.InterviewId)',
+                message: null,
                 wasInitialized: false,
                 isLoading: false,
                 tableOptions: tableOptions
             },
             methods: {
                 addParamsToRequest: function(requestData) {
-                    requestData.interviewId = this.interviewId;
+                    requestData.interviewId = this.interviewId.trim();
                 },
                 responseProcessor: function (response) {
                     this.isLoading = false;
+                    this.message = response.message;
                 },
                 findInterviews: function () {
                     var self = this;
@@ -136,6 +138,8 @@
                     <h4>@Troubleshooting.MissingCensusInterviews_FiltersTitle</h4>
                     <div class="block-filter" v-bind:class="{'has-error': errors.has('interviewId')}">
                         <h5>Interview key or interivew id</h5>
+
+                        @*/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i*@
                         <input class="form-control"
                                placeholder="Enter interview key or id"
                                data-vv-name="interviewId"
@@ -162,6 +166,7 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-sm-7 ">
+                            <p>{{message}}</p>
                         </div>
                     </div>
                     <div class="interviews-info">

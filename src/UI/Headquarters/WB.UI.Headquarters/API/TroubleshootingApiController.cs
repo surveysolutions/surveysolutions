@@ -20,15 +20,19 @@ namespace WB.UI.Headquarters.API
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
+        private readonly ITroubleshootingService troubleshootingService;
 
         public TroubleshootingApiController(
             IAllInterviewsFactory allInterviewsViewFactory, 
             ICommandService commandService, 
-            ILogger logger, IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory) 
+            ILogger logger, 
+            IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory, 
+            ITroubleshootingService troubleshootingService) 
             : base(commandService, logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
+            this.troubleshootingService = troubleshootingService;
         }
 
         [HttpPost]
@@ -53,13 +57,15 @@ namespace WB.UI.Headquarters.API
 
             var interview = items.Items.FirstOrDefault();
 
+            string message = troubleshootingService.GetMissingDataReason(interviewId, interviewKey);
+            
             return new TroubleshootingMissingInterviewsDataTableResponse
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,
                 RecordsFiltered = items.TotalCount,
                 Data = items.Items.ToList(),
-                Message = "Hello World!",
+                Message = message,
                 InterviewKey = interview?.Key
             };
         }
