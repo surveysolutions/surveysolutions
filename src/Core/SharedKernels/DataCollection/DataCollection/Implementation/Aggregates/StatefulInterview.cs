@@ -429,6 +429,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Id);
         }
 
+        public IEnumerable<Identity> GetAllCommentedEnabledQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(question => !question.IsDisabled() && question.AnswerComments.Any())
+                .Select(x => x.Identity);
+        }
+
         private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
                question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);

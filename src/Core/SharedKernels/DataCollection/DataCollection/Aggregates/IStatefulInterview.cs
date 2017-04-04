@@ -145,6 +145,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
 
+        IEnumerable<Identity> GetAllCommentedEnabledQuestions();
+
         string GetLastSupervisorComment();
 
         IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
