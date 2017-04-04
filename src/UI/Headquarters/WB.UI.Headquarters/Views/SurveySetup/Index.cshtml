@@ -116,7 +116,7 @@
                 @if (ApplicationSettings.WebInterviewEnabled && !isObserver)
                 {
                     <text>
-                    if (!selectedRow.isDisabled && selectedRow.allowCensusMode) {
+                    if (!selectedRow.isDisabled) {
                         items["webSetup"] = {
                             name: "@Dashboard.WebInterviewSetup",
                             callback: webInterviewSetup
