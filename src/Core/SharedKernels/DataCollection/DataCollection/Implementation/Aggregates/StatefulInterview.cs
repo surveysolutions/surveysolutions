@@ -471,6 +471,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewTreeSection FirstSection => this.Tree.Sections.First();
 
+        public Guid CurrentResponsibleId => this.properties.InterviewerId ?? this.properties.SupervisorId.GetValueOrDefault();
+
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 

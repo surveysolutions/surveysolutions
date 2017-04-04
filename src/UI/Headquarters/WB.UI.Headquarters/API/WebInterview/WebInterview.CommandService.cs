@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public partial class WebInterview
     {
-        private Guid commandResponsibleId => this.webInterviewConfigProvider.Get(this.GetCallerInterview().QuestionnaireIdentity).ResponsibleId;
+        private Guid commandResponsibleId => this.webInterviewConfigProvider.Get(this.GetCallerInterview().QuestionnaireIdentity).ResponsibleId.Value; // TODO KP-9074: Put correct responsible here
 
         private void ExecuteQuestionCommand(QuestionCommand command)
         {

@@ -150,4 +150,14 @@
   <data name="WebLinkTitle" xml:space="preserve">
     <value>Используйте эту ссылку чтоб начать интервью</value>
   </data>
+  <data name="DownloadTitle" xml:space="preserve">
+    <value>Скачать ({0})</value>
+    <comment>{0} - count of interviews in file</comment>
+  </data>
+  <data name="ExportTitle" xml:space="preserve">
+    <value>Вы можете скачать интервью в статусе `Интервьюер назначен` для доставки ссылок респондентам</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Остановить web интервью</value>
+  </data>
 </root>

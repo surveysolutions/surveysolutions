@@ -10,5 +10,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string WebInterviewLink { get; set; }
         public Guid? ResponsibleId { get; set; }
         public bool UseCaptcha { get; set; }
+        public bool IsCensus { get; set; }
+        public int InterviewsCount { get; set; }
     }
 }
