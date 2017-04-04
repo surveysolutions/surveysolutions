@@ -343,12 +343,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledQuestions()
-            => this.Tree.FindQuestions().Where(question =>
-                !question.IsDisabled() &&
-                (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
+            => this.Tree.FindQuestions().Where(question => !question.IsDisabled());
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.GetEnabledQuestions().Where(question => question.IsInterviewer);
+            => this.GetEnabledQuestions().Where(question =>
+                question.IsInterviewer && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
 
         public int CountActiveAnsweredQuestionsInInterview()
             => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
