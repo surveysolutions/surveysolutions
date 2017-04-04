@@ -4,6 +4,18 @@ using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Models.Interview
 {
+    public class TroubleshootingMissingInterviewsDataTableRequest : DataTableRequest
+    {
+        public string InterviewId { get; set; }
+    }
+
+    public class TroubleshootingMissingInterviewsDataTableResponse : DataTableResponse<InterviewListItem>
+    {
+        public string Message { get; set; }
+
+        public string InterviewKey { get; set; }
+    }
+
     public class TroubleshootingCensusInterviewsDataTableRequest : DataTableRequest
     {
         public string QuestionnaireId { get; set; }

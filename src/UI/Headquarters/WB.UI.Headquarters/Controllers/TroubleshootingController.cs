@@ -1,6 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Models.Troubleshooting;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -20,10 +23,10 @@ namespace WB.UI.Headquarters.Controllers
             return View();
         }
 
-        public ActionResult DataIsMissing()
+        public ActionResult DataIsMissing(string id)
         {
             this.ViewBag.ActivePage = MenuItem.Troubleshooting;
-            return View();
+            return View(new DataIsMissingModel { InterviewId = id} );
         }
     }
 }

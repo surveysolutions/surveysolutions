@@ -5,7 +5,7 @@
 @section scripts
 {
     @Scripts.Render("~/js/common")
-    @Scripts.Render("~/js/troubleshooting-census")
+    @Scripts.Render("~/js/troubleshooting")
     <script type="text/javascript">
         var app = new Vue({
             data: {
@@ -23,7 +23,6 @@
                 totalCensusInterviews: 0,
                 totalBrokenPackages: 0,
                 isLoading: false,
-                tableFilters: {},
                 tableOptions: {
                     rowId: 'key',
                     order: [[2, 'desc']],
@@ -155,7 +154,7 @@
                     <h4>@Troubleshooting.MissingCensusInterviews_FiltersTitle</h4>
                     <div class="block-filter" v-bind:class="{'has-error': errors.has('questionnaireId')}">
                         <h5>@Troubleshooting.MissingCensusInterviews_Filters_Questionnaire</h5>
-                        <user-selector
+                        <typeahead
                             data-vv-name="questionnaireId"
                             v-validate="'required'"
                             :has-error="errors.has('questionnaireId')"
@@ -164,18 +163,18 @@
                             :ajax-params="questionnaireParams"
                             :value="questionnaireId"
                             v-on:selected="questionnaireSelected"
-                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></user-selector>
+                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></typeahead>
                         <span v-show="errors.has('questionnaireId')" class="help-block">{{ errors.first('questionnaireId') }}</span>
                     </div>
                     <div class="block-filter">
                         <h5>@Troubleshooting.MissingCensusInterviews_Filters_Interviewer</h5>
-                        <user-selector
+                        <typeahead
                             placeholder="@Troubleshooting.MissingCensusInterviews_Filters_InterviewerPlaceholder"
                             control-id="interviewerId"
                             :value="interviewerId"
                             :ajax-params="{ supervisorId: 'aaaa' }"
                             v-on:selected="userSelected" 
-                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></user-selector>
+                            fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></typeahead>
                     </div>
                     <div class="block-filter">
                         <h5>@Troubleshooting.MissingCensusInterviews_Filters_Dates</h5>
