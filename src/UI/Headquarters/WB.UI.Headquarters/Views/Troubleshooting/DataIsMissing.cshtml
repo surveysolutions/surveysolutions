@@ -1,11 +1,178 @@
-﻿@{
+﻿@model WB.UI.Headquarters.Models.Troubleshooting.DataIsMissingModel
+@{
     ViewBag.Title = "title";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
+@section scripts
+{
+    @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/troubleshooting")
+    <script type="text/javascript">
 
-<main>
-    <div class="container">
-        <div class="row">
+        var tableOptions = {
+            rowId: 'key',
+            order: [[2, 'desc']],
+            deferLoading: 0,
+            columns: [
+                {
+                    data: "key",
+                    name: "Key", // case-sensitive!
+                    "class": "interview-id title-row",
+                    render: function(data, type, row) {
+                        return (row.wasCreatedOnClient === true ? "<span class='census-icon'></span>" : "") + '<a href="@Url.Action("Details", "Interview")/' + row.interviewId + '">' + data + '</a>';
+                    },
+                    title: "@Troubleshooting.TableTitle_InterviewId"
+                },
+                {
+                    data: "responsibleName",
+                    name: "ResponsibleName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    "class": "enumerator",
+                    render: function(data, type, row) {
+                        return '<span class="interviewer">' + data + '</span>';
+                    },
+                    title: "@Troubleshooting.TableTitle_Enumerator"
+                },
+                {
+                    data: "updateDate",
+                    name: "UpdateDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    "class": "date",
+                    title: "@Troubleshooting.TableTitle_LastUpdate"
+                },
+                {
+                    data: "status",
+                    name: "Status", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    title: "@Troubleshooting.TableTitle_Status"
+                }
+            ],
+            ajax: {
+                url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "MissingData" })",
+                type: "POST"
+            }
+        };
+
+        var app = new Vue({
+            data: {
+                interviewId: '@(Model.InterviewId)',
+                wasInitialized: false,
+                isLoading: false,
+                tableOptions: tableOptions
+            },
+            methods: {
+                addParamsToRequest: function(requestData) {
+                    requestData.interviewId = this.interviewId;
+                },
+                responseProcessor: function (response) {
+                    this.isLoading = false;
+                },
+                findInterviews: function () {
+                    var self = this;
+                    this.$validator.validateAll().then(function (result) {
+                        if (result) {
+                            self.reloadTable();
+                            self.startWatchers(['interviewId'], self.reloadTable.bind(self));
+                            document.querySelector("main").classList.remove("search-wasnt-started");
+                            self.wasInitialized = true;
+                        }
+                    });
+                },
+                startWatchers: function (props, watcher) {
+                    var iterator = function (prop) {
+                        this.$watch(prop, watcher);
+                    };
+                    props.forEach(iterator, this);
+                },
+                reloadTable: function () {
+                    var self = this;
+                    this.$validator.validateAll().then(function(result) {
+                        if (result) {
+                            self.isLoading = true;
+                            self.$refs.table.reload(self.reloadTable);
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                document.querySelector("main").classList.remove("hold-transition");
+                document.querySelector("footer").classList.add("footer-adaptive");
+                @if (!string.IsNullOrWhiteSpace(Model.InterviewId))
+                {
+                <text>this.findInterviews();</text>
+                }
+            }
+        });
+
+        window.onload = function () {
+            Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
+
+            app.$mount('#app');
+        }
+    </script>
+}
+<main class="hold-transition search-wasnt-started" id="app">
+    <div class="container-fluid">
+        <div class="row before-search">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a href="">I see no data for syncronized interivew on the server</a></li>
+                </ol>
+                <h1>
+                    @Troubleshooting.MissingCensusInterviews_PageHeader
+                </h1>
+            </div>
         </div>
-    </div>
-</main>
+        <div class="row before-search">
+            <div class="col-sm-7">
+                <p>Specify an interview key or interivew id to search. Alternatively, open the interview details page and press "Troubleshoot" button.</p>
+            </div>
+        </div>
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <h4>@Troubleshooting.MissingCensusInterviews_FiltersTitle</h4>
+                    <div class="block-filter" v-bind:class="{'has-error': errors.has('interviewId')}">
+                        <h5>Interview key or interivew id</h5>
+                        <input class="form-control"
+                               placeholder="Enter interview key or id"
+                               data-vv-name="interviewId"
+                               v-model="interviewId" 
+                               v-validate="'required'" />
+                        <span v-show="errors.has('interviewId')" class="help-block">{{ errors.first('interviewId') }}</span>
+                    </div>
+                    <div class="block-filter">
+                        <button type="button" v-if="wasInitialized === false" v-on:click="findInterviews"
+                                class="btn btn-primary btn-lg" id="find-interview">
+                            @Troubleshooting.MissingCensusInterviews_Filters_Search
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+                <div class="main-information">
+                    <div class="page-header clearfix">
+                        <ol class="breadcrumb">
+                            <li><a href="">@Troubleshooting.Title</a></li>
+                        </ol>
+                        <h1>
+                            I see no data for syncronized interivew on the server 
+                        </h1>
+                    </div>
+                    <div class="clearfix">
+                        <div class="col-sm-7 ">
+                        </div>
+                    </div>
+                    <div class="interviews-info">
+                        <div class="table-wrapper interviews-large-screen">
+                            <interview-table ref="table"
+                                             :add-params-to-request="addParamsToRequest"
+                                             :response-processor="responseProcessor"
+                                             :table-options="tableOptions"></interview-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>

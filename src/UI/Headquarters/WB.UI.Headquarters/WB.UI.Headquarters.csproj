@@ -543,7 +543,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\vue\troubleshooting-census.js" />
+    <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\dist\*.*" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
@@ -612,8 +612,8 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <Content Include="Dependencies\vue\UserSelector.vue" />
-    <Content Include="Dependencies\vue\troubleshooting-census.js" />
+    <Content Include="Dependencies\vue\Typeahead.vue" />
+    <Content Include="Dependencies\vue\troubleshooting.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -1574,6 +1574,7 @@
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Code\WebInterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
+    <Compile Include="Models\Troubleshooting\DataIsMissingModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
@@ -1673,7 +1674,7 @@
     <Compile Include="Models\InterviewModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
-    <Compile Include="Models\Interview\TroubleshootingCensusInterviewsDataTableRequest.cs" />
+    <Compile Include="Models\Interview\TroubleshootingModels.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
