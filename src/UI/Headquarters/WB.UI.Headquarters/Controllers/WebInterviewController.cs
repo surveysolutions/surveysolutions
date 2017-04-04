@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -97,7 +98,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
             var responsibleId = webInterviewConfig.ResponsibleId;
-            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId));
+            if (!responsibleId.HasValue)
+                throw new InvalidOperationException("Web interview configuration has no responsible for census interview creation");
+
+            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId.Value));
 
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
@@ -174,7 +178,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -191,8 +195,8 @@ namespace WB.UI.Headquarters.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
-                    var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
+                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
+                    var responsibleId = interview.CurrentResponsibleId;
 
                     this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,

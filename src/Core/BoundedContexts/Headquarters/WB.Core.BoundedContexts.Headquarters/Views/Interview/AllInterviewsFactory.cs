@@ -6,12 +6,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public interface IAllInterviewsFactory
-    {
-        AllInterviewsView Load(AllInterviewsInputModel input);
-        InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input);
-    }
-
     public class AllInterviewsFactory : IAllInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;

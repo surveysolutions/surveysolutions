@@ -565,6 +565,7 @@
     <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
     <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
     <Compile Include="Views\Interview\HardDeletedInterview.cs" />
+    <Compile Include="Views\Interview\IAllInterviewsFactory.cs" />
     <Compile Include="Views\Interview\IInterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
     <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
