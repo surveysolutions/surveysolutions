@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -30,6 +29,39 @@ namespace WB.UI.Headquarters.API
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public DataTableResponse<InterviewListItem> MissingData([FromBody] TroubleshootingMissingInterviewsDataTableRequest request)
+        {
+            Guid parsedInterviewId;
+            Guid? interviewId = Guid.TryParse(request.InterviewId, out parsedInterviewId) ? parsedInterviewId: (Guid?)null;
+            string interviewKey = interviewId.HasValue ? null : request.InterviewId;
+
+            var input = new InterviewsWithoutPrefilledInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                InterviewKey = interviewKey,
+                InterviewId = interviewId,
+                SearchBy = request.Search.Value
+            };
+
+            var items = this.allInterviewsViewFactory.LoadInterviewsWithoutPrefilled(input);
+
+            var interview = items.Items.FirstOrDefault();
+
+            return new TroubleshootingMissingInterviewsDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items.ToList(),
+                Message = "Hello World!",
+                InterviewKey = interview?.Key
+            };
         }
 
         [HttpPost]

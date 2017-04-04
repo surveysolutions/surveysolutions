@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+namespace WB.UI.Headquarters.Models
 {
     public class TroubleshootModel
     {

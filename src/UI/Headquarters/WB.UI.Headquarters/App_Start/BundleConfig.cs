@@ -12,9 +12,9 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new ScriptBundle("~/js/troubleshooting-census").Include(
+            bundles.Add(new ScriptBundle("~/js/troubleshooting").Include(
                 "~/Dependencies/build/vue-libs.js",
-                "~/Dependencies/build/vue/troubleshooting-census.js",
+                "~/Dependencies/build/vue/troubleshooting.js",
                 "~/Dependencies/js/dataTables.conditionalPaging.js",
                 "~/Dependencies/js/searchHighlight.js"
              ));
