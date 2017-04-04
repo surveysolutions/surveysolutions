@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
+        public double GetAverageSyncronizationSpeed(Guid interviewerId)
+            => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate).Take(5).Average(info => info.Statistics.TotalConnectionSpeed);
+
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);

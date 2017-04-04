@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>());
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<IHttpStatistican>());
         }
     }
 }

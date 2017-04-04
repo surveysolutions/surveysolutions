@@ -47,6 +47,7 @@
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
     <Compile Include="EmptyArray.cs" />
+    <Compile Include="Implementation\Services\HttpStatistican.cs" />
     <Compile Include="IPasswordPolicy.cs" />
     <Compile Include="NumericExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
@@ -103,7 +104,9 @@
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
+    <Compile Include="Services\HttpStats.cs" />
     <Compile Include="Services\ICompressor.cs" />
+    <Compile Include="Services\IHttpStatistican.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\IJsonAllTypesSerializer.cs" />
     <Compile Include="Services\ISerializer.cs" />
