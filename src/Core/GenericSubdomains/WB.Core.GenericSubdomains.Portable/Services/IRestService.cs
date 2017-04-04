@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-
 using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Core.GenericSubdomains.Portable.Services

@@ -101,14 +101,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
                 interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters && !interview.IsDeleted));
-
+            
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id);
             var hasUpdateForInterviewerApp = false;
 
             if (lastSuccessDeviceInfo != null)
             {
-                string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+                string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
                 int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                     ? null
@@ -131,7 +130,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(id),
                 TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(id),
                 LastSuccessDeviceInfo = lastSuccessDeviceInfo,
-                LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id)
+                LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id),
+                AverageSyncSpeed = this.deviceSyncInfoRepository.GetAverageSyncronizationSpeed(id)
             };
             return this.View(interviewerProfileModel);
         }
