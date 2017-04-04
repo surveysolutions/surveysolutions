@@ -56,6 +56,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
 
         public int RejectedInterviewsOnDeviceCount { get; set; }
         public int NewInterviewsOnDeviceCount { get; set; }
+        
+        public long TotalUploadedBytes { get; set; }
+        public long TotalDownloadedBytes { get; set; }
+        public double TotalConnectionSpeed { get; set; }
+        public TimeSpan TotalSyncDuration { get; set; }
+
         public virtual DateTime SyncFinishDate { get; set; }
     }
 }

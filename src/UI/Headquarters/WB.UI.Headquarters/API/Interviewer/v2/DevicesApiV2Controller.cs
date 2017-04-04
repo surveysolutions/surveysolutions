@@ -102,7 +102,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 UploadedInterviewsCount = statistics.UploadedInterviewsCount,
                 NewInterviewsOnDeviceCount = statistics.NewInterviewsOnDeviceCount,
                 RejectedInterviewsOnDeviceCount = statistics.RejectedInterviewsOnDeviceCount,
-                SyncFinishDate = DateTime.UtcNow
+                SyncFinishDate = DateTime.UtcNow,
+                TotalConnectionSpeed = statistics.TotalConnectionSpeed,
+                TotalDownloadedBytes = statistics.TotalDownloadedBytes,
+                TotalUploadedBytes = statistics.TotalUploadedBytes,
+                TotalSyncDuration = statistics.TotalSyncDuration
             };
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
 

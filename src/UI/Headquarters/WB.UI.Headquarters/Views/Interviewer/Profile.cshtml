@@ -1,10 +1,8 @@
-﻿@using System.Globalization
-@using System.Web.Optimization
-@using Humanizer
+﻿@using Humanizer
 @using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model WB.UI.Headquarters.Models.InterviewerProfileModel
 
 @{
@@ -20,7 +18,35 @@
         newInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.NewInterviewsOnDeviceCount;
         rejectedInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.RejectedInterviewsOnDeviceCount;
     }
-
+}
+@helper ConnectionType(DeviceSyncInfo deviceSync)
+{
+    if (deviceSync.NetworkType == @"WIFI")
+    {
+        <text>(@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, deviceSync.NetworkType))</text>
+    }
+    else
+    {
+        <text>(@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, deviceSync.NetworkType, deviceSync.NetworkSubType, deviceSync.MobileOperator))</text>
+    }
+}
+@helper ConnectionStats(string prefix, DeviceSyncInfo deviceSyncInfo)
+{
+    <ul class="list-unstyled">
+        <li>@prefix: @deviceSyncInfo.SyncDate.ToString(@"MMM dd, hh:mm") (@deviceSyncInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
+        @{
+            var syncStatistics = deviceSyncInfo.Statistics;
+        }
+        @if (syncStatistics != null)
+        {
+            <li>@Pages.InterviewerProfile_TotalSyncTime: @syncStatistics.TotalSyncDuration.Humanize(precision: 2)</li>
+            <li>@Pages.InterviewerProfile_ConnectionSpeed: @syncStatistics.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
+                @ConnectionType(deviceSyncInfo)</li>
+            <li>@string.Format(Pages.InterviewerProfile_DataStatsFormat, 
+               syncStatistics.TotalUploadedBytes.Bytes().Humanize(@"0.00"), 
+               syncStatistics.TotalDownloadedBytes.Bytes().Humanize(@"0.00"))</li>
+        }
+    </ul>
 }
 @section scripts
 {
@@ -123,31 +149,13 @@
                     <ul class="list-unstyled">
                         <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>
                         <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
+                        <li>@Pages.InterviewerProfile_AverageSyncSpeed: @Model.AverageSyncSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")</li>      
                     </ul>
-                    <ul class="list-unstyled">
-                        <li>@string.Format(Pages.InterviewerProfile_LastSuccessSyncFormat, Model.LastSuccessDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastSuccessDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
-                        @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
-                        {
-                            <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastSuccessDeviceInfo.NetworkType)</li>
-                        }
-                        else
-                        {
-                            <li>@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, Model.LastSuccessDeviceInfo.NetworkType, Model.LastSuccessDeviceInfo.NetworkSubType, Model.LastSuccessDeviceInfo.MobileOperator)</li>
-                        }
-                    </ul>
+                    @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessDeviceInfo)
+                  
                     @if (Model.LastFailedDeviceInfo != null)
                     {
-                        <ul class="list-unstyled">
-                            <li>@string.Format(Pages.InterviewerProfile_LastFailedSyncFormat, Model.LastFailedDeviceInfo.SyncDate.ToString(@"MMM dd, hh:mm"), Model.LastFailedDeviceInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
-                            @if (Model.LastSuccessDeviceInfo.NetworkType == @"WIFI")
-                            {
-                                <li>@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, Model.LastFailedDeviceInfo.NetworkType)</li>
-                            }
-                            else
-                            {
-                                <li>@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, Model.LastFailedDeviceInfo.NetworkType, Model.LastFailedDeviceInfo.NetworkSubType, Model.LastFailedDeviceInfo.MobileOperator)</li>
-                            }
-                        </ul>
+                        @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedDeviceInfo)
                     }
                 </div>
             </div>

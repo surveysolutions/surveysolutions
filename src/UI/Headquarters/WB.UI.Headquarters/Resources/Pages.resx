@@ -453,20 +453,34 @@
   <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
     <value>Total number of failed synchronizations</value>
   </data>
-  <data name="InterviewerProfile_LastSuccessSyncFormat" xml:space="preserve">
-    <value>Last successfull sync: {0} ({1})</value>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Last successfull sync</value>
   </data>
-  <data name="InterviewerProfile_LastFailedSyncFormat" xml:space="preserve">
-    <value>Last failed sync: {0} ({1})</value>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Last failed sync</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Synchronization duration</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
-    <value>Connection: Type: {0} {1}, Operator: {2}</value>
+    <value>Type: {0} {1}, Operator: {2}</value>
+    <comment>{0} - NetworkType, {1} Network subtype, {2} - Mobile operator name, i.e. Vodafon</comment>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
-    <value>Connection: {0}</value>
+    <value>Type: {0}</value>
   </data>
   <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
     <value>Connection type</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Connection speed</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} uploaded, {1} downloaded</value>
+     <comment>{0}, {1} - Data amount </comment>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Average synch speed</value>
   </data>
   <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
     <value>Signal strength</value>

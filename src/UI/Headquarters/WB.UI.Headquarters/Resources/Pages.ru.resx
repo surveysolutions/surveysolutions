@@ -694,17 +694,29 @@
   <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
     <value>Общее количество оборванных синхронизаций</value>
   </data>
-  <data name="InterviewerProfile_LastSuccessSyncFormat" xml:space="preserve">
-    <value>Последняя успешная синхронизация: {0} ({1})</value>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Последняя успешная синхронизация</value>
   </data>
-  <data name="InterviewerProfile_LastFailedSyncFormat" xml:space="preserve">
-    <value>Последняя оборванная синхронизация: {0} ({1})</value>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Последняя оборванная синхронизация</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Длительность синхронизации</value>
   </data>
   <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
     <value>Соединение: тип: {0} {1}, мобильный оператор: {2}</value>
   </data>
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>Соединение: {0}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Скорость соединения</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} загружено, {1} скаченно</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Средняя скорость синхронизации</value>
   </data>
   <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
     <value>Тип соединения</value>

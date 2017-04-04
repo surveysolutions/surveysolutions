@@ -83,6 +83,14 @@
       <HintPath>..\..\..\packages\FluentAssertions.4.19.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Flurl, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Flurl.2.2.1\lib\portable40-net40+sl5+win8+wp8+wpa81\Flurl.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Flurl.Http.1.1.1\lib\portable40-net45+sl5+win8+wp8+wpa81\Flurl.Http.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
@@ -463,6 +471,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\When_Interviewer_SignIn.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
+    <Compile Include="GenericSubdomains\Utils\HttpStatisticianTests\HttpStatisticianTests.cs" />
     <Compile Include="Infrastructure\CqrsPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\EventSourcedAggregateRootRepositoryTests\EventSourcedAggregateRootRepositoryWithExtendedCacheTests.cs" />
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content_and_headers_contains_etag.cs" />
@@ -1674,6 +1683,7 @@
     <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GenericSubdomains\Utils\HttpStatisticiantTests\" />
     <Folder Include="Resources\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />

@@ -18,5 +18,6 @@ namespace WB.UI.Headquarters.Models
         public DeviceSyncInfo LastFailedDeviceInfo { get; set; }
         public int TotalSuccessSynchronizationCount { get; set; }
         public int TotalFailedSynchronizationCount { get; set; }
+        public double AverageSyncSpeed { get; set; }
     }
 }
