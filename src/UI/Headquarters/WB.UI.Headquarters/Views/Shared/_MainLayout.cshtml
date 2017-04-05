@@ -38,6 +38,8 @@
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
     @Scripts.Render("~/js/new-ui.js")
+    @Scripts.Render("~/js/main-redesigned")
+   
     <title>@ViewBag.Title</title>
     @RenderSection("scripts", false)
 </head>
@@ -134,26 +136,6 @@
 
     @Html.Partial("Clickjacking")
     @Html.Partial("GlobalSettings")
-    <script type="text/javascript">
-        var ajustNoticeHeight = function(){
-            var height = $(".view-mode").outerHeight();
-            $('.view-mode + main').css("margin-top", height+"px");
-            $('.wrapper-view-mode').css("padding-top", height);
-            $('.wrapper-view-mode .foldback-button').css("margin-top", height);
-            $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
-        };
-        $(document).ready(function () {
-            $( ".view-mode + main .container-fluid .filters" ).wrapInner( "<div class='wrapper-view-mode'></div>");
-            $( ".view-mode + main .container-fluid .content" ).wrapInner( "<div class='wrapper-view-mode'></div>");
-            ajustNoticeHeight();
-
-            $('.view-mode .alerts .alert').on('closed.bs.alert', function() {
-                ajustNoticeHeight();
-            });
-        });
-        $( window ).resize(function() {
-            ajustNoticeHeight();
-        });
-    </script> 
+   
 </body>
 </html>

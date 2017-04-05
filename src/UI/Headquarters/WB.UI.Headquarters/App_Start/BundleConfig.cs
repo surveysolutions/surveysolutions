@@ -19,6 +19,39 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/searchHighlight.js"
              ));
 
+            //libs.js:
+            //vendor\jquery\dist\jquery.js
+            //vendor\bootstrap - sass\assets\javascripts\bootstrap.js
+            //vendor\knockout\dist\knockout.js
+            //vendor\knockout-mapping\build\output\knockout.mapping-latest.js
+            //vendor\moment\moment.js
+            //vendor\lodash\lodash.js
+            //vendor\datatables.net\js\jquery.dataTables.js
+            //vendor\datatables.net-select\js\dataTables.select.js
+            //vendor\pnotify\dist\pnotify.js
+            //vendor\pnotify\dist\pnotify.animate.js
+            //vendor\pnotify\dist\pnotify.buttons.js
+            //vendor\pnotify\dist\pnotify.callbacks.js
+            //vendor\pnotify\dist\pnotify.confirm.js
+            //vendor\pnotify\dist\pnotify.desktop.js
+            //vendor\pnotify\dist\pnotify.history.js
+            //vendor\pnotify\dist\pnotify.mobile.js
+            //vendor\pnotify\dist\pnotify.nonblock.js
+            //vendor\bootstrap-select\dist\js\bootstrap - select.js
+            //vendor\jQuery-contextMenu\dist\jquery.contextMenu.js
+            //vendor\jquery-highlight\jquery.highlight.js
+            //vendor\flatpickr\dist\flatpickr.js
+            bundles.Add(new ScriptBundle("~/js/main-redesigned").Include(
+                "~/Scripts/modernizr-2.8.3.js",
+                "~/Scripts/director.js",
+                "~/Scripts/query-string.js",
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js",
+                "~/Scripts/viewmodels/surveymanagmentheader.js",
+                "~/Scripts/bootbox.min.js"
+            ));
+
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.min.css",

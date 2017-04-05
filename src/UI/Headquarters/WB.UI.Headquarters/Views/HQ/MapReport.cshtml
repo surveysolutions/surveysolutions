@@ -2,64 +2,11 @@
 @using AppSettings = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings
 @{
     ViewBag.Title = MapReport.MapReportTitle;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div id="menu" class="col-sm-3 col-md-2 sidebar">
-    <div id="report-builder">
-        <div class="central-pane">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="form-group">
-                        <label for="questionnaire">@Reports.Questionnaire</label>
-                        <div class="controls">
-                            <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="version">@Reports.Version</label>
-                        <div class="controls">
-                            <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : isVersionsEnabled"></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="variable">@Reports.Variables</label>
-                        <div class="controls">
-                            <select class="form-control" id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled"></select>
-                        </div>
-                    </div>
-                    <div class="form-group" data-bind="visible: markerlimitReached">
-                        <div class="alert-warning">
-                            <span >@MapReport.NotAllMarkers</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bottom-pane">
-
-            <div class="row-fluid">
-                <div class="span23 btn-group-sm">
-                    <button class="btn-block btn" id="reloadMarkersInBounds" data-bind="click: reloadMarkersInBounds, visible: readyToUpdate">@MapReport.ReloadMarkers</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script type="text/html" id="interview-tooltip-template">
-        <div>
-            <div class="row-fluid"><strong>@Users.Interviewer :</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
-            <div class="row-fluid"><strong>@Users.Supervisor :</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
-            <div class="row-fluid"><strong>@Common.Status :</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
-            <div class="row-fluid"><strong>@Reports.CompletionDate :</strong>&nbsp;<span data-bind="text: LastUpdatedDate">[last updated date]</span></div>
-            <div class="row-fluid" style="white-space:nowrap;"><strong>@MapReport.ViewInterviewContent :</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }"> @MapReport.details </a></div>
-        </div>
-    </script>
-</div>
-<div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <div id="map-canvas" class="google-maps" />
-</div>
 @section scripts
 {
-
     @Scripts.Render("~/js/list")
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
@@ -86,7 +33,53 @@
     </script>
 }
 
-@section styles
-{
 
-}
+<main class="hold-transition" id="app">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <div class="block-filter">
+                        <h5>@Reports.Questionnaire</h5>
+                        <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                    </div>
+                    <div class="block-filter">
+                        <h5>@Reports.Version</h5>
+                        <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : isVersionsEnabled"></select>
+                    </div>
+                    <div class="block-filter">
+                        <h5>@Reports.Variables</h5>
+                        <select class="form-control" id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled"></select>
+                    </div>
+                    <div class="block-filter" data-bind="visible: markerlimitReached">
+                        <div class="alert-warning">
+                            <span>@MapReport.NotAllMarkers</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="preset-filters-container">
+                    <div class="block-filter">
+                        <button class="btn btn-primary btn-lg" id="reloadMarkersInBounds" data-bind="click: reloadMarkersInBounds, visible: readyToUpdate">@MapReport.ReloadMarkers</button>
+                    </div>
+                </div>
+            </aside>
+            <div class="main-information">
+                <div id="map-canvas" class="google-maps"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<script type="text/html" id="interview-tooltip-template">
+    <div>
+        <div class="row-fluid"><strong>@Users.Interviewer :</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
+        <div class="row-fluid"><strong>@Users.Supervisor :</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
+        <div class="row-fluid"><strong>@Common.Status :</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
+        <div class="row-fluid"><strong>@Reports.CompletionDate :</strong>&nbsp;<span data-bind="text: LastUpdatedDate">[last updated date]</span></div>
+        <div class="row-fluid" style="white-space:nowrap;"><strong>@MapReport.ViewInterviewContent :</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }"> @MapReport.details </a></div>
+    </div>
+</script>
