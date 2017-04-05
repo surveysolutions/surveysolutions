@@ -4,13 +4,10 @@ using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
@@ -19,31 +16,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
     {
         Establish context = () =>
         {
-            var interviewsAsyncPlainStorage =
-                new SqliteInmemoryStorage<InterviewView>();
-            interviewsAsyncPlainStorage.Store(
-            new[]
-                {
-                    new InterviewView
-                    {
-                        QuestionnaireId = questionnaireIdentity.ToString(),
-                        InterviewId = Guid.Parse("22222222222222222222222222222222"),
-                        Id = Guid.Parse("22222222222222222222222222222222").FormatGuid()
-                    },
-                    new InterviewView
-                    {
-                        QuestionnaireId = questionnaireIdentity.ToString(),
-                        InterviewId = Guid.Parse("33333333333333333333333333333333"),
-                        Id = Guid.Parse("33333333333333333333333333333333").FormatGuid()
-                    },
-                });
-
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
                 questionnaireStorage: mockOfPlainQuestionnaireRepository.Object,
-                questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object,
-                interviewViewRepository: interviewsAsyncPlainStorage,
-                interviewFactory: mockOfInterviewAccessor.Object);
+                questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object);
         };
 
         Because of = () => interviewerQuestionnaireAccessor.RemoveQuestionnaire(questionnaireIdentity);
@@ -56,9 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 
         It should_remove_questionnaire_assembly_from_file_storage = () =>
             mockOfQuestionnaireAssemblyFileAccessor.Verify(x => x.RemoveAssembly(questionnaireIdentity), Times.Once);
-
-        It should_remove_interviews_by_questionnaire_from_plain_storage = () =>
-            mockOfInterviewAccessor.Verify(x => x.RemoveInterview(Moq.It.IsAny<Guid>()), Times.Exactly(2));
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
         private static readonly Mock<IQuestionnaireStorage> mockOfPlainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();

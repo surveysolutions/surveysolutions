@@ -9,6 +9,7 @@
     self.InterviewListUrl = interviewListUrl;
 
     self.submitting = false;
+    self.submitSuccess = false;
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
     self.questions = ko.observableArray();
@@ -32,7 +33,7 @@
     self.saveCommand = function() {
             if (!self.isViewModelValid())
                 return;
-            if (!self.submitting) {
+            if (!self.submitting && !self.submitSuccess) {
                 self.submitting = true;
 
                 var command = {
@@ -44,7 +45,8 @@
                         answersToFeaturedQuestions: datacontext.prepareQuestion()
                     })
                 };
-                self.SendCommand(command, function(data) {
+                self.SendCommand(command, function (data) {
+                    self.submitSuccess = true;
                     window.location = self.InterviewListUrl.concat("?templateId=",
                         datacontext.questionnaire.templateId, "&templateVersion=",
                         datacontext.questionnaire.templateVersion);

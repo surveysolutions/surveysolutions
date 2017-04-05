@@ -5,20 +5,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
     [Obsolete("Since v 5.8")]
     public class SyncItem
     {
-        public Guid RootId
-        {
-            get
-            {
-                return this.rootId == Guid.Empty ? this.Id : this.rootId;
-            }
-            set
-            {
-                this.rootId = value;
-            }
-        }
-
-        [Obsolete("Remove when all clients are updated to 3.1 version")]
-        public Guid Id;
+        public Guid RootId { get; set; }
 
         public string Content;
         public string ItemType;
@@ -27,6 +14,5 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public long ChangeTracker = 0;
 
         public string MetaInfo;
-        private Guid rootId;
     }
 }

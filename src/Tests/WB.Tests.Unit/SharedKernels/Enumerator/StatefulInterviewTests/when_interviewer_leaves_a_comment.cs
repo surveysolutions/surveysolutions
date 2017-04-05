@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.CommentAnswer(interviewerId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsInInterview();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer();
             Assert.That(commentedBySupervisorQuestionsInInterview, Is.Empty);
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));

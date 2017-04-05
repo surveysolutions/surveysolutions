@@ -2,6 +2,7 @@ using Machine.Specifications;
 using Moq;
 using NHibernate;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.TransactionManagerProviderTests

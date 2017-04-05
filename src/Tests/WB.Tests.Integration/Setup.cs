@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration
 {
@@ -60,7 +61,7 @@ namespace WB.Tests.Integration
 
             var navigationState = Mock.Of<NavigationState>(_ => _.InterviewId == interview.Id.FormatGuid());
 
-            var liteEventRegistry = Create.LiteEventRegistry();
+            var liteEventRegistry = Abc.Create.Service.LiteEventRegistry();
             var mvxMessenger = Mock.Of<IMvxMessenger>();
 
             Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
@@ -69,11 +70,10 @@ namespace WB.Tests.Integration
                     questionnaireRepository,
                     mvxMessenger,
                     liteEventRegistry,
-                    Create.DynamicTextViewModel(
+                    Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository),
-                    Create.AnswerNotifier(liteEventRegistry))
+                    IntegrationCreate.AnswerNotifier(liteEventRegistry))
                 {
                     NavigationState = navigationState,
                 };
@@ -91,18 +91,16 @@ namespace WB.Tests.Integration
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
-                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
-                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                         liteEventRegistry,
-                        questionnaireRepository: questionnaireRepository,
                         interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
-                        Create.AnswerNotifier(liteEventRegistry)));
+                        IntegrationCreate.AnswerNotifier(liteEventRegistry)));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())

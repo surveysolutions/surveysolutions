@@ -1,10 +1,13 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
 {
@@ -24,9 +27,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             viewState.Levels.Add("0", interviewLevel);
 
+            var questionnaire = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.FixedRoster(rosterGroupId,
+                    fixedTitles: new FixedRosterTitle[] {new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2")}),
+
+                Create.Entity.FixedRoster(disabledGroupId,
+                    fixedTitles: new FixedRosterTitle[] {new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2")})
+            });
+
             var questionnaireRosterScopes = CreateQuestionnaireRosterScopes(rosterScopeId, rosterGroupId, disabledGroupId);
 
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterScopes);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterScopes, questionnaireDocument : questionnaire);
         };
 
         Because of = () =>

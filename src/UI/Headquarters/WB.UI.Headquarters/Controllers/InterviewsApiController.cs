@@ -6,12 +6,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -24,16 +24,15 @@ namespace WB.UI.Headquarters.Controllers
 
         public InterviewsApiController(
             ICommandService commandService, 
-            IGlobalInfoProvider globalInfo, 
             ILogger logger, 
             IInterviewImportService interviewImportService,
             IArchiveUtils archiver)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.interviewImportService = interviewImportService;
             this.archiver = archiver;
         }
-        
+
         [HttpGet]
         [CamelCase]
         public InterviewImportStatusApiView GetImportInterviewsStatus()
@@ -54,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewImportProcessId = status.InterviewImportProcessId
             };
         }
-
+        
         [HttpGet]
         [ObserverNotAllowedApi]
         public HttpResponseMessage GetInvalidInterviewsByLastImport()

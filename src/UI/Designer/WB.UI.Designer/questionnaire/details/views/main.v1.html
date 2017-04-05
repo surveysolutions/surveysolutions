@@ -84,11 +84,11 @@
                         <h3><span ng-show="questionnaire.chapters.length!=0">{{questionnaire.chapters.length}}</span> Section<span ng-show="questionnaire.chapters.length!=1">s</span>:</h3>
                         <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list">
                             <li class="chapter-panel-item"
-                                ng-repeat="chapter in questionnaire.chapters"
-                                ui-tree-node
-                                ng-class="{ current: isCurrentChapter(chapter) }"
-                                context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
-                                context-menu-hide-on-mouse-leave="true">
+                                    ng-repeat="chapter in questionnaire.chapters"
+                                    ui-tree-node
+                                    ng-class="{ current: isCurrentChapter(chapter) }"
+                                    context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
+                                    context-menu-hide-on-mouse-leave="true">
                                 <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                                     <div class="inner">
                                         <a class="handler" ui-tree-handle><span></span></a>
@@ -97,18 +97,18 @@
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a ng-click="editChapter(chapter);">Edit</a></li>
+                                        <li><a ng-click="editChapter(chapter);">Open</a></li>
                                         <li><a ng-click="copyRef(chapter);">Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();">Paste after</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
                                         </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Delete</a></li>
                                     </ul>
                                 </div>
                             </li>
                         </ul>
                         <div class="button-holder">
-                            <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()">
+                            <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
                         </div>
                     </perfect-scrollbar>
                 </div>

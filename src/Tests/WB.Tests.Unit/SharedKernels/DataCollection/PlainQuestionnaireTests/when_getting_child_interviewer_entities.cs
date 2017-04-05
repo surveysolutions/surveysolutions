@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {

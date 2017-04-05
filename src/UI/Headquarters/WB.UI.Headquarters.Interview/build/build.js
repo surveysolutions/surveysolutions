@@ -21,16 +21,23 @@ shell.config.silent = true
 shell.cp('-R', 'static/*', assetsPath)
 shell.config.silent = false
 
-webpack(webpackConfig, function (err, stats) {
-  spinner.stop()
-  if (err) throw err
-  process.stdout.write(stats.toString({
-    colors: true,
-    modules: false,
-    children: false,
-    chunks: false,
-    chunkModules: false
-  }) + '\n\n')
+var res = webpack(webpackConfig, function (err, stats) {
+    spinner.stop()
+    if (err) {
+        throw err
+    }
+    process.stdout.write(stats.toString({
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+    }) + '\n\n')
 
-  console.log(chalk.cyan('  Build complete.\n'))
+    if(stats.hasErrors()){
+        console.log(chalk.red('  Build completed with errors'))
+        process.exit(1)
+    }
+
+    console.log(chalk.cyan('  Build complete.\n'))
 })

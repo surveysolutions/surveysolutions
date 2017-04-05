@@ -228,4 +228,7 @@
   <data name="Settings" xml:space="preserve">
     <value>Параметры</value>
   </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Идентификатор</value>
+  </data>
 </root>

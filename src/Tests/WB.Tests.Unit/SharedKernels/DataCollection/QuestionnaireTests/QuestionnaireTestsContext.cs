@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests

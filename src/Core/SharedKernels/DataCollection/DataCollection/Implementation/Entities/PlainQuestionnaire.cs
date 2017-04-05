@@ -1559,8 +1559,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId)
         {
             return this.AllQuestions.Where(
-                    x => (x.LinkedToQuestionId.HasValue && x.LinkedToQuestionId == linkedSourceEntityId)
-                      || (x.LinkedToRosterId.HasValue && x.LinkedToRosterId == linkedSourceEntityId))
+                    x => (x.LinkedToQuestionId == linkedSourceEntityId)
+                      || (x.LinkedToRosterId == linkedSourceEntityId))
                     .Select(x => x.PublicKey);
         }
     }

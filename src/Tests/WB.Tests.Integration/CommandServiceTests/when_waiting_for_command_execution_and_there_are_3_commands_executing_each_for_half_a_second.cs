@@ -9,6 +9,7 @@ using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -40,7 +41,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
-            commandService = Create.CommandService(repository: repository);
+            commandService = Abc.Create.Service.CommandService(repository: repository, aggregateLock: new AggregateLock());
 
             var t1 = commandService.ExecuteAsync(new ExecuteForHalfASecond(), null, CancellationToken.None);
             Task.Delay(5).Wait();

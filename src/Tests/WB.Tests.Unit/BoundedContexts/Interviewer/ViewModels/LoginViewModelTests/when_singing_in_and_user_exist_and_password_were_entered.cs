@@ -16,14 +16,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 {
     public class when_singing_in_and_user_exist_and_password_were_entered : LoginViewModelTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(userPassword) == userPasswordHash);
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
 
             var principal = new Mock<IPrincipal>();
-            principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
+            principal.Setup(x => x.SignIn(userName, userPassword, true)).Returns(true);
 
             InterviewersPlainStorageMock
                .Setup(x => x.FirstOrDefault())
@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 principal: principal.Object);
 
             viewModel.Load();
+            viewModel.UserName = userName;
             viewModel.Password = userPassword;
         };
 

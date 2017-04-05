@@ -41,14 +41,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
-        private readonly IRostrerStructureService rosterStructureService;
+        private readonly IRosterStructureService rosterStructureService;
 
         public PreloadedDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IRostrerStructureService rosterStructureService)
+            IRosterStructureService rosterStructureService)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
         private string[] JoinRowIdWithParentIdsInParentIdsVector(string id, string[] parentIds)
         {
-            var result = new string[parentIds.Count() + 1];
+            var result = new string[parentIds.Length + 1];
             result[0] = id;
             for (int i = 1; i < result.Length; i++)
             {
@@ -900,15 +900,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var userNameLowerCase = userName.ToLower();
             if (!responsiblesCache.ContainsKey(userNameLowerCase))
             {
-                var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
+                var user = this.userViewFactory.GetUser(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
 
                 var userNotExistOrArchived = user == null || user.IsArchived;
 
                 responsiblesCache[userNameLowerCase] = userNotExistOrArchived ? null : new UserToVerify
                 (
                     user.IsLockedByHQ || user.IsLockedBySupervisor,
-                    user.IsSupervisor(), 
-                    user.Roles.Any(role => role == UserRoles.Operator)
+                    user.IsSupervisor(),
+                    user.Roles.Any(role => role == UserRoles.Interviewer)
                 );
             }
 

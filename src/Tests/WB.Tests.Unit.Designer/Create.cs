@@ -24,14 +24,13 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -133,7 +132,7 @@ namespace WB.Tests.Unit.Designer
             return new AttachmentView
             {
                 AttachmentId = (id ?? Guid.NewGuid()).FormatGuid(),
-                Meta = new AttachmentMeta {},
+                Meta = new AttachmentMeta { AttachmentId = id ?? Guid.NewGuid() },
                 Content = new AttachmentContent
                 {
                     Size = size ?? 10
@@ -143,11 +142,7 @@ namespace WB.Tests.Unit.Designer
 
         public static Group Chapter(string title = "Chapter X", Guid? chapterId = null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
         {
-            return Create.Group(
-                title: title,
-                groupId: chapterId,
-                hideIfDisabled: hideIfDisabled,
-                children: children);
+            return Abc.Create.Entity.Group(groupId: chapterId, title: title, hideIfDisabled: hideIfDisabled, children: children);
         }
 
         public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
@@ -164,19 +159,28 @@ namespace WB.Tests.Unit.Designer
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
-            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                },
-                isLookupTablesFeatureSupported: true,
-                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
+
+
+            return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV10" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7",
+                            "WB.Core.SharedKernels.DataCollection.V8",
+                            "WB.Core.SharedKernels.DataCollection.V9",
+                            "WB.Core.SharedKernels.DataCollection.V10",
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV10(expressionStateModel).TransformText(),
+                        linkedFilterMethodGenerator: model => new LinkedFilterMethodTemplateV10(model).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(
@@ -597,10 +601,10 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2", string label = null)
         {
             return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression, label: null));
+                variableData: new VariableData(type: type, name: variableName, expression: expression, label: label));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
@@ -965,9 +969,9 @@ namespace WB.Tests.Unit.Designer
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
                     rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
 
-            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
+            public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, label));
             }
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
@@ -1037,9 +1041,9 @@ namespace WB.Tests.Unit.Designer
                     isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>());
             }
 
-            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, null), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, label), responsibleId, parentId, index);
             }
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)

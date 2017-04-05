@@ -7,6 +7,7 @@ using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -20,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
 
@@ -29,7 +31,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         Establish context = () =>
         {
-            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             origin = "hq";
@@ -54,9 +56,10 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 serializer: newtonJsonSerializer, 
                 interviewPackageStorage: packagesStorage,
                 brokenInterviewPackageStorage: brokenPackagesStorage,
-                commandService: mockOfCommandService.Object);
+                commandService: mockOfCommandService.Object,
+                uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>());
 
-            expectedCommand = new SynchronizeInterviewEventsCommand(
+            expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
                 questionnaireId: Guid.Parse("22222222222222222222222222222222"),
                 questionnaireVersion: 111,
@@ -72,7 +75,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
                     });
 
-            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray());
+            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage

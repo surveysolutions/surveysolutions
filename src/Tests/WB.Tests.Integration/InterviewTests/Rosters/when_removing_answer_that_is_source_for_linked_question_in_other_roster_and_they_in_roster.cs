@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -33,38 +34,38 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var fixedRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(
-                        id: parentRosterId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.Roster(
+                        rosterId: parentRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new FixedRosterTitle[] {
-                                Create.FixedTitle(1, "Parent 1"),
-                                Create.FixedTitle(2, "Parent 2") },
+                        fixedRosterTitles: new FixedRosterTitle[] {
+                                IntegrationCreate.FixedTitle(1, "Parent 1"),
+                                IntegrationCreate.FixedTitle(2, "Parent 2") },
                         children: new IComposite[] {
-                            Create.Roster(
-                                id: rosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: rosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new FixedRosterTitle[] {
-                                    Create.FixedTitle(3, "Roster 1"),
-                                    Create.FixedTitle(4, "Roster 2") },
+                                fixedRosterTitles: new FixedRosterTitle[] {
+                                    IntegrationCreate.FixedTitle(3, "Roster 1"),
+                                    IntegrationCreate.FixedTitle(4, "Roster 2") },
                                 variable: "fixed_source",
                                 children: new IComposite[]
                                 {
-                                    Create.NumericIntegerQuestion(sourceQuestionId, variable: "source")
+                                    Abc.Create.Entity.NumericIntegerQuestion(sourceQuestionId, variable: "source")
                                 }),
 
-                            Create.Roster(
-                                id: fixedRosterId,
+                            Abc.Create.Entity.Roster(
+                                rosterId: fixedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new FixedRosterTitle[] {
-                                    Create.FixedTitle(5, "Item 1"),
-                                    Create.FixedTitle(6, "Item 2") },
+                                fixedRosterTitles: new FixedRosterTitle[] {
+                                    IntegrationCreate.FixedTitle(5, "Item 1"),
+                                    IntegrationCreate.FixedTitle(6, "Item 2") },
                                 variable: "fix",
                                 children: new IComposite[]
                                 {
-                                    Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                                    Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                                 }),
-                            Create.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
+                            Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
                         })
                     );
 
@@ -74,8 +75,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 3 }, DateTime.Now, 17);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 5 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3 }, new decimal[] { 1, 4 } });
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1 }, DateTime.Now, new decimal[][] { new decimal[] { 1, 3 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 5 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3 }, new decimal[] { 1, 4 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3 } });
 
                 using (var eventContext = new EventContext())
                 {

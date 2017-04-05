@@ -162,8 +162,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[]
                                           {
-                                              Create.FixedTitle(1, "Roster X-1"),
-                                              Create.FixedTitle(2, "Roster X-2")
+                                              IntegrationCreate.FixedTitle(1, "Roster X-1"),
+                                              IntegrationCreate.FixedTitle(2, "Roster X-2")
                                           },
                 Children = varNames.Select(varName => new TextQuestion(varName)
                 {
@@ -206,8 +206,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 FixedRosterTitles =   new[]
                                           {
-                                              Create.FixedTitle(1, "Roster X-1"),
-                                              Create.FixedTitle(2, "Roster X-2")
+                                              IntegrationCreate.FixedTitle(1, "Roster X-1"),
+                                              IntegrationCreate.FixedTitle(2, "Roster X-2")
                                           },
                                 Children = new List<IComposite>()
                                 {
@@ -475,7 +475,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    Create.CodeGenerator(),
+                    IntegrationCreate.CodeGenerator(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
         }
 

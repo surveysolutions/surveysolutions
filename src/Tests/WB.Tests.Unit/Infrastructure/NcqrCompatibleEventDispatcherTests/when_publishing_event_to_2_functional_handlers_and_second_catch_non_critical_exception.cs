@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests

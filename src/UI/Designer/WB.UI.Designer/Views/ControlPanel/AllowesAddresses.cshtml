@@ -1,0 +1,37 @@
+﻿@model IEnumerable<WB.Core.BoundedContexts.Designer.Views.AllowedAddresses.AllowedAddress>
+@{
+    ViewBag.Title = "Allowes Addresses";
+    this.Layout = "~/Views/ControlPanel/Layout.ControlPanel.cshtml";
+}
+
+<h2>Allowes Addresses <a class="btn btn-default" href="@Url.Action("AddAllowesAddress","ControlPanel")">Add</a></h2>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Address</th>
+        <th>Description</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var address in Model)
+    {
+        <tr>
+            <td>@address.Address</td>
+            <td>@address.Description</td>
+            <td>
+                <a href="@Url.Action("EditAllowesAddress", "ControlPanel", new {id = address.Id})" class="btn btn-link">Edit</a>
+            </td>
+            <td>
+                @using (Html.BeginForm("RemoveAllowesAddress", "ControlPanel", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("Id", address.Id)
+                    <button type="submit" class="btn btn-link">Remove</button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

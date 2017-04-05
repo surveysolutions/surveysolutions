@@ -17,21 +17,19 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var dependentStaticTextOutsideRosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             var dependentStaticTextInsideRosterId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-
-                Create.StaticText(dependentStaticTextOutsideRosterId, enablementCondition: "q1 > 0"),
-
-                Create.Roster(fixedTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.StaticText(dependentStaticTextOutsideRosterId, enablementCondition: "q1 > 0"),
+                Abc.Create.Entity.Roster(fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(1, "one") }, children: new IComposite[]
                 {
-                    Create.StaticText(dependentStaticTextInsideRosterId, enablementCondition: "q1 > 0"),
+                     Abc.Create.Entity.StaticText(dependentStaticTextInsideRosterId, enablementCondition: "q1 > 0"),
                 })
             }));
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {

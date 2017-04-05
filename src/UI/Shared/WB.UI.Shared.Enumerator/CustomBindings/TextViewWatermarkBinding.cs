@@ -48,10 +48,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.OneWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void Dispose(bool isDisposing)
         {

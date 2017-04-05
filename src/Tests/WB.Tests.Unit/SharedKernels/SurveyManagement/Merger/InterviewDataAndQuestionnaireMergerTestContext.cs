@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -62,11 +63,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         {
             var interviewGroupView =
                 interviewDetailsView.Groups.FirstOrDefault(
-                    g => g.Entities.Any(q => q.Id == questionId) && g.RosterVector.SequenceEqual(questionRosterVector));
+                    g => g.Entities.Any(q => q.Id.Id == questionId) && g.Id.RosterVector.Identical(questionRosterVector));
             if (
                 interviewGroupView != null)
                 return interviewGroupView
-                    .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionId);
+                    .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id.Id == questionId);
             return null;
         }
 
@@ -75,10 +76,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             decimal[] questionRosterVector)
         {
             var interviewGroupView = interviewDetailsView.Groups.FirstOrDefault(g => 
-                g.Entities.Any(q => q.Id == staticTextId) && 
-                g.RosterVector.SequenceEqual(questionRosterVector));
+                g.Entities.Any(q => q.Id.Id == staticTextId) && 
+                g.Id.RosterVector.Identical(questionRosterVector));
 
-            return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
+            return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id.Id == staticTextId);
         }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
+            mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
 
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         It should_be_downloaded_questionnaire = () => 
             mockOfDesignerApiService.Verify(
-                _ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), 
+                _ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), 
                 Times.Once);
 
         It should_be_questionnaire_stored_to_local_storage = () => 

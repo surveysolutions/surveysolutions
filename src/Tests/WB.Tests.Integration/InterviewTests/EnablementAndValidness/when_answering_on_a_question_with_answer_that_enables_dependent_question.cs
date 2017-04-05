@@ -16,15 +16,15 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                Create.NumericIntegerQuestion(dependentQuestionId, enablementCondition: "q1 > 0"),
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.NumericIntegerQuestion(dependentQuestionId, enablementCondition: "q1 > 0"),
             }));
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Abc.Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {

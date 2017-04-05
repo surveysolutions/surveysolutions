@@ -12,12 +12,14 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -85,7 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 new Dictionary<Guid, object>(), new Dictionary<Guid, string>() { { secondLevelRosterId, "roster21" } });
 
             
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             merger = CreateMerger(questionnaire);
         };
 
@@ -113,7 +115,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid firstLevelRosterId;
         private static Guid linkedQuestionId;

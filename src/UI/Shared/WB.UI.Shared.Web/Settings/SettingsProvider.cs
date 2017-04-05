@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Web.Settings
     {
         private static readonly Regex ConnectionStringPasswordRegex = new Regex("password=([^;]*);", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        protected virtual List<string> settingsToSkip => new List<string> { "Headquarters.AccessToken", "EventStore.Password" };
+        protected virtual List<string> settingsToSkip => new List<string> { "Headquarters.AccessToken" };
 
         public virtual IEnumerable<ApplicationSetting> GetSettings()
         {

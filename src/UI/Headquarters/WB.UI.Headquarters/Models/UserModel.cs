@@ -7,6 +7,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     public class UserModel
     {
         public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
+        public const string PersonNameRegex = @"^[\p{L} '.-]+$";
+        public const int PersonNameMaxLength = 100;
+        public const int PhoneNumberLength = 15;
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [Display(Name = nameof(FieldsAndValidations.UserNameFieldName), ResourceType = typeof (FieldsAndValidations), Order = 1)]
@@ -29,12 +32,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(Name = nameof(FieldsAndValidations.EmailFieldName), ResourceType = typeof (FieldsAndValidations), Order = 4)]
         public string Email { get; set; }
 
-        [StringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PersonNameErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
+        [StringLength(PersonNameMaxLength, ErrorMessageResourceName = nameof(FieldsAndValidations.PersonNameErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = nameof(FieldsAndValidations.PersonNameFieldName), ResourceType = typeof(FieldsAndValidations), Order = 5)]
+        [RegularExpression(PersonNameRegex, ErrorMessageResourceName = nameof(FieldsAndValidations.PersonNameAllowedCharactersErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string PersonName { get; set; }
 
         [Phone(ErrorMessageResourceName = nameof(FieldsAndValidations.PhoneErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = nameof(FieldsAndValidations.PhoneNumberFieldName), ResourceType = typeof(FieldsAndValidations), Order = 6)]
+        [StringLength(PhoneNumberLength, ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.PhoneErrorLength))]
         public string PhoneNumber { get; set; }
 
         [Display(Name = nameof(FieldsAndValidations.IsLockedFieldName), ResourceType = typeof (FieldsAndValidations), Order = 7)]

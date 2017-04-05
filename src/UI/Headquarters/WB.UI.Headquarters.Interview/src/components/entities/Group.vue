@@ -2,13 +2,13 @@
     <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true">
         <div class="options-group">
                 <router-link :to="navigateTo" class="btn btn-roster-section" :class="btnStatusClass">
-                    {{this.$me.title}}<span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
+                    <span v-html="$me.title"></span><span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
                 </router-link>
          </div>
          <div class="information-block roster-section-info" v-if="!$me.isDisabled">
                 {{this.$me.statisticsByAnswersAndSubsections}}<span v-if="hasInvalidAnswers">, </span>
                 <span class="error-text" v-if="hasInvalidAnswers">{{this.$me.statisticsByInvalidAnswers}}</span>
-         </div>        
+         </div>
     </wb-question>
 </template>
 
@@ -28,7 +28,7 @@
                 }
             },
             rosterTitle(){
-                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"            
+                return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"
             },
             isNotStarted() {
                 return this.$me.status == "NotStarted"
@@ -44,7 +44,7 @@
             },
             btnStatusClass() {
                 return [{
-                    'btn-success': this.$me.validity.isValid && this.isCompleted,                    
+                    'btn-success': this.$me.validity.isValid && this.isCompleted,
                     'btn-danger': !this.$me.validity.isValid,
                     'btn-primary': !this.isCompleted ,
                     'disabled': this.$me.isDisabled
@@ -54,7 +54,7 @@
                 return ['roster-section-block', {
                     'started': this.$me.validity.isValid && this.isStarted,
                     'has-error': !this.$me.validity.isValid,
-                    '': this.$me.validity.isValid && !this.isCompleted                    
+                    '': this.$me.validity.isValid && !this.isCompleted
                 },
                 {
                     'answered': this.isCompleted

@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Api
 {
