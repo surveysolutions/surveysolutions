@@ -78,6 +78,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
 
             this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
+            this.Kernel.Bind<IHttpStatistican>().To<HttpStatistican>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
