@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             Assert.That(reader.FieldHeaders[0], Is.EqualTo("Link"));
             Assert.That(reader.FieldHeaders[1], Is.EqualTo("Interview Key"));
 
-            Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{interviewId:N}"));
+            Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{interviewId:N}/Cover"));
             Assert.That(reader.GetField(1), Is.EqualTo(interviewKey));
         }
 

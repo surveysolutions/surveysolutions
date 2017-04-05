@@ -9,8 +9,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Models.WebInterview;
-using InterviewStaticText = WB.UI.Headquarters.Models.WebInterview.InterviewStaticText;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -37,7 +37,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             return new InterviewInfo
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
-                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid()
+                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                IsSampleMode = !this.questionnaireBrowseViewFactory.GetById(this.GetCallerInterview().QuestionnaireIdentity).AllowCensusMode
             };
         }
 

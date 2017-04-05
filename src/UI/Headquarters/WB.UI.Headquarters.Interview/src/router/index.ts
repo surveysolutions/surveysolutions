@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 
 import { apiCaller, getInstance as hubProxy, queryString } from "../api"
 import Complete from "../components/Complete"
+import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
 import store from "../store"
@@ -18,7 +19,7 @@ const router = new VueRouter({
             name: "prefilled",
             path: "/:interviewId/Cover",
             components: {
-                default: Section,
+                default: Cover,
                 sideBar: SideBar
             }
         },

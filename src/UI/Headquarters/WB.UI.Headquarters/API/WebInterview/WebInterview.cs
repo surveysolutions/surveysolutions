@@ -3,6 +3,7 @@ using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.CommandBus;
@@ -20,6 +21,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -36,7 +38,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IWebInterviewNotificationService webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
@@ -44,6 +47,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.questionnaireRepository = questionnaireRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.webInterviewNotificationService = webInterviewNotificationService;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
 

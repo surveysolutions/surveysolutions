@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             foreach (var interviewReference in interviewsBatch)
             {
-                csvWriter.WriteField(baseUrl + "/" + interviewReference.Id);
+                csvWriter.WriteField($"{baseUrl}/{interviewReference.Id}/Cover");
                 csvWriter.WriteField(interviewReference.Key ?? "");
                 foreach (var prefilledQuestion in prefilledQuestions.Where(x => x.InterviewId == interviewReference.Id))
                 {
