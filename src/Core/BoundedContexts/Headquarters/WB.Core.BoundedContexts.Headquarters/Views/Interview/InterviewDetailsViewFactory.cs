@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     AnsweredCount = interview.CountAllEnabledAnsweredQuestions(),
                     AllCount = interview.CountAllEnabledQuestions(),
-                    CommentedCount = interview.GetCommentedBySupervisorAllQuestions().Count(),
+                    CommentedCount = interview.GetAllCommentedEnabledQuestions().Count(),
                     EnabledCount = interview.CountAllEnabledQuestions(),
                     FlaggedCount = interviewData.Levels.Sum(lvl => lvl.Value.QuestionsSearchCache.Values.Count(q => q.IsFlagged())),
                     InvalidCount = interview.CountAllInvalidEntities(),
