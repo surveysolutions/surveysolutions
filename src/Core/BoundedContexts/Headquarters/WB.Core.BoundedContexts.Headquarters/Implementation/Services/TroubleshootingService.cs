@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -15,22 +14,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class TroubleshootingService : ITroubleshootingService
     {
-        private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackagesReader;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireFactory;
+        private readonly ISynchronizationLogViewFactory syncLogFactory;
+        private readonly IBrokenInterviewPackagesViewFactory brokenPackagesFactory;
 
         public TroubleshootingService(
-            IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackagesReader, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, 
-            IPlainStorageAccessor<SynchronizationLogItem> syncLogAccessor, 
-            IQuestionnaireBrowseViewFactory questionnaireFactory)
+            IQuestionnaireBrowseViewFactory questionnaireFactory, 
+            ISynchronizationLogViewFactory syncLogFactory, 
+            IBrokenInterviewPackagesViewFactory brokenPackagesFactory)
         {
-            this.brokenInterviewPackagesReader = brokenInterviewPackagesReader;
             this.interviewSummaryReader = interviewSummaryReader;
-            this.syncLogAccessor = syncLogAccessor;
             this.questionnaireFactory = questionnaireFactory;
+            this.syncLogFactory = syncLogFactory;
+            this.brokenPackagesFactory = brokenPackagesFactory;
         }
+
+        private readonly InterviewStatus[] statusesEligibleForSyncronization = 
+        {
+            InterviewStatus.RejectedBySupervisor,
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.Deleted
+        };
 
         public string GetMissingDataReason(Guid? interviewId, string interviewKey)
         {
@@ -40,11 +46,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (interview == null)
                 return "The interview was not found";
+
+            BrokenInterviewPackage lastBrokenPackage = brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
+
+            InterviewLog interviewLog = this.syncLogFactory.GetInterviewLog(interview.InterviewId, interview.ResponsibleId);
             
-            if (interview.Status != InterviewStatus.RejectedBySupervisor && 
-                interview.Status != InterviewStatus.InterviewerAssigned && 
-                interview.Status != InterviewStatus.Deleted)
+            var lastUploadedInterviewIsBroken = interviewLog.LastUploadInterviewDate <= lastBrokenPackage?.IncomingDate;
+
+            if (!statusesEligibleForSyncronization.Contains(interview.Status))
             {
+                if (lastUploadedInterviewIsBroken)
+                {
+                    return "Contact support to recover interview";
+                }
                 return "The interview is out of interviewer's responsibility";
             }
 
@@ -59,61 +73,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             if (interview.ReceivedByInterviewer == false)
+            {
+                if (lastUploadedInterviewIsBroken && interviewLog.InterviewWasNotDownloadedAfterItWasUploaded)
+                {
+                    return "Contact support to recover interview";
+                }
                 return $"The interview was not recieved by responsible interviewer {interview.ResponsibleName}";
-
-            var lastBrokenPackage = this.brokenInterviewPackagesReader
-              .Query(queryable => queryable.Where(x => x.InterviewId == interviewId)
-              .OrderByDescending(x => x.IncomingDate)
-              .Take(1)
-              .ToList())
-              .SingleOrDefault();
+            }
 
             if (lastBrokenPackage!=null && 
-                lastBrokenPackage.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString())
+                lastBrokenPackage.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString() && 
+                lastUploadedInterviewIsBroken)
             {
                 return "The interview was re-assigned. Recieved oackage was not applied";
             }
-            
-            var lastDownloadInterviewDates = syncLogAccessor.Query(queryable => queryable
-                .Where(x => x.Type == SynchronizationLogType.GetInterview)
-                .Where(x => x.Log.Contains(interviewId.ToString()))
-                .OrderByDescending(x => x.LogDate)
-                .Select(x => x.LogDate)
-                .ToList());
-
-            DateTime firstDownloadInterviewDate = lastDownloadInterviewDates.Last();
-            DateTime lastDownloadInterviewDate = lastDownloadInterviewDates.First();
-
-            DateTime? lastUploadInterviewDate = syncLogAccessor.Query(queryable => queryable
-                .Where(x => x.Type == SynchronizationLogType.PostInterview)
-                .Where(x => x.Log.Contains(interviewId.ToString()))
-                .OrderByDescending(x => x.LogDate)
-                .Take(1)
-                .ToList()).SingleOrDefault()?.LogDate;
 
             if (lastBrokenPackage != null &&
-                lastBrokenPackage.ExceptionType == "Unexpected" && lastUploadInterviewDate < lastBrokenPackage.IncomingDate)
+                lastBrokenPackage.ExceptionType == "Unexpected" && 
+                lastUploadedInterviewIsBroken)
             {
                 return "Survey solutions team should be contacted.";
             }
-
-            bool isInterviewOnDevice = !lastUploadInterviewDate.HasValue ||
-                                       lastDownloadInterviewDate > lastUploadInterviewDate;
-
-
-            DateTime? lastLinkDate = syncLogAccessor.Query(queryable => queryable
-                .Where(x => x.Type == SynchronizationLogType.LinkToDevice && x.InterviewerId == interview.ResponsibleId)
-                .OrderByDescending(x => x.LogDate)
-                .Take(1)
-                .ToList()).SingleOrDefault()?.LogDate;
-
-            bool wasDeviceLinkedAfterInterviewWasDownloaded = lastLinkDate > lastDownloadInterviewDate;
-            if (isInterviewOnDevice && wasDeviceLinkedAfterInterviewWasDownloaded)
+            
+            if (interviewLog.IsInterviewOnDevice && interviewLog.WasDeviceLinkedAfterInterviewWasDownloaded)
                 return "The interview can be deleted by interviewer if it is marked as received and after that, there is record that tablet was cleared. Get back to interviewer";
 
-            if (isInterviewOnDevice)
+            if (interviewLog.IsInterviewOnDevice)
             {
-                if (firstDownloadInterviewDate <= lastLinkDate && lastLinkDate <= lastDownloadInterviewDate)
+                if (interviewLog.InterviewerChangedDeviceBetweenDownloads)
                 {
                     return "The interview was not uploaded by an interviewer yet, but user changed devices, so make sure started interviews were not deleted during this process";
                 }
