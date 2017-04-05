@@ -69,8 +69,11 @@
                     Vital="yes"
                     Name="NDP462-KB3151802-Web.exe"
                     SourceFile="redist\NDP462-KB3151802-Web.exe"
-                    DetectCondition="!(wix.NetFx462WebDetectCondition)"
-                     />     
+                    DetectCondition="!(wix.NetFx462WebDetectCondition)">
+                <ExitCode Behavior="forceReboot" Value="1641" />
+                <ExitCode Behavior="forceReboot" Value="3010" />
+                <ExitCode Behavior="success" Value="0" />
+            </ExePackage>
         </PackageGroup>
     </Fragment>
 </Wix>
