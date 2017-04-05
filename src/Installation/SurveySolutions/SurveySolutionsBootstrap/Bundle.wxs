@@ -59,9 +59,9 @@
     
         <PackageGroup Id="NetFx462WebLocal">
             <ExePackage Id="NetFx462WebLocal"
-                    InstallCommand="/q /norestart /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
-                    RepairCommand="/q /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
-                    UninstallCommand="/uninstall /q /norestart /ChainingPackage &quot;[WixBundleName]&quot; /log &quot;[NetFx462FullLog].html&quot;"
+                    InstallCommand="/passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
+                    RepairCommand="/passive /showrmui /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot;"
+                    UninstallCommand="/uninstall /passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
                     PerMachine="yes"
                     Cache="no"
                     Compressed="yes"
