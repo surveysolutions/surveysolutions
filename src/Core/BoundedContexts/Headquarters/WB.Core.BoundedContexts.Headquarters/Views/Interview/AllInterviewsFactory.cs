@@ -83,11 +83,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input)
         {
-            List<InterviewSummary> interviews;
+            List<InterviewSummary> interviews = new List<InterviewSummary>();
             int totalCount;
             if (input.InterviewId.HasValue)
             {
-                interviews = this.reader.GetById(input.InterviewId.Value).ToEnumerable().ToList();
+                var interviewSummary = this.reader.GetById(input.InterviewId.Value);
+                if (interviewSummary!=null)
+                {
+                    interviews = interviewSummary.ToEnumerable().ToList();
+                }
                 totalCount = interviews.Count;
             }
             else
