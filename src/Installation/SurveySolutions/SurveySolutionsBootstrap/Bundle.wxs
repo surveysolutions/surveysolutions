@@ -18,8 +18,8 @@
         <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
             <bal:WixStandardBootstrapperApplication 
                 LicenseUrl=""
-                LogoFile="img\logo-50.png"
-                LogoSideFile="img\logo-50.png"
+                LogoFile="img\logo-50.bmp"
+                LogoSideFile="img\logo-50.bmp"
                 ShowVersion="yes"
                 SuppressOptionsUI="yes"/>
             
