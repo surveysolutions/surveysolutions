@@ -104,14 +104,20 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
             }
 
-            var model = new SetupModel();
-            model.QuestionnaireTitle = questionnaire.Title;
-            model.QuestionnaireVersion = questionnaire.Version;
-            model.IsCensus = questionnaire.AllowCensusMode;
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+
+            var model = new SetupModel
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                QuestionnaireVersion = questionnaire.Version,
+                IsCensus = questionnaire.AllowCensusMode,
+                QuestionnaireIdentity = questionnaireIdentity
+            };
+
             if (questionnaire.AllowCensusMode)
             {
                 var baseUrl = this.Url.Action("Start", "WebInterview", new {id = ""}, this.Request.Url.Scheme);
-                model.WebInterviewLink = $"{baseUrl}/{QuestionnaireIdentity.Parse(id)}";
+                model.WebInterviewLink = $"{baseUrl}/{questionnaireIdentity}";
             }
             else
             {

@@ -12,5 +12,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool UseCaptcha { get; set; }
         public bool IsCensus { get; set; }
         public int InterviewsCount { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
     }
 }
