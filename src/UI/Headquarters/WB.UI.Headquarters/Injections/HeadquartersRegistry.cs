@@ -159,7 +159,11 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
-            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
+            this.Bind<IRestService>()
+                .To<RestService>()
+                .WithConstructorArgument("networkService", _ => null)
+                .WithConstructorArgument("restServicePointManager", _ => null)
+                .WithConstructorArgument("httpStatistican", _ => _.Kernel.Get<IHttpStatistican>());
 
             this.Bind<IExportSettings>().To<ExportSettings>();
 
