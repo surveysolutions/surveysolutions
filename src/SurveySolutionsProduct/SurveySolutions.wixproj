@@ -46,11 +46,13 @@
     <Content Include="Configuration.wxi" />
     <Content Include="Headquarters.Web.config" />
     <Content Include="img\icon-256-max-win10.png" />
+    <Content Include="img\icon-32.bmp" />
     <Content Include="img\icon-32.png" />
     <Content Include="img\icon-48-desktop-medium.png" />
     <Content Include="img\left-image+text.png" />
     <Content Include="img\left-image.png" />
     <Content Include="img\logo-100.png" />
+    <Content Include="img\logo-50.bmp" />
     <Content Include="img\logo-50.png" />
   </ItemGroup>
   <ItemGroup>
