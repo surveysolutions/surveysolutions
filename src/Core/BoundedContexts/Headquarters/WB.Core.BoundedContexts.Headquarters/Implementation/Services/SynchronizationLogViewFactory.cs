@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,6 +15,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public SynchronizationLogViewFactory(IPlainStorageAccessor<SynchronizationLogItem> plainStorageAccessor)
         {
             this.plainStorageAccessor = plainStorageAccessor;
+        }
+
+
+        public InterviewLog GetInterviewLog(Guid interviewId, Guid responsibleId)
+        {
+            var interviewSynchronizationLog = this.plainStorageAccessor.Query(queryable => queryable
+                .Where(x => (x.Type == SynchronizationLogType.PostInterview || x.Type == SynchronizationLogType.GetInterview) && x.Log.Contains(interviewId.ToString()))
+                .OrderByDescending(x => x.LogDate)
+                .ToList());
+
+            DateTime? lastUploadInterviewDate = interviewSynchronizationLog.LastOrDefault(x => x.Type == SynchronizationLogType.PostInterview)?.LogDate;
+            DateTime? lastDownloadInterviewDate = interviewSynchronizationLog.FirstOrDefault(x => x.Type == SynchronizationLogType.GetInterview)?.LogDate;
+            DateTime? firstDownloadInterviewDate = interviewSynchronizationLog.LastOrDefault(x => x.Type == SynchronizationLogType.GetInterview)?.LogDate;
+
+            DateTime? lastLinkDate = plainStorageAccessor.Query(queryable => queryable
+              .Where(x => x.Type == SynchronizationLogType.LinkToDevice && x.InterviewerId == responsibleId)
+              .OrderByDescending(x => x.LogDate)
+              .Take(1)
+              .ToList()).SingleOrDefault()?.LogDate;
+
+            return new InterviewLog
+            {
+                FirstDownloadInterviewDate = firstDownloadInterviewDate,
+                LastDownloadInterviewDate = lastDownloadInterviewDate,
+                LastLinkDate = lastLinkDate,
+                LastUploadInterviewDate = lastUploadInterviewDate
+            };
         }
 
         public SynchronizationLog GetLog(SynchronizationLogFilter filter)
