@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
@@ -6,7 +7,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         bool IsAuthenticated { get; }
         IUserIdentity CurrentUserIdentity { get; }
-        bool SignIn(string userName, string passwordHash, bool staySignedIn);
+        bool SignIn(string userName, string password, bool staySignedIn);
+        bool SignInWithHash(string userName, string passwordHash, bool staySignedIn);
         void SignOut();
+        bool SignIn(string userId, bool staySignedIn);
     }
 }

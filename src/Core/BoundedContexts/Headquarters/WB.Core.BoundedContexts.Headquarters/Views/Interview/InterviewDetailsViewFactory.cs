@@ -1,288 +1,567 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    using Interview = SharedKernels.DataCollection.Implementation.Aggregates.Interview;
-
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
-
-        private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IPlainStorageAccessor<UserDocument> userStore;
-        private readonly IInterviewDataAndQuestionnaireMerger merger;
+        private readonly IUserViewFactory userStore;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAttachmentContentService attachmentContentService;
-        private readonly ITranslationStorage translationStorage;
-        private readonly IQuestionnaireTranslator questionnaireTranslator;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
+        private readonly ISubstitutionService substitutionService;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
-        public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
-            IPlainStorageAccessor<UserDocument> userStore,
-            IInterviewDataAndQuestionnaireMerger merger,
+        private class ValidationView
+        {
+            public string Message { get; set; }
+            public int FailedValidationIndex { get; set; }
+        }
+
+        public InterviewDetailsViewFactory(
+            IUserViewFactory userStore,
             IChangeStatusFactory changeStatusFactory,
             IInterviewPackagesService incomingSyncPackagesQueue,
             IQuestionnaireStorage questionnaireStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
-            IAttachmentContentService attachmentContentService,
-            ITranslationStorage translationStorage,
-            IQuestionnaireTranslator questionnaireTranslator)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
+            IReadSideKeyValueStorage<InterviewData>  interviewDataRepository,
+            ISubstitutionService substitutionService)
         {
-            this.interviewStore = interviewStore;
             this.userStore = userStore;
-            this.merger = merger;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.questionnaireStorage = questionnaireStorage;
-            this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
-            this.attachmentContentService = attachmentContentService;
-            this.translationStorage = translationStorage;
-            this.questionnaireTranslator = questionnaireTranslator;
+            this.interviewSummaryRepository = interviewSummaryRepository;
+            this.interviewDataRepository = interviewDataRepository;
+            this.substitutionService = substitutionService;
             this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
-        public DetailsViewModel GetInterviewDetails(Guid interviewId,
-            Guid? currentGroupId,
-            decimal[] currentGroupRosterVector,
-            InterviewDetailsFilter? filter)
+        public DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter filter, Identity currentGroupIdentity)
         {
-            var interview = this.interviewStore.GetById(interviewId);
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
+            var interviewData = this.interviewDataRepository.GetById(interviewId);
 
-            if (interview == null || interview.IsDeleted)
-                return null;
+            var questionnaireIdentity = new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, interview.Language);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
 
-            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
-            if (user == null)
-                throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
+            var responsible = this.userStore.GetUser(new UserViewInputModel(interviewSummary.ResponsibleId));
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireId,
-                interview.QuestionnaireVersion);
-
-            if (questionnaire == null)
-                throw new ArgumentException(
-                    $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
-
-            var currentTranslation = questionnaire.Translations.SingleOrDefault(t => t.Name == interview.CurrentLanguage);
-            if (currentTranslation != null)
+            var rootNode = new InterviewGroupView(Identity.Create(questionnaire.QuestionnaireId, RosterVector.Empty))
             {
-                var questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
-                var translation = this.translationStorage.Get(questionnaireIdentity, currentTranslation.Id);
-
-                if (translation == null)
-                    throw new ArgumentException($"No translation found for language '{interview.CurrentLanguage}' and questionnaire '{questionnaireIdentity}'.");
-
-                questionnaire = this.questionnaireTranslator.Translate(questionnaire, translation);
-            }
-
-            var attachmentIdAndTypes =
-                this.attachmentContentService.GetAttachmentInfosByContentIds(
-                    questionnaire.Attachments.Select(x => x.ContentId).ToList());
-
-            InterviewDetailsView interviewDetailsView = this.merger.Merge(interview, questionnaire, user.GetUseLight(),
-                this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
-
-            var interviewEntityViews = interviewDetailsView.Groups
-                .SelectMany(group => group.Entities)
-                .Where(entity => entity is InterviewQuestionView || entity is InterviewStaticTextView)
-                .ToList();
-            var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
-
-            this.FilterCategoricalQuestionOptions(interviewId, questionnaire, questionViews);
-
-            var detailsStatisticView = new DetailsStatisticView
-            {
-                AnsweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
-                UnansweredCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
-                CommentedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
-                EnabledCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
-                FlaggedCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
-                InvalidCount = interviewEntityViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
-                SupervisorsCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
-                HiddenCount = questionViews.Count(interviewEntityView => IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
+                Title = questionnaire.Title
             };
+            var interviewGroupViews = rootNode.ToEnumerable()
+                                              .Concat(interview.GetAllGroupsAndRosters().Select(this.ToGroupView)).ToList();
 
-            var selectedGroups = new List<InterviewGroupView>();
+            var interviewEntityViews = this.GetFilteredEntities(interview, interviewData, questionnaire, questionnaireDocument, currentGroupIdentity, filter);
+            if (filter != InterviewDetailsFilter.All)
+                interviewEntityViews = this.GetEntitiesWithoutEmptyGroupsAndRosters(interviewEntityViews);
 
-            var currentGroup = interviewDetailsView.Groups.Find(group => currentGroupId != null && group.Id == currentGroupId &&
-                                                                group.RosterVector.SequenceEqual(currentGroupRosterVector));
-
-            foreach (var interviewGroupView in interviewDetailsView.Groups)
+            return new DetailsViewModel
             {
-                if (currentGroup?.ParentId != null)
+                Filter = filter,
+                SelectedGroupId = currentGroupIdentity,
+                FilteredEntities = interviewEntityViews,
+                InterviewDetails = new InterviewDetailsView
                 {
-                    if (interviewGroupView.Id == currentGroup.Id &&
-                        interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) ||
-                        selectedGroups.Any(_ => _.Id == interviewGroupView.ParentId))
-                    {
-                        selectedGroups.Add(interviewGroupView);
-                    }
-                }
-                else
+                    Groups = interviewGroupViews,
+                    Responsible = new UserLight(interviewSummary.ResponsibleId, responsible?.UserName ?? "<UNKNOWN>"),
+                    Title = questionnaire.Title,
+                    Description = questionnaireDocument.Description,
+                    PublicKey = interviewSummary.InterviewId,
+                    Status = interview.Status,
+                    ReceivedByInterviewer = interviewSummary.ReceivedByInterviewer,
+                    CurrentTranslation = interview.Language,
+                    IsAssignedToInterviewer = interviewSummary.IsAssignedToInterviewer
+                },
+                Statistic = new DetailsStatisticView
                 {
-                    interviewGroupView.Entities = interviewGroupView.Entities
-                        .Where(question => { return IsEntityInFilter(filter, question); })
-                        .ToList();
-
-                    if (interviewGroupView.Entities.Any())
-                        selectedGroups.Add(interviewGroupView);
-                }
-            }
-
-            return new DetailsViewModel()
-            {
-                Filter = filter.Value,
-                SelectedGroupId = currentGroupId,
-                SelectedGroupRosterVector = currentGroupRosterVector,
-                InterviewDetails = interviewDetailsView,
-                FilteredGroups = selectedGroups,
-                Statistic = detailsStatisticView,
+                    AnsweredCount = interview.CountAllEnabledAnsweredQuestions(),
+                    AllCount = interview.CountAllEnabledQuestions(),
+                    CommentedCount = interview.GetAllCommentedEnabledQuestions().Count(),
+                    EnabledCount = interview.CountAllEnabledQuestions(),
+                    FlaggedCount = interviewData.Levels.Sum(lvl => lvl.Value.QuestionsSearchCache.Values.Count(q => q.IsFlagged())),
+                    InvalidCount = interview.CountAllInvalidEntities(),
+                    SupervisorsCount = interview.CountEnabledSupervisorQuestions(),
+                    HiddenCount = interview.CountEnabledHiddenQuestions(),
+                },
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = interviewId}),
                 HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId),
-                Translations = questionnaire.Translations.Select(translation => 
-                    new InterviewTranslationView()
-                    {
-                        Id = translation.Id,
-                        Name = translation.Name
-                    }
-                ).ToReadOnlyCollection()
+                Translations = questionnaire.GetTranslationLanguages().Select(ToTranslationView).ToReadOnlyCollection(),
+                InterviewKey = interviewSummary.Key,
+                QuestionnaireName = questionnaire.Title,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion
             };
         }
 
-        private void FilterCategoricalQuestionOptions(Guid interviewId, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
+        private IEnumerable<InterviewEntityView> GetEntitiesWithoutEmptyGroupsAndRosters(IEnumerable<InterviewEntityView> interviewEntityViews)
         {
-            var interviewAggregate = (StatefulInterview) this.statefulInterviewRepository.Get(interviewId.ToString());
+            var allEntities = interviewEntityViews.ToList();
+            var parentsOfQuestions = allEntities.OfType<InterviewQuestionView>().Select(x => x.ParentId).ToHashSet();
+            var parentsOfStaticTexts = allEntities.OfType<InterviewStaticTextView>().Select(x => x.ParentId).ToHashSet();
 
-            var linkedQuestions = questionViews.Where(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue).ToList();
-            this.UpdateOptionsForLinkedQuestions(interviewAggregate, questionnaire, linkedQuestions);
-
-            foreach (var categoricalQuestion in questionViews.Where(x => x.IsFilteredCategorical))
+            foreach (var interviewEntityView in allEntities)
             {
-                var questionIdentity = new Identity(categoricalQuestion.Id, categoricalQuestion.RosterVector);
+                var groupView = interviewEntityView as InterviewGroupView;
+                if (groupView == null)
+                    yield return interviewEntityView;
+                else if (parentsOfQuestions.Contains(groupView.Id) || parentsOfStaticTexts.Contains(groupView.Id))
+                    yield return groupView;
+            }
+        }
 
-                categoricalQuestion.Options = 
-                    interviewAggregate.GetFirstTopFilteredOptionsForQuestion(questionIdentity, null, string.Empty, 200)
-                    .Select(x => new QuestionOptionView
+        private IEnumerable<InterviewEntityView> GetFilteredEntities(IStatefulInterview interview,
+            InterviewData interviewData, IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument, Identity currentGroupIdentity,
+            InterviewDetailsFilter filter)
+        {
+            var groupEntities = currentGroupIdentity == null || currentGroupIdentity.Id == questionnaire.QuestionnaireId
+                ? interview.GetAllSections()
+                : (interview.GetGroup(currentGroupIdentity) as IInterviewTreeNode).ToEnumerable();
+
+            foreach (var entity in this.GetQuestionsFirstAndGroupsAfterFrom(groupEntities))
+            {
+                if (!IsEntityInFilter(filter, entity, interviewData)) continue;
+
+                var question = entity as InterviewTreeQuestion;
+                var group = entity as InterviewTreeGroup;
+                var staticText = entity as InterviewTreeStaticText;
+
+                if (question != null) yield return this.ToQuestionView(question, questionnaire, questionnaireDocument, interview, interviewData);
+                else if (group != null) yield return this.ToGroupView(group);
+                else if (staticText != null) yield return this.ToStaticTextView(interview, staticText, questionnaire, questionnaireDocument);
+            }
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetQuestionsFirstAndGroupsAfterFrom(IEnumerable<IInterviewTreeNode> groups)
+        {
+            var itemsQueue = new Stack<IInterviewTreeNode>(groups.Reverse());
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentItem = itemsQueue.Pop();
+
+                yield return currentItem;
+
+                IEnumerable<IInterviewTreeNode> childItems = currentItem.Children;
+
+                if (childItems != null)
+                {
+                    var reverseChildItems = childItems.Reverse().ToList();
+                    var childItemsIncOrrectOrder = 
+                        reverseChildItems.Where(child =>  child is InterviewTreeGroup)
+                        .Concat(reverseChildItems.Where(child => !(child is InterviewTreeGroup)));
+
+                    foreach (var childItem in childItemsIncOrrectOrder)
                     {
-                        Label = x.Title,
-                        Value = x.Value
-                    })
-                    .ToList();
+                        itemsQueue.Push(childItem);
+                    }
+                }
             }
         }
 
-        private void UpdateOptionsForLinkedQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
+        private static InterviewAttachmentViewModel ToAttachmentView(IQuestionnaire questionnaire, Guid staticTextId)
         {
-            this.UpdateOptionsForLinkedMultiQuestions(interview, questionnaire, questionViews.Where(x=>x.QuestionType == QuestionType.MultyOption).ToList());
-            this.UpdateOptionsForLinkedSingleQuestions(interview, questionnaire, questionViews.Where(x => x.QuestionType == QuestionType.SingleOption).ToList());
+            var attachment = questionnaire.GetAttachmentForEntity(staticTextId);
+            
+            if (attachment == null) return null;
+
+            return new InterviewAttachmentViewModel
+            {
+                ContentId = attachment.ContentId,
+                ContentName = attachment.Name
+            };
         }
 
-        private void UpdateOptionsForLinkedSingleQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> singleOptionQuestions)
+        private InterviewEntityView ToQuestionView(InterviewTreeQuestion interviewQuestion, IQuestionnaire questionnaire, 
+            QuestionnaireDocument questionnaireDocument, IStatefulInterview interview, InterviewData interviewData)
         {
-            foreach (var singleOptionQuestionView in singleOptionQuestions)
+            var questionnaireQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == interviewQuestion.Identity.Id);
+            
+            return new InterviewQuestionView
             {
-                if(questionnaire.Find<IQuestion>(singleOptionQuestionView.Id).QuestionType == QuestionType.TextList) continue;
-                
-                var linkedQuestionIdentity = Identity.Create(singleOptionQuestionView.Id, singleOptionQuestionView.RosterVector);
-                
-                var singleLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(linkedQuestionIdentity);
+                Id = interviewQuestion.Identity,
+                ParentId = interviewQuestion.Parent.Identity,
+                Title = interviewQuestion.Title.Text,
+                IsAnswered = interviewQuestion.IsAnswered(),
+                IsValid = interviewQuestion.IsValid,
+                AnswerString = GetAnswerAsString(interviewQuestion, questionnaire), 
+                QuestionType = questionnaire.GetQuestionType(interviewQuestion.Identity.Id),
+                IsFeatured = interviewQuestion.IsPrefilled,
+                LinkedToQuestionId = questionnaire.IsQuestionLinked(interviewQuestion.Identity.Id) ? questionnaire.GetQuestionReferencedByLinkedQuestion(interviewQuestion.Identity.Id) : (Guid?)null,
+                LinkedToRosterId = questionnaire.IsQuestionLinkedToRoster(interviewQuestion.Identity.Id) ? questionnaire.GetRosterReferencedByLinkedQuestion(interviewQuestion.Identity.Id) : (Guid?)null,
+                Scope = questionnaire.GetQuestionScope(interviewQuestion.Identity.Id),
+                Variable = interviewQuestion.VariableName,
+                Settings = ToQuestionSettingsView(questionnaireQuestion),
+                Comments = interviewQuestion.AnswerComments.Select(ToCommentView).ToList(),
+                IsEnabled = !interviewQuestion.IsDisabled(),
+                IsReadOnly = !(interviewQuestion.IsSupervisors && interview.Status < InterviewStatus.ApprovedByHeadquarters),
+                Options = ToOptionsView(interviewQuestion, interview),
+                Answer = ToAnswerView(interviewQuestion),
+                IsFlagged = GetIsFlagged(interviewQuestion, interviewData),
+                FailedValidationMessages = GetFailedValidationMessages(
+                    interviewQuestion.FailedValidations?.Select(
+                        (x, index) => ToValidationView(interviewQuestion.ValidationMessages, x, index)),
+                    questionnaireQuestion.ValidationConditions).ToList()
+            };
+        }
 
-                singleOptionQuestionView.Options =
-                    singleLinkedToRosterQuestion?.Options?.Select(x => new QuestionOptionView
-                        {
-                            Value = x.Coordinates.ToArray(),
-                            Label = interview.GetLinkedOptionTitle(linkedQuestionIdentity, x)
-                        })?.ToList() ?? Enumerable.Empty<QuestionOptionView>().ToList();
+        private string GetAnswerAsString(InterviewTreeQuestion interviewQuestion, IQuestionnaire questionnaire)
+        {
+            if (!interviewQuestion.IsAnswered())
+                return string.Empty;
+
+            if (interviewQuestion.IsInteger)
+            {
+                var integerValue = interviewQuestion.AsInteger.GetAnswer().Value;
+                return questionnaire.ShouldUseFormatting(interviewQuestion.Identity.Id)
+                    ? integerValue.ToString("N0", CultureInfo.InvariantCulture)
+                    : integerValue.ToString(CultureInfo.InvariantCulture);
             }
-        }
 
-        private void UpdateOptionsForLinkedMultiQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> multiOptionsQuestions)
-        {
-            foreach (var multiOptionQuestionView in multiOptionsQuestions)
+            if (interviewQuestion.IsDouble)
             {
-                if (questionnaire.Find<IQuestion>(multiOptionQuestionView.Id).QuestionType == QuestionType.TextList) continue;
-
-                var linkedQuestionIdentity = Identity.Create(multiOptionQuestionView.Id, multiOptionQuestionView.RosterVector);
-
-                var multiLinkedToRosterQuestion = interview.GetLinkedMultiOptionQuestion(linkedQuestionIdentity);
-
-                multiOptionQuestionView.Options =
-                    multiLinkedToRosterQuestion?.Options?.Select(x => new QuestionOptionView
-                    {
-                        Value = x.Coordinates.ToArray(),
-                        Label = interview.GetLinkedOptionTitle(linkedQuestionIdentity, x)
-                    })?.ToList() ?? Enumerable.Empty<QuestionOptionView>().ToList();
+                var doubleValue = interviewQuestion.AsDouble.GetAnswer().Value;
+                return questionnaire.ShouldUseFormatting(interviewQuestion.Identity.Id)
+                    ? $"{doubleValue:0,0.#################}"
+                    : doubleValue.ToString(CultureInfo.InvariantCulture);
             }
+
+            return interviewQuestion.GetAnswerAsString();
         }
 
-
-        public Guid? GetFirstChapterId(Guid interviewId)
+        private static bool GetIsFlagged(InterviewTreeQuestion interviewQuestion, InterviewData interviewData)
         {
-            var interview = this.interviewStore.GetById(interviewId);
+            var levelId = InterviewEventHandlerFunctional.CreateLevelIdFromPropagationVector(
+                    interviewQuestion.Identity.RosterVector);
 
-            if (interview != null && !interview.IsDeleted)
+            if (!interviewData.Levels.ContainsKey(levelId)) return false;
+            if (!interviewData.Levels[levelId].QuestionsSearchCache.ContainsKey(interviewQuestion.Identity.Id)) return false;
+
+            return interviewData.Levels[levelId].QuestionsSearchCache[interviewQuestion.Identity.Id].IsFlagged();
+        }
+
+        private static object ToAnswerView(InterviewTreeQuestion interviewQuestion)
+        {
+            if (!interviewQuestion.IsAnswered()) return null;
+
+            if (interviewQuestion.IsYesNo)
+                return interviewQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions().ToArray();
+
+            if (interviewQuestion.IsMultiFixedOption)
+                return interviewQuestion.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray();
+
+            if (interviewQuestion.IsMultiLinkedOption)
+                return interviewQuestion.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray();
+
+            if (interviewQuestion.IsSingleFixedOption)
+                return interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue;
+
+            if (interviewQuestion.IsSingleLinkedOption)
+                return interviewQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue;
+
+            if (interviewQuestion.IsGps)
+                return interviewQuestion.AsGps.GetAnswer().Value;
+
+            if (interviewQuestion.IsText)
+                return interviewQuestion.AsText.GetAnswer().Value;
+
+            if (interviewQuestion.IsInteger)
+                return interviewQuestion.AsInteger.GetAnswer().Value;
+
+            if (interviewQuestion.IsDouble)
+                return interviewQuestion.AsDouble.GetAnswer().Value;
+
+            return null;
+        }
+
+        private List<QuestionOptionView> ToOptionsView(InterviewTreeQuestion interviewQuestion, IStatefulInterview interview)
+        {
+            if (interviewQuestion.IsSingleFixedOption || interviewQuestion.IsMultiFixedOption)
             {
-                var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
-                    interview.QuestionnaireId, interview.QuestionnaireVersion);
+                var options = interview.GetTopFilteredOptionsForQuestion(interviewQuestion.Identity, null, null, int.MaxValue)?.Select(a => new QuestionOptionView
+                              {
+                                  Value = a.Value,
+                                  Label = a.Title
+                              })?.ToList() ?? new List<QuestionOptionView>(); ;
 
-                return questionnaire.Children[0].PublicKey;
+                var optionsToMarkAsSelected = new List<int>();
+                if (interviewQuestion.IsSingleFixedOption && interviewQuestion.AsSingleFixedOption.IsAnswered)
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
+
+                if (interviewQuestion.IsMultiFixedOption && interviewQuestion.AsMultiFixedOption.IsAnswered)
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiFixedOption.GetAnswer().CheckedValues);
+
+                foreach (var selectedValue in optionsToMarkAsSelected)
+                {
+                    var selectedOption = options.FirstOrDefault(x => (int)x.Value == selectedValue);
+                    if (selectedOption == null) continue;
+                    selectedOption.IsChecked = true;
+                    selectedOption.Index = optionsToMarkAsSelected.IndexOf(selectedValue) + 1;
+                }
+
+                return options;
+            }
+
+            if (interviewQuestion.IsLinked)
+            {
+                var optionsToMarkAsSelected = new List<RosterVector>();
+                if (interviewQuestion.IsSingleLinkedOption && interviewQuestion.AsSingleLinkedOption.IsAnswered)
+                {
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue);
+                }
+                if (interviewQuestion.IsMultiLinkedOption && interviewQuestion.AsMultiLinkedOption.IsAnswered)
+                {
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedOption.GetAnswer().CheckedValues);
+                }
+
+                var options = interviewQuestion.AsLinked.Options.Select(x => new QuestionOptionView
+                {
+                    Value = x,
+                    Label = interview.GetLinkedOptionTitle(interviewQuestion.Identity, x),
+                    IsChecked = optionsToMarkAsSelected.Contains(x),
+                    Index = optionsToMarkAsSelected.IndexOf(x) + 1
+                }).ToList();
+
+                return options;
+            }
+
+            if (interviewQuestion.IsLinkedToListQuestion)
+            {
+                var optionsToMarkAsSelected = new List<int>();
+                if (interviewQuestion.IsSingleLinkedToList && interviewQuestion.AsSingleLinkedToList.IsAnswered)
+                {
+                    optionsToMarkAsSelected.Add(interviewQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue);
+                }
+                if (interviewQuestion.IsMultiLinkedToList && interviewQuestion.AsMultiLinkedToList.IsAnswered)
+                {
+                    optionsToMarkAsSelected.AddRange(interviewQuestion.AsMultiLinkedToList.GetAnswer().CheckedValues);
+                }
+                var listQuestion = interview.FindQuestionInQuestionBranch(interviewQuestion.AsLinkedToList.LinkedSourceId, interviewQuestion.Identity);
+
+                var options = interviewQuestion.AsLinkedToList.Options.Select(x => new QuestionOptionView
+                {
+                    Value = Convert.ToInt32(x),
+                    Label = listQuestion.AsTextList.GetTitleByItemCode(x),
+                    IsChecked = optionsToMarkAsSelected.Contains(Convert.ToInt32(x)),
+                    Index = optionsToMarkAsSelected.IndexOf(Convert.ToInt32(x)) + 1
+                }).ToList();
+
+                return options;
+            }
+
+            if (interviewQuestion.IsTextList && interviewQuestion.AsTextList.IsAnswered)
+            {
+                return interviewQuestion.AsTextList.GetAnswer().Rows.Select(x => new QuestionOptionView
+                {
+                    Value = Convert.ToInt32(x.Value),
+                    Label = x.Text
+                }).ToList();
+            }
+
+            if (interviewQuestion.IsYesNo)
+            {
+                var options = interview.GetTopFilteredOptionsForQuestion(interviewQuestion.Identity, null, null, 200)?.Select(a => new QuestionOptionView
+                {
+                    Value = a.Value,
+                    Label = a.Title
+                })?.ToList() ?? new List<QuestionOptionView>();
+
+                return options;
+            }
+
+            return new List<QuestionOptionView>();
+        }
+
+        private dynamic ToQuestionSettingsView(IQuestion question)
+        {
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                return new NumericQuestionSettings
+                {
+                    IsInteger = numericQuestion.IsInteger,
+                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces,
+                    UseFormating = numericQuestion.UseFormatting
+                };
+            }
+
+            var categoricalMultiQuestion = question as MultyOptionsQuestion;
+            if (categoricalMultiQuestion != null)
+            {
+                return new MultiQuestionSettings
+                {
+                    YesNoQuestion = categoricalMultiQuestion.YesNoView,
+                    AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
+                    MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
+                    IsLinkedToRoster = categoricalMultiQuestion.LinkedToRosterId.HasValue
+                };
+            }
+
+            var categoricalSingleQuestion = question as SingleQuestion;
+            if (categoricalSingleQuestion != null)
+            {
+                return new SingleQuestionSettings
+                {
+                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
+                    IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
+                    IsLinkedToRoster = categoricalSingleQuestion.LinkedToRosterId.HasValue,
+                    
+                };
+            }
+
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+               return new TextQuestionSettings
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                return new DateTimeQuestionSettings
+                {
+                    IsTimestamp = question.IsTimestamp
+                };
             }
 
             return null;
         }
 
-        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
+        private InterviewQuestionCommentView ToCommentView(AnswerComment comment) => new InterviewQuestionCommentView
         {
-            var question = entity as InterviewQuestionView;
+            Text = comment.Comment,
+            CommenterId = comment.UserId,
+            CommenterRole = comment.UserRole,
+            CommenterName = this.userStore.GetUser(new UserViewInputModel(comment.UserId))?.UserName ?? "<UNKNOWN>",
+            Date = comment.CommentTime
+        };
+
+        private InterviewEntityView ToStaticTextView(IStatefulInterview interview, InterviewTreeStaticText interviewStaticText, IQuestionnaire questionnaire,
+            QuestionnaireDocument questionnaireDocument)
+        {
+            var attachment = ToAttachmentView(questionnaire, interviewStaticText.Identity.Id);
+            var questionnaireStaticText = questionnaireDocument.FirstOrDefault<StaticText>(st => st.PublicKey == interviewStaticText.Identity.Id);
+
+            return new InterviewStaticTextView
+            {
+                Id = interviewStaticText.Identity,
+                ParentId = interviewStaticText.Parent.Identity,
+                Text = interviewStaticText.Title.Text,
+                IsEnabled = !interviewStaticText.IsDisabled(),
+                IsValid = interviewStaticText.IsValid,
+                FailedValidationMessages = GetFailedValidationMessages(
+                    interviewStaticText.FailedValidations?.Select(
+                        (x, index) => ToValidationView(interviewStaticText.ValidationMessages, x, index)),
+                    questionnaireStaticText.ValidationConditions).ToList(),
+                Attachment = attachment
+            };
+        }
+
+        private static ValidationView ToValidationView(SubstitionText[] validationMessages,
+            FailedValidationCondition validationCondition, int failedValidationIndex)
+            => new ValidationView
+            {
+                FailedValidationIndex = validationCondition.FailedConditionIndex,
+                Message = validationMessages[failedValidationIndex].Text
+            };
+
+        private static IEnumerable<ValidationCondition> GetFailedValidationMessages(
+            IEnumerable<ValidationView> interviewValidations, IList<ValidationCondition> questionnaireValidations)
+        {
+            if (interviewValidations == null) yield break;
+
+            foreach (var failedValidation in interviewValidations)
+            {
+                var validationExpression =
+                    questionnaireValidations[failedValidation.FailedValidationIndex].Expression;
+                var validationMessage = failedValidation.Message;
+
+                yield return new ValidationCondition(validationExpression, validationMessage);
+            }
+        }
+
+        private static InterviewTranslationView ToTranslationView(string translation)
+            => new InterviewTranslationView { /*Id = translation.Id,*/ Name = translation };
+
+        private InterviewGroupView ToGroupView(InterviewTreeGroup group) => new InterviewGroupView
+        {
+                Id = group.Identity,
+                Title = this.ToGroupTitleView(@group),
+                Depth = group.Parents?.Count() + 1 ?? 1
+        };
+
+        private string ToGroupTitleView(InterviewTreeGroup group)
+        {
+            var roster = group as InterviewTreeRoster;
+
+            return roster != null
+                ? $"{roster.Title.Text} - {roster.RosterTitle ?? this.substitutionService.DefaultSubstitutionText}"
+                : @group.Title.Text;
+        }
+
+        private static bool IsEntityInFilter(InterviewDetailsFilter? filter, IInterviewTreeNode entity, InterviewData interviewData)
+        {
+            var question = entity as InterviewTreeQuestion;
 
             if (question != null)
             {
                 switch (filter)
                 {
                     case InterviewDetailsFilter.Answered:
-                        return question.IsAnswered;
+                        return question.IsAnswered();
                     case InterviewDetailsFilter.Unanswered:
-                        return question.IsEnabled && !question.IsAnswered;
+                        return !question.IsDisabled() && !question.IsAnswered();
                     case InterviewDetailsFilter.Commented:
-                        return question.Comments != null && question.Comments.Any();
+                        return question.AnswerComments?.Any() ?? false;
                     case InterviewDetailsFilter.Enabled:
-                        return question.IsEnabled;
+                        return !question.IsDisabled();
                     case InterviewDetailsFilter.Flagged:
-                        return question.IsFlagged;
+                        return GetIsFlagged(question, interviewData);
                     case InterviewDetailsFilter.Invalid:
                         return !question.IsValid;
                     case InterviewDetailsFilter.Supervisors:
-                        return question.Scope == QuestionScope.Supervisor;
+                        return question.IsSupervisors;
                     case InterviewDetailsFilter.Hidden:
-                        return question.Scope == QuestionScope.Hidden;
+                        return question.IsHidden;
                 }
             }
 
-            var staticText = entity as InterviewStaticTextView;
+            var staticText = entity as InterviewTreeStaticText;
             if (staticText != null)
             {
                 switch (filter)
                 {
                     case InterviewDetailsFilter.Enabled:
-                        return staticText.IsEnabled;
+                        return !staticText.IsDisabled();
                     case InterviewDetailsFilter.Invalid:
                         return !staticText.IsValid;
                     case InterviewDetailsFilter.Flagged:
@@ -294,6 +573,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }
             }
             return true;
+        }
+
+        public Guid GetFirstChapterId(Guid id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            return interview.FirstSection.Identity.Id;
         }
     }
 }

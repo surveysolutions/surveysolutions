@@ -105,9 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             CalculateLinkedToListOptionsOnTree(this.Tree, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
-
-            this.Tree.ActualizeNodesInOrderCache();
-
+            
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
@@ -214,7 +212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Command handlers
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
+        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId, InterviewKey key)
         {
             this.QuestionnaireIdentity = questionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -237,6 +235,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+
+            this.ApplyInterviewKey(key);
         }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
@@ -289,18 +289,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetRoster(rosterIdentity)?.RosterTitle;
 
         public string GetTitleText(Identity entityIdentity)
-        {
-            var question = this.Tree.GetQuestion(entityIdentity);
-            if (question != null) return question.Title.Text;
+            => this.GetTitleSubstitutionText(entityIdentity)?.Text ?? string.Empty;
 
-            var group = this.Tree.GetGroup(entityIdentity);
-            if(group != null) return group.Title.Text;
+        public string GetBrowserReadyTitleHtml(Identity entityIdentity)
+            => this.GetTitleSubstitutionText(entityIdentity)?.BrowserReadyText ?? string.Empty;
 
-            var staticText = this.Tree.GetStaticText(entityIdentity);
-            if (staticText != null) return staticText.Title.Text;
-
-            return string.Empty;
-        }
+        private SubstitionText GetTitleSubstitutionText(Identity entityIdentity)
+            => this.Tree.GetQuestion(entityIdentity)?.Title
+            ?? this.Tree.GetGroup(entityIdentity)?.Title
+            ?? this.Tree.GetStaticText(entityIdentity)?.Title;
 
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
@@ -345,21 +342,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
+        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestions()
+            => this.Tree.FindQuestions().Where(question => !question.IsDisabled());
+
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.Tree.FindQuestions().Where(question =>
-                !question.IsDisabled() &&
-                (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)) &&
-                question.IsInterviewer);
+            => this.GetEnabledQuestions().Where(question =>
+                question.IsInterviewer && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
 
         public int CountActiveAnsweredQuestionsInInterview()
             => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
         public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
+        public int CountAllEnabledAnsweredQuestions()
+            => this.GetEnabledQuestions().Count(question => question.IsAnswered());
+        public int CountAllEnabledQuestions() => this.GetEnabledQuestions().Count();
+        public int CountAllInvalidEntities() => this.GetAllInvalidEntitiesInInterview().Count();
+
+        public int CountEnabledSupervisorQuestions()
+            => this.GetEnabledQuestions().Count(question => question.IsSupervisors);
+
+        public int CountEnabledHiddenQuestions() => this.GetEnabledQuestions().Count(question => question.IsHidden);
+
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
+        public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Select(question => question.Identity));
+
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
-            => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
+                    .Select(question => question.Identity));
 
         public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
         {
@@ -373,13 +387,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
-        private IEnumerable<Identity> GetEnabledInvalidQuestions()
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
-                                && question.IsInterviewer)
-                .Select(question => question.Identity);
+                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient)));
 
         public int CountEnabledQuestions(Identity group)
             => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
@@ -396,12 +408,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasUnansweredQuestions(Identity group) 
             => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
-        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer()
         {
+            var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            return this.Tree.FindQuestions().Where(
-                question => this.IsEnabledWithSupervisorComments(question, questionnaire))
+            return allCommentedQuestions.Where(identity => questionnaire.IsInterviewierQuestion(identity.Id));
+        }
+
+        public IEnumerable<Identity> GetCommentedBySupervisorAllQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(this.IsEnabledWithSupervisorComments)
                 .Select(x => new
                 {
                     Id = x.Identity,
@@ -411,9 +429,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.Id);
         }
 
-        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question, IQuestionnaire questionnaire)
+        public IEnumerable<Identity> GetAllCommentedEnabledQuestions()
+        {
+            return this.Tree.FindQuestions()
+                .Where(question => !question.IsDisabled() && question.AnswerComments.Any())
+                .Select(x => x.Identity);
+        }
+
+        private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question)
             => !question.IsDisabled() &&
-               questionnaire.IsInterviewierQuestion(question.Identity.Id) &&
                question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
@@ -449,10 +473,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
+        public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
+            => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
+
+        public InterviewTreeSection FirstSection => this.Tree.Sections.First();
+
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 
-        
+        public IEnumerable<IInterviewTreeNode> GetAllNodes() => this.Tree.GetAllNodesInEnumeratorOrder();
+
         public bool IsEntityValid(Identity identity)
         {
             var question = this.Tree.GetQuestion(identity);
@@ -527,7 +557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
-        public int CountCommentedQuestions() => this.GetCommentedBySupervisorQuestionsInInterview().Count();
+        public int CountCommentedQuestionsVisibledToInterviewer() => this.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Count();
 
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
@@ -540,6 +570,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool AcceptsInterviewerAnswers()
         {
             return !IsDeleted && Status == InterviewStatus.InterviewerAssigned;
+        }
+
+        public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
+        {
+            return this.Tree.Sections;
         }
     }
 }

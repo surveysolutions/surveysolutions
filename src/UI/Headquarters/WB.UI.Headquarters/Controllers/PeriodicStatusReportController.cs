@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Resources;
 
@@ -18,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [LimitsFilter]
     public class PeriodicStatusReportController : BaseController
     {
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
 
         private readonly IUserViewFactory userViewFactory;
@@ -59,12 +59,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public PeriodicStatusReportController(
             ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
             IUserViewFactory userViewFactory)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.userViewFactory = userViewFactory;
         }
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 reportType: reportType,
                 webApiActionName: PeriodicStatusReportWebApiActionName.ByInterviewers,
                 canNavigateToQuantityByTeamMember: false,
-                canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
+                canNavigateToQuantityBySupervisors: this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter,
                 reportName: "Quantity",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
                 totalRowPresent: true,
@@ -121,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 reportType: reportType,
                 webApiActionName: periodicStatusReportWebApiActionName,
                 canNavigateToQuantityByTeamMember: false,
-                canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
+                canNavigateToQuantityBySupervisors: this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter,
                 reportName: "Speed",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
                 totalRowPresent: false,
@@ -207,7 +208,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!supervisorId.HasValue)
                 return null;
 
-            var userView =this.userViewFactory.Load(new UserViewInputModel(supervisorId.Value));
+            var userView =this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value));
             return userView?.UserName;
         }
     }

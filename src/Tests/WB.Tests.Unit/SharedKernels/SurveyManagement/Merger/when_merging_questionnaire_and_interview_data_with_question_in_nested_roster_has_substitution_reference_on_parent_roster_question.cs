@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -18,6 +19,7 @@ using It = Machine.Specifications.It;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
@@ -94,7 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { nestedRosterId, "b" } });
            
-            user = Mock.Of<UserDocument>();
+            user = Mock.Of<UserView>();
             merger = CreateMerger(questionnaire);
         };
 
@@ -119,7 +121,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
         private static QuestionnaireDocument questionnaire;
-        private static UserDocument user;
+        private static UserView user;
 
         private static Guid nestedRosterId;
         private static Guid substitutionReferenceQuestionId;

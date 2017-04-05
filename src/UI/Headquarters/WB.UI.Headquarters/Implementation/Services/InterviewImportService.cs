@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -23,6 +24,7 @@ namespace WB.UI.Headquarters.Implementation.Services
     public class InterviewImportService : IInterviewImportService
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IInterviewUniqueKeyGenerator interviewKeyGenerator;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
@@ -32,6 +34,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
         private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
         public InterviewImportService(
             ICommandService commandService,
@@ -39,14 +42,18 @@ namespace WB.UI.Headquarters.Implementation.Services
             SampleImportSettings sampleImportSettings, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
             IQuestionnaireStorage questionnaireStorage,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IInterviewUniqueKeyGenerator interviewKeyGenerator,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider,
+            ITransactionManagerProvider transactionManagerProvider)
         {
             this.commandService = commandService;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
             this.questionnaireStorage = questionnaireStorage;
+            this.interviewKeyGenerator = interviewKeyGenerator;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, bool isPanel, Guid? supervisorId, Guid headquartersId)
@@ -100,7 +107,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                     {
                         if (!supervisorId.HasValue && !importedInterview.SupervisorId.HasValue)
                         {
-                            this.Status.State.Errors.Add(new InterviewImportError()
+                            this.Status.State.Errors.Add(new InterviewImportError
                             {
                                 ErrorMessage =
                                     string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
@@ -111,6 +118,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         try
                         {
                             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
                             this.plainTransactionManager.ExecuteInPlainTransaction(
                                 () => this.commandService.Execute(
                                     new CreateInterviewWithPreloadedData(
@@ -121,7 +129,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                                         supervisorId: responsibleSupervisorId,
                                         interviewerId: importedInterview.InterviewerId,
                                         answersTime: DateTime.UtcNow,
-                                        preloadedDataDto: importedInterview.PreloadedData)));
+                                        preloadedDataDto: importedInterview.PreloadedData,
+                                        interviewKey: this.interviewKeyGenerator.Get()))));
                         }
                         catch (Exception ex)
                         {

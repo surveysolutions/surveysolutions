@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -20,7 +21,6 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications
 {

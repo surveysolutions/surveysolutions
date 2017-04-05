@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
         };
 
         Because of = () =>
-                user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: true, isConfirmed: false);
+                user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: true, isConfirmed: false, canImportOnHq: false);
 
         It should_set_IsLockedOut_to_true = () =>
                 user.IsLockedOut.ShouldEqual(true);

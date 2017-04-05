@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.AnsweredQuestionSynchronizationDto(prefilledQuestionId, rosterVector, 2, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(hiddenQuestionId, rosterVector, 3, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(disabledQuestionId, rosterVector, 4, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
-                Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Operator)),
+                Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Interviewer)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
             };
 
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsInInterview().ToArray();
+            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToArray();
 
         It should_return_2_commented_by_supervisor_questions = () =>
             commentedQuestionsIdentities.Length.ShouldEqual(2);

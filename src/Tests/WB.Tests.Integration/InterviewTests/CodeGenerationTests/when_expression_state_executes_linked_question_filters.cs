@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -6,7 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
@@ -26,16 +27,15 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new[]
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new[]
             {
-                Create.Chapter(children: new IComposite[]
+                Abc.Create.Entity.Group(children: new IComposite[]
                 {
-                    Create.Roster(id: rosterId, variable: "fixed_roster", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, obsoleteFixedTitles: new string[] {"1", "2", "3"}),
-                    Create.SingleOptionQuestion(questionId: questionId, variable: "a", linkedToRosterId: rosterId,linkedFilterExpression: "@rowcode>1" ),
-
+                    Abc.Create.Entity.Roster(rosterId: rosterId, variable: "fixed_roster", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2", "3"}),
+                    Abc.Create.Entity.SingleOptionQuestion(questionId: questionId, variable: "a", linkedToRosterId: rosterId,linkedFilterExpression: "@rowcode>1" ),
                 })
             });
-                IInterviewExpressionStateV7 state = GetInterviewExpressionState(questionnaireDocument,version: 13) as IInterviewExpressionStateV7;
+                IInterviewExpressionStateV8 state = GetInterviewExpressionState(questionnaireDocument,version: 17) as IInterviewExpressionStateV8;
                 state.AddRoster(rosterId, new decimal[0], 1, null);
                 state.AddRoster(rosterId, new decimal[0], 2, null);
                 state.DisableGroups(new[] { new Identity(rosterId, new decimal[] {2}) });
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfOptions = filterResults.LinkedQuestionOptions[questionId].Count()
+                    CountOfOptions = filterResults.LinkedQuestionOptionsSet[new Identity(questionId, RosterVector.Empty)].Count()
                 };
             });
         

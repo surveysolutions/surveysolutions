@@ -9,8 +9,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ImageViewBitmapWithFallbackBinding : BaseBinding<ImageView, byte[]>
     {
-        private static Bitmap nullImageBitmap = null;
-
         public ImageViewBitmapWithFallbackBinding(ImageView androidControl) : base(androidControl)
         {
         }
@@ -38,28 +36,20 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                         }
                         else
                         {
-                            LoadDefaultImage(control);
+                            this.SetDefaultImage(control);
                         }
                     }
                 }
             }
             else
             {
-                LoadDefaultImage(control);
+                this.SetDefaultImage(control);
             }
         }
 
-        private static void LoadDefaultImage(ImageView control)
+        protected virtual void SetDefaultImage(ImageView control)
         {
-            if (nullImageBitmap == null)
-            {
-                var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-                var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
-                var noImageOptions = new BitmapFactory.Options() { InPurgeable = true };
-                nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
-            }
-
-            control.SetImageBitmap(nullImageBitmap);
+            control.SetImageResource(Resource.Drawable.no_image_found);
         }
 
         private static void SetupPaddingForImageView(ImageView control, DisplayMetrics displayMetrics, BitmapFactory.Options boundsOptions)

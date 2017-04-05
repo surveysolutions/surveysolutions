@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         public void SetupEventContext()
         {
-            eventContext = Create.Other.EventContext();
+            eventContext = new EventContext();
         }
 
         [TearDown]

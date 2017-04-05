@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 namespace WB.Core.SharedKernels.DataCollection.Views
 {
     [DebuggerDisplay("User {UserName}")]
+    [Obsolete("Since v5.19")]
     public class UserDocument : IView
     {
         public UserDocument()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -26,37 +27,37 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                    Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
-                        Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                        Abc.Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
+                        Abc.Create.Entity.StaticText(publicKey: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("a > 0", "err") }),
                     }),
                     events: new object[]
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
+                        Abc.Create.Event.NumericIntegerQuestionAnswered(
+                            questionA, null, -1, null, null
+                        ),
 
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Abc.Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            }),
+                                Abc.Create.Identity(questionA),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        }),
 
-                        Create.Event.StaticTextsDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        Abc.Create.Event.StaticTextsDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                        {
                             {
-                                {
-                                    Create.Identity(staticTextB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                                Abc.Create.Identity(staticTextB),
+                                new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                            }
+                        }.ToList())
                     });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, RosterVector.Empty, DateTime.Now, 3);
 
                     return new InvokeResult
                     {

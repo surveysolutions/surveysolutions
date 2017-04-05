@@ -5,11 +5,12 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly IUserPreloadingService userPreloadingService;
 
-        private  readonly IPlainStorageAccessor<UserDocument> userStorage;
+        private  readonly IUserRepository userStorage;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
-            IPlainStorageAccessor<UserDocument> userStorage, 
+            IUserRepository userStorage, 
             UserPreloadingSettings userPreloadingSettings, 
             ILogger logger)
         {
@@ -94,34 +95,46 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
         {
-            var activeUserNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
-            userStorage.Query(_ => _.Where(u => !u.IsArchived).Select(u => u.UserName.ToLower())).ToHashSet());
+            var allInterviewersAndSupervisors =
+                this.userStorage.Users.Select(x => new
+                {
+                    UserId = x.Id,
+                    UserName = x.UserName,
+                    IsArchived = x.IsArchived,
+                    SupervisorId = x.Profile.SupervisorId,
+                    IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
+                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                }).ToArray();
 
-            var activeSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var activeUserNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
+            
+            var activeSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .Distinct()
+                .ToHashSet();
 
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower()).Distinct()).ToHashSet()
-                );
+            var archivedSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
 
-            var archivedSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
-
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower())).ToHashSet()
-                );
-
-            var archivedInterviewerNamesMappedOnSupervisorName = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Operator))
-                            .Select(
-                                u => new {u.UserName, SupervisorName = u.Supervisor == null ? "" : u.Supervisor.Name}))
-                    .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower())
-                );
+            var archivedInterviewerNamesMappedOnSupervisorName = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsInterviewer)
+                .Select(u =>
+                    new
+                    {
+                        u.UserName,
+                        SupervisorName = allInterviewersAndSupervisors
+                            .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
+                    })
+                .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
             var validationFunctions = new[]
             {
@@ -136,12 +149,24 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
                 new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),
                 new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
+                new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
+                new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
             };
 
             for (int i = 0; i < validationFunctions.Length; i++)
             {
                 this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
             }
+        }
+
+        private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
+        {
+            return arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMaxLength;
+        }
+
+        private bool FullNameLengthVerification(UserPreloadingDataRecord record)
+        {
+            return record.FullName?.Length > this.userPreloadingSettings.FullNameMaxLength;
         }
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
@@ -203,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (desiredRole != UserRoles.Operator)
+            if (desiredRole != UserRoles.Interviewer)
                 return false;
 
             if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(userPreloadingDataRecord.Login.ToLower()))
@@ -224,7 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             switch (desiredRole)
             {
-                case UserRoles.Operator:
+                case UserRoles.Interviewer:
                     return archivedSupervisorNames.Contains(userPreloadingDataRecord.Login.ToLower());
                 case UserRoles.Supervisor:
                     return
@@ -238,14 +263,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            return role == UserRoles.Undefined;
+            return role == 0;
         }
 
         private bool SupervisorVerification(IList<UserPreloadingDataRecord> data,
             HashSet<string> activeSupervisors, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (role != UserRoles.Operator)
+            if (role != UserRoles.Interviewer)
                 return false;
 
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor))

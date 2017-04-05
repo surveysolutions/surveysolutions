@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -16,15 +19,15 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentGroupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                Create.Group(dependentGroupId, enablementCondition: "q1 > 0"),
+                Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
+                Abc.Create.Entity.Group(dependentGroupId, "Group X", null, "q1 > 0", false, null),
             }));
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: answeredQuestionId, answer: 1));
 
                 return new InvokeResults
                 {

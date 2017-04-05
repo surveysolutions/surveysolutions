@@ -33,10 +33,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                var finalQuestionId = Guid.Parse("88888888888888888888888888888888");
 
 
-               var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                   Create.NumericIntegerQuestion(id: petsAgeQuestionId,
+               var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                   Abc.Create.Entity.NumericIntegerQuestion(id: petsAgeQuestionId,
                                                                  variable: "pet_age",
-                                                                 validationExpression: new List<ValidationCondition>()
+                                                                 validationConditions: new List<ValidationCondition>()
                                                                     {
                                                                          new ValidationCondition("pet_age > 10", "pet_age > 10"),
                                                                          new ValidationCondition("pet_age > 20", "pet_age > 20"),

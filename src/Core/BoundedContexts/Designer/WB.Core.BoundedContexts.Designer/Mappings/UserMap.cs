@@ -56,6 +56,8 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Property(x => x.UserName);
 
+            Property(x => x.CanImportOnHq);
+
             Set(x => x.SimpleRoles, m =>
             {
                 m.Key(km => km.Column("UserId"));

@@ -23,6 +23,9 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Last login", Order = 3)]
         public string LastLoginDate { get; set; }
 
+        [Display(Name = "Can import on HQ")]
+        public bool CanImportOnHq { get; set; }
+
         [Display(Name = "Name", Order = 1)]
         [Default]
         public string UserName { get; set; }

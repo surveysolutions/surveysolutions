@@ -1,5 +1,5 @@
 ﻿using Machine.Specifications;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests
 {

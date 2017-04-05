@@ -1,9 +1,14 @@
+using Android.App;
+using Android.Content;
 using Android.OS;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platform;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -35,6 +40,32 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnViewModelSet();
             this.SetContentView(this.ViewResourceId);
+        }
+
+        public override void OnLowMemory()
+        {
+            this.TryWriteMemoryInformationToLog("LowMemory natification");
+            base.OnLowMemory();
+        }
+
+        protected override void OnDestroy()
+        {
+            TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
+            base.OnDestroy();
+        }
+
+        private void TryWriteMemoryInformationToLog(string message)
+        {
+            try
+            {
+                Mvx.Error(message + System.Environment.NewLine);
+                Mvx.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");
+                Mvx.Error($"Disk: {AndroidInformationUtils.GetDiskInformation()} {System.Environment.NewLine}");
+            }
+            catch
+            {
+                // ignore if we can get info about RAM and Disk
+            }
         }
     }
 }

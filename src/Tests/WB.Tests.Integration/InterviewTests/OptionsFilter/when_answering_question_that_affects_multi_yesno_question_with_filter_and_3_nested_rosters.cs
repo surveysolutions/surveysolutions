@@ -26,32 +26,32 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 var options = new List<Answer>
                 {
-                    Create.Option(value: "1", text: "Option 1"),
-                    Create.Option(value: "2", text: "Option 2"),
-                    Create.Option(value: "3", text: "Option 3"),
-                    Create.Option(value: "12", text: "Option 12"),
+                    Abc.Create.Entity.Option(value: "1", text: "Option 1"),
+                    Abc.Create.Entity.Option(value: "2", text: "Option 2"),
+                    Abc.Create.Entity.Option(value: "3", text: "Option 3"),
+                    Abc.Create.Entity.Option(value: "12", text: "Option 12"),
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.NumericIntegerQuestion(q1Id, variable: "q1"),
-                    Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNo: true),
-                    Create.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
+                    Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < q1", yesNoView: true),
+                    Abc.Create.Entity.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(q3Id, variable: "q3"),
+                        Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "q3"),
                     }),
-                    Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                    Abc.Create.Entity.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
-                        Create.Roster(roster3Id, variable:"fixed_nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                            fixedTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
+                        Abc.Create.Entity.Roster(roster3Id, variable:"fixed_nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
+                            fixedRosterTitles: new []{ IntegrationCreate.FixedTitle(1, "Hello")}, children: new IComposite[]
                         {
-                            Create.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                            Abc.Create.Entity.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {
-                                Create.NumericRealQuestion(q5Id, variable: "q5"),
+                                Abc.Create.Entity.NumericRealQuestion(q5Id, variable: "q5"),
                             }),
                         })
                     }),
-                    Create.SingleQuestion(q4Id, variable: "q4", options: options, enablementCondition: "r1.SelectMany(x => x.fixed_nested_r.SelectMany(y=> y.num_nested2_r)).Count() > 1")
+                    Abc.Create.Entity.SingleQuestion(q4Id, variable: "q4", options: options, enablementCondition: "r1.SelectMany(x => x.fixed_nested_r.SelectMany(y=> y.num_nested2_r)).Count() > 1")
                 });
 
                 ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
@@ -59,12 +59,16 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerNumericIntegerQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 10);
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(q2Id, RosterVector.Empty,
-                    Create.AnsweredYesNoOption(1m, yes: true),
-                    Create.AnsweredYesNoOption(2m, yes: true),
-                    Create.AnsweredYesNoOption(3m, yes: true)
-                    ));
-                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 2);
+                interview.AnswerYesNoQuestion(
+                    Abc.Create.Command.AnswerYesNoQuestion(questionId: q2Id, rosterVector: RosterVector.Empty,
+                        answeredOptions: new[]
+                        {
+                            Abc.Create.Entity.AnsweredYesNoOption(1m, true),
+                            Abc.Create.Entity.AnsweredYesNoOption(2m, true),
+                            Abc.Create.Entity.AnsweredYesNoOption(3m, true)
+                        }
+                        ));
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Abc.Create.Entity.RosterVector(new[] {3}), DateTime.Now, 2);
 
                 var result = new InvokeResults();
 

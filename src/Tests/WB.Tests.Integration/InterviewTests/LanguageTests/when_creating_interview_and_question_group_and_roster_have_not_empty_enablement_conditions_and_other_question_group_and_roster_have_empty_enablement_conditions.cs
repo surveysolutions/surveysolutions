@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -20,16 +22,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Create.Chapter(children: new IComposite[]
+                    Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]
                     {
-                        Create.NumericIntegerQuestion(variable: "a", enablementCondition: null),
-                        Create.Question(id: questionId, variable: "b", enablementCondition: "a > 0"),
-                        Create.Group(variable: "i", enablementCondition: null),
-                        Create.Group(id: groupId, variable: "groupConditional", enablementCondition: "a < 0"),
-                        Create.Roster(variable: "x", obsoleteFixedTitles: new[] { "1", "2" }, enablementCondition: null),
-                        Create.Roster(id: rosterId, variable: "fixedConditional", obsoleteFixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
+                        Abc.Create.Entity.NumericIntegerQuestion(variable: "a"),
+                        Abc.Create.Entity.Question(questionId: questionId, variable: "b", enablementCondition: "a > 0"),
+                        Abc.Create.Entity.Group(),
+                        Abc.Create.Entity.Group(groupId, enablementCondition: "a < 0"),
+                        Abc.Create.Entity.Roster(variable: "x", fixedTitles: new[] { "1", "2" }),
+                        Abc.Create.Entity.Roster(rosterId: rosterId, variable: "fixedConditional", fixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
                     }),
                 });
 

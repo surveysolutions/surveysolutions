@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
@@ -23,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IRestService restService;
-        private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly string apiPrefix = @"/api/hq";
         private readonly string apiVersion = @"v3";
         private readonly IStringCompressor zipUtils;
@@ -32,27 +32,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly DesignerUserCredentials designerUserCredentials;
 
 
         public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider, 
-            IRestService restService, 
-            IGlobalInfoProvider globalInfoProvider, 
+            IRestService restService,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             ITranslationManagementService translationManagementService,
             ICommandService commandService,
-            ILogger logger)
+            ILogger logger,
+            IAuthorizedUser authorizedUser,
+            DesignerUserCredentials designerUserCredentials)
         {
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
-            this.globalInfoProvider = globalInfoProvider;
             this.zipUtils = zipUtils;
             this.attachmentContentService = attachmentContentService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.translationManagementService = translationManagementService;
             this.commandService = commandService;
             this.logger = logger;
+            this.authorizedUser = authorizedUser;
+            this.designerUserCredentials = designerUserCredentials;
         }
 
         public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode)
@@ -61,8 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var designerUserCredentials = this.globalInfoProvider.GetDesignerUserCredentials();
-                if (designerUserCredentials == null)
+                var credentials = this.designerUserCredentials.Get();
+                if (credentials == null)
                 {
                     return new QuestionnaireImportResult
                     {
@@ -72,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
                     url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{questionnaireId}",
-                    credentials: designerUserCredentials,
+                    credentials: credentials,
                     queryString: new
                     {
                         clientQuestionnaireContentVersion = supportedVersion,
@@ -93,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         var attachmentContent = await this.restService.DownloadFileAsync(
                             url: $"{this.apiPrefix}/attachment/{questionnaireAttachment.ContentId}",
-                            credentials: designerUserCredentials);
+                            credentials: credentials);
 
                         this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
                             attachmentContent.ContentType, attachmentContent.Content);
@@ -109,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                     var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
                         url: $"{this.apiPrefix}/translations/{questionnaire.PublicKey}",
-                        credentials: designerUserCredentials);
+                        credentials: credentials);
 
                     this.translationManagementService.Store(translationContent.Select(x => new TranslationInstance
                     {
@@ -124,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
                 
                 this.commandService.Execute(new ImportFromDesigner(
-                    this.globalInfoProvider.GetCurrentUser().Id,
+                    this.authorizedUser.Id,
                     questionnaire,
                     isCensusMode,
                     questionnaireAssembly,

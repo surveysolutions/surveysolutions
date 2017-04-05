@@ -23,5 +23,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(ResourceType = typeof(FieldsAndValidations), Name = nameof(FieldsAndValidations.LogOnModel_Password))]
         public string Password { get; set; }
 
+        public bool RequireCaptcha { get; set; } = false;
     }
 }

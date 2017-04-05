@@ -22,10 +22,10 @@ namespace WB.Tests.Integration.HeadquartersTeamsAndStatusesReportTests
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
-                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: 2, status: InterviewStatus.Completed),
-                Create.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: version, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: questionnaireId, questionnaireVersion: 2, status: InterviewStatus.Completed),
+                Abc.Create.Entity.InterviewSummary(teamLeadId: teamLeadId, questionnaireId: Guid.NewGuid(), questionnaireVersion: version, status: InterviewStatus.Completed),
             };
 
             var repository = CreateInterviewSummaryRepository();

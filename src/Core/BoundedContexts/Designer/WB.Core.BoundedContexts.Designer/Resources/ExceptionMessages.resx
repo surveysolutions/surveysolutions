@@ -198,4 +198,7 @@
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
+  <data name="VariableLabelContainsSubstitutionReference" xml:space="preserve">
+    <value>It is not allowed to use substitutions in variable label</value>
+  </data>
 </root>

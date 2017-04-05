@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 
         Because of = () =>
             user.Update(userName: userName, comment: comment, email: userEmail, passwordQuestion: passwordQuestion, isLockedOut: false,
-                isConfirmed: false);
+                isConfirmed: false, canImportOnHq: false);
 
         It should_set_UserName_equal_to_userName = () =>
                 user.UserName.ShouldEqual(userName);

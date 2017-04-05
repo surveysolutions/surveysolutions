@@ -628,6 +628,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items satisfying selected filter.
+        /// </summary>
+        public static string InterviewDetails_NoItems {
+            get {
+                return ResourceManager.GetString("InterviewDetails_NoItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview has pending synchronization packages in queue.
         /// </summary>
         public static string InterviewDetails_PendingPackageLabel {
@@ -786,6 +795,429 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerEdit_TitleFormat {
             get {
                 return ResourceManager.GetString("InterviewerEdit_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Android version.
+        /// </summary>
+        public static string InterviewerProfile_AndroidVersion {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_AndroidVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to done interviews (completed and approved by hq).
+        /// </summary>
+        public static string InterviewerProfile_Approved {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (assigned to {1}).
+        /// </summary>
+        public static string InterviewerProfile_AssignedToFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_AssignedToFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Battery status (%).
+        /// </summary>
+        public static string InterviewerProfile_BatteryStatus {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_BatteryStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to off.
+        /// </summary>
+        public static string InterviewerProfile_BatteryStatus_SaverIsOff {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_BatteryStatus_SaverIsOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to on.
+        /// </summary>
+        public static string InterviewerProfile_BatteryStatus_SaverIsOn {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_BatteryStatus_SaverIsOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}%, power source: {1}, battery saver is {2}.
+        /// </summary>
+        public static string InterviewerProfile_BatteryStatusFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_BatteryStatusFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection: Type: {0} {1}, Operator: {2}.
+        /// </summary>
+        public static string InterviewerProfile_ConnectionMobileFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ConnectionMobileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection type.
+        /// </summary>
+        public static string InterviewerProfile_ConnectionType {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ConnectionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection: {0}.
+        /// </summary>
+        public static string InterviewerProfile_ConnectionWifiFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ConnectionWifiFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database.
+        /// </summary>
+        public static string InterviewerProfile_DatabaseInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DatabaseInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device and connection statistics.
+        /// </summary>
+        public static string InterviewerProfile_DeviceAndConnectionStatistics {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceAndConnectionStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet time at the beginning of synchronization.
+        /// </summary>
+        public static string InterviewerProfile_DeviceDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device ID.
+        /// </summary>
+        public static string InterviewerProfile_DeviceId {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detailed device info.
+        /// </summary>
+        public static string InterviewerProfile_DeviceInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device language.
+        /// </summary>
+        public static string InterviewerProfile_DeviceLanguage {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device location or last known location.
+        /// </summary>
+        public static string InterviewerProfile_DeviceLocation {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device model.
+        /// </summary>
+        public static string InterviewerProfile_DeviceModel {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device orientation.
+        /// </summary>
+        public static string InterviewerProfile_DeviceOrientation {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceOrientation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device serial number.
+        /// </summary>
+        public static string InterviewerProfile_DeviceSerial {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceSerial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews recieved by Interviewer.
+        /// </summary>
+        public static string InterviewerProfile_DownloadedInterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DownloadedInterviewsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of questionnaires recieved by Interviewer.
+        /// </summary>
+        public static string InterviewerProfile_DownloadedQuestionnairesCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DownloadedQuestionnairesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mail: {0}.
+        /// </summary>
+        public static string InterviewerProfile_EmailFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_EmailFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full name: {0}.
+        /// </summary>
+        public static string InterviewerProfile_FullNameFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_FullNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit personal info.
+        /// </summary>
+        public static string InterviewerProfile_Info {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer App version.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerAppVersion {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerAppVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be updated.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerCanBeUpdated {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerCanBeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewers.
+        /// </summary>
+        public static string InterviewerProfile_Interviewers {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Survey Solutions updated date.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerUpdatedDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerUpdatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Up to date.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerUpToDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions version.
+        /// </summary>
+        public static string InterviewerProfile_InterviewerVersion {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_InterviewerVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last connection statistics.
+        /// </summary>
+        public static string InterviewerProfile_LastConnectionStatistics {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_LastConnectionStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last failed sync: {0} ({1}).
+        /// </summary>
+        public static string InterviewerProfile_LastFailedSyncFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_LastFailedSyncFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last successfull sync: {0} ({1}).
+        /// </summary>
+        public static string InterviewerProfile_LastSuccessSyncFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_LastSuccessSyncFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Memory (available/total).
+        /// </summary>
+        public static string InterviewerProfile_MemoryInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_MemoryInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to new assignments on device.
+        /// </summary>
+        public static string InterviewerProfile_NewOnDevice {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_NewOnDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total number of failed synchronizations.
+        /// </summary>
+        public static string InterviewerProfile_NumberOfFailedSynchronizations {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_NumberOfFailedSynchronizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total number of success synchronizations.
+        /// </summary>
+        public static string InterviewerProfile_NumberOfSuccessSynchronizations {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_NumberOfSuccessSynchronizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number: {0}.
+        /// </summary>
+        public static string InterviewerProfile_PhoneFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_PhoneFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to rejected assignments again on device.
+        /// </summary>
+        public static string InterviewerProfile_Rejected {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server time at the beginning of synchronization.
+        /// </summary>
+        public static string InterviewerProfile_ServerDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ServerDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Signal strength.
+        /// </summary>
+        public static string InterviewerProfile_SignalStrength {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_SignalStrength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of assignments that have been started, but not completed.
+        /// </summary>
+        public static string InterviewerProfile_StartedAssignments {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_StartedAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage (available/total).
+        /// </summary>
+        public static string InterviewerProfile_StorageInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_StorageInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer: {0}.
+        /// </summary>
+        public static string InterviewerProfile_TitleFormat {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of completed interviews received from Interviewer.
+        /// </summary>
+        public static string InterviewerProfile_UploadedInterviewsCount {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_UploadedInterviewsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to waiting for approval.
+        /// </summary>
+        public static string InterviewerProfile_WaitingForApproval {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_WaitingForApproval", resourceCulture);
             }
         }
         
@@ -1128,6 +1560,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string NotFound_Title {
             get {
                 return ResourceManager.GetString("NotFound_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred please try again later..
+        /// </summary>
+        public static string OperationFailedDescription {
+            get {
+                return ResourceManager.GetString("OperationFailedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation failed.
+        /// </summary>
+        public static string OperationFailedTitle {
+            get {
+                return ResourceManager.GetString("OperationFailedTitle", resourceCulture);
             }
         }
         

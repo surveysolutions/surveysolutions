@@ -1,4 +1,8 @@
-﻿var gulp = require('gulp'),
+﻿var browserify = require('browserify'),
+    babelify = require('babelify'),
+    source = require("vinyl-source-stream");
+
+var gulp = require('gulp'),
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -8,8 +12,10 @@
     cssnano = require('gulp-cssnano'),
     util = require('gulp-util'),
     debug = require('gulp-debug'),
-    rename = require('gulp-rename');
-
+    rename = require('gulp-rename'),
+    vueify = require('vueify'),
+    glob = require('glob'),
+    es = require('event-stream');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -41,6 +47,7 @@ var config = {
     bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
+    buildDistDir: './dist',
     filesToInject: [
         {
             file: "LogOn.cshtml",
@@ -62,8 +69,40 @@ var config = {
     jsLibsInject: 'jsLibs'
 };
 
+gulp.task('vueify', wrapPipe(function (success, error) {
+    glob('./vue/*.js', function (err, files) {
+        if (err) error();
+        var tasks = files.map(function (entry) {
+            var b = browserify({
+                entries: entry,
+                debug: !config.production
+            });
+
+            return b
+                .transform(babelify, { presets: ['es2015'] })
+                .transform(vueify)
+            .bundle().on('error', error)
+            .pipe(source(entry).on('error', error))
+            .pipe(gulp.dest(config.buildDir).on('error', error));
+        });
+
+        es.merge(tasks).on('end', success);
+    });
+}));
+
+gulp.task('vue-libs', wrapPipe(function (success, error) {
+    var filter = plugins.filter(['**/vue*.js', '**/vee*.js']);
+
+    return gulp.src('./bower.json')
+        .pipe(mainBowerFiles().on('error', error))
+        .pipe(filter)
+        .pipe(concat('vue-libs.js').on('error', error))
+        .pipe(gulp.dest(config.buildDir).on('error', error));
+}));
+
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
-    return gulp.src(config.bootstrapFontFiles).pipe(gulp.dest(config.fontsDir));
+    return gulp.src(config.bootstrapFontFiles)
+        .pipe(gulp.dest(config.fontsDir).on('error', error));
 }));
 
 gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
@@ -74,28 +113,39 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
         .pipe(cssnano().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('watch-styles', function () {
+gulp.task('watch-vue', wrapPipe(function (success, error) {
+    if (config.production) {
+        return util.noop();
+    }
+    gulp.watch('./vue/*.*', ['vueify']);
     gulp.watch(config.cssFilesToWatch, ['styles']);
-});
+}));
+
+function mainBowerFilesFilter(filePath) {
+    if (filePath.includes("\\vue")) return false;
+    if (filePath.includes("\\vee")) return false;
+    return !filePath.endsWith(".js");
+}
 
 gulp.task('bowerJs', wrapPipe(function (success, error) {
+    var filter = plugins.filter(['**/*.js', '!**/vue*.js', '!**/vee*.js']);
+
     return gulp.src('./bower.json')
-        .pipe(mainBowerFiles('**/*.js').on('error', error))
-        //gulp.src(mainBowerFiles('**/*.js').on('error', error))
-        .pipe(plugins.ngAnnotate().on('error', error))
+        .pipe(mainBowerFiles().on('error', error))
+        .pipe(filter)
       	.pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.uglify().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('bowerCss', wrapPipe(function (success, error) {
-    return  gulp.src('./bower.json')
+    return gulp.src('./bower.json')
         .pipe(mainBowerFiles('**/*.css').on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(concat('libs.css').on('error', error))
@@ -103,14 +153,14 @@ gulp.task('bowerCss', wrapPipe(function (success, error) {
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(cssnano().on('error', error))
         .pipe(plugins.rev().on('error', error))
-    	.pipe(gulp.dest(config.buildDir));
+    	.pipe(gulp.dest(config.buildDistDir));
 }));
 
 gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (success, error) {
     if (config.production) {
-        var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
-        var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
-        var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
+        var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
+        var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
+        var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
 
         var tasks = config.filesToInject.map(function (fileToInject) {
             var target = gulp.src(fileToInject.folder + fileToInject.file);
@@ -126,8 +176,8 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (succes
     }
     // DEV: to include files not in batch
     //else {
-    //    var cssLibs = gulp.src(mainBowerFiles('**/*.css'));
-    //    var jsLibs = gulp.src(mainBowerFiles('**/*.js'));
+    //    var cssLibs = gulp.src('./bower.json').pipe(mainBowerFiles('**/*.css'));// gulp.src(mainBowerFiles('**/*.css'));
+    //    var jsLibs = gulp.src('./bower.json').pipe(mainBowerFiles('**/*.js'));// gulp.src(mainBowerFiles('**/*.js'));
 
     //    var tasks = config.filesToInject.map(function (fileToInject) {
     //        var target = gulp.src(fileToInject.folder + fileToInject.file);
@@ -155,9 +205,9 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], wrapPipe(function (succes
 }));
 
 gulp.task('clean', function () {
-    return gulp.src(config.buildDir + '/*').pipe(plugins.clean());
+    return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(/*'watch-styles', */'move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject', 'vueify', 'vue-libs', 'watch-vue');
 });

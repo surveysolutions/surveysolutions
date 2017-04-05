@@ -15,10 +15,10 @@ A simple, lightweight JavaScript API for handling cookies
 * [RFC 6265](https://tools.ietf.org/html/rfc6265) compliant
 * Useful [Wiki](https://github.com/js-cookie/js-cookie/wiki)
 * Enable [custom encoding/decoding](#converters)
-* **~800 bytes** gzipped!
+* **~900 bytes** gzipped!
 
 **If you're viewing this at https://github.com/js-cookie/js-cookie, you're reading the documentation for the master branch.
-[View documentation for the latest release (2.1.1).](https://github.com/js-cookie/js-cookie/tree/v2.1.1#readme)**
+[View documentation for the latest release.](https://github.com/js-cookie/js-cookie/tree/latest#readme)**
 
 ## Build Status Matrix
 
@@ -28,7 +28,7 @@ A simple, lightweight JavaScript API for handling cookies
 
 ### Direct download
 
-Download the script [here](https://github.com/js-cookie/js-cookie/blob/v2.1.1/src/js.cookie.js) and include it (unless you are packaging scripts somehow else):
+Download the script [here](https://github.com/js-cookie/js-cookie/blob/latest/src/js.cookie.js) and include it (unless you are packaging scripts somehow else):
 
 ```html
 <script src="/path/to/js.cookie.js"></script>
@@ -43,7 +43,7 @@ JavaScript Cookie supports [npm](https://www.npmjs.com/package/js-cookie) and [B
 
 ### Module Loaders
 
-JavaScript Cookie can also be loaded as an AMD or CommonJS module.
+JavaScript Cookie can also be loaded as an AMD, CommonJS or [ES6](https://github.com/js-cookie/js-cookie/issues/233#issuecomment-233187386) module.
 
 ## Basic Usage
 
@@ -142,7 +142,7 @@ Cookies.getJSON(); // => { name: { foo: 'bar' } }
 
 This project is [RFC 6265](http://tools.ietf.org/html/rfc6265#section-4.1.1) compliant. All special characters that are not allowed in the cookie-name or cookie-value are encoded with each one's UTF-8 Hex equivalent using [percent-encoding](http://en.wikipedia.org/wiki/Percent-encoding).  
 The only character in cookie-name or cookie-value that is allowed and still encoded is the percent `%` character, it is escaped in order to interpret percent input as literal.  
-To override the default cookie decoding you need to use a [converter](#converter).
+Please note that the default encoding/decoding strategy is meant to be interoperable [only between cookies that are read/written by js-cookie](https://github.com/js-cookie/js-cookie/pull/200#discussion_r63270778). To override the default encoding/decoding strategy you need to use a [converter](#converter).
 
 ## Cookie Attributes
 
@@ -151,6 +151,8 @@ Cookie attributes defaults can be set globally by setting properties of the `Coo
 ### expires
 
 Define when the cookie will be removed. Value can be a [`Number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) which will be interpreted as days from time of creation or a [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) instance. If omitted, the cookie becomes a session cookie.
+
+To create a cookie that expires in less than a day, you can check the [FAQ on the Wiki](https://github.com/js-cookie/js-cookie/wiki/Frequently-Asked-Questions#expire-cookies-in-less-than-a-day).
 
 **Default:** Cookie is removed when the user closes the browser.
 
@@ -276,8 +278,9 @@ Check out the [Contributing Guidelines](CONTRIBUTING.md)
 * Commit with the message "Release version x.x.x"
 * Create version tag in git
 * Create a github release and upload the minified file
-* Link the documentation of the latest release tag in the `README.md`
-* Link the download link to the latest release tag in the `README.md`
+* Change the `latest` tag pointer to the latest commit
+  * `git tag -fa latest`
+  * `git push <remote> :refs/tags/latest`
 * Commit with the message "Prepare for the next development iteration"
 * Release on npm
 

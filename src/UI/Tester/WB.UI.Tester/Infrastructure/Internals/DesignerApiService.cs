@@ -66,12 +66,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return serverQuestionnaires.ToReadOnlyCollection();
         }
 
-        public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
+        public async Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
         {
             Questionnaire downloadedQuestionnaire = null;
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
-                url: $"{this.apiPrefix}/questionnaires/{selectedQuestionnaire.Id}",
+                url: $"{this.apiPrefix}/questionnaires/{questionnaireId}",
                 credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 

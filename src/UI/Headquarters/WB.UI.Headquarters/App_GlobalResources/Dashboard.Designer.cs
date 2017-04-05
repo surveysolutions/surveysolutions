@@ -250,7 +250,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2. Click on a questionnaire from the list to create interview assignments..
+        ///   Looks up a localized string similar to 2. Click on a questionnaire from the list to create interview assignments.
         /// </summary>
         internal static string SurveySetupIntroMessage2 {
             get {

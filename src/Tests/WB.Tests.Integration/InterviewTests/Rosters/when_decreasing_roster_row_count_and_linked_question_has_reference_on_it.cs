@@ -4,6 +4,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -29,16 +30,16 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var linkedOutsideId = Guid.Parse("22222222222222222222222222222222");
                 var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                          children: new IComposite[]
                          {
-                             Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),
-                             Create.Roster(id:rosterId, rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId, variable: "ros",
+                             Abc.Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: "trigger"),
+                             Abc.Create.Entity.Roster(rosterId:rosterId, rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId, variable: "ros",
                              children: new IComposite[]
                              {
-                                 Create.TextQuestion(id:sourceQuestionId,variable: "source")
+                                 Abc.Create.Entity.TextQuestion(questionId: sourceQuestionId, variable: "source")
                              }),
-                             Create.MultyOptionsQuestion(linkedOutsideId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                             Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                          }
                     );
 

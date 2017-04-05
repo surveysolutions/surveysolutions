@@ -21,8 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public string AnswerString { get; set; }
 
-        public decimal[] RosterVector { get; set; }
-
         public string Variable { get; set; }
 
         public List<QuestionOptionView> Options { get; set; }
@@ -40,9 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
-        public bool IsFilteredCategorical { get; set; }
-
-        public int[] PropagationVector { get; set; }
 
         public List<InterviewQuestionCommentView> Comments { get; set; }
 
@@ -79,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsLinkedToRoster { get; set; }
 
-        public bool IsLinkedToListQuestion { get; set; }
+        //public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class SingleQuestionSettings
@@ -90,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsLinkedToRoster { get; set; }
 
-        public bool IsLinkedToListQuestion { get; set; }
+        //public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class InterviewQuestionCommentView
@@ -107,5 +102,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public object Value { get; set; }
         public string Label { get; set; }
+
+        public bool IsChecked { get; set; } = false;
+
+        public int Index { get; set; } = 0;
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+    <Bundle Name="SurveySolutions Installation"
+            Version="$(var.SurveySolutionsVersion)"
+            Manufacturer="The World Bank"
+            UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
+
+        <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
+            (VersionNT64 &gt;= v6.3) 
+        </bal:Condition>
+        
+        <!--OR WixBundleAction = 3-->
+        
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
+            <bal:WixStandardBootstrapperApplication 
+                LicenseUrl=""
+                LogoFile="img\logo.png"
+                LogoSideFile="img\logo.png"
+                ShowVersion="yes"
+                SuppressOptionsUI="yes"/>
+        </BootstrapperApplicationRef>
+        
+        <Chain>
+            <PackageGroupRef Id="NetFx462Web"/>
+
+            <RollbackBoundary />
+
+            <MsiPackage Id="SurveySolutionsPackage"
+              Cache="no"
+              Compressed="yes"
+              DisplayInternalUI="yes"
+              Vital="yes"
+              InstallCondition="VersionNT64"
+              SourceFile="$(var.SurveySolutions.TargetPath)" />
+            
+        </Chain>
+    </Bundle>
+</Wix>

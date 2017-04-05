@@ -4,6 +4,7 @@ using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure
 {
