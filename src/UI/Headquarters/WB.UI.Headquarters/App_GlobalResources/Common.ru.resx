@@ -169,7 +169,7 @@
     <value>Результаты не найдены</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Предзаполненные вопросы</value>
+    <value>Идентифицирующие вопросы</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Вопросники</value>
