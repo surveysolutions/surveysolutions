@@ -49,7 +49,7 @@
     "http-proxy-middleware": "^0.17.4",
     "json-loader": "^0.5.4",
     "minimist": "^1.2.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.5.2",
     "opn": "^4.0.2",
     "ora": "^1.1.0",
     "postcss": "^5.2.16",
@@ -66,11 +66,11 @@
     "vue-style-loader": "^2.0.3",
     "vue-template-compiler": "^2.2.2",
     "vue-ts-loader": "0.0.3",
-    "webpack": "^2.2.1",
+    "webpack": "^2.3.3",
     "webpack-bundle-analyzer": "^2.3.1",
     "webpack-dev-middleware": "^1.10.1",
-    "webpack-hot-middleware": "^2.17.1",
-    "webpack-merge": "^4.0.0",
+    "webpack-hot-middleware": "^2.18.0",
+    "webpack-merge": "^4.1.0",
     "write-file-webpack-plugin": "^3.4.2"
   },
   "engines": {
