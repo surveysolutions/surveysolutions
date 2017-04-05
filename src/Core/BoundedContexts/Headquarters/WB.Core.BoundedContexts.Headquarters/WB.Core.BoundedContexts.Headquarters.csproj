@@ -714,6 +714,8 @@
     <Compile Include="Views\User\UserView.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
     <Compile Include="Views\ViewerStatus.cs" />
+    <Compile Include="WebInterview\ISampleWebInterviewService.cs" />
+    <Compile Include="WebInterview\Impl\SampleWebInterviewService.cs" />
     <Compile Include="WebInterview\WebInterviewConfig.cs" />
     <Compile Include="WebInterview\IWebInterviewConfigProvider.cs" />
     <Compile Include="WebInterview\IWebInterviewConfigurator.cs" />

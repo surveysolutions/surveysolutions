@@ -1160,6 +1160,7 @@
     <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
