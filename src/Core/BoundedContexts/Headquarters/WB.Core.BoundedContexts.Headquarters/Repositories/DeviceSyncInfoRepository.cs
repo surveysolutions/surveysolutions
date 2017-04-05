@@ -30,7 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
         public double GetAverageSyncronizationSpeed(Guid interviewerId)
-            => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate).Take(5).Average(info => info.Statistics.TotalConnectionSpeed);
+            => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)
+                .Where(d => d.InterviewerId == interviewerId)        
+                .Take(5).Average(info => info.Statistics.TotalConnectionSpeed);
 
         public DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
