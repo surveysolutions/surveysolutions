@@ -136,10 +136,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     })
                 .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
+            var preloadedUsersGroupedByUserName =
+                data.GroupBy(x => x.Login.ToLower()).ToDictionary(x=>x.Key, x=>x.Count());
+
             var validationFunctions = new[]
             {
                 new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row),"PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginDublicationInDataset(data, row), "PLU0002",u => u.Login),
+                new PreloadedDataValidator(row => LoginDublicationInDataset(preloadedUsersGroupedByUserName, row), "PLU0002",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames,row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
@@ -218,10 +221,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return activeUserNames.Contains(userPreloadingDataRecord.Login.ToLower());
         }
 
-        private bool LoginDublicationInDataset(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
-        {
-            return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login.ToLower()) > 1;
-        }
+        private bool LoginDublicationInDataset(Dictionary<string, int> data,
+            UserPreloadingDataRecord userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
@@ -231,10 +232,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (desiredRole != UserRoles.Interviewer)
                 return false;
 
-            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(userPreloadingDataRecord.Login.ToLower()))
+            var loginName = userPreloadingDataRecord.Login.ToLower();
+            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(loginName))
                 return false;
 
-            if (archivedInterviewerNamesMappedOnSupervisorName[userPreloadingDataRecord.Login.ToLower()] !=
+            if (archivedInterviewerNamesMappedOnSupervisorName[loginName] !=
                 userPreloadingDataRecord.Supervisor.ToLower())
                 return true;
 
@@ -247,14 +249,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
 
+            var loginName = userPreloadingDataRecord.Login.ToLower();
             switch (desiredRole)
             {
                 case UserRoles.Interviewer:
-                    return archivedSupervisorNames.Contains(userPreloadingDataRecord.Login.ToLower());
+                    return archivedSupervisorNames.Contains(loginName);
                 case UserRoles.Supervisor:
                     return
                         archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(
-                            userPreloadingDataRecord.Login.ToLower());
+                            loginName);
                 default:
                     return false;
             }

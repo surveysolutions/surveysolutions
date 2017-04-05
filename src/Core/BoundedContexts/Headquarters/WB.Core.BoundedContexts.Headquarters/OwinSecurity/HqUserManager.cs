@@ -115,16 +115,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-            
-            var creationStatus = await this.CreateAsync(user, password);
+            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
+            user.PasswordHash = this.PasswordHasher.HashPassword(password);
 
-            if (creationStatus.Succeeded)
-            {
-                UpdateSha1PasswordIfNeeded(user, password, role);
-                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
-            }
+            this.UpdateSha1PasswordIfNeeded(user, password, role);
 
-            return creationStatus;
+            return await this.CreateAsync(user);
         }
         
         public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
