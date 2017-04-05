@@ -7259,7 +7259,8 @@ a.disabled {
 
 /* Forms */
 .form-control {
-  box-shadow: none; }
+  box-shadow: none;
+  border-color: #dbdfe2; }
 
 ::-webkit-input-placeholder {
   font-weight: normal !important;
@@ -7666,8 +7667,11 @@ input.double-checkbox-white {
       .active-search .search .btn-search:hover {
         background-position: -60px 10px; }
 
-.block-filter .btn-group.bootstrap-select, .block-filter .combo-box, .block-filter .input-group {
+.block-filter .btn-group.bootstrap-select, .block-filter .combo-box, .block-filter .input-group, .block-filter .field {
   margin-left: -10px !important; }
+
+.block-filter .field {
+  width: 295px; }
 
 .combo-box {
   position: relative;
@@ -7678,6 +7682,11 @@ input.double-checkbox-white {
       position: static !important; }
     .combo-box .btn-input .dropdown-toggle .dropdown-menu {
       z-index: 3; }
+  .combo-box .btn-clear {
+    border-left: 1px solid #dbdfe2; }
+  @media (max-width: 1210px) {
+    .combo-box .btn-clear {
+      right: 0; } }
 
 ul.dropdown-menu li, ul.dropdown-menu li * {
   word-wrap: break-word;
@@ -7685,6 +7694,49 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 
 .form-date .input-group.date .form-control {
   z-index: 0; }
+
+.help-block {
+  margin: 0; }
+
+.profile .separate-line {
+  max-width: 500px; }
+
+.profile .block-filter .form-group .field {
+  float: left;
+  margin-right: 20px; }
+
+.profile .block-filter .form-group .help-block {
+  float: left;
+  max-width: 400px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  min-height: 40px; }
+
+.profile .block-filter .form-group:after {
+  display: block;
+  content: "";
+  clear: both; }
+
+.profile .block-filter .form-group .single-checkbox + label {
+  margin-left: -5px;
+  font-weight: bold; }
+
+@media (max-width: 1210px) {
+  .profile .separate-line {
+    margin-left: 0; } }
+
+@media (max-width: 780px) {
+  .profile .separate-line {
+    margin-left: 0; }
+  .profile .block-filter .form-group .field {
+    float: none;
+    margin-right: 0; }
+  .profile .block-filter .form-group .help-block {
+    float: none;
+    margin-top: 10px;
+    max-width: 280px; } }
 
 .structured-content {
   margin: 0; }
@@ -8684,7 +8736,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   font-size: 14px;
   line-height: 16px;
   font-family: inherit;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: bold; }
 
 .hold-transition * {
@@ -8891,7 +8943,8 @@ table tr th .census-icon, table tr td .census-icon {
     .flag.flagged:hover:before, .question.with-flag .question-editor .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor .flag:focus:before {
       background-position: -18px 0; }
 
-.view-mood {
+.view-mode {
+  border: none;
   position: fixed;
   top: 70px;
   z-index: 20;
@@ -8900,58 +8953,30 @@ table tr th .census-icon, table tr td .census-icon {
   color: #8a6d3b;
   margin: 0;
   border-radius: 0; }
-  .view-mood .panel-heading {
+  .view-mode .panel-warning.panel-heading {
+    border-width: 2px;
     padding: 5px;
     background-color: #ff8; }
-  .view-mood + main {
-    margin-top: 30px; }
-    .view-mood + main .container-fluid .filters {
-      padding-top: 130px; }
-    .view-mood + main .container-fluid .content {
-      padding-top: 100px; }
-    .view-mood + main .container-fluid .foldback-button {
-      top: 105px; }
-    .view-mood + main .container-fluid .questionnaire .unit-title.is_stuck {
-      top: 100px !important; }
-  .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
-    top: 155px; }
+  .view-mode .panel-heading {
+    padding: 0;
+    border-width: 0px; }
+    .view-mode .panel-heading .alerts {
+      margin: 0; }
+      .view-mode .panel-heading .alerts .alert {
+        border-radius: 0; }
 
 .extra-margin-bottom {
   margin-bottom: 30px; }
 
 @media (max-width: 1210px) {
-  .wide-navbar .view-mood {
+  .wide-navbar .view-mode {
     top: 60px; }
-    .wide-navbar .view-mood + main .container-fluid .content {
-      padding-top: 90px; }
-  .view-mood {
-    top: 70px; }
-    .view-mood + main .container-fluid {
-      margin-top: 30px; }
-      .view-mood + main .container-fluid .filters {
-        padding-top: 125px; }
-      .view-mood + main .container-fluid .content {
-        padding-top: 100px; }
-      .view-mood + main .container-fluid .foldback-button {
-        top: 95px; }
-      .view-mood + main .container-fluid .questionnaire .unit-title.is_stuck {
-        top: 90px !important; }
-    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button,
-    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button,
-    .view-mood + .web-interview-for-supervisor.fullscreen-hidden-content .filters .foldback-button {
-      top: 95px; } }
+  .view-mode {
+    top: 70px; } }
 
 @media (max-width: 880px) {
-  .view-mood {
-    top: 60px; }
-    .view-mood + main .container-fluid .content {
-      padding-top: 90px; }
-      .view-mood + main .container-fluid .content .foldback-button {
-        top: 145px; }
-      .view-mood + main .container-fluid .content .humburger-foldback-button {
-        top: 95px; }
-    .view-mood + .web-interview.fullscreen-hidden-content .content .foldback-button {
-      top: 95px; } }
+  .view-mode {
+    top: 60px; } }
 
 .position-relative {
   position: relative; }
@@ -9033,6 +9058,11 @@ table tr th .census-icon, table tr td .census-icon {
   color: #a6a8a9;
   font-weight: normal;
   font-style: italic; }
+
+.separate-line {
+  border-top: 3px solid #dbdfe2;
+  margin-left: -25px;
+  padding-bottom: 20px; }
 
 @media (max-width: 880px) {
   .interviews-large-screen {
@@ -9703,7 +9733,8 @@ main .flex-row {
 
 .selection-box a {
   display: block;
-  margin-bottom: 25px; }
+  margin-bottom: 25px;
+  cursor: pointer; }
 
 .btn-file input {
   display: none; }
@@ -11801,6 +11832,9 @@ main .before-search {
 
 .search-wasnt-started + .footer {
   padding-left: 0 !important; }
+
+.troubleshooting-explanation {
+  font-weight: bold; }
 
 .servers-error {
   width: 350px; }
