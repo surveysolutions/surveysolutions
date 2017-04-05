@@ -6,7 +6,8 @@ declare interface ILanguageInfo {
 declare interface IInterviewInfo {
     questionnaireTitle: string;
     humanId : string;
-    firstSectionId: string
+    firstSectionId: string;
+    isSampleMode: boolean
 }
 
 declare interface IInterviewEntityWithType {

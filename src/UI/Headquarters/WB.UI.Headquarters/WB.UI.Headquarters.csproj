@@ -1665,7 +1665,6 @@
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\ImportModeModel.cs" />
-    <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />

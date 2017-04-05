@@ -40,9 +40,10 @@ export default {
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
-    SET_INTERVIEW_INFO(state, interviewInfo) {
-        Vue.set(state, "questionnaireTitle", interviewInfo.questionnaireTitle)
-        Vue.set(state, "firstSectionId", interviewInfo.firstSectionId)
+    SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
+        state.questionnaireTitle = interviewInfo.questionnaireTitle
+        state.firstSectionId = interviewInfo.firstSectionId
+        state.isSampleMode = interviewInfo.isSampleMode
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, "completeInfo", completeInfo)
