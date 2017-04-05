@@ -1,5 +1,23 @@
-﻿namespace WB.UI.Headquarters.Models.WebInterview
+﻿using System.Collections.Generic;
+
+namespace WB.UI.Headquarters.Models.WebInterview
 {
+    public class ReadonlyPrefilledQuestion
+    {
+        public string Answer { get; set; }
+        public string Title { get; set; }
+    }
+
+    public class SamplePrefilledData
+    {
+        public SamplePrefilledData()
+        {
+            this.Questions = new List<ReadonlyPrefilledQuestion>();
+        }
+
+        public List<ReadonlyPrefilledQuestion> Questions { get; set; }
+    }
+
     public class PrefilledPageData
     {
         public InterviewEntityWithType[] Entities { get; set; }

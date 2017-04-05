@@ -22,6 +22,9 @@ const store = new Vuex.Store(safeStore({
         entityDetails: { /* string: object */ },
         breadcrumbs: {
             breadcrumbs: []
+        },
+        samplePrefilledInfo: {
+            questions: []
         }
     },
     actions,

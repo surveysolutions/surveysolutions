@@ -45,6 +45,9 @@ export default {
         state.firstSectionId = interviewInfo.firstSectionId
         state.isSampleMode = interviewInfo.isSampleMode
     },
+    SET_COVER_INFO(state, coverInfo: ISamplePrefilledData) {
+        state.samplePrefilledInfo = coverInfo
+    },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, "completeInfo", completeInfo)
     },

@@ -10,7 +10,6 @@ const fetch = {
     },
     actions: {
         fetch({ commit, rootState }, {id, ids, done}) {
-
             commit("SET_FETCH", {
                 entityDetails: rootState.entityDetails,
                 id, ids,
