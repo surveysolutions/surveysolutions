@@ -184,6 +184,6 @@
     <value>Sample mode import</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
-    <value>This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices.</value>
+    <value>This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices.</value>
   </data>
 </root>

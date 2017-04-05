@@ -2128,7 +2128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }
@@ -2189,7 +2189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }

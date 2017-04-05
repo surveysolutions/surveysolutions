@@ -147,7 +147,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. Resposible supervisor is missing.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. Resposible supervisor is missing.
         /// </summary>
         public static string ImportInterviews_FailedToImportInterview_NoSupervisor {
             get {
@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
         /// </summary>
         public static string ImportInterviews_GenericError {
             get {
