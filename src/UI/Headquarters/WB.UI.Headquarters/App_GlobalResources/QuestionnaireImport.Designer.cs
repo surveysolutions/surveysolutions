@@ -223,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices..
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices..
         /// </summary>
         internal static string RegularImportSubTitle {
             get {
