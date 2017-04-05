@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity, this.Url.Content("~/WebInterview/Interview"));
+            byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity, this.Url.Content("~/WebInterview"));
 
             var compressedBytes = Compress(uncompressedDataStream);
 
