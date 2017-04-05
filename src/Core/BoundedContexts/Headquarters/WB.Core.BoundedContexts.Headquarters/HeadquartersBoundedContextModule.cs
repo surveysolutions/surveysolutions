@@ -244,6 +244,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
             this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
+            this.Bind<ISampleWebInterviewService>().To<SampleWebInterviewService>();
 
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 
