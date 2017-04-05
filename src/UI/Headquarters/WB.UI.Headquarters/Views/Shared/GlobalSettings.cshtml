@@ -34,7 +34,10 @@
                     token : '@TokenHeaderValue()'
                 },
                 config: {
-                    syncQueueEnabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true": "false"),
+                    syncQueue: {
+                        enabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true" : "false"),
+                        lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
+                    },
                     dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 }
             }

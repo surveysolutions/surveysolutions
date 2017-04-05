@@ -44,5 +44,6 @@ namespace WB.Core.GenericSubdomains.Portable
 
             return new Guid(bytes16);
         }
+
     }
 }

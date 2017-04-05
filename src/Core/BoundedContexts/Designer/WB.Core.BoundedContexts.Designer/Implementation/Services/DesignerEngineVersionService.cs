@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services

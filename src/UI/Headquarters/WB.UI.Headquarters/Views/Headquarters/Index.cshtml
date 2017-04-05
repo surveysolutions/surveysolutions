@@ -1,7 +1,10 @@
 ﻿@using Main.Core.Entities.SubEntities
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Users.Headquarters;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
 @section scripts
@@ -29,7 +32,7 @@
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
-            @if (User.IsInRole("Observer"))
+            @if (authorizedUser.IsObserver)
             {
                 <text>
                 var impersonateAsUser = function (key, opt) {
@@ -71,7 +74,7 @@
                         $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
                     }
                 });
-                @if (User.IsInRole("Observer"))
+                @if (authorizedUser.IsObserver)
                 {
                     <text>
                     $.contextMenu(self.contextMenuOptions);
@@ -81,8 +84,11 @@
 
             self.table = $('table#headquarters')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt', function (e, settings, techNote, message) {
-                    location.reload();
+                .on('xhr.dt', function (e, settings, json, xhr) {
+                    if (xhr.status === 401)
+                        location.reload();
+                    else if (xhr.status != undefined && xhr.status !== 200)
+                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
                 })
                 .DataTable({
                     processing: true,
@@ -151,7 +157,7 @@
             <div class="page-header clearfix">
                 <div>
                     <h1>@Users.Headquarters</h1>
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                    @if (authorizedUser.IsAdministrator)
                     {
                         <a class="btn btn-success" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">@Users.AddHeadquarters</a>
                     }

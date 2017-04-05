@@ -1,5 +1,5 @@
 import * as toastr from "toastr"
-import * as Vue from "vue"
+import Vue from "vue"
 import { verboseMode } from "./config"
 
 Vue.config.errorHandler = (error, vm) => {

@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Tests.Abc;
 using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
 
 namespace WB.Tests.Unit.Applications.Headquarters
@@ -147,30 +148,37 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
         protected static IQuestionnaireImportService CreateIQuestionnaireImportService(
       ICommandService commandService = null,
-      IGlobalInfoProvider globalInfo = null,
+      IAuthorizedUser authorizedUser = null,
       IStringCompressor zipUtils = null,
       ILogger logger = null,
-      Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null,
       IRestService restService = null,
       ISupportedVersionProvider supportedVersionProvider = null,
       IAttachmentContentService attachmentContentService = null,
       IPlainStorageAccessor<TranslationInstance> translationInstances = null,
-      IQuestionnaireVersionProvider questionnaireVersionProvider = null
-      )
+      IQuestionnaireVersionProvider questionnaireVersionProvider = null,
+      DesignerUserCredentials designerUserCredentials = null)
         {
             var service = restService ?? Mock.Of<IRestService>();
-            var globalInfoProvider = globalInfo ?? new Mock<IGlobalInfoProvider> { DefaultValue = DefaultValue.Mock }.Object;
+            var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
+
+            if (designerUserCredentials == null)
+            {
+                var mockOfUserCredentials = new Mock<DesignerUserCredentials>();
+                mockOfUserCredentials.Setup(x => x.Get()).Returns(new RestCredentials());
+                designerUserCredentials = mockOfUserCredentials.Object;
+            }
+
             IQuestionnaireImportService questionnaireImportService = new QuestionnaireImportService(
                 supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
                 service,
-                globalInfoProvider,
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
                 Mock.Of<ITranslationManagementService>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                Mock.Of<ILogger>()
-            );
+                Mock.Of<ILogger>(),
+                globalInfoProvider,
+                designerUserCredentials);
             return questionnaireImportService;
         }
     }

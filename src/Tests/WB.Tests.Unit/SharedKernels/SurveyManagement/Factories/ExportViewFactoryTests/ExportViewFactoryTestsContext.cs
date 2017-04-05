@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireStorage questionnaireStorage = null,
             IExportQuestionService exportQuestionService = null,
-            IRostrerStructureService rostrerStructureService = null)
+            IRosterStructureService rosterStructureService = null)
         {
             return new ExportViewFactory(
                 Mock.Of<IFileSystemAccessor>(),
                 exportQuestionService ?? new ExportQuestionService(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                rostrerStructureService ?? new RosterStructureService());
+                rosterStructureService ?? new RosterStructureService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)

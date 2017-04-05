@@ -42,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
+        private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
@@ -66,7 +67,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public WebInterviewController(ICommandService commandService,
             IWebInterviewConfigProvider configProvider,
-            IGlobalInfoProvider globalInfo,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -74,8 +74,9 @@ namespace WB.UI.Headquarters.Controllers
             IImageProcessingService imageProcessingService,
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
-            ILogger logger, IUserViewFactory usersRepository)
-            : base(commandService, globalInfo, logger)
+            ILogger logger, IUserViewFactory usersRepository,
+            IInterviewUniqueKeyGenerator keyGenerator)
+            : base(commandService, logger)
         {
             this.commandService = commandService;
             this.configProvider = configProvider;
@@ -87,6 +88,7 @@ namespace WB.UI.Headquarters.Controllers
             this.connectionLimiter = connectionLimiter;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.usersRepository = usersRepository;
+            this.keyGenerator = keyGenerator;
         }
 
         private string CreateInterview(QuestionnaireIdentity questionnaireId)
@@ -95,12 +97,13 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
             var responsibleId = webInterviewConfig.ResponsibleId;
-            var interviewer = this.usersRepository.Load(new UserViewInputModel(responsibleId));
+            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId));
 
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewer.PublicKey, questionnaireId, DateTime.UtcNow,
-                interviewer.Supervisor.Id);
+                interviewer.Supervisor.Id,
+                this.keyGenerator.Get());
 
             this.commandService.Execute(createInterviewOnClientCommand);
             return interviewId.FormatGuid();

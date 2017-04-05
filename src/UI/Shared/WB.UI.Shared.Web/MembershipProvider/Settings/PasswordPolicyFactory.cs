@@ -1,4 +1,5 @@
-﻿using WB.UI.Shared.Web.MembershipProvider.Accounts;
+﻿using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.UI.Shared.Web.MembershipProvider.Settings
 {

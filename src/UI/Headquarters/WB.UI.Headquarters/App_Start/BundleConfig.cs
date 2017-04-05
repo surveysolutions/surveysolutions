@@ -12,6 +12,13 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
+            bundles.Add(new ScriptBundle("~/js/troubleshooting-census").Include(
+                "~/Dependencies/build/vue-libs.js",
+                "~/Dependencies/build/vue/troubleshooting-census.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
+                "~/Dependencies/js/searchHighlight.js"
+             ));
+
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.min.css",
@@ -172,8 +179,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/knockout/ko.extenders.js",
                 "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js",
-                "~/Scripts/pages/import-interviews.js"
+                "~/Scripts/knockout/ko.spin.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews").Include(
@@ -264,6 +270,9 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
                 "~/Scripts/pages/export-settings.js"
                 ));
+
+            bundles.Add(new ScriptBundle("~/js/new-ui.js").Include(
+                "~/Scripts/new-ui.js"));
         }
     }
 }

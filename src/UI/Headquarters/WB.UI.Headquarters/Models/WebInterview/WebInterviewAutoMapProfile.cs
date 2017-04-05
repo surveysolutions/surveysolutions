@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
                  .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
                  .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                  .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()))
                  .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeStaticText, InterviewEntity>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeStaticText, InterviewStaticText>()
@@ -113,12 +113,12 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeGroup, InterviewEntity>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeRoster, InterviewEntity>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
 
             this.CreateMap<InterviewTreeGroup, InterviewGroupOrRosterInstance>()
@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.State, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
                 .ForMember(x => x.HasChildren, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled())))
-                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.Text))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
                 .ForMember(x => x.RosterTitle, opts =>
                 {
                     opts.Condition(x => x is InterviewTreeRoster);

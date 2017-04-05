@@ -45,6 +45,10 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Esent.Collections">
       <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.3.2\lib\net40\Esent.Collections.dll</HintPath>
       <Private>True</Private>
@@ -57,10 +61,6 @@
       <HintPath>..\..\..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EventStore.Client.3.9.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
@@ -69,7 +69,7 @@
       <HintPath>..\..\..\packages\FluentMigrator.Tools.1.6.2\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizer, Version=3.0.0.0, Culture=neutral, PublicKeyToken=61c49a1a9e79cc28, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\HtmlSanitizer.3.3.144-beta\lib\net45\HtmlSanitizer.dll</HintPath>
+      <HintPath>..\..\..\packages\HtmlSanitizer.3.4.156\lib\net45\HtmlSanitizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Humanizer, Version=2.0.1.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
@@ -82,10 +82,6 @@
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
@@ -112,8 +108,8 @@
       <HintPath>..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -127,24 +123,24 @@
     <Reference Include="Ninject.Web.Mvc">
       <HintPath>..\..\..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
+    <Reference Include="Nito.AsyncEx, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    <Reference Include="Nito.AsyncEx.Enlightenment, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.4.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Npgsql, Version=3.1.9.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.1.9\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.1.10.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.1.10\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -188,12 +184,9 @@
       <HintPath>..\..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ZetaLongPaths, Version=1.0.0.9, Culture=neutral, PublicKeyToken=b764f59068f31f38, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ZetaLongPaths.1.0.0.9\lib\net40-full\ZetaLongPaths.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InitializationException.cs" />
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
@@ -208,15 +201,6 @@
     <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
-    <Compile Include="Storage\EventStore\EventStoreSettings.cs" />
-    <Compile Include="Storage\EventStore\EventStoreWriteSideModule.cs" />
-    <Compile Include="Storage\EventStore\IEventStoreApiService.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventMetada.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreApiService.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreConnectionProvider.cs" />
-    <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
-    <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
-    <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
     <Compile Include="Storage\NewtonJsonSerializer.cs" />
     <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
@@ -233,6 +217,8 @@
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSidePlainPostgresTransactionManagerWithSessions.cs" />
     <Compile Include="Storage\Postgre\Implementation\SessionHandle.cs" />
+    <Compile Include="Subsystem.cs" />
+    <Compile Include="Threading\AsyncHelper.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />

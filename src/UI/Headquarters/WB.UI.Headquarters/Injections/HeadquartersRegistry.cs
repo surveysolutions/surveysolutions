@@ -19,7 +19,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Infrastructure.Security;
@@ -34,8 +33,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -43,7 +40,6 @@ using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Services;
-using WB.UI.Headquarters.Models.User;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -64,9 +60,6 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
             this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
-            this.Kernel.Bind<IIdentityManager>().To<IdentityManager>();
-            this.Kernel.Bind<IFormsAuthentication>().To<FormsAuthentication>();
-            this.Kernel.Bind<IGlobalInfoProvider>().To<GlobalInfoProvider>();
             this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
@@ -76,8 +69,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IAttachmentContentService>().To<AttachmentContentService>();
             this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
             this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
-            this.Kernel.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
-            this.Kernel.Bind<IUserWebViewFactory>().To<UserWebViewFactory>();
             
             this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
@@ -85,6 +76,8 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
             this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
+
+            this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -140,7 +133,7 @@ namespace WB.UI.Headquarters.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(QuestionnaireMembershipProvider).Assembly,
+                typeof(HeadquartersRegistry).Assembly,
                 typeof(QuestionnaireItemInputModel).Assembly,
                 typeof(HeadquartersBoundedContextModule).Assembly
             });
@@ -159,8 +152,6 @@ namespace WB.UI.Headquarters.Injections
         {
             base.Load();
 
-            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
-
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 
@@ -175,12 +166,11 @@ namespace WB.UI.Headquarters.Injections
 
             this.BindFilter<TransactionFilter>(FilterScope.First, 0)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
+            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
 
             this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-
-            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
             this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
             this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)

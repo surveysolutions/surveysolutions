@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -37,21 +38,21 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             linkedOption3Text = "linked option 3";
 
             var triggerQuestionId= Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
-                Create.Roster(id: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                Abc.Create.Entity.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Abc.Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
                     children: new IComposite[]
                     {
-                        Create.MultyOptionsQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
+                        Abc.Create.Entity.MultyOptionsQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
                             variable: "link_multi")
                     }),
-                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
+                Abc.Create.Entity.Roster(rosterId: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
+                Abc.Create.Entity.Roster(rosterId: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { IntegrationCreate.FixedTitle(0), IntegrationCreate.FixedTitle(1), IntegrationCreate.FixedTitle(2)},
                     children: new IComposite[]
                     {
-                        Create.TextQuestion(id: linkedToQuestionId, variable: "link_source"),
+                        Abc.Create.Entity.TextQuestion(questionId: linkedToQuestionId, variable: "link_source"),
                     })
             });
 
@@ -74,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
         Because of = () =>
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new [] { linkedOption3Vector, linkedOption2Vector });
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new RosterVector[] { linkedOption3Vector, linkedOption2Vector });
 
         Cleanup stuff = () =>
         {

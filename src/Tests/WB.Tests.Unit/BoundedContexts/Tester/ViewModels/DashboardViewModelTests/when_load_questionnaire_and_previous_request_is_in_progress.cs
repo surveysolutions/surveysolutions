@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         Because of = () => viewModel.LoadQuestionnaireCommand.Execute();
 
-        It should_not_be_loaded_new_questionnaire = () => mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireListItem>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Never);
+        It should_not_be_loaded_new_questionnaire = () => mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Never);
         
         private static DashboardViewModel viewModel;
         private static readonly Mock<IDesignerApiService> mockOfDesignerApiService = new Mock<IDesignerApiService>();

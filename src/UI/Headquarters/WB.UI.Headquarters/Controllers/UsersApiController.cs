@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -18,66 +21,56 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class UsersApiController : BaseApiController
     {
-        private readonly IInterviewersViewFactory interviewersFactory;
-        private readonly ISupervisorsViewFactory supervisorsFactory;
-        private readonly IUserListViewFactory usersFactory;
-        public readonly IDeleteSupervisorService deleteSupervisorService;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IUserViewFactory usersFactory;
+        private readonly HqUserManager userManager;
 
         public UsersApiController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
-            IInterviewersViewFactory interviewersFactory,
-            ISupervisorsViewFactory supervisorsFactory,
-            IUserListViewFactory usersFactory, 
-            IDeleteSupervisorService deleteSupervisorService)
-            : base(commandService, provider, logger)
+            IUserViewFactory usersFactory,
+            HqUserManager userManager)
+            : base(commandService, logger)
         {
-            this.interviewersFactory = interviewersFactory;
-            this.supervisorsFactory = supervisorsFactory;
+            this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
-            this.deleteSupervisorService = deleteSupervisorService;
+            this.userManager = userManager;
         }
-
 
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter request)
+        public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter filter)
         {
+            Guid? supervisorId = null;
+
+            if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
+                supervisorId = this.userManager.FindByName(filter.SupervisorName)?.Id;
+
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            var currentUserRole = this.authorizedUser.Role;
+            if (currentUserRole == UserRoles.Supervisor)
+                supervisorId = this.authorizedUser.Id;
 
-            var input = new InterviewersInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                ViewerId = viewerId,
-                Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
-
-                SupervisorName = request.SupervisorName,
-                Archived = request.Archived,
-                ConnectedToDevice = request.ConnectedToDevice
-            };
-
-            var interviewers = this.interviewersFactory.Load(input);
+            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.GetSortOrder(),
+                filter.Search.Value, filter.Archived, filter.ConnectedToDevice, supervisorId);
 
             return new DataTableResponse<InterviewerListItem>
             {
-                Draw = request.Draw + 1,
+                Draw = filter.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
                 Data = interviewers.Items.ToList().Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate =  x.CreationDate,
-
+                    CreationDate =  x.CreationDate.FormatDateWithTime(),
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
-                    DeviceId = x.DeviceId
+                    DeviceId = x.DeviceId,
+                    IsArchived = x.IsArchived
                 })
             };
 
@@ -92,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string Email { get; set; }
             public virtual string DeviceId { get; set; }
             public virtual bool IsLocked { get; set; }
+            public virtual bool IsArchived { get; set; }
         }
 
 
@@ -99,34 +93,14 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView Supervisors(UsersListViewModel data)
-        {
-            var input = new SupervisorsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = false
-            };
-
-            return this.supervisorsFactory.Load(input);
-        }
+            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+                data.SearchBy, false);
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView ArchivedSupervisors(UsersListViewModel data)
-        {
-            var input = new SupervisorsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = true
-            };
-
-            return this.supervisorsFactory.Load(input);
-        }
+            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+                data.SearchBy, true);
 
         [HttpPost]
         [CamelCase]
@@ -163,54 +137,63 @@ namespace WB.UI.Headquarters.Controllers
 
         private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request, UserRoles userRoles)
         {
-            var input = new UserListViewInputModel
-            {
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Role = userRoles,
-                Orders = request.GetSortOrderRequestItems(),
-                SearchBy = request.Search.Value,
-            };
-
-            var headquarters = this.usersFactory.Load(input);
+            var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
+                request.Search.Value, false, userRoles);
 
             return new DataTableResponse<InterviewerListItem>
             {
                 Draw = request.Draw + 1,
-                RecordsTotal = headquarters.TotalCount,
-                RecordsFiltered = headquarters.TotalCount,
-                Data = headquarters.Items.ToList().Select(x => new InterviewerListItem
+                RecordsTotal = users.TotalCount,
+                RecordsFiltered = users.TotalCount,
+                Data = users.Items.ToList().Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate,
+                    CreationDate = x.CreationDate.FormatDateWithTime(),
                     Email = x.Email,
-                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor
+                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
+                    IsArchived = x.IsArchived
                 })
             };
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public JsonCommandResponse DeleteSupervisor(DeleteSupervisorCommandRequest request)
+        public async Task<JsonCommandResponse> DeleteSupervisor(DeleteSupervisorCommandRequest request)
         {
-            var response = new JsonCommandResponse();
-            try
-            {
-                this.deleteSupervisorService.DeleteSupervisor(request.SupervisorId);
-                response.IsSuccess = true;
-            }
-            catch (Exception e)
-            {
-                this.Logger.Error(e.Message, e);
+            var identityResults = await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
 
-                response.IsSuccess = false;
-                response.DomainException = e.Message;
-            }
+            return new JsonCommandResponse
+            {
+                IsSuccess = identityResults.All(result => result.Succeeded),
+                DomainException = string.Join(@"; ", identityResults.Select(result=>result.Errors))
+            };
+        }
 
-            return response;
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
+        {
+            var archiveResults = await this.userManager.ArchiveUsersAsync(request.UserIds, request.Archive);
+
+            return new JsonBundleCommandResponse
+            {
+                CommandStatuses = archiveResults.Select(x =>
+                    new JsonCommandResponse
+                    {
+                        IsSuccess = x.Succeeded,
+                        DomainException = string.Join(@"; ", x.Errors)
+                    }).ToList()
+            };
         }
     }
+
+    public class ArchiveUsersRequest
+    {
+        public Guid[] UserIds { get; set; }
+        public bool Archive { get; set; }
+    }
+
     public class DeleteSupervisorCommandRequest 
     {
         public Guid SupervisorId { get; set; }

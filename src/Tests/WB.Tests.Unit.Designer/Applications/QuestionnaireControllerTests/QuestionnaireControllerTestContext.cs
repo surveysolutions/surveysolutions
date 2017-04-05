@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.SessionState;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -15,7 +16,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {

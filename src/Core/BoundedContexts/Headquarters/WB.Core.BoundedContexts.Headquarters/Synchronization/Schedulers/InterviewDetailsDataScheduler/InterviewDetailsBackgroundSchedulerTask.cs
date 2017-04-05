@@ -6,32 +6,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
     public class InterviewDetailsBackgroundSchedulerTask
     {
         private readonly IScheduler scheduler;
-        private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
 
         public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings)
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting)
         {
             if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
-            if (interviewDetailsDataLoaderSettings == null) throw new ArgumentNullException(nameof(interviewDetailsDataLoaderSettings));
+            if (syncPackagesProcessorBackgroundJobSetting == null) throw new ArgumentNullException(nameof(syncPackagesProcessorBackgroundJobSetting));
             this.scheduler = scheduler;
-            this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
+            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
         }
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<InterviewDetailsBackgroundJob>()
+            IJobDetail job = JobBuilder.Create<SyncPackagesProcessorBackgroundJob>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();
 
 
-            if (this.interviewDetailsDataLoaderSettings.SchedulerEnabled)
+            if (this.syncPackagesProcessorBackgroundJobSetting.Enabled)
             {
                 ITrigger trigger = TriggerBuilder.Create()
                     .WithIdentity("Capi interview packages sync trigger", "Synchronization")
                     .StartNow()
                     .WithSimpleSchedule(x => x
-                        .WithIntervalInSeconds(this.interviewDetailsDataLoaderSettings.SynchronizationInterval)
+                        .WithIntervalInSeconds(this.syncPackagesProcessorBackgroundJobSetting.SynchronizationInterval)
                         .RepeatForever())
                     .Build();
 

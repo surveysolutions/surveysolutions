@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         It should_generate_class_with_V7_namespace_included = () =>
              generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V7");
 
-        private static int version = 13;
+        private static int version = 16;
         private static CodeGenerator generator;
         private static string generatedClassContent;
         private static QuestionnaireDocument questionnaire;

@@ -416,14 +416,14 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
     };
 
     function getInterviewItemIdWithPostfix(questionId, rosterVector, postfix) {
-        return questionId + "_" + rosterVector + "_" + (_.isUndefined(postfix) ? "" : postfix);
+        return questionId.replace(/-/gi, "") + (_.isEmpty(rosterVector) ? "" : rosterVector) + (_.isUndefined(postfix) ? "" : "_" + postfix);
     }
 
     function parseRosterVector(rosterVector) {
-        if (rosterVector == "")
+        if (rosterVector == "" || rosterVector == "_")
             return [];
 
-        return rosterVector.split('_');
+        return rosterVector.substring(1, rosterVector.length).split('-');
     }
 
     function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {

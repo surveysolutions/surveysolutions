@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
+using Main.Core.Entities.SubEntities;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -18,11 +20,10 @@ namespace WB.UI.Headquarters.Controllers
     public class ApiUserController : TeamController
     {
         public ApiUserController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
             ILogger logger,
-            IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher)
-            : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
+            IAuthorizedUser authorizedUser,
+            HqUserManager userManager)
+            : base(commandService, logger, authorizedUser, userManager)
         {
         }
 
@@ -37,74 +38,61 @@ namespace WB.UI.Headquarters.Controllers
         [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult Create(UserModel model)
+        public async Task<ActionResult> Create(UserModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
             if (this.ModelState.IsValid)
             {
-                try
+                var creationResult = await this.CreateUserAsync(model, UserRoles.ApiUser);
+                if (creationResult.Succeeded)
                 {
-                    this.CreateApiWriterUser(model);
+                    this.Success("API User was successfully created");
+                    return this.RedirectToAction("Index");
                 }
-                catch (Exception e)
-                {
-                    this.Logger.Error(e.Message, e);
-                    this.Error(e.Message);
-                    return this.View(model);
-                }
-
-                this.Success("API User was successfully created");
-                return this.RedirectToAction("Index");
+                AddErrors(creationResult);
             }
 
             return this.View(model);
         }
 
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            var user = this.GetUserById(id);
+            var user = await this.userManager.FindByIdAsync(id);
 
             if (user == null) throw new HttpException(404, string.Empty);
+            if (!user.IsInRole(UserRoles.ApiUser)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel
             {
                 UserName = user.UserName,
-                Id = user.PublicKey,
+                Id = user.Id,
                 Email = user.Email,
-                IsLocked = user.IsLockedByHQ
+                IsLocked = user.IsLockedByHeadquaters
             });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(UserEditModel model)
+        public async Task<ActionResult> Edit(UserEditModel model)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var user = this.GetUserById(model.Id);
-                if (user != null)
+                var updateResult = await this.UpdateAccountAsync(model);
+                if (updateResult.Succeeded)
                 {
-                    if (!user.IsAdmin())
-                    {
-                        this.UpdateAccount(user, model);
-                        this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                        return this.RedirectToAction("Index");
-                    }
-
-                    this.Error("Could not update user information because you don't have permission to perform this operation");
+                    this.Success($"Information about <b>{model.UserName}</b> successfully updated");
+                    return this.RedirectToAction("Index");
                 }
-                else
-                {
-                    this.Error("Could not update user information because current user does not exist");
-                }
+                AddErrors(updateResult);
             }
 
-            return this.View(model);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         public ActionResult Index()

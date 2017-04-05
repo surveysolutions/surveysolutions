@@ -1,4 +1,5 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 <div class="form-group">
     @Html.LabelFor(x => x.UserName, new { @class = "col-sm-2 control-label required" })
@@ -36,16 +37,18 @@
         @Html.ValidationMessageFor(x => x.Email, null, new {@class = "help-block"})
     </div>
 </div>
-<div class="form-group">
+@{ Html.EnableClientValidation(false); }
+<div class="form-group @Html.HasErrorClassFor(x => x.PersonName)">
     @Html.LabelFor(x => x.PersonName, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-2">
-        @Html.TextBoxFor(x => x.PersonName, new {@class = "form-control"})
+        @Html.TextBoxFor(x => x.PersonName, new {@class = "form-control", maxlength = UserModel.PersonNameMaxLength })
     </div>
     <div class="col-sm-4">
         @Html.ValidationMessageFor(x => x.PersonName, null, new { @class = "help-block" })
     </div>
 </div>
-<div class="form-group">
+@{ Html.EnableClientValidation(true); }
+<div class="form-group @Html.HasErrorClassFor(x => x.PhoneNumber)" >
     @Html.LabelFor(x => x.PhoneNumber, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-2">
         @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })

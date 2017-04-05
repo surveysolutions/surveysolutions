@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
 {

@@ -125,6 +125,9 @@
     }])
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
+    }])
+    .config(['$qProvider', function ($qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
     }]);
 
     angular.module('templates', []);

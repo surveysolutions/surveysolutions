@@ -37,8 +37,11 @@
 
             self.table = $('table#api-users')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt', function (e, settings, techNote, message) {
-                    location.reload();
+                .on('xhr.dt', function (e, settings, json, xhr) {
+                    if (xhr.status === 401)
+                        location.reload();
+                    else if (xhr.status != undefined && xhr.status !== 200)
+                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
                 })
                 .DataTable({
                     language:
@@ -59,7 +62,7 @@
                             data: "userName",
                             name: "UserName", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href='@Url.Action("Edit", "ApiUser")/"+ row.userId +"'>" + data + "</a>";
+                                return "<a href='@Url.Action("Edit", "ApiUser")/" + row.userId + "'>" + data + "</a>";
                             }
                         },
                         {

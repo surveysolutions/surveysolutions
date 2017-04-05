@@ -19,6 +19,8 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Is Locked Out", Order = 4)]
         public bool IsLockedOut { get; set; }
 
+        public bool CanImportOnHq { get; set; }
+
         [Display(Name = "User name", Order = 1)]
         public string UserName { get; set; }
     }

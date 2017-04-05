@@ -30,11 +30,11 @@ namespace WB.UI.Headquarters.API.Resources
         [HttpGet]
         public HttpResponseMessage Thumbnail()
         {
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey)?.Logo;
+            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
 
             if (companyLogo != null)
             {
-                var stringEtag = this.GetEtagValue(companyLogo);
+                var stringEtag = companyLogo.GetEtagValue();
                 var etag = $"\"{stringEtag}\"";
 
                 var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"];
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.API.Resources
 
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new ByteArrayContent(imageProcessingService.ResizeImage(companyLogo, defaultImageHeightToScale, defaultImageWidthToScale))
+                    Content = new ByteArrayContent(imageProcessingService.ResizeImage(companyLogo.Logo, defaultImageHeightToScale, defaultImageWidthToScale))
                 };
 
                 response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(@"image/png");
@@ -53,16 +53,6 @@ namespace WB.UI.Headquarters.API.Resources
             }
 
             return Request.CreateResponse(HttpStatusCode.NotFound);
-        }
-
-        private string GetEtagValue(byte[] bytes)
-        {
-            using (var hasher = SHA1.Create())
-            {
-                var computeHash = hasher.ComputeHash(bytes);
-                string hash = BitConverter.ToString(computeHash).Replace("-", "");
-                return hash;
-            }
         }
     }
 }

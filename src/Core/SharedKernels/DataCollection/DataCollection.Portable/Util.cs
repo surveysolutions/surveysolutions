@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -10,38 +11,38 @@ namespace WB.Core.SharedKernels.DataCollection
         public static T[] Shrink<T>(this IEnumerable<T> vector)
         {
             var enumerable = vector as T[] ?? vector.ToArray();
-            return enumerable.Take(enumerable.Count() - 1).ToArray();
+            return enumerable.Take(enumerable.Length - 1).ToArray();
         }
 
         public static decimal[] EmptyRosterVector = new decimal[0];
 
         public static decimal[] GetRosterVector(decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            var outerRosterList = outerRosterVector.ToList();
-            outerRosterList.Add(rosterInstanceId);
-            return outerRosterList.ToArray();
+            return outerRosterVector.ExtendWithOneItem(rosterInstanceId);
+        }
+
+        public static int[] GetRosterVector(int[] outerRosterVector, int rosterInstanceId)
+        {
+            return outerRosterVector.ExtendWithOneItem(rosterInstanceId);
         }
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-                StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
+            foreach (var scopeId in scopeIds)
+            {
+                builder.Append("$");
+                builder.Append(scopeId.Id.ToString());
 
-                foreach (var scopeId in scopeIds)
+                foreach (var coordinate in scopeId.RosterVector.Coordinates)
                 {
-                    builder.Append("$");
+                    builder.Append("-");
 
-                    builder.Append(scopeId.Id);
-
-                    foreach (var coordinate in scopeId.RosterVector.Coordinates)
-                    {
-                        builder.Append("-");
-
-                        builder.Append(Convert.ToInt32(coordinate));
-                    }
+                    builder.Append(Convert.ToInt32(coordinate));
                 }
+            }
 
-                builder.Append("|");
-
+            builder.Append("|");
             return builder.ToString();
         }
 
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetSiblingsKey(Identity[] rosterKey)
         {
-            var parentRosterKey = rosterKey.Shrink();//.Select(x => new Identity(x.Id, x.RosterVector.Shrink())).ToArray();
+            var parentRosterKey = rosterKey.Shrink();
             return GetSiblingsKey(parentRosterKey, rosterKey.Last().Id);
         }
 

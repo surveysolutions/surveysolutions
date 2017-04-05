@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                 .RosterIdToRosterTitleQuestionIdMap[rosterGroupId].QuestionId.ShouldEqual(rosterTitleQuestionId);
 
         private static QuestionnaireDocument questionnarie;
-        private static IRostrerStructureService rosterStructureService;
+        private static IRosterStructureService rosterStructureService;
         private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid rosterTitleQuestionId;
         private static Guid rosterGroupId;

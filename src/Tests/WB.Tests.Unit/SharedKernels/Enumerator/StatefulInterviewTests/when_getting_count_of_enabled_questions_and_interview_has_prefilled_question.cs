@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {

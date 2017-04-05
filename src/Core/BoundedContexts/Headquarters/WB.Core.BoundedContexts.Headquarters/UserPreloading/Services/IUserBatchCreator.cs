@@ -1,7 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public interface IUserBatchCreator
     {
-        void CreateUsersFromReadyToBeCreatedQueue();
+        Task CreateUsersFromReadyToBeCreatedQueueAsync();
     }
 }

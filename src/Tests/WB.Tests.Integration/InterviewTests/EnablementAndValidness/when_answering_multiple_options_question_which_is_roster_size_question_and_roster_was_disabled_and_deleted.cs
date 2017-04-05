@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -27,26 +29,26 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var multiOptionQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
-                        options: new List<Answer>{ Create.Option(value: "1", text: "Hello"), Create.Option(value: "2", text: "World") }),
-                    Create.Roster(rosterId, 
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
+                        options: new List<Answer>{ Abc.Create.Entity.Option(value: "1", text: "Hello"), Abc.Create.Entity.Option(value: "2", text: "World") }),
+                    Abc.Create.Entity.Roster(rosterId, 
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
                         enablementCondition: "!q1.Contains(2)",children: new[]
                         {
-                            Create.TextQuestion(idOfQuestionInRoster, variable:"q2")
+                            Abc.Create.Entity.TextQuestion(questionId: idOfQuestionInRoster, variable: "q2")
                         })
                     );
 
                 var emptyVector = new int[] {};
                 var interview = SetupInterview(questionnaireDocument, new object[] { });
 
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new [] { 1 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new [] { 1, 2 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new [] { 2 });
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, emptyVector);
-                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new [] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 1, 2 });
+                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 2 });
+                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, emptyVector);
+                interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, RosterVector.Empty, DateTime.Now, new [] { 1 });
 
                 using (var eventContext = new EventContext())
                 {

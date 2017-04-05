@@ -2,15 +2,16 @@
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     public partial class InterviewTests
     {
         [Test]
-	    public void When_answering_on_categorical_multi_question_linked_to_list_in_roster_and_text_list_outside_roster_Then_answer_should_be_set()
-	    {
-	        //arrange
+        public void When_answering_on_categorical_multi_question_linked_to_list_in_roster_and_text_list_outside_roster_Then_answer_should_be_set()
+        {
+            //arrange
             var textListQuestionId = Guid.Parse("11111111111111111111111111111111");
             var categoricalMultiQuestionId = Guid.Parse("22222222222222222222222222222222");
             var numericRosterSizeId = Guid.Parse("33333333333333333333333333333333");
@@ -39,6 +40,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //assert
             Assert.That(interview.GetMultiOptionLinkedToListQuestion(Identity.Create(categoricalMultiQuestionId,
                 Create.Entity.RosterVector(0))).GetAnswer().CheckedValues, Is.EquivalentTo(new[] {1, 5}));
-	    }
+        }
     }
 }

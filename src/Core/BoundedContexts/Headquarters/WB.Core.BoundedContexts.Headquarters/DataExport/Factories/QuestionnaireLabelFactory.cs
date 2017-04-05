@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             var levelVariableValueLabel = new VariableValueLabel[0];
             if (level.LevelLabels != null)
             {
-                levelVariableValueLabel= level.LevelLabels.Select(x => new VariableValueLabel(x.Caption, x.Title)).ToArray();
+                levelVariableValueLabel= level.LevelLabels.Select(x => new VariableValueLabel(x.Caption, x.Title?.RemoveHtmlTags())).ToArray();
             }
 
             variableLabels.Add(new LabeledVariable(level.LevelIdColumnName, string.Empty, null, levelVariableValueLabel));
@@ -37,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
                     if (hasLabels)
                     {
-                        variableValueLabel = headerItem.Labels.Values.Select(label => new VariableValueLabel(label.Caption, label.Title ?? string.Empty)).ToArray();
+                        variableValueLabel = headerItem.Labels.Values.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
                     }
 
                     variableLabels.Add(new LabeledVariable(headerItem.ColumnNames[i],

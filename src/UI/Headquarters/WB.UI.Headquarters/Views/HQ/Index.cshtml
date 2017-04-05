@@ -1,9 +1,11 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
-@using WB.UI.Headquarters.Resources
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Dashboard.Questionnaires;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var isAdmin = authorizedUser.IsAdministrator;
 }
 
 @section scripts
@@ -34,13 +36,14 @@
 <main>
     <div class="container-fluid">
         <div class="row">
+            @Html.Partial("_alerts")
             <div class="page-header">
                 <h1>@Dashboard.Questionnaires</h1>
             </div>
         </div>
         <div class="well well-sm">
             <div class="btn-group">
-                @if (!(User.Identity.IsObserver()))
+                @if (!(authorizedUser.IsObserver))
                 {
                     <div class="form-inline">
                         <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
@@ -118,7 +121,7 @@
                         <!-- /ko -->
 
 
-                        @if (User.IsInRole("Administrator"))
+                        @if (isAdmin)
                         {
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">

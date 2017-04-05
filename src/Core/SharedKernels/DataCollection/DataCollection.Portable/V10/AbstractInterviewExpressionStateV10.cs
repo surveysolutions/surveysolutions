@@ -143,9 +143,7 @@ namespace WB.Core.SharedKernels.DataCollection.V10
         {
             var rosterStringKey = Util.GetRosterStringKey((rosterIdentityKey));
 
-            var dependentRosters = this.InterviewScopes.Keys
-                .Where(x => x.StartsWith(rosterStringKey, StringComparison.Ordinal))
-                .ToArray();
+            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(rosterStringKey, StringComparison.Ordinal)).ToList();
 
             foreach (var rosterKey in dependentRosters)
             {
@@ -251,8 +249,8 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             {
                 if (sourceRosterVector.Length == linkedRosterVector.Length && linkedRosterVector.Length > 0)
                 {
-                    var linkedParentRosterVector = linkedRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
-                    var sourceParentRosterVector = sourceRosterVector.Take(linkedRosterVector.Length - 1).ToArray();
+                    var linkedParentRosterVector = linkedRosterVector.Take(linkedRosterVector.Length - 1);
+                    var sourceParentRosterVector = sourceRosterVector.Take(linkedRosterVector.Length - 1);
 
                     var doesScopesHasTheSameParent = sourceParentRosterVector.SequenceEqual(linkedParentRosterVector);
                     if (doesScopesHasTheSameParent)
