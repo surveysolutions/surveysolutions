@@ -46,15 +46,15 @@
                 <div class="filters-container">
                     <div class="block-filter">
                         <h5>@Reports.Questionnaire</h5>
-                        <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                        <select id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire', selectPicker: {}"></select>
                     </div>
                     <div class="block-filter">
                         <h5>@Reports.Version</h5>
-                        <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : isVersionsEnabled"></select>
+                        <select id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : isVersionsEnabled, selectPicker: {}"></select>
                     </div>
                     <div class="block-filter">
                         <h5>@Reports.Variables</h5>
-                        <select class="form-control" id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled"></select>
+                        <select id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled, selectPicker: {}"></select>
                     </div>
                     <div class="block-filter" data-bind="visible: markerlimitReached">
                         <div class="alert-warning">
