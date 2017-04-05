@@ -7,7 +7,6 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -16,13 +15,13 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Tests.Abc;
-using WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    internal class when_synchronize_and_need_download_missing_attachments : SynchronizationProcessTestsContext
+    [Subject(typeof(SynchronizationProcess))]
+    internal class when_synchronize_and_need_download_missing_attachments
     {
         Establish context = () =>
         {
@@ -63,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 && x.Exists("5") == false
                 );
 
-            viewModel = CreateSynchronizationProcess(principal: principal,
+            viewModel = Create.Service.SynchronizationProcess(principal: principal,
                 interviewViewRepository: interviewViewRepository,
                 attachmentContentStorage: attachmentContentStorage,
                 synchronizationService: synchronizationService,
