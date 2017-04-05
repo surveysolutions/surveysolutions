@@ -78,22 +78,28 @@
         </div><!-- /.container-fluid -->
     </nav>
 </header>
-    
+@if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
+{
+    <div class="panel view-mode">
     @if (authorizedUser.IsObserving)
     {
-        <div class="panel panel-warning view-mood">
-            <div class="panel-heading">
-                @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
-            </div>
+        <div class="panel-heading panel-warning">
+            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
         </div>
     }
     @if (ViewBag.GlobalNotice != null)
     {
-        <div class="alert alert-info alert-dismissible text-center " role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            @ViewBag.GlobalNotice
+        <div class="panel-heading">
+            <div class="alerts">
+                <div class="alert alert-info alert-dismissible text-center" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    @ViewBag.GlobalNotice
+                </div>
+            </div>
         </div>
     }
+    </div>
+}
 @RenderBody()
     <footer class="footer">
         <div class="container-fluid">
@@ -128,5 +134,26 @@
 
     @Html.Partial("Clickjacking")
     @Html.Partial("GlobalSettings")
+    <script type="text/javascript">
+        var ajustNoticeHeight = function(){
+            var height = $(".view-mode").outerHeight();
+            $('.view-mode + main').css("margin-top", height+"px");
+            $('.wrapper-view-mode').css("padding-top", height);
+            $('.wrapper-view-mode .foldback-button').css("margin-top", height);
+            $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
+        };
+        $(document).ready(function () {
+            $( ".view-mode + main .container-fluid .filters" ).wrapInner( "<div class='wrapper-view-mode'></div>");
+            $( ".view-mode + main .container-fluid .content" ).wrapInner( "<div class='wrapper-view-mode'></div>");
+            ajustNoticeHeight();
+
+            $('.view-mode .alerts .alert').on('closed.bs.alert', function() {
+                ajustNoticeHeight();
+            });
+        });
+        $( window ).resize(function() {
+            ajustNoticeHeight();
+        });
+    </script> 
 </body>
 </html>

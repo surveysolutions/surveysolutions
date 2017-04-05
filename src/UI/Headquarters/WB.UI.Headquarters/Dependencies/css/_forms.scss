@@ -1,6 +1,7 @@
 /* Forms */
 .form-control{
 	box-shadow: none;
+	border-color: $gray_form;
 }
 @include placeholder {
     font-weight: normal !important;
@@ -392,10 +393,14 @@ input.double-checkbox-white{
 	}
 }
 .block-filter {
-	.btn-group.bootstrap-select, .combo-box, .input-group{
+	.btn-group.bootstrap-select, .combo-box, .input-group, .field{
 		margin-left: -10px !important;
 	}
+	.field{
+		width: 295px;
+	}
 } 
+
 .combo-box{
 	position: relative;
 	width: 295px;
@@ -411,7 +416,13 @@ input.double-checkbox-white{
 	}
 	.btn-clear{
 		@extend %visibility-visible;
+		border-left: 1px solid $gray_form;
 	}
+	@media (max-width: $screen-md-min){
+        .btn-clear{
+            right: 0;
+        }
+    }  
 }
 ul.dropdown-menu li, ul.dropdown-menu li *{
 	word-wrap: break-word;
@@ -420,3 +431,62 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 .form-date .input-group.date .form-control{
 	z-index: 0;
 }
+.help-block{
+	margin: 0;
+}
+.profile{
+	.separate-line{
+		max-width: 500px;
+	}
+	.block-filter{
+		.form-group{
+			.field{
+				float: left;
+				margin-right: 20px;
+			}
+			.help-block{
+				float: left;
+				max-width: 400px;
+				display: flex;
+				align-items: center;
+				min-height: 40px;
+			}
+			&:after{
+				display: block;
+				content: "";
+				clear: both;
+			}
+			.single-checkbox + label{
+				margin-left: -5px;
+				font-weight: bold
+			}
+		}
+	}
+}
+@media (max-width: $screen-md-min){
+    .profile{
+		.separate-line{
+			margin-left: 0;
+		}
+    } 
+}
+@media (max-width: 780px){
+	.profile{
+		.separate-line{
+			margin-left: 0;
+		}
+		.block-filter{
+			.form-group{
+				.field{
+					float: none;
+					margin-right: 0;
+				}
+				.help-block{
+					float: none;
+					margin-top: 10px;
+					max-width: 280px;
+				}
+			}
+		}
+	}
+} 

@@ -20,6 +20,7 @@
 	@extend %uppercase-font;
     display: block;
     margin-bottom: 25px;
+	cursor: pointer;
 }
 .btn-file input{
 	display: none;
