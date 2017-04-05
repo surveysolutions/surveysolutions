@@ -103,10 +103,20 @@ declare interface ICompleteInfo {
     entitiesWithError: IEntityWithError[]
 }
 
+declare interface ISamplePrefilledData {
+    questions: IReadonlyPrefilledQuestion[]
+}
+declare interface IReadonlyPrefilledQuestion{
+    answer: string,
+    title: string
+}
+
 declare interface IWebInterviewApi {
     getInterviewDetails(): IInterviewInfo
 
     getPrefilledEntities(): IPrefilledPageData
+    getSamplePrefilled(): ISamplePrefilledData
+
     hasPrefilledQuestions(): boolean
     isEnabled(id: string): boolean
     getSectionEntities(sectionId: string): IInterviewEntityWithType[]

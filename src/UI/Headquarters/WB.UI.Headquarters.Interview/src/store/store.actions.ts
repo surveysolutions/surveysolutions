@@ -7,7 +7,7 @@ import { batchedAction } from "../helpers"
 import router from "./../router"
 
 export default {
-    onBeforeNavigate({commit}) {
+    onBeforeNavigate({ commit }) {
         commit("RESET_LOADED_ENTITIES_COUNT")
     },
 
@@ -23,7 +23,7 @@ export default {
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
-    fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
+    fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
@@ -181,6 +181,11 @@ export default {
     fetchInterviewStatus: debounce(async ({ commit }) => {
         const interviewState = await apiCaller(api => api.getInterviewStatus())
         commit("SET_INTERVIEW_STATUS", interviewState)
+    }, 200),
+
+    fetchSamplePrefilled: debounce(async ({ commit }) => {
+        const coverInfo = await apiCaller<ISamplePrefilledData>(api => api.getSamplePrefilled())
+        commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
     completeInterview({ dispatch }, comment: string) {

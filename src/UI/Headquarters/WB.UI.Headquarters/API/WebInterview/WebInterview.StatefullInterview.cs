@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -65,6 +64,24 @@ namespace WB.UI.Headquarters.API.WebInterview
         public string GetInterviewStatus()
         {
             return GetInterviewSimpleStatus().ToString();
+        }
+
+        public SamplePrefilledData GetSamplePrefilled()
+        {
+            var interview = this.GetCallerInterview();
+            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
+                .GetPrefilledQuestions()
+                .Select(x => new ReadonlyPrefilledQuestion
+                {
+                    Answer = interview.GetAnswerAsString(new Identity(x, RosterVector.Empty)),
+                    Title = interview.GetQuestion(new Identity(x, RosterVector.Empty)).Title.BrowserReadyText
+                })
+                .ToList();
+
+            return new SamplePrefilledData
+            {
+                Questions = interviewEntityWithTypes
+            };
         }
 
         public PrefilledPageData GetPrefilledEntities()
