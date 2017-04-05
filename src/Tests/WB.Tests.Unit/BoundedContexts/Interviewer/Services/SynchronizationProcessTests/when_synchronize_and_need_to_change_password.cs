@@ -13,11 +13,13 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    internal class when_synchronize_and_need_to_change_password : SynchronizationProcessTestsContext
+    [Subject(typeof(SynchronizationProcess))]
+    internal class when_synchronize_and_need_to_change_password
     {
         private Establish context = () =>
         {
@@ -53,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.FirstOrDefault())
                 .Returns(interviewerIdentity);
 
-            viewModel = CreateSynchronizationProcess(principal: principalMock.Object,
+            viewModel = Create.Service.SynchronizationProcess(principal: principalMock.Object,
                 synchronizationService: synchronizationServiceMock.Object,
                 interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,

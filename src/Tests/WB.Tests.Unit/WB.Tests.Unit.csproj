@@ -521,7 +521,6 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_with_filtered_options.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\SynchronizationProcessTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\SynchronizationViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_password.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_need_download_attachments.cs" />
@@ -1085,7 +1084,6 @@
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\TeamUsersAndQuestionnairesFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\when_questionnaire_is_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_supervisors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SqliteInmemoryStorage.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
