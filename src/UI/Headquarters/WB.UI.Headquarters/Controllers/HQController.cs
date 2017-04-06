@@ -71,6 +71,18 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(this.Filters());
         }
 
+        public ActionResult InterviewsRedesigned(Guid? questionnaireId)
+        {
+            if (questionnaireId.HasValue)
+            {
+                this.Success(
+                    $@"{HQ.InterviewWasCreated} <a class=""btn btn-success"" href=""{this.Url.Action("TakeNew", "HQ",
+                        new { id = questionnaireId.Value })}""><i class=""icon-plus""></i>{HQ.CreateOneMore}</a>");
+            }
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            return this.View(this.Filters());
+        }
+
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(Guid id, long version)
