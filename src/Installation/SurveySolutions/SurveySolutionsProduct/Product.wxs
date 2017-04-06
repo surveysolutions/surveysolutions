@@ -11,7 +11,7 @@
              Version="$(var.SurveySolutionsVersion)" 
              Manufacturer="The World Bank" 
              UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
-        
+
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
         <!--not supported in wix 3.10 should be in 3.11 and 4-->
@@ -29,7 +29,9 @@
         <!--<Property Id="CONNSTRING"/>-->
         <Property Id="SITEPORT" Value="9700"></Property>
         
-        <Property Id="CONNSTRING" Value="Server=127.0.0.1;Port=5432;User Id=postgres;Password=Password;Database=SuperHQ;"></Property>
+        <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
+        <Property Id="CONNPORT" Value="5432"></Property>
+        <Property Id="CONNUSERNAME" Value="postgres"></Property>
         
         <UI>
 
@@ -191,7 +193,7 @@
                               Action="setValue"
                               ElementPath="//configuration/connectionStrings/add"
                               Name="connectionString"
-                              Value="[CONNSTRING]"
+                              Value="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SuperHQ;"
                               Sequence='5'/>
                 
                 <!--<add key="EventStore.Provider" value="Postgres" />-->
@@ -308,7 +310,18 @@
             <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
 
             <Control Id="ConnStringLabel" Type="Text" X="20" Y="60" Width="290" Height="30" NoPrefix="yes" Text="!(loc.ConnectionStringDlgLabel)" />
-            <Control Id="ConnStringTextbox" Type="Edit" X="20" Y="100"  Height="18" Width="320" Property="CONNSTRING"  />
+
+            <Control Id="CONNSERVERLabel" Type="Text" X="20" Y="102" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringServerDlgLabel)" />
+            <Control Id="CONNSERVERTextbox" Type="Edit" X="90" Y="100"  Height="18" Width="260" Property="CONNSERVER"  />
+
+            <Control Id="CONNPORTLabel" Type="Text" X="20" Y="132" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringPortDlgLabel)" />
+            <Control Id="CONNPORTTextbox" Type="Edit" X="90" Y="130"  Height="18" Width="260" Property="CONNPORT"  />
+
+            <Control Id="CONNUSERNAMELabel" Type="Text" X="20" Y="162" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringUserNameDlgLabel)" />
+            <Control Id="CONNUSERNAMETextbox" Type="Edit" X="90" Y="160"  Height="18" Width="260" Property="CONNUSERNAME"  />
+
+            <Control Id="CONNPASSWORDLabel" Type="Text" X="20" Y="192" Width="50" Height="18" NoPrefix="yes" Text="!(loc.ConnectionStringPasswordDlgLabel)" />
+            <Control Id="CONNPASSWORDTextbox" Type="Edit" X="90" Y="190" Height="18" Width="260" Property="CONNPASSWORD" Password="yes"/>
 
         </Dialog>
         </UI>
