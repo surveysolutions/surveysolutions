@@ -240,11 +240,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
-            throw new Exception("Test exception");
-            //var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
-            //this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
-            //this.Tree.GetQuestion(questionIdentity).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
-            //this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+            this.Tree.GetQuestion(questionIdentity).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
+            this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
         }
 
         public virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
