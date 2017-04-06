@@ -6,6 +6,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string Answer { get; set; }
         public string Title { get; set; }
+        public string Type { get; set; }
     }
 
     public class SamplePrefilledData

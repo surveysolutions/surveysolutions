@@ -108,7 +108,8 @@ declare interface ISamplePrefilledData {
 }
 declare interface IReadonlyPrefilledQuestion{
     answer: string,
-    title: string
+    title: string,
+    type: string
 }
 
 declare interface IWebInterviewApi {

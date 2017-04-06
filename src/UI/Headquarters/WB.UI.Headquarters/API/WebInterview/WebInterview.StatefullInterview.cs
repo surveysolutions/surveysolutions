@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
@@ -9,8 +10,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -71,17 +74,45 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interview = this.GetCallerInterview();
             var interviewEntityWithTypes = this.GetCallerQuestionnaire()
                 .GetPrefilledQuestions()
-                .Select(x => new ReadonlyPrefilledQuestion
-                {
-                    Answer = interview.GetAnswerAsString(new Identity(x, RosterVector.Empty)),
-                    Title = interview.GetQuestion(new Identity(x, RosterVector.Empty)).Title.BrowserReadyText
-                })
+                .Select(x => this.GetReadonlyPrefilledQuestion(x, interview))
                 .ToList();
 
             return new SamplePrefilledData
             {
                 Questions = interviewEntityWithTypes
             };
+        }
+
+        private ReadonlyPrefilledQuestion GetReadonlyPrefilledQuestion(Guid questionId, IStatefulInterview interview)
+        {
+            var question = new ReadonlyPrefilledQuestion();
+            var entityType = this.GetEntityType(questionId);
+            question.Type = entityType.ToString();
+            var questionIdentity = new Identity(questionId, RosterVector.Empty);
+            question.Title = interview.GetQuestion(questionIdentity).Title.BrowserReadyText;
+
+            if (entityType == InterviewEntityType.Gps)
+            {
+                GpsAnswer questionAnswer = interview.GetQuestion(questionIdentity).AsGps.GetAnswer();
+                string answer = questionAnswer?.Value != null ? $"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
+                question.Answer = answer;
+            }
+            if (entityType == InterviewEntityType.DateTime && interview.GetQuestion(questionIdentity).AsDateTime.IsTimestamp)
+            {
+                var dateQuestion = interview.GetQuestion(questionIdentity).AsDateTime;
+
+                DateTimeAnswer questionAnswer = dateQuestion.GetAnswer();
+                string answer = questionAnswer?.Value != null
+                    ? $"<time datetime=\"{questionAnswer.Value:o}\">{interview.GetAnswerAsString(questionIdentity)}</time>"
+                    : null;
+                question.Answer = answer;
+            }
+            else
+            {
+                question.Answer = interview.GetAnswerAsString(questionIdentity, CultureInfo.InvariantCulture);
+            }
+
+            return question;
         }
 
         public PrefilledPageData GetPrefilledEntities()
