@@ -98,7 +98,7 @@
         <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
         <ComponentGroupRef Id="ProductComponents" />
           
-        <ComponentGroupRef Id="SettingsUpdate" />
+        <ComponentGroupRef Id="SettingsUpdate"  />
         </Feature>
     </Product>
     
@@ -149,10 +149,10 @@
                 
         </ComponentGroup>
         
-        <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER">
-                <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA">
+        <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER" >
+                <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
                 <CreateFolder/>
-                <File Source="Headquarters.Web.config" PatchIgnore="yes"/>
+                <File Source="Headquarters.Web.config" PatchIgnore="yes" />
 
                 <!--<connectionStrings>
                            <add name="Postgres" connectionString="Persist Security Info=true;Server=prod-db.mysurvey.solutions;Port=5432;User Id=brpdsa;Password=Qwerty1234;Database=brpdsa;ApplicationName=brpdsa" />
