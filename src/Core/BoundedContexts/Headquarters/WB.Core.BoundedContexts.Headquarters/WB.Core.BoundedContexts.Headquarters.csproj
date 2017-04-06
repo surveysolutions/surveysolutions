@@ -434,6 +434,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Troubleshooting.Designer.cs">
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Troubleshooting.ru.Designer.cs">
+      <DependentUpon>Troubleshooting.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\UserPreloadingServiceMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -813,6 +823,16 @@
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Troubleshooting.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">

@@ -278,6 +278,11 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/chart").Include(
+                "~/Scripts/ko.pager.js",
+                "~/Scripts/viewmodels/listview.js",
+                "~/Scripts/components/bindings.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js",
                 "~/Scripts/query-string.js",
                 "~/Scripts/jqPlot/jquery.jqplot.js",
                 "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js",

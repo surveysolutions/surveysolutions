@@ -13,10 +13,11 @@
 
     self.FromDate = ko.observable(null);
     self.ToDate = ko.observable(null);
-
+    self.StartDate = ko.observable(null);
+    
     self.TemplateName = ko.observable();
 
-    self.SelectedRange = ko.observable();
+    var flatpickr = null;
 
     self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
@@ -48,38 +49,39 @@
 
         self.SendRequest(self.ServiceUrl, params, function (data) {
             self.setReportRange(data.From, data.To);
+            self.StartDate(moment(data.StartDate).toDate());
+            flatpickr.redraw();
             self.Stats = data;
             self.drawChart();
         });
     };
 
-    $("#dates-range").flatpickr({
+    flatpickr = $("#dates-range").flatpickr({
         mode: "range",
-        dateFormat: dateFormat,
-        maxDate: "today"
-    });
-    //$("#dates-range").daterangepicker({
-    //    locale: {
-    //        format: dateFormat
-    //    },
-    //    maxDate: new Date()
-    //},
-    //function (start, end) {
-    //    self.setReportRange(start, end);
-    //    self.FromDate(start);
-    //    self.ToDate(end);
+        maxDate: "today",
+        wrap: true,
+        onChange: function (selectedDates, dateStr, instance) {
+            var start = selectedDates.length > 0 ? selectedDates[0] : null;
+            var end = selectedDates.length > 1 ? selectedDates[1] : null;
 
-    //    self.initChart();
-    //});
+            if (start != null && end != null) {
+                self.FromDate(start);
+                self.ToDate(end);
+
+                self.initChart();
+            }
+        },
+        disable: [
+            function (date) {
+                return date < self.StartDate(); // return true to disable
+            }
+        ]
+    });
 
     self.setReportRange = function (start, end) {
         if (!start || !end) return;
 
-        var formatedStartDate = start.format(dateFormat);
-        var formatedEndDate = end.format(dateFormat);
-        self.SelectedRange(formatedStartDate + "/" + formatedEndDate);
-        $('#dates-range').data('daterangepicker').setStartDate(moment(start));
-        $('#dates-range').data('daterangepicker').setEndDate(moment(end));
+        flatpickr.setDate([moment(start).toDate(), moment(end).toDate()], false);
     };
 
     self.drawChart = function () {
