@@ -12,7 +12,8 @@
                             Any answers you provide are sent to our system right away.
                             If you experience a communication disruption you can return to the questionnaire 
                             by following the same link you prowided so far retained for you.
-                            You can then continue by submitting new answers or revising earlier answers.</b>
+                            You can then continue by submitting new answers or revising earlier answers. 
+                    </b>
                 </p>
             </div>
         </div>
@@ -21,7 +22,12 @@
             <div class="container-info">
                 <p v-html="question.title"></p>
                 <p>
-                    <b>{{question.answer}}</b>
+                    <b v-if="question.type == 'Gps'">
+                        <a :href="getGpsUrl(question)" target="_blank">{{question.answer}}</a>
+                    </b>
+                    <b v-else-if="question.type == 'DateTime'" v-dateTimeFormatting v-html="question.answer">
+                    </b>
+                    <b v-else>{{question.answer}}</b>
                 </p>
             </div>
         </div>
@@ -49,6 +55,9 @@
         methods: {
             fetch() {
                 this.$store.dispatch("fetchSamplePrefilled")
+            },
+            getGpsUrl(question: IReadonlyPrefilledQuestion) {
+                return `http://maps.google.com/maps?q=${question.answer}`
             }
         }
     }
