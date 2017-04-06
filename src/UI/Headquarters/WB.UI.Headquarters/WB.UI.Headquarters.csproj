@@ -1110,6 +1110,7 @@
     <Content Include="Views\Troubleshooting\DataIsMissing.cshtml" />
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
+    <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
