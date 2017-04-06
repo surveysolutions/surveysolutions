@@ -39,8 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
         };
 
-        Because of = () =>
-            result = interviewersViewFactory.GetInterviewers(0, 20, "DeviceId", null, false, true, null);
+        Because of = () => result = interviewersViewFactory.GetInterviewers(0, 20, "DeviceId", null, false, InterviewerOptionFilter.Outdated, null, null);
 
         It should_return_3_interviewers = () =>
         {

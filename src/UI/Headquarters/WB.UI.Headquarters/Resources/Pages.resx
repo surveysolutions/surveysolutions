@@ -539,8 +539,8 @@
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
     <value>Supervisor</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Connected to the server</value>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>Interviewer version</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Archive status</value>
@@ -650,6 +650,15 @@
   <data name="AnyOption" xml:space="preserve">
     <value>Any</value>
   </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Not synced</value>
+  </data>  
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>Up to date</value>
+  </data>  
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Outdated</value>
+  </data>
   <data name="Upload_Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
@@ -725,8 +734,8 @@
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Login name of the interviewer’s supervisor</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
-    <value>Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server</value>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>Interviewer version reported during last synchronization of his/her tablet to the server</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Language</value>

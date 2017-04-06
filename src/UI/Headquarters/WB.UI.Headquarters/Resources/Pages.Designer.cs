@@ -1330,24 +1330,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connected to the server.
-        /// </summary>
-        public static string Interviewers_ConnectedToDeviceTitle {
-            get {
-                return ResourceManager.GetString("Interviewers_ConnectedToDeviceTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server.
-        /// </summary>
-        public static string Interviewers_ConnectedToDeviceTooltip {
-            get {
-                return ResourceManager.GetString("Interviewers_ConnectedToDeviceTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Account creation date.
         /// </summary>
         public static string Interviewers_CreationDateTitle {
@@ -1384,11 +1366,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer version.
+        /// </summary>
+        public static string Interviewers_InterviewerVersion {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewerVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer version reported during last synchronization of his/her tablet to the server.
+        /// </summary>
+        public static string Interviewers_InterviewerVersionTooltip {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewerVersionTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not connected.
         /// </summary>
         public static string Interviewers_NotConnected {
             get {
                 return ResourceManager.GetString("Interviewers_NotConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not synced.
+        /// </summary>
+        public static string Interviewers_NotSyncedOption {
+            get {
+                return ResourceManager.GetString("Interviewers_NotSyncedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outdated.
+        /// </summary>
+        public static string Interviewers_OutdatedOption {
+            get {
+                return ResourceManager.GetString("Interviewers_OutdatedOption", resourceCulture);
             }
         }
         
@@ -1434,6 +1452,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_Unarchive {
             get {
                 return ResourceManager.GetString("Interviewers_Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Up to date.
+        /// </summary>
+        public static string Interviewers_UpToDateOption {
+            get {
+                return ResourceManager.GetString("Interviewers_UpToDateOption", resourceCulture);
             }
         }
         
