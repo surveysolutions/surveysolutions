@@ -372,8 +372,13 @@
     <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
+    <Compile Include="Migrator\DataMigration.cs" />
+    <Compile Include="Migrator\DataMigrationInfo.cs" />
+    <Compile Include="Migrator\DataMigrator.cs" />
+    <Compile Include="Migrator\IDataMigrationContext.cs" />
     <Compile Include="OwinSecurityModule.cs" />
     <Compile Include="OwinSecurity\HqPasswordValidator.cs" />
+    <Compile Include="OwinSecurity\Migrations\UsersToIdentityMigration.cs" />
     <Compile Include="OwinSecurity\Providers\ApiAuthTokenProvider.cs" />
     <Compile Include="OwinSecurity\Providers\HashCompatibilityProvider.cs" />
     <Compile Include="OwinSecurity\HqSignInManager.cs" />

@@ -47,6 +47,18 @@
       <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework6.Npgsql, Version=3.1.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EventStore.Client.3.9.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
@@ -173,6 +185,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
@@ -516,6 +529,10 @@
     <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />
     <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
     <Compile Include="UtilsTest\CreateClassShouldNotContainAdditionalMethods.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\DropCreateDatabaseWithDataMigration.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\When_migration_success_DataMigratorTests.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\TestEntity.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\When_one_of_migration_fails_DataMigratorTests.cs" />
     <Compile Include="UtilsTest\GuidExtensionsTests.cs" />
     <Compile Include="UtilsTest\UtilTests.cs" />
     <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
