@@ -126,6 +126,15 @@
   <data name="AnyOption" xml:space="preserve">
     <value>Любой</value>
   </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Несинхронизированные</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>Актуальная</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Устаревшая</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
   </data>
@@ -333,8 +342,8 @@
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Подключен к планшету</value>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>Версия интервьюера</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Создан</value>
@@ -582,8 +591,8 @@
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Имя супервизора</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
-    <value>Была ли произведена первая успешная синхронизация с его/её планшетом</value>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>Версия интервьювера полученная по время последней синхронизации планшета</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (вер. {1})</value>

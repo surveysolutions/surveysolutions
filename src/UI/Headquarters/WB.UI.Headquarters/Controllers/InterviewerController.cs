@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
@@ -12,12 +11,10 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -30,26 +27,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
-        private readonly IAndroidPackageReader androidPackageReader;
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
 
         public InterviewerController(ICommandService commandService, 
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager,
                               IQueryableReadSideRepositoryReader<InterviewSummary>  interviewRepository,
-                              IDeviceSyncInfoRepository deviceSyncInfoRepository,
-                              IAndroidPackageReader androidPackageReader,
-                              IFileSystemAccessor fileSystemAccessor)
+                              IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
-            this.androidPackageReader = androidPackageReader;
-            this.fileSystemAccessor = fileSystemAccessor;
+            this.interviewerVersionReader = interviewerVersionReader;
         }
-
-
+        
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> Create(Guid? supervisorId)
         {
@@ -60,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new InterviewerModel() {SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName});
+            return this.View(new InterviewerModel {SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName});
         }
 
         [HttpPost]
@@ -107,14 +99,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (lastSuccessDeviceInfo != null)
             {
-                string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
-
-                int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                    ? null
-                    : this.androidPackageReader.Read(pathToInterviewerApp).Version;
-
-                hasUpdateForInterviewerApp =  interviewerApkVersion.HasValue && (interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion);
-            }
+                int? interviewerApkVersion = interviewerVersionReader.Version;
+                hasUpdateForInterviewerApp =  interviewerApkVersion.HasValue && interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
+            }  
 
             var interviewerProfileModel = new InterviewerProfileModel
             {
