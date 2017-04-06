@@ -30,6 +30,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Apply
 
+        public override void Apply(InterviewCreated @event)
+        {
+            base.Apply(@event);
+            this.sourceInterview = this.Tree.Clone();
+        }
+
         public override void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId,
