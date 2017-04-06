@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -45,7 +46,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 : this.interviewSummaryReader.Query(q => q.Where(x => x.Key == interviewKey).Take(1).ToList()).SingleOrDefault();
 
             if (interview == null)
-                return "The interview was not found";
+                return Troubleshooting.NoData_NotFound;
+
+            var questionnaire = questionnaireFactory.GetById(new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
+
+            if (interview.IsDeleted || interview.Status == InterviewStatus.Deleted)
+            {
+                if (questionnaire.IsDeleted)
+                    return Troubleshooting.NoData_QuestionnaireDeleted;
+
+                return Troubleshooting.NoData_InterviewDeleted;
+            }
 
             BrokenInterviewPackage lastBrokenPackage = brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
 
@@ -53,61 +64,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             
             var lastUploadedInterviewIsBroken = interviewLog.LastUploadInterviewDate <= lastBrokenPackage?.IncomingDate;
 
-            if (!statusesEligibleForSyncronization.Contains(interview.Status))
+            if (lastUploadedInterviewIsBroken)
             {
-                if (lastUploadedInterviewIsBroken)
+                if (lastBrokenPackage?.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString())
                 {
-                    return "Contact support to recover interview";
+                    return Troubleshooting.NoData_InterviewWasReassigned;
                 }
-                return "The interview is out of interviewer's responsibility";
+
+                return Troubleshooting.NoData_ContactSupport;
             }
 
-            var questionnaire = questionnaireFactory.GetById(new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
-
-            if (interview.IsDeleted || interview.Status == InterviewStatus.Deleted)
+            var interviewIsOnServer = !this.statusesEligibleForSyncronization.Contains(interview.Status);
+            if (interviewIsOnServer)
             {
-                if (questionnaire.IsDeleted)
-                    return " The interview was deleted with its template and cannot be restored";
-
-                return "The interview was deleted";
+                return Troubleshooting.NoData_NoIssuesInterviewOnServer;
             }
 
             if (interview.ReceivedByInterviewer == false)
             {
-                if (lastUploadedInterviewIsBroken && interviewLog.InterviewWasNotDownloadedAfterItWasUploaded)
-                {
-                    return "Contact support to recover interview";
-                }
-                return $"The interview was not recieved by responsible interviewer {interview.ResponsibleName}";
-            }
-
-            if (lastBrokenPackage!=null && 
-                lastBrokenPackage.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString() && 
-                lastUploadedInterviewIsBroken)
-            {
-                return "The interview was re-assigned. Recieved oackage was not applied";
-            }
-
-            if (lastBrokenPackage != null &&
-                lastBrokenPackage.ExceptionType == "Unexpected" && 
-                lastUploadedInterviewIsBroken)
-            {
-                return "Survey solutions team should be contacted.";
+                return string.Format(Troubleshooting.NoData_InterviewWasNotReceived, interview.ResponsibleName);
             }
             
-            if (interviewLog.IsInterviewOnDevice && interviewLog.WasDeviceLinkedAfterInterviewWasDownloaded)
-                return "The interview can be deleted by interviewer if it is marked as received and after that, there is record that tablet was cleared. Get back to interviewer";
-
             if (interviewLog.IsInterviewOnDevice)
             {
+                if (interviewLog.WasDeviceLinkedAfterInterviewWasDownloaded)
+                {
+                    return Troubleshooting.NoData_InterviewerChangedDevice;
+                }
+
                 if (interviewLog.InterviewerChangedDeviceBetweenDownloads)
                 {
-                    return "The interview was not uploaded by an interviewer yet, but user changed devices, so make sure started interviews were not deleted during this process";
+                    return Troubleshooting.NoData_InterviewerChangedDevice;
                 }
-                return "The interview was not uploaded by an interviewer yet";
+                return Troubleshooting.NoData_InterveiwWasNotUploadedYet;
             }
 
-            return "Unknown";
+            return Troubleshooting.NoData_ContactSupportWithMoreDetails;
         }
     }
 }
