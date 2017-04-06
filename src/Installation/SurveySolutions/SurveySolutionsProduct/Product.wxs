@@ -6,7 +6,7 @@
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
     <Product Id="EE5F1DD2-13D8-442C-9978-8E8918EA789D" 
-             Name="SurveySolutionsSite" 
+             Name="SurveySolutions" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
              Manufacturer="The World Bank" 
@@ -23,9 +23,9 @@
             
         
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]> 
+            <![CDATA[Installed OR (VersionNT64 >= 603 )]]> 
         </Condition>
-
+<!--AND MsiNTProductType > 1-->
         <!--<Property Id="CONNSTRING"/>-->
         <Property Id="SITEPORT" Value="9700"></Property>
         
@@ -59,7 +59,8 @@
 
         </UI>
         
-        <WixVariable Id="WixUIInfoIco" Value="img/icon-32.bmp" />
+        <!--<WixVariable Id="WixUIInfoIco" Value="img/icon-32.bmp" />-->
+        
         <UIRef Id="WixUI_InstallDir" />
         
         <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
@@ -290,7 +291,7 @@
 
     <Fragment>
         <UI>
-        <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="SurveySolutions">
+        <Dialog Id="ConnectionStringDlg" Width="370" Height="270" Title="!(loc.ConnectionStringDlg_Title)">
             
             <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
             <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
@@ -300,13 +301,14 @@
 
             <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ConnectionStringDlgDescription)" />
             
-            <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="Connection string" />
-            <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
-            <!--Text="!(loc.ConnectionStringBannerBitmap)"-->
+            <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ConnectionStringDlgTitle)" />
+            <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.ConnectionStringDlgBannerBitmap)" />
+            
             <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
             <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
 
-            <Control Id="connStringTextbox" Type="Edit" X="20" Y="100"  Height="18" Width="320" Property="CONNSTRING"  />
+            <Control Id="ConnStringLabel" Type="Text" X="20" Y="60" Width="290" Height="30" NoPrefix="yes" Text="!(loc.ConnectionStringDlgLabel)" />
+            <Control Id="ConnStringTextbox" Type="Edit" X="20" Y="100"  Height="18" Width="320" Property="CONNSTRING"  />
 
         </Dialog>
         </UI>

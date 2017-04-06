@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
 
-    <Bundle Name="SurveySolutions Installation"
+    <Bundle Name="SurveySolutions"
             Version="$(var.SurveySolutionsVersion)"
             Manufacturer="The World Bank"
             UpgradeCode="5189a6c7-c50d-4dc5-8205-7a3c78e289c9">
@@ -38,7 +38,8 @@
               DisplayInternalUI="yes"
               Vital="yes"
               InstallCondition="VersionNT64"
-              SourceFile="$(var.SurveySolutions.TargetPath)" />
+              SourceFile="$(var.SurveySolutions.TargetPath)" >
+            </MsiPackage>
         </Chain>
     </Bundle>
     
@@ -60,8 +61,6 @@
         <PackageGroup Id="NetFx462WebLocal">
             <ExePackage Id="NetFx462WebLocal"
                     InstallCommand="/passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
-                    RepairCommand="/passive /showrmui /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot;"
-                    UninstallCommand="/uninstall /passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
                     PerMachine="yes"
                     Cache="no"
                     Compressed="yes"
@@ -74,6 +73,8 @@
                 <ExitCode Behavior="forceReboot" Value="3010" />
                 <ExitCode Behavior="success" Value="0" />
             </ExePackage>
+            <!--RepairCommand="/passive /showrmui /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot;"
+                    UninstallCommand="/uninstall /passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"-->
         </PackageGroup>
     </Fragment>
 </Wix>
