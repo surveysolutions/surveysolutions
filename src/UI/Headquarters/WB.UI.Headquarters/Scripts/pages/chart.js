@@ -53,19 +53,24 @@
         });
     };
 
-    $("#dates-range").daterangepicker({
-        locale: {
-            format: dateFormat
-        },
-        maxDate: new Date()
-    },
-    function (start, end) {
-        self.setReportRange(start, end);
-        self.FromDate(start);
-        self.ToDate(end);
-
-        self.initChart();
+    $("#dates-range").flatpickr({
+        mode: "range",
+        dateFormat: dateFormat,
+        maxDate: "today"
     });
+    //$("#dates-range").daterangepicker({
+    //    locale: {
+    //        format: dateFormat
+    //    },
+    //    maxDate: new Date()
+    //},
+    //function (start, end) {
+    //    self.setReportRange(start, end);
+    //    self.FromDate(start);
+    //    self.ToDate(end);
+
+    //    self.initChart();
+    //});
 
     self.setReportRange = function (start, end) {
         if (!start || !end) return;
