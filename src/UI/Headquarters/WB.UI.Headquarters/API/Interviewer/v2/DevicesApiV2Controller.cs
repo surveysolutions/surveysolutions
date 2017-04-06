@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -23,6 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
+        private readonly HqUserManager userManager;
 
         public DevicesApiV2Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
@@ -40,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         {
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.syncLogRepository = syncLogRepository;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -49,9 +53,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public override HttpResponseMessage LinkCurrentInterviewerToDevice(string id, int version) => base.LinkCurrentInterviewerToDevice(id, version);
 
         [HttpPost]
-        public IHttpActionResult Info(DeviceInfoApiView info)
+        public async Task<IHttpActionResult> Info(DeviceInfoApiView info)
         {
             var deviceLocation = info.DeviceLocation;
+            
+            var user = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
+
+            if (user == null) return this.Unauthorized();
+
             this.deviceSyncInfoRepository.AddOrUpdate(new DeviceSyncInfo
             {
                 SyncDate = DateTime.UtcNow,
@@ -87,6 +96,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 StorageFreeInBytes = info.StorageInfo?.Free ?? 0,
                 StorageTotalInBytes = info.StorageInfo?.Total ?? 0
             });
+
+            user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
+            user.Profile.DeviceAppVersion = info.AppVersion;
+
+            await this.userManager.UpdateAsync(user);
 
             return this.Ok();
         }

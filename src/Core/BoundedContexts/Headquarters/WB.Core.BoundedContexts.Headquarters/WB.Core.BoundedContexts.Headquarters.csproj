@@ -377,6 +377,7 @@
     <Compile Include="Migrator\DataMigrator.cs" />
     <Compile Include="Migrator\IDataMigrationContext.cs" />
     <Compile Include="OwinSecurityModule.cs" />
+    <Compile Include="OwinSecurity\Migrations\AddDeviceAppVersionToUserProfileMigration.cs" />
     <Compile Include="OwinSecurity\HqPasswordValidator.cs" />
     <Compile Include="OwinSecurity\Migrations\UsersToIdentityMigration.cs" />
     <Compile Include="OwinSecurity\Providers\ApiAuthTokenProvider.cs" />

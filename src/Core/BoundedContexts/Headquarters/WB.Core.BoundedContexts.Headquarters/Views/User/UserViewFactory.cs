@@ -132,15 +132,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, bool? hasDevice, Guid? supervisorId)
+        public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, 
+            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? appBuildVersion, Guid? supervisorId)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
                 var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
 
-                if (hasDevice.HasValue)
-                    interviewers = interviewers.Where(x => (x.Profile.DeviceId != null) == hasDevice.Value);
-
+                switch (interviewerOptionFilter)
+                {
+                    case InterviewerOptionFilter.Any:
+                        break;
+                    case InterviewerOptionFilter.NotSynced:
+                        interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
+                        break;
+                    case InterviewerOptionFilter.UpToDate:
+                        interviewers = interviewers.Where(x => appBuildVersion.HasValue && appBuildVersion > x.Profile.DeviceAppBuildVersion);
+                        break;
+                    case InterviewerOptionFilter.Outdated:
+                        interviewers = interviewers.Where(x => !(appBuildVersion.HasValue && appBuildVersion > x.Profile.DeviceAppBuildVersion));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(interviewerOptionFilter), interviewerOptionFilter, null);
+                }
+                
                 if (supervisorId.HasValue)
                     interviewers = interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
 
@@ -154,7 +169,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     UserName = x.UserName,
                     SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
                     DeviceId = x.Profile.DeviceId,
-                    IsArchived = x.IsArchived
+                    IsArchived = x.IsArchived,
+                    DeviceAppVersion = x.Profile.DeviceAppVersion,
+                    DeviceAppBuildVersion = x.Profile.DeviceAppBuildVersion
                 });
             };
 

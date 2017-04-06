@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Route("api/v1/supervisors/{supervisorId:guid}/interviewers")]
         public UserApiView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
-            => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, null, supervisorId));
+            => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, InterviewerOptionFilter.Any, null, supervisorId));
 
         [HttpGet]
         [Route("api/v1/supervisors/{id:guid}/details")]

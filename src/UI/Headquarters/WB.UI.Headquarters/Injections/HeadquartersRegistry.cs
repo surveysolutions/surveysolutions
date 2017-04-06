@@ -184,6 +184,7 @@ namespace WB.UI.Headquarters.Injections
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
+            this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
         }
     }
 }
