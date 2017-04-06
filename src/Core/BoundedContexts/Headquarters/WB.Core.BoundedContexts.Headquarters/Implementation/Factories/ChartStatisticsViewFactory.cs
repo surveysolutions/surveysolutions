@@ -81,7 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 Lines = chartLines,
                 From = FormatDate(start),
-                To = FormatDate(stop)
+                To = FormatDate(stop),
+                StartDate = FormatDate(pointToBeSetGraphLooksOk)
             };
         }
 
