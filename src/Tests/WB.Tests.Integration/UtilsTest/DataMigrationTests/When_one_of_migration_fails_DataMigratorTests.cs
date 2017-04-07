@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Threading.Tasks;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Migrator;
-using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.UtilsTest.DataMigrationTests
 {
     [TestFixture]
-    public class When_one_of_migration_fails_DataMigratorTests : with_postgres_db
+    public class When_one_of_migration_fails_DataMigratorTests : nunit_ef_postgredb_test_specification
     {
-        [OneTimeSetUp]
-        public void Setup() => Context();
-
-        [OneTimeTearDown]
-        public void TearDown() => Cleanup();
-
         [Test]
         public async Task Should_not_store_any_migrations()
         {
-            var ctx = new TestFailingDbContext(new NpgsqlConnection(connectionStringBuilder.ConnectionString));
+            var ctx = new TestFailingDbContext();
 
             var migrations = await ctx.DataMigrations.ToListAsync();
 
@@ -31,30 +22,18 @@ namespace WB.Tests.Integration.UtilsTest.DataMigrationTests
         [Test]
         public void Should_not_store_data_from_first_migration()
         {
-            var ctx = new TestFailingDbContext(new NpgsqlConnection(connectionStringBuilder.ConnectionString));
+            var ctx = new TestFailingDbContext();
 
             var entity = ctx.TestEntities.Find(1);
             Assert.IsNull(entity);
         }
 
-        internal sealed class TestFailingDbContext : DbContext, IDataMigrationContext
+        internal sealed class TestFailingDbContext : TestDbContext
         {
-            public TestFailingDbContext(DbConnection db) : base(db, true)
+            public TestFailingDbContext() 
             {
-                Database.SetInitializer(new DropCreateDatabaseWithDataMigration<TestFailingDbContext>());
+                Database.SetInitializer(new MigrateDataInitializer<TestFailingDbContext>());
             }
-
-            // Here you define your own DbSet's
-            protected override void OnModelCreating(DbModelBuilder modelBuilder)
-            {
-                base.OnModelCreating(modelBuilder);
-
-                modelBuilder.Entity<TestEntity>().ToTable("entity", "test");
-                modelBuilder.Entity<DataMigrationInfo>().ToTable("dataMigrations", "test");
-            }
-
-            public IDbSet<DataMigrationInfo> DataMigrations { get; set; }
-            public IDbSet<TestEntity> TestEntities { get; set; }
         }
 
         internal class TestFailingEntityMigrationTest1 : DataMigration<TestFailingDbContext>
