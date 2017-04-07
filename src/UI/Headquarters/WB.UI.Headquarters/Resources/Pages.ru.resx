@@ -357,6 +357,21 @@
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
     <value>Супервизор</value>
   </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Супервизор (команды)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Состояние созданных и собранных интервью</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
+    <value>{0} интервью от {1} команд</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} интервью от {1} интервьеров</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>Интервьвер (команда)</value>
+  </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Интервьюеры</value>
   </data>

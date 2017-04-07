@@ -539,6 +539,23 @@
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
     <value>Supervisor</value>
   </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Supervisor (teams)</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>Interviewer (team)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Statuses of issued or conducted interviews</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
+    <value>{0} interviews from {1} teams</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} interviews from {1} interviewers</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Connected to the server</value>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Interviewer version</value>
   </data>
