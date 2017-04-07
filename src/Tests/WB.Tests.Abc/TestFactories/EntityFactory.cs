@@ -1107,7 +1107,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public HqUser HqUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
-            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null)
+            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null, int? interviewerBuild = null)
         {
             var user = new HqUser
             {
@@ -1118,7 +1118,9 @@ namespace WB.Tests.Abc.TestFactories
                 Profile = new HqUserProfile
                 {
                     SupervisorId = supervisorId,
-                    DeviceId = deviceId
+                    DeviceId = deviceId,
+                    DeviceAppBuildVersion = interviewerBuild,
+                    DeviceAppVersion = interviewerVersion
                 },
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1

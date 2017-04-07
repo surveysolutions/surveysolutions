@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
         public string SupervisorName { get; set; }
 
         public string DeviceId { get; set; }
-        public string DeviceAppVersion { get; set; }
-        public int? DeviceAppBuildVersion { get; set; }
+        public string EnumeratorVersion { get; set; }
+        public int? EnumeratorBuild { get; set; }
     }
 }
