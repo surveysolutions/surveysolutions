@@ -14,7 +14,14 @@ namespace WB.UI.Headquarters.Models.Api
 
         public class SearchInfo
         {
-            public string Value { get; set; }
+            private string value;
+
+            public string Value
+            {
+                get { return this.value?.Trim(); }
+                set { this.value = value; }
+            }
+
             public bool Regex { get; set; }
         }
 
