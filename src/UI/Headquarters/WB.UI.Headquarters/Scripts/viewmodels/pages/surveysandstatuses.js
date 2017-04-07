@@ -9,13 +9,13 @@
         self.IsResponsiblesLoading(true);
         self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true, function() {
+        }, true, true, function () {
             self.IsResponsiblesLoading(false);
         });
     }
     self.SelectedResponsible = ko.observable();
 
-    self.GetFilterMethod = function() {
+    self.GetFilterMethod = function () {
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         if (Modernizr.history) {
             window.history.pushState({}, "responsible", self.Url.toString());
@@ -27,8 +27,10 @@
         if (self.QueryString['responsible']) {
             self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
         }
-        self.SelectedResponsible.subscribe(self.filter);
-        self.search();
+        self.SelectedResponsible.subscribe(function () { self.reloadDataTable(); });
+
+        self.initDataTable();
+        self.reloadDataTable();
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SurveysAndStatuses, Supervisor.VM.ListView);

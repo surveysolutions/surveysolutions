@@ -1933,6 +1933,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} interviews from {1} interviewers.
+        /// </summary>
+        public static string SurveysAndStatuses_InterviewerStatisticsFormat {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_InterviewerStatisticsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer (team).
+        /// </summary>
+        public static string SurveysAndStatuses_InterviewerTitle {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_InterviewerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statuses of issued or conducted interviews.
+        /// </summary>
+        public static string SurveysAndStatuses_Overview {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews from {1} teams.
+        /// </summary>
+        public static string SurveysAndStatuses_SupervisorStatisticsFormat {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_SupervisorStatisticsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor (teams).
+        /// </summary>
+        public static string SurveysAndStatuses_SupervisorTitle {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_SupervisorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by HQ.
         /// </summary>
         public static string SurveysStatuses_ApprovedByHQ {

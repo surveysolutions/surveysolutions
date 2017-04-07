@@ -15,7 +15,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Models.Api;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
@@ -234,23 +236,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
-        {
-            var teamLeadName = this.authorizedUser.UserName;
-
-            var input = new SurveysAndStatusesReportInputModel
-            {
-                TeamLeadName = teamLeadName,
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Orders = request.SortOrder,
-                ResponsibleName = request.ResponsibleName == teamLeadName ? null : request.ResponsibleName 
-            };
-
-            return this.surveysAndStatusesReport.Load(input);
-        }
-
-        [HttpPost]
         public TeamsAndStatusesReportView HeadquarterSupervisorsAndStatusesReport(SummaryListViewModel data)
         {
             var input = new TeamsAndStatusesInputModel
@@ -266,17 +251,53 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveysAndStatusesReportRequest data)
+        [CamelCase]
+        public DataTableResponse<HeadquarterSurveysAndStatusesReportLine> SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
         {
-            var input = new SurveysAndStatusesReportInputModel
-            {
-                Orders = data.SortOrder,
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                TeamLeadName = data.ResponsibleName
-            };
+            var teamLeadName = this.authorizedUser.UserName;
 
-            return this.surveysAndStatusesReport.Load(input);
+            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            {
+                TeamLeadName = teamLeadName,
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                Orders = filter.GetSortOrderRequestItems(),
+                ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
+            });
+
+            return new DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items
+            };
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public DataTableResponse<HeadquarterSurveysAndStatusesReportLine> HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        {
+            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            {
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TeamLeadName = filter.ResponsibleName
+            });
+
+            return new DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items
+            };
+        }
+
+        public class SurveysAndStatusesFilter : DataTableRequest
+        {
+            public string ResponsibleName { get; set; }
         }
 
         [HttpPost]

@@ -1068,7 +1068,6 @@
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
-    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\ApiUserCreateForm.cshtml" />

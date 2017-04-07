@@ -117,6 +117,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/bootbox.min.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/main-no-libs").Include(
+                "~/Scripts/modernizr-2.8.3.js",
+                "~/Scripts/query-string.js",
                 "~/Scripts/supervisor.framework.js",
                 "~/Scripts/viewmodels/viewmodelbase.js",
                 "~/Scripts/viewmodels/pagebase.js",
