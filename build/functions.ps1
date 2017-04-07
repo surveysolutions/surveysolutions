@@ -239,41 +239,6 @@ function GetOutputAssembly($Project, $BuildConfiguration) {
     return GetPathRelativeToCurrectLocation $fullPathToAssembly
 }
 
-function RunTestsFromProject($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='$Project']"
-
-    $assembly = GetOutputAssembly $Project $BuildConfiguration
-
-    if (-not (Test-Path $assembly)) {
-
-        Write-Host "##teamcity[message status='WARNING' text='Expected tests assembly $assembly is missing']"
-
-    } else {
-
-        Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
-
-        $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
-        
-	$command = ".\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe $assembly --result:$resultXml --teamcity"
-        Write-Host $command
-        iex $command | Write-Host
-        Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
-    }
-
-    Write-Host "##teamcity[blockClosed name='$Project']"
-}
-
-function RunTests($BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Running tests']"
-
-    $projects = GetProjectsWithTests
- 
-	foreach ($project in $projects) {
-		RunTestsFromProject $project $BuildConfiguration
- 
-    Write-Host "##teamcity[blockClosed name='Running tests']"
-}
-
 function RunConfigTransform($Project, $BuildConfiguration){
 	$file = get-childitem $Project
 	$PathToConfigFile = Join-Path $file.directoryname "Web.config"
