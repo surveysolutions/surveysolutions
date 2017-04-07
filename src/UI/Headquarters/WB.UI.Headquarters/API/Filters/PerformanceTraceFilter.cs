@@ -24,16 +24,21 @@ namespace WB.UI.Headquarters.API.Filters
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             this.Stopwatch = new Stopwatch();
-            this.Stopwatch.Start();
+            this.Stopwatch?.Start();
             base.OnActionExecuting(actionContext);
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             var sw = this.Stopwatch;
-            sw.Stop();
+            sw?.Stop();
+
             base.OnActionExecuted(actionExecutedContext);
-            actionExecutedContext.Response?.Headers.Add(@"Server-Timing", @"action=" + sw.Elapsed.TotalSeconds);
+
+            if (sw != null)
+            {
+                actionExecutedContext.Response?.Headers.Add(@"Server-Timing", @"action=" + sw.Elapsed.TotalSeconds);
+            }
         }
     }
 }

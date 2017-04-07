@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
         public async Task should_collect_uploaded_data()
         {
             // arrange
-            var statistician = new HttpStatistican();
+            var statistician = new HttpStatistician();
 
             using (var httpTest = new HttpTest())
             {
@@ -46,8 +46,8 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
             // assert
             var stats = statistician.GetStats();
 
-            Assert.That(stats.Downloaded, Is.EqualTo(104), "Should take into account estimated headers size.");
-            Assert.That(stats.Uploaded, Is.EqualTo(108), "Should take into account estimated headers size.");
+            Assert.That(stats.DownloadedBytes, Is.EqualTo(104), "Should take into account estimated headers size.");
+            Assert.That(stats.UploadedBytes, Is.EqualTo(108), "Should take into account estimated headers size.");
 
             Assert.That(stats.Speed, Is.EqualTo(104 + 108), "Duration should be 1 second, so speed is equal to bytes");
 

@@ -402,7 +402,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IAttachmentContentStorage attachmentContentStorage = null,
-            IHttpStatistican httpStatistican = null)
+            IHttpStatistician httpStatistician = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
             return new SynchronizationProcess(
@@ -420,7 +420,7 @@ namespace WB.Tests.Abc.TestFactories
                 new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                httpStatistican ?? Mock.Of<IHttpStatistican>());
+                httpStatistician ?? Mock.Of<IHttpStatistician>());
         }
     }
 }

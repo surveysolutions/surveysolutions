@@ -11,6 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId);
         int GetSuccessSynchronizationsCount(Guid interviewerId);
         int GetFailedSynchronizationsCount(Guid interviewerId);
-        double GetAverageSyncronizationSpeed(Guid interviewerId);
+        double GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId);
     }
 }

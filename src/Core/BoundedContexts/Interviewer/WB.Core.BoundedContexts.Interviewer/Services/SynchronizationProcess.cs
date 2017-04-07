@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IHttpStatistican httpStatistican;
+        private readonly IHttpStatistician httpStatistician;
 
         private RestCredentials restCredentials;
         private bool remoteLoginRequired = false;
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher,
-            IHttpStatistican httpStatistican)
+            IHttpStatistician httpStatistician)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
-            this.httpStatistican = httpStatistican;
+            this.httpStatistician = httpStatistician;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
                 
-                this.httpStatistican.Reset();
+                this.httpStatistician.Reset();
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
@@ -593,7 +593,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         private SyncStatisticsApiView ToSyncStatisticsApiView(SychronizationStatistics statistics, Stopwatch stopwatch)
         {
-            var httpStats = this.httpStatistican.GetStats();
+            var httpStats = this.httpStatistician.GetStats();
 
             return new SyncStatisticsApiView
             {
@@ -602,8 +602,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
                 RejectedInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
                 NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
-                TotalDownloadedBytes = httpStats.Downloaded,
-                TotalUploadedBytes = httpStats.Uploaded,
+                TotalDownloadedBytes = httpStats.DownloadedBytes,
+                TotalUploadedBytes = httpStats.UploadedBytes,
                 TotalConnectionSpeed = httpStats.Speed,
                 TotalSyncDuration = stopwatch.Elapsed
             };

@@ -149,7 +149,7 @@
                     <ul class="list-unstyled">
                         <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>
                         <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
-                        <li>@Pages.InterviewerProfile_AverageSyncSpeed: @Model.AverageSyncSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")</li>      
+                        <li>@Pages.InterviewerProfile_AverageSyncSpeed: @Model.AverageSyncSpeedBytesPerSecond.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")</li>      
                     </ul>
                     @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessDeviceInfo)
                   

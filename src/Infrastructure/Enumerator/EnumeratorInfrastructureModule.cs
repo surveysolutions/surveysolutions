@@ -52,7 +52,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
             this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
-            this.Bind<IHttpStatistican>().To<HttpStatistican>().InSingletonScope();
+            this.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
         }
     }
 }
