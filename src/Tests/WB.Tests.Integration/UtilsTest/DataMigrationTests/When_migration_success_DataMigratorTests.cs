@@ -1,26 +1,18 @@
-﻿using System.Data.Common;
+﻿
 using System.Data.Entity;
 using System.Threading.Tasks;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Migrator;
-using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.UtilsTest.DataMigrationTests
 {
     [TestFixture]
-    public class When_migration_success_DataMigratorTests : with_postgres_db
+    public class When_migration_success_DataMigratorTests : nunit_ef_postgredb_test_specification
     {
-        [OneTimeSetUp]
-        public void Setup() => Context();
-
-        [OneTimeTearDown]
-        public void TearDown() => Cleanup();
-
         [Test]
         public async Task Should_run_two_data_migrations()
         {
-            var ctx = new TestOkDbContext(new NpgsqlConnection(connectionStringBuilder.ConnectionString));
+            var ctx = new TestOkDbContext();
 
             var migrations = await ctx.DataMigrations.ToListAsync();
 
@@ -35,7 +27,7 @@ namespace WB.Tests.Integration.UtilsTest.DataMigrationTests
         [Test]
         public void Should_run_first_migration_and_fill_data()
         {
-            var ctx = new TestOkDbContext(new NpgsqlConnection(connectionStringBuilder.ConnectionString));
+            var ctx = new TestOkDbContext();
 
             var entity = ctx.TestEntities.Find(1);
             Assert.That(entity.Id, Is.EqualTo(1));
@@ -45,31 +37,19 @@ namespace WB.Tests.Integration.UtilsTest.DataMigrationTests
         [Test]
         public void Should_run_second_migration_and_fill_data()
         {
-            var ctx = new TestOkDbContext(new NpgsqlConnection(connectionStringBuilder.ConnectionString));
+            var ctx = new TestOkDbContext();
 
             var entity = ctx.TestEntities.Find(2);
             Assert.That(entity.Id, Is.EqualTo(2));
             Assert.That(entity.Value, Is.EqualTo("Test migration 2"));
         }
-        
-        internal sealed class TestOkDbContext : DbContext, IDataMigrationContext
+
+        internal sealed class TestOkDbContext : TestDbContext
         {
-            public TestOkDbContext(DbConnection db) : base(db, true)
+            public TestOkDbContext() : base()
             {
-                Database.SetInitializer(new DropCreateDatabaseWithDataMigration<TestOkDbContext>());
+                Database.SetInitializer(new MigrateDataInitializer<TestOkDbContext>());
             }
-
-            // Here you define your own DbSet's
-            protected override void OnModelCreating(DbModelBuilder modelBuilder)
-            {
-                base.OnModelCreating(modelBuilder);
-
-                modelBuilder.Entity<TestEntity>().ToTable("entity", "test");
-                modelBuilder.Entity<DataMigrationInfo>().ToTable("dataMigrations", "test");
-            }
-
-            public IDbSet<DataMigrationInfo> DataMigrations { get; set; }
-            public IDbSet<TestEntity> TestEntities { get; set; }
         }
 
         internal class TestOkEntityMigrationTest1 : DataMigration<TestOkDbContext>
