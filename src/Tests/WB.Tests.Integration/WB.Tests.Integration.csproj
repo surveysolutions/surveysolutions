@@ -529,7 +529,8 @@
     <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />
     <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
     <Compile Include="UtilsTest\CreateClassShouldNotContainAdditionalMethods.cs" />
-    <Compile Include="UtilsTest\DataMigrationTests\DropCreateDatabaseWithDataMigration.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\nunit_ef_postgredb_test_specification.cs" />
+    <Compile Include="UtilsTest\DataMigrationTests\TestDbContext.cs" />
     <Compile Include="UtilsTest\DataMigrationTests\When_migration_success_DataMigratorTests.cs" />
     <Compile Include="UtilsTest\DataMigrationTests\TestEntity.cs" />
     <Compile Include="UtilsTest\DataMigrationTests\When_one_of_migration_fails_DataMigratorTests.cs" />
