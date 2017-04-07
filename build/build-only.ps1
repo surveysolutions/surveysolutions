@@ -12,10 +12,16 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+$MainSolution = 'WB.sln'
+
 
 $versionString = (GetVersionString 'src\core')
 UpdateProjectVersion $BuildNumber -ver $versionString
 try {
+	BuildSolution `
+                -Solution $MainSolution `
+                -BuildConfiguration $BuildConfiguration
+
 	$PackageName = 'WBCapi.apk'
 		. "$scriptFolder\build-android-package.ps1" `
 			-VersionName $versionString `
