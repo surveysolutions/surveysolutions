@@ -1330,6 +1330,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected to the server.
+        /// </summary>
+        public static string Interviewers_ConnectedToDeviceTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_ConnectedToDeviceTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account creation date.
         /// </summary>
         public static string Interviewers_CreationDateTitle {
