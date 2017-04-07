@@ -556,6 +556,7 @@
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Connected to the server</value>
+  </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
     <value>Interviewer version</value>
   </data>
