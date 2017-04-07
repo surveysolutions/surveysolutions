@@ -23,12 +23,10 @@
             
         
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
-            <![CDATA[Installed OR (VersionNT64 >= 603 )]]> 
+            <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]>
         </Condition>
-<!--AND MsiNTProductType > 1-->
-        <!--<Property Id="CONNSTRING"/>-->
+
         <Property Id="SITEPORT" Value="9700"></Property>
-        
         <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
         <Property Id="CONNPORT" Value="5432"></Property>
         <Property Id="CONNUSERNAME" Value="postgres"></Property>
