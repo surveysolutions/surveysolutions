@@ -5,11 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
-    public enum InterviewerOptionFilter
-    {
-        Any, NotSynced, UpToDate, Outdated
-    }
-
     public interface IUserViewFactory
     {
         UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role);
