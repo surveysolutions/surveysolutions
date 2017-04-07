@@ -7,7 +7,7 @@
     <Bundle Name="SurveySolutions"
             Version="$(var.SurveySolutionsVersion)"
             Manufacturer="The World Bank"
-            UpgradeCode="7238860D-5A5C-4446-B3BC-C09B8E132823">
+            UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA">
 
         <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
             (VersionNT64 &gt;= v6.3) 
