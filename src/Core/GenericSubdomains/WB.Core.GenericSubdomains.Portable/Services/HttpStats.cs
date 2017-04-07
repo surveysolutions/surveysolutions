@@ -4,10 +4,13 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public class HttpStats
     {
-        public long Downloaded { get; set; }
-        public long Uploaded { get; set; }
+        public long DownloadedBytes { get; set; }
+        public long UploadedBytes { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public double Speed => this.Duration.TotalSeconds > 0 ? (this.Downloaded + this.Uploaded) / this.Duration.TotalSeconds : 0;
+        /// <summary>
+        /// Connection speed in bytes per second
+        /// </summary>
+        public double Speed => this.Duration.TotalSeconds > 0 ? (this.DownloadedBytes + this.UploadedBytes) / this.Duration.TotalSeconds : 0;
     }
 }

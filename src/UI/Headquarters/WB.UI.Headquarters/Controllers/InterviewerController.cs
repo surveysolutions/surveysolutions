@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(id),
                 LastSuccessDeviceInfo = lastSuccessDeviceInfo,
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id),
-                AverageSyncSpeed = this.deviceSyncInfoRepository.GetAverageSyncronizationSpeed(id)
+                AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(id)
             };
             return this.View(interviewerProfileModel);
         }

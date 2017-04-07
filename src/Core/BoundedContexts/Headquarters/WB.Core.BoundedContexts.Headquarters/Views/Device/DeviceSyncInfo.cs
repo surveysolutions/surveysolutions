@@ -65,6 +65,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
         [DefaultValue(0)]
         public long TotalDownloadedBytes { get; set; }
 
+        /// <summary>
+        /// Upload/Download summary connection speed in bytes/second
+        /// </summary>
         [DefaultValue(0)]
         public double TotalConnectionSpeed { get; set; }
 

@@ -3,7 +3,7 @@ using Flurl.Http;
 
 namespace WB.Core.GenericSubdomains.Portable.Services
 {
-    public interface IHttpStatistican
+    public interface IHttpStatistician
     {
         void Reset();
         HttpStats GetStats();

@@ -22,7 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly INetworkService networkService;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
-        private readonly IHttpStatistican httpStatistican;
+        private readonly IHttpStatistician httpStatistician;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -30,13 +30,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
-            IHttpStatistican httpStatistican)
+            IHttpStatistician httpStatistician)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
-            this.httpStatistican = httpStatistican;
+            this.httpStatistician = httpStatistician;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -90,7 +90,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IFlurlClient restClient = fullUrl
                 .WithTimeout(this.restServiceSettings.Timeout)
                 .AllowHttpStatus(HttpStatusCode.NotModified, HttpStatusCode.NoContent)
-                .CollectHttpStats(this.httpStatistican)
+                .CollectHttpStats(this.httpStatistician)
                 .WithHeader("User-Agent", this.restServiceSettings.UserAgent)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
             

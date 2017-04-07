@@ -8,17 +8,17 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
-    public class HttpStatistican : IHttpStatistican
+    public class HttpStatistician : IHttpStatistician
     {
         private long Downloaded = 0;
         private long Uploaded = 0;
         private TimeSpan TotalDuration = TimeSpan.Zero;
         private readonly Stopwatch Stopwatch = new Stopwatch();
 
-        public void Track(long? uploaded, long? downloaded, TimeSpan duration)
+        private void Track(long uploaded, long downloaded, TimeSpan duration)
         {
-            this.Downloaded += downloaded ?? 0;
-            this.Uploaded += uploaded ?? 0;
+            this.Downloaded += downloaded;
+            this.Uploaded += uploaded;
             this.TotalDuration = this.TotalDuration.Add(duration);
         }
 
@@ -32,7 +32,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public HttpStats GetStats()
         {
-            return new HttpStats {Downloaded = this.Downloaded, Uploaded = this.Uploaded, Duration = this.TotalDuration};
+            return new HttpStats {DownloadedBytes = this.Downloaded, UploadedBytes = this.Uploaded, Duration = this.TotalDuration};
         }
 
         public void CollectHttpCallStatistics(HttpCall call)
@@ -74,7 +74,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
     public static class HttpStatisticianHelper
     {
-        public static IFlurlClient CollectHttpStats(this IFlurlClient client, IHttpStatistican statistician)
+        public static IFlurlClient CollectHttpStats(this IFlurlClient client, IHttpStatistician statistician)
         {
             client.Settings.AfterCall = statistician.CollectHttpCallStatistics;
             return client;

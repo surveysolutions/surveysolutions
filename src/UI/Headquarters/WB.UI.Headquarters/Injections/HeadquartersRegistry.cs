@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
 
             this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
-            this.Kernel.Bind<IHttpStatistican>().To<HttpStatistican>().InSingletonScope();
+            this.Kernel.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -163,7 +163,7 @@ namespace WB.UI.Headquarters.Injections
                 .To<RestService>()
                 .WithConstructorArgument("networkService", _ => null)
                 .WithConstructorArgument("restServicePointManager", _ => null)
-                .WithConstructorArgument("httpStatistican", _ => _.Kernel.Get<IHttpStatistican>());
+                .WithConstructorArgument("httpStatistican", _ => _.Kernel.Get<IHttpStatistician>());
 
             this.Bind<IExportSettings>().To<ExportSettings>();
 
