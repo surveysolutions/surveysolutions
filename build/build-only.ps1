@@ -12,7 +12,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
-$MainSolution = 'WB.sln'
+$MainSolution = 'src\WB.sln'
 
 
 $versionString = (GetVersionString 'src\core')
