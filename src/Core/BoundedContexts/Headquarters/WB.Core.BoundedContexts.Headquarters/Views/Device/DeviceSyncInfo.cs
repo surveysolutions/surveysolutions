@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -50,16 +51,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int Id { get; set; }
+
         public int UploadedInterviewsCount { get; set; }
         public int DownloadedInterviewsCount { get; set; }
         public int DownloadedQuestionnairesCount { get; set; }
 
         public int RejectedInterviewsOnDeviceCount { get; set; }
         public int NewInterviewsOnDeviceCount { get; set; }
-        
+
+        [DefaultValue(0)]
         public long TotalUploadedBytes { get; set; }
+
+        [DefaultValue(0)]
         public long TotalDownloadedBytes { get; set; }
+
+        [DefaultValue(0)]
         public double TotalConnectionSpeed { get; set; }
+
         public TimeSpan TotalSyncDuration { get; set; }
 
         public virtual DateTime SyncFinishDate { get; set; }
