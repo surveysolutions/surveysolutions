@@ -1,6 +1,6 @@
 ﻿@model WB.UI.Headquarters.Models.Troubleshooting.DataIsMissingModel
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = Troubleshooting.NoData_Title;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @section scripts
@@ -11,7 +11,7 @@
 
         var tableOptions = {
             rowId: 'key',
-            order: [[2, 'desc']],
+            "ordering": false,
             deferLoading: 0,
             columns: [
                 {
@@ -47,7 +47,8 @@
             ajax: {
                 url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "MissingData" })",
                 type: "POST"
-            }
+            },
+            dom: "rtp"
         };
 
         var app = new Vue({
@@ -115,16 +116,16 @@
         <div class="row before-search">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li><a href="">I see no data for syncronized interivew on the server</a></li>
+                    <li><a href="@Url.Action("Index", "Troubleshooting")">@Troubleshooting.Title</a></li>
                 </ol>
                 <h1>
-                    @Troubleshooting.MissingCensusInterviews_PageHeader
+                    @Troubleshooting.NoData_Title
                 </h1>
             </div>
         </div>
         <div class="row before-search">
             <div class="col-sm-7">
-                <p>Specify an interview key or interivew id to search. Alternatively, open the interview details page and press "Troubleshoot" button.</p>
+                <p>@Troubleshooting.NoData_Description</p>
             </div>
         </div>
         <div class="row">
@@ -137,14 +138,18 @@
                 <div class="filters-container">
                     <h4>@Troubleshooting.MissingCensusInterviews_FiltersTitle</h4>
                     <div class="block-filter" v-bind:class="{'has-error': errors.has('interviewId')}">
-                        <h5>Interview key or interivew id</h5>
-
-                        @*/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i*@
+                        <h5>@Troubleshooting.NoData_Filters_InterviewKey</h5>
                         <input class="form-control"
-                               placeholder="Enter interview key or id"
+                               placeholder="@Troubleshooting.NoData_Filters_InterviewKeyPlaceholder"
                                data-vv-name="interviewId"
-                               v-model="interviewId" 
-                               v-validate="'required'" />
+                               v-model="interviewId"
+                               v-on:keyup.enter="findInterviews"
+                               v-validate="{ 
+                                rules: {
+                                    regex:/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$|^[0-9a-f]{8}[0-9a-f]{4}[1-5][0-9a-f]{3}[89ab][0-9a-f]{3}[0-9a-f]{12}$|^\d\d-\d\d-\d\d-\d\d$/i,
+                                    required: true
+                                }
+                               }" />
                         <span v-show="errors.has('interviewId')" class="help-block">{{ errors.first('interviewId') }}</span>
                     </div>
                     <div class="block-filter">
@@ -160,9 +165,7 @@
                         <ol class="breadcrumb">
                             <li><a href="">@Troubleshooting.Title</a></li>
                         </ol>
-                        <h1>
-                            I see no data for syncronized interivew on the server 
-                        </h1>
+                        <h1>@Troubleshooting.NoData_Title</h1>
                     </div>
                     <div class="clearfix">
                         <div class="col-sm-7 ">

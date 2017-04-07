@@ -233,6 +233,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specify an interview key or interivew id to search. Alternatively, open the interview details page and press &quot;Troubleshoot&quot; button..
+        /// </summary>
+        public static string NoData_Description {
+            get {
+                return ResourceManager.GetString("NoData_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview key or interivew id.
+        /// </summary>
+        public static string NoData_Filters_InterviewKey {
+            get {
+                return ResourceManager.GetString("NoData_Filters_InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter interview key or id.
+        /// </summary>
+        public static string NoData_Filters_InterviewKeyPlaceholder {
+            get {
+                return ResourceManager.GetString("NoData_Filters_InterviewKeyPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I see no data for syncronized interview on the server.
+        /// </summary>
+        public static string NoData_Title {
+            get {
+                return ResourceManager.GetString("NoData_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click on the link of an issue you want to resolve. For the problems not listed below, visit Survey Solutions &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;support site&lt;/a&gt;..
         /// </summary>
         public static string SupportSite {

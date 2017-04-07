@@ -193,4 +193,16 @@ Select an interviewer and timeframe to narrow down your search result</value>
   <data name="TableTitle_Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>Specify an interview key or interivew id to search. Alternatively, open the interview details page and press "Troubleshoot" button.</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>Interview key or interivew id</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>Enter interview key or id</value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>I see no data for syncronized interview on the server</value>
+  </data>
 </root>

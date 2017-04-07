@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             InterviewSummary interview = interviewId.HasValue 
                 ? this.interviewSummaryReader.GetById(interviewId.Value) 
-                : this.interviewSummaryReader.Query(q => q.Where(x => x.Key == interviewKey).Take(1).ToList()).SingleOrDefault();
+                : this.interviewSummaryReader.Query(q => q.SingleOrDefault(x => x.Key == interviewKey));
 
             if (interview == null)
                 return Troubleshooting.NoData_NotFound;
