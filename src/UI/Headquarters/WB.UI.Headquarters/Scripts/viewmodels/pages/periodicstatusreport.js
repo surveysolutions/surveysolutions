@@ -46,6 +46,15 @@
     self.FormatQuantityPeriod = function (data) {
         return data;
     };
+
+    var updateQuestionnaireName = function (value) {
+        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
+    }
+
+    var updateReportTypeName = function (value) {
+        self.ReportTypeName($("#reportTypeSelector option[value='" + value + "']").text());
+    }
+
     self.load = function () {
         var todayMinus7Days = moment().add(-6, 'days').format(dateFormat);
 
@@ -132,12 +141,5 @@
     self.initReport = function () {
         self.search();
     };
-    var updateQuestionnaireName = function (value) {
-        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
-    }
-
-    var updateReportTypeName = function (value) {
-        self.ReportTypeName($("#reportTypeSelector option[value='" + value + "']").text());
-    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.PeriodicStatusReport, Supervisor.VM.ListView);
