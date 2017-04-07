@@ -136,7 +136,10 @@
     <value>Teams and Statuses</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
-    <value>Survey Name</value>
+    <value>Questionnaire Template</value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Template Version</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
     <value>Supervisor assigned</value>
