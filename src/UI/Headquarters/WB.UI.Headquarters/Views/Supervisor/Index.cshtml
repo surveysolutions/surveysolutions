@@ -28,6 +28,7 @@
             self.Url = new Url();
             self.Archived = ko.observable(false);
             self.SelectedItems = ko.observableArray([]);
+            self.SupervisorsCount = ko.observable(0);
 
             self.getConfirmAndSendRequest = function (confirmMessage, archive) {
                 notifier.confirm("@Pages.ConfirmationNeededTitle",
@@ -84,6 +85,8 @@
                 self.Archived(self.QueryString['archived']);
                 self.Url.query['archived'] = self.QueryString['archived'] || "";
                 self.Archived.subscribe(updater);
+
+                self.SupervisorsCount.subscribe(updater);
             };
 
             self.IsNothingSelected = ko.computed(function () {
@@ -184,6 +187,10 @@
                         location.reload();
                     else if (xhr.status != undefined && xhr.status !== 200)
                         notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
+
+                    if (xhr.status === 200) {
+                        model.SupervisorsCount(xhr.responseJSON.recordsTotal);
+                    }
                 })
                 .DataTable({
                     processing: true,
@@ -263,7 +270,6 @@
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
                     "order": [[1, 'desc']],
-                    dom: "frtp",
                     conditionalPaging: true
                 });
 
@@ -278,11 +284,10 @@
                 .on('click',
                     function () {
                         // Get all rows with search applied
-                        var rows = table.rows({ 'search': 'applied' }).nodes();
+                        var rows = self.table.rows({ 'search': 'applied' }).nodes();
                         // Check/uncheck checkboxes for all rows in the table
 
                         var checkboxes = $('input[type="checkbox"]', rows);
-
                         var newState = this.checked;
 
                         _.forEach(checkboxes,
@@ -364,7 +369,7 @@
                 <div class="row">
                     <div class="page-header clearfix">
                         <div>
-                            <h1>@Users.Supervisors</h1>
+                            <h1><span data-bind="text: SupervisorsCount"></span> @Users.SupervisorsInTeam</h1>
                             @if (authorizedUser.IsAdministrator)
                             {
                                 <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
@@ -387,8 +392,8 @@
                             </th>
                         }
                         <th>@Users.UserName</th>
-                        <th  class="for-tablets" title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
-                        <th  class="for-mobile-devices">@Users.SupervisorEmail</th>
+                        <th class="for-tablets" title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
+                        <th class="for-mobile-devices">@Users.SupervisorEmail</th>
                         <th title="@Users.NotLinkedToDeviceTitle">@Users.NotLinkedToDevice</th>
                         <th title="@Users.NumberOfInterviewersInTeam">@Users.TotalInterviewers</th>
                     </tr>

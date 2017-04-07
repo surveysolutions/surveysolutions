@@ -412,6 +412,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to supervisors in your team.
+        /// </summary>
+        internal static string SupervisorsInTeam {
+            get {
+                return ResourceManager.GetString("SupervisorsInTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Interviewers.
         /// </summary>
         internal static string TotalInterviewers {
