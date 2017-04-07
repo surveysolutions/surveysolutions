@@ -17,6 +17,82 @@
     <script type="text/javascript">
         'use strict';
 
+        Supervisor.VM.SupervisorsNew = function (listViewUrl,
+                archiveUsersUrl,
+                ajax,
+                notifier) {
+            Supervisor.VM.SupervisorsNew.superclass.constructor.apply(this, []);
+
+            var self = this;
+
+            self.Url = new Url();
+            self.Archived = ko.observable(false);
+            self.SelectedItems = ko.observableArray([]);
+
+            self.getConfirmAndSendRequest = function (confirmMessage, archive) {
+                notifier.confirm("@Pages.ConfirmationNeededTitle",
+                    confirmMessage,
+                    // confirm
+                    function () {
+
+                        var request = {
+                            userIds: self.SelectedItems(),
+                            archive: archive
+                        };
+
+                        ajax.sendRequest(archiveUsersUrl, "post", request, false,
+                            // onSuccess
+                            function (data) {
+                                var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
+                                    return !cmd.IsSuccess;
+                                });
+
+                                if (failedCommands.length > 0) {
+                                    var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function (failedCommand) {
+                                        if (!Supervisor.Framework.Objects.isUndefined(failedCommand.DomainException) && failedCommand.DomainException !== null)
+                                            return failedCommand.DomainException;
+                                        else {
+                                            return input.settings.messages.unhandledExceptionMessage;
+                                        }
+                                    });
+                                    $.each(failedDomainExceptions, function (index, message) {
+                                        notifier.showError("@Pages.OperationFailedTitle", message);
+                                    });
+                                }
+
+                                self.updater();
+                            });
+                    },
+                    // cancel
+                    function () { });
+            }
+
+
+            self.unarchiveSupervisors = function () {
+                self.getConfirmAndSendRequest("@Archived.UnarchiveSupervisorWarning \r\n @Pages.Supervisors_ArchiveSupervisorsConfirm", false);
+            };
+
+            self.archiveSupervisors = function () {
+                self.getConfirmAndSendRequest("@Pages.Supervisors_ArchiveSupervisorsConfirmMessage", true);
+            }
+
+            self.updater = function () { };
+
+            self.load = function (updater) {
+                self.updater = updater;
+
+                self.Archived(self.QueryString['archived']);
+                self.Url.query['archived'] = self.QueryString['archived'] || "";
+                self.Archived.subscribe(updater);
+            };
+
+            self.IsNothingSelected = ko.computed(function () {
+                return $(self.SelectedItems()).length === 0;
+            });
+        };
+
+        Supervisor.Framework.Classes.inherit(Supervisor.VM.SupervisorsNew, Supervisor.VM.BasePage);
+
         var SupervisorModel = function (ajax, notifier) {
             var self = this;
 
@@ -25,6 +101,14 @@
             var deleteSupervisorUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })';
             var supervisorsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllSupervisors" })';
             var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
+            var $archiveUsersUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
+
+            var model = new Supervisor.VM.SupervisorsNew(
+                supervisorsListUrl,
+                $archiveUsersUrl,
+                ajax,
+                notifier);
+            ko.applyBindings(model);
 
             var requestHeaders = {};
             requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
@@ -37,7 +121,7 @@
                 var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
-            @if (authorizedUser.IsObserver || authorizedUser.IsAdministrator)
+            @if (authorizedUser.IsObserver)
             {
                 <text>
 
@@ -47,31 +131,18 @@
                 @if (authorizedUser.IsObserver)
                     {
                         <text>
-                var impersonateAsUser = function (key, opt) {
-                    var selectedRow = selectRowAndGetData(opt.$trigger);
-                    window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
-                };
-                items["impersonate"] =
-                {
-                    name: "@Users.ImpersonateAsUser",
-                    callback: impersonateAsUser
-                };
-                </text>
+                        var impersonateAsUser = function (key, opt) {
+                            var selectedRow = selectRowAndGetData(opt.$trigger);
+                            window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
+                        };
+                        items["impersonate"] =
+                        {
+                            name: "@Users.ImpersonateAsUser",
+                            callback: impersonateAsUser
+                        };
+                        </text>
                     }
-                /*@if (authorizedUser.IsAdministrator)
-                {
-                    <text>
-                var deleteSupervisor = function (key, opt) {
-                    var selectedRow = selectRowAndGetData(opt.$trigger);
-                    window.location.href = deleteSupervisorUrl + '?personName=' + selectedRow.userName;
-                };
-                items["delete"] =
-                {
-                    name: "@Users.Remove",
-                    callback: deleteSupervisor
-                };
-                </text>
-                }*/
+
                 return items;
             }
 
@@ -101,8 +172,8 @@
                 @if (authorizedUser.IsObserver)
                 {
                     <text>
-                $.contextMenu(self.contextMenuOptions);
-                </text>
+                    $.contextMenu(self.contextMenuOptions);
+                    </text>
                 }
             };
 
@@ -125,12 +196,29 @@
                     ajax: {
                         url: supervisorsListUrl,
                         type: "POST",
-                        headers: requestHeaders
+                        headers: requestHeaders,
+                        "data": function(d) {
+                            model.SelectedItems.removeAll(); // move to before filter event
+                            d.Archived = model.Archived();
+                        }
                     },
                     "createdRow": function (row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
                     },
                     columns: [
+                        @if (isAdmin)
+                        {
+                            <text>
+                                {
+                                    "orderable": false,
+                                    render: function(data, type, row) {
+                                        return "<input class=\"checkbox-filter\" id=\"cbx_" + row.userId + "\" value=\"" + row.userId +
+                                            "\" type=\"checkbox\"> <label for=\"cbx_" + row.userId + "\"><span class=\"tick\"></span></label> ";
+                                    },
+                                    "class": "checkbox-cell"
+                                },
+                            </text>
+                        }
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
@@ -155,29 +243,16 @@
                             data: "notConnectedToDeviceInterviewersCount",
                             name: "NotConnectedToDeviceInterviewersCount", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href='@Url.Action("Index", "Interviewers", new { area = string.Empty })/" + row.userId + "'>" + data + "</a>";
+                                return "<a href='@Url.Action("Index", "Interviewers", new { area = string.Empty })?supervisor=" + row.userName + "&connectedToDevice=false'>" + data + "</a>";
                             }
                         },
                         {
                             data: "interviewersCount",
                             name: "InterviewersCount", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href='@Url.Action("Index", "Interviewers", new { area = string.Empty})/" + row.userId + "'>" + data + "</a>";
+                                return "<a href='@Url.Action("Index", "Interviewers", new { area = string.Empty})?supervisor=" + row.userName + "'>" + data + "</a>";
                             }
                         }
-                        @if (authorizedUser.IsAdministrator)
-                        {
-                            <text>
-                            ,
-                            {
-                                orderable: false,
-                                render: function (data, type, row) {
-                                    return "<a href='@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })/" + row.userId + "'>delete</a>";
-                                }
-                            }
-                            </text>
-                        }
-
                     ],
                     select: {
                         style: 'single'
@@ -192,6 +267,63 @@
                     conditionalPaging: true
                 });
 
+            var updater = function () {
+                self.table.ajax.reload();
+            }
+
+            model.load(updater);
+
+            // Handle click on "Select all" control
+            $('#check-all')
+                .on('click',
+                    function () {
+                        // Get all rows with search applied
+                        var rows = table.rows({ 'search': 'applied' }).nodes();
+                        // Check/uncheck checkboxes for all rows in the table
+
+                        var checkboxes = $('input[type="checkbox"]', rows);
+
+                        var newState = this.checked;
+
+                        _.forEach(checkboxes,
+                            function (checkbox) {
+                                if (newState) {
+                                    if (!checkbox.checked) {
+                                        model.SelectedItems.push(checkbox.value);
+                                    }
+                                } else {
+                                    if (checkbox.checked) {
+                                        var indexOfSupervisor = model.SelectedItems.indexOf(checkbox.value);
+                                        model.SelectedItems.splice(indexOfSupervisor, 1);
+                                    }
+                                }
+                            });
+
+                        checkboxes.prop('checked', newState);
+
+                    });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#supervisors tbody')
+                .on('change',
+                    'input[type="checkbox"]',
+                    function () {
+                        // If checkbox is not checked
+                        if (!this.checked) {
+                            var indexOfSupervisor = model.SelectedItems.indexOf(this.value);
+                            model.SelectedItems.splice(indexOfSupervisor, 1);
+
+                            var el = $('#check-all').get(0);
+                            // If "Select all" control is checked and has 'indeterminate' property
+                            if (el && el.checked && ('indeterminate' in el)) {
+                                // Set visual state of "Select all" control
+                                // as 'indeterminate'
+                                el.indeterminate = true;
+                            }
+                        } else {
+                            model.SelectedItems.push(this.value);
+                        }
+                    });
             return self;
         };
 
@@ -203,37 +335,80 @@
 }
 
 
-<main>
+<main class="hold-transition">
     <div class="container-fluid">
-        @Html.Partial("_notice")
-        @Html.Partial("_alerts")
         <div class="row">
-            <div class="page-header clearfix">
-                <div>
-                    <h1>@Users.Supervisors</h1>
-                    @if (authorizedUser.IsAdministrator)
-                    {
-                        <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
-                    }
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
-            </div>
-            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle:</h4>
+
+                    <div class="block-filter">
+                        <h5>@Pages.Supervisors_ArchiveStatusTitle</h5>
+                        <select data-bind="value: Archived" class="selectpicker">
+                            <option value="false">@Pages.Supervisors_ActiveUsers</option>
+                            <option value="true">@Pages.Supervisors_ArchivedUsers</option>
+                        </select>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="main-information">
+                @Html.Partial("_notice")
+                @Html.Partial("_alerts")
+                <div class="row">
+                    <div class="page-header clearfix">
+                        <div>
+                            <h1>@Users.Supervisors</h1>
+                            @if (authorizedUser.IsAdministrator)
+                            {
+                                <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                    </div>
+                </div>
+                <table id="supervisors" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
+                    <thead>
+                    <tr>
+                        @if (isAdmin)
+                        {
+                            <th class="sorting_disabled checkbox-cell">
+                                <input class="double-checkbox" id="check-all" type="checkbox">
+                                <label for="check-all">
+                                    <span class="tick"></span>
+                                </label>
+                            </th>
+                        }
+                        <th>@Users.UserName</th>
+                        <th  class="for-tablets" title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
+                        <th  class="for-mobile-devices">@Users.SupervisorEmail</th>
+                        <th title="@Users.NotLinkedToDeviceTitle">@Users.NotLinkedToDevice</th>
+                        <th title="@Users.NumberOfInterviewersInTeam">@Users.TotalInterviewers</th>
+                    </tr>
+                    </thead>
+                </table>
+                
+                @if (isAdmin)
+                {
+                    <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
+                        <div class="panel-body">
+                            <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
+                            <label for="q1az">
+                                <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' @Pages.Supervisors_Selected'"></span>
+                            </label>
+                            <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveSupervisors">@Pages.Supervisors_Archive</button>
+                            <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveSupervisors">@Pages.Supervisors_Unarchive</button>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-        <table id="supervisors" class="table table-striped table-ordered table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>@Users.UserName</th>
-                    <th title="@Users.AccountCreationDateTooltip">@Users.CreationDate</th>
-                    <th>@Users.SupervisorEmail</th>
-                    <th title="@Users.NotLinkedToDeviceTitle">@Users.NotLinkedToDevice</th>
-                    <th title="@Users.NumberOfInterviewersInTeam">@Users.TotalInterviewers</th>
-                    @if (authorizedUser.IsAdministrator)
-                    {
-                        <th></th>
-                    }
-                </tr>
-            </thead>
-        </table>
     </div>
 </main>

@@ -477,7 +477,7 @@
   </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{0} uploaded, {1} downloaded</value>
-     <comment>{0}, {1} - Data amount </comment>
+    <comment>{0}, {1} - Data amount </comment>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
     <value>Average synch speed</value>
@@ -543,6 +543,9 @@
     <value>Interviewer version</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>Archive status</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Archive status</value>
   </data>
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
@@ -680,6 +683,12 @@
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
     <value>Archived interviewers</value>
   </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Active supervisors</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Archived supervisors</value>
+  </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connected</value>
   </data>
@@ -776,5 +785,20 @@
   </data>
   <data name="InterviewDetails_NoItems" xml:space="preserve">
     <value>No items satisfying selected filter</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>supervisor(s) selected</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
   </data>
 </root>

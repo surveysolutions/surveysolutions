@@ -1780,6 +1780,78 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active supervisors.
+        /// </summary>
+        public static string Supervisors_ActiveUsers {
+            get {
+                return ResourceManager.GetString("Supervisors_ActiveUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive.
+        /// </summary>
+        public static string Supervisors_Archive {
+            get {
+                return ResourceManager.GetString("Supervisors_Archive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived supervisors.
+        /// </summary>
+        public static string Supervisors_ArchivedUsers {
+            get {
+                return ResourceManager.GetString("Supervisors_ArchivedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive status.
+        /// </summary>
+        public static string Supervisors_ArchiveStatusTitle {
+            get {
+                return ResourceManager.GetString("Supervisors_ArchiveStatusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to continue?.
+        /// </summary>
+        public static string Supervisors_ArchiveSupervisorsConfirm {
+            get {
+                return ResourceManager.GetString("Supervisors_ArchiveSupervisorsConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
+        /// </summary>
+        public static string Supervisors_ArchiveSupervisorsConfirmMessage {
+            get {
+                return ResourceManager.GetString("Supervisors_ArchiveSupervisorsConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to supervisor(s) selected.
+        /// </summary>
+        public static string Supervisors_Selected {
+            get {
+                return ResourceManager.GetString("Supervisors_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unarchive.
+        /// </summary>
+        public static string Supervisors_Unarchive {
+            get {
+                return ResourceManager.GetString("Supervisors_Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on Client.
         /// </summary>
         public static string Survey_CreatedOnClientTitle {

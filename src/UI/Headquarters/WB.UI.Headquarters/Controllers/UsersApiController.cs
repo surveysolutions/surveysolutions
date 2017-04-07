@@ -139,10 +139,10 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequest request)
+        public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
         {
             var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),
-                request.Search.Value, false);
+                request.Search.Value, request.Archived);
 
             return new DataTableResponse<SupervisorListItem>
             {
