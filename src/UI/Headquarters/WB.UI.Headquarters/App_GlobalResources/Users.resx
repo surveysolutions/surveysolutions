@@ -159,6 +159,9 @@
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Impersonate as this user in read only mode</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Observer" xml:space="preserve">
     <value>Observer</value>
   </data>
