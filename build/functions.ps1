@@ -267,25 +267,10 @@ function RunTests($BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Running tests']"
 
     $projects = GetProjectsWithTests
-    
-    if ($projects -ne $null) {
-        $parallelRunner = Get-ChildItem 'build\tools\' | 
-                                    Where-Object { $_.Name -like 'Machine.Specifications.TeamCityParallelRunner*'} | 
-                                    Select -First 1
-	if ($parallelRunner) {
-            $assemblies = $projects | ForEach-Object -Process {GetOutputAssembly $_ $BuildConfiguration} | Where-Object {(Test-Path $_) -and ($_ -notlike "*Mono*")}
-            $assembliesJoined = [string]::Join(" ", $assemblies)
-
-            $command = Join-Path "build\tools\$parallelRunner" "\mspec-teamcity-prunner.exe --threads 3 $assembliesJoined"
-            Write-Host $command
-            iex $command | Write-Host
-        }
-
-        foreach ($project in $projects) {
-            RunTestsFromProject $project $BuildConfiguration
-        }
-    }
-
+ 
+	foreach ($project in $projects) {
+		RunTestsFromProject $project $BuildConfiguration
+ 
     Write-Host "##teamcity[blockClosed name='Running tests']"
 }
 
