@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 next = this.random.Next(maxInterviewKeyValue);
             }
 
+            if (this.generatedIds.Count > 200) this.generatedIds.Clear();
+
             this.generatedIds.Add(next);
             return next;
         }
