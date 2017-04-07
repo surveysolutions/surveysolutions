@@ -1533,6 +1533,7 @@
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Code\IInterviewerVersionReader.cs" />
+    <Compile Include="Code\InterviewerVersionReader.cs" />
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
     <Compile Include="Code\LocalizationExtensions.cs" />
