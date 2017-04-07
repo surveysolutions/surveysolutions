@@ -177,10 +177,9 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/mapreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
-                "~/Scripts/moment.js",
+                "~/Scripts/ko.pager.js",
+                "~/Scripts/viewmodels/listview.js",
                 "~/Scripts/components/moment-duration-format.js",
-                "~/Scripts/bootstrap-datepicker.js",
-                "~/Scripts/ko.datepicker.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/synclog").Include(

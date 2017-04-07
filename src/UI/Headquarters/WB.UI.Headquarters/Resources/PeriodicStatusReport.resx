@@ -222,4 +222,7 @@
   <data name="From" xml:space="preserve">
     <value>From</value>
   </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>In the {0} team</value>
+  </data>
 </root>
