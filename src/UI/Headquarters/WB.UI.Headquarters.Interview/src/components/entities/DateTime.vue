@@ -47,8 +47,14 @@
         computed: {
             answer() {
                 if (this.$me && this.$me.answer) {
-                    const result = format(this.$me.answer, this.$me.isTimestamp ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD")
-                    return result
+                    if (this.$me.isTimestamp){
+                        return format(this.$me.answer, "YYYY-MM-DD HH:mm:ss")
+                    }
+                    else {
+                        const date = new Date(this.$me.answer)
+                        const result = format(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),"YYYY-MM-DD")
+                        return result;
+                    }
                 }
                 return ""
             }
