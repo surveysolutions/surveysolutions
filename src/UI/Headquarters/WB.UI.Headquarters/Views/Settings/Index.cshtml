@@ -23,6 +23,12 @@
         });
 
     </script>
+    <style type="text/css">
+        .logo {
+            max-width: 365px;
+            max-height: 329px;
+        }
+    </style>
 }
 
 <div class="row-fluid">
@@ -75,7 +81,7 @@
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
         <div class="col-sm-7">
-            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")"/>
+            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo" onerror="this.src='@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';"/>
             <form action="@Url.Action("RemoveLogo", "Settings")" method="post">
                 <button type="submit" class="btn btn-danger">Remove logo</button>
             </form>
