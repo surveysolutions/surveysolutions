@@ -1,5 +1,6 @@
 using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -28,10 +29,15 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             // no on per request scope required - lifetime managed by their parents controllers/handlers
             this.Bind<HQIdentityDbContext>().ToSelf();
+            this.Kernel.Get<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+
             this.Bind<HQPlainStorageDbContext>().ToSelf();
+            this.Kernel.Get<HQIdentityDbContext>().Roles.FirstOrDefault();
+
             this.Bind<IUserStore<HqUser, Guid>>().To<HqUserStore>();
             this.Bind<HqUserManager>().ToSelf();
             this.Bind<HqSignInManager>().ToSelf();
+
             this.Bind<IApiTokenProvider<Guid>>().To<ApiAuthTokenProvider<HqUser, Guid>>();
             this.Bind<IAuthorizedUser>().To<AuthorizedUser>();
         }
