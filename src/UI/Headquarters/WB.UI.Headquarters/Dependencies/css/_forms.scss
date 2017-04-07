@@ -416,13 +416,22 @@ input.double-checkbox-white{
 	}
 	.btn-clear{
 		@extend %visibility-visible;
-		border-left: 1px solid $gray_form;
+		//border-left: 1px solid $gray_form;
 	}
 	@media (max-width: $screen-md-min){
         .btn-clear{
             right: 0;
         }
     }  
+}
+.form-date.answered{
+	.form-control{
+		padding-right: 35px;
+	}
+	.btn-clear{
+		z-index: 5;
+		right: 40px;
+	}
 }
 ul.dropdown-menu li, ul.dropdown-menu li *{
 	word-wrap: break-word;
