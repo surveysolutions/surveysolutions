@@ -59,6 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                             Type = a.Type
                         }).ToList(),
                     InterviewId = x.InterviewId,
+                    Key = x.Key,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
@@ -89,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
             }
 
             if (input.Status.HasValue)
