@@ -205,6 +205,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In the {0} team.
+        /// </summary>
+        public static string InTheSupervisorTeamFormat {
+            get {
+                return ResourceManager.GetString("InTheSupervisorTeamFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Month.
         /// </summary>
         public static string Month {
