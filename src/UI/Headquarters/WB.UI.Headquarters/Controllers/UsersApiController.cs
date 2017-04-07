@@ -83,8 +83,8 @@ namespace WB.UI.Headquarters.Controllers
                     Email = x.Email,
                     DeviceId = x.DeviceId,
                     IsArchived = x.IsArchived,
-                    EnumeratorVersion = x.DeviceAppVersion,
-                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value > x.DeviceAppBuildVersion
+                    EnumeratorVersion = x.EnumeratorVersion,
+                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value > x.EnumeratorBuild
                 })
             };
 

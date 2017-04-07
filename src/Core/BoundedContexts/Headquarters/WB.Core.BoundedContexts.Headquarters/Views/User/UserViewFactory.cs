@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, 
-            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? appBuildVersion, Guid? supervisorId)
+            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? apkBuildVersion, Guid? supervisorId)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
@@ -147,10 +147,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
                         break;
                     case InterviewerOptionFilter.UpToDate:
-                        interviewers = interviewers.Where(x => appBuildVersion.HasValue && appBuildVersion > x.Profile.DeviceAppBuildVersion);
+                        interviewers = interviewers.Where(x => apkBuildVersion.HasValue && apkBuildVersion <= x.Profile.DeviceAppBuildVersion);
                         break;
                     case InterviewerOptionFilter.Outdated:
-                        interviewers = interviewers.Where(x => !(appBuildVersion.HasValue && appBuildVersion > x.Profile.DeviceAppBuildVersion));
+                        interviewers = interviewers.Where(x => !(apkBuildVersion.HasValue && apkBuildVersion <= x.Profile.DeviceAppBuildVersion));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(interviewerOptionFilter), interviewerOptionFilter, null);
@@ -170,8 +170,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
                     DeviceId = x.Profile.DeviceId,
                     IsArchived = x.IsArchived,
-                    DeviceAppVersion = x.Profile.DeviceAppVersion,
-                    DeviceAppBuildVersion = x.Profile.DeviceAppBuildVersion
+                    EnumeratorVersion = x.Profile.DeviceAppVersion,
+                    EnumeratorBuild = x.Profile.DeviceAppBuildVersion
                 });
             };
 
