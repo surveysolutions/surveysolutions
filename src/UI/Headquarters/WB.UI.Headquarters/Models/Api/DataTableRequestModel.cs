@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Models.Api
 
         public string GetSortOrder()
         {
-            var order = this.Order.FirstOrDefault();
+            var order = this.Order?.FirstOrDefault();
             if (order == null)
                 return string.Empty;
 
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Models.Api
 
         public IEnumerable<OrderRequestItem> GetSortOrderRequestItems()
         {
-            var order = this.Order.FirstOrDefault();
+            var order = this.Order?.FirstOrDefault();
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
