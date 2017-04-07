@@ -720,6 +720,7 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\HqUser.cs" />
+    <Compile Include="Views\User\InterviewerOptionFilter.cs" />
     <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserViewFactory.cs" />
     <Compile Include="Views\User\RoleExtensions.cs" />
