@@ -113,8 +113,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView ArchivedSupervisors(UsersListViewModel data)
-            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+        {
+            return this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize,
+                data.SortOrder.GetOrderRequestString(),
                 data.SearchBy, true);
+        }
 
         [HttpPost]
         [CamelCase]
@@ -136,9 +139,38 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [CamelCase]
         [Authorize(Roles = "Administrator")]
-        public DataTableResponse<InterviewerListItem> AllSupervisors([FromBody] DataTableRequest request)
+        public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequest request)
         {
-            return this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
+            var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),
+                request.Search.Value, false);
+
+            return new DataTableResponse<SupervisorListItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = users.TotalCount,
+                RecordsFiltered = users.TotalCount,
+                Data = users.Items.ToList().Select(x => new SupervisorListItem
+                {
+                    UserId = x.UserId,
+                    UserName = x.UserName,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
+                    InterviewersCount = x.InterviewersCount,
+                    NotConnectedToDeviceInterviewersCount = x.NotConnectedToDeviceInterviewersCount
+                })
+            };
+        }
+
+        public class SupervisorListItem
+        {
+            public virtual Guid UserId { get; set; }
+            public virtual string UserName { get; set; }
+            public virtual string CreationDate { get; set; }
+            public virtual string Email { get; set; }
+            public virtual bool IsLocked { get; set; }
+            public virtual int InterviewersCount { get; set; }
+            public virtual int NotConnectedToDeviceInterviewersCount { get; set; }
         }
 
         [HttpPost]
