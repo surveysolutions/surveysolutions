@@ -178,6 +178,11 @@ a.disabled{
 .btn-clear{
 	@include clear();
 }
+.answered{
+	.btn-clear{
+		@extend %visibility-visible;
+	}
+}
 .btn-action-questionnaire{
 	background-color: $white;
 	border-color: transparent;

@@ -43,7 +43,6 @@
                     </div>
                     <div class="block-filter">
                         <h5>@Reports.DatesRange</h5>
-
                         <div class="form-date input-group" id="dates-range">
                             <input type="text" placeholder="Select range" class="form-control flatpickr-input" readonly="readonly" data-input>
                             <button type="submit" class="btn btn-link btn-clear">
@@ -53,9 +52,6 @@
                                 <span class="calendar"></span>
                             </span>
                         </div>
-
-                        @*<input type="text" class="form-control" data-bind="value: SelectedRange" readonly="readonly" />
-                        <span style="cursor: pointer" class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>*@
                     </div>
                 </div>
             </aside>
@@ -63,9 +59,11 @@
                 <div class="page-header">
                     <h1>@Reports.CumulativeInterviewChart</h1>
                 </div>
-                <div class="col-sm-8">
-                    <h2 data-bind="text: TemplateName"></h2>
-                    <h2 id="NoResultsFound">@Common.NoResultsFound</h2>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2 data-bind="text: TemplateName"></h2>
+                        <h2 id="NoResultsFound">@Common.NoResultsFound</h2>
+                    </div>
                 </div>
                 <div id="interviewChart"></div>
             </div>
