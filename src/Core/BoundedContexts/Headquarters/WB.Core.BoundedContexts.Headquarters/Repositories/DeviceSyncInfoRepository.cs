@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
 
-        public double GetAverageSyncronizationSpeed(Guid interviewerId)
+        public double GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId)        
                 .Take(5).Average(info => info.Statistics.TotalConnectionSpeed);

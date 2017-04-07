@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         private readonly long uploadedBytes = 6000;
         private readonly TimeSpan totalDuration = TimeSpan.FromSeconds(1);
         private Stopwatch sw;
-        private Mock<IHttpStatistican> httpStatistician;
+        private Mock<IHttpStatistician> httpStatistician;
 
         [OneTimeSetUp]
         public async Task Context()
@@ -71,12 +71,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                      && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
             );
             
-            this.httpStatistician = new Mock<IHttpStatistican>();
+            this.httpStatistician = new Mock<IHttpStatistician>();
 
             this.httpStatistician.Setup(s => s.GetStats()).Returns(new HttpStats
                 {
-                    Downloaded = this.downloadedBytes,
-                    Uploaded = this.uploadedBytes,
+                    DownloadedBytes = this.downloadedBytes,
+                    UploadedBytes = this.uploadedBytes,
                     Duration = this.totalDuration
                 });
 
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 synchronizationService: synchronizationServiceMock.Object,
                 questionnaireFactory: interviewerQuestionnaireAccessor,
                 interviewFactory: mockOFInterviewAccessor.Object,
-                httpStatistican: httpStatistician.Object
+                httpStatistician: httpStatistician.Object
             );
 
             this.sw = new Stopwatch();
