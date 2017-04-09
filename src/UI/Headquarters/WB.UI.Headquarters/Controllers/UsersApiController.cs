@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
                     DeviceId = x.DeviceId,
                     IsArchived = x.IsArchived,
                     EnumeratorVersion = x.EnumeratorVersion,
-                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value > x.EnumeratorBuild
+                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild
                 })
             };
 
