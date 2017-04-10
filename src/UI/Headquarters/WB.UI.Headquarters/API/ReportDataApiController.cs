@@ -71,19 +71,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public TeamsAndStatusesReportView SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter data)
+        [CamelCase]
+        public TeamsAndStatusesReportResponse SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter filter)
         {
             var input = new TeamsAndStatusesInputModel
             {
                 ViewerId = this.authorizedUser.Id,
-                Orders = data.GetSortOrderRequestItems(),
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                TemplateId = data.TemplateId,
-                TemplateVersion = data.TemplateVersion
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TemplateId = filter.TemplateId,
+                TemplateVersion = filter.TemplateVersion
             };
 
-            return this.supervisorTeamsAndStatusesReport.Load(input);
+            var view = this.supervisorTeamsAndStatusesReport.Load(input);
+            return new TeamsAndStatusesReportResponse
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items,
+                TotalRow = view.TotalRow
+            };
         }
 
         [HttpPost]
