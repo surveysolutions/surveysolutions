@@ -10,7 +10,7 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.0.0.0</SurveySolutionsVersion>
+    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
     <HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>
     <Name>SurveySolutions</Name>

@@ -28,26 +28,45 @@
         </Condition>
 
         <Property Id="SITEPORT" Value="9700"></Property>
+        
         <Property Id="CONNSERVER" Value="127.0.0.1"></Property>
         <Property Id="CONNPORT" Value="5432"></Property>
         <Property Id="CONNUSERNAME" Value="postgres"></Property>
+
+
+        <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
+
+        <Property Id="INSTALLFOLDER" > 
+            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Name="Install Path" Win64='yes'></RegistrySearch>
+        </Property>
+
+<!--        <Condition Message="Path was not found.">
+            <![CDATA[((( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED) AND (NOT INSTALLFOLDER))]]>
+        </Condition>-->
         
         <UI>
-
-            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
             <UIRef Id="WixUI_InstallDir" />
-
+            
+            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
             <DialogRef Id="ConnectionStringDlg" />
 
             <!--Override original steps-->
             <!--Remove license agreement step-->
-            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">NOT Installed</Publish>
-            
-            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="5">1</Publish>
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="1">NOT Installed</Publish>
 
+
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="20">
+                ( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED
+            </Publish>
+
+            <!--<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg"><![CDATA[Upgrading]]></Publish>-->
+            
             
             <!--Redirect to new connection string step-->
             <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+
 
             <!--Custom step-->
             <Publish Dialog="ConnectionStringDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
@@ -56,13 +75,20 @@
             <!--Override original step-->
             <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConnectionStringDlg" Order="1">NOT Installed</Publish>
 
+
+            <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">REINSTALL OR WIX_UPGRADE_DETECTED</Publish>
+
+            <!--<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">REINSTALL OR WIX_UPGRADE_DETECTED</Publish>-->
+            
+            
+            
             <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="SurveySolutions has been succesfully installed." />
 
         </UI>
         
         <!--<WixVariable Id="WixUIInfoIco" Value="img/icon-32.bmp" />-->
         
-        <UIRef Id="WixUI_InstallDir" />
+        
         
         <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
                 
@@ -85,10 +111,10 @@
         <InstallExecuteSequence>
 
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
-                <![CDATA[NOT Installed]]>
+                <![CDATA[FirstInstall]]>
             </Custom>
             <Custom Action="InstallIIS" Before="WriteRegistryValues">
-                <![CDATA[NOT Installed]]>
+                <![CDATA[FirstInstall]]>
             </Custom>
 
         </InstallExecuteSequence>
@@ -104,27 +130,32 @@
         </Feature>
         
     </Product>
-    
-    
             
     <Fragment>
+
+        <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
+
         <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="INSTALLFOLDER" >
-                    <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
-                        <Directory Id="CONFIGFOLDER" Name="Configuration">
-                        </Directory>
+            <Directory Id="INSTALLFOLDER">
+                <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
+                    <Directory Id="CONFIGFOLDER" Name="Configuration">
                     </Directory>
+                </Directory>
             </Directory>
         </Directory>
-        
-        <SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />
     
     </Fragment>
 
     <Fragment>
         <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
+
+            <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
+                <RegistryKey Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Action="createAndRemoveOnUninstall">
+                    <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
+                </RegistryKey>
+            </Component>
            
-                <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes">
+                <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
                     
                     <iis:WebAppPool
                         Id="SurveySolutionsSiteAppPool"
@@ -154,7 +185,7 @@
         
         <ComponentGroup Id="SettingsUpdate" Directory="CONFIGFOLDER" >
                 <Component Id="ConfigUpdate" Guid="035F0D52-04C7-4DB4-A9C7-C447F405C2EA" NeverOverwrite="yes">
-                <CreateFolder/>
+                <!--<CreateFolder/>-->
                 <File Source="Headquarters.Web.config" PatchIgnore="yes" />
 
                 <!--<connectionStrings>
