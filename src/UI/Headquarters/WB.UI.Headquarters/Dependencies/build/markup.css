@@ -5913,6 +5913,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   color: #3f3f3f;
   width: 100% !important;
   font: 14px/16px Arial, sans-serif; }
+  .table .type-numeric {
+    text-align: right; }
   .table tr {
     transition: all 0.2s linear 0s; }
     .table tr .without-break {
@@ -6011,6 +6013,26 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     .table tbody tr td:hover a, .table tbody tr td:hover a:hover, .table tbody tr td:hover a:focus, .table tbody tr td:hover a:active, .table tbody tr td:focus a, .table tbody tr td:focus a:hover, .table tbody tr td:focus a:focus, .table tbody tr td:focus a:active, .table tbody tr td:active a, .table tbody tr td:active a:hover, .table tbody tr td:active a:focus, .table tbody tr td:active a:active {
       color: #2a81cb !important;
       text-decoration: none; }
+  .table tfoot tr {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; }
+    .table tfoot tr td, .table tfoot tr th {
+      border-top: none;
+      padding: 15px;
+      height: 35px; }
+      .table tfoot tr td.title-row, .table tfoot tr th.title-row {
+        font-size: 18px;
+        line-height: 20px; }
+        .table tfoot tr td.title-row a, .table tfoot tr td.title-row span, .table tfoot tr th.title-row a, .table tfoot tr th.title-row span {
+          font-size: 18px;
+          line-height: 20px; }
+      .table tfoot tr td:hover a, .table tfoot tr td:hover a:hover, .table tfoot tr td:hover a:focus, .table tfoot tr td:hover a:active, .table tfoot tr td:focus a, .table tfoot tr td:focus a:hover, .table tfoot tr td:focus a:focus, .table tfoot tr td:focus a:active, .table tfoot tr td:active a, .table tfoot tr td:active a:hover, .table tfoot tr td:active a:focus, .table tfoot tr td:active a:active, .table tfoot tr th:hover a, .table tfoot tr th:hover a:hover, .table tfoot tr th:hover a:focus, .table tfoot tr th:hover a:active, .table tfoot tr th:focus a, .table tfoot tr th:focus a:hover, .table tfoot tr th:focus a:focus, .table tfoot tr th:focus a:active, .table tfoot tr th:active a, .table tfoot tr th:active a:hover, .table tfoot tr th:active a:focus, .table tfoot tr th:active a:active {
+        color: #2a81cb !important;
+        text-decoration: none; }
+      .table tfoot tr td a, .table tfoot tr th a {
+        transition: all 0.2s linear 0s;
+        text-overflow: ellipsis;
+        color: #3f3f3f; }
 
 .table-striped tbody tr {
   background-color: #f8f9f9; }
