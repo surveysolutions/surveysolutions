@@ -178,6 +178,7 @@ namespace WB.UI.Headquarters
                 ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
                 "~/Scripts/ko.pager.js",
+                "~/Scripts/components/bindings.js",
                 "~/Scripts/viewmodels/listview.js",
                 "~/Scripts/components/moment-duration-format.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
