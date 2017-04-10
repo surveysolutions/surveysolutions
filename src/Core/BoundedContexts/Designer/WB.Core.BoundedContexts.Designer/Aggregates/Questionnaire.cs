@@ -2059,7 +2059,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
             if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException("Question inside roster sub-section can not be identifying");
+                throw new QuestionnaireException("Question inside roster sub-section cannot have Identifying scope");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)

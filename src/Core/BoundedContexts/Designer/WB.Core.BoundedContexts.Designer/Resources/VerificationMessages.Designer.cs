@@ -1279,7 +1279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No identifying (identifying) questions are defined. Define at least one identifying question..
+        ///   Looks up a localized string similar to No identifying questions are defined. Define at least one identifying question..
         /// </summary>
         internal static string WB0216_NoPrefilledQuestions {
             get {
