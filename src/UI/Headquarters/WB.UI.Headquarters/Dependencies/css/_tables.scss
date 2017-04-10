@@ -3,6 +3,9 @@
     width: 100% !important;
     // font: 16px/18px "RobotoRegular";
     font: 14px/16px Arial, sans-serif; 
+    .type-numeric{
+        text-align: right;
+    }
     tr{
         .without-break{
             white-space: nowrap;
@@ -142,6 +145,36 @@
                         color: $blue !important;
                         text-decoration: none;
                     }
+                }
+            }
+        }
+    }
+    tfoot{
+        tr{
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            td, th{
+                border-top: none;
+                padding: 15px;
+                height: 35px;
+                &.title-row{
+                    font-size: 18px;
+                    line-height: 20px;
+                    a, span{
+                        font-size: 18px;
+                        line-height: 20px;
+                    }
+                }
+                &:hover, &:focus, &:active{
+                    a, a:hover, a:focus, a:active{
+                        color: $blue !important;
+                        text-decoration: none;
+                    }
+                }
+                a{
+                    @include transition(all, 0.2s);
+                    text-overflow: ellipsis;
+                    color: $gray_text;
                 }
             }
         }
