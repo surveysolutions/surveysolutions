@@ -384,11 +384,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(returnUrl);
         }
 
-        public ActionResult Interview(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         public ActionResult OutdatedBrowser()
         {
             return View();
