@@ -11222,6 +11222,40 @@ body.no-cookies div.no-cookies {
   .main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
     left: 0; } }
 
+.map-report {
+  padding-bottom: 0; }
+  .map-report .container-fluid {
+    padding-right: 15px;
+    padding-left: 15px; }
+  .map-report .main-information {
+    margin-left: 282px; }
+  .map-report .footer.footer-adaptive {
+    padding-left: 382px; }
+
+@media (max-width: 1300px) {
+  .map-report .fullscreen-hidden-filters .main-information {
+    margin-left: 0;
+    padding-left: 12px; } }
+
+@media (max-width: 1210px) {
+  .map-report .main-information {
+    margin-left: 247px;
+    padding-right: 0px; }
+  .map-report .fullscreen-hidden-filters .main-information {
+    margin-left: 0; }
+  .map-report .footer.footer-adaptive {
+    padding-left: 290px; } }
+
+@media (max-width: 880px) {
+  .map-report .main-information {
+    margin-left: 12px; }
+  .map-report .footer.footer-adaptive {
+    padding-left: 12px; } }
+
+@media (max-width: 481px) {
+  .map-report .main-information {
+    padding-top: 0; } }
+
 .wrapper-info {
   border-bottom: 2px solid #dbdfe2; }
   .wrapper-info .container-info {
