@@ -19,6 +19,19 @@
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
                                                            new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" })');
 
+
+            model.footerCallback = function () {
+                var api = this.api();
+                var totalRow = model.TotalRow();
+                $(api.column(1).footer()).text(totalRow.supervisorAssignedCount);
+                $(api.column(2).footer()).text(totalRow.interviewerAssignedCount);
+                $(api.column(3).footer()).text(totalRow.completedCount);
+                $(api.column(4).footer()).text(totalRow.rejectedBySupervisorCount);
+                $(api.column(5).footer()).text(totalRow.approvedBySupervisorCount);
+                $(api.column(6).footer()).text(totalRow.rejectedByHeadquartersCount);
+                $(api.column(7).footer()).text(totalRow.approvedByHeadquartersCount);
+                $(api.column(8).footer()).text(totalRow.totalCount);
+            };
             model.getDataTableColumns = function () {
                 return [
                     {
@@ -91,72 +104,74 @@
         });
     </script>
 }
-<div class="main">
+<main class="main">
     <div class="container-fluid">
-        <aside class="filters">
-            <div class="foldback-button" id="hide-filters">
-                <span class="arrow"></span>
-                <span class="arrow"></span>
-                <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-            </div>
-            <div class="filters-container">
-                <h4>@Pages.FilterTitle:</h4>
-                <div class="block-filter">
-                    <h5>@Common.Template</h5>
-                    <select id="questionnaireSelector" data-bind="value: SelectedTemplate" class="form-control">
-                        @if (Model.Count() > 1)
-                        {
-                            <option value="">@Common.Any</option>
-                        }
-                        @foreach (var item in Model)
-                        {
-                            <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
-                        }
-                    </select>
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
-            </div>
-        </aside>
-        <div class="main-information reports">
-            @Html.Partial("_alerts")
-            <div class="page-header clearfix">
-                <h1>@Reports.TeamsAndStatuses</h1>
-            </div>
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle:</h4>
+                    <div class="block-filter">
+                        <h5>@Common.Template</h5>
+                        <select id="questionnaireSelector" data-bind="value: SelectedTemplate, selectPicker: {}" class="form-control">
+                            @if (Model.Count() > 1)
+                            {
+                                <option value="">@Common.Any</option>
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </aside>
+            <div class="main-information reports">
+                @Html.Partial("_alerts")
+                <div class="page-header clearfix">
+                    <h1>@Reports.TeamsAndStatuses</h1>
+                </div>
 
-            <div class="table-with-scroll">
-                <div class="dataTables_wrapper">
-                    <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
-                           data-order="[[ 1, &quot;asc&quot;]]" data-searching="false">
-                        <thead>
-                            <tr>
-                                <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
-                                <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
-                                <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                                <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
-                                <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
-                                <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
-                                <th data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
-                                <th data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
-                                <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            @*<tr>
-                                <td>
-                                    <b>@Common.Total</b>
-                                </td>
-                                <td><span data-bind="text: TotalRow().SupervisorAssignedCount"></span></td>
-                                <td><span data-bind="text: TotalRow().InterviewerAssignedCount"></span></td>
-                                <td><span data-bind="text: TotalRow().CompletedCount"></span></td>
-                                <td><span data-bind="text: TotalRow().RejectedBySupervisorCount"></span></td>
-                                <td><span data-bind="text: TotalRow().ApprovedBySupervisorCount"></span></td>
-                                <td><span data-bind="text: TotalRow().RejectedByHeadquartersCount"></span></td>
-                                <td><span data-bind="text: TotalRow().ApprovedByHeadquartersCount"></span></td>
-                                <td><span data-bind="text: TotalRow().TotalCount"></span></td>
-                            </tr>*@
-                        </tfoot>
-                    </table>
+                <div class="table-with-scroll">
+                    <div class="dataTables_wrapper">
+                        <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
+                               data-order="[[ 1, &quot;asc&quot;]]" data-searching="false">
+                            <thead>
+                                <tr>
+                                    <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
+                                    <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                                    <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                                    <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
+                                    <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
+                                    <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
+                                    <th data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
+                                    <th data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
+                                    <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        @Common.Total
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>

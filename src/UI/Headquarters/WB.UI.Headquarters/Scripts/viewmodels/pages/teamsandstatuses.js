@@ -4,7 +4,6 @@
     var self = this;
     self.Url = new Url(window.location.href);
     self.SelectedTemplate = ko.observable('');
-    self.TotalRow = ko.observable({});
     self.QuestionnaireName = ko.observable();
 
     self.GetFilterMethod = function () {
