@@ -163,9 +163,10 @@
                 $.extend(request, data);
 
                 self.SendRequest(serviceUrl, request, function (d) {
-                    if (!_.isUndefined(onDataReceivedCallback))
-                        onDataReceivedCallback(d);
-                     callback(d);
+                    if (d.totalRow) {
+                        self.TotalRow(d.totalRow);
+                    }
+                    callback(d);
                 });
             },
             columns: tableColumns,
@@ -176,7 +177,8 @@
             conditionalPaging: true,
             processing: true,
             serverSide: true,
-            deferRender: true
+            deferRender: true,
+            footerCallback: self.footerCallback
         });
     };
     self.reloadDataTable = function() {
