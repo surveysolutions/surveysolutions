@@ -19,7 +19,7 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
-    self.TotalRow = ko.observableArray(null);
+    self.TotalRow = ko.observable(null);
 
     this.QuestionnaireName = ko.observable();
 
@@ -30,11 +30,11 @@
     };
 
     self.getTotalAverage = function () {
-        return self.TotalRow().Average ? self.TotalRow().Average() : 0;
+        return (self.TotalRow() || {}).Average || 0;
     };
 
     self.getTotalCount = function () {
-        return self.TotalRow().Total ? self.TotalRow().Total() : 0;
+        return (self.TotalRow() || {}).Total || 0;
     };
 
     self.FormatSpeedPeriod = function(data) {
