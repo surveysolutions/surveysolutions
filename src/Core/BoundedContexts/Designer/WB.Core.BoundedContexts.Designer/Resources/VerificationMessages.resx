@@ -565,7 +565,7 @@
     <value>You have a barcode question. Tablets must support autofocus to be used with this questionnaire.</value>
   </data>
   <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
-    <value>No identifying (identifying) questions are defined. Define at least one identifying question.</value>
+    <value>No identifying questions are defined. Define at least one identifying question.</value>
   </data>
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
     <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
