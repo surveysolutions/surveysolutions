@@ -1942,7 +1942,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews from {1} interviewers.
+        ///   Looks up a localized string similar to {0} interview(s) from {1} responsible(s).
         /// </summary>
         public static string SurveysAndStatuses_InterviewerStatisticsFormat {
             get {
@@ -1969,7 +1969,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews from {1} teams.
+        ///   Looks up a localized string similar to {0} interview(s) from {1} responsible(s).
         /// </summary>
         public static string SurveysAndStatuses_SupervisorStatisticsFormat {
             get {

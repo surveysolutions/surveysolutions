@@ -252,7 +252,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [CamelCase]
-        public DataTableResponse<HeadquarterSurveysAndStatusesReportLine> SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        public SurveysAndStatusesDataTableResponse SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
         {
             var teamLeadName = this.authorizedUser.UserName;
 
@@ -265,18 +265,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
             });
 
-            return new DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+            return new SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items
+                Data = view.Items,
+                TotalResponsibleCount = view.TotalResponsibleCount,
+                TotalInterviewCount = view.TotalInterviewCount
             };
         }
 
         [HttpPost]
         [CamelCase]
-        public DataTableResponse<HeadquarterSurveysAndStatusesReportLine> HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        public SurveysAndStatusesDataTableResponse HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
         {
             var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
             {
@@ -286,13 +288,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TeamLeadName = filter.ResponsibleName
             });
 
-            return new DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+            return new SurveysAndStatusesDataTableResponse
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = view.TotalCount,
                 RecordsFiltered = view.TotalCount,
-                Data = view.Items
+                Data = view.Items,
+                TotalResponsibleCount = view.TotalResponsibleCount,
+                TotalInterviewCount = view.TotalInterviewCount
             };
+        }
+
+
+        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+        {
+            public int TotalInterviewCount { get; set; }
+            public int TotalResponsibleCount { get; set; }
         }
 
         public class SurveysAndStatusesFilter : DataTableRequest

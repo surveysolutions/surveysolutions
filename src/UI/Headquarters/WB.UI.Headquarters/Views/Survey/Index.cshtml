@@ -14,11 +14,11 @@
 
     <script type="text/javascript">
         $(document)
-            .ready(function() {
+            .ready(function () {
                 $("footer").addClass("footer-adaptive");
 
                 $("#hide-filters")
-                    .click(function() {
+                    .click(function () {
                         $(".filters").toggleClass("hidden-filters");
                         $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
                         $("footer").toggleClass("footer-adaptive");
@@ -27,75 +27,72 @@
             });
     </script>
     <script type="text/javascript">
-    var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
-    $(function() {
-        var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
-        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
-        var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
-        model.getDataTableColumns = function () {
-            return [
-                {
-                    render: function (data, type, row) {
-                        return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + "\">" + data + "</a>";
+        var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
+        $(function () {
+            var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
+            var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
+
+            var statisticsMessage = "@Pages.SurveysAndStatuses_InterviewerStatisticsFormat";
+
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
+            model.getDataTableColumns = function () {
+                return [
+                    {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.Completed', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['responsible']);
+                        }
+                    }, {
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedByHeadquarters', model.Url.query['responsible']);
+                        }
+                    }, {
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
                     }
-                },
-                {
-                    render: function (data, type, row) {
-                        return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + "\">" + data + "</a>";
-                    }
-                },
-                {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] +
-                                '&status=@InterviewStatus.SupervisorAssigned\">' + data + "</a>";
-                    }
-                }, {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] +
-                            '&status=@InterviewStatus.InterviewerAssigned\">' + data + "</a>";
-                    }
-                }, {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] +
-                            '&status=@InterviewStatus.Completed\">' + data + "</a>";
-                    }
-                }, {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] +
-                            '&status=@InterviewStatus.RejectedBySupervisor\">' + data + "</a>";
-                    }
-                }, {
-                }, {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] +
-                            '&status=@InterviewStatus.RejectedByHeadquarters\">' + data + "</a>";
-                    }
-                }, {
-                }, {
-                    render: function (data, type, row) {
-                        if (data === 0) return "<span>" + data + "</span>";
-                        else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                            '&templateVersion=' + row.questionnaireVersion + '&responsible=' + model.Url.query['responsible'] + '"\">' +
-                            data + "</a>";
-                    }
-                }
-            ];
+                ];
+            };
+            ko.applyBindings(model);
+            model.load();
+        });
+        function getLinkToInterviews(model, data, row, interviewStatus, responsible) {
+            if (data === 0) return "<span>" + data + "</span>";
+
+            var link = "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
+                '&templateVersion=' + row.questionnaireVersion;
+
+            if (!_.isUndefined(responsible))
+                link += '&responsible=' + model.Url.query['responsible'];
+
+            if (!_.isUndefined(interviewStatus))
+                link += '&status=' + interviewStatus;
+
+            return link + '"\">' + data + "</a>";
         };
-        ko.applyBindings(model);
-        model.load();
-    });
     </script>
 }
 
@@ -128,7 +125,7 @@
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
-                    <p>@Pages.SurveysAndStatuses_InterviewerStatisticsFormat</p>
+                    <p data-bind="text: StatisticsMessage"></p>
                 </div>
                 <div class="table-with-scroll">
                     <div class="dataTables_wrapper no-footer">
