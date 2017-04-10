@@ -5,13 +5,14 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
-    <Product Id="EE5F1DD2-13D8-442C-9978-8E8918EA789D" 
+    <Product Id="*" 
              Name="SurveySolutions" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
              Manufacturer="The World Bank" 
              UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA">
-
+        <!--EE5F1DD2-13D8-442C-9978-8E8918EA789D-->
+        
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
         <!--not supported in wix 3.10 should be in 3.11 and 4-->
@@ -92,15 +93,16 @@
 
         </InstallExecuteSequence>
         
-        <MajorUpgrade DowngradeErrorMessage="A newer version of MyProductName is already installed." AllowDowngrades="no"/>
+        <MajorUpgrade DowngradeErrorMessage="A newer version of MyProductName is already installed." AllowDowngrades="no"
+                      Schedule="afterInstallExecute"/>
         
         <MediaTemplate  EmbedCab="yes" />
 
         <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
-        <ComponentGroupRef Id="ProductComponents" />
-          
-        <ComponentGroupRef Id="SettingsUpdate"  />
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentGroupRef Id="SettingsUpdate"  />
         </Feature>
+        
     </Product>
     
     
