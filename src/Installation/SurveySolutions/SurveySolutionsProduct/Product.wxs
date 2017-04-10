@@ -5,7 +5,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
-    <Product Id="*" 
+    <Product Id="EE5F1DD2-13D8-442C-9978-8E8918EA789D" 
              Name="SurveySolutions" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
@@ -92,7 +92,7 @@
 
         </InstallExecuteSequence>
         
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MajorUpgrade DowngradeErrorMessage="A newer version of MyProductName is already installed." AllowDowngrades="no"/>
         
         <MediaTemplate  EmbedCab="yes" />
 
