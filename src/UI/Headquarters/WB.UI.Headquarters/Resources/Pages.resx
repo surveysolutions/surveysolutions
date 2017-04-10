@@ -549,10 +549,10 @@
     <value>Statuses of issued or conducted interviews</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} interviews from {1} teams</value>
+    <value>{0} interview(s) from {1} responsible(s)</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} interviews from {1} interviewers</value>
+    <value>{0} interview(s) from {1} responsible(s)</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Connected to the server</value>

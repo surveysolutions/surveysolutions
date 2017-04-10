@@ -135,7 +135,7 @@
     };
 
     var datatable;
-    self.initDataTable = function() {
+    self.initDataTable = function(onDataReceivedCallback) {
         $.fn.dataTable.ext.errMode = 'none';
 
         var tableColumns = self.getDataTableColumns();
@@ -162,7 +162,11 @@
 
                 $.extend(request, data);
 
-                self.SendRequest(serviceUrl, request, function(d) { callback(d); });
+                self.SendRequest(serviceUrl, request, function (d) {
+                    if (!_.isUndefined(onDataReceivedCallback))
+                        onDataReceivedCallback(d);
+                     callback(d);
+                });
             },
             columns: tableColumns,
             columnDefs: tableColumnDefs,
