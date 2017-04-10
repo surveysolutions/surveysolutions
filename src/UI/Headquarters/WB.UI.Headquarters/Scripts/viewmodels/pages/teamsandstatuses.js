@@ -4,8 +4,8 @@
     var self = this;
     self.Url = new Url(window.location.href);
     self.SelectedTemplate = ko.observable('');
-    self.TotalRow = ko.observable(null);
-    this.QuestionnaireName = ko.observable();
+    self.TotalRow = ko.observable({});
+    self.QuestionnaireName = ko.observable();
 
     self.GetFilterMethod = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
@@ -23,21 +23,22 @@
         };
     };
 
+    var updateQuestionnaireName = function (value) {
+        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
+    }
+
     self.load = function () {
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         updateQuestionnaireName(self.SelectedTemplate());
 
-        self.SelectedTemplate.subscribe(function (value) {
+        self.SelectedTemplate.subscribe(function () {
             updateQuestionnaireName(self.SelectedTemplate());
-            self.filter();
+            self.reloadDataTable();
         });
 
-        self.search();
+        self.initDataTable();
+        self.reloadDataTable();
     };
-
-    var updateQuestionnaireName = function (value) {
-        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
-    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.TeamsAndStatuses, Supervisor.VM.ListView);
