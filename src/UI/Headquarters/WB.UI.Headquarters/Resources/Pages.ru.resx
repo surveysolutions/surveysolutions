@@ -364,10 +364,10 @@
     <value>Состояние созданных и собранных интервью</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
-    <value>{0} интервью от {1} команд</value>
+    <value>{0} интервью от {1} ответственных</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
-    <value>{0} интервью от {1} интервьеров</value>
+    <value>{0} интервью от {1} ответственных</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>Интервьвер (команда)</value>
