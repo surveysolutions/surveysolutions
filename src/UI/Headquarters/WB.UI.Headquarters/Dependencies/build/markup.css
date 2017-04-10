@@ -9183,6 +9183,24 @@ table tr th .census-icon, table tr td .census-icon {
   .screen-small-resolution .header-unit label {
     padding-right: 30px; } }
 
+#interviewChart {
+  width: 100%;
+  height: 600px;
+  padding: 10px; }
+
+table.jqplot-table-legend {
+  width: 90%;
+  border: none; }
+
+td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+  width: 20px; }
+
+div.jqplot-table-legend-swatch-outline {
+  border: none; }
+
+.jqplot-table-legend-swatch {
+  border-width: 10px; }
+
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
   display: flex; }
