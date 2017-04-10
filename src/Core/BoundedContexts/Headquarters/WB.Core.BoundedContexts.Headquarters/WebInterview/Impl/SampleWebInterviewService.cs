@@ -104,15 +104,18 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             csvWriter.WriteField("Link");
             csvWriter.WriteField("Interview Key");
 
-            var titles = this.answers.Query(_ => _
-                .Where(x => x.InterviewSummary.SummaryId == sampleInterviewId.Id)
-                .OrderBy(x => x.Position)
-                .Select(x => x.Title)
-                .ToList());
-
-            foreach (var questionItem in titles)
+            if (sampleInterviewId != null)
             {
-                csvWriter.WriteField(TitlesCleanupRegex.Replace(questionItem.RemoveHtmlTags(), ""));
+                var titles = this.answers.Query(_ => _
+                    .Where(x => x.InterviewSummary.SummaryId == sampleInterviewId.Id)
+                    .OrderBy(x => x.Position)
+                    .Select(x => x.Title)
+                    .ToList());
+
+                foreach (var questionItem in titles)
+                {
+                    csvWriter.WriteField(TitlesCleanupRegex.Replace(questionItem.RemoveHtmlTags(), ""));
+                }
             }
 
             csvWriter.NextRecord();

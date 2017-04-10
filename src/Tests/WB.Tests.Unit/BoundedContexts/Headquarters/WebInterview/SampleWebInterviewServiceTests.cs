@@ -16,8 +16,31 @@ using WB.Tests.Abc.Storage;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
     [TestOf(typeof(SampleWebInterviewService))]
-    public class SampleWebInterviewServiceTests 
+    public class SampleWebInterviewServiceTests
     {
+        [Test]
+        public void When_no_interviews_created_for_questionnaire()
+        {
+            var questionnaireId = Create.Entity.QuestionnaireIdentity();
+
+            var service = this.GetService();
+
+            // Act
+            byte[] ouptutBytes = service.Generate(questionnaireId, "http://baseurl");
+
+            // Assert
+            var reader = GetCsvReader(ouptutBytes);
+
+            reader.Read();
+
+            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(2));
+            Assert.That(reader.FieldHeaders[0], Is.EqualTo("Link"));
+            Assert.That(reader.FieldHeaders[1], Is.EqualTo("Interview Key"));
+            
+            var csvReaderException = Assert.Throws<CsvReaderException>(() => reader.Read(), "Only header row should be written to the output file");
+            Assert.That(csvReaderException.Message, Does.Contain("exhausted all records"));
+        }
+
         [Test]
         public void When_generating_for_questionnaire_without_prefilled_questions_Should_ouput_links()
         {
@@ -109,9 +132,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             InterviewDataExportSettings exportSettings = null)
         {
             return new SampleWebInterviewService(
-                summaries ?? new TestInMemoryWriter<InterviewSummary>(), 
-                answers ?? new TestInMemoryWriter<QuestionAnswer>(),  
-                exportSettings ?? new InterviewDataExportSettings {InterviewIdsQueryBatchSize = 10});
+                summaries ?? new TestInMemoryWriter<InterviewSummary>(),
+                answers ?? new TestInMemoryWriter<QuestionAnswer>(),
+                exportSettings ?? new InterviewDataExportSettings { InterviewIdsQueryBatchSize = 10 });
         }
     }
 }
