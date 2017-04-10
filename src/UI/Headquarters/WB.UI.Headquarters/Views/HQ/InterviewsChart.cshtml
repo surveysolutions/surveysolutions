@@ -5,7 +5,10 @@
     ViewBag.Title = Reports.InterviewChart;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-
+@section styles
+{
+    @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
+}
 @section scripts
 {
     @Scripts.Render("~/js/chart")
@@ -19,7 +22,7 @@
             ko.applyBindings(model);
             model.load();
         });
-</script>
+    </script>
 }
 
 <main class="hold-transition">
@@ -70,28 +73,3 @@
         </div>
     </div>
 </main>
-
-@section styles
-{
-    @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
-    <style type="text/css">
-        #interviewChart {
-            width: 100%;
-            height: 600px;
-            padding: 10px;
-        }
-        table.jqplot-table-legend {
-             width: 90%;
-             border: none;
-         }
-        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-            width: 20px;
-        }
-        div.jqplot-table-legend-swatch-outline {
-            border: none;
-        }
-        .jqplot-table-legend-swatch {
-            border-width: 10px;
-        }
-    </style>
-}
