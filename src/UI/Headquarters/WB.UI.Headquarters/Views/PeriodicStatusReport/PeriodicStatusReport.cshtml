@@ -72,7 +72,7 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.From</h5>
                         <div class="form-date input-group" id="dates-range">
-                            <input type="text" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
+                            <input type="text" data-bind="flatpickr: FromDate, flatpickrOptions: { maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'm/d/Y'}" placeholder="Select start date" class="form-control flatpickr-input" readonly="readonly" data-input>
                             <button type="submit" class="btn btn-link btn-clear">
                                 <span></span>
                             </button>
