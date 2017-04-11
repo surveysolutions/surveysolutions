@@ -17,21 +17,9 @@
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         $(function () {
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
-                                                           new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" })');
+                                                           new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" })',
+                $interviewsUrl);
 
-
-            model.footerCallback = function () {
-                var api = this.api();
-                var totalRow = model.TotalRow();
-                $(api.column(1).footer()).text(totalRow.supervisorAssignedCount);
-                $(api.column(2).footer()).text(totalRow.interviewerAssignedCount);
-                $(api.column(3).footer()).text(totalRow.completedCount);
-                $(api.column(4).footer()).text(totalRow.rejectedBySupervisorCount);
-                $(api.column(5).footer()).text(totalRow.approvedBySupervisorCount);
-                $(api.column(6).footer()).text(totalRow.rejectedByHeadquartersCount);
-                $(api.column(7).footer()).text(totalRow.approvedByHeadquartersCount);
-                $(api.column(8).footer()).text(totalRow.totalCount);
-            };
             model.getDataTableColumns = function () {
                 return [
                     {
@@ -40,60 +28,44 @@
                         }
                     },
                     {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.SupervisorAssigned\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.InterviewerAssigned\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.Completed\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.RejectedBySupervisor\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.ApprovedBySupervisor\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedBySupervisor');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.RejectedByHeadquarters\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible +
-                                '&status=@InterviewStatus.ApprovedByHeadquarters\">' + data + "</a>";
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedByHeadquarters');
                         }
                     }, {
+                        className: "type-numeric",
                         render: function (data, type, row) {
-                            if (data === 0) return "<span>" + data + "</span>";
-                            else return "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-                                '&templateVersion=' + row.questionnaireVersion + '&responsible=' + row.responsible + '"\">' +
-                                data + "</a>";
+                            return model.getLinkToInterviews(data, row);
                         }
                     }
                 ];
@@ -104,6 +76,7 @@
         });
     </script>
 }
+
 <main class="main">
     <div class="container-fluid">
         <div class="row">
@@ -134,6 +107,7 @@
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <h1>@Reports.TeamsAndStatuses</h1>
+                    <p data-bind="text: QuestionnaireName"></p>
                 </div>
 
                 <div class="table-with-scroll">

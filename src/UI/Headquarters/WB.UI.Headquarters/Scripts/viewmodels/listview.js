@@ -163,9 +163,8 @@
                 $.extend(request, data);
 
                 self.SendRequest(serviceUrl, request, function (d) {
-                    if (d.totalRow) {
-                        self.TotalRow(d.totalRow);
-                    }
+                    if (!_.isUndefined(onDataReceivedCallback))
+                        onDataReceivedCallback(d);
                     callback(d);
                 });
             },
