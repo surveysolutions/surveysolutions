@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -1479,6 +1480,20 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewKey InterviewKey(int key = 289)
         {
             return new InterviewKey(key);
+        }
+
+        public BrokenInterviewPackagesView BrokenInterviewPackagesView(params BrokenInterviewPackageView[] brokenPackages)
+        {
+            return new BrokenInterviewPackagesView
+            {
+                Items = brokenPackages,
+                TotalCount = brokenPackages.Length
+            };
+        }
+
+        public BrokenInterviewPackageView BrokenInterviewPackageView()
+        {
+            return new BrokenInterviewPackageView();
         }
     }
 }

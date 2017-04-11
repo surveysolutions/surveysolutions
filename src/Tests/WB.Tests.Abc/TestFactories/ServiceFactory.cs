@@ -19,12 +19,14 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -421,6 +423,19 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>());
+        }
+
+        public TroubleshootingService Troubleshooting(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
+            IQuestionnaireBrowseViewFactory questionnaireFactory = null,
+            IInterviewLogSummaryReader syncLogFactory = null,
+            IBrokenInterviewPackagesViewFactory brokenPackagesFactory = null)
+        {
+            return new TroubleshootingService(
+                interviewSummaryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
+                questionnaireFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(), 
+                syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
+                brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
     }
 }
