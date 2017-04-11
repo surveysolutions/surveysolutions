@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WB.UI.Headquarters.Models.Troubleshooting.CensusInterviewsModel
+@{
     ViewBag.Title = Troubleshooting.MissingCensusInterviews_PageHeader;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
@@ -7,6 +8,47 @@
     @Scripts.Render("~/js/common")
     @Scripts.Render("~/js/troubleshooting")
     <script type="text/javascript">
+        var tableOptions = {
+            rowId: 'key',
+            order: [[2, 'desc']],
+            deferLoading: 0,
+            columns: [
+                {
+                    data: "key",
+                    name: "Key", // case-sensitive!
+                    "class": "interview-id title-row",
+                    render: function(data, type, row) {
+                        return (row.wasCreatedOnClient === true ? "<span class='census-icon'></span>" : "") + '<a href="@Url.Action("Details", "Interview")/' + row.interviewId + '">' + data + '</a>';
+                    },
+                    title: "@Troubleshooting.TableTitle_InterviewId"
+                },
+                {
+                    data: "responsibleName",
+                    name: "ResponsibleName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    "class": "enumerator",
+                    render: function(data, type, row) {
+                        return '<span class="interviewer">' + data + '</span>';
+                    },
+                    title: "@Troubleshooting.TableTitle_Enumerator"
+                },
+                {
+                    data: "updateDate",
+                    name: "UpdateDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    "class": "date",
+                    title: "@Troubleshooting.TableTitle_LastUpdate"
+                },
+                {
+                    data: "status",
+                    name: "Status", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    title: "@Troubleshooting.TableTitle_Status"
+                }
+            ],
+            ajax: {
+                url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "CensusInterviews"})",
+                type: "POST"
+            }
+        };
+
         var app = new Vue({
             data: {
                 interviewerId: null,
@@ -20,49 +62,10 @@
                 },
                 questionnaireParams: { censusOnly: true },
                 wasInitialized: false,
-                totalCensusInterviews: 0,
-                totalBrokenPackages: 0,
+                message: "",
+                foundInterviewsMessage: "",
                 isLoading: false,
-                tableOptions: {
-                    rowId: 'key',
-                    order: [[2, 'desc']],
-                    deferLoading: 0,
-                    columns: [
-                        {
-                            data: "key",
-                            name: "Key", // case-sensitive!
-                            "class": "interview-id title-row",
-                            render: function (data, type, row) {
-                                return (row.wasCreatedOnClient === true ? "<span class='census-icon'></span>" : "") + '<a href="@Url.Action("Details", "Interview")/' + row.interviewId + '">' + data + '</a>';
-                            },
-                            title: "@Troubleshooting.TableTitle_InterviewId"
-                        },
-                        {
-                            data: "responsibleName",
-                            name: "ResponsibleName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                            "class": "enumerator",
-                            render: function (data, type, row) {
-                                return '<span class="interviewer">' + data + '</span>';
-                            },
-                            title: "@Troubleshooting.TableTitle_Enumerator"
-                        },
-                        {
-                            data: "updateDate",
-                            name: "UpdateDate", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                            "class": "date",
-                            title: "@Troubleshooting.TableTitle_LastUpdate"
-                        },
-                        {
-                            data: "status",
-                            name: "Status", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                            title: "@Troubleshooting.TableTitle_Status"
-                        }
-                    ],
-                    ajax: {
-                        url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "TroubleshootingApi", action = "CensusInterviews"})",
-                        type: "POST"
-                    }
-                }
+                tableOptions: tableOptions
             },
             methods: {
                 addParamsToRequest: function(requestData) {
@@ -71,24 +74,24 @@
                     requestData.changedFrom = moment(this.changedFrom).format();
                     requestData.changedTo = moment(this.changedTo).format();
                 },
-                responseProcessor: function (response) {
+                responseProcessor: function(response) {
                     this.isLoading = false;
-                    this.totalCensusInterviews = response.censusInterviewsCount;
-                    this.totalBrokenPackages = response.brokenPackagesCount;
+                    this.message = response.message;
+                    this.foundInterviewsMessage = response.foundInterviewsMessage;
                 },
-                userSelected: function (newValue) {
+                userSelected: function(newValue) {
                     this.interviewerId = newValue;
                 },
-                questionnaireSelected: function (newValue) {
+                questionnaireSelected: function(newValue) {
                     this.questionnaireId = newValue;
                 },
-                rangeSelected: function (textValue, from, to) {
+                rangeSelected: function(textValue, from, to) {
                     this.changedFrom = from;
                     this.changedTo = to;
                 },
-                findInterviews: function () {
+                findInterviews: function() {
                     var self = this;
-                    this.$validator.validateAll().then(function (result) {
+                    this.$validator.validateAll().then(function(result) {
                         if (result) {
                             self.reloadTable();
                             self.startWatchers(['interviewerId', 'questionnaireId', 'changedFrom', 'changedTo'], self.reloadTable.bind(self));
@@ -97,13 +100,13 @@
                         }
                     });
                 },
-                startWatchers: function (props, watcher) {
-                    var iterator = function (prop) {
+                startWatchers: function(props, watcher) {
+                    var iterator = function(prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
                 },
-                reloadTable: function () {
+                reloadTable: function() {
                     var self = this;
                     this.$validator.validateAll().then(function(result) {
                         if (result && (self.changedFrom !== null && self.changedTo !== null) || (self.changedFrom == null && self.changedTo == null)) {
@@ -113,13 +116,13 @@
                     });
                 }
             },
-            mounted: function () {
+            mounted: function() {
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
             }
         });
 
-        window.onload = function () {
+        window.onload = function() {
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
@@ -172,7 +175,7 @@
                             placeholder="@Troubleshooting.MissingCensusInterviews_Filters_InterviewerPlaceholder"
                             control-id="interviewerId"
                             :value="interviewerId"
-                            :ajax-params="{ supervisorId: 'aaaa' }"
+                            :ajax-params="{ }"
                             v-on:selected="userSelected" 
                             fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></typeahead>
                     </div>
@@ -197,15 +200,8 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-7 ">
-                        <ul class="list-unstyled" v-if="isLoading == false">
-                            <li v-if="totalBrokenPackages == 0"><b>@Troubleshooting.MissingCensusInterviews_NoBrokenPackages_Message</b></li>
-                            <li v-else class="error-text"><b>@Troubleshooting.MissingCensusInterviews_SomeBrokenPackages_Message</b></li>
-                        </ul>
-                        <ul class="list-unstyled" v-if="isLoading == false">
-                            <li v-if="totalCensusInterviews > 1"><b>@string.Format(Troubleshooting.MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format, "{{totalCensusInterviews}}")</b></li>
-                            <li v-else-if="totalCensusInterviews == 1"><b>@Troubleshooting.MissingCensusInterviews_OneInterviewFound_Message</b></li>
-                            <li v-else><b>@Troubleshooting.MissingCensusInterviews_NothingFound_Message</b></li>
-                        </ul>
+                        <p v-if="isLoading == false" v-html="message"></p>
+                        <p v-if="isLoading == false" v-html="foundInterviewsMessage"></p>
                     </div>
                 </div>
                 <div class="interviews-info">

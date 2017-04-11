@@ -147,4 +147,10 @@
   <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
     <value>Опросник этого интервью был удален администратором сервера. Все интервью, собранные по этому опроснику утеряны и не могут быть восстановлены.</value>
   </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которое вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию.</value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которые вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию и повторите поиск заново. Если и после этого вы не увидите интервью в списке, то обратитесь в службу поддержки.</value>
+  </data>
 </root>

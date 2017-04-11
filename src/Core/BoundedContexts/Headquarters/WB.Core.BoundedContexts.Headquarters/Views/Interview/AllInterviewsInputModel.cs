@@ -36,5 +36,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string InterviewKey { get; set; }
 
         public Guid? InterviewId { get; set; }
+        public Guid? SupervisorId { get; set; }
     }
 }
