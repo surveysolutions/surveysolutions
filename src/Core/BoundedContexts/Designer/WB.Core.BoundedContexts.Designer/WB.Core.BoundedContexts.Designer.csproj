@@ -272,6 +272,7 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateAreaQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateMultimediaQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateMultiOptionQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateCascadingComboboxOptions.cs" />
