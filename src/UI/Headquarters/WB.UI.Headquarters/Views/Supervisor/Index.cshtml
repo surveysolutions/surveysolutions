@@ -6,9 +6,6 @@
     ViewBag.Title = Users.Supervisors;
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     var isAdmin = authorizedUser.IsAdministrator;
-    var isAdminOrObserver = isAdmin || authorizedUser.IsObserver;
-    var isObserving = authorizedUser.IsObserving;
-    var isAdminOrHeadquarters = isAdmin || authorizedUser.IsHeadquarter;
 }
 
 @section scripts
@@ -101,7 +98,6 @@
 
             self.table = null;
 
-            var deleteSupervisorUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })';
             var supervisorsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllSupervisors" })';
             var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
             var $archiveUsersUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
@@ -131,20 +127,15 @@
             var buildMenuItem = function (selectedRow) {
                 var items = {}
 
-                @if (authorizedUser.IsObserver)
-                    {
-                        <text>
-                        var impersonateAsUser = function (key, opt) {
-                            var selectedRow = selectRowAndGetData(opt.$trigger);
-                            window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
-                        };
-                        items["impersonate"] =
-                        {
-                            name: "@Users.ImpersonateAsUser",
-                            callback: impersonateAsUser
-                        };
-                        </text>
-                    }
+                var impersonateAsUser = function (key, opt) {
+                    var selectedRow = selectRowAndGetData(opt.$trigger);
+                    window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
+                };
+                items["impersonate"] =
+                {
+                    name: "@Users.ImpersonateAsUser",
+                    callback: impersonateAsUser
+                };
 
                 return items;
             }
@@ -184,7 +175,9 @@
                 .on('init.dt', onTableInitComplete)
                 .on('xhr.dt', function (e, settings, json, xhr) {
                     if (xhr.status === 401)
+                        {debugger;
                         location.reload();
+                    }
                     else if (xhr.status != undefined && xhr.status !== 200)
                         notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
 
