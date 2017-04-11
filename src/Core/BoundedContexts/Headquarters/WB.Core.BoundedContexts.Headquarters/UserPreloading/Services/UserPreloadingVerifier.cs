@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         readonly Regex loginValidatioRegex;
         readonly Regex emailValidationRegex;
         readonly Regex phoneNumberValidationRegex;
+        readonly Regex fullNameRegex;
 
         public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            this.fullNameRegex = new Regex(this.userPreloadingSettings.PersonNameFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
@@ -154,12 +156,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
                 new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
                 new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
+                new PreloadedDataValidator(FullNameAllowedSymbolsValidation, "PLU0014", u => u.FullName),
             };
 
             for (int i = 0; i < validationFunctions.Length; i++)
             {
                 this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
             }
+        }
+
+        private bool FullNameAllowedSymbolsValidation(UserPreloadingDataRecord arg)
+        {
+            if (string.IsNullOrEmpty(arg.FullName))
+                return false;
+
+            return !this.fullNameRegex.IsMatch(arg.FullName);
         }
 
         private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
