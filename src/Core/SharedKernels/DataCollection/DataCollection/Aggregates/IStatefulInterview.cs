@@ -62,6 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
+        InterviewTreeAreaQuestion GetAreaQuestion(Identity identity);
+
         InterviewTreeQuestion GetQuestion(Identity identity);
 
         InterviewTreeStaticText GetStaticText(Identity identity);
