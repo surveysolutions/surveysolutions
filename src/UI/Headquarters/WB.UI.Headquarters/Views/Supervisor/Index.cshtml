@@ -175,9 +175,7 @@
                 .on('init.dt', onTableInitComplete)
                 .on('xhr.dt', function (e, settings, json, xhr) {
                     if (xhr.status === 401)
-                        {debugger;
                         location.reload();
-                    }
                     else if (xhr.status != undefined && xhr.status !== 200)
                         notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
 
