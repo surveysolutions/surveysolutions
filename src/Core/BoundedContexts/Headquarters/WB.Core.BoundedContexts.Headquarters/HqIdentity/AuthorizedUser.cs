@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
-namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
+namespace WB.Core.BoundedContexts.Headquarters.HqIdentity
 {
     public class AuthorizedUser : IAuthorizedUser
     {
@@ -46,5 +46,20 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public UserRoles Role
             => (UserRoles)Enum.Parse(typeof(UserRoles), this.authenticationManager.User.FindFirst(ClaimTypes.Role).Value);
+    }
+
+    public static class IdentityHelpers
+    {
+        /// <summary>Return the user id using the UserIdClaimType</summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        public static Guid GetUserGuid(this IIdentity identity)
+        {
+            if (identity == null)
+                throw new ArgumentNullException(nameof(identity));
+
+            var userId = (identity as ClaimsIdentity)?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return userId != null ? Guid.Parse(userId) : Guid.Empty;
+        }
     }
 }
