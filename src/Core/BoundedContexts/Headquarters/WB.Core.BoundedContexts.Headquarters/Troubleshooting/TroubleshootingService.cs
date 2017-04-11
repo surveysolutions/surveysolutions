@@ -12,19 +12,19 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
+namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 {
     public class TroubleshootingService : ITroubleshootingService
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireFactory;
-        private readonly ISynchronizationLogViewFactory syncLogFactory;
+        private readonly IInterviewLogSummaryReader syncLogFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenPackagesFactory;
 
         public TroubleshootingService(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, 
-            IQuestionnaireBrowseViewFactory questionnaireFactory, 
-            ISynchronizationLogViewFactory syncLogFactory, 
+            IQuestionnaireBrowseViewFactory questionnaireFactory,
+            IInterviewLogSummaryReader syncLogFactory, 
             IBrokenInterviewPackagesViewFactory brokenPackagesFactory)
         {
             this.interviewSummaryReader = interviewSummaryReader;
@@ -52,8 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             });
 
             return brokenItems.TotalCount == 0
-                ? Troubleshooting.MissingCensusInterviews_NoBrokenPackages_Message
-                : Troubleshooting.MissingCensusInterviews_SomeBrokenPackages_Message;
+                ? TroubleshootingMessages.MissingCensusInterviews_NoBrokenPackages_Message
+                : TroubleshootingMessages.MissingCensusInterviews_SomeBrokenPackages_Message;
         }
 
         public string GetMissingDataReason(Guid? interviewId, string interviewKey)
@@ -63,19 +63,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 : this.interviewSummaryReader.Query(q => q.SingleOrDefault(x => x.Key == interviewKey));
 
             if (interview == null)
-                return Troubleshooting.NoData_NotFound;
+                return TroubleshootingMessages.NoData_NotFound;
 
-            var questionnaire = questionnaireFactory.GetById(new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
+            var questionnaire = this.questionnaireFactory.GetById(new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
 
             if (interview.IsDeleted || interview.Status == InterviewStatus.Deleted)
             {
                 if (questionnaire.IsDeleted)
-                    return Troubleshooting.NoData_QuestionnaireDeleted;
+                    return TroubleshootingMessages.NoData_QuestionnaireDeleted;
 
-                return Troubleshooting.NoData_InterviewDeleted;
+                return TroubleshootingMessages.NoData_InterviewDeleted;
             }
 
-            BrokenInterviewPackage lastBrokenPackage = brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
+            BrokenInterviewPackage lastBrokenPackage = this.brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
 
             InterviewLog interviewLog = this.syncLogFactory.GetInterviewLog(interview.InterviewId, interview.ResponsibleId);
             
@@ -85,38 +85,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 if (lastBrokenPackage?.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString())
                 {
-                    return Troubleshooting.NoData_InterviewWasReassigned;
+                    return TroubleshootingMessages.NoData_InterviewWasReassigned;
                 }
 
-                return Troubleshooting.NoData_ContactSupport;
+                return TroubleshootingMessages.NoData_ContactSupport;
             }
 
             var interviewIsOnServer = !this.statusesEligibleForSyncronization.Contains(interview.Status);
             if (interviewIsOnServer)
             {
-                return Troubleshooting.NoData_NoIssuesInterviewOnServer;
+                return TroubleshootingMessages.NoData_NoIssuesInterviewOnServer;
             }
 
             if (interview.ReceivedByInterviewer == false)
             {
-                return string.Format(Troubleshooting.NoData_InterviewWasNotReceived, interview.ResponsibleName);
+                return string.Format(TroubleshootingMessages.NoData_InterviewWasNotReceived, interview.ResponsibleName);
             }
             
             if (interviewLog.IsInterviewOnDevice)
             {
                 if (interviewLog.WasDeviceLinkedAfterInterviewWasDownloaded)
                 {
-                    return Troubleshooting.NoData_InterviewerChangedDevice;
+                    return TroubleshootingMessages.NoData_InterviewerChangedDevice;
                 }
 
                 if (interviewLog.InterviewerChangedDeviceBetweenDownloads)
                 {
-                    return Troubleshooting.NoData_InterviewerChangedDevice;
+                    return TroubleshootingMessages.NoData_InterviewerChangedDevice;
                 }
-                return Troubleshooting.NoData_InterveiwWasNotUploadedYet;
+                return TroubleshootingMessages.NoData_InterveiwWasNotUploadedYet;
             }
 
-            return Troubleshooting.NoData_ContactSupportWithMoreDetails;
+            return TroubleshootingMessages.NoData_ContactSupportWithMoreDetails;
         }
     }
 }
