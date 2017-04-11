@@ -147,4 +147,16 @@
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите изменить настройки шифрования? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
   </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Настройка уведомления</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Настройки логотипа</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Удалить </value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
 </root>
