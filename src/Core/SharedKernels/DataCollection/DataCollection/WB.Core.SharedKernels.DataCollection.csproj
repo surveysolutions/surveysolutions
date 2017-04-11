@@ -319,7 +319,6 @@
     <Compile Include="ValueObjects\Interview\QuestionStateExtensions.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
-    <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\FileDescription.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswers.cs" />
@@ -333,7 +332,6 @@
     <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
-    <Compile Include="Views\UserDocument.cs" />
     <Compile Include="WebApi\InterviewAnswerOnPrefilledQuestionApiView.cs" />
     <Compile Include="WebApi\InterviewDetailsApiView.cs" />
     <Compile Include="WebApi\InterviewApiView.cs" />
