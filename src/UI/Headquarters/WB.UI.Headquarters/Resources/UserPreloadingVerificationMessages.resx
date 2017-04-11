@@ -156,4 +156,7 @@
   <data name="PLU0013" xml:space="preserve">
     <value>Phone number should not contain more than 15 characters</value>
   </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed</value>
+  </data>
 </root>

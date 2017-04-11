@@ -185,7 +185,8 @@ namespace WB.UI.Headquarters
                     passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: UserModel.PersonNameMaxLength,
-                    phoneNumberMaxLength: UserModel.PhoneNumberLength);
+                    phoneNumberMaxLength: UserModel.PhoneNumberLength,
+                    personNameFormatRegex: UserModel.PersonNameRegex);
 
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);

@@ -285,6 +285,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         }
 
         [Test]
+        public void when_person_full_name_has_illigal_characters_Should_return_error()
+        {
+            var fullName = "Имя 123";
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(fullName: fullName));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0014", 1, "FullName", fullName));
+        }
+
+        [Test]
         public void when_phone_number_more_than_allowed_length_Should_return_error()
         {
             var phone = new string('1', 16);
