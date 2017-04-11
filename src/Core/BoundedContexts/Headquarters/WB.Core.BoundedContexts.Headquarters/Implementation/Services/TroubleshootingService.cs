@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -38,6 +39,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Deleted
         };
+
+        public string GetCensusInterviewsMissingReason(string questionnaireId, Guid? interviewerId, DateTime changedFrom,
+            DateTime changedTo)
+        {
+            BrokenInterviewPackagesView brokenItems = this.brokenPackagesFactory.GetFilteredItems(new BrokenInterviewPackageFilter
+            {
+                QuestionnaireIdentity = questionnaireId,
+                FromProcessingDateTime = changedFrom,
+                ToProcessingDateTime = changedTo,
+                ResponsibleId = interviewerId
+            });
+
+            return brokenItems.TotalCount == 0
+                ? Troubleshooting.MissingCensusInterviews_NoBrokenPackages_Message
+                : Troubleshooting.MissingCensusInterviews_SomeBrokenPackages_Message;
+        }
 
         public string GetMissingDataReason(Guid? interviewId, string interviewKey)
         {

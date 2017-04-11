@@ -61,6 +61,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization..
+        /// </summary>
+        public static string MissingCensusInterviews_NoBrokenPackages_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_NoBrokenPackages_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization and repeat the search. If the interview is not located on the second search, contact support team..
+        /// </summary>
+        public static string MissingCensusInterviews_SomeBrokenPackages_Message {
+            get {
+                return ResourceManager.GetString("MissingCensusInterviews_SomeBrokenPackages_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The interview data were corrupted. Contact support to recover that interview.
         /// </summary>
         public static string NoData_ContactSupport {

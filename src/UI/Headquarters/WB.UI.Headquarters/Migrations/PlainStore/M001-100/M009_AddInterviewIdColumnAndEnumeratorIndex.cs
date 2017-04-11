@@ -13,20 +13,14 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
         public override void Up()
         {
             Alter.Table(this.synchronizationLogTable).AddColumn(this.interviewIdColumn).AsGuid().Nullable();
-
-            if (!Schema.Table(this.synchronizationLogTable).Index(enumeratoridIndexName).Exists())
-            {
-                Create.Index(enumeratoridIndexName)
-                    .OnTable(this.synchronizationLogTable)
-                    .OnColumn(this.enumeratorColumnName);
-            }
-
-            if (!Schema.Table(this.synchronizationLogTable).Index(interviewidIndexName).Exists())
-            {
-                Create.Index(interviewidIndexName)
-                    .OnTable(this.synchronizationLogTable)
-                    .OnColumn(this.interviewIdColumn);
-            }
+            
+            Create.Index(enumeratoridIndexName)
+                .OnTable(this.synchronizationLogTable)
+                .OnColumn(this.enumeratorColumnName);
+           
+            Create.Index(interviewidIndexName)
+                .OnTable(this.synchronizationLogTable)
+                .OnColumn(this.interviewIdColumn);
         }
 
         public override void Down()
