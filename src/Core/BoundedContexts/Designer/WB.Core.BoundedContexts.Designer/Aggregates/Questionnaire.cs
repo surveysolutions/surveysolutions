@@ -1451,12 +1451,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
-                QuestionType.TextList, command.ResponsibleId, null);
+                QuestionType.Area, command.ResponsibleId, null);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
-                    QuestionType.TextList,
+                    QuestionType.Area,
                     command.Scope,
                     command.Title,
                     command.VariableName,

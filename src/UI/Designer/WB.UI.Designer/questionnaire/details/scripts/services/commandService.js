@@ -223,6 +223,7 @@
                         break;
                     case "GpsCoordinates":
                     case "Text":
+                    case "Area":
                         break;
                     case "TextList":
                         command.maxAnswerCount = question.maxAnswerCount;
