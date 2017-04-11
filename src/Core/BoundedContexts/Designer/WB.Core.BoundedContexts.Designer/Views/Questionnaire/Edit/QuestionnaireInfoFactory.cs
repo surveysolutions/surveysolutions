@@ -470,6 +470,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:
+                case QuestionType.Area:
                     return questionView;
             }
             return null;
