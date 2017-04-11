@@ -26,6 +26,8 @@ namespace Main.Core.Entities.SubEntities
 
         QRBarcode = 10,
 
-        Multimedia = 11
+        Multimedia = 11,
+
+        Area = 12
     }
 }
