@@ -5,8 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
     public class SynchronizationLogItem
     {
         public virtual int Id { get; set; }
-
         public virtual Guid InterviewerId { get; set; }
+        public virtual Guid? InterviewId { get; set; }
         public virtual string InterviewerName { get; set; }
         public virtual string DeviceId { get; set; }
         public virtual DateTime LogDate { get; set; }

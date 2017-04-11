@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
@@ -9,13 +10,19 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
-    public class UserViewFactory : IUserViewFactory
+    internal class UserViewFactory : IUserViewFactory
     {
-        protected readonly IUserRepository UserRepository;
+        private readonly IUserRepository userRepository;
+
+        protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
         public UserViewFactory(IUserRepository UserRepository)
         {
-            this.UserRepository = UserRepository;
+            this.userRepository = UserRepository;
+        }
+
+        public UserViewFactory()
+        {
         }
 
         public UserView GetUser(UserViewInputModel input)

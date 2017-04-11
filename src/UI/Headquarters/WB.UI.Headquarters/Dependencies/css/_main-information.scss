@@ -113,3 +113,57 @@
 		left: 0;
 	}
 }
+.map-report{
+	padding-bottom: 0;
+	.container-fluid{
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.main-information{
+		margin-left: 282px;
+	}
+	.footer.footer-adaptive{
+		padding-left: 382px;
+	}
+}
+@media (max-width: 1300px){
+	.map-report{
+		.fullscreen-hidden-filters .main-information {
+			margin-left: 0;
+			padding-left: 12px;
+		}
+	}
+}
+@media (max-width: $screen-md-min){
+	.map-report{
+		.main-information{
+			margin-left: 247px;
+			padding-right: 0px;
+		}
+		.fullscreen-hidden-filters {
+			.main-information{
+				margin-left: 0;
+			}
+		}
+		.footer.footer-adaptive{
+			padding-left: 290px;
+		}
+	}
+}
+@media (max-width: $screen-sm-min){
+	.map-report{
+		.main-information{
+			margin-left: 12px;
+		}
+		.footer.footer-adaptive{
+			padding-left: 12px;
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.map-report{
+		.main-information{
+			padding-top: 0;
+		}
+	}
+}

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.DataAnnotations;
 
@@ -44,7 +42,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
         public bool IsLockedBySupervisor { get; set; }
-
-        public IList<DeviceInfo> DevicesHistory { get; set; }
     }
 }

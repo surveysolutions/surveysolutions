@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
-using System.Web.Http.Routing;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -63,6 +62,9 @@ namespace WB.UI.Headquarters.Code
                     Type = this.logAction
                 };
 
+                Guid parsedId;
+                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty), out parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
+
                 switch (this.logAction)
                 {
                     case SynchronizationLogType.CanSynchronize:
@@ -101,18 +103,22 @@ namespace WB.UI.Headquarters.Code
                         break;
                     case SynchronizationLogType.GetInterviewPackage:
                         logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        logItem.InterviewId = idAsGuid;
                         break;
                     case SynchronizationLogType.InterviewPackageProcessed:
                         logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        logItem.InterviewId = idAsGuid;
                         break;
                     case SynchronizationLogType.GetInterviews:
                         logItem.Log = this.GetInterviewsLogMessage(context);
                         break;
                     case SynchronizationLogType.GetInterview:
-                        logItem.Log = SyncLogMessages.GetInterview.FormatString(context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty));
+                        logItem.Log = SyncLogMessages.GetInterview.FormatString(idAsGuid);
+                        logItem.InterviewId = idAsGuid;
                         break;
                     case SynchronizationLogType.InterviewProcessed:
-                        logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty));
+                        logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(idAsGuid);
+                        logItem.InterviewId = idAsGuid;
                         break;
                     case SynchronizationLogType.GetQuestionnaireAttachments:
                         logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context);
@@ -121,12 +127,14 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
                         break;
                     case SynchronizationLogType.PostInterview:
-                        var interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
+                        Guid? interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
                         logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value) : UnknownStringArgumentValue, interviewId);
+                        logItem.InterviewId = interviewId;
                         break;
                     case SynchronizationLogType.PostPackage:
                         var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
                         logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(packageId), packageId);
+                        logItem.InterviewId = packageId;
                         break;
                     case SynchronizationLogType.GetTranslations:
                         var questionnaireId = context.GetActionArgumentOrDefault<string>("id", null);
