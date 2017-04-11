@@ -234,6 +234,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => FileName;
     }
+    
+    [DebuggerDisplay("{ToString()}")]
+    public class AreaAnswer : AbstractAnswer
+    {
+        private AreaAnswer(string area)
+        {
+            if (area == null) throw new ArgumentNullException(nameof(area));
+            this.Area = area;
+        }
+
+        public string Area { get; }
+
+        public static AreaAnswer FromString(string fileName) => fileName != null ? new AreaAnswer(fileName) : null;
+
+        public override string ToString() => Area;
+    }
 
     [DebuggerDisplay("{ToString()}")]
     public class YesNoAnswer : AbstractAnswer
