@@ -138,7 +138,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
         {
             var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),

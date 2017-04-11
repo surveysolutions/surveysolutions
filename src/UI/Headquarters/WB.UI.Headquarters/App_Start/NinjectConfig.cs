@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -57,6 +60,7 @@ using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
+using WB.UI.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
@@ -71,6 +75,7 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
+    [Localizable(false)]
     public static class NinjectConfig
     {
         public static IKernel CreateKernel()
@@ -122,16 +127,17 @@ namespace WB.UI.Headquarters
 
             var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
 
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
+
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
+                new NLogLoggingModule(),
                 new ServiceLocationModule(),
-                new OwinSecurityModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new CaptchaModule(),
-                new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
@@ -139,17 +145,19 @@ namespace WB.UI.Headquarters
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                    "readside",
-                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
+                    "readside", DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
                     mappingAssemblies)
             );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
-            var eventStoreSettings = new PostgreConnectionSettings();
-            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString;
-            eventStoreSettings.SchemaName = "events";
+            var eventStoreSettings = new PostgreConnectionSettings
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                SchemaName = "events"
+            };
+
             var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
@@ -177,7 +185,8 @@ namespace WB.UI.Headquarters
                     passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: UserModel.PersonNameMaxLength,
-                    phoneNumberMaxLength: UserModel.PhoneNumberLength);
+                    phoneNumberMaxLength: UserModel.PhoneNumberLength,
+                    personNameFormatRegex: UserModel.PersonNameRegex);
 
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
@@ -215,7 +224,8 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     interviewCountLimit),
-                new WebInterviewNinjectModule());
+                new WebInterviewNinjectModule(),
+                new OwinSecurityModule());
 
             kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -260,7 +270,7 @@ namespace WB.UI.Headquarters
                 {
                     AssembliesToInclude =
                     {
-                        typeof(API.WebInterview.WebInterview).Assembly,
+                        typeof(WebInterview).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }

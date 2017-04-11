@@ -156,4 +156,7 @@
   <data name="PLU0013" xml:space="preserve">
     <value>Номер телефона не может содержать больше 15 символов</value>
   </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>Имя пользователя может содержать только буквы, пробелы, точки и апосторофы</value>
+  </data>
 </root>

@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public InterviewLog GetInterviewLog(Guid interviewId, Guid responsibleId)
         {
             var interviewSynchronizationLog = this.plainStorageAccessor.Query(queryable => queryable
-                .Where(x => (x.Type == SynchronizationLogType.PostInterview || x.Type == SynchronizationLogType.GetInterview) && x.Log.Contains(interviewId.ToString()))
+                .Where(x => (x.Type == SynchronizationLogType.PostInterview || x.Type == SynchronizationLogType.GetInterview) && x.InterviewId == interviewId)
                 .OrderByDescending(x => x.LogDate)
                 .ToList());
 
