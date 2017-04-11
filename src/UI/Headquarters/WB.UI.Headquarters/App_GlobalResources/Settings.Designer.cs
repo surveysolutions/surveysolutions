@@ -97,6 +97,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Note saved.
+        /// </summary>
+        internal static string GlobalNoteSaved {
+            get {
+                return ResourceManager.GetString("GlobalNoteSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global note.
+        /// </summary>
+        internal static string GlobalNoteSettings {
+            get {
+                return ResourceManager.GetString("GlobalNoteSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Global note.
         /// </summary>
         internal static string GlobalNotice {
@@ -124,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company logo.
+        /// </summary>
+        internal static string LogoSettings {
+            get {
+                return ResourceManager.GetString("LogoSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company logo updated.
         /// </summary>
         internal static string LogoUpdated {
@@ -147,6 +174,15 @@ namespace Resources {
         internal static string RegeneratePasswordConfirm {
             get {
                 return ResourceManager.GetString("RegeneratePasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove logo.
+        /// </summary>
+        internal static string RemoveLogo {
+            get {
+                return ResourceManager.GetString("RemoveLogo", resourceCulture);
             }
         }
         

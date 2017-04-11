@@ -165,7 +165,7 @@
                 self.SendRequest(serviceUrl, request, function (d) {
                     if (!_.isUndefined(onDataReceivedCallback))
                         onDataReceivedCallback(d);
-                     callback(d);
+                    callback(d);
                 });
             },
             columns: tableColumns,
@@ -176,7 +176,8 @@
             conditionalPaging: true,
             processing: true,
             serverSide: true,
-            deferRender: true
+            deferRender: true,
+            footerCallback: self.footerCallback
         });
     };
     self.reloadDataTable = function() {
