@@ -119,7 +119,7 @@
 
         </InstallExecuteSequence>
         
-        <MajorUpgrade DowngradeErrorMessage="A newer version of MyProductName is already installed." AllowDowngrades="no"
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowDowngrades="no"
                       Schedule="afterInstallExecute"/>
         
         <MediaTemplate  EmbedCab="yes" />
@@ -197,13 +197,13 @@
                               ElementPath="//configuration"
                               Name="connectionStrings" Sequence='1'/>
 
-                <util:XmlFile Id="CreateElementXml1" 
+                <util:XmlFile Id="CreateAddElementConnectionStrings" 
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement" 
                               ElementPath="//configuration/connectionStrings"
                               Name="add" Sequence='2'/>
                 
-                <util:XmlFile Id="UpdateElementXml1"
+                <util:XmlFile Id="UpdateNameElementConnectionStrings"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/connectionStrings/add"
@@ -219,7 +219,7 @@
                               Value="Npgsql"
                               Sequence='4'/>
 
-                <util:XmlFile Id="UpdateElementValueXml1"
+                <util:XmlFile Id="UpdateConnectionStringsElementConnectionStringValue"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/connectionStrings/add"
@@ -228,14 +228,14 @@
                               Sequence='5'/>
                 
                 <!--<add key="EventStore.Provider" value="Postgres" />-->
-                <util:XmlFile Id="CreateElementXml2"
+                <util:XmlFile Id="CreateAddElementEventStore"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
                               Name="add" 
                               Sequence='6'/>
 
-                <util:XmlFile Id="UpdateElementXml2"
+                <util:XmlFile Id="UpdateKeyElementEventStore"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -243,7 +243,7 @@
                               Value="EventStore.Provider"
                               Sequence='7'/>
 
-                <util:XmlFile Id="UpdateElementValueXml2"
+                <util:XmlFile Id="SetValueKeyElementEventStore"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='EventStore.Provider'[\]]"
@@ -252,13 +252,13 @@
                               Sequence='8'/>   
                     
                 <!--<add key="DataStorePath" value="..." />-->
-                <util:XmlFile Id="CreateElementXml3"
+                <util:XmlFile Id="CreateElementDataStorePath"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
                               Name="add" Sequence='9'/>
 
-                <util:XmlFile Id="UpdateElementXml3"
+                <util:XmlFile Id="UpdateKeyElementDataStorePath"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -266,7 +266,7 @@
                               Value="DataStorePath"
                               Sequence='10'/>
 
-                <util:XmlFile Id="UpdateElementValueXml3"
+                <util:XmlFile Id="SetValueElementDataStorePath"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='DataStorePath'[\]]"
@@ -275,13 +275,13 @@
                               Sequence='11'/>
             
                 <!--<add key="DesignerAddress" value="https://solutions.worldbank.org" />-->
-                <util:XmlFile Id="CreateElementXml4"
+                <util:XmlFile Id="CreateElementDesignerAddress"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
                               Name="add" Sequence='12'/>
 
-                <util:XmlFile Id="UpdateElementXml4"
+                <util:XmlFile Id="AddKeyElementDesignerAddress"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -289,7 +289,7 @@
                               Value="DesignerAddress"
                               Sequence="13"/>
 
-                <util:XmlFile Id="UpdateElementValueXml4"
+                <util:XmlFile Id="UpdateValueElementDesignerAddress"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
@@ -297,13 +297,13 @@
                               Value="https://solutions.worldbank.org"
                               Sequence='14'/>
                 <!--<add key="WebInterviewEnabled" value="true" />-->
-                <util:XmlFile Id="CreateElementXml5"
+                <util:XmlFile Id="CreateElementWebInterviewEnabled"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="createElement"
                               ElementPath="//configuration/appSettings"
                               Name="add" Sequence='15'/>
 
-                <util:XmlFile Id="UpdateElementXml5"
+                <util:XmlFile Id="AddKeyElementWebInterviewEnabled"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
@@ -311,7 +311,7 @@
                               Value="WebInterviewEnabled"
                               Sequence="16"/>
 
-                <util:XmlFile Id="UpdateElementValueXml5"
+                <util:XmlFile Id="UpdateValueElementWebInterviewEnabled"
                               File="[CONFIGFOLDER]\Headquarters.Web.config"
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='WebInterviewEnabled'[\]]"
