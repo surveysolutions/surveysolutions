@@ -369,7 +369,6 @@
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
-    <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
     <Compile Include="OwinSecurityModule.cs" />
