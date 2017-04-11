@@ -120,6 +120,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = "Multimedia",
                 Text = "Picture"
+            },
+            new SelectOption
+            {
+                Value = "Area",
+                Text = "Area"
             }
         };
 
