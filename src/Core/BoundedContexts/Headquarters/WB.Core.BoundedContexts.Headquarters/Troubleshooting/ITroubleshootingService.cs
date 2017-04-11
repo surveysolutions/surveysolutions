@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services
+namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 {
     public interface ITroubleshootingService
     {

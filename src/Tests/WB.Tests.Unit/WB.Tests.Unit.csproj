@@ -464,6 +464,7 @@
     <Compile Include="BoundedContexts\Headquarters\InterviewUniqueKeyGeneratorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HashCompatibilityProviderTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\TroubleshootingTests\TroubleshootingServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\SampleWebInterviewServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\CompanyLogoSynchronizerTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_upload_sync_statistics.cs" />
