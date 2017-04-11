@@ -176,5 +176,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("PLU0013", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        /// </summary>
+        public static string PLU0014 {
+            get {
+                return ResourceManager.GetString("PLU0014", resourceCulture);
+            }
+        }
     }
 }
