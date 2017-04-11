@@ -147,4 +147,10 @@
   <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
     <value>The questionnaire for that interview was deleted by server administrator. All interviews associated with this questionnaire are lost and cannot be restored</value>
   </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization.</value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat synchronization and repeat the search. If the interview is not located on the second search, contact support team.</value>
+  </data>
 </root>

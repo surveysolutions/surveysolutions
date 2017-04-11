@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Models.Interview
 
     public class TroubleshootingCensusInterviewsDataTableResponse : DataTableResponse<InterviewListItem>
     {
-        public long BrokenPackagesCount { get; set; }
-        public long CensusInterviewsCount { get; set; }
+        public string Message { get; set; }
+        public string FoundInterviewsMessage { get; set; }
     }
 }
