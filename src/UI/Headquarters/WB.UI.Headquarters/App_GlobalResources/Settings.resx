@@ -150,4 +150,16 @@
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Are you sure you want to change protection state? You will need to regenerate exported data in order to open it.</value>
   </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Global note</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Company logo</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Remove logo</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Note saved</value>
+  </data>
 </root>
