@@ -58,9 +58,10 @@
             <div class="question-type-specific-block"
                  ng-include="'views/question-details/' + activeQuestion.type + '-template.html'"
                  ng-if="activeQuestion.type != undefined
-                 && (activeQuestion.type!='GpsCoordinates'
-                 && activeQuestion.type!='QRBarcode'
-                 && activeQuestion.type!='Multimedia')
+                 && (activeQuestion.type != 'GpsCoordinates'
+                 && activeQuestion.type != 'QRBarcode'
+                 && activeQuestion.type != 'Multimedia'
+                 && activeQuestion.type != 'Area')
                  ">
             </div>
         </div>
