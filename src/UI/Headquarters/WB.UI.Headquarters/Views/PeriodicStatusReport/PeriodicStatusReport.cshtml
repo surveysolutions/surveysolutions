@@ -109,12 +109,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-8">
-                        @if (Model.CanNavigateToQuantityBySupervisors)
-                        {
-                            <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
-                        }
+                        
                         <h2 data-bind="text: QuestionnaireName"></h2>
                         <h3>@Model.ReportNameDescription</h3>
+                        @if (Model.CanNavigateToQuantityBySupervisors)
+                        {
+                            <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
+                        }
                     </div>
                 </div>
                 <p data-bind="visible: Pager().TotalItemCount() == 0">
