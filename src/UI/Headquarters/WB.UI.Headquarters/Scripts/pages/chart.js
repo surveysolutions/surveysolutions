@@ -71,11 +71,11 @@
                 self.initChart();
             }
         },
-        //disable: [
-        //    function (date) {
-        //        return date < self.StartDate(); // return true to disable
-        //    }
-        //]
+        disable: [
+            function (date) {
+                return date < self.StartDate(); // return true to disable
+            }
+        ]
     });
 
     self.setReportRange = function (start, end) {
