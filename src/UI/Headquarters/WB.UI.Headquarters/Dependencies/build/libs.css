@@ -862,10 +862,10 @@ select.selectpicker {
   display: inline-block;
   display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  -ms-flex-pack: justify;
-  justify-content: space-around;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
 .flatpickr-day {
   background: none;
@@ -1122,7 +1122,7 @@ span.flatpickr-weekday {
     top: 0 !important;
   }
 }
-.flatpickr-input[readonly] {
+.flatpickr-input {
   cursor: pointer;
 }
 @keyframes flatpickrFadeInDown {
@@ -1135,4 +1135,3 @@ span.flatpickr-weekday {
     transform: none;
   }
 }
-
