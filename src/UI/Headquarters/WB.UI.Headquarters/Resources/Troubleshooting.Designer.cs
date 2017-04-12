@@ -170,15 +170,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization..
-        /// </summary>
-        public static string MissingCensusInterviews_NoBrokenPackages_Message {
-            get {
-                return ResourceManager.GetString("MissingCensusInterviews_NoBrokenPackages_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No interviews satisfy filter conditions.
         /// </summary>
         public static string MissingCensusInterviews_NothingFound_Message {
@@ -202,15 +193,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string MissingCensusInterviews_PageHeader {
             get {
                 return ResourceManager.GetString("MissingCensusInterviews_PageHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team..
-        /// </summary>
-        public static string MissingCensusInterviews_SomeBrokenPackages_Message {
-            get {
-                return ResourceManager.GetString("MissingCensusInterviews_SomeBrokenPackages_Message", resourceCulture);
             }
         }
         

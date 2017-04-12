@@ -166,9 +166,6 @@
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
     <value>{0} интервью удовлетворяют условиям поиска</value>
   </data>
-  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
-    <value>Если интервью, которое вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию.</value>
-  </data>
   <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
     <value>Нет интервью, удовлетворяющих критериям поиска</value>
   </data>
@@ -177,9 +174,6 @@
   </data>
   <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
     <value>Поиск интервью, собранных в census режиме </value>
-  </data>
-  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
-    <value>Если интервью, которые вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию и повторите поиск заново. Если и после этого вы не увидите интервью в списке, то обратитесь в службу поддержки.</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
     <value>Интервьювер</value>

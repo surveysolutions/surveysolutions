@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identities => this.questionIdentity;
 
-        private const int SuggestionsMaxCount = 15;
+        private const int SuggestionsMaxCount = 50;
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,

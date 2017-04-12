@@ -350,7 +350,9 @@
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
-    <Compile Include="Implementation\Services\TroubleshootingService.cs" />
+    <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
+    <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
+    <Compile Include="Troubleshooting\TroubleshootingService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\AssemblyInfoMap.cs" />
@@ -433,13 +435,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Troubleshooting.Designer.cs">
-      <DependentUpon>Troubleshooting.resx</DependentUpon>
+    <Compile Include="Resources\TroubleshootingMessages.Designer.cs">
+      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\Troubleshooting.ru.Designer.cs">
-      <DependentUpon>Troubleshooting.ru.resx</DependentUpon>
+    <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
+      <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -473,7 +475,7 @@
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
-    <Compile Include="Services\ITroubleshootingService.cs" />
+    <Compile Include="Troubleshooting\ITroubleshootingService.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />
@@ -690,7 +692,7 @@
     <Compile Include="Views\Survey\SurveysViewItem.cs" />
     <Compile Include="Views\Survey\SurveyUsersView.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
-    <Compile Include="Views\SynchronizationLog\InterviewLog.cs" />
+    <Compile Include="Troubleshooting\Views\InterviewLog.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLog.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogDevicesView.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogFilter.cs" />
@@ -823,14 +825,14 @@
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\Troubleshooting.resx">
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Troubleshooting.Designer.cs</LastGenOutput>
+      <LastGenOutput>TroubleshootingMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.ru.resx">
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Troubleshooting.ru.Designer.cs</LastGenOutput>
+      <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />

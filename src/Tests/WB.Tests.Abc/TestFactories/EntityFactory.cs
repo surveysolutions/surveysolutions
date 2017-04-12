@@ -12,8 +12,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -30,14 +33,13 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -423,7 +425,9 @@ namespace WB.Tests.Abc.TestFactories
             UserRoles role = UserRoles.Interviewer,
             string key = null,
             DateTime? updateDate = null,
-            bool? wasCreatedOnClient= null)
+            bool? wasCreatedOnClient= null,
+            bool isDeleted = false,
+            bool receivedByInterviewer = false)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -437,7 +441,9 @@ namespace WB.Tests.Abc.TestFactories
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
-                WasCreatedOnClient = wasCreatedOnClient ?? false
+                WasCreatedOnClient = wasCreatedOnClient ?? false,
+                IsDeleted = isDeleted,
+                ReceivedByInterviewer = receivedByInterviewer
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
@@ -1479,6 +1485,46 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewKey InterviewKey(int key = 289)
         {
             return new InterviewKey(key);
+        }
+
+        public BrokenInterviewPackagesView BrokenInterviewPackagesView(params BrokenInterviewPackageView[] brokenPackages)
+        {
+            return new BrokenInterviewPackagesView
+            {
+                Items = brokenPackages,
+                TotalCount = brokenPackages.Length
+            };
+        }
+
+        public BrokenInterviewPackageView BrokenInterviewPackageView()
+        {
+            return new BrokenInterviewPackageView();
+        }
+
+        public BrokenInterviewPackage BrokenInterviewPackage(DateTime? processingDate = null, DateTime? incomingDate = null,
+            InterviewDomainExceptionType? exceptionType =null)
+        {
+            return new BrokenInterviewPackage
+            {
+                ProcessingDate = processingDate ?? DateTime.Now,
+                IncomingDate = incomingDate ?? DateTime.Now,
+                ExceptionType = exceptionType?.ToString() ?? "Unexpected"
+            };
+        }
+
+        public InterviewSyncLogSummary InterviewSyncLogSummary(
+            DateTime? firstDownloadInterviewDate = null,
+            DateTime? lastDownloadInterviewDate = null,
+            DateTime? lastLinkDate = null,
+            DateTime? lastUploadInterviewDate = null)
+        {
+            return new InterviewSyncLogSummary
+            {
+                FirstDownloadInterviewDate = firstDownloadInterviewDate,
+                LastDownloadInterviewDate = lastDownloadInterviewDate,
+                LastLinkDate = lastLinkDate,
+                LastUploadInterviewDate = lastUploadInterviewDate
+            };
         }
     }
 }
