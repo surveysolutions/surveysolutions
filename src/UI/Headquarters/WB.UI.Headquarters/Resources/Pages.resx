@@ -816,6 +816,9 @@
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
   </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>interview(s) selected</value>
+  </data>
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Unarchive</value>
   </data>
