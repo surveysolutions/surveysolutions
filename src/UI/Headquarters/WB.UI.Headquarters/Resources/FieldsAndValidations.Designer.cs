@@ -88,6 +88,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not update user information because current user does not exist.
+        /// </summary>
+        public static string CannotUpdate_CurrentUserDoesNotExists {
+            get {
+                return ResourceManager.GetString("CannotUpdate_CurrentUserDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update user information because current user is archived.
+        /// </summary>
+        public static string CannotUpdate_CurrentUserIsArchived {
+            get {
+                return ResourceManager.GetString("CannotUpdate_CurrentUserIsArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire title is required.
         /// </summary>
         public static string CloneQuestionnaireModel_NewTitle_Error_Required {
@@ -133,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email.
+        ///   Looks up a localized string similar to Email address.
         /// </summary>
         public static string EmailFieldName {
             get {

@@ -8,5 +8,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.OldPasswordFieldName), ResourceType = typeof(FieldsAndValidations))]
         public string OldPassword { get; set; }
+        
+        [DataType(DataType.Text)]
+        public string Role { get; set; }
     }
 }

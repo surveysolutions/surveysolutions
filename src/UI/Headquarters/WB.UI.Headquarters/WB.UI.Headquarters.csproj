@@ -942,6 +942,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.ru.resx">
       <DependentUpon>Strings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.zh.resx">
       <DependentUpon>Strings.resx</DependentUpon>
@@ -1403,6 +1404,9 @@
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
+    <Content Include="Views\Shared\FormFieldLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1712,7 +1716,7 @@
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\ManageAccountModel.cs" />
+    <Compile Include="Models\Account\ManageAccountModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -1732,7 +1736,7 @@
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
-    <Compile Include="Models\UserEditModel.cs" />
+    <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
@@ -1892,6 +1896,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
+    <Folder Include="Views\Shared\Redesign\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
