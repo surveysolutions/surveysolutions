@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 {

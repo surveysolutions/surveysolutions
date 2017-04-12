@@ -3,10 +3,11 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -63,16 +64,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
                 : this.interviewSummaryReader.Query(q => q.SingleOrDefault(x => x.Key == interviewKey));
 
             if (interview == null)
-                return TroubleshootingMessages.NoData_NotFound;
+                return string.Format(TroubleshootingMessages.NoData_NotFound, interviewId?.FormatGuid() ?? interviewKey);
 
             var questionnaire = this.questionnaireFactory.GetById(new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
 
             if (interview.IsDeleted || interview.Status == InterviewStatus.Deleted)
             {
                 if (questionnaire.IsDeleted)
-                    return TroubleshootingMessages.NoData_QuestionnaireDeleted;
+                    return TroubleshootingMessages.NoData_QuestionnaireDeleted.FormatString(interview.Key);
 
-                return TroubleshootingMessages.NoData_InterviewDeleted;
+                return TroubleshootingMessages.NoData_InterviewDeleted.FormatString(interview.Key);
             }
 
             BrokenInterviewPackage lastBrokenPackage = this.brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
@@ -85,35 +86,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
             {
                 if (lastBrokenPackage?.ExceptionType == InterviewDomainExceptionType.OtherUserIsResponsible.ToString())
                 {
-                    return TroubleshootingMessages.NoData_InterviewWasReassigned;
+                    return TroubleshootingMessages.NoData_InterviewWasReassigned.FormatString(interview.Key);
                 }
 
-                return TroubleshootingMessages.NoData_ContactSupport;
+                return TroubleshootingMessages.NoData_ContactSupport.FormatString(interview.Key);
             }
 
             var interviewIsOnServer = !this.statusesEligibleForSyncronization.Contains(interview.Status);
             if (interviewIsOnServer)
             {
-                return TroubleshootingMessages.NoData_NoIssuesInterviewOnServer;
+                return TroubleshootingMessages.NoData_NoIssuesInterviewOnServer.FormatString(interview.Key);
             }
 
             if (interview.ReceivedByInterviewer == false)
             {
-                return string.Format(TroubleshootingMessages.NoData_InterviewWasNotReceived, interview.ResponsibleName);
+                return TroubleshootingMessages.NoData_InterviewWasNotReceived.FormatString(interview.Key, interview.ResponsibleName);
             }
             
             if (interviewSyncLogSummary.IsInterviewOnDevice)
             {
                 if (interviewSyncLogSummary.WasDeviceLinkedAfterInterviewWasDownloaded)
                 {
-                    return TroubleshootingMessages.NoData_InterviewerChangedDevice;
+                    return TroubleshootingMessages.NoData_InterviewerChangedDevice.FormatString(interview.Key);
                 }
 
                 if (interviewSyncLogSummary.InterviewerChangedDeviceBetweenDownloads)
                 {
-                    return TroubleshootingMessages.NoData_InterviewerChangedDevice;
+                    return TroubleshootingMessages.NoData_InterviewerChangedDevice.FormatString(interview.Key);
                 }
-                return TroubleshootingMessages.NoData_InterveiwWasNotUploadedYet;
+                return TroubleshootingMessages.NoData_InterveiwWasNotUploadedYet.FormatString(interview.Key);
             }
 
             return TroubleshootingMessages.NoData_ContactSupportWithMoreDetails;
