@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Migrations.Users
 				                rec.email,
 				                FALSE, -- EmailConfirmed
 				                rec.password,
-                                uuid_in(md5(random()::text || now()::text)::cstring),
+                                uuid_in(md5(random()::text || now()::text)::cstring), -- http://stackoverflow.com/a/21327318/41483
 				                rec.phonenumber,
 				                FALSE, -- PhoneNumberConfirmed
 				                FALSE, -- TwoFactorEnabled
