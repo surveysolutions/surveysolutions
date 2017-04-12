@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
 {
-    public class InterviewLog
+    public class InterviewSyncLogSummary
     {
         public DateTime? FirstDownloadInterviewDate { get; set; }
         public DateTime? LastDownloadInterviewDate { get; set; }
