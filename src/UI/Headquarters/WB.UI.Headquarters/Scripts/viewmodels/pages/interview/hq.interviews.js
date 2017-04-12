@@ -1,5 +1,5 @@
-﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl) {
-    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl]);
+﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier) {
+    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl, notifier]);
 
     var self = this;
 
@@ -12,7 +12,7 @@
             "#confirm-continue-message-template"
         );
     };
-    self.IsAssignToLoading = ko.observable(false);
+/*    self.IsAssignToLoading = ko.observable(false);
     self.AssignTo = ko.observable();
     self.UsersToAssignUrl = usersToAssignUrl;
     self.Users = function (query, sync, pageSize) {
@@ -22,7 +22,7 @@
         }, true, true, function () {
             self.IsAssignToLoading(false);
         });
-    }
+    }*/
     self.Assign = function () {
         var commandName = "AssignSupervisorCommand";
         var messageTemplateId = "#confirm-assign-to-other-team-template";
@@ -98,6 +98,67 @@
             "#confirm-unapprove-template",
             "#confirm-continue-message-template"
         );
+    };
+
+    self.AssignInterview = function () {
+        var commandName = "AssignSupervisorCommand";
+        var messageTemplateId = "#assign-interview-template";
+        var continueMessageTemplateId = "#confirm-continue-message-template";
+
+        var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
+            return item.CanBeReassigned();// && item.ResponsibleId() !== self.AssignTo().UserId;
+        });
+
+        var countInterviewsToAssign = ko.observable(0);
+
+        var model = {
+            CountInterviewsToAssign: countInterviewsToAssign,
+            Users: self.CreateUsersViewModel(usersToAssignUrl),
+            StoreInteviewer: function () {
+                model.Users.AssignTo() == undefined
+                    ? countInterviewsToAssign(0)
+                    : countInterviewsToAssign(eligibleSelectedItems.length);
+            },
+            ClearAssignTo: function () {
+                model.Users.AssignTo(undefined);
+                countInterviewsToAssign(0);
+            }
+        };
+
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
+
+        if (eligibleSelectedItems.length === 0) {
+            notifier.alert('', messageHtml);
+            return;
+        }
+
+        messageHtml += $(continueMessageTemplateId).html();
+
+        notifier.confirm('Confirmation Needed', messageHtml, function (result) {
+            if (result) {
+                var itemsThatShouldBeReassigned = eligibleSelectedItems;
+
+                if (itemsThatShouldBeReassigned.length > 0) {
+                    var getParamsToAssignToOtherTeam = function (interview) {
+                        return {
+                            SupervisorId: model.Users.AssignTo().UserId,
+                            InterviewId: interview.InterviewId
+                        }
+                    };
+
+                    var onSuccessCommandExecuting = function () {
+                        model.Users.AssignTo(undefined);
+                    };
+
+                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
+                }
+            }
+            else {
+                model.Users.AssignTo(undefined);
+            }
+        });
+
+        ko.applyBindings(model, $(".assign-interviewer")[0]);
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.HQInterviews, Supervisor.VM.InterviewsBase);

@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, usersToAssignUrl, commandExecutionUrl) {
+﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, usersToAssignUrl, commandExecutionUrl, notifier) {
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
@@ -104,13 +104,13 @@
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
         if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
+            notifier.alert('', messageHtml);
             return;
         }
 
         messageHtml += $(continueMessageTemplateId).html();
 
-        bootbox.confirm(messageHtml, function (result) {
+        notifier.confirm('', messageHtml, function (result) {
             if (result) {
                 var interviewer = model.Users.AssignTo();
                 $.each(filteredItems, function (index, interview) {

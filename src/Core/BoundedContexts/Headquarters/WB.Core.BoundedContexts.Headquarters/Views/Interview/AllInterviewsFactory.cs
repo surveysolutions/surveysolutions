@@ -137,6 +137,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var items = _.Where(x => !x.IsDeleted);
 
+            if (input.SupervisorId.HasValue)
+            {
+                items = items.Where(x => x.TeamLeadId == input.SupervisorId);
+            }
+
             if (!string.IsNullOrWhiteSpace(input.InterviewKey))
             {
                 items = items.Where(x => x.Key == input.InterviewKey);

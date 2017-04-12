@@ -118,33 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NoData_ContactSupport" xml:space="preserve">
-    <value>The interview data were corrupted. Contact support to recover that interview</value>
+    <value>Интервью  {0} повреждено. Обратитесь в службу поддержки для его восстановления.</value>
   </data>
   <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
-    <value>Please contact support to provide more details</value>
+    <value>Пожалуйста обратитесь в службу поддержки для предоставления более подробной информации</value>
   </data>
   <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
-    <value>The interview was not uploaded to the server yet</value>
+    <value>Интервью  {0} еще не было загружено на сервер.</value>
   </data>
   <data name="NoData_InterviewDeleted" xml:space="preserve">
-    <value>The interview was erased by HQ or Admininstrator and cannot be recovered</value>
+    <value>Интервью  {0} было удалено HQ или администратором и не может быть восстановлено</value>
   </data>
   <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
-    <value>The interviewer changed tablets. The data for that interview might be lost because of the tablets been relinked. If this is the case, that interview cannot be recovered</value>
+    <value>Интервьювер сменил устройство. Данные по интервью  {0} могли быть утеряны в связи с перепривязкой устройств. В этом случае данные по интервью не могут быть восстановлены.</value>
   </data>
   <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
-    <value>The interview was not recieved by responsible interviewer {0}</value>
+    <value>Интервью  {0} еще не было получено ответвенным за него интервьювером {0}.</value>
   </data>
   <data name="NoData_InterviewWasReassigned" xml:space="preserve">
-    <value>The interview was re-assigned to a different intervier. The interview is currently on that interviewer's tablet and has not been syncronized with the server</value>
+    <value>Интервью  {0} было переназначено на другого интервьювера. Интревью находится на устройстве ответственного за него человека и еще не было синхронизировано с сервером.</value>
   </data>
   <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
-    <value>No issues were found with that interview on the server side.&lt;br /&gt;Clarify the situtaion with the person currently responsible for that interview.&lt;br /&gt;If problem persists, contact support to provide further details</value>
+    <value>Проблем с данным интервью  {0} на сервере не обнаружено.&lt;br /&gt;Уточните ситуацию с человеком, ответственным за это интервью.&lt;br /&gt;Если проблема не разрешится, обратитесь в службу поддержки для предоставления более детальной информации.</value>
   </data>
   <data name="NoData_NotFound" xml:space="preserve">
-    <value>The interview is not found</value>
+    <value>Интервью  {0} не найдено</value>
   </data>
   <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
-    <value>The questionnaire for that interview was deleted by server administrator. All interviews associated with this questionnaire are lost and cannot be restored</value>
+    <value>Опросник интервью  {0} был удален администратором сервера. Все интервью, собранные по этому опроснику утеряны и не могут быть восстановлены.</value>
+  </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которое вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию.</value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>Если интервью, которые вы пытаетесь найти отсутствует в списке, пожалуйста, попросите интервьювера закрыть интервью и повторить синхронизацию и повторите поиск заново. Если и после этого вы не увидите интервью в списке, то обратитесь в службу поддержки.</value>
   </data>
 </root>

@@ -7,12 +7,16 @@
 @using WB.UI.Headquarters.Resources
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/js/main-no-libs")
+    @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/interviews")
+    @Scripts.Render("~/js/common")
+
     <script type="text/javascript">
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
@@ -22,17 +26,251 @@
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
         var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
         $(function() {
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl);
+            var notifier = new Notifier();
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier);
             ko.applyBindings(model);
             model.load();
         });
     </script>
 }
 
-@section header
-{
-    <h3 class="sinle-line-header">@Common.Interviews</h3>
-}
+
+
+<main class="hold-transition">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle:</h4>
+                    
+                    <div class="block-filter">
+                        <h5>@Common.Search</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Text" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-bind="click: filter">Filter</button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="block-filter">
+                        <h5>@Pages.Template</h5>
+                        <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
+                            @if (Model.Templates.Count() > 1)
+                            {
+                                <option value="">@Common.Any</option>
+                            }
+                            @foreach (var item in Model.Templates)
+                            {
+                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="block-filter">
+                        <h5>@Common.Responsible</h5>
+                        <p class="list-group-item-text">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                                    <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+
+                    <div class="block-filter">
+                        <h5>@Common.Status</h5>
+                        <select data-bind="value: SelectedStatus" class="selectpicker">
+                            <option value="">@Common.Any</option>
+                            @foreach (var item in Model.Statuses)
+                            {
+                                <option value="@item.Status">@item.StatusName</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+            </aside>
+
+            <div class="main-information">
+                @Html.Partial("_notice")
+                @Html.Partial("_alerts")
+                <div class="row">
+                    <div class="page-header clearfix">
+                        <div>
+                            <h1>@Common.Interviews</h1>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                    </div>
+                </div>
+                
+                <table id="interviews" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
+                    <thead>
+                        <tr>
+                            <th class="sorting_disabled checkbox-cell">
+                                <input class="double-checkbox" id="check-all" type="checkbox"  data-bind="click: $root.selectAll($element)">
+                                <label for="check-all">
+                                    <span class="tick"></span>
+                                </label>
+                            </th>
+                            <th class="sorting_disabled">
+                                @Common.InterviewKey
+                            </th>
+                            <!-- ko if:SelectedTemplate() == '' -->
+                            <th class="sorting_disabled">@Common.PrefilledQuestions</th>
+                            <!-- /ko -->
+                            <!-- ko ifnot:SelectedTemplate() == '' -->
+                            <!-- ko if:Items().length > 0-->
+                            <!-- ko foreach:Items()[0].FeaturedQuestions -->
+                            <th class="sorting_disabled" data-bind='html: Question'></th>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <th data-bind='sortby: "ResponsibleName"'>@Common.Responsible</th>
+                            <th class="date last-update" data-bind='sortby: "UpdateDate"'>@Common.LastUpdate</th>
+                            <th class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
+                            <th data-bind='sortby: "Status"'>@Common.Status</th>
+                            <th data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
+                            <th class="sorting_disabled">@Common.CreatedOnClient</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach:Items -->
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
+                                <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
+                            </td>
+                            <td class="interview-id title-row">
+                                <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
+                            </td>
+                            <!-- ko if:$root.SelectedTemplate() == '' -->
+                            <td data-bind="text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
+                            <!-- /ko -->
+                            <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                            <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
+                            <td data-bind="text: Answer"></td>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <td>
+                                <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
+                            </td>
+                            <td class="date last-update" data-bind="text: LastEntryDate"></td>
+                            <td class="errors">
+                                <!-- ko if:HasErrors -->
+                                Yes
+                                <!-- /ko -->
+                                <!-- ko ifnot:HasErrors -->
+                                <span class="empty"></span>
+                                <!-- /ko -->
+                            </td>
+                            <td data-bind="text: Status"></td>
+                            <td data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
+                                <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
+                            </td>
+                            <td data-bind="css: { 'success-text': CreatedOnClient }">
+                                <span data-bind="text: CreatedOnClient ? 'Yes' : 'No'"></span>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    </tbody>
+                </table>
+
+                <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
+                    <div class="panel-body">
+                        <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
+                        <label for="q1az">
+                            <span class="tick"></span> <span data-bind="text: SelectedItems().length + ' @Pages.Interviews_Selected'"></span>
+                        </label>
+                        <button class="btn btn-lg btn-success" data-bind="disable: IsNothingSelected, click: $root.AssignInterview">@Common.Assign</button>
+                        <button class="btn btn-lg btn-success" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">@Common.Approve</button>
+                        <button class="btn btn-lg reject" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">@Common.Reject</button>
+                        <button class="btn btn-lg btn-primary" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">@Common.Unapprove</button>
+                        <button class="btn btn-link" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">@Common.Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="assign-interview-template">
+        <div class="btn-group assign-interviewer">
+            @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
+                    "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
+                    InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
+                    InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
+            @Interviews.ChooseResponsibleInterviewer
+            <div class="input-group">
+                <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
+                <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                <div class="input-group-btn" data-bind="click: ClearAssignTo">
+                    <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                </div>
+            </div>
+        </div>
+    </script>    
+    <script type="text/html" id="confirm-delete-template">
+        @Html.Raw(Interviews.DeleteConfirmMessageHQ.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+            InterviewStatus.InterviewerAssigned.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-approve-template">
+        @Html.Raw(Interviews.ApproveConfirmMessageHQ.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.Completed.ToLocalizeString(),
+            InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-reject-template">
+        @Html.Raw(Interviews.RejectConfirmMessageHQ.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-unapprove-template">
+        @Html.Raw(Interviews.UnapproveConfirmMessageHQ.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-continue-message-template">
+        <br />@Interviews.ContinueConfirmMessage
+    </script>
+    <script type="text/html" id="confirm-assign-to-other-team-template">
+        <div class="container-fluid">
+            <div class="row">
+                @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
+                    "<span class='text-normal' data-bind='text: eligibleSelectedItems.length'></span>",
+                    InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
+                    InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
+            </div>
+        </div>
+    </script>
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
 
 @section actionbar{
     <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
@@ -221,3 +459,4 @@
     </ul>
 
 }
+*@
