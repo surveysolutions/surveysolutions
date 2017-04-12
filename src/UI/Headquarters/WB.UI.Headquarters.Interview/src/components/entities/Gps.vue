@@ -20,6 +20,7 @@
 </template>
 <script lang="ts">
     import { entityDetails } from "components/mixins"
+    import { googleApiKey } from "src/config"
 
     class GpsAnswer implements IGpsAnswer {
         latitude: number
@@ -49,9 +50,9 @@
         },
         computed: {
             googleMapPosition() {
-                return 'https://maps.googleapis.com/maps/api/staticmap?center=' + this.$me.answer.latitude + ',' + this.$me.answer.longitude
-                    + '&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|' + this.$me.answer.latitude + ',' + this.$me.answer.longitude
-                    + '&key=AIzaSyCSzVuKZ30UhOYVrseHIRsK4XNiO3Tpd3Q'
+                return `https://maps.googleapis.com/maps/api/staticmap?center=${this.$me.answer.latitude},${this.$me.answer.longitude}`
+                    + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${this.$me.answer.latitude},${this.$me.answer.longitude}`
+                    + `&key=${googleApiKey}`
             }
         },
         methods: {

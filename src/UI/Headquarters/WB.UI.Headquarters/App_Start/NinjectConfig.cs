@@ -284,7 +284,7 @@ namespace WB.UI.Headquarters
             });
 
             kernel.Bind<GoogleApiSettings>()
-                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"GoogleApiKey"]))
+                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"Google.Map.ApiKey"]))
                 .InSingletonScope();
 
             return kernel;
