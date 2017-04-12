@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
         {
             var service = Create.Service.Troubleshooting();
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_NotFound, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_NotFound.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object);
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_QuestionnaireDeleted, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_QuestionnaireDeleted.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object);
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewDeleted, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewDeleted.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -85,7 +86,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object, syncLogFactoryMock.Object, brokenPackagesFactoryMock.Object);
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewWasReassigned, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewWasReassigned.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object, syncLogFactoryMock.Object, brokenPackagesFactoryMock.Object);
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_ContactSupport, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_ContactSupport.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -120,7 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object, syncLogFactoryMock.Object, brokenPackagesFactoryMock.Object);
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(TroubleshootingMessages.NoData_NoIssuesInterviewOnServer, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_NoIssuesInterviewOnServer.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -137,7 +138,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
             var service = Create.Service.Troubleshooting(interviewSummaryReader, questionnaireFactoryMock.Object, syncLogFactoryMock.Object, brokenPackagesFactoryMock.Object);
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
-            Assert.AreEqual(string.Format(TroubleshootingMessages.NoData_InterviewWasNotReceived, "Vasya"), message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewWasNotReceived.FormatString(interviewKey, "Vasya"), message);
         }
 
         [Test]
@@ -160,7 +161,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
 
-            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewerChangedDevice, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewerChangedDevice.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -183,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
 
-            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewerChangedDevice, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterviewerChangedDevice.FormatString(interviewKey), message);
         }
 
         [Test]
@@ -206,7 +207,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 
             var message = service.GetMissingDataReason(null, this.interviewKey);
 
-            Assert.AreEqual(TroubleshootingMessages.NoData_InterveiwWasNotUploadedYet, message);
+            Assert.AreEqual(TroubleshootingMessages.NoData_InterveiwWasNotUploadedYet.FormatString(interviewKey), message);
         }
 
         [Test]
