@@ -14,11 +14,13 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -31,6 +33,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -424,7 +427,9 @@ namespace WB.Tests.Abc.TestFactories
             UserRoles role = UserRoles.Interviewer,
             string key = null,
             DateTime? updateDate = null,
-            bool? wasCreatedOnClient= null)
+            bool? wasCreatedOnClient= null,
+            bool isDeleted = false,
+            bool receivedByInterviewer = false)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -438,7 +443,9 @@ namespace WB.Tests.Abc.TestFactories
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
-                WasCreatedOnClient = wasCreatedOnClient ?? false
+                WasCreatedOnClient = wasCreatedOnClient ?? false,
+                IsDeleted = isDeleted,
+                ReceivedByInterviewer = receivedByInterviewer
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
@@ -1494,6 +1501,32 @@ namespace WB.Tests.Abc.TestFactories
         public BrokenInterviewPackageView BrokenInterviewPackageView()
         {
             return new BrokenInterviewPackageView();
+        }
+
+        public BrokenInterviewPackage BrokenInterviewPackage(DateTime? processingDate = null, DateTime? incomingDate = null,
+            InterviewDomainExceptionType? exceptionType =null)
+        {
+            return new BrokenInterviewPackage
+            {
+                ProcessingDate = processingDate ?? DateTime.Now,
+                IncomingDate = incomingDate ?? DateTime.Now,
+                ExceptionType = exceptionType?.ToString() ?? "Unexpected"
+            };
+        }
+
+        public InterviewSyncLogSummary InterviewSyncLogSummary(
+            DateTime? firstDownloadInterviewDate = null,
+            DateTime? lastDownloadInterviewDate = null,
+            DateTime? lastLinkDate = null,
+            DateTime? lastUploadInterviewDate = null)
+        {
+            return new InterviewSyncLogSummary
+            {
+                FirstDownloadInterviewDate = firstDownloadInterviewDate,
+                LastDownloadInterviewDate = lastDownloadInterviewDate,
+                LastLinkDate = lastLinkDate,
+                LastUploadInterviewDate = lastUploadInterviewDate
+            };
         }
     }
 }

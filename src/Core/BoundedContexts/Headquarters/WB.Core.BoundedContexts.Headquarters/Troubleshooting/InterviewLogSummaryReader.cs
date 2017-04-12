@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
             this.plainStorageAccessor = plainStorageAccessor;
         }
 
-        public InterviewLog GetInterviewLog(Guid interviewId, Guid responsibleId)
+        public InterviewSyncLogSummary GetInterviewLog(Guid interviewId, Guid responsibleId)
         {
             var interviewSynchronizationLog = this.plainStorageAccessor.Query(queryable => queryable
                 .Where(x => (x.Type == SynchronizationLogType.PostInterview || x.Type == SynchronizationLogType.GetInterview) && x.InterviewId == interviewId)
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
               .Take(1)
               .ToList()).SingleOrDefault()?.LogDate;
 
-            return new InterviewLog
+            return new InterviewSyncLogSummary
             {
                 FirstDownloadInterviewDate = firstDownloadInterviewDate,
                 LastDownloadInterviewDate = lastDownloadInterviewDate,

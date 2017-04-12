@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 {
     public interface IInterviewLogSummaryReader
     {
-        InterviewLog GetInterviewLog(Guid interviewId, Guid responsibleId);
+        InterviewSyncLogSummary GetInterviewLog(Guid interviewId, Guid responsibleId);
     }
 }

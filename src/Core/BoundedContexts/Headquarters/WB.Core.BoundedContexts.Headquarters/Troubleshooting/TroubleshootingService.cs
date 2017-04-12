@@ -77,9 +77,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 
             BrokenInterviewPackage lastBrokenPackage = this.brokenPackagesFactory.GetLastInterviewBrokenPackage(interview.InterviewId);
 
-            InterviewLog interviewLog = this.syncLogFactory.GetInterviewLog(interview.InterviewId, interview.ResponsibleId);
+            InterviewSyncLogSummary interviewSyncLogSummary = this.syncLogFactory.GetInterviewLog(interview.InterviewId, interview.ResponsibleId);
             
-            var lastUploadedInterviewIsBroken = interviewLog.LastUploadInterviewDate <= lastBrokenPackage?.IncomingDate;
+            var lastUploadedInterviewIsBroken = interviewSyncLogSummary.LastUploadInterviewDate <= lastBrokenPackage?.IncomingDate;
 
             if (lastUploadedInterviewIsBroken)
             {
@@ -102,14 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
                 return string.Format(TroubleshootingMessages.NoData_InterviewWasNotReceived, interview.ResponsibleName);
             }
             
-            if (interviewLog.IsInterviewOnDevice)
+            if (interviewSyncLogSummary.IsInterviewOnDevice)
             {
-                if (interviewLog.WasDeviceLinkedAfterInterviewWasDownloaded)
+                if (interviewSyncLogSummary.WasDeviceLinkedAfterInterviewWasDownloaded)
                 {
                     return TroubleshootingMessages.NoData_InterviewerChangedDevice;
                 }
 
-                if (interviewLog.InterviewerChangedDeviceBetweenDownloads)
+                if (interviewSyncLogSummary.InterviewerChangedDeviceBetweenDownloads)
                 {
                     return TroubleshootingMessages.NoData_InterviewerChangedDevice;
                 }
