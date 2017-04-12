@@ -35,6 +35,7 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
+                    <h4>@Pages.FilterTitle</h4>
                     <div class="block-filter">
                         <h5>@Common.Template</h5>
                         <select id="templateSelector" class="selectpicker" data-bind="value: SelectedTemplate" class="form-control">
@@ -62,7 +63,7 @@
                 <div class="page-header">
                     <h1>@Reports.CumulativeInterviewChart</h1>
                 </div>
-                <div class="row">
+                <div class="clearfix">
                     <div class="col-sm-8">
                         <h2 data-bind="text: TemplateName"></h2>
                         <h2 id="NoResultsFound">@Common.NoResultsFound</h2>
