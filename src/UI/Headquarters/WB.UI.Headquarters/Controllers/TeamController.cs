@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -30,13 +31,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         protected async Task<IdentityResult> UpdateAccountAsync(UserEditModel editModel)
         {
-            var appUser = await this.userManager.FindByIdAsync(editModel.Id).ConfigureAwait(false);
+            var appUser = await this.userManager.FindByIdAsync(editModel.Id);
 
             if(appUser == null)
-                return IdentityResult.Failed(@"Could not update user information because current user does not exist");
+                return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserDoesNotExists);
             if(appUser.IsArchived)
-                return IdentityResult.Failed(@"Could not update user information because current user is archived");
-
+                return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+            
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
@@ -46,7 +47,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ? editModel.IsLocked
                 : appUser.IsLockedByHeadquaters;
 
-            return await this.userManager.UpdateUserAsync(appUser, editModel.Password).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(editModel.Password))
+            {
+                if (editModel.Password != editModel.ConfirmPassword)
+                {
+                    return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
+                }
+
+                return await this.userManager.UpdateUserAsync(appUser, editModel.Password);
+            }
+
+            return await this.userManager.UpdateAsync(appUser);
         }
 
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)

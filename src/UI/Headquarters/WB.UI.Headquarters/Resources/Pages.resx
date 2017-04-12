@@ -120,6 +120,24 @@
   <data name="LogOn_Title" xml:space="preserve">
     <value>Log On</value>
   </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Edit admin profile</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Edit profile public information details</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters.</value>
+  </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
   </data>

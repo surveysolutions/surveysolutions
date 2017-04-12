@@ -39,7 +39,6 @@
     "vue": "global:Vue",
     "vue-resource": "global:VueResource",
     "vee-validate": "global:VeeValidate"
-
   },
   "browserify": {
     "transform": [
@@ -49,7 +48,7 @@
   "scripts": {
     "bower": "node_modules\\.bin\\bower install",
     "bower-force": "node_modules\\.bin\\bower install --force",
-    "gulp": "node_modules\\.bin\\gulp --production"
+    "gulp": "node_modules\\.bin\\gulp"
   },
   "dependencies": {
     "bower": "^1.8.0",

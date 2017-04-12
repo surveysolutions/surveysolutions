@@ -183,4 +183,8 @@
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>Недопустимое свойство</value>
   </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Пароль аккаунта успешно изменён</value>
+    <comment>Пароль аккаунта успешно изменён</comment>
+  </data>
 </root>
