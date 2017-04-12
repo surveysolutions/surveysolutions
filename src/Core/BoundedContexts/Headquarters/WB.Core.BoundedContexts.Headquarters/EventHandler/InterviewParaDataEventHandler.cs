@@ -57,7 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, AnswersRemoved>,
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
-        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>,
+        IUpdateHandler<InterviewHistoryView, AreaQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -628,6 +629,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, @event.EventTimeStamp);
 
             return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+            @event.Payload.RosterVector));
+
+            return view;
         }
     }
 }

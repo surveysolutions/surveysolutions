@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                                          ILitePublishedEventHandler<TranslationSwitched>,
                                          ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>
+                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
+                                         ILitePublishedEventHandler<AreaQuestionAnswered>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -471,6 +472,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.Language = @event.Payload.Language;
 
             this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
     }
 }
