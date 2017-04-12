@@ -1,5 +1,5 @@
-﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl) {
-    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl]);
+﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier) {
+    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl, notifier]);
 
     var self = this;
 
@@ -128,13 +128,13 @@
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
         if (eligibleSelectedItems.length === 0) {
-            bootbox.alert(messageHtml);
+            notifier.alert('', messageHtml);
             return;
         }
 
         messageHtml += $(continueMessageTemplateId).html();
 
-        bootbox.confirm(messageHtml, function (result) {
+        notifier.confirm('Confirmation Needed', messageHtml, function (result) {
             if (result) {
                 var itemsThatShouldBeReassigned = eligibleSelectedItems;
 

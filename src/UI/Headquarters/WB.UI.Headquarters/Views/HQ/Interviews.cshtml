@@ -26,7 +26,8 @@
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
         var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
         $(function() {
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl);
+            var notifier = new Notifier();
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier);
             ko.applyBindings(model);
             model.load();
         });
@@ -47,7 +48,17 @@
 
                 <div class="filters-container">
                     <h4>@Pages.FilterTitle:</h4>
-
+                    
+                    <div class="block-filter">
+                        <h5>@Common.Search</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Text" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-bind="click: filter">Filter</button>
+                            </span>
+                        </div>
+                    </div>
+                    
                     <div class="block-filter">
                         <h5>@Pages.Template</h5>
                         <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
@@ -111,16 +122,16 @@
                                     <span class="tick"></span>
                                 </label>
                             </th>
-                            <th>
+                            <th class="sorting_disabled">
                                 @Common.InterviewKey
                             </th>
                             <!-- ko if:SelectedTemplate() == '' -->
-                            <th>@Common.PrefilledQuestions</th>
+                            <th class="sorting_disabled">@Common.PrefilledQuestions</th>
                             <!-- /ko -->
                             <!-- ko ifnot:SelectedTemplate() == '' -->
                             <!-- ko if:Items().length > 0-->
                             <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                            <th data-bind='html: Question'></th>
+                            <th class="sorting_disabled" data-bind='html: Question'></th>
                             <!-- /ko -->
                             <!-- /ko -->
                             <!-- /ko -->
@@ -129,7 +140,7 @@
                             <th class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
                             <th data-bind='sortby: "Status"'>@Common.Status</th>
                             <th data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
-                            <th>@Common.CreatedOnClient</th>
+                            <th class="sorting_disabled">@Common.CreatedOnClient</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,7 +167,10 @@
                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                             <td class="errors">
                                 <!-- ko if:HasErrors -->
-                                <span class="glyphicon glyphicon-ok margin-right-5" style="color:red"></span>
+                                Yes
+                                <!-- /ko -->
+                                <!-- ko ifnot:HasErrors -->
+                                <span class="empty"></span>
                                 <!-- /ko -->
                             </td>
                             <td data-bind="text: Status"></td>
@@ -194,10 +208,7 @@
                     "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
                     InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
                     InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
-            <br />
-            <br />
             @Interviews.ChooseResponsibleInterviewer
-            <br />
             <div class="input-group">
                 <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                 <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
@@ -205,7 +216,6 @@
                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                 </div>
             </div>
-            <br />
         </div>
     </script>    
     <script type="text/html" id="confirm-delete-template">

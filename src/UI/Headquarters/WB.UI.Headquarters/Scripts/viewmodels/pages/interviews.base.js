@@ -1,4 +1,4 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
@@ -109,13 +109,13 @@
             var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
             if (filteredItems.length === 0) {
-                bootbox.alert(messageHtml);
+                notifier.alert('', messageHtml);
                 return;
             }
 
             messageHtml += $(continueMessageTemplateId).html();
 
-            bootbox.confirm(messageHtml, function (result) {
+            notifier.confirm('', messageHtml, function (result) {
                 if (result) {
                     self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
                 } else {
