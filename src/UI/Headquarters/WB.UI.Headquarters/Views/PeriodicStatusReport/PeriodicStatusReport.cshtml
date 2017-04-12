@@ -52,7 +52,7 @@
                     {
                         <div class="block-filter">
                             <h5>@PeriodicStatusReport.Type</h5>
-                            <select id="reportTypeSelector" class="selectpicker" data-bind="value: SelectedType">
+                            <select id="reportTypeSelector" data-bind="value: SelectedType, selectPicker: {}">
                                 @foreach (var item in Model.ReportTypes)
                                 {
                                     <option value='@((int) item)'>@PeriodicStatusReport.ResourceManager.GetString(@item.ToString())</option>
@@ -62,7 +62,7 @@
                     }
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
-                        <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire" class="selectpicker">
+                        <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
                         @foreach (var item in Model.Questionnaires)
                         {
                             <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Period</h5>
-                        <select id="periodSelector" class="selectpicker" data-bind="value: Period">
+                        <select id="periodSelector" data-bind="value: Period, selectPicker: {}">
                             <option value='d'>@PeriodicStatusReport.Day</option>
                             <option value='w'>@PeriodicStatusReport.Week</option>
                             <option value='m'>@PeriodicStatusReport.Month</option>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.PeriodCount</h5>
-                        <select data-bind="value: ColumnCount" class="selectpicker">
+                        <select data-bind="value: ColumnCount, selectPicker: {}">
                         @for (int i = 1; i <= 12; i++)
                         {
                             <option value="@i">@i</option>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <p data-bind="visible: Pager().TotalItemCount() == 0">
-                    No results found
+                    @Pages.NoResults
                 </p>
                 <div class="table-with-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
                     <table class="table table-striped table-bordered table-condensed table-hover">
