@@ -121,19 +121,19 @@
     <value>Устранение неполадок</value>
   </data>
   <data name="InterviewDataIsMissingDescription" xml:space="preserve">
-    <value>Укажите ключ или ID интервью для поиска. Вы также можете окрыть интервью и нажать кнопку "Устранить проблему".</value>
+    <value>Укажите ключ или интервью ID для поиска. Вы также можете открыть интервью и нажать кнопку "Устранить проблему"</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>Интервьювер утверждает, что интервью было закончино и синхронизировано, но я не вижу данных на сервере.</value>
+    <value>Интервьюер утверждает, что интервью было закончено и синхронизировано, но я не вижу данных на сервере</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
-    <value>Вам потребуется выбрать название опросника, логина интервьювера и диапазон дат</value>
+    <value>Вам потребуется выбрать название опросника, имя интервьюера и диапазон дат</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>Я не могу найти собранное в cesus режиме интервью</value>
+    <value>Я не могу найти интервью, собранное в режиме census</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
-    <value>Перейдите по ссылке, описывающую вашу проблему, чтобы увидеть предлагаемые решения. Если проблема, с которой вы столкнулись не описана ниже, перейдите на  &lt;a href="{0}" target="_blank"&gt;сайт поддержки&lt;/a&gt; Survey Solutions. </value>
+    <value>Перейдите по ссылке, которая описывает ваш вопрос, чтобы увидеть предлагаемые решения. Если проблема, с которой вы столкнулись, не описана ниже, перейдите на &lt;a href="{0}" target="_blank"&gt;сайт технической поддержки&lt;/a&gt; Survey Solutions.</value>
   </data>
   <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
     <value>Условия поиска</value>
@@ -186,5 +186,17 @@
   </data>
   <data name="TableTitle_Status" xml:space="preserve">
     <value>Статус</value>
+  </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>Укажите ключ интервью или идентификатор интервью для поиска. В качестве альтернативы, откройте страницу с информацией об интервью и нажмите кнопку "Диагностика".</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>Ключ интервью или идентификатор интервью</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>Введите ключ или идентификатор интервью</value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>Я не вижу данных для синхронизированных интервью на сервере</value>
   </data>
 </root>
