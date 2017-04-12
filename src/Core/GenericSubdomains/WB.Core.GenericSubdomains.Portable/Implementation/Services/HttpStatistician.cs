@@ -38,7 +38,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public void CollectHttpCallStatistics(HttpCall call)
         {
             var request = (call.Request.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Request?.Headers);
-            var response = (call.Response.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Response?.Headers);
+            var response = (call.Response?.Content?.Headers?.ContentLength ?? 0) + GetHeadersEstimatedSize(call.Response?.Headers);
 
             if (call.Duration.HasValue)
             {
@@ -47,7 +47,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 // From total call duration substracting time that it took server to process response. 
                 // this way interview upload speed will not be affected by very long server side interview processing
                 IEnumerable<string> perfHeaders;
-                if (call.Response.Headers.TryGetValues("Server-Timing", out perfHeaders))
+                if (call.Response != null && call.Response.Headers.TryGetValues("Server-Timing", out perfHeaders))
                 {
                     foreach (var perfHeader in perfHeaders)
                     {

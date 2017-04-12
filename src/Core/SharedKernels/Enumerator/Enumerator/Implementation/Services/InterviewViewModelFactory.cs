@@ -48,6 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             LinkedToListQuestionMultiOptionQuestionModel = 184,
             LinkedToListQuestionSingleOptionQuestionModel = 185,
 
+            AreaQuestionModel = 190,
+
             GroupModel = 200,
             RosterModel = 201,
             StaticTextModel = 300,
@@ -84,6 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.RosterModel, Load<RosterViewModel>},
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
                 { InterviewEntityType.VariableModel, Load<VariableViewModel>},
+                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
             };
 
         private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
@@ -208,6 +211,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         return InterviewEntityType.QRBarcodeQuestionModel;
                     case QuestionType.Multimedia:
                         return InterviewEntityType.MultimediaQuestionModel;
+                    case QuestionType.Area:
+                        return InterviewEntityType.AreaQuestionModel;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
