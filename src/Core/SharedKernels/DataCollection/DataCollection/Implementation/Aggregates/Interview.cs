@@ -65,11 +65,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
        
-        /// <remarks>
-        /// Repository operations are time-consuming.
-        /// So this repository may be used only in command handlers.
-        /// And should never be used in event handlers!!
-        /// </remarks>
         private readonly IQuestionnaireStorage questionnaireRepository;
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
@@ -226,6 +221,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ExpressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.RosterVector, @event.Latitude,
                 @event.Longitude, @event.Accuracy, @event.Altitude);
+        }
+
+        public virtual void Apply(AreaQuestionAnswered @event)
+        {
+            var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
+            this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
+
+            this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromString(@event.Answer));
         }
 
         public virtual void Apply(TextListQuestionAnswered @event)
@@ -2030,6 +2033,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedToList.GetAnswer().ToDecimals().ToArray()));
+                }
+                if (changedQuestion.IsArea)
+                {
+                    this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsArea.GetAnswer().Area));
                 }
             }
         }
