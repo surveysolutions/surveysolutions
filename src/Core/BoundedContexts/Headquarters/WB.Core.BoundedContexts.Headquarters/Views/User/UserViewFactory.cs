@@ -27,7 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public UserView GetUser(UserViewInputModel input)
         {
-            var query = this.UserRepository.Users.Select(user => new UserQueryItem
+            var repository = this.UserRepository;
+            var query = repository.Users.Select(user => new UserQueryItem
             {
                 PublicKey = user.Id,
                 UserName = user.UserName,
@@ -41,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 RoleId = user.Roles.FirstOrDefault().RoleId,
                 DeviceId = user.Profile.DeviceId,
                 SupervisorId = user.Profile.SupervisorId,
-                SupervisorName = this.UserRepository.Users.Select(x => new {Id = x.Id, Name = x.UserName})
+                SupervisorName = repository.Users.Select(x => new {Id = x.Id, Name = x.UserName})
                     .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
                     .Name
             });
@@ -56,7 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 query = query.Where(x => x.DeviceId == input.DeviceId);
 
             var dbUser = query.FirstOrDefault();
-            
+            if (dbUser == null) return null;
+
             return new UserView
             {
                 PublicKey = dbUser.PublicKey,
