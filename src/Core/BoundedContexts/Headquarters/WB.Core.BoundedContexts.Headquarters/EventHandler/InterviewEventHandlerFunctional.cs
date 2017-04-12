@@ -74,7 +74,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, VariablesChanged>,
         IUpdateHandler<InterviewData, VariablesDisabled>,
         IUpdateHandler<InterviewData, VariablesEnabled>,
-        IUpdateHandler<InterviewData, TranslationSwitched>
+        IUpdateHandler<InterviewData, TranslationSwitched>,
+        IUpdateHandler<InterviewData, AreaQuestionAnswered>
     {
         private readonly IUserViewFactory users;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -821,6 +822,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             interview.CurrentLanguage = @event.Payload.Language;
             return interview;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
+                @event.Payload.Answer, @event.Payload.Answer != null);
         }
     }
 }

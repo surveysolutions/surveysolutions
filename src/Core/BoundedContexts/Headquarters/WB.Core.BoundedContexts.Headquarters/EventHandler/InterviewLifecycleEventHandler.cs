@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewDeleted>,
         IEventHandler<InterviewHardDeleted>,
-        IEventHandler<InterviewerAssigned>
+        IEventHandler<InterviewerAssigned>,
+        IEventHandler<AreaQuestionAnswered>
     {
         public override object[] Writers => new object[0];
 
@@ -239,6 +240,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.aggregateRootCacheCleaner.Evict(evnt.EventSourceId);
             this.webInterviewNotificationService.ReloadInterview(evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, new Identity(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+            this.webInterviewNotificationService.RefreshEntitiesWithFilteredOptions(evnt.EventSourceId);
         }
     }
 }
