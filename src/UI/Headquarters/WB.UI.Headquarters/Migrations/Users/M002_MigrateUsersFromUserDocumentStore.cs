@@ -9,8 +9,7 @@ namespace WB.UI.Headquarters.Migrations.Users
     {
         public override void Up()
         {
-            this.Execute.Sql(@"
-                CREATE EXTENSION IF NOT EXISTS ""uuid-ossp"";
+            this.Execute.Sql(@"                
                 DO $$
                 DECLARE 
 	                hasroles BOOLEAN;
@@ -71,7 +70,7 @@ namespace WB.UI.Headquarters.Migrations.Users
 				                rec.email,
 				                FALSE, -- EmailConfirmed
 				                rec.password,
-				                uuid_generate_v4(),
+                                uuid_in(md5(random()::text || now()::text)::cstring),
 				                rec.phonenumber,
 				                FALSE, -- PhoneNumberConfirmed
 				                FALSE, -- TwoFactorEnabled
