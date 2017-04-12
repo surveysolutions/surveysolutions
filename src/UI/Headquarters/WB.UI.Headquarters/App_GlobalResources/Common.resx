@@ -197,6 +197,9 @@
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Approve</value>
+  </data> 
+  <data name="Assign" xml:space="preserve">
+    <value>Assign</value>
   </data>
   <data name="Reject" xml:space="preserve">
     <value>Reject</value>

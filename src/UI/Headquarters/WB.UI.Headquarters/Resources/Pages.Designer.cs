@@ -1492,6 +1492,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to interview(s) selected.
+        /// </summary>
+        public static string Interviews_Selected {
+            get {
+                return ResourceManager.GetString("Interviews_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string Layout_Filter {
