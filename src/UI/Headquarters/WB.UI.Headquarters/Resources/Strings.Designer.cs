@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account password successfully updated.
+        /// </summary>
+        public static string HQ_AccountController_AccountPasswordChangedSuccessfully {
+            get {
+                return ResourceManager.GetString("HQ_AccountController_AccountPasswordChangedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account information successfully updated.
         /// </summary>
         public static string HQ_AccountController_AccountUpdatedSuccessfully {

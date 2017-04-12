@@ -1,0 +1,7 @@
+﻿@model String
+@{
+    Layout = "~/Views/Shared/FormFieldLayout.cshtml";
+}
+@section form{
+    @Html.TextBoxFor(v => v, new {@class = "form-control"})
+}

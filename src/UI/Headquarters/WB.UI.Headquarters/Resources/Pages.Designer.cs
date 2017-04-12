@@ -70,11 +70,65 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string AccountManage_ChangePassword {
+            get {
+                return ResourceManager.GetString("AccountManage_ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters..
+        /// </summary>
+        public static string AccountManage_ChangePasswordHelp {
+            get {
+                return ResourceManager.GetString("AccountManage_ChangePasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit profile public information details.
+        /// </summary>
+        public static string AccountManage_EditPublicInformation {
+            get {
+                return ResourceManager.GetString("AccountManage_EditPublicInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string AccountManage_Login {
+            get {
+                return ResourceManager.GetString("AccountManage_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string AccountManage_Role {
+            get {
+                return ResourceManager.GetString("AccountManage_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save changes.
         /// </summary>
         public static string AccountManage_SaveChanges {
             get {
                 return ResourceManager.GetString("AccountManage_SaveChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit admin profile.
+        /// </summary>
+        public static string AccountManage_Title {
+            get {
+                return ResourceManager.GetString("AccountManage_Title", resourceCulture);
             }
         }
         

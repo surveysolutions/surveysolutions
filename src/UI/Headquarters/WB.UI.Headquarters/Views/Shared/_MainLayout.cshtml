@@ -7,7 +7,6 @@
 @{
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
-
 @functions{
     public string TokenHeaderValue()
     {
@@ -16,9 +15,7 @@
         return cookieToken + ":" + formToken;
     }
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8">
@@ -81,62 +78,61 @@
         </div><!-- /.container-fluid -->
     </nav>
 </header>
-@if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
-{
-    <div class="panel view-mode">
-    @if (authorizedUser.IsObserving)
+<main>
+    @if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
     {
-        <div class="panel-heading panel-warning">
-            @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
-        </div>
-    }
-    @if (ViewBag.GlobalNotice != null)
-    {
-        <div class="panel-heading">
-            <div class="alerts">
-                <div class="alert alert-info alert-dismissible text-center" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    @ViewBag.GlobalNotice
+        <div class="panel view-mode">
+        @if (authorizedUser.IsObserving)
+        {
+            <div class="panel-heading panel-warning">
+                @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
+            </div>
+        }
+        @if (ViewBag.GlobalNotice != null)
+        {
+            <div class="panel-heading">
+                <div class="alerts">
+                    <div class="alert alert-info alert-dismissible text-center" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        @ViewBag.GlobalNotice
+                    </div>
                 </div>
             </div>
+        }
         </div>
     }
-    </div>
-}
-@RenderBody()
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="text-left">
-                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
-            </div>
-            <div class="text-left">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
-                @if (AppSettings.IsDebugBuilded)
-                {
-                    <span id="build-config">[.NET Debug]</span>
-                }
-
-                @if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    <span id="compile-config" style="color: red">Web Debug</span>
-                }
-                <span>|</span>
-                <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
-                @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
-                {
-                    <div>
-                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
-                    </div>
-                }
-            </div>
+    @RenderBody()
+</main>
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="text-left">
+            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
         </div>
-    </footer>
+        <div class="text-left">
+            @(ServiceLocator.Current.GetInstance<IProductVersion>())
+            @if (AppSettings.IsDebugBuilded)
+            {
+                <span id="build-config">[.NET Debug]</span>
+            }
 
-    <!-- jsApp:js -->
-    <!-- endinject -->
-
-    @Html.Partial("Clickjacking")
-    @Html.Partial("GlobalSettings")
-   
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <span id="compile-config" style="color: red">Web Debug</span>
+            }
+            <span>|</span>
+            <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
+            @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
+            {
+                <div>
+                    <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+                </div>
+            }
+        </div>
+    </div>
+</footer>
+<!-- jsApp:js -->
+<!-- endinject -->
+@Html.Partial("Clickjacking")
+@Html.Partial("GlobalSettings")
 </body>
 </html>
