@@ -48,6 +48,7 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
+                    <h4>@Pages.FilterTitle</h4>
                     @if (Model.ReportTypes.Length > 1)
                     {
                         <div class="block-filter">
@@ -63,10 +64,10 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
-                        @foreach (var item in Model.Questionnaires)
-                        {
-                            <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
-                        }
+                            @foreach (var item in Model.Questionnaires)
+                            {
+                                <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
+                            }
                         </select>
                     </div>
                     <div class="block-filter">
@@ -92,10 +93,10 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.PeriodCount</h5>
                         <select data-bind="value: ColumnCount, selectPicker: {}">
-                        @for (int i = 1; i <= 12; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -107,20 +108,20 @@
                         @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
                     </h1>
                 </div>
-                <div class="row">
+                <div class="clearfix">
                     <div class="col-sm-8">
-                        
                         <h2 data-bind="text: QuestionnaireName"></h2>
                         <h3>@Model.ReportNameDescription</h3>
                         @if (Model.CanNavigateToQuantityBySupervisors)
                         {
                             <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
                         }
+
+                        <p data-bind="visible: Pager().TotalItemCount() == 0">
+                            @Pages.NoResults
+                        </p>
                     </div>
                 </div>
-                <p data-bind="visible: Pager().TotalItemCount() == 0">
-                    @Pages.NoResults
-                </p>
                 <div class="table-with-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
                     <table class="table table-striped table-bordered table-condensed table-hover">
                         <thead>

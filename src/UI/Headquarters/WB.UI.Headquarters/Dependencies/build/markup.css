@@ -9187,19 +9187,18 @@ table tr th .census-icon, table tr td .census-icon {
   width: 100%;
   height: 600px;
   padding: 10px; }
-
-table.jqplot-table-legend {
-  width: 90%;
-  border: none; }
-
-td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-  width: 20px; }
-
-div.jqplot-table-legend-swatch-outline {
-  border: none; }
-
-.jqplot-table-legend-swatch {
-  border-width: 10px; }
+  #interviewChart table.jqplot-table-legend {
+    width: 90%;
+    border: none;
+    margin: 0;
+    border: none; }
+  #interviewChart td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+    width: 20px; }
+  #interviewChart div.jqplot-table-legend-swatch-outline {
+    border: none;
+    margin-right: 5px; }
+  #interviewChart .jqplot-table-legend-swatch {
+    border-width: 10px; }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
