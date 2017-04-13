@@ -216,4 +216,8 @@
   <data name="ObserversEmail" xml:space="preserve">
     <value>Электронная почта наблюдателя </value>
   </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Редактирование супервизора</value>
+    <comment>Редактирование супервизора</comment>
+  </data>
 </root>

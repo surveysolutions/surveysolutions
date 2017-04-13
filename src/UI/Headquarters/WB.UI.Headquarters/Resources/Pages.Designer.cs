@@ -781,6 +781,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Interviewer profile.
+        /// </summary>
+        public static string Interviewer_CreateProfile {
+            get {
+                return ResourceManager.GetString("Interviewer_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Interviewer {0} profile.
+        /// </summary>
+        public static string Interviewer_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Interviewer_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer profile.
+        /// </summary>
+        public static string Interviewer_Profile {
+            get {
+                return ResourceManager.GetString("Interviewer_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer assigned.
         /// </summary>
         public static string InterviewerAssigned {
@@ -1816,7 +1843,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publik information details (optional) &lt;br&gt; will be visible to HQ users only.
+        ///   Looks up a localized string similar to Personal information details (optional) &lt;br&gt; will be visible to HQ users only.
         /// </summary>
         public static string PublicSection {
             get {
