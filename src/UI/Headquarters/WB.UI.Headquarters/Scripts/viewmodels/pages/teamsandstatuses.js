@@ -61,16 +61,25 @@
     self.getLinkToInterviews = function(data, row, interviewStatus) {
         if (data === 0) return "<span>" + data + "</span>";
 
-        var link = "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
-            '&templateVersion=' + row.questionnaireVersion;
+        var queryObject = {};
 
-        
-        link += '&responsible=' + row.responsible;
+        if (row.questionnaireId) {
+            queryObject.templateId = row.questionnaireId;
+            queryObject.templateVersion = row.questionnaireVersion;
+        }
 
-        if (!_.isUndefined(interviewStatus))
-            link += '&status=' + interviewStatus;
+        if (row.responsible) {
+            queryObject.responsible = row.responsible;
+        }
 
-        return link + '"\">' + data + "</a>";
+        if (!_.isUndefined(interviewStatus)) {
+            queryObject.status = interviewStatus;
+        }
+
+        var queryString = $.param(queryObject);
+        var linkUrl = $interviewsUrl + (queryString ? "?" + queryString : "");
+
+        return "<a href=\"" + linkUrl + "\">" + data + "</a>";
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.TeamsAndStatuses, Supervisor.VM.ListView);
