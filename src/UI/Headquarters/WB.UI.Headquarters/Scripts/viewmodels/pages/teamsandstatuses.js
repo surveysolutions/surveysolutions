@@ -30,14 +30,19 @@
     self.footerCallback = function () {
         var api = this.api();
         var totalRow = self.TotalRow();
-        $(api.column(1).footer()).text(totalRow.supervisorAssignedCount);
-        $(api.column(2).footer()).text(totalRow.interviewerAssignedCount);
-        $(api.column(3).footer()).text(totalRow.completedCount);
-        $(api.column(4).footer()).text(totalRow.rejectedBySupervisorCount);
-        $(api.column(5).footer()).text(totalRow.approvedBySupervisorCount);
-        $(api.column(6).footer()).text(totalRow.rejectedByHeadquartersCount);
-        $(api.column(7).footer()).text(totalRow.approvedByHeadquartersCount);
-        $(api.column(8).footer()).text(totalRow.totalCount);
+        if (api.column(0).data().length === 0) {
+            $(this).find("tfoot").hide();
+        } else {
+            $(this).find("tfoot").show();
+            $(api.column(1).footer()).text(totalRow.supervisorAssignedCount);
+            $(api.column(2).footer()).text(totalRow.interviewerAssignedCount);
+            $(api.column(3).footer()).text(totalRow.completedCount);
+            $(api.column(4).footer()).text(totalRow.rejectedBySupervisorCount);
+            $(api.column(5).footer()).text(totalRow.approvedBySupervisorCount);
+            $(api.column(6).footer()).text(totalRow.rejectedByHeadquartersCount);
+            $(api.column(7).footer()).text(totalRow.approvedByHeadquartersCount);
+            $(api.column(8).footer()).text(totalRow.totalCount);
+        }
     };
 
     self.onDataTableDataReceived = function (data) {
