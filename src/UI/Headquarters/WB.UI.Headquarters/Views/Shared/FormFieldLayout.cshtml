@@ -1,5 +1,4 @@
-﻿@model String
-@if (ViewData.ContainsKey("disableClientValidation")) { Html.EnableClientValidation(false); }
+﻿@if (ViewData.ContainsKey("disableClientValidation")) { Html.EnableClientValidation(false); }
 <div class="block-filter">
     <h5>@Html.LabelForModel():</h5>
     <div class="form-group @(ViewData.ModelState.IsValidField(ViewData.ModelMetadata.PropertyName) ? string.Empty : "has-error")">
