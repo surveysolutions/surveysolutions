@@ -7,8 +7,11 @@ namespace WB.UI.Headquarters.Migrations.Users
     {
         public override void Up()
         {
-            this.Delete.Table("migrations");
-            this.Delete.Table("dataMigrations");
+            if (Schema.Table("migrations").Exists())
+                this.Delete.Table("migrations");
+
+            if (Schema.Table("dataMigrations").Exists())
+                this.Delete.Table("dataMigrations");
         }
 
         public override void Down()
