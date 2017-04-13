@@ -1050,7 +1050,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_with_question_linked_to_roster_and_answered_only_roster_size_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_with_question_linked_to_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_with_question_linked_to_roster_and_linked_option_change_structure_present.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_and_interviewer_locked_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor.cs" />
