@@ -4,31 +4,9 @@
     ViewBag.Title = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
     ViewBag.PageTitle = Pages.Supervisor_Profile;
     ViewBag.PageSubTitle = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
-    Layout = @"~/Views/Shared/_EditorLayout.cshtml";
+  
+    ViewBag.ControllerName = "Supervisor";
+    ViewBag.ControllerAction = "Edit";
+    ViewBag.IsEditMode = true;
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-<div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Edit", "Supervisor", FormMethod.Post, new { @class = @"profile" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="col-sm-12">
-            @Html.HiddenFor(x => x.UserName)
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
-        </div>
-
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
-
-        <div class="col-sm-7">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-
-        @Html.EditorForModel("UpdateButtonsRow")
-    }
-</div>

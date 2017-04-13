@@ -3,31 +3,8 @@
     ViewBag.Title = Pages.Headquarter_CreateProfile;
     ViewBag.PageTitle = Pages.Headquarter_Profile;
     ViewBag.PageSubTitle = Pages.Headquarter_CreateProfile;
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+
+    ViewBag.ControllerName = @"Headquarters";
+    ViewBag.ControllerAction = @"Edit";
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-<div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Create", "Headquarters", FormMethod.Post, new { @class = @"profile" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="col-sm-12">
-            @Html.EditorFor(x => x.UserName, "TextBoxFormField")
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
-        </div>
-
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
-
-        <div class="col-sm-7">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-
-        @Html.EditorForModel("CreateButtonsRow")
-    }
-</div>

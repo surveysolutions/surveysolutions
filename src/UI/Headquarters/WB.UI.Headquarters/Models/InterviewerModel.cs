@@ -14,5 +14,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public string SupervisorName { get; set; }
 
         public bool IsShowSupervisorSelector { get; set; }
+
+        [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
+        public bool IsLockedBySupervisor { get; set; }
     }
 }

@@ -1407,10 +1407,10 @@
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
     <Content Include="Views\Shared\FormFieldLayout.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\PublicInfoDetails.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CreateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
+    <Content Include="Views\Shared\_UserEditorLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

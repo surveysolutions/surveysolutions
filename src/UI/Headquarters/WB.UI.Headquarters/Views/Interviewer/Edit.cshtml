@@ -1,34 +1,21 @@
-﻿@using WB.Core.GenericSubdomains.Portable
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
     ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
     ViewBag.PageTitle = Pages.Interviewer_Profile;
     ViewBag.PageSubTitle = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
-    Layout = @"~/Views/Shared/_EditorLayout.cshtml";
+
+    ViewBag.ControllerName = "Interviewer";
+    ViewBag.ControllerAction = "Edit";
+    ViewBag.CancelAction = "Back";
+    ViewBag.IsEditMode = true;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-<div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Edit", "Supervisor", FormMethod.Post, new { @class = @"profile" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="col-sm-12">
-            @Html.HiddenFor(x => x.UserName)
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
-        </div>
-
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
-
-        <div class="col-sm-7">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-
-        @Html.EditorForModel("UpdateButtonsRow", new {Action = "Back" })
-    }
-</div>
+@section PostDetailsSection
+{
+    @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+}

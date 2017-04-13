@@ -797,6 +797,16 @@
   </data>
   <data name="Supervisor_EditProfileFormat" xml:space="preserve">
     <value>Edit supervisor profile: {0}</value>
+  </data>    
+  
+  <data name="Observer_Profile" xml:space="preserve">
+    <value>Observer profile</value>
+  </data>
+  <data name="Observer_CreateProfile" xml:space="preserve">
+    <value>Create observer profile</value>
+  </data>
+  <data name="Observer_EditProfileFormat" xml:space="preserve">
+    <value>Edit observer profile: {0}</value>
   </data>  
   
   <data name="Interviewer_Profile" xml:space="preserve">

@@ -9,7 +9,9 @@
 <div class="form-group">
     @Html.LabelFor(x => x.IsLocked, new { @class = "col-sm-4 control-label" })
     <div class="col-sm-8">
-        @Html.CheckBoxFor(x => x.IsLocked,  (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator) ?  (object)new {} :  (object)new { @disabled = "disabled" })
+        @Html.CheckBoxFor(x => x.IsLocked,  (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator) 
+            ?  (object)new {} 
+            :  (object)new { @disabled = "disabled" })
         @Html.ValidationMessageFor(x => x.IsLocked, null, new {@class = "help-block"})
     </div>
 </div>
