@@ -1780,6 +1780,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create observer profile.
+        /// </summary>
+        public static string Observer_CreateProfile {
+            get {
+                return ResourceManager.GetString("Observer_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit observer profile: {0}.
+        /// </summary>
+        public static string Observer_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Observer_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer profile.
+        /// </summary>
+        public static string Observer_Profile {
+            get {
+                return ResourceManager.GetString("Observer_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred please try again later..
         /// </summary>
         public static string OperationFailedDescription {
