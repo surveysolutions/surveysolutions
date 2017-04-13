@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQRBarcodeScanService qrBarcodeScanService;
+        private readonly IAreaEditService areaEditService;
         private readonly ILiteEventRegistry eventRegistry;
 
         private Identity questionIdentity;
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AreaQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
-            IQRBarcodeScanService qrBarcodeScanService,
+            IAreaEditService areaEditService,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<AreaQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
-            this.qrBarcodeScanService = qrBarcodeScanService;
+            this.areaEditService = areaEditService;
             this.eventRegistry = eventRegistry;
 
             this.questionState = questionStateViewModel;
@@ -107,9 +107,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+                var area = await this.areaEditService.EditAreaAsync(this.Answer);
 
-                if (scanCode != null)
+                if (area != null)
                 {
                     var command = new AnswerQRBarcodeQuestionCommand(
                         interviewId: this.interviewId,
@@ -117,11 +117,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
                         answerTime: DateTime.UtcNow,
-                        answer: scanCode.Code);
+                        answer: area.Area);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = scanCode.Code;
+                    this.Answer = area.Area;
                 }
             }
             catch (MissingPermissionsException)
