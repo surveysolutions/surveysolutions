@@ -1,12 +1,49 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
 {
     @RenderSection("scripts", false)
-}
+    @Scripts.Render("~/validate")
+    <script type="text/javascript">
+        $('#umbrella').hide();
+        $(function () {
+            $.each($('.form-control'), function (index, value) {
+                if ($(this).val().length > 0) {
+                    $(this).parent(".field").addClass("answered");
+                }
 
-<div class="main">
-    @RenderBody()
-</div>
+                $(this).change(function () {
+                    if ($(this).val().length > 0) {
+                        $(this).parent(".field").addClass("answered");
+                    }
+                    else {
+                        $(this).parent(".field").removeClass("answered");
+                    }
+                });
+                $(this).parent().children(".btn-clear").click(function () {
+                    $(this).parent().removeClass("answered");
+                    $(this).parent().find("input").val('').blur();
+                });
+            });
+        });
+    </script>
+}
+<style>
+    .field-validation-valid {
+        display: none !important;
+    }
+</style>
+<main>
+    <div class="container">
+        @Html.Partial("_alerts")
+        <div class="page-header">
+            <ol class="breadcrumb">
+                <li><a href="">@ViewBag.PageTitle</a></li>
+            </ol>
+            <h1>@Html.Raw(ViewBag.PageSubTitle)</h1>
+        </div>
+        @RenderBody()
+    </div>
+</main>

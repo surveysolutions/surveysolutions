@@ -125,7 +125,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -157,20 +157,20 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Owin.Security.Cookies.3.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -942,6 +942,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.ru.resx">
       <DependentUpon>Strings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.zh.resx">
       <DependentUpon>Strings.resx</DependentUpon>
@@ -1354,7 +1355,6 @@
     <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
-    <Content Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutForErrorPage.cshtml" />
@@ -1363,14 +1363,10 @@
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\ApiUserCreateForm.cshtml" />
-    <Content Include="Views\Shared\ApiUserEditForm.cshtml" />
     <Content Include="Views\Shared\Clickjacking.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\GlobalSettings.cshtml" />
     <Content Include="Views\Shared\LimitsIndicator.cshtml" />
-    <Content Include="Views\Shared\UserCreateForm.cshtml" />
-    <Content Include="Views\Shared\UserEditForm.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
@@ -1403,6 +1399,13 @@
     <Content Include="Views\Interviewer\Profile.cshtml" />
     <Content Include="Views\Shared\_notice.cshtml" />
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
+    <Content Include="Views\Shared\_FormFieldLayout.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CreateButtonsRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
+    <Content Include="Views\Shared\_UserEditorLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1603,6 +1606,7 @@
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
+    <Compile Include="Models\Account\IPublicDetails.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
@@ -1712,7 +1716,7 @@
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\ManageAccountModel.cs" />
+    <Compile Include="Models\Account\ManageAccountModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -1732,8 +1736,8 @@
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
-    <Compile Include="Models\UserEditModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\Account\UserEditModel.cs" />
+    <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />

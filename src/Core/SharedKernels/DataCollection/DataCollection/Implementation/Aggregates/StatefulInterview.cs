@@ -36,6 +36,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.sourceInterview = this.Tree.Clone();
         }
 
+        public override void Apply(InterviewFromPreloadedDataCreated @event)
+        {
+            base.Apply(@event);
+            this.sourceInterview = this.Tree.Clone();
+        }
+
         public override void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId,

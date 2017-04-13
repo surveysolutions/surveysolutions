@@ -12,17 +12,6 @@
             "#confirm-continue-message-template"
         );
     };
-/*    self.IsAssignToLoading = ko.observable(false);
-    self.AssignTo = ko.observable();
-    self.UsersToAssignUrl = usersToAssignUrl;
-    self.Users = function (query, sync, pageSize) {
-        self.IsAssignToLoading(true);
-        self.SendRequest(self.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
-            sync(response.Users, response.TotalCountByQuery);
-        }, true, true, function () {
-            self.IsAssignToLoading(false);
-        });
-    }*/
     self.Assign = function () {
         var commandName = "AssignSupervisorCommand";
         var messageTemplateId = "#confirm-assign-to-other-team-template";

@@ -1,39 +1,17 @@
-﻿@using System.Web.Optimization
+﻿@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
-
 @{
-    ViewBag.Title = Users.CreateSupervisor;
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    ViewBag.Title = Pages.Supervisor_CreateProfile;
+    ViewBag.PageTitle = Pages.Supervisor_Profile;
+    ViewBag.PageSubTitle = Pages.Supervisor_CreateProfile;
+
+    ViewBag.ControllerName = "Supervisor";
+    ViewBag.ControllerAction = "Create";
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-
-@section scripts
+@section PreFormSection
 {
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-@Html.Partial("_notice")
-@Html.Partial("_alerts")
-<div class="page-header">
-    <h2>@Users.CreateSupervisor</h2>
-</div>
-
-
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger" } })
-    <fieldset class="form-horizontal">
-        @{
-            this.Html.RenderPartial("UserCreateForm");
-        }
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    </fieldset>
+    <div class="col-sm-7">
+        <p>@Html.Raw(Pages.Supervisor_CreateText.FormatString(Url.Action("UserBatchUploads", "BatchUserUpload")))</p>
+    </div>
 }
