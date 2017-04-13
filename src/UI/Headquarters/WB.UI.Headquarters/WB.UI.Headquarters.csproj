@@ -1355,7 +1355,6 @@
     <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
-    <Content Include="Views\Shared\UserEditFormWithoutLock.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutForErrorPage.cshtml" />
@@ -1364,14 +1363,10 @@
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\ApiUserCreateForm.cshtml" />
-    <Content Include="Views\Shared\ApiUserEditForm.cshtml" />
     <Content Include="Views\Shared\Clickjacking.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\GlobalSettings.cshtml" />
     <Content Include="Views\Shared\LimitsIndicator.cshtml" />
-    <Content Include="Views\Shared\UserCreateForm.cshtml" />
-    <Content Include="Views\Shared\UserEditForm.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
@@ -1406,7 +1401,7 @@
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
-    <Content Include="Views\Shared\FormFieldLayout.cshtml" />
+    <Content Include="Views\Shared\_FormFieldLayout.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CreateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
@@ -1901,7 +1896,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
-    <Folder Include="Views\Shared\Redesign\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
