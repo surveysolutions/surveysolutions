@@ -5,7 +5,7 @@ using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserModel : IPublicDetails
+    public class UserModel : ICommonUserDetails
     {
         public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
         public const string PersonNameRegex = @"^[\p{L} '.-]+$";

@@ -1,10 +1,18 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 @{
     ViewBag.Title = Pages.Interviewer_CreateProfile;
 
     ViewBag.PageTitle = Pages.Interviewer_Profile;
     ViewBag.PageSubTitle = Pages.Interviewer_CreateProfile;
-    Layout = @"~/Views/Shared/_EditorLayout.cshtml";
+
+    ViewBag.ControllerName = "Interviewer";
+    ViewBag.ControllerAction = "Create";
+    ViewBag.CancelAction = "Back";
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
 @section scripts
 {
@@ -18,48 +26,27 @@
         });
     </script>
 }
-<div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Create", "Interviewer", FormMethod.Post, new { @class = @"profile" }))
+@section PreDetailsSection
+{
+    @if (Model.IsShowSupervisorSelector)
     {
-        @Html.AntiForgeryToken()
-
-        <div class="col-sm-12">
-            @if (Model.IsShowSupervisorSelector)
-            {
-                <div class="block-filter">
-                    <h5>@Html.LabelFor(x => x.SupervisorId)</h5>
-                    <div class="combo-box">
-                        <div class="btn-group btn-input clearfix">
-                            <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
-                            <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                            @Html.HiddenFor(x => x.SupervisorId, new { data_bind = @"value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
-                        </div>
-                        <button type="button" class="btn btn-link btn-clear" data-bind="click: function(){ SelectedSupervisor(undefined); }">
-                            <span></span>
-                        </button>
-                    </div>
-                    @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = @"help-block" })
+        <div class="block-filter">
+            <h5>@Html.LabelFor(x => x.SupervisorId)</h5>
+            <div class="combo-box">
+                <div class="btn-group btn-input clearfix">
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    @Html.HiddenFor(x => x.SupervisorId, new { data_bind = @"value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
                 </div>
-            }
-
-            @Html.EditorFor(x => x.UserName, "TextBoxFormField")
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
+                <button type="button" class="btn btn-link btn-clear" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                    <span></span>
+                </button>
+            </div>
+            @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = @"help-block" })
         </div>
-
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
-
-        <div class="col-sm-7">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-
-        @Html.EditorForModel("CreateButtonsRow", new {Action = "Back"})
-
     }
-</div>
+}
+@section PostDetailsSection
+{
+     @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+}
