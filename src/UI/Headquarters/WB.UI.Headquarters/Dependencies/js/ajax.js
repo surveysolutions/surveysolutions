@@ -31,6 +31,7 @@
             title: title,
             text: message,
             hide: false,
+            insert_brs: false,
             addclass: "centered-modal",
             confirm: {
                 confirm: true
@@ -52,6 +53,7 @@
             title: title,
             text: message,
             hide: false,
+            insert_brs: false,
             addclass: "centered-modal",
             confirm: {
                 confirm: true,
