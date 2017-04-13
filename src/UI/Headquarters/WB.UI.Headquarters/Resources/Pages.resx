@@ -797,9 +797,20 @@
   </data>
   <data name="Supervisor_EditProfile" xml:space="preserve">
     <value>Edit supervisor {0} profile</value>
+  </data>  
+  
+  <data name="Interviewer_Profile" xml:space="preserve">
+    <value>Interviewer profile</value>
   </data>
+  <data name="Interviewer_CreateProfile" xml:space="preserve">
+    <value>Create Interviewer profile</value>
+  </data>
+  <data name="Interviewer_EditProfileFormat" xml:space="preserve">
+    <value>Edit Interviewer {0} profile</value>
+  </data>
+  
   <data name="PublicSection">
-    <value>Publik information details (optional) &lt;br&gt; will be visible to HQ users only</value>
+    <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>

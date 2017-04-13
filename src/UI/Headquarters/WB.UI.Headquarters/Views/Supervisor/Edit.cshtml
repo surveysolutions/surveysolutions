@@ -1,10 +1,10 @@
 ﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
-    ViewBag.Title = Users.CreateSupervisor;
+    ViewBag.Title = Users.Supervisors_Edit;
     Layout = @"~/Views/Shared/_EditorLayout.cshtml"; 
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Edit", "Supervisor", FormMethod.Post, new { @class = @"profile" }))
+    @using (Html.BeginForm("Edit", "Interviewer", FormMethod.Post, new { @class = @"profile" }))
     {
         @Html.AntiForgeryToken()
 
