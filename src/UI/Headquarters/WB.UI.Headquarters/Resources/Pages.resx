@@ -796,7 +796,7 @@
     <value>Create supervisor profile</value>
   </data>
   <data name="Supervisor_EditProfileFormat" xml:space="preserve">
-    <value>Edit supervisor profile: {0}</value>
+    <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>    
   
   <data name="Observer_Profile" xml:space="preserve">
@@ -806,7 +806,17 @@
     <value>Create observer profile</value>
   </data>
   <data name="Observer_EditProfileFormat" xml:space="preserve">
-    <value>Edit observer profile: {0}</value>
+    <value>Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>   
+  
+  <data name="ApiUser_Profile" xml:space="preserve">
+    <value>API user profile</value>
+  </data>
+  <data name="ApiUser_CreateProfile" xml:space="preserve">
+    <value>Create API user profile</value>
+  </data>
+  <data name="ApiUser_EditProfileFormat" xml:space="preserve">
+    <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>  
   
   <data name="Interviewer_Profile" xml:space="preserve">
@@ -816,7 +826,7 @@
     <value>Create interviewer profile</value>
   </data>
   <data name="Interviewer_EditProfileFormat" xml:space="preserve">
-    <value>Edit interviewer profile: {0} </value>
+    <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
     
   <data name="Headquarter_Profile" xml:space="preserve">
@@ -826,7 +836,7 @@
     <value>Create headquarter profile</value>
   </data>
   <data name="Headquarter_EditProfileFormat" xml:space="preserve">
-    <value>Edit headquarter {0} profile</value>
+    <value>Edit headquarter profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   
   <data name="PublicSection">

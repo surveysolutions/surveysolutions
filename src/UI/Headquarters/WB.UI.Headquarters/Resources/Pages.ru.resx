@@ -805,7 +805,7 @@
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
 Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
-    <comment>{0} - link to batch user creation</comment>
+    <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
   </data>
   <data name="Supervisor_Profile" xml:space="preserve">
     <value>Профиль супервизора</value>
@@ -816,8 +816,8 @@
     <comment>Создать профиль супервизора</comment>
   </data>
   <data name="Supervisor_EditProfile" xml:space="preserve">
-    <value>Редактирование профиля супервизора {0}</value>
-    <comment>Редактировать профиль супервизора {0}</comment>
+    <value>Редактирование профиля супервизора &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <comment>Редактировать профиль супервизора &lt;strong&gt;{0}&lt;/strong&gt;</comment>
   </data>
   <data name="Interviewer_Profile" xml:space="preserve">
     <value>Профиль интервьюера</value>
@@ -828,7 +828,7 @@
     <comment>Создание профиля интервьювера</comment>
   </data>
   <data name="Interviewer_EditProfileFormat" xml:space="preserve">
-    <value>Редактирование профиля интервьювера {0}</value>
-    <comment>Редактирование профиля интервьювера {0}</comment>
+    <value>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <comment>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</comment>
   </data>
 </root>

@@ -37,13 +37,12 @@
 </style>
 <main>
     <div class="container">
-        @Html.Partial("_notice")
         @Html.Partial("_alerts")
         <div class="page-header">
             <ol class="breadcrumb">
                 <li><a href="">@ViewBag.PageTitle</a></li>
             </ol>
-            <h1>@ViewBag.PageSubTitle</h1>
+            <h1>@Html.Raw(ViewBag.PageSubTitle)</h1>
         </div>
         @RenderBody()
     </div>
