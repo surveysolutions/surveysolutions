@@ -819,4 +819,16 @@
     <value>Редактирование профиля супервизора {0}</value>
     <comment>Редактировать профиль супервизора {0}</comment>
   </data>
+  <data name="Interviewer_Profile" xml:space="preserve">
+    <value>Профиль интервьюера</value>
+    <comment>Профиль интервьюера</comment>
+  </data>
+  <data name="Interviewer_CreateProfile" xml:space="preserve">
+    <value>Создание профиля интервьювера</value>
+    <comment>Создание профиля интервьювера</comment>
+  </data>
+  <data name="Interviewer_EditProfileFormat" xml:space="preserve">
+    <value>Редактирование профиля интервьювера {0}</value>
+    <comment>Редактирование профиля интервьювера {0}</comment>
+  </data>
 </root>
