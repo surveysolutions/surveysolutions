@@ -795,18 +795,28 @@
   <data name="Supervisor_CreateProfile" xml:space="preserve">
     <value>Create supervisor profile</value>
   </data>
-  <data name="Supervisor_EditProfile" xml:space="preserve">
-    <value>Edit supervisor {0} profile</value>
+  <data name="Supervisor_EditProfileFormat" xml:space="preserve">
+    <value>Edit supervisor profile: {0}</value>
   </data>  
   
   <data name="Interviewer_Profile" xml:space="preserve">
     <value>Interviewer profile</value>
   </data>
   <data name="Interviewer_CreateProfile" xml:space="preserve">
-    <value>Create Interviewer profile</value>
+    <value>Create interviewer profile</value>
   </data>
   <data name="Interviewer_EditProfileFormat" xml:space="preserve">
-    <value>Edit Interviewer {0} profile</value>
+    <value>Edit interviewer profile: {0} </value>
+  </data>
+    
+  <data name="Headquarter_Profile" xml:space="preserve">
+    <value>Headquarter profile</value>
+  </data>
+  <data name="Headquarter_CreateProfile" xml:space="preserve">
+    <value>Create headquarter profile</value>
+  </data>
+  <data name="Headquarter_EditProfileFormat" xml:space="preserve">
+    <value>Edit headquarter {0} profile</value>
   </data>
   
   <data name="PublicSection">

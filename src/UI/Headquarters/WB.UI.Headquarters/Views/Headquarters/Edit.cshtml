@@ -1,46 +1,35 @@
-﻿@using System.Web.Optimization
+﻿@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
-
 @{
-    ViewBag.Title = string.Format(Users.EditFormat, Model.UserName);
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Headquarter_Profile;
+    ViewBag.PageSubTitle = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
+
+    Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
+<div class="row extra-margin-bottom">
+    @using (Html.BeginForm("Edit", "Headquarters", FormMethod.Post, new { @class = @"profile" }))
+    {
+        @Html.AntiForgeryToken()
 
-@section scripts
-{
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-
-<main>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>@Users.Edit:&nbsp;@Model.UserName</h1>
+        <div class="col-sm-12">
+            @Html.HiddenFor(x => x.UserName)
+            @Html.EditorFor(x => x.Password, "PasswordFormField")
+            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
         </div>
-        @Html.Partial("_notice")
-        @Html.Partial("_alerts")
 
-        <div class="row">
-            <div class="col-md-6">
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-                    <fieldset class="form-horizontal">
-                        @{
-                            this.Html.RenderPartial("UserEditForm");
-                        }
-                        <div class="form-group">
-                            <div class="col-sm-offset-2">
-                                <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-                            </div>
-                        </div>
-                    </fieldset>
-                }
-            </div>
+        <div class="col-sm-12">
+            <div class="separate-line"></div>
         </div>
-    </div>
-</main>
 
+        <div class="col-sm-7">
+            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
+            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
+            @Html.EditorFor(x => x.Email, "TextBoxFormField")
+            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
+        </div>
+
+        @Html.EditorForModel("UpdateButtonsRow")
+    }
+</div>

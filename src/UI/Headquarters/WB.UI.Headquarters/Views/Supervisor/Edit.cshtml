@@ -1,10 +1,13 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+﻿@using WB.Core.GenericSubdomains.Portable
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
-    ViewBag.Title = Users.Supervisors_Edit;
-    Layout = @"~/Views/Shared/_EditorLayout.cshtml"; 
+    ViewBag.Title = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Supervisor_Profile;
+    ViewBag.PageSubTitle = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
+    Layout = @"~/Views/Shared/_EditorLayout.cshtml";
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Edit", "Interviewer", FormMethod.Post, new { @class = @"profile" }))
+    @using (Html.BeginForm("Edit", "Supervisor", FormMethod.Post, new { @class = @"profile" }))
     {
         @Html.AntiForgeryToken()
 

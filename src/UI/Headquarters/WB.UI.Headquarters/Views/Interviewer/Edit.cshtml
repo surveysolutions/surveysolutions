@@ -2,6 +2,8 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
     ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Interviewer_Profile;
+    ViewBag.PageSubTitle = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
     Layout = @"~/Views/Shared/_EditorLayout.cshtml";
 }
 <div class="row extra-margin-bottom">

@@ -1,6 +1,8 @@
 ﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
+    ViewBag.PageTitle = Pages.AccountManage_Title;
+    ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 <div class="row extra-margin-bottom">
@@ -26,27 +28,27 @@
     }
 
     @using (Html.BeginForm("UpdatePassword", "Account", FormMethod.Post, new { @class = "profile" }))
-            {
+    {
         @Html.AntiForgeryToken()
         <div class="col-sm-7">
             <h2>@Pages.AccountManage_ChangePassword</h2>
             <p>@Html.Raw(Pages.AccountManage_ChangePasswordHelp)</p>
         </div>
-                <div class="col-sm-12">
-                    @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
-                    @Html.EditorFor(x => x.Password, "PasswordFormField")
-                    @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+        <div class="col-sm-12">
+            @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
+            @Html.EditorFor(x => x.Password, "PasswordFormField")
+            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
 
-                    @Html.HiddenFor(x => x.PersonName)
-                    @Html.HiddenFor(x => x.Email)
-                    @Html.HiddenFor(x => x.PhoneNumber)
-                    @Html.HiddenFor(x => x.Role)
-                    @Html.HiddenFor(x => x.UserName)
+            @Html.HiddenFor(x => x.PersonName)
+            @Html.HiddenFor(x => x.Email)
+            @Html.HiddenFor(x => x.PhoneNumber)
+            @Html.HiddenFor(x => x.Role)
+            @Html.HiddenFor(x => x.UserName)
 
-                    <div class="block-filter">
-                        <button type="submit" class="btn btn-success">update</button>
-                        <button type="submit" class="btn btn-lg btn-link">Cancel</button>
-                    </div>
-                </div>
+            <div class="block-filter">
+                <button type="submit" class="btn btn-success">update</button>
+                <button type="submit" class="btn btn-lg btn-link">Cancel</button>
+            </div>
+        </div>
     }
 </div>
