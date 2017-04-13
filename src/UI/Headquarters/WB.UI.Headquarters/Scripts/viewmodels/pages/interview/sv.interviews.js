@@ -8,7 +8,7 @@
         return !(self.IsNothingSelected && _.isUndefined(self.Users.AssignTo()));
     });
 
-    self.Assign = function () {
+    self.AssignInterview = function () {
 
         var commandName = "AssignInterviewerCommand";
         var parametersFunc = function (item) { return { InterviewerId: self.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
@@ -22,26 +22,53 @@
             self.Users.AssignTo(undefined);
         };
 
-        var filteredItems = self.GetSelectedItemsAfterFilter(function(item) {
-                                return item.CanBeReassigned()
-                                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.Users.AssignTo().UserId);
-                            });
-        var receivedByInterviewerItems = _.filter(filteredItems, function(item) { return item.ReceivedByInterviewer() === true });
+        var filteredItems = self.GetSelectedItemsAfterFilter(function(item) { return item.CanBeReassigned(); });
+        var receivedByInterviewerItemsCount = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === true }).length;
+        var countInterviewsToAssign = ko.observable(0);
 
-        var popupViewModel = {
-            allItems: filteredItems,
-            receivedItems: receivedByInterviewerItems
+        var model = {
+            IsExistsItemsToAssign: filteredItems.length > 0,
+            CountInterviewsToAssign: countInterviewsToAssign,
+            CountReceivedByInterviewerItems: receivedByInterviewerItemsCount,
+            IsReassignReceivedByInterviewer: ko.observable(false),
+            Users: self.CreateUsersViewModel(usersToAssignUrl),
+            StoreInteviewer: function () {
+
+                if (model.Users.AssignTo() == undefined) {
+                    countInterviewsToAssign(0);
+                    return;
+                }
+
+                var itemsThatShouldBeReassigned = [];
+                if (model.IsReassignReceivedByInterviewer() == true) {
+                    itemsThatShouldBeReassigned = filteredItems;
+                } else {
+                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
+                }
+
+                itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
+                    function (item) {
+                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
+                    });
+
+                countInterviewsToAssign(itemsThatShouldBeReassigned.length);
+            },
+            ClearAssignTo: function () {
+                model.Users.AssignTo(undefined);
+                countInterviewsToAssign(0);
+            }
         };
-        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, popupViewModel);
+
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
         if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
+            notifier.alert('', messageHtml);
             return;
         }
 
         messageHtml += $(continueMessageTemplateId).html();
 
-        bootbox.confirm(messageHtml, function (result) {
+        notifier.confirm('', messageHtml, function (result) {
             if (result) {
                 var itemsThatShouldBeReassigned = [];
                 if ($("#reassignReceivedByInterviewer").is(':checked')) {
@@ -49,6 +76,11 @@
                 } else {
                     itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
                 }
+
+                itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
+                    function(item) {
+                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.Users.AssignTo().UserId);
+                    });
 
                 if (itemsThatShouldBeReassigned.length > 0) {
                     self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
@@ -59,6 +91,8 @@
                 }
             }
         });
+
+        ko.applyBindings(model, $(".assign-interviewer")[0]);
     };
 
     self.ApproveInterview = function () {
