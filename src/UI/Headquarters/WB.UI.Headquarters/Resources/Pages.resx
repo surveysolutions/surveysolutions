@@ -138,6 +138,15 @@
   <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
     <value>Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters.</value>
   </data>
+  <data name="AccountManage_SupervisorProfile" xml:space="preserve">
+    <value>Supervisor profile</value>
+  </data>
+  <data name="AccountManage_SupervisorProfileCreate" xml:space="preserve">
+    <value>Create supervisor profile</value>
+  </data>
+  <data name="AccountManage_SupervisorProfileEdit" xml:space="preserve">
+    <value>Edit supervisor profile</value>
+  </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
   </data>
@@ -772,6 +781,25 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>This action will create individual user with supervisor rights,
+        &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
+  <data name="Supervisor_Profile" xml:space="preserve">
+    <value>Supervisor profile</value>
+  </data>
+  <data name="Supervisor_CreateProfile" xml:space="preserve">
+    <value>Create supervisor profile</value>
+  </data>
+  <data name="Supervisor_EditProfile" xml:space="preserve">
+    <value>Edit supervisor {0} profile</value>
+  </data>
+  <data name="PublicSection">
+    <value>Publik information details (optional) &lt;br&gt; will be visible to HQ users only</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>

@@ -231,4 +231,7 @@
   <data name="OldPasswordFieldName" xml:space="preserve">
     <value>Old password</value>
   </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>Please choose another username</value>
+  </data>
 </root>

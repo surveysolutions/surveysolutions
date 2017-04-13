@@ -5,7 +5,7 @@ using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserEditModel
+    public class UserEditModel : IPublicDetails
     {
         [Key]
         public Guid Id { get; set; }

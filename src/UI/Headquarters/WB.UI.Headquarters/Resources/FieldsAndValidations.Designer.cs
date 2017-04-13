@@ -385,6 +385,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose another username.
+        /// </summary>
+        public static string UserName_Taken {
+            get {
+                return ResourceManager.GetString("UserName_Taken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol.
         /// </summary>
         public static string UserNameErrorMessage {

@@ -794,4 +794,29 @@
     <value>Редактирование профиля администратора</value>
     <comment>Редактирование профиля администратора</comment>
   </data>
+  <data name="Update" xml:space="preserve">
+    <value>Обновить</value>
+    <comment>Обновить</comment>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
+    <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
+Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+    <comment>{0} - link to batch user creation</comment>
+  </data>
+  <data name="Supervisor_Profile" xml:space="preserve">
+    <value>Профиль супервизора</value>
+    <comment>Профиль супервизора</comment>
+  </data>
+  <data name="Supervisor_CreateProfile" xml:space="preserve">
+    <value>Создать профиль супервизора</value>
+    <comment>Создать профиль супервизора</comment>
+  </data>
+  <data name="Supervisor_EditProfile" xml:space="preserve">
+    <value>Редактирование профиля супервизора {0}</value>
+    <comment>Редактировать профиль супервизора {0}</comment>
+  </data>
 </root>

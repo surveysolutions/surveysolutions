@@ -6,17 +6,18 @@ using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-
     [LimitsFilter]
     [ValidateInput(false)]
     [Authorize(Roles = "Administrator, Headquarter, Observer")]
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Create()
         {
+            SetActivePage(Pages.Supervisor_Profile, Pages.Supervisor_CreateProfile);
             return this.View(new UserModel());
         }
 
@@ -42,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(UserModel model)
         {
+            SetActivePage(Pages.Supervisor_Profile, Pages.Supervisor_CreateProfile);
             if (ModelState.IsValid)
             {
                 var creationResult = await this.CreateUserAsync(model, UserRoles.Supervisor);
@@ -74,8 +77,9 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> Edit(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id);
+            SetActivePage(Pages.Supervisor_Profile, Pages.Supervisor_EditProfile.FormatString(user.UserName));
 
-            if(user == null) throw new HttpException(404, string.Empty);
+            if (user == null) throw new HttpException(404, string.Empty);
             if (!user.IsInRole(UserRoles.Supervisor)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel()
@@ -95,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Edit(UserEditModel model)
         {
+            SetActivePage(Pages.Supervisor_Profile, Pages.Supervisor_EditProfile.FormatString(model.UserName));
             if (ModelState.IsValid)
             {
                 var creationResult = await this.UpdateAccountAsync(model);

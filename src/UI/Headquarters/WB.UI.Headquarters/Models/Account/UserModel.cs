@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserModel
+    public class UserModel : IPublicDetails
     {
         public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
         public const string PersonNameRegex = @"^[\p{L} '.-]+$";
@@ -14,6 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredUserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [Display(Name = nameof(FieldsAndValidations.UserNameFieldName), ResourceType = typeof (FieldsAndValidations), Order = 1)]
         [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = nameof(FieldsAndValidations.UserNameErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [Remote("IsUniqueUsername", "Account", HttpMethod = "POST", ErrorMessageResourceName = nameof(FieldsAndValidations.UserName_Taken), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string UserName { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
@@ -25,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 3)]
-        [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [System.ComponentModel.DataAnnotations.Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]
