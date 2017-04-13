@@ -124,6 +124,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfile {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfileCreate {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfileCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfileEdit {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfileEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit admin profile.
         /// </summary>
         public static string AccountManage_Title {
@@ -1789,6 +1816,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publik information details (optional) &lt;br&gt; will be visible to HQ users only.
+        /// </summary>
+        public static string PublicSection {
+            get {
+                return ResourceManager.GetString("PublicSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (ver. {1}).
         /// </summary>
         public static string QuestionnaireNameFormat {
@@ -1839,6 +1875,43 @@ namespace WB.UI.Headquarters.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create supervisor profile.
+        /// </summary>
+        public static string Supervisor_CreateProfile {
+            get {
+                return ResourceManager.GetString("Supervisor_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user with supervisor rights,
+        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
+        /// </summary>
+        public static string Supervisor_CreateText {
+            get {
+                return ResourceManager.GetString("Supervisor_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit supervisor {0} profile.
+        /// </summary>
+        public static string Supervisor_EditProfile {
+            get {
+                return ResourceManager.GetString("Supervisor_EditProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor profile.
+        /// </summary>
+        public static string Supervisor_Profile {
+            get {
+                return ResourceManager.GetString("Supervisor_Profile", resourceCulture);
             }
         }
         
@@ -2181,6 +2254,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
         

@@ -1,39 +1,36 @@
-﻿@using System.Web.Optimization
+﻿@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
-
 @{
     ViewBag.Title = Users.CreateSupervisor;
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    Layout = @"~/Views/Shared/_EditorLayout.cshtml";
 }
+<div class="row extra-margin-bottom">
+    <div class="col-sm-7">
+        <p>@Html.Raw(Pages.Supervisor_CreateText.FormatString(Url.Action("UserBatchUploads", "BatchUserUpload")))</p>
+    </div>
 
-@section scripts
-{
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-@Html.Partial("_notice")
-@Html.Partial("_alerts")
-<div class="page-header">
-    <h2>@Users.CreateSupervisor</h2>
-</div>
+    @using (Html.BeginForm("Create", "Supervisor", FormMethod.Post, new { @class = @"profile" }))
+    {
+        @Html.AntiForgeryToken()
 
-
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger" } })
-    <fieldset class="form-horizontal">
-        @{
-            this.Html.RenderPartial("UserCreateForm");
-        }
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-            </div>
+        <div class="col-sm-12">
+            @Html.EditorFor(x => x.UserName, "TextBoxFormField")
+            @Html.EditorFor(x => x.Password, "PasswordFormField")
+            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
         </div>
-    </fieldset>
-}
+
+        <div class="col-sm-12">
+            <div class="separate-line"></div>
+        </div>
+
+        <div class="col-sm-7">
+            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
+            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
+            @Html.EditorFor(x => x.Email, "TextBoxFormField")
+            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
+        </div>
+
+        @Html.EditorForModel("CreateButtonsRow")
+    }
+</div>

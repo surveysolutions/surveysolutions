@@ -1407,6 +1407,10 @@
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
     <Content Include="Views\Shared\FormFieldLayout.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PublicInfoDetails.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CreateButtonsRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1607,6 +1611,7 @@
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
+    <Compile Include="Models\Account\IPublicDetails.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
@@ -1737,7 +1742,7 @@
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\Account\UserModel.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />

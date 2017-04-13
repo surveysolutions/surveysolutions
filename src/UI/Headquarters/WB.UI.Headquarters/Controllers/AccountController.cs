@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Manage()
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+            SetActivePage(Pages.AccountManage_Title, Pages.AccountManage_EditPublicInformation);
 
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
@@ -152,6 +153,7 @@ namespace WB.UI.Headquarters.Controllers
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+            SetActivePage(Pages.AccountManage_Title, Pages.AccountManage_EditPublicInformation);
 
             model.Password = null;
             model.ConfirmPassword = null;
@@ -178,6 +180,7 @@ namespace WB.UI.Headquarters.Controllers
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
             model.Id = currentUser.Id;
 
+            SetActivePage(Pages.AccountManage_Title, Pages.AccountManage_EditPublicInformation);
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
             await this.ValidateOldPassword(model, currentUser);
@@ -261,6 +264,14 @@ namespace WB.UI.Headquarters.Controllers
             if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
 
             return RedirectToAction("NotFound", "Error");
+        }
+        
+        [HttpPost]
+        public async Task<string> IsUniqueUsername(string userName)
+        {
+            return await this.userManager.FindByNameAsync(userName) == null
+                ? "true"
+                : "false";
         }
     }
 }

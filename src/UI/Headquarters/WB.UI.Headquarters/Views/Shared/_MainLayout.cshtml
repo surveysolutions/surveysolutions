@@ -78,7 +78,6 @@
         </div><!-- /.container-fluid -->
     </nav>
 </header>
-<main>
     @if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
     {
         <div class="panel view-mode">
@@ -102,7 +101,6 @@
         </div>
     }
     @RenderBody()
-</main>
 <footer class="footer">
     <div class="container-fluid">
         <div class="text-left">
