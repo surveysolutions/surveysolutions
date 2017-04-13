@@ -8,7 +8,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
         Label = "AreaEditorActivity", Theme = "@android:style/Theme.Black.NoTitleBar.Fullscreen")]
     public class AreaEditorActivity : Activity
     {
-        public static event System.Action<AreaEditResult> OnAreaEditCompleted;
+        //public static event System.Action<AreaEditResult> OnAreaEditCompleted;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
