@@ -88,7 +88,7 @@
                 <button type="submit" class="btn btn-success">@Common.Save</button>
             </form>
             <div class="col-sm-3">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';"/>
+                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo extra-margin-bottom" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';"/>
                 <form action="@Url.Action("RemoveLogo", "Settings")" method="post">
                     <button type="submit" class="btn btn-danger">@Settings.RemoveLogo</button>
                 </form>
