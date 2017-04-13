@@ -502,6 +502,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create headquarter profile.
+        /// </summary>
+        public static string Headquarter_CreateProfile {
+            get {
+                return ResourceManager.GetString("Headquarter_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit headquarter {0} profile.
+        /// </summary>
+        public static string Headquarter_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Headquarter_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headquarter profile.
+        /// </summary>
+        public static string Headquarter_Profile {
+            get {
+                return ResourceManager.GetString("Headquarter_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Health check monitor.
         /// </summary>
         public static string HealthCheck_Header {
@@ -781,7 +808,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Interviewer profile.
+        ///   Looks up a localized string similar to Create interviewer profile.
         /// </summary>
         public static string Interviewer_CreateProfile {
             get {
@@ -790,7 +817,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Interviewer {0} profile.
+        ///   Looks up a localized string similar to Edit interviewer profile: {0} .
         /// </summary>
         public static string Interviewer_EditProfileFormat {
             get {
@@ -1925,11 +1952,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit supervisor {0} profile.
+        ///   Looks up a localized string similar to Edit supervisor profile: {0}.
         /// </summary>
-        public static string Supervisor_EditProfile {
+        public static string Supervisor_EditProfileFormat {
             get {
-                return ResourceManager.GetString("Supervisor_EditProfile", resourceCulture);
+                return ResourceManager.GetString("Supervisor_EditProfileFormat", resourceCulture);
             }
         }
         

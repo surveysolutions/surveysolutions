@@ -9,7 +9,6 @@ using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -46,8 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> Create(Guid? supervisorId)
         {
-            SetActivePage(Pages.Interviewer_Profile, Pages.Interviewer_CreateProfile);
-
             if (!supervisorId.HasValue)
                 return this.View(new InterviewerModel() { IsShowSupervisorSelector = true });
 
@@ -65,8 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(InterviewerModel model)
         {
-            SetActivePage(Pages.Interviewer_Profile, Pages.Interviewer_CreateProfile);
-
             if (ModelState.IsValid)
             {
                 var creationResult = await this.CreateUserAsync(model, UserRoles.Interviewer, model.SupervisorId);
@@ -133,8 +128,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var user = await this.userManager.FindByIdAsync(id);
 
-            SetActivePage(Pages.Interviewer_Profile, Pages.Interviewer_EditProfileFormat.FormatString(user.UserName));
-
             if (user == null) throw new HttpException(404, string.Empty);
             if (user.IsArchived) throw new HttpException(403, string.Empty);
             if (!user.IsInRole(UserRoles.Interviewer)) throw new HttpException(403, HQ.NoPermission);
@@ -157,8 +150,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> Edit(UserEditModel model)
         {
-            SetActivePage(Pages.Interviewer_Profile, Pages.Interviewer_EditProfileFormat.FormatString(model.UserName));
-
             if (ModelState.IsValid)
             {
                 var updateResult = await this.UpdateAccountAsync(model).ConfigureAwait(false);

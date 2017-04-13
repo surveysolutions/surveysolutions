@@ -60,12 +60,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return await this.userManager.UpdateAsync(appUser);
         }
 
-        protected void SetActivePage(string title, string subTitle)
-        {
-            this.ViewBag.PageTitle = title;
-            this.ViewBag.PageSubTitle = subTitle;
-        }
-
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
         {
             if (supervisorId != null)
