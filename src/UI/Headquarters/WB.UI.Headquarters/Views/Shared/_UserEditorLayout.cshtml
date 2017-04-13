@@ -13,19 +13,19 @@
         @Html.AntiForgeryToken()
         @RenderSection("PreFormSection", false)
         <div class="col-sm-12">
-            @RenderSection("PreDetailsSection", false)
+            @RenderSection(@"PreDetailsSection", false)
             @(isEditMode ? Html.HiddenFor(x => x.UserName) : Html.EditorFor(x => x.UserName, "TextBoxFormField"))
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
             @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
-            @RenderSection("PostDetailsSection", false)
+            @RenderSection(@"PostDetailsSection", false)
         </div>
 
         <div class="col-sm-12">
             <div class="separate-line"></div>
         </div>
 
-        <div class="col-sm-7">
+        <div class="col-sm-12">
             <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
             @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
             @Html.EditorFor(x => x.Email, "TextBoxFormField")
