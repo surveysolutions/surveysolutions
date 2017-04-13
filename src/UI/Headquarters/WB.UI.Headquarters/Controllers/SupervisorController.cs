@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -16,7 +17,6 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-
     [LimitsFilter]
     [ValidateInput(false)]
     [Authorize(Roles = "Administrator, Headquarter, Observer")]
@@ -75,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var user = await this.userManager.FindByIdAsync(id);
 
-            if(user == null) throw new HttpException(404, string.Empty);
+            if (user == null) throw new HttpException(404, string.Empty);
             if (!user.IsInRole(UserRoles.Supervisor)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel()

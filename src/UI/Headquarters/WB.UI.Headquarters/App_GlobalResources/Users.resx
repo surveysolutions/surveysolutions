@@ -176,7 +176,10 @@
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
-  </data>  
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Edit Supervisor</value>
+  </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>supervisors in your team</value>
   </data>

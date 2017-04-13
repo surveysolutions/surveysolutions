@@ -18,6 +18,7 @@ using WB.Tests.Abc.Storage;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
 {
     [TestFixture]
+    [TestOf(typeof(TroubleshootingService))]
     internal class TroubleshootingServiceTests
     {
         private string interviewKey = "11-11-11-11";

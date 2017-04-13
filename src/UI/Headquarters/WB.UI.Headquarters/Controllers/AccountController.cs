@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Captcha;
@@ -131,15 +132,17 @@ namespace WB.UI.Headquarters.Controllers
 
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
-            return View(new ManageAccountModel()
+            return View(new ManageAccountModel
             {
                 Id = currentUser.Id,
                 Email = currentUser.Email,
                 PersonName = currentUser.FullName,
-                PhoneNumber = currentUser.PhoneNumber
+                PhoneNumber = currentUser.PhoneNumber,
+                UserName = currentUser.UserName,
+                Role = currentUser.Roles.FirstOrDefault().Role.ToUiString()
             });
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -150,6 +153,50 @@ namespace WB.UI.Headquarters.Controllers
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
+            model.Password = null;
+            model.ConfirmPassword = null;
+            model.OldPassword = null;
+
+            if (this.ModelState.IsValid)
+            {
+                var updateResult = await this.UpdateAccountAsync(model);
+
+                if (updateResult.Succeeded)
+                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
+                else
+                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
+            }
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public async Task<ActionResult> UpdatePassword(ManageAccountModel model)
+        {
+            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            model.Id = currentUser.Id;
+
+            this.ViewBag.ActivePage = MenuItem.ManageAccount;
+
+            await this.ValidateOldPassword(model, currentUser);
+
+            if (this.ModelState.IsValid)
+            {
+                var updateResult = await this.UpdateAccountAsync(model);
+
+                if (updateResult.Succeeded)
+                    this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfully);
+                else
+                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
+            }
+            
+            return View("Manage", model);
+        }
+
+        private async Task ValidateOldPassword(ManageAccountModel model, HqUser currentUser)
+        {
             if (!string.IsNullOrEmpty(model.Password))
             {
                 bool isPasswordValid = await this.IsOldPasswordValid(model, currentUser);
@@ -158,17 +205,6 @@ namespace WB.UI.Headquarters.Controllers
                     this.ModelState.AddModelError<ManageAccountModel>(x => x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
                 }
             }
-
-            if (this.ModelState.IsValid)
-            {
-                var updateResult = await this.UpdateAccountAsync(model);
-                if (updateResult.Succeeded)
-                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully);
-                else
-                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
-            }
-
-            return this.View(model);
         }
 
         private async Task<bool> IsOldPasswordValid(ManageAccountModel model, HqUser currentUser)
@@ -225,6 +261,14 @@ namespace WB.UI.Headquarters.Controllers
             if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
 
             return RedirectToAction("NotFound", "Error");
+        }
+        
+        [HttpPost]
+        public async Task<string> IsUniqueUsername(string userName)
+        {
+            return await this.userManager.FindByNameAsync(userName) == null
+                ? "true"
+                : "false";
         }
     }
 }

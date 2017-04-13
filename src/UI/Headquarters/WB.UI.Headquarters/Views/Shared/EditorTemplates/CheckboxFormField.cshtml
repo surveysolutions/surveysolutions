@@ -1,0 +1,7 @@
+﻿@model bool
+<div class="block-filter">
+    <div class="form-group">
+        @Html.CheckBoxFor(v => v, new { @class = @"single-checkbox" })
+        @Html.LabelForModel(new { style = "font-weight: bold" })
+    </div>
+</div>

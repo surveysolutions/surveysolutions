@@ -70,6 +70,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string AccountManage_ChangePassword {
+            get {
+                return ResourceManager.GetString("AccountManage_ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters..
+        /// </summary>
+        public static string AccountManage_ChangePasswordHelp {
+            get {
+                return ResourceManager.GetString("AccountManage_ChangePasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit profile public information details.
+        /// </summary>
+        public static string AccountManage_EditPublicInformation {
+            get {
+                return ResourceManager.GetString("AccountManage_EditPublicInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string AccountManage_Login {
+            get {
+                return ResourceManager.GetString("AccountManage_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string AccountManage_Role {
+            get {
+                return ResourceManager.GetString("AccountManage_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save changes.
         /// </summary>
         public static string AccountManage_SaveChanges {
@@ -79,11 +124,74 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfile {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfileCreate {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfileCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit supervisor profile.
+        /// </summary>
+        public static string AccountManage_SupervisorProfileEdit {
+            get {
+                return ResourceManager.GetString("AccountManage_SupervisorProfileEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit admin profile.
+        /// </summary>
+        public static string AccountManage_Title {
+            get {
+                return ResourceManager.GetString("AccountManage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any.
         /// </summary>
         public static string AnyOption {
             get {
                 return ResourceManager.GetString("AnyOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create API user profile.
+        /// </summary>
+        public static string ApiUser_CreateProfile {
+            get {
+                return ResourceManager.GetString("ApiUser_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        /// </summary>
+        public static string ApiUser_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("ApiUser_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API user profile.
+        /// </summary>
+        public static string ApiUser_Profile {
+            get {
+                return ResourceManager.GetString("ApiUser_Profile", resourceCulture);
             }
         }
         
@@ -421,6 +529,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create headquarter profile.
+        /// </summary>
+        public static string Headquarter_CreateProfile {
+            get {
+                return ResourceManager.GetString("Headquarter_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit headquarter profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        /// </summary>
+        public static string Headquarter_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Headquarter_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headquarter profile.
+        /// </summary>
+        public static string Headquarter_Profile {
+            get {
+                return ResourceManager.GetString("Headquarter_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Health check monitor.
         /// </summary>
         public static string HealthCheck_Header {
@@ -696,6 +831,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewDetails_UnansweredButtonLabel {
             get {
                 return ResourceManager.GetString("InterviewDetails_UnansweredButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create interviewer profile.
+        /// </summary>
+        public static string Interviewer_CreateProfile {
+            get {
+                return ResourceManager.GetString("Interviewer_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        /// </summary>
+        public static string Interviewer_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Interviewer_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer profile.
+        /// </summary>
+        public static string Interviewer_Profile {
+            get {
+                return ResourceManager.GetString("Interviewer_Profile", resourceCulture);
             }
         }
         
@@ -1645,6 +1807,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create observer profile.
+        /// </summary>
+        public static string Observer_CreateProfile {
+            get {
+                return ResourceManager.GetString("Observer_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        /// </summary>
+        public static string Observer_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Observer_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer profile.
+        /// </summary>
+        public static string Observer_Profile {
+            get {
+                return ResourceManager.GetString("Observer_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred please try again later..
         /// </summary>
         public static string OperationFailedDescription {
@@ -1735,6 +1924,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Personal information details (optional) &lt;br&gt; will be visible to HQ users only.
+        /// </summary>
+        public static string PublicSection {
+            get {
+                return ResourceManager.GetString("PublicSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (ver. {1}).
         /// </summary>
         public static string QuestionnaireNameFormat {
@@ -1785,6 +1983,43 @@ namespace WB.UI.Headquarters.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create supervisor profile.
+        /// </summary>
+        public static string Supervisor_CreateProfile {
+            get {
+                return ResourceManager.GetString("Supervisor_CreateProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action will create individual user with supervisor rights,
+        ///        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;..
+        /// </summary>
+        public static string Supervisor_CreateText {
+            get {
+                return ResourceManager.GetString("Supervisor_CreateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        /// </summary>
+        public static string Supervisor_EditProfileFormat {
+            get {
+                return ResourceManager.GetString("Supervisor_EditProfileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor profile.
+        /// </summary>
+        public static string Supervisor_Profile {
+            get {
+                return ResourceManager.GetString("Supervisor_Profile", resourceCulture);
             }
         }
         
@@ -2127,6 +2362,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Total {
             get {
                 return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
         

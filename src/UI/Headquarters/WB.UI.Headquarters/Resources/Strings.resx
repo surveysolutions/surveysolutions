@@ -123,6 +123,9 @@
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
     <value>Account information successfully updated</value>
   </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Account password successfully updated</value>
+  </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Manage account</value>
   </data>

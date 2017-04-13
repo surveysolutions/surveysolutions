@@ -1,46 +1,12 @@
-﻿@using System.Web.Optimization
+﻿@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
-
 @{
-    ViewBag.Title = string.Format(Users.EditFormat, Model.UserName);
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Headquarter_Profile;
+    ViewBag.PageSubTitle = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
+
+    ViewBag.ControllerName = "Headquarters";
+    ViewBag.ControllerAction = "Edit";
+    ViewBag.IsEditMode = true;
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-
-@section scripts
-{
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-
-<main>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>@Users.Edit:&nbsp;@Model.UserName</h1>
-        </div>
-        @Html.Partial("_notice")
-        @Html.Partial("_alerts")
-
-        <div class="row">
-            <div class="col-md-6">
-                @using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-                    <fieldset class="form-horizontal">
-                        @{
-                            this.Html.RenderPartial("UserEditForm");
-                        }
-                        <div class="form-group">
-                            <div class="col-sm-offset-2">
-                                <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-                            </div>
-                        </div>
-                    </fieldset>
-                }
-            </div>
-        </div>
-    </div>
-</main>
-
