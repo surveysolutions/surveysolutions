@@ -815,7 +815,7 @@
     <value>Создать профиль супервизора</value>
     <comment>Создать профиль супервизора</comment>
   </data>
-  <data name="Supervisor_EditProfile" xml:space="preserve">
+  <data name="Supervisor_EditProfileFormat" xml:space="preserve">
     <value>Редактирование профиля супервизора &lt;strong&gt;{0}&lt;/strong&gt;</value>
     <comment>Редактировать профиль супервизора &lt;strong&gt;{0}&lt;/strong&gt;</comment>
   </data>
