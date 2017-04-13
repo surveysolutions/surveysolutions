@@ -797,8 +797,7 @@
   </data>
   <data name="Supervisor_EditProfileFormat" xml:space="preserve">
     <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>    
-  
+  </data>
   <data name="Observer_Profile" xml:space="preserve">
     <value>Observer profile</value>
   </data>
