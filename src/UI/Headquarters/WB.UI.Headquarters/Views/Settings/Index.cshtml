@@ -35,13 +35,14 @@
         <div class="row">
             <div class="page-header">
                 <h1>
-                    @Settings.ExportEncryption_Title
                 </h1>
             </div>
         </div>
 
         <div class="row extra-margin-bottom">
-
+            <h2>
+                @Settings.ExportEncryption_Title
+            </h2>
             <div class="col-sm-12">
                 <div class="form-inline">
 
@@ -87,7 +88,7 @@
                 <button type="submit" class="btn btn-success">@Common.Save</button>
             </form>
             <div class="col-sm-3">
-                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';"/>
+                <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo extra-margin-bottom" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';"/>
                 <form action="@Url.Action("RemoveLogo", "Settings")" method="post">
                     <button type="submit" class="btn btn-danger">@Settings.RemoveLogo</button>
                 </form>

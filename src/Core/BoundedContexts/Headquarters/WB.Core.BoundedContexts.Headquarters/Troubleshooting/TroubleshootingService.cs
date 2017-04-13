@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Troubleshooting
 {
-    public class TroubleshootingService : ITroubleshootingService
+    internal class TroubleshootingService : ITroubleshootingService
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireFactory;

@@ -1,42 +1,10 @@
-﻿@using System.Web.Optimization
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
-
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 @{
-    ViewBag.Title = @Users.CreateHeadquarters;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.Headquarter_CreateProfile;
+    ViewBag.PageTitle = Pages.Headquarter_Profile;
+    ViewBag.PageSubTitle = Pages.Headquarter_CreateProfile;
+
+    ViewBag.ControllerName = @"Headquarters";
+    ViewBag.ControllerAction = @"Edit";
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-
-@section scripts
-{
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-
-<main>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>@Users.CreateHeadquarters</h1>
-        </div>
-        @Html.Partial("_notice")
-        @Html.Partial("_alerts")
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger" } })
-            <fieldset class="form-horizontal">
-                @{
-                    this.Html.RenderPartial("UserCreateForm");
-                }
-                <div class="form-group">
-                    <div class="col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                        @Html.ActionLink(Common.Cancel, "Index", null, new {@class = "btn btn-default"})
-                    </div>
-                </div>
-            </fieldset>
-        }
-    </div>
-</main>

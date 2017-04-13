@@ -1,48 +1,54 @@
-﻿@using System.Web.Optimization
-@using WB.UI.Headquarters.Resources
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
-
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
+    ViewBag.PageTitle = Pages.AccountManage_Title;
+    ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
+    Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
+<div class="row extra-margin-bottom">
+    <div class="col-sm-7">
+        <ul class="list-unstyled">
+            <li><b>@Pages.AccountManage_Login: @Model.UserName</b></li>
+            <li><b>@Pages.AccountManage_Role: @Model.Role</b></li>
+        </ul>
+    </div>
 
-@section scripts
-{
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-}
-@Html.Partial("_notice")
-@Html.Partial("_alerts")
-
-<div class="page-header">
-    <h2>
-        @ViewBag.Title
-    </h2>
-</div>
-
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <fieldset class="form-horizontal">
-        <div class="col-md-6">
-            <div class="form-group @Html.HasErrorClassFor(x => x.OldPassword)">
-                @Html.LabelFor(x => x.OldPassword, new { @class = "col-sm-4 control-label" })
-                <div class="col-sm-8">
-                    @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", autocomplete = "off" })
-                    @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-block" })
-                </div>
-            </div>
-
-            @{this.Html.RenderPartial("UserEditFormWithoutLock");}
-
-            <div class="form-group">
-                <div class="col-sm-offset-3">
-                    <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
-                </div>
+    @using (Html.BeginForm("Manage", "Account", FormMethod.Post, new { @class = "profile" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Role)
+        @Html.HiddenFor(x => x.UserName)
+        @Html.EditorForModel("PublicInfoDetails")
+        <div class="col-sm-12">
+            <div class="block-filter">
+                <button type="submit" class="btn btn-success">@Pages.Update</button>
+                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
-    </fieldset>
-}
+    }
+
+    @using (Html.BeginForm("UpdatePassword", "Account", FormMethod.Post, new { @class = "profile" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-sm-7">
+            <h2>@Pages.AccountManage_ChangePassword</h2>
+            <p>@Html.Raw(Pages.AccountManage_ChangePasswordHelp)</p>
+        </div>
+        <div class="col-sm-12">
+            @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
+            @Html.EditorFor(x => x.Password, "PasswordFormField")
+            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+
+            @Html.HiddenFor(x => x.PersonName)
+            @Html.HiddenFor(x => x.Email)
+            @Html.HiddenFor(x => x.PhoneNumber)
+            @Html.HiddenFor(x => x.Role)
+            @Html.HiddenFor(x => x.UserName)
+
+            <div class="block-filter">
+                <button type="submit" class="btn btn-success">update</button>
+                <button type="submit" class="btn btn-lg btn-link">Cancel</button>
+            </div>
+        </div>
+    }
+</div>

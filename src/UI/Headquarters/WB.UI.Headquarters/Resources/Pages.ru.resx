@@ -778,4 +778,57 @@
   <data name="InterviewDetails_NoItems" xml:space="preserve">
     <value>Нет элементов, удовлетворяющих выбранному фильтру</value>
   </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Сменить пароль</value>
+    <comment>Сменить пароль</comment>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Роль</value>
+    <comment>Роль</comment>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>Логин</value>
+    <comment>Логин</comment>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Редактирование профиля администратора</value>
+    <comment>Редактирование профиля администратора</comment>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Обновить</value>
+    <comment>Обновить</comment>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
+    <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
+Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+    <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
+  </data>
+  <data name="Supervisor_Profile" xml:space="preserve">
+    <value>Профиль супервизора</value>
+    <comment>Профиль супервизора</comment>
+  </data>
+  <data name="Supervisor_CreateProfile" xml:space="preserve">
+    <value>Создать профиль супервизора</value>
+    <comment>Создать профиль супервизора</comment>
+  </data>
+  <data name="Supervisor_EditProfileFormat" xml:space="preserve">
+    <value>Редактирование профиля супервизора &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <comment>Редактировать профиль супервизора &lt;strong&gt;{0}&lt;/strong&gt;</comment>
+  </data>
+  <data name="Interviewer_Profile" xml:space="preserve">
+    <value>Профиль интервьюера</value>
+    <comment>Профиль интервьюера</comment>
+  </data>
+  <data name="Interviewer_CreateProfile" xml:space="preserve">
+    <value>Создание профиля интервьювера</value>
+    <comment>Создание профиля интервьювера</comment>
+  </data>
+  <data name="Interviewer_EditProfileFormat" xml:space="preserve">
+    <value>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <comment>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</comment>
+  </data>
 </root>

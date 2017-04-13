@@ -129,4 +129,22 @@
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Interviewer assigned</value>
   </data>
+  <data name="UserRoles_Administrator">
+    <value>Administrator</value>
+  </data>
+  <data name="UserRoles_Supervisor">
+    <value>Supervisor</value>
+  </data>
+  <data name="UserRoles_Interviewer">
+    <value>Interviewer</value>
+  </data>
+  <data name="UserRoles_Headquarter">
+    <value>Headquarter</value>
+  </data>
+  <data name="UserRoles_Observer">
+    <value>Observer</value>
+  </data>
+  <data name="UserRoles_ApiUser">
+    <value>ApiUser</value>
+  </data>
 </root>

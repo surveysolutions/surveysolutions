@@ -5,13 +5,13 @@ using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserEditModel
+    public class UserEditModel : ICommonUserDetails
     {
         [Key]
         public Guid Id { get; set; }
 
         public string UserName { get; set; }
-
+        
         [PasswordStringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordLengthMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [PasswordRegularExpression(ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [DataType(DataType.Password)]

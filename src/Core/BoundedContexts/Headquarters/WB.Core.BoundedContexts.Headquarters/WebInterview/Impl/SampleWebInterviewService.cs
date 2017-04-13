@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             {
                 var ids = this.summaries.Query(_ => _
                     .Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId &&
-                        x.QuestionnaireVersion == x.QuestionnaireVersion &&
+                        x.QuestionnaireVersion == questionnaire.Version &&
                         x.Status == InterviewStatus.InterviewerAssigned)
                     .OrderBy(x => x.InterviewId)
                     .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)

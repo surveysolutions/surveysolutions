@@ -1,49 +1,21 @@
-﻿@using System.Web.Optimization
-@using WB.UI.Headquarters.Resources
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
-
 @{
-    ViewBag.Title = string.Format(Pages.InterviewerEdit_TitleFormat, Model.UserName);
+    ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.PageTitle = Pages.Interviewer_Profile;
+    ViewBag.PageSubTitle = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
+
+    ViewBag.ControllerName = "Interviewer";
+    ViewBag.ControllerAction = "Edit";
+    ViewBag.CancelAction = "Back";
+    ViewBag.IsEditMode = true;
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-@section scripts
+@section PostDetailsSection
 {
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
+    @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
 }
-<div class="main">
-    @Html.Partial("_notice")
-    @Html.Partial("_alerts")
-    <div class="page-header">
-        <h2>Edit Interviewer: &nbsp; <small> @Model.UserName</small></h2>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-                <fieldset class="form-horizontal">
-                    @{
-                        this.Html.RenderPartial("UserEditForm");
-
-                        <div class="form-group">
-                            @Html.LabelFor(x => x.IsLockedBySupervisor, new { @class = "col-sm-4 control-label" })
-                            <div class="col-sm-8">
-                                @Html.CheckBoxFor(x => x.IsLockedBySupervisor)
-                                @Html.ValidationMessageFor(x => x.IsLockedBySupervisor, null, new { @class = "help-block" })
-                            </div>
-                        </div>
-                    }
-                    <div class="form-group">
-                        <div class="col-sm-offset-2">
-                            <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
-                            @Html.ActionLink(Pages.Cancel, "Profile", new { id = Model.Id }, new { @class = "btn btn-default" })
-                        </div>
-                    </div>
-                </fieldset>
-                        }
-        </div>
-    </div>
-</div>
