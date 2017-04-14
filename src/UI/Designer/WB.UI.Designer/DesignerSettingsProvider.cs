@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net.Configuration;
-using System.Web.Configuration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.UI.Shared.Web.Settings;
 
@@ -20,20 +19,17 @@ namespace WB.UI.Designer
                 yield return applicationSetting;
             }
 
-            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
-
-            //int esentCacheSize = ;
-            //var hqSettings = (HeadquartersSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup/settings");
-
+            var dynamicCompilerSettings = GetSection<DynamicCompilerSettingsGroup>("dynamicCompilerSettingsGroup");
+            
             foreach (var settings in  dynamicCompilerSettings.SettingsCollection)
             {
-                yield return new ApplicationSetting(string.Format("DynamicCompilerSettings.{0}.Name", settings.Name), settings.Name);
-                yield return new ApplicationSetting(string.Format("DynamicCompilerSettings.{0}.PortableAssembliesPath", settings.Name), settings.PortableAssembliesPath);
-                yield return new ApplicationSetting(string.Format("DynamicCompilerSettings.{0}.PortableAssemblies", settings.Name), 
+                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.Name", settings.Name);
+                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.PortableAssembliesPath", settings.PortableAssembliesPath);
+                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.PortableAssemblies", 
                     string.Join(";",settings.DefaultReferencedPortableAssemblies));
             }
 
-            var smtpSection = (SmtpSection)WebConfigurationManager.GetSection("system.net/mailSettings/smtp");
+            var smtpSection = GetSection<SmtpSection>("system.net/mailSettings/smtp");
             yield return new ApplicationSetting("MailSettings.From", smtpSection.From);
             yield return new ApplicationSetting("MailSettings.DeliveryMethod", smtpSection.DeliveryMethod);
             yield return new ApplicationSetting("MailSettings.Network.DefaultCredentials", smtpSection.Network.DefaultCredentials);

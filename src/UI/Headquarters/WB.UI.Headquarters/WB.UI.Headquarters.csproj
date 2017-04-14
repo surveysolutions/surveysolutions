@@ -726,9 +726,6 @@
     <Content Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="Dependencies\vue\troubleshooting.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Configuration\TLK.Headquarters.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>

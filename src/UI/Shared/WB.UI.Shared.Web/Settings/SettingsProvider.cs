@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.ServiceModel.Configuration;
 using System.Text.RegularExpressions;
 using System.Web.Configuration;
+using NConfig;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Web.Settings
@@ -14,18 +17,18 @@ namespace WB.UI.Shared.Web.Settings
 
         public virtual IEnumerable<ApplicationSetting> GetSettings()
         {
-            foreach (string appSettingKey in WebConfigurationManager.AppSettings.AllKeys.Except(settingsToSkip.Contains))
+            foreach (string appSettingKey in AppSettings.AllKeys.Except(settingsToSkip.Contains))
             {
                 yield return new ApplicationSetting
                 {
                     Name = appSettingKey,
-                    Value = WebConfigurationManager.AppSettings[appSettingKey]
+                    Value = AppSettings[appSettingKey]
                 };
             }
 
-            for (int connectionStringIndex = 0; connectionStringIndex < WebConfigurationManager.ConnectionStrings.Count; connectionStringIndex++)
+            for (int connectionStringIndex = 0; connectionStringIndex < ConnectionStrings.Count; connectionStringIndex++)
             {
-                var connectionString = WebConfigurationManager.ConnectionStrings[connectionStringIndex];
+                var connectionString = ConnectionStrings[connectionStringIndex];
                 yield return new ApplicationSetting
                 {
                     Name = $"connectionStrings\\{connectionString.Name}",
@@ -33,7 +36,7 @@ namespace WB.UI.Shared.Web.Settings
                 };
             }
 
-            var serviceModelClientSection = (ClientSection)WebConfigurationManager.GetSection("system.serviceModel/client");
+            var serviceModelClientSection = GetSection<ClientSection>("system.serviceModel/client");
             for (int i = 0; i < serviceModelClientSection.Endpoints.Count; i++)
             {
                 yield return new ApplicationSetting
@@ -43,6 +46,17 @@ namespace WB.UI.Shared.Web.Settings
                 };
             }
         }
+
+        public TSection GetSection<TSection>(string name) where TSection : ConfigurationSection
+        {
+            return NConfigurator.Default.GetSection<TSection>(name) 
+                // if host specific config override do not specify section in sectionconfigs then NULL will returned by NConfigurator
+                ?? (TSection) WebConfigurationManager.GetSection(name);
+        }
+
+        public NameValueCollection AppSettings => WebConfigurationManager.AppSettings;
+
+        public ConnectionStringSettingsCollection ConnectionStrings => WebConfigurationManager.ConnectionStrings;
 
         private static string RemovePasswordFromConnectionString(string connectionString)
             => ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
