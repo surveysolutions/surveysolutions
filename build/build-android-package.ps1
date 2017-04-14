@@ -88,7 +88,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration){
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' "/p:Configuration=$BuildConfiguration;CodeContractsRunCodeAnalysis=false" | Write-Host
+	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
