@@ -1,40 +1,51 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ICommonUserDetails
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
-    var isEditMode = (bool?)ViewBag.IsEditMode ?? false;
     var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
+    var hideDetails = (bool?) ViewBag.HideDetails ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm((string)ViewBag.ControllerAction, (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
+    @if (!hideDetails)
+    {
+         using (Html.BeginForm((string) ViewBag.ControllerAction, (string) ViewBag.ControllerName, FormMethod.Post, new {@class = @"profile"}))
+         {
+             @Html.AntiForgeryToken()
+             @RenderSection(@"PreFormSection", false)
+             @Html.HiddenFor(x => x.Id)
+             @Html.HiddenFor(x => x.UserName)
+             <div class="col-sm-12">
+                 @RenderSection(@"PreDetailsSection", false)
+
+                 @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new {disableClientValidation = true})
+                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
+                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
+                 @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
+                 @RenderSection(@"PostDetailsSection", false)
+             </div>
+
+             @Html.EditorForModel("UpdateButtonsRow", new {Action = ViewBag.CancelAction})
+         }
+    }
+
+    @using (Html.BeginForm("UpdatePassword", (string) ViewBag.ControllerName, FormMethod.Post, new {@class = @"profile"}))
     {
         @Html.AntiForgeryToken()
-        @RenderSection("PreFormSection", false)
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.UserName)
+        <div class="col-sm-7">
+            <h2>@Pages.AccountManage_ChangePassword</h2>
+            <p>@Html.Raw(Pages.AccountManage_ChangePasswordHelp)</p>
+        </div>
         <div class="col-sm-12">
-            @RenderSection(@"PreDetailsSection", false)
-            @(isEditMode ? Html.HiddenFor(x => x.UserName) : Html.EditorFor(x => x.UserName, "TextBoxFormField"))
+            @RenderSection(@"PrePasswordForm", false)
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
-            @RenderSection(@"PostDetailsSection", false)
         </div>
 
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
-
-        <div class="col-sm-12">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-
-        @(isEditMode 
-            ? Html.EditorForModel("UpdateButtonsRow", new {Action = ViewBag.CancelAction}) 
-            : Html.EditorForModel("CreateButtonsRow", new {Action = ViewBag.CancelAction}))
+        @Html.EditorForModel("UpdateButtonsRow", new {Action = ViewBag.CancelAction})
     }
 </div>
 @RenderBody()

@@ -1406,6 +1406,7 @@
     <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
     <Content Include="Views\Shared\_UserEditorLayout.cshtml" />
+    <Content Include="Views\Shared\_UserCreateLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1606,7 +1607,6 @@
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
-    <Compile Include="Models\Account\IPublicDetails.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
