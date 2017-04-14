@@ -1,13 +1,18 @@
 using System;
+using System.Threading.Tasks;
 using NConsole;
+using NLog;
 
 namespace support
 {
     public static class ConsoleExtensions
     {
-        public static void WriteLine(this IConsoleHost host, string text = null)
+        public static void WriteLine(this IConsoleHost host, string text = null, bool isHighlighted = false)
         {
-            host.WriteMessage($"{text}{Environment.NewLine}");
+            const string underline = "\x1B[4m";
+            const string reset = "\x1B[0m";
+
+            host.WriteMessage(isHighlighted ? $"{underline}{text}{reset}{Environment.NewLine}" : $"{text}{Environment.NewLine}");
         }
 
         public static void WriteHighlitedText(this IConsoleHost host, string textToHighlight, ConsoleColor colorOfHighlightedText)
@@ -34,6 +39,29 @@ namespace support
         {
             host.WriteHighlitedText("FAILED", ConsoleColor.DarkRed);
             host.WriteLine();
+        }
+
+        public static async Task TryExecuteActionWithAnimationAsync(this IConsoleHost host, ILogger logger, Task<bool> action)
+        {
+            SpinAnimation.Start();
+
+            var isActionExecutedSuccessfully = false;
+
+            try
+            {
+                isActionExecutedSuccessfully = await action;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Unexpected exception");
+            }
+
+            SpinAnimation.Stop();
+
+            if (isActionExecutedSuccessfully)
+                host.WriteOk();
+            else
+                host.WriteFailed();
         }
     }
 }

@@ -80,6 +80,7 @@
     <Compile Include="ConfigurationManagerSettings.cs" />
     <Compile Include="ConsoleDependencyResolver.cs" />
     <Compile Include="ConsoleExtensions.cs" />
+    <Compile Include="CustomHelpCommand.cs" />
     <Compile Include="ElmahSection.cs" />
     <Compile Include="IConfigurationManagerSettings.cs" />
     <Compile Include="IDatabaseSevice.cs" />
