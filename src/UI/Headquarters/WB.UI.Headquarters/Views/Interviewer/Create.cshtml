@@ -12,7 +12,7 @@
     ViewBag.CancelAction = "Back";
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
-    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
+    Layout = "~/Views/Shared/_UserCreateLayout.cshtml";
 }
 @section scripts
 {

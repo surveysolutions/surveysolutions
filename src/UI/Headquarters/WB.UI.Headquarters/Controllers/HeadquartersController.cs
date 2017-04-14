@@ -109,5 +109,11 @@ namespace WB.UI.Headquarters.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model);
     }
 }

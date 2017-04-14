@@ -187,4 +187,13 @@
     <value>Пароль аккаунта успешно изменён</value>
     <comment>Пароль аккаунта успешно изменён</comment>
   </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Пароль для аккаунта &lt;b&gt;{0}&lt;/b&gt; успешно изменён</value>
+    <comment>Password for account {0} successfully updated
+Пароль для аккаунта {0} успешно изменён</comment>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
+    <comment>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</comment>
+  </data>
 </root>

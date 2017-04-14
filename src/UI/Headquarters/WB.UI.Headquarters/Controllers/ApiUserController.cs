@@ -6,11 +6,13 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -47,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
                 var creationResult = await this.CreateUserAsync(model, UserRoles.ApiUser);
                 if (creationResult.Succeeded)
                 {
-                    this.Success("API User was successfully created");
+                    this.Success(Pages.ApiUser_WasCreatedFormat.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
                 AddErrors(creationResult);
@@ -85,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
                 var updateResult = await this.UpdateAccountAsync(model);
                 if (updateResult.Succeeded)
                 {
-                    this.Success($"Information about <b>{model.UserName}</b> successfully updated");
+                    this.Success(Strings.HQ_AccountController_AccountUpdatedSuccessfully.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
                 AddErrors(updateResult);
@@ -94,6 +96,12 @@ namespace WB.UI.Headquarters.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model);
 
         public ActionResult Index()
         {
