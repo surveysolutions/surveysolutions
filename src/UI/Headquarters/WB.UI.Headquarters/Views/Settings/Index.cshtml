@@ -53,7 +53,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="block-filter">
+                <div>
                     <h5><label for="exportPassword">@Settings.Password</label>:</h5>
                     <div class="form-group ">
                         <div class="field">
@@ -93,7 +93,7 @@
 
                     <input type="file" id="companyLogo" name="logo" accept="image/gif, image/jpeg, image/png" id="logo" />
                 </div>
-                <button type="submit" class="btn btn-success">@Common.Save</button>
+                <button type="submit" class="btn btn-success" data-bind="click: onLogoSubmit">@Common.Save</button>
             </form>
             <div class="col-sm-3">
                 <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo extra-margin-bottom" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';" />
