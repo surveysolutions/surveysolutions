@@ -76,17 +76,7 @@
 
         notifier.confirm('', messageHtml, function (result) {
             if (result) {
-                var itemsThatShouldBeReassigned = [];
-                if (model.IsReassignReceivedByInterviewer() == true) {
-                    itemsThatShouldBeReassigned = filteredItems;
-                } else {
-                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
-                }
-
-                itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
-                    function(item) {
-                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
-                    });
+                var itemsThatShouldBeReassigned = model.GetListInterviewsToAssign();
 
                 var parametersFunc = function (item) { return { InterviewerId: model.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
 
