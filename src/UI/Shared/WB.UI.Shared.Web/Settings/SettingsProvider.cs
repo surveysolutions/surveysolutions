@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.ServiceModel.Configuration;
@@ -49,9 +50,16 @@ namespace WB.UI.Shared.Web.Settings
 
         public TSection GetSection<TSection>(string name) where TSection : ConfigurationSection
         {
-            return NConfigurator.Default.GetSection<TSection>(name) 
-                // if host specific config override do not specify section in sectionconfigs then NULL will returned by NConfigurator
-                ?? (TSection) WebConfigurationManager.GetSection(name);
+            var result = NConfigurator.Default.GetSection<TSection>(name);
+
+            if (result == null)
+            {
+                throw new ArgumentException($"Cannot find section with name {name}. " +
+                    $"If this is custom section that is overriden in another configuration, please make sure that <configSection> contains definition " +
+                    $"of custom section", nameof(name));
+            }
+
+            return result;
         }
 
         public NameValueCollection AppSettings => WebConfigurationManager.AppSettings;
