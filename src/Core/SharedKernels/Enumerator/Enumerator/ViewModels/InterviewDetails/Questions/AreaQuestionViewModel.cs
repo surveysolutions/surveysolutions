@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (area != null)
                 {
-                    var command = new AnswerQRBarcodeQuestionCommand(
+                    var command = new AnswerAreaQuestionCommand(
                         interviewId: this.interviewId,
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (MissingPermissionsException)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
             }
             catch (InterviewException ex)
             {

@@ -694,6 +694,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap to edit area.
+        /// </summary>
+        public static string Interview_Questions_Area_SaveAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Area_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to record GPS.
         /// </summary>
         public static string Interview_Questions_Gps_SaveAnswer {

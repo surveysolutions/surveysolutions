@@ -18,7 +18,7 @@
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
-                           Text Localization('Interview_Questions_QrBarcode_SaveAnswer'); 
+                           Text Localization('Interview_Questions_Area_SaveAnswer'); 
                            BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
     </LinearLayout>
   </LinearLayout>
