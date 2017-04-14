@@ -1614,10 +1614,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_geo_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\QuestionnaireUpgradeServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireUpgradeServiceTests\when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />

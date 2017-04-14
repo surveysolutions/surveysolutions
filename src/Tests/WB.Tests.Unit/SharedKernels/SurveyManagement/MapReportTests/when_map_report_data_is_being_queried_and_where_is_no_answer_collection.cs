@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
         {
             input = Mock.Of<MapReportInputModel>(x 
                 => x.Variable == "var"
-                && x.QuestionnaireId == Guid.Parse("44444444444444444444444444444444")
-                && x.QuestionnaireVersion == 1);
+                && x.QuestionnaireId == "44444444444444444444444444444444$1");
 
             mapReport = CreateMapReport();
         };
