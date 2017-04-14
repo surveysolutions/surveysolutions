@@ -1,13 +1,11 @@
 ﻿@{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-
 @section scripts
 {
     @RenderSection("scripts", false)
     @Scripts.Render("~/validate")
     <script type="text/javascript">
-        $('#umbrella').hide();
         $(function () {
             $.each($('.form-control'), function (index, value) {
                 if ($(this).val().length > 0) {
