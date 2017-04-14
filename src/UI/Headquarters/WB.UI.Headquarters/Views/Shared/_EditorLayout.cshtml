@@ -40,7 +40,7 @@
         @Html.Partial("_alerts")
         <div class="page-header">
             <ol class="breadcrumb">
-                <li><a href="">@ViewBag.PageTitle</a></li>
+                <li><a href="@Url.Action(ViewBag.CancelAction ?? "Index")">@ViewBag.PageTitle</a></li>
             </ol>
             <h1>@Html.Raw(ViewBag.PageSubTitle)</h1>
         </div>
