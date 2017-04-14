@@ -1,5 +1,5 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+@model UserEditModel
 @{
     ViewBag.Title = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
     ViewBag.PageTitle = Pages.Supervisor_Profile;
@@ -8,5 +8,5 @@
     ViewBag.ControllerName = "Supervisor";
     ViewBag.ControllerAction = "Edit";
     ViewBag.IsEditMode = true;
-    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
+    Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }

@@ -1303,7 +1303,7 @@
     <Content Include="Views\BatchUserUpload\UserPreloadigVerificationDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
-    <Content Include="Views\Shared\_EditorLayout.cshtml" />
+    <Content Include="Views\Shared\Profile\_EditorLayout.cshtml" />
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
@@ -1398,12 +1398,12 @@
     <Content Include="Views\HQ\InterviewsRedesigned.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextBoxFormField.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PasswordFormField.cshtml" />
-    <Content Include="Views\Shared\_FormFieldLayout.cshtml" />
+    <Content Include="Views\Shared\Profile\_FormFieldPartialLayout.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CreateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\UpdateButtonsRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
-    <Content Include="Views\Shared\_UserEditorLayout.cshtml" />
-    <Content Include="Views\Shared\_UserCreateLayout.cshtml" />
+    <Content Include="Views\Shared\Profile\_UserEditorLayout.cshtml" />
+    <Content Include="Views\Shared\Profile\_UserCreateLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
