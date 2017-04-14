@@ -48,10 +48,6 @@
                     <div class="block-filter">
                         <h5>@Common.Template</h5>
                         <select id="questionnaireSelector" data-bind="value: selectedQuestionnaire, selectPicker: {}" class="form-control">
-                            @if (Model.Questionnaires.Total != 1)
-                            {
-                                <option value="">@Common.Any</option>
-                            }
                             @foreach (var item in Model.Questionnaires.Options)
                             {
                                 <option value='@item.Key'>@item.Value</option>
@@ -60,7 +56,7 @@
                     </div>
                     <div class="block-filter">
                         <h5>@Reports.Variables</h5>
-                        <select id="variable" data-bind="options: questionnaireVariables, value: selectedVariable,optionsValue: 'Key', optionsText: 'Value', optionsCaption : 'Select variable', enable : isVariablesEnabled, selectPicker: {}"></select>
+                        <select id="variable" data-bind="options: questionnaireVariables, value: selectedVariable,optionsValue: 'Key', optionsText: 'Value', optionsCaption : 'Select variable', selectPicker: {}"></select>
                     </div>
                     <div class="block-filter" data-bind="visible: markerlimitReached">
                         <div class="alert-warning">

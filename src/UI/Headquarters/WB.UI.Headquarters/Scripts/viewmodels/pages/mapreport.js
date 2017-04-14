@@ -105,14 +105,9 @@
 
     self.questionnaireVariables = ko.observableArray(null);
 
-    self.isVariablesEnabled = ko.observable(false);
-    self.isVersionsEnabled = ko.computed(function () {
-        return self.selectedQuestionnaire() ? true  : false;
-    });
-
     self.selectedQuestionnaire.subscribe(function (value) {
         self.questionnaireVariables([]);
-        self.isVariablesEnabled(false);
+      
         self.selectedVariable(undefined);
         
         if (_.isUndefined(value))
@@ -125,12 +120,12 @@
         self.SendRequest(self.questionsUrl, params, function (data) {
             self.questionnaireVariables(data.Options);
             if (data.Total > 0) {
-                self.isVariablesEnabled(true);
+               
                 if (self.questionnaireVariables().length === 1) {
                     self.selectedVariable(data.Options[0].Key);
                 }
             } else {
-                self.isVariablesEnabled(false);
+               
                 self.ShowNotification("No Geo Location question", "There are no any Geo Locations in chosen questionnaire");
             }
         }, true, true);
