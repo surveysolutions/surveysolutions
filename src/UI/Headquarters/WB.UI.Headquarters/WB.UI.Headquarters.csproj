@@ -1608,6 +1608,7 @@
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
     <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
+    <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\Troubleshooting\DataIsMissingModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />

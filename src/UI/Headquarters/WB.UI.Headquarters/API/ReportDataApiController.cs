@@ -14,10 +14,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
@@ -37,7 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IMapReport mapReport;
 
-        private readonly IQuestionnaireQuestionInfoFactory questionInforFactory;
   
         private readonly IQuantityReportFactory quantityReport;
 
@@ -51,8 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
             ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IMapReport mapReport, 
-            IQuestionnaireQuestionInfoFactory questionInforFactory,
+            IMapReport mapReport,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport)
@@ -64,7 +64,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.mapReport = mapReport;
-            this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
@@ -121,9 +120,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return result;
         }
 
-        public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
+        [HttpGet]
+        public ComboboxModel QuestionInfo(string questionnaireId)
         {
-            return this.questionInforFactory.Load(input);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+            var variables = this.mapReport.GetVariablesForQuestionnaire(questionnaireIdentity);
+            return new ComboboxModel(variables.Select(x => new ComboboxOptionModel(x, x)).ToArray(), variables.Count);
         }
 
         public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel data)
