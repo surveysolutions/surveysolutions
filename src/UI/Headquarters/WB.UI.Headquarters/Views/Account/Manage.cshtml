@@ -3,52 +3,23 @@
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
     ViewBag.PageTitle = Pages.AccountManage_Title;
     ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    ViewBag.ControllerName = @"Account";
+    ViewBag.ControllerAction = @"Manage";
+    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
 }
-<div class="row extra-margin-bottom">
+@section PreFormSection
+{
     <div class="col-sm-7">
         <ul class="list-unstyled">
             <li><b>@Pages.AccountManage_Login: @Model.UserName</b></li>
             <li><b>@Pages.AccountManage_Role: @Model.Role</b></li>
         </ul>
     </div>
-
-    @using (Html.BeginForm("Manage", "Account", FormMethod.Post, new { @class = "profile" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(x => x.Role)
-        @Html.HiddenFor(x => x.UserName)
-        @Html.EditorForModel("PublicInfoDetails")
-        <div class="col-sm-12">
-            <div class="block-filter">
-                <button type="submit" class="btn btn-success">@Pages.Update</button>
-                @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    }
-
-    @using (Html.BeginForm("UpdatePassword", "Account", FormMethod.Post, new { @class = "profile" }))
-    {
-        @Html.AntiForgeryToken()
-        <div class="col-sm-7">
-            <h2>@Pages.AccountManage_ChangePassword</h2>
-            <p>@Html.Raw(Pages.AccountManage_ChangePasswordHelp)</p>
-        </div>
-        <div class="col-sm-12">
-            @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-
-            @Html.HiddenFor(x => x.PersonName)
-            @Html.HiddenFor(x => x.Email)
-            @Html.HiddenFor(x => x.PhoneNumber)
-            @Html.HiddenFor(x => x.Role)
-            @Html.HiddenFor(x => x.UserName)
-
-            <div class="block-filter">
-                <button type="submit" class="btn btn-success">update</button>
-                <button type="submit" class="btn btn-lg btn-link">Cancel</button>
-            </div>
-        </div>
-    }
-</div>
+}
+@section PreDetailsSection
+{
+    @Html.HiddenFor(x => x.Role)
+}
+@section PrePasswordForm{
+    @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
+}

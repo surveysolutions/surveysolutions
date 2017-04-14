@@ -1,23 +1,9 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 @{
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    Layout = "~/Views/Shared/_UserCreateLayout.cshtml";
 
     ViewBag.Title = Pages.ApiUser_CreateProfile;
     ViewBag.PageTitle = Pages.ApiUser_Profile;
     ViewBag.PageSubTitle = Pages.ApiUser_CreateProfile;
 }
-<div class="row extra-margin-bottom">
-    @using (Html.BeginForm("Create", "ApiUser", FormMethod.Post, new { @class = @"profile" }))
-    {
-        @Html.AntiForgeryToken()
-        <div class="col-sm-12">
-            @Html.EditorFor(x => x.UserName, "TextBoxFormField")
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField")
-        </div>
-
-        @Html.EditorForModel("CreateButtonsRow")
-    }
-</div>

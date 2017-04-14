@@ -831,4 +831,20 @@
     <value>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</value>
     <comment>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</comment>
   </data>
+  <data name="ApiUser_WasCreatedFormat" xml:space="preserve">
+    <value>API пользователь &lt;b&gt;{0}&lt;/b&gt; успешно создан</value>
+    <comment>API пользователь &lt;b&gt;{0}&lt;/b&gt; успешно создан</comment>
+  </data>
+  <data name="ApiUser_Profile" xml:space="preserve">
+    <value>Профиль API пользователя</value>
+    <comment>Профиль API пользователя</comment>
+  </data>
+  <data name="ApiUser_CreateProfile" xml:space="preserve">
+    <value>Создание профиля API пользователя</value>
+    <comment>Создание профиля API пользователя</comment>
+  </data>
+  <data name="ApiUser_EditProfileFormat" xml:space="preserve">
+    <value>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <comment>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</comment>
+  </data>
 </root>

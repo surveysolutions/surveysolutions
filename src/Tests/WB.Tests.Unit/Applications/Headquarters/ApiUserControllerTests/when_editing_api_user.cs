@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             };
 
             identityManagerMock.Setup(x => x.FindByIdAsync(userId)).ReturnsAsync(Create.Entity.HqUser());
-            identityManagerMock.Setup(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            identityManagerMock.Setup(x => x.UpdateAsync(Moq.It.IsAny<HqUser>())).ReturnsAsync(IdentityResult.Success);
 
             controller = CreateApiUserController(userManager: identityManagerMock.Object);
         };
@@ -41,13 +41,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
         It should_execute_CreateUserCommand_onece = () =>
-            identityManagerMock.Verify(x => x.UpdateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>()), Times.Once);
+            identityManagerMock.Verify(x => x.UpdateAsync(Moq.It.IsAny<HqUser>()), Times.Once);
 
         private static Mock<TestHqUserManager> identityManagerMock = new Mock<TestHqUserManager>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;
     }
-
-
 }
