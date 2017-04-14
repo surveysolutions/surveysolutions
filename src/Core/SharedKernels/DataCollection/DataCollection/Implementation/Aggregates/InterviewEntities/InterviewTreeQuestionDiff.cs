@@ -52,6 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (this.SourceNode.IsTextList) return !this.SourceNode.AsTextList.EqualByAnswer(this.ChangedNode.AsTextList);
                 if (this.SourceNode.IsSingleLinkedToList) return !this.SourceNode.AsSingleLinkedToList.EqualByAnswer(this.ChangedNode.AsSingleLinkedToList);
                 if (this.SourceNode.IsMultiLinkedToList) return !this.SourceNode.AsMultiLinkedToList.EqualByAnswer(this.ChangedNode.AsMultiLinkedToList);
+                if (this.SourceNode.IsArea) return !this.SourceNode.AsArea.EqualByAnswer(this.ChangedNode.AsArea);
 
                 return false;
             }
