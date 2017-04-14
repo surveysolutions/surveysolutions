@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -31,18 +30,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.TroubleshootingTests
         [SetUp]
         public void SetupTests()
         {
-            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
-            ServiceLocator.SetLocatorProvider(() => serviceLocator);
-
             this.interviewSummaryReader = Stub.ReadSideRepository<InterviewSummary>();
             this.questionnaireFactoryMock = new Mock<IQuestionnaireBrowseViewFactory>();
             this.brokenPackagesFactoryMock = new Mock<IBrokenInterviewPackagesViewFactory>();
             this.syncLogFactoryMock = new Mock<IInterviewLogSummaryReader>();
-        }
-
-        [TearDown]
-        public void CleanTests()
-        {
         }
 
         [Test]
