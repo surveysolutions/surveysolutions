@@ -158,8 +158,8 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
     $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
 
-    Write-Host "##teamcity[blockOpened name='$blockMessage']"
-    Write-Host "##teamcity[progressStart '$progressMessage']"
+    Write-Host "##teamcity[blockOpened name=|'$blockMessage|']"
+    Write-Host "##teamcity[progressStart |'$progressMessage|']"
 
     & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
@@ -173,8 +173,8 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
         }
     }
 
-    Write-Host "##teamcity[progressFinish '$progressMessage']"
-    Write-Host "##teamcity[blockClosed name='$blockMessage']"
+    Write-Host "##teamcity[progressFinish |'$progressMessage|']"
+    Write-Host "##teamcity[blockClosed name=|'$blockMessage|']"
 
     return $wasBuildSuccessfull
 }
