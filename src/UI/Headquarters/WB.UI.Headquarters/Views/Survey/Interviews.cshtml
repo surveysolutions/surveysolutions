@@ -176,7 +176,7 @@
                                     <span class="empty"></span>
                                     <!-- /ko -->
                                 </td>
-                                <td data-bind="text: Status"></td>
+                                <td class="status" data-bind="text: Status"></td>
                                 <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
                                     <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
                                 </td>
@@ -196,9 +196,8 @@
                                 <label data-bind="attr: { for: 'cbx_' + InterviewId() }">
                                     <span class="tick"></span>
                                     <span class="title-row" data-bind="text: Key"></span>
-                                    <span></span>
+                                    <span data-bind="text: Status"></span>
                                 </label>
-                                @*<span class="comment-icon"></span>*@
                             </div>
                             <ul class="list-unstyled">
                                 <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? 'Yes' : 'No'"></span></li>
@@ -263,14 +262,14 @@
     </script>
     <script type="text/html" id="confirm-approve-template">
         @Html.Raw(string.Format(Interviews.ApproveConfirmMessage,
-            "<span class='text-normal' data-bind='text: length'></span>",
+            "<span data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
         <div class='reject-interviewer'>
             @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
-                "<span class='text-normal' data-bind='text: CountInterviewsToReject'></span>",
+                "<span data-bind='text: CountInterviewsToReject'></span>",
                 InterviewStatus.Completed.ToLocalizeString(),
                 InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
             <div data-bind="visible: IsNeedShowAssignInterviewers">
