@@ -11,7 +11,6 @@
     self.AssignInterview = function () {
 
         var commandName = "AssignInterviewerCommand";
-        var parametersFunc = function (item) { return { InterviewerId: self.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
 
         var messageTemplateId = "#confirm-assign-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
@@ -79,8 +78,10 @@
 
                 itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
                     function(item) {
-                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.Users.AssignTo().UserId);
+                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
                     });
+
+                var parametersFunc = function (item) { return { InterviewerId: model.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
 
                 if (itemsThatShouldBeReassigned.length > 0) {
                     self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
