@@ -203,7 +203,8 @@
     <Compile Include="AndroidPathUtils.cs" />
     <Compile Include="DevicePasswordHasher.cs" />
     <Compile Include="Internals\AreaEditor\AreaEditorActivity.cs" />
-    <Compile Include="Internals\AreaEditor\AreaEditResult.cs" />
+    <Compile Include="Internals\AreaEditor\AreaEditorResult.cs" />
+    <Compile Include="Internals\AreaEditor\MapViewModel.cs" />
     <Compile Include="Internals\PictureChooser.cs" />
     <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
