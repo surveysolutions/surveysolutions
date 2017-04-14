@@ -42,7 +42,11 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        internal static void SetupNConfig() => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        internal static void SetupNConfig()
+        {
+            NConfigurator.RegisterSectionMerger(new DeepMerger<HqSecuritySection>());
+            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        }
 
         static Startup()
         {
@@ -85,6 +89,7 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
+            
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -105,7 +110,7 @@ namespace WB.UI.Headquarters
 
         private void ConfigureAuth(IAppBuilder app)
         {
-            var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
+            var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
