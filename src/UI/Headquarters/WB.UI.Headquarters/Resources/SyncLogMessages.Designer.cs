@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload interview: &lt;b&gt;&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;{1}&lt;/a&gt; &lt;/b&gt;.
+        ///   Looks up a localized string similar to Upload interview: {0}.
         /// </summary>
         public static string PostPackage {
             get {

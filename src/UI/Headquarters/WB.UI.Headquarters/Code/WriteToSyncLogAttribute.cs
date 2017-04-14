@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Code
                         break;
                     case SynchronizationLogType.PostInterview:
                         Guid? interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
-                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value) : UnknownStringArgumentValue, interviewId);
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(interviewId.Value) : UnknownStringArgumentValue);
                         logItem.InterviewId = interviewId;
                         break;
                     case SynchronizationLogType.PostPackage:
