@@ -13,7 +13,7 @@
     ViewBag.IsEditMode = true;
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
-    Layout = "~/Views/Shared/_UserEditorLayout.cshtml";
+    Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section PostDetailsSection
 {

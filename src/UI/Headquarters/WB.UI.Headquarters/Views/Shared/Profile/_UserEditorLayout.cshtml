@@ -1,6 +1,6 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+﻿@model UserEditModel
 @{
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    Layout = "_EditorLayout.cshtml";
     var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
     var hideDetails = (bool?) ViewBag.HideDetails ?? false;
 }
