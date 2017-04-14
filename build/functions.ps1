@@ -154,12 +154,22 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
+function TeamCityEncode([string]$value) {
+    $result = $value.Replace("|", "||")
+    $result = $result.Replace("'", "|'") 
+    $result = $result.Replace("[", "|[")
+    $result = $result.Replace("]", "|]") 
+    $result = $result.Replace("\r", "|r") 
+    $result = $result.Replace("\n", "|n")
+    $result
+}
+
 function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
     $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
     $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
 
-    Write-Host "##teamcity[blockOpened name=|'$blockMessage|']"
-    Write-Host "##teamcity[progressStart |'$progressMessage|']"
+    Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
+    Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
     & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
@@ -173,8 +183,8 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
         }
     }
 
-    Write-Host "##teamcity[progressFinish |'$progressMessage|']"
-    Write-Host "##teamcity[blockClosed name=|'$blockMessage|']"
+    Write-Host "##teamcity[progressFinish '$(TeamCityEncode $progressMessage)']"
+    Write-Host "##teamcity[blockClosed name='$(TeamCityEncode $blockMessage)']"
 
     return $wasBuildSuccessfull
 }
