@@ -161,7 +161,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$blockMessage']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -281,7 +281,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' '/p:username=' '/p:CodeContractsRunCodeAnalysis=false' | Write-Host
+    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' '/p:username=' '' | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
