@@ -3,20 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Platform.Droid.Platform;
-using MWBarcodeScanner;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals
+namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
 {
     internal class AreaEditService : IAreaEditService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IPermissions permissions;
-
-        private ManualResetEvent areaEditResultResetEvent = new ManualResetEvent(false);
 
         public AreaEditService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, IPermissions permissions)
         {
@@ -28,7 +24,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
         {
             await this.permissions.AssureHasPermission(Permission.Location);
 
-            return await EditArea(area);
+            return await this.EditArea(area);
         }
 
         private Task<AreaEditResult> EditArea(string area)
@@ -38,11 +34,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
                 try
                 {
                     AreaEditorResult result = null;
-
-                    this.areaEditResultResetEvent.Reset();
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
-
-                    Intent intent = new Intent(androidCurrentTopActivity.Activity, typeof(AreaEditorActivity));
+                    Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaEditorActivity));
 
                     intent.PutExtra(Intent.ExtraText, area);
 
@@ -58,7 +51,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
 
                     return result != null ? new AreaEditResult() { Area = result.Area} : null;
                 }
-                catch (System.Exception ex)
+                catch (Exception)
                 {
                     return (AreaEditResult)null;
                 }

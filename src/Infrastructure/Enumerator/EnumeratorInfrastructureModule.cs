@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator.Internals;
+using WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor;
 using WB.Infrastructure.Shared.Enumerator.Internals.FileSystem;
 
 namespace WB.Infrastructure.Shared.Enumerator
