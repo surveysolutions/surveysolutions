@@ -102,21 +102,21 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             this.Finish();
         }
 
-        private async void BtnUndo(object sender, EventArgs e)
+        private void BtnUndo(object sender, EventArgs e)
         {
             var command = mapView.SketchEditor.UndoCommand;
             if (mapView.SketchEditor.UndoCommand.CanExecute(command))
                 mapView.SketchEditor.UndoCommand.Execute(command);
         }
 
-        private async void BtnRedo(object sender, EventArgs e)
+        private void BtnRedo(object sender, EventArgs e)
         {
             var command = mapView.SketchEditor.RedoCommand;
             if (mapView.SketchEditor.RedoCommand.CanExecute(command))
                 mapView.SketchEditor.RedoCommand.Execute(command);
         }
 
-        private async void BtnClear(object sender, EventArgs e)
+        private void BtnClear(object sender, EventArgs e)
         {
             mapView.SketchEditor.ClearGeometry();
         }
