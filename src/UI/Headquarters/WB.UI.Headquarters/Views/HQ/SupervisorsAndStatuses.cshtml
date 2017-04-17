@@ -111,40 +111,38 @@
                     <p data-bind="text: QuestionnaireName"></p>
                 </div>
 
-                <div class="table-with-scroll">
-                    <div class="dataTables_wrapper">
-                        <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
-                               data-order="[[ 1, &quot;asc&quot;]]" data-searching="false">
-                            <thead>
-                                <tr>
-                                    <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
-                                    <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
-                                    <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
-                                    <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
-                                    <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
-                                    <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
-                                    <th data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
-                                    <th data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
-                                    <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr class="title-row">
-                                    <th>
-                                        @Common.Total
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                <div class="dataTables_wrapper">
+                    <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable"
+                           data-order="[[ 1, &quot;asc&quot;]]" data-searching="false" data-s-Dom="f<&quot;table-with-scroll&quot;t>ip">
+                        <thead>
+                        <tr>
+                            <th data-name="Responsible" data-data="responsible">@Users.Supervisors</th>
+                            <th data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                            <th data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                            <th data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
+                            <th data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
+                            <th data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
+                            <th data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
+                            <th data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
+                            <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr class="title-row">
+                            <th>
+                                @Common.Total
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>

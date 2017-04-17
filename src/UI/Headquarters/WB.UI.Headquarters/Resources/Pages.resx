@@ -806,8 +806,10 @@
   </data>
   <data name="Observer_EditProfileFormat" xml:space="preserve">
     <value>Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>   
-  
+  </data>
+  <data name="ApiUser_WasCreatedFormat" xml:space="preserve">
+    <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
+  </data>
   <data name="ApiUser_Profile" xml:space="preserve">
     <value>API user profile</value>
   </data>
@@ -816,8 +818,7 @@
   </data>
   <data name="ApiUser_EditProfileFormat" xml:space="preserve">
     <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>  
-  
+  </data>
   <data name="Interviewer_Profile" xml:space="preserve">
     <value>Interviewer profile</value>
   </data>

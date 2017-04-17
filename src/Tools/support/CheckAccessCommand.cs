@@ -1,8 +1,9 @@
+using System;
 using System.ComponentModel;
 using System.Configuration;
-using System.Linq;
 using System.Threading.Tasks;
 using NConsole;
+using NLog;
 
 namespace support
 {
@@ -12,18 +13,24 @@ namespace support
         private readonly INetworkService _networkService;
         private readonly IDatabaseSevice _databaseSevice;
         private readonly IConfigurationManagerSettings _configurationManagerSettings;
+        private readonly ILogger _logger;
 
         public CheckAccessCommand(INetworkService networkService, IDatabaseSevice databaseSevice,
-            IConfigurationManagerSettings configurationManagerSettings)
+            IConfigurationManagerSettings configurationManagerSettings, ILogger logger)
         {
             _networkService = networkService;
             _databaseSevice = databaseSevice;
             _configurationManagerSettings = configurationManagerSettings;
+            _logger = logger;
         }
 
         [Description("Physical path to Headquarters website.")]
         [Argument(Name = "path")]
         public string PathToHeadquarters { get; set; }
+
+        [Description("Check access to Survey Solutions website, connection and permissions to Headquarters database.")]
+        [Switch(LongName = "all")]
+        public bool All { get; set; } = false;
 
         [Description("Check access to Survey Solutions website.")]
         [Switch(ShortName = "ss", LongName = "survey-solutions")]
@@ -51,50 +58,22 @@ namespace support
                                "Please, ensure that you enter correct path to Headquarters website");
             else
             {
-                if (!this.CheckDesignerWebsite && !this.CheckDbConnection && !this.CheckDbPermissions)
-                    host.WriteLine("No health checks selected");
-
-                if (this.CheckDesignerWebsite)
+                if (this.All || this.CheckDesignerWebsite)
                 {
                     host.WriteMessage("Connection to the Survey Solutions website: ");
-                    SpinAnimation.Start();
-                    var isWebsiteReachable =
-                        await _networkService.IsHostReachableAsync(designerUrl).ConfigureAwait(false);
-                    SpinAnimation.Stop();
-
-                    if (isWebsiteReachable)
-                        host.WriteOk();
-                    else
-                        host.WriteFailed();
+                    await host.TryExecuteActionWithAnimationAsync(_logger, _networkService.IsHostReachableAsync(designerUrl));
                 }
 
-                if (this.CheckDbConnection)
+                if (this.All || this.CheckDbConnection)
                 {
                     host.WriteMessage("Connection to database: ");
-
-                    SpinAnimation.Start();
-                    var hasConnectionToDatabase = await _databaseSevice.HasConnectionAsync(dbConnectionString).ConfigureAwait(false);
-                    SpinAnimation.Stop();
-
-                    if (hasConnectionToDatabase)
-                        host.WriteOk();
-                    else
-                        host.WriteFailed();
+                    await host.TryExecuteActionWithAnimationAsync(_logger, _databaseSevice.HasConnectionAsync(dbConnectionString));
                 }
 
-                if (this.CheckDbPermissions)
+                if (this.All || this.CheckDbPermissions)
                 {
                     host.WriteMessage("Permissions to database: ");
-
-                    SpinAnimation.Start();
-                    var hasPermissionsToDatabase = (await _databaseSevice.HasPermissionsAsync(dbConnectionString).ConfigureAwait(false));
-                    SpinAnimation.Stop();
-
-                    if (hasPermissionsToDatabase)
-                        host.WriteOk();
-                    else
-                        host.WriteFailed();
-
+                    await host.TryExecuteActionWithAnimationAsync(_logger, _databaseSevice.HasPermissionsAsync(dbConnectionString));
                 }
             }
 

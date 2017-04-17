@@ -66,7 +66,7 @@
         //check whether browser fully supports all File API
         if (window.File && window.FileReader && window.FileList && window.Blob) {
             //get the file size and file type from file input field
-            var fsize = $('#logo')[0].files[0].size;
+            var fsize = $('#companyLogo')[0].files[0].size;
 
             if (fsize > 1024*1024*10) //do something if file size more than 10 mb
             {

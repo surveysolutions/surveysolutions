@@ -184,7 +184,7 @@
     <value>Нет новых интервью пакетов для загрузки</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
-    <value>Выгружено интервью: &lt;b&gt; &lt;a href="{0}" target="_blank"&gt;{1}&lt;/a&gt;&lt;/b&gt;</value>
+    <value>Загружено интервью: {0}</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
     <value>&lt;font color="green" '=""&gt;Сборка вопросника &lt;b&gt;{0}&lt;/b&gt; [{1}] успешно обработана&lt;/font&gt;</value>

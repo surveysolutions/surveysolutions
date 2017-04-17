@@ -1,14 +1,16 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ICommonUserDetails
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 @{
-    Layout = "~/Views/Shared/_EditorLayout.cshtml";
+    Layout = "_EditorLayout.cshtml";
     var isEditMode = (bool?)ViewBag.IsEditMode ?? false;
     var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
+    var controllerAction = ViewBag.CreateAction as string ?? "Create";
+    var controllerName = ViewBag.ControllerName as string;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm((string)ViewBag.ControllerAction, (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
+    @using (Html.BeginForm(controllerAction, controllerName, FormMethod.Post, new { @class = @"profile" }))
     {
         @Html.AntiForgeryToken()
         @RenderSection("PreFormSection", false)

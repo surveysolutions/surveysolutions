@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updateResult = await this.UpdateAccountAsync(model).ConfigureAwait(false);
+                var updateResult = await this.UpdateAccountAsync(model);
                 if (updateResult.Succeeded)
                 {
                     this.Success(string.Format(Pages.InterviewerController_EditSuccess, model.UserName));
@@ -164,6 +164,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model, "Back");
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back()

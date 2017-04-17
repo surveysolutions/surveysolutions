@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using NConsole;
+using NLog;
 using NLog.Config;
 
 namespace support
@@ -20,10 +21,12 @@ namespace support
         private int _totalLogFilesCount;
 
         private readonly IConfigurationManagerSettings _configurationManagerSettings;
+        private readonly ILogger _logger;
 
-        public ArchiveLogsCommand(IConfigurationManagerSettings configurationManagerSettings)
+        public ArchiveLogsCommand(IConfigurationManagerSettings configurationManagerSettings, ILogger logger)
         {
             _configurationManagerSettings = configurationManagerSettings;
+            _logger = logger;
         }
 
         [Description("Physical path to Headquarters website.")]
@@ -66,18 +69,34 @@ namespace support
                 _totalLogFilesCount = Directory.EnumerateFiles(pathToElmahLogs).Count() +
                                       Directory.EnumerateFiles(pathToNlogLogs).Count();
 
-                await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
-                await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
+                try
+                {
+                    await MoveLogFilesToTempDirAsync(pathToElmahLogs, tempLogsDirectory, "elmah");
+                    await MoveLogFilesToTempDirAsync(pathToNlogLogs, tempLogsDirectory, "nlog");
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Unexpected exception");
+                    host.WriteError("Unexpected exception. See error log for more details");
+                }
 
                 host.WriteLine();
-                host.WriteMessage("Archiving files: ");
-                
-                ArchiveWithProgress(tempLogsDirectory, archiveFileName);
 
-                DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
-                
+                try
+                {
+                    host.WriteMessage("Archiving files: ");
+                    ArchiveWithProgress(tempLogsDirectory, archiveFileName);
+                    DeleteTemporaryDirectoryWithLogFiles(tempLogsDirectory);
+                    host.WriteLine();
+                    host.WriteLine($"Archived to {Path.Combine(tempSupportDirectory, archiveFileName)}");
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Unexpected exception");
+                    host.WriteError("Unexpected exception. See error log for more details");
+                }
+
                 host.WriteLine();
-                host.WriteLine($"Archived to {Path.Combine(tempSupportDirectory, archiveFileName)}");
             }
 
             return null;

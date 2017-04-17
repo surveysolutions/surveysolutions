@@ -121,7 +121,7 @@
     <value>Устранение неполадок</value>
   </data>
   <data name="InterviewDataIsMissingDescription" xml:space="preserve">
-    <value>Укажите ключ или интервью ID для поиска. Вы также можете открыть интервью и нажать кнопку "Устранить проблему"</value>
+    <value>Укажите ключ или интервью ID для поиска.</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
     <value>Интервьюер утверждает, что интервью было закончено и синхронизировано, но я не вижу данных на сервере</value>
@@ -188,7 +188,7 @@
     <value>Статус</value>
   </data>
   <data name="NoData_Description" xml:space="preserve">
-    <value>Укажите ключ интервью или идентификатор интервью для поиска. В качестве альтернативы, откройте страницу с информацией об интервью и нажмите кнопку "Диагностика".</value>
+    <value>Укажите ключ интервью (XX-XX-XX-XX) или идентификатор интервью для поиска.</value>
   </data>
   <data name="NoData_Filters_InterviewKey" xml:space="preserve">
     <value>Ключ интервью или идентификатор интервью</value>

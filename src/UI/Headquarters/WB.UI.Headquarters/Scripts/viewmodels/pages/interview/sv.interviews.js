@@ -11,7 +11,6 @@
     self.AssignInterview = function () {
 
         var commandName = "AssignInterviewerCommand";
-        var parametersFunc = function (item) { return { InterviewerId: self.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
 
         var messageTemplateId = "#confirm-assign-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
@@ -32,14 +31,19 @@
             CountReceivedByInterviewerItems: receivedByInterviewerItemsCount,
             IsReassignReceivedByInterviewer: ko.observable(false),
             Users: self.CreateUsersViewModel(usersToAssignUrl),
-            StoreInteviewer: function () {
-
-                if (model.Users.AssignTo() == undefined) {
-                    countInterviewsToAssign(0);
-                    return;
-                }
+            StoreInteviewer: function () { model.RecalculateCountInterviewsToAssign(); },
+            RecalculateCountInterviewsToAssign: function() {
+                var itemsThatShouldBeReassigned = model.GetListInterviewsToAssign();
+                countInterviewsToAssign(itemsThatShouldBeReassigned.length);
+            },
+            GetListInterviewsToAssign: function () {
 
                 var itemsThatShouldBeReassigned = [];
+
+                if (model.Users.AssignTo() == undefined) {
+                    return itemsThatShouldBeReassigned;
+                }
+
                 if (model.IsReassignReceivedByInterviewer() == true) {
                     itemsThatShouldBeReassigned = filteredItems;
                 } else {
@@ -51,13 +55,15 @@
                         return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == model.Users.AssignTo().UserId);
                     });
 
-                countInterviewsToAssign(itemsThatShouldBeReassigned.length);
+                return itemsThatShouldBeReassigned;
             },
             ClearAssignTo: function () {
                 model.Users.AssignTo(undefined);
                 countInterviewsToAssign(0);
             }
         };
+        model.IsReassignReceivedByInterviewer.subscribe(function () { model.RecalculateCountInterviewsToAssign(); });
+
 
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
@@ -70,17 +76,9 @@
 
         notifier.confirm('', messageHtml, function (result) {
             if (result) {
-                var itemsThatShouldBeReassigned = [];
-                if ($("#reassignReceivedByInterviewer").is(':checked')) {
-                    itemsThatShouldBeReassigned = filteredItems;
-                } else {
-                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
-                }
+                var itemsThatShouldBeReassigned = model.GetListInterviewsToAssign();
 
-                itemsThatShouldBeReassigned = _.filter(itemsThatShouldBeReassigned,
-                    function(item) {
-                        return !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.Users.AssignTo().UserId);
-                    });
+                var parametersFunc = function (item) { return { InterviewerId: model.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
 
                 if (itemsThatShouldBeReassigned.length > 0) {
                     self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
