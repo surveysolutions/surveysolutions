@@ -636,7 +636,6 @@
     <Compile Include="Views\Reposts\Factories\IMapReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\QuestionnaireQuestionInfoFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SurveysAndStatusesReport.cs" />
@@ -644,7 +643,6 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
@@ -665,7 +663,6 @@
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
     <Compile Include="Views\Reposts\Views\QuantityTotalRow.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
-    <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
     <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
