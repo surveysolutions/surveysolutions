@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
     [Activity(ConfigurationChanges = ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.Orientation, Label = "AreaEditorActivity")]
     public class AreaEditorActivity : Activity
     {
-        public static event System.Action<AreaEditorResult> OnAreaEditCompleted;
+        public static event Action<AreaEditorResult> OnAreaEditCompleted;
 
         MapViewModel mapViewModel = new MapViewModel();
         MapView mapView = new MapView();
@@ -24,10 +24,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
 
         public override void OnBackPressed()
         {
-            AreaEditorActivity.OnAreaEditCompleted((AreaEditorResult)null);
-            this.Finish();
+            this.Cancel();
         }
-
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -47,13 +45,13 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             mapView.Map = mapViewModel.Map;
             mapViewModel.PropertyChanged += MapViewModel_PropertyChanged;
 
-            if (this.geometry != null)
+            /*if (this.geometry != null)
             {
                 if(this.mapView.GraphicsOverlays.Count == 0)
                     this.mapView.GraphicsOverlays.Add(new GraphicsOverlay());
 
                 this.mapView.GraphicsOverlays[0].Graphics.Add(new Graphic() {Geometry = this.geometry});
-            }
+            }*/
         }
 
         private void MapViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -91,10 +89,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             {
                 result = await mapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon);
             }
-
+            
             AreaEditorActivity.OnAreaEditCompleted(new AreaEditorResult()
             {
                 Area = result?.ToJson()
+                
             });
 
             IsEditing = false;
@@ -107,18 +106,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             var command = mapView.SketchEditor.UndoCommand;
             if (mapView.SketchEditor.UndoCommand.CanExecute(command))
                 mapView.SketchEditor.UndoCommand.Execute(command);
-        }
-
-        private void BtnRedo(object sender, EventArgs e)
-        {
-            var command = mapView.SketchEditor.RedoCommand;
-            if (mapView.SketchEditor.RedoCommand.CanExecute(command))
-                mapView.SketchEditor.RedoCommand.Execute(command);
-        }
-
-        private void BtnClear(object sender, EventArgs e)
-        {
-            mapView.SketchEditor.ClearGeometry();
         }
 
         private void BtnStopClick(object sender, EventArgs e)
@@ -153,21 +140,14 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             var layout = new LinearLayout(this) { Orientation = Android.Widget.Orientation.Vertical };
 
             // Create Button that will start the Feature Query
-            var queryButton = new Button(this);
-            queryButton.Text = "Start Edit";
-            queryButton.Click += BtnClickAsync;
-
+            var startButton = new Button(this);
+            startButton.Text = "Start Edit";
+            startButton.Click += BtnClickAsync;
+            
             var ButtonUndo = new Button(this);
             ButtonUndo.Text = "Undo";
             ButtonUndo.Click += BtnUndo;
-
-            var ButtonRedo = new Button(this);
-            ButtonRedo.Text = "Redo";
-            ButtonRedo.Click += BtnRedo;
-
-            var ButtonClear = new Button(this);
-            ButtonClear.Text = "Clear";
-            ButtonClear.Click += BtnClear;
+            
 
             var ButtonSave = new Button(this);
             ButtonSave.Text = "Save";
@@ -181,22 +161,17 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             var showButton = new Button(this);
             showButton.Text = "Show";
             showButton.Click += OnShowButtonClicked;
-
-
+            
             var startLocatorButton = new Button(this);
             startLocatorButton.Text = "Locator";
             startLocatorButton.Click += OnStartButtonClicked;
 
             LinearLayout topContainer = new LinearLayout(this);
 
-            topContainer.AddView(queryButton);
+            topContainer.AddView(startButton);
             topContainer.AddView(ButtonUndo);
-            topContainer.AddView(ButtonRedo);
-            topContainer.AddView(ButtonClear);
+            topContainer.AddView(startLocatorButton);
 
-            LinearLayout locationContainer = new LinearLayout(this);
-            locationContainer.AddView(startLocatorButton);
-            
             LinearLayout bottomContainer = new LinearLayout(this);
 
             bottomContainer.AddView(ButtonSave);
@@ -211,7 +186,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
                 new LinearLayout.LayoutParams(layout_width, LinearLayout.LayoutParams.WrapContent);
 
             layout.AddView(topContainer, layoutParamsButtons);
-            layout.AddView(locationContainer, layoutParamsButtons);
             layout.AddView(bottomContainer, layoutParamsButtons);
 
             layout.AddView(mapView, layoutParamsMain);
@@ -222,8 +196,12 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
 
         private void BtnCancelClick(object sender, EventArgs e)
         {
+            this.Cancel();
+        }
+
+        private void Cancel()
+        {
             AreaEditorActivity.OnAreaEditCompleted((AreaEditorResult)null);
-            //IsEedit = false;
             this.Finish();
         }
     }
