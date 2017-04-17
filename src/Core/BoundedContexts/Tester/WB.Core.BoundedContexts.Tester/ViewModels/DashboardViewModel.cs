@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 
                 this.questionnaireListStorage.Store(this.localQuestionnaires);
 
-                var lastUpdateDate = DateTime.UtcNow;
+                var lastUpdateDate = DateTime.Now;
                 this.HumanizeLastUpdateDate(lastUpdateDate);
 
                 this.dashboardLastUpdateStorage.Store(new DashboardLastUpdate

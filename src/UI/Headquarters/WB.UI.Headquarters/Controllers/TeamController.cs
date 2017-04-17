@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Microsoft.AspNet.Identity;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -42,24 +44,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
             appUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
-            appUser.IsLockedByHeadquaters = this.authorizedUser.IsAdministrator ||
-                                            this.authorizedUser.IsHeadquarter
+            appUser.IsLockedByHeadquaters = this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter
                 ? editModel.IsLocked
                 : appUser.IsLockedByHeadquaters;
-
-            if (!string.IsNullOrWhiteSpace(editModel.Password))
-            {
-                if (editModel.Password != editModel.ConfirmPassword)
-                {
-                    return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
-                }
-
-                return await this.userManager.UpdateUserAsync(appUser, editModel.Password);
-            }
 
             return await this.userManager.UpdateAsync(appUser);
         }
 
+        private async Task<IdentityResult> UpdateAccountPasswordAsync(UserEditModel editModel)
+        {
+            if (editModel.Password != null && editModel.Password == editModel.ConfirmPassword)
+            {
+                var appUser = await this.userManager.FindByIdAsync(editModel.Id);
+                if (appUser == null)
+                    return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserDoesNotExists);
+                if (appUser.IsArchived)
+                    return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
+
+                return await this.userManager.ChangePasswordAsync(appUser, editModel.Password);
+            }
+
+            return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
+        }
+        
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
         {
             if (supervisorId != null)
@@ -82,6 +89,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 PhoneNumber = user.PhoneNumber,
                 Profile = supervisorId.HasValue ? new HqUserProfile {SupervisorId = supervisorId} : null
             }, user.Password, role);
+        }
+        
+        
+        protected async Task<ActionResult> HandleUpdatePasswordAsync(UserEditModel model, string successActionName = "Index", string failAction ="Edit")
+        {
+            // var currentUser = this.userManager.FindByIdAsync(model.Id);
+            //TODO: Add check that same user should provide oldpassword
+
+            if (this.ModelState.IsValid)
+            {
+                var updateResult = await this.UpdateAccountPasswordAsync(model);
+
+                if (updateResult.Succeeded)
+                {
+                    this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
+                    return RedirectToAction(successActionName);
+                }
+                else
+                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
+            }
+
+            return View(failAction, model);
         }
     }
 }

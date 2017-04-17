@@ -11,7 +11,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -105,6 +104,15 @@ namespace WB.UI.Headquarters.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<ActionResult> UpdatePassword(UserEditModel model)
+        {
+            return await HandleUpdatePasswordAsync(model);
         }
     }
 }

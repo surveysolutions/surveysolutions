@@ -144,8 +144,22 @@
         }, true);
     };
 
-    var updateTemplateName = function (value) {
+    var updateTemplateName = function(value) {
         self.TemplateName($("#templateSelector option[value='" + value + "']").text());
-    }
+    };
+
+    self.ToggleVisiblePrefilledColumns = function () {
+        var isVisiblePrefilledColumns = $(".prefield-column").first().hasClass("visible");
+        if (!isVisiblePrefilledColumns) {
+            $(".show-prefield-btn").text("Hide");
+            $(".prefield-column").addClass("visible");
+        }
+        else {
+            $(".show-prefield-btn").text("Show prefield");
+            $(".prefield-column").removeClass("visible");
+        }
+
+        return false;
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

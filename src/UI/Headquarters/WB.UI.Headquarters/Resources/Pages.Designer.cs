@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API User &lt;b&gt;{0}&lt;/b&gt; was successfully created.
+        /// </summary>
+        public static string ApiUser_WasCreatedFormat {
+            get {
+                return ResourceManager.GetString("ApiUser_WasCreatedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by headquarters.
         /// </summary>
         public static string ApprovedByHeadquarters {

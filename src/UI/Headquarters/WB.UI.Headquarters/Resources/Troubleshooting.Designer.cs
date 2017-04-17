@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify an interview key or interivew id to search. Alternatively, open the interview details page and press &quot;Troubleshoot&quot;  button..
+        ///   Looks up a localized string similar to Specify an interview key or interivew id to search..
         /// </summary>
         public static string InterviewDataIsMissingDescription {
             get {
@@ -215,7 +215,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify an interview key or interivew id to search. Alternatively, open the interview details page and press &quot;Troubleshoot&quot; button..
+        ///   Looks up a localized string similar to Specify an interview key (XX-XX-XX-XX) or interivew id to search..
         /// </summary>
         public static string NoData_Description {
             get {

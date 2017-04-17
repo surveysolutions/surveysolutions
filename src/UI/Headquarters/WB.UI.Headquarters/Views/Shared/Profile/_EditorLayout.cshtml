@@ -1,13 +1,11 @@
 ﻿@{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-
 @section scripts
 {
     @RenderSection("scripts", false)
     @Scripts.Render("~/validate")
     <script type="text/javascript">
-        $('#umbrella').hide();
         $(function () {
             $.each($('.form-control'), function (index, value) {
                 if ($(this).val().length > 0) {
@@ -40,7 +38,7 @@
         @Html.Partial("_alerts")
         <div class="page-header">
             <ol class="breadcrumb">
-                <li><a href="">@ViewBag.PageTitle</a></li>
+                <li><a href="@Url.Action(ViewBag.CancelAction ?? "Index")">@ViewBag.PageTitle</a></li>
             </ol>
             <h1>@Html.Raw(ViewBag.PageSubTitle)</h1>
         </div>
