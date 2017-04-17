@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
@@ -11,34 +11,36 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
     {
         public MapViewModel()
         {
+            string pathToSearch = "interviewer/maps/";
+            string tpkToSearch = "*.tpk";
+            string vtpkToSearch = "*.vtpk";
             
-            string filename = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "interviewer/maps/chibombo_b7.tpk");
+            string searchPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, pathToSearch);
+            var tpkFileSearchResult = Directory.GetFiles(searchPath, tpkToSearch);
+            var vtpkFileSearchResult = Directory.GetFiles(searchPath, vtpkToSearch);
 
-            if (!File.Exists(filename))
+            var map = new Map();
+
+            if (vtpkFileSearchResult.Length > 0)
             {
-                Console.WriteLine("no file: " + filename);
-                _map = null;
+                var layer = new ArcGISVectorTiledLayer(new Uri(vtpkFileSearchResult.First()));
+                map.Basemap.BaseLayers.Add(layer);
             }
+
+            if (tpkFileSearchResult.Length != 0)
+            {
+                foreach (var filename in tpkFileSearchResult)
+                {
+                    TileCache titleCache = new TileCache(filename);
+                    var layer = new ArcGISTiledLayer(titleCache);
+                    map.Basemap.BaseLayers.Add(layer);
+                }
+            }
+
             else
             {
-                var map = new Map();
-
-                TileCache titleCache = new TileCache(filename);
-                var layer = new ArcGISTiledLayer(titleCache);
-
-                //layer.MaxScale = 1;
-
-                /*ServiceFeatureTable tbl =  new ServiceFeatureTable();
-                
-                var featureTable = new FeatureLayer(tbl);
-                map.OperationalLayers.Add(featureTable);*/
-
-                map.Basemap.BaseLayers.Add(layer);
-
-                /*map.MaxScale = 1;
-                map.MinScale = 22;*/
-
-                _map = map;
+                Console.WriteLine("no files in: " + searchPath);
+                map = null;
             }
 
             //----
@@ -55,17 +57,19 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             
             //_map = new Map(Basemap.CreateTopographic());
 
+            this.map = map;
+
         }
 
-        private Map _map;
+        private Map map;
 
         /// <summary>
         /// Gets or sets the map
         /// </summary>
         public Map Map
         {
-            get { return _map; }
-            set { _map = value; OnPropertyChanged(); }
+            get { return map; }
+            set { map = value; OnPropertyChanged(); }
         }
 
 
@@ -76,8 +80,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var propertyChangedHandler = PropertyChanged;
-            if (propertyChangedHandler != null)
-                propertyChangedHandler(this, new PropertyChangedEventArgs(propertyName));
+            propertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
