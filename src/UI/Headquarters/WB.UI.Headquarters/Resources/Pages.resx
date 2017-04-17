@@ -585,7 +585,7 @@
     <value>Connected to the server</value>
   </data>
   <data name="Interviewers_InterviewerVersion" xml:space="preserve">
-    <value>Interviewer version</value>
+    <value>App version</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Archive status</value>
@@ -849,7 +849,7 @@
     <value>Login name of the interviewer’s supervisor</value>
   </data>
   <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
-    <value>Interviewer version reported during last synchronization of his/her tablet to the server</value>
+    <value>Interviewer App version reported during last synchronization of his/her tablet to the server</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Language</value>
