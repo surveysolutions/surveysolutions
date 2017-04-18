@@ -16,6 +16,7 @@ export default {
         commit("SET_INTERVIEW_INFO", info)
         const flag = await apiCaller(api => api.hasPrefilledQuestions())
         commit("SET_HAS_PREFILLED_QUESTIONS", flag)
+
     },
 
     async getLanguageInfo({ commit }) {
@@ -192,9 +193,10 @@ export default {
         apiCaller(api => api.completeInterview(comment))
     },
 
-    cleanUpEntity({ commit }, id) {
-        commit("CLEAR_ENTITY", id)
-    },
+    cleanUpEntity: batchedAction(({ commit }, ids) => {
+        commit("CLEAR_ENTITIES", { ids })
+    }, null, /* limit */ 100),
+
     changeLanguage({ commit }, language) {
         apiCaller(api => api.changeLanguage(language))
     },

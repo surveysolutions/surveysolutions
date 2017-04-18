@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             var interviewInfo = new InterviewInfoInternal(
                 interview: interview,
                 questionnaire: questionnaire,
-                variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
+                variableToQuestionId: questionnaire.Find<IQuestion>().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
                 variableToVariableId: questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
                 variableToRosterId:   questionnaire.Find<IGroup>(g => g.IsRoster).ToDictionary(x => x.VariableName, x => x.PublicKey),
                 attachments: attachmentInfos);

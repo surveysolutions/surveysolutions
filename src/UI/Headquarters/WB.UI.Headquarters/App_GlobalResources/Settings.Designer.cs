@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password could open the data archives..
+        /// </summary>
+        internal static string ExportEncryption_Description {
+            get {
+                return ResourceManager.GetString("ExportEncryption_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Encryption.
         /// </summary>
         internal static string ExportEncryption_Title {
@@ -111,6 +120,15 @@ namespace Resources {
         internal static string GlobalNoteSettings {
             get {
                 return ResourceManager.GetString("GlobalNoteSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify text in the Global Note field to be shown on the top of every screen on the server..
+        /// </summary>
+        internal static string GlobalNoteSettings_Description {
+            get {
+                return ResourceManager.GetString("GlobalNoteSettings_Description", resourceCulture);
             }
         }
         
@@ -147,6 +165,15 @@ namespace Resources {
         internal static string LogoSettings {
             get {
                 return ResourceManager.GetString("LogoSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company logo shows a custom image on the server login page and on the login page of the interviewer app. Click Choose file button to upload an image on your computer to the server..
+        /// </summary>
+        internal static string LogoSettings_Description {
+            get {
+                return ResourceManager.GetString("LogoSettings_Description", resourceCulture);
             }
         }
         

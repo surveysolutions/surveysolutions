@@ -847,4 +847,7 @@
     <value>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
     <comment>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</comment>
   </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
 </root>
