@@ -152,16 +152,7 @@
     };
 
     self.ToggleVisiblePrefilledColumns = function () {
-        var isVisiblePrefilledColumns = self.IsVisiblePrefilledColumns();
-        if (!isVisiblePrefilledColumns) {
-            $(".show-prefield-btn").text("Hide");
-            self.IsVisiblePrefilledColumns(true);
-        }
-        else {
-            $(".show-prefield-btn").text("Show identifying");
-            self.IsVisiblePrefilledColumns(false);
-        }
-
+        self.IsVisiblePrefilledColumns(!self.IsVisiblePrefilledColumns());
         return false;
     };
 
