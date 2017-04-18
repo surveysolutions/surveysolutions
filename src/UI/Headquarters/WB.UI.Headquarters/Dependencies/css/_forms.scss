@@ -182,7 +182,7 @@ input.double-checkbox-white{
 	margin-bottom: 15px; 
 }
 .input-group{
-	width: 315px; 
+	width: 295px; 
 	.form-control{
 		border-color: $gray_form;
 		border-right: none;
@@ -394,7 +394,7 @@ input.double-checkbox-white{
 }
 .block-filter {
 	.btn-group.bootstrap-select, .combo-box, .input-group, .field{
-		margin-left: -10px !important;
+		margin-left: 0;
 	}
 	.field{
 		width: 295px;
@@ -440,10 +440,29 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 .form-date .input-group.date .form-control{
 	z-index: 0;
 }
-.help-block{
-	margin: 0;
-}
 .profile{
+	.help-block{
+		margin: 0;
+	}
+	&>div{
+		padding-left: 5px;
+		& > *{
+			margin-left: 10px;
+		}
+		& > .block-filter{ 
+			margin-left: 0;
+			& > *{
+				margin-left: 10px;
+			}
+			& > .form-group{
+				margin-left: 0;
+			}
+			& >.btn-group.bootstrap-select, .combo-box, .input-group, .field{
+				margin-left: 0 !important;
+			}
+		}
+		
+	}
 	.separate-line{
 		max-width: 500px;
 	}
@@ -475,15 +494,12 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 @media (max-width: $screen-md-min){
     .profile{
 		.separate-line{
-			margin-left: 0;
+			margin-left: 0 !important;
 		}
     } 
 }
 @media (max-width: 780px){
 	.profile{
-		.separate-line{
-			margin-left: 0;
-		}
 		.block-filter{
 			.form-group{
 				.field{
@@ -493,9 +509,13 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 				.help-block{
 					float: none;
 					margin-top: 10px;
+					margin-left: 10px;
 					max-width: 280px;
 				}
 			}
 		}
 	}
 } 
+.input-group-addon{
+	border-color: $gray_form;
+}

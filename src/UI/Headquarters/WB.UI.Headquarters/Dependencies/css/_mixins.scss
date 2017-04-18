@@ -301,17 +301,11 @@
         padding-top: 105px;
         width: $filter-small-width;
         .bootstrap-select.btn-group{
-            width: calc(100% + 10px) !important;   
+            width: 100% !important;   
         } 
-        .input-group{
-            width: calc(100% + 10px);
+        .input-group, .combo-box, .btn-input .dropdown-toggle{
+            width: 100%;
         }
-        .combo-box{
-		    width: 100%;
-		.btn-input .dropdown-toggle{
- 			width: calc(100% + 10px);
- 		}
-	}
         .open > .dropdown-menu{
             width: 100%;    
         }
@@ -487,10 +481,21 @@
     }
     @media (max-width: $screen-md-min){
         .btn-input.open > .dropdown-menu{
-            width: calc(100% + 10px);
-        }
-        .btn-clear{
-            right: -10px;
+            width: 100%;
         }
     }  
+}
+%filter-indent{
+    & > *{
+		margin-left: 10px;
+	}
+	& > .block-filter{
+		margin-left: 0;
+		& > *{
+			margin-left: 10px;
+		}
+		.btn-group.bootstrap-select, .combo-box, .input-group, .field{
+			margin-left: 0 !important;
+		}
+	}
 }
