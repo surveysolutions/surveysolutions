@@ -34,6 +34,7 @@ module.exports = merge(baseWebpackConfig, {
       verboseLogging: true
     }),
     new WriteFiles({
+      useHashIndex: true,
       log: false,
       // we don't need anything other that index.cshtml and app.js for dev env to work
       //test: /(\.cshtml)|(app.js)|(app.js.map)$/
