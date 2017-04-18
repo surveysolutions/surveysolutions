@@ -18,8 +18,10 @@ export default {
     SET_SECTION_DATA(state, sectionData: IInterviewEntityWithType[]) {
         state.entities = sectionData
     },
-    CLEAR_ENTITY(state, id) {
-        Vue.delete(state.entityDetails, id)
+    CLEAR_ENTITIES(state, {ids}) {
+        forEach(ids, id => {
+             Vue.delete(state.entityDetails, id)
+        })
     },
     SET_ANSWER_NOT_SAVED(state, { id, message }) {
         const validity = state.entityDetails[id].validity

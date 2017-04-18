@@ -8,7 +8,7 @@ import { batchedAction } from "../helpers"
 
 declare interface ISidebarState {
     panels: ISidebarPanel[],
-    sidebarHidden: Boolean
+    sidebarHidden: boolean
 }
 
 export default safeStore({

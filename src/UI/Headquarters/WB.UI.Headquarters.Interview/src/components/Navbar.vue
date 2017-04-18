@@ -70,9 +70,9 @@
                 this.$store.dispatch("changeLanguage", { language: language })
 
                 modal.dialog({
-                    message: "<p>Switching language. Please wait...</p>", 
-                    
-                    closeButton: false              
+                    message: "<p>Switching language. Please wait...</p>",
+
+                    closeButton: false
                 })
             }
         },

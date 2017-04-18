@@ -3,11 +3,11 @@ import modal from "./modal"
 import store from "./store"
 
 class IdleTimeouter {
-    private shown: Boolean
+    private shown: boolean
     constructor() {
         this.shown = false
     }
-    public show () {
+    public show() {
         if (!this.shown) {
             this.shown = true
             store.dispatch("stop")
