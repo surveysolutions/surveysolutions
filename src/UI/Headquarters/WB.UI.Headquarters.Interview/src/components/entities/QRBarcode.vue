@@ -23,10 +23,9 @@
         methods: {
             answerQRBarcodeQuestion(evnt) {
                 const target = $(evnt.target)
-                let answer: string = target.val()
+                const answer: string = target.val()
 
-                if (!answer || !answer.trim()) {
-                    this.markAnswerAsNotSavedWithMessage("Empty value cannot be saved")
+                if (answer == this.$me.answer) {
                     return
                 }
 
@@ -36,5 +35,4 @@
             }
         }
     }
-
 </script>
