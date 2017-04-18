@@ -13,19 +13,16 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
         {
             string pathToSearch = "interviewer/maps/";
             string tpkToSearch = "*.tpk";
-            string vtpkToSearch = "*.vtpk";
+            //string vtpkToSearch = "*.vtpk";
             
             string searchPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, pathToSearch);
             var tpkFileSearchResult = Directory.GetFiles(searchPath, tpkToSearch);
-            var vtpkFileSearchResult = Directory.GetFiles(searchPath, vtpkToSearch);
+            //var vtpkFileSearchResult = Directory.GetFiles(searchPath, vtpkToSearch);
 
             var map = new Map();
 
-            if (vtpkFileSearchResult.Length > 0)
-            {
-                var layer = new ArcGISVectorTiledLayer(new Uri(vtpkFileSearchResult.First()));
-                map.Basemap.BaseLayers.Add(layer);
-            }
+            var serviceUri = new Uri("http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer");
+            map.Basemap.BaseLayers.Add(new ArcGISTiledLayer(serviceUri));
 
             if (tpkFileSearchResult.Length != 0)
             {
