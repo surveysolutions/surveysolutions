@@ -153,6 +153,12 @@
   <data name="PrefilledQuestions" xml:space="preserve">
     <value>Identifying Questions</value>
   </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Show identifying</value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>Hide</value>
+  </data>
   <data name="InterviewKey" xml:space="preserve">
     <value>Interview Key</value>
   </data>

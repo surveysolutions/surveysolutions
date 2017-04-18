@@ -32,7 +32,7 @@ const connectionStore = {
                     message: "<p>Connection to server is lost.</p>" +
                     "<p>Please reload the page to restore connection and continue this interview.</p>",
                     callback: () => {
-                        location.reload()
+                       location.reload()
                     },
                     onEscape: false,
                     closeButton: false,

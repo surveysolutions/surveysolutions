@@ -50,16 +50,6 @@
                     <h4>@Pages.FilterTitle:</h4>
                     
                     <div class="block-filter">
-                        <h5>@Common.Search</h5>
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Text" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-bind="click: filter">Filter</button>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="block-filter">
                         <h5>@Pages.Template</h5>
                         <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
                             @if (Model.Templates.Count() > 1)
@@ -108,79 +98,88 @@
 
                 <div class="interviews-info">
                     <div class="table-wrapper interviews-large-screen">
-
-                        <table id="interviews" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
-                            <thead>
-                            <tr>
-                                <th class="sorting_disabled checkbox-cell">
-                                    <input class="double-checkbox" id="check-all" type="checkbox" data-bind="click: $root.selectAll($element)">
-                                    <label for="check-all">
-                                        <span class="tick"></span>
-                                    </label>
-                                </th>
-                                <th class="sorting_disabled  interview-id  title-row">
-                                    @Common.InterviewKey
-                                    <a href="#" class="show-prefield-btn" data-bind="click: $root.ToggleVisiblePrefilledColumns()">Show prefilled</a>
-                                </th>
-                                <!-- ko if:SelectedTemplate() == '' -->
-                                <th class="prefield-column sorting_disabled">@Common.PrefilledQuestions</th>
-                                <!-- /ko -->
-                                <!-- ko ifnot:SelectedTemplate() == '' -->
-                                <!-- ko if:Items().length > 0-->
-                                <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                                <th class="prefield-column sorting_disabled" data-bind='html: Question'></th>
-                                <!-- /ko -->
-                                <!-- /ko -->
-                                <!-- /ko -->
-                                <th data-bind='sortby: "ResponsibleName"'>@Common.Responsible</th>
-                                <th class="date last-update" data-bind='sortby: "UpdateDate"'>@Common.LastUpdate</th>
-                                <th class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
-                                <th class="status" data-bind='sortby: "Status"'>@Common.Status</th>
-                                <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
-                                <th class="census sorting_disabled">@Common.CreatedOnClient</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- ko foreach:Items -->
-                            <tr data-bind="css: { 'selected' : IsSelected }">
-                                <td class="checkbox-cell">
-                                    <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
-                                    <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
-                                </td>
-                                <td class="interview-id title-row">
-                                    <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
-                                </td>
-                                <!-- ko if:$root.SelectedTemplate() == '' -->
-                                <td class="prefield-column" data-bind="text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
-                                <!-- /ko -->
-                                <!-- ko ifnot:$root.SelectedTemplate() == '' -->
-                                <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
-                                <td class="prefield-column" data-bind="text: Answer"></td>
-                                <!-- /ko -->
-                                <!-- /ko -->
-                                <td>
-                                    <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
-                                </td>
-                                <td class="date last-update" data-bind="text: LastEntryDate"></td>
-                                <td class="errors">
-                                    <!-- ko if:HasErrors -->
-                                    Yes
-                                    <!-- /ko -->
-                                    <!-- ko ifnot:HasErrors -->
-                                    <span class="empty"></span>
-                                    <!-- /ko -->
-                                </td>
-                                <td class="status" data-bind="text: Status"></td>
-                                <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
-                                    <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
-                                </td>
-                                <td class="census" data-bind="css: { 'success-text': CreatedOnClient }">
-                                    <span data-bind="text: CreatedOnClient ? 'Yes' : 'No'"></span>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
+                        <div class="dataTables_wrapper no-footer">
+                            <div class="dataTables_filter">
+                                <label>
+                                    @Common.Search:
+                                    <input class="" placeholder="text" type="search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                                </label>
+                            </div>
+                            <div class="table-with-scroll">
+                                <table id="interviews" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting_disabled checkbox-cell">
+                                                <input class="double-checkbox" id="check-all" type="checkbox" data-bind="click: $root.selectAll($element)">
+                                                <label for="check-all">
+                                                    <span class="tick"></span>
+                                                </label>
+                                            </th>
+                                            <th class="sorting_disabled  interview-id  title-row">
+                                                @Common.InterviewKey
+                                                <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
+                                            </th>
+                                            <!-- ko if:SelectedTemplate() == '' -->
+                                            <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
+                                            <!-- /ko -->
+                                            <!-- ko ifnot:SelectedTemplate() == '' -->
+                                            <!-- ko if:Items().length > 0-->
+                                            <!-- ko foreach:Items()[0].FeaturedQuestions -->
+                                            <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }, html: Question'></th>
+                                            <!-- /ko -->
+                                            <!-- /ko -->
+                                            <!-- /ko -->
+                                            <th data-bind='sortby: "ResponsibleName"'>@Common.Responsible</th>
+                                            <th class="date last-update" data-bind='sortby: "UpdateDate"'>@Common.LastUpdate</th>
+                                            <th class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
+                                            <th class="status" data-bind='sortby: "Status"'>@Common.Status</th>
+                                            <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
+                                            <th class="census sorting_disabled">@Common.CreatedOnClient</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- ko foreach:Items -->
+                                        <tr data-bind="css: { 'selected' : IsSelected }">
+                                            <td class="checkbox-cell">
+                                                <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
+                                                <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
+                                            </td>
+                                            <td class="interview-id title-row">
+                                                <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
+                                            </td>
+                                            <!-- ko if:$root.SelectedTemplate() == '' -->
+                                            <td class="prefield-column" data-bind="css: { visible : $root.IsVisiblePrefilledColumns }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
+                                            <!-- /ko -->
+                                            <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                                            <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
+                                            <td class="prefield-column" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }, text: Answer'></td>
+                                            <!-- /ko -->
+                                            <!-- /ko -->
+                                            <td>
+                                                <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
+                                            </td>
+                                            <td class="date last-update" data-bind="text: LastEntryDate"></td>
+                                            <td class="errors">
+                                                <!-- ko if:HasErrors -->
+                                                Yes
+                                                <!-- /ko -->
+                                                <!-- ko ifnot:HasErrors -->
+                                                <span class="empty"></span>
+                                                <!-- /ko -->
+                                            </td>
+                                            <td class="status" data-bind="text: Status"></td>
+                                            <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
+                                                <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
+                                            </td>
+                                            <td class="census" data-bind="css: { 'success-text': CreatedOnClient }">
+                                                <span data-bind="text: CreatedOnClient ? 'Yes' : 'No'"></span>
+                                            </td>
+                                        </tr>
+                                        <!-- /ko -->
+                                    </tbody>
+                                </table>
+                            </div>
+                         </div>
                     </div>
                     
                     <div class="screen-small-resolution">
