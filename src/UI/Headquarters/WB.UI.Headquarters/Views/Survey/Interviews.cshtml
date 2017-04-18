@@ -125,12 +125,12 @@
                                             <a href="#" class="show-prefield-btn" data-bind="click: $root.ToggleVisiblePrefilledColumns()">Show identifying</a>
                                         </th>
                                         <!-- ko if:SelectedTemplate() == '' -->
-                                        <th class="prefield-column sorting_disabled">@Common.PrefilledQuestions</th>
+                                        <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                         <!-- /ko -->
                                         <!-- ko ifnot:SelectedTemplate() == '' -->
                                         <!-- ko if:Items().length > 0-->
                                         <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                                        <th class="prefield-column sorting_disabled" data-bind='html: Question'></th>
+                                        <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }, html: Question'></th>
                                         <!-- /ko -->
                                         <!-- /ko -->
                                         <!-- /ko -->
@@ -153,11 +153,11 @@
                                             <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
                                         </td>
                                         <!-- ko if:$root.SelectedTemplate() == '' -->
-                                        <td class="prefield-column" data-bind="text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
+                                        <td class="prefield-column" data-bind="css: { visible : $root.IsVisiblePrefilledColumns() }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
                                         <!-- /ko -->
                                         <!-- ko ifnot:$root.SelectedTemplate() == '' -->
                                         <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
-                                        <td class="prefield-column" data-bind="text: Answer"></td>
+                                        <td class="prefield-column" data-bind="css: { visible : $root.IsVisiblePrefilledColumns() }, text: Answer"></td>
                                         <!-- /ko -->
                                         <!-- /ko -->
                                         <td>
