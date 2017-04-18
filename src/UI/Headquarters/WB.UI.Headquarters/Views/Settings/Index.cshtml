@@ -45,8 +45,7 @@
             </h2>
             <div class="col-xs-10 info-block">
                 <p>
-                    Check Enable encryption box to encrypt export data archives and protect them with the provided password.
-                    Change password by pressing the circular error button. After encryption, only people who know the password could open the data archives.
+                    @Settings.ExportEncryption_Description
                 </p>
                 </div>
                 <div class="col-sm-12">
@@ -82,7 +81,7 @@
             <h2>@Settings.GlobalNoteSettings</h2>
             <div class="col-xs-10 info-block">
                 <p>
-                    Specify text in the Global Note field to be shown on the top of every screen on the server.
+                    @Settings.GlobalNoteSettings_Description
                 </p>
             </div>
                 <form class="col-sm-7">
@@ -102,7 +101,7 @@
             <h2>@Settings.LogoSettings</h2>
             <div class="col-xs-10 info-block">
                 <p>
-                    Company logo shows a custom image on the server login page and on the login page of the interviewer app. Click Choose file button to upload an image on your computer to the server.
+                    @Settings.LogoSettings_Description
                 </p>
             </div>
                 <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-3" data-bind="submit: onLogoSubmit">
