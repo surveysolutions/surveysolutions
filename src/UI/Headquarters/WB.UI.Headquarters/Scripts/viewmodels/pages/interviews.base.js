@@ -94,6 +94,8 @@
         self.SelectedStatus.subscribe(self.filter);
 
         self.search();
+
+        self.InitSearchBar();
     };
 
     self.sendCommandAfterFilterAndConfirm = function (commandName,
@@ -155,11 +157,28 @@
             $(".prefield-column").addClass("visible");
         }
         else {
-            $(".show-prefield-btn").text("Show prefield");
+            $(".show-prefield-btn").text("Show identifying");
             $(".prefield-column").removeClass("visible");
         }
 
         return false;
     };
+
+    self.InitSearchBar = function() {
+        $('.dataTables_filter label').on('click', function (e) {
+            if (e.target !== this)
+                return;
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active");
+                $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+            }
+        });
+
+        if (self.Url.query['searchBy'].length > 0) {
+            $('.dataTables_filter label').addClass("active");
+        }
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);
