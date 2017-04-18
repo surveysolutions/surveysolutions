@@ -22,6 +22,7 @@
 
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
+    self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
 
@@ -151,14 +152,14 @@
     };
 
     self.ToggleVisiblePrefilledColumns = function () {
-        var isVisiblePrefilledColumns = $(".prefield-column").first().hasClass("visible");
+        var isVisiblePrefilledColumns = self.IsVisiblePrefilledColumns();
         if (!isVisiblePrefilledColumns) {
             $(".show-prefield-btn").text("Hide");
-            $(".prefield-column").addClass("visible");
+            self.IsVisiblePrefilledColumns(true);
         }
         else {
             $(".show-prefield-btn").text("Show identifying");
-            $(".prefield-column").removeClass("visible");
+            self.IsVisiblePrefilledColumns(false);
         }
 
         return false;
@@ -168,6 +169,7 @@
         $('.dataTables_filter label').on('click', function (e) {
             if (e.target !== this)
                 return;
+
             if ($(this).hasClass("active")) {
                 $(this).removeClass("active");
             } else {
