@@ -122,7 +122,7 @@
                                         </th>
                                         <th class="sorting_disabled interview-id  title-row">
                                             @Common.InterviewKey
-                                            <a href="#" class="show-prefield-btn" data-bind="click: $root.ToggleVisiblePrefilledColumns()">Show identifying</a>
+                                            <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                         </th>
                                         <!-- ko if:SelectedTemplate() == '' -->
                                         <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
