@@ -29,7 +29,7 @@
 	@include gradient-horizontal($gray_form, $gray_form);
 	background-repeat: no-repeat;
 	background-size: 65px 1px;
-	background-position: 0 100%;
+	background-position: 10px 100%;
 	padding: 15px 0;
 }
 .bootstrap-select .dropdown-menu > li > a.flagged{
@@ -726,7 +726,7 @@ label.inactive{
 	            top: $indent-foldback-button-hd;
 	        }
 	        .preset-filters-container, .filters-container{
-				padding-left: 20px;
+				padding-left: 10px;
 				padding-right: 15px;
 			}
 		}
