@@ -42,8 +42,7 @@
                     ? parseInt(answerString)
                     : null
 
-                if (answer == null) {
-                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
+                if (answer == this.$me.answer) {
                     return
                 }
 
