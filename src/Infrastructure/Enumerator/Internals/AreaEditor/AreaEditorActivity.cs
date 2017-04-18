@@ -43,15 +43,9 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             }
 
             mapView.Map = mapViewModel.Map;
+            
             mapViewModel.PropertyChanged += MapViewModel_PropertyChanged;
 
-            /*if (this.geometry != null)
-            {
-                if(this.mapView.GraphicsOverlays.Count == 0)
-                    this.mapView.GraphicsOverlays.Add(new GraphicsOverlay());
-
-                this.mapView.GraphicsOverlays[0].Graphics.Add(new Graphic() {Geometry = this.geometry});
-            }*/
         }
 
         private void MapViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -123,22 +117,12 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
         private void OnStartButtonClicked(object sender, EventArgs e)
         {
             mapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.CompassNavigation;
-
-            //TODO Remove this IsStarted check https://github.com/Esri/arcgis-runtime-samples-xamarin/issues/182
-            if (!mapView.LocationDisplay.IsEnabled)
-                mapView.LocationDisplay.IsEnabled = true;
-            else
-            {
-                mapView.LocationDisplay.IsEnabled = false;
-            }
+            this.mapView.LocationDisplay.IsEnabled = !this.mapView.LocationDisplay.IsEnabled;
         }
 
         //issue in esri . inflating from layout doesn't work
         private void CreateLayout()
         {
-            // Create a new vertical layout for the app
-            var layout = new LinearLayout(this) { Orientation = Android.Widget.Orientation.Vertical };
-
             // Create Button that will start the Feature Query
             var startButton = new Button(this);
             startButton.Text = "Start Edit";
@@ -147,7 +131,6 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             var ButtonUndo = new Button(this);
             ButtonUndo.Text = "Undo";
             ButtonUndo.Click += BtnUndo;
-            
 
             var ButtonSave = new Button(this);
             ButtonSave.Text = "Save";
@@ -163,14 +146,14 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             showButton.Click += OnShowButtonClicked;
             
             var startLocatorButton = new Button(this);
-            startLocatorButton.Text = "Locator";
+            startLocatorButton.Text = "Locate";
             startLocatorButton.Click += OnStartButtonClicked;
 
             LinearLayout topContainer = new LinearLayout(this);
 
             topContainer.AddView(startButton);
             topContainer.AddView(ButtonUndo);
-            topContainer.AddView(startLocatorButton);
+            //topContainer.AddView(startLocatorButton);
 
             LinearLayout bottomContainer = new LinearLayout(this);
 
@@ -178,18 +161,23 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
             bottomContainer.AddView(ButtonCancel);
 
             // Add the map view to the layout
-            var layout_width = LinearLayout.LayoutParams.MatchParent;
-            var layout_height = LinearLayout.LayoutParams.MatchParent;
-            LinearLayout.LayoutParams layoutParamsMain = new LinearLayout.LayoutParams(layout_width, layout_height);
+            var layoutParamsMain = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 
+                LinearLayout.LayoutParams.MatchParent);
             
-            LinearLayout.LayoutParams layoutParamsButtons = 
-                new LinearLayout.LayoutParams(layout_width, LinearLayout.LayoutParams.WrapContent);
+            var layoutParamsButtons = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 
+                LinearLayout.LayoutParams.WrapContent);
 
+            // Create a new vertical layout for the app
+            var layout = new LinearLayout(this) { Orientation = Android.Widget.Orientation.Vertical };
             layout.AddView(topContainer, layoutParamsButtons);
             layout.AddView(bottomContainer, layoutParamsButtons);
 
-            layout.AddView(mapView, layoutParamsMain);
+            var relative = new RelativeLayout(this);
+            relative.AddView(mapView);
+            relative.AddView(startLocatorButton);
 
+            layout.AddView(relative, layoutParamsMain);
+            
             // Show the layout in the app
             SetContentView(layout);
         }
