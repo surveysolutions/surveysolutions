@@ -7,9 +7,6 @@
 	border-right: 3px solid $gray-super-light;
 	padding: 100px 5px 50px 5px;
 	margin-left: 12px;
-	// .input-group, .btn-group.bootstrap-select{
-	// 	margin-left: -10px !important;
-	// } 
 	.input-group.date{
 		margin-left: 0 !important;
 	}
@@ -66,7 +63,8 @@ input.checkbox-filter{
 .filters-container {
 	color: $gray_text;
 	border-bottom: 3px solid $gray-super-light;
-	padding: 0 25px 20px 30px; 
+	padding: 0 25px 20px 20px; 
+	@extend %filter-indent;
 }
 .block-filter{
 	margin-bottom: 30px;
@@ -144,7 +142,8 @@ input.checkbox-filter{
 	@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
 }
 .preset-filters-container{
-	padding: 30px 25px 20px 30px;
+	padding: 30px 25px 20px 20px;
+	@extend %filter-indent;	
 	a, .export-queue{
 		@extend h5;
 		color: $blue;
@@ -154,20 +153,20 @@ input.checkbox-filter{
 .filters-container .flagged-questions{
 	margin: 0;
 }
-.filters {
-	.bootstrap-select.btn-group{
-		width: 305px !important;
-	}
-	.input-group{
-		width: 305px;
-	}
-	 .combo-box{
-		width: 305px;
-		.btn-input .dropdown-toggle{
- 			width: 305px;
- 		}
-	}
-}
+// .filters {
+// 	.bootstrap-select.btn-group{
+// 		width: 305px !important;
+// 	}
+// 	.input-group{
+// 		width: 305px;
+// 	}
+// 	 .combo-box{
+// 		width: 305px;
+// 		.btn-input .dropdown-toggle{
+//  			width: 305px;
+//  		}
+// 	}
+// }
 .filters{
 	.help-block{
 		margin-top: 10px;
@@ -191,7 +190,7 @@ input.checkbox-filter{
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
 	.preset-filters-container, .filters-container{
-		padding-left: 20px;
+		padding-left: 10px;
 		padding-right: 15px;
 	}
 	.foldback-button{
@@ -241,12 +240,12 @@ input.checkbox-filter{
 	
 }
 
-@media (max-width: $screen-xs-min){
-	.fullscreen-hidden-filters{
-		.filters{
-			.filters-container, .preset-filters-container{
-				width: 250px;
-			}
-		}
-	}
-}
+// @media (max-width: $screen-xs-min){
+// 	.fullscreen-hidden-filters{
+// 		.filters{
+// 			.filters-container, .preset-filters-container{
+// 				width: 250px;
+// 			}
+// 		}
+// 	}
+// }

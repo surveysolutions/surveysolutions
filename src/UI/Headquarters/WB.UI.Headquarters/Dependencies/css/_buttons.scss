@@ -179,7 +179,7 @@ a.disabled{
 	@include clear();
 }
 .answered{
-	.btn-clear{
+	& > .btn-clear{
 		@extend %visibility-visible;
 	}
 }
