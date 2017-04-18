@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        internal static string HideIdentifying {
+            get {
+                return ResourceManager.GetString("HideIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview Key.
         /// </summary>
         internal static string InterviewKey {
@@ -345,6 +354,15 @@ namespace Resources {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show identifying.
+        /// </summary>
+        internal static string ShowIdentifying {
+            get {
+                return ResourceManager.GetString("ShowIdentifying", resourceCulture);
             }
         }
         

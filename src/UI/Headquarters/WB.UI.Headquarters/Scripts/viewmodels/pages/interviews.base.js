@@ -22,6 +22,7 @@
 
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
+    self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
 
@@ -94,6 +95,8 @@
         self.SelectedStatus.subscribe(self.filter);
 
         self.search();
+
+        self.InitSearchBar();
     };
 
     self.sendCommandAfterFilterAndConfirm = function (commandName,
@@ -149,17 +152,26 @@
     };
 
     self.ToggleVisiblePrefilledColumns = function () {
-        var isVisiblePrefilledColumns = $(".prefield-column").first().hasClass("visible");
-        if (!isVisiblePrefilledColumns) {
-            $(".show-prefield-btn").text("Hide");
-            $(".prefield-column").addClass("visible");
-        }
-        else {
-            $(".show-prefield-btn").text("Show prefield");
-            $(".prefield-column").removeClass("visible");
-        }
-
+        self.IsVisiblePrefilledColumns(!self.IsVisiblePrefilledColumns());
         return false;
     };
+
+    self.InitSearchBar = function() {
+        $('.dataTables_filter label').on('click', function (e) {
+            if (e.target !== this)
+                return;
+
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active");
+                $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+            }
+        });
+
+        if (self.Url.query['searchBy'].length > 0) {
+            $('.dataTables_filter label').addClass("active");
+        }
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

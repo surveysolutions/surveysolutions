@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     {
         public TextViewTextFormattedBinding(TextView androidControl) : base(androidControl) { }
 
-        public override MvxBindingMode DefaultMode { get { return MvxBindingMode.OneWay; } }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValueToView(TextView control, ISpannable value)
         {

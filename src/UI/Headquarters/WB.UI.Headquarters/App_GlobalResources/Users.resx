@@ -249,4 +249,7 @@
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Headquarter's email</value>
   </data>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Add interviewer</value>
+  </data>
 </root>

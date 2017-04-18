@@ -1546,7 +1546,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer version.
+        ///   Looks up a localized string similar to App version.
         /// </summary>
         public static string Interviewers_InterviewerVersion {
             get {
@@ -1555,7 +1555,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer version reported during last synchronization of his/her tablet to the server.
+        ///   Looks up a localized string similar to Interviewer App version reported during last synchronization of his/her tablet to the server.
         /// </summary>
         public static string Interviewers_InterviewerVersionTooltip {
             get {
