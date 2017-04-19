@@ -139,7 +139,7 @@
     <value>Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters.</value>
   </data>
   <data name="AccountManage_SupervisorProfile" xml:space="preserve">
-    <value>Supervisor profile</value>
+    <value>Supervisors</value>
   </data>
   <data name="AccountManage_SupervisorProfileCreate" xml:space="preserve">
     <value>Create supervisor profile</value>
@@ -799,7 +799,7 @@
     <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Observer_Profile" xml:space="preserve">
-    <value>Observer profile</value>
+    <value>Observers</value>
   </data>
   <data name="Observer_CreateProfile" xml:space="preserve">
     <value>Create observer profile</value>
@@ -820,7 +820,7 @@
     <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Interviewer_Profile" xml:space="preserve">
-    <value>Interviewer profile</value>
+    <value>Interviewers</value>
   </data>
   <data name="Interviewer_CreateProfile" xml:space="preserve">
     <value>Create interviewer profile</value>
@@ -830,13 +830,13 @@
   </data>
     
   <data name="Headquarter_Profile" xml:space="preserve">
-    <value>Headquarter profile</value>
+    <value>Headquarters</value>
   </data>
   <data name="Headquarter_CreateProfile" xml:space="preserve">
-    <value>Create headquarter profile</value>
+    <value>Create headquarters profile</value>
   </data>
   <data name="Headquarter_EditProfileFormat" xml:space="preserve">
-    <value>Edit headquarter profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   
   <data name="PublicSection">
@@ -894,7 +894,7 @@
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Archive</value>
   </data>
-  <data name="Supervisors_ArchiveSupervisorsConfirm" xml:space="preserve">
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">

@@ -67,7 +67,7 @@
 
 
             self.unarchiveSupervisors = function () {
-                self.getConfirmAndSendRequest("@Archived.UnarchiveSupervisorWarning \r\n @Pages.Supervisors_ArchiveSupervisorsConfirm", false);
+                self.getConfirmAndSendRequest("@Archived.UnarchiveSupervisorWarning \r\n @Pages.Supervisors_UnarchiveSupervisorsConfirm", false);
             };
 
             self.archiveSupervisors = function () {
@@ -178,10 +178,6 @@
                         location.reload();
                     else if (xhr.status != undefined && xhr.status !== 200)
                         notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
-
-                    if (xhr.status === 200) {
-                        model.SupervisorsCount(xhr.responseJSON.recordsTotal);
-                    }
                 })
                 .DataTable({
                     processing: true,
@@ -198,6 +194,10 @@
                         "data": function(d) {
                             model.SelectedItems.removeAll(); // move to before filter event
                             d.Archived = model.Archived();
+                        },
+                        "dataSrc": function (json) {
+                            model.SupervisorsCount(json.recordsTotal);
+                            return json.data;
                         }
                     },
                     "createdRow": function (row, data, dataIndex) {
@@ -359,7 +359,7 @@
                 <div class="row">
                     <div class="page-header clearfix">
                         <div>
-                            <h1><span data-bind="text: SupervisorsCount"></span> @Users.SupervisorsInTeam</h1>
+                            <h1>@Users.Supervisors</h1>
                             @if (authorizedUser.IsAdministrator)
                             {
                                 <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
