@@ -894,7 +894,7 @@
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Archive</value>
   </data>
-  <data name="Supervisors_ArchiveSupervisorsConfirm" xml:space="preserve">
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
