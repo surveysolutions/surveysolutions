@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor profile.
+        ///   Looks up a localized string similar to Supervisors.
         /// </summary>
         public static string AccountManage_SupervisorProfile {
             get {
@@ -538,7 +538,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create headquarter profile.
+        ///   Looks up a localized string similar to Create headquarters profile.
         /// </summary>
         public static string Headquarter_CreateProfile {
             get {
@@ -547,7 +547,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit headquarter profile: &lt;strong&gt;{0}&lt;/strong&gt;.
+        ///   Looks up a localized string similar to Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;.
         /// </summary>
         public static string Headquarter_EditProfileFormat {
             get {
@@ -556,7 +556,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarter profile.
+        ///   Looks up a localized string similar to Headquarters.
         /// </summary>
         public static string Headquarter_Profile {
             get {
@@ -862,7 +862,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer profile.
+        ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         public static string Interviewer_Profile {
             get {
@@ -1834,7 +1834,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observer profile.
+        ///   Looks up a localized string similar to Observers.
         /// </summary>
         public static string Observer_Profile {
             get {
