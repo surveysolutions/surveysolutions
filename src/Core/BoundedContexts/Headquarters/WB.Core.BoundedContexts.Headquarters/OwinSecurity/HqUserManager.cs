@@ -46,11 +46,17 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return userIdentity;
         }
 
-        protected override Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
+        protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
             this.UpdateSha1PasswordIfNeeded(user, newPassword);
 
-            return base.UpdatePassword(passwordStore, user, newPassword);
+            var result = await base.UpdatePassword(passwordStore, user, newPassword);
+            if (result.Succeeded)
+            {
+               return await UpdateAsync(user);
+            }
+
+            return result;
         }
 
         [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]

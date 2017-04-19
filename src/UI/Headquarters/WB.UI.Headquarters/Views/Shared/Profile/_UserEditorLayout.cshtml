@@ -2,7 +2,7 @@
 @{
     Layout = "_EditorLayout.cshtml";
     var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
-    var hideDetails = (bool?) ViewBag.HideDetails ?? false;
+    var hideDetails = (bool?)ViewBag.HideDetails ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
@@ -10,27 +10,28 @@
 <div class="row extra-margin-bottom">
     @if (!hideDetails)
     {
-         using (Html.BeginForm((string) ViewBag.ControllerAction, (string) ViewBag.ControllerName, FormMethod.Post, new {@class = @"profile"}))
-         {
-             @Html.AntiForgeryToken()
-             @RenderSection(@"PreFormSection", false)
-             @Html.HiddenFor(x => x.Id)
-             @Html.HiddenFor(x => x.UserName)
-             <div class="col-sm-12">
-                 @RenderSection(@"PreDetailsSection", false)
+        using (Html.BeginForm((string)ViewBag.ControllerAction, (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
+        {
+            @Html.AntiForgeryToken()
+            @RenderSection(@"PreFormSection", false)
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.UserName)
+            <div class="col-sm-12">
+                @RenderSection(@"PreDetailsSection", false)
 
-                 @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new {disableClientValidation = true})
-                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
-                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-                 @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
-                 @RenderSection(@"PostDetailsSection", false)
-             </div>
+                @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
+                @Html.EditorFor(x => x.Email, "TextBoxFormField")
+                @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
+                @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? new { } : (object)new { @disabled = @"disabled" })
+                @RenderSection(@"PostDetailsSection", false)
+                @Html.Partial("Profile/ValidationSummary")
+            </div>
 
-             @Html.EditorForModel("UpdateButtonsRow", new {Action = ViewBag.CancelAction})
-         }
+            @Html.EditorForModel("UpdateButtonsRow", new { Action = ViewBag.CancelAction })
+        }
     }
 
-    @using (Html.BeginForm("UpdatePassword", (string) ViewBag.ControllerName, FormMethod.Post, new {@class = @"profile"}))
+    @using (Html.BeginForm("UpdatePassword", (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x => x.Id)
@@ -43,9 +44,10 @@
             @RenderSection(@"PrePasswordForm", false)
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
+            @Html.Partial("Profile/ValidationSummary")
         </div>
 
-        @Html.EditorForModel("UpdateButtonsRow", new {Action = ViewBag.CancelAction})
+        @Html.EditorForModel("UpdateButtonsRow", new { Action = ViewBag.CancelAction })
     }
 </div>
 @RenderBody()

@@ -1,9 +1,9 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+@model UserEditModel
 @{
-    ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Interviewer_Profile;
     ViewBag.PageSubTitle = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
 

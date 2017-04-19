@@ -61,12 +61,30 @@ export function detailsMixin(fetchMethod: string, defaults) {
             markAnswerAsNotSavedWithMessage(message) {
                 this.$store.dispatch("setAnswerAsNotSaved", { id: this.id, message })
             },
+            removeAnswer() {
+                this.$store.dispatch("removeAnswer", this.$me.id)
+                this.$emit("answerRemoved", this.$me.id)
+            },
             fetch(id) {
                 this.$store.dispatch({
                     type: fetchMethod,
                     id: id || this.id,
                     source: "client"
                 })
+            },
+            handleEmptyAnswer(answer) {
+                const answ = answer || ""
+
+                if (answ === (this.$me.answer || "")) {
+                    return true
+                }
+
+                if (answ === "" && this.$me.isAnswered) {
+                    this.removeAnswer()
+                    return true
+                }
+
+                return false
             }
         }
     }

@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
-                        <input autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
+                        <input ref="input" autocomplete="off" type="text" class="field-to-fill" :placeholder="'Enter text ' + userFriendlyMask" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerTextQuestion" v-mask="$me.mask" :data-mask-completed="$me.isAnswered" title="Enter text">
                             <wb-remove-answer />
                     </div>
@@ -32,10 +32,12 @@
         },
         methods: {
             answerTextQuestion(evnt) {
-                const target = $(evnt.target)
-                let answer: string = target.val()
+                const target = $(this.$refs.input)
+                const answer = this.$refs.input.value
 
-                if(answer == this.$me.answer) return;
+                if(this.handleEmptyAnswer(answer)) {
+                    return
+                }
 
                 if (this.$me.mask && !target.data("maskCompleted")) {
                     this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")

@@ -44,10 +44,9 @@
                     ? parseFloat(answerString)
                     : null
 
-                if (answer == this.$me.answer) {
+                if(this.handleEmptyAnswer(answer)) {
                     return
                 }
-
                 if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value')
                     return
