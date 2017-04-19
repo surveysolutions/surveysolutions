@@ -63,10 +63,8 @@
             
             
             <!--Redirect to new connection string step-->
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">1</Publish>
             <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="ConnectionStringDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
-
-            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
-
 
             <!--Custom step-->
             <Publish Dialog="ConnectionStringDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg">1</Publish>
