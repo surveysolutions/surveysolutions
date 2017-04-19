@@ -5817,7 +5817,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-.combo-box input:checked ~ .btn-clear, .question-editor .options-group .field input:checked ~ .btn-clear, .dataTables_wrapper .dataTables_filter label.active input, .answered .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu, .question.disabled-question:after, .field.answered .btn-clear, .field.has-error .btn-clear {
+.combo-box input:checked ~ .btn-clear, .question-editor .options-group .field input:checked ~ .btn-clear, .dataTables_wrapper .dataTables_filter label.active input, .answered > .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu, .question.disabled-question:after, .field.answered .btn-clear, .field.has-error .btn-clear {
   visibility: visible;
   opacity: 1;
   filter: alpha(opacity=100); }
@@ -5905,9 +5905,17 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 
 @media (max-width: 1210px) {
   .combo-box .btn-input.open > .dropdown-menu, .question-editor .options-group .field .btn-input.open > .dropdown-menu {
-    width: calc(100% + 10px); }
-  .combo-box .btn-clear, .question-editor .options-group .field .btn-clear {
-    right: -10px; } }
+    width: 100%; } }
+
+.filters-container > *, .preset-filters-container > * {
+  margin-left: 10px; }
+
+.filters-container > .block-filter, .preset-filters-container > .block-filter {
+  margin-left: 0; }
+  .filters-container > .block-filter > *, .preset-filters-container > .block-filter > * {
+    margin-left: 10px; }
+  .filters-container > .block-filter .btn-group.bootstrap-select, .preset-filters-container > .block-filter .btn-group.bootstrap-select, .filters-container > .block-filter .combo-box, .preset-filters-container > .block-filter .combo-box, .filters-container > .block-filter .input-group, .preset-filters-container > .block-filter .input-group, .filters-container > .block-filter .field, .preset-filters-container > .block-filter .field {
+    margin-left: 0 !important; }
 
 .table {
   color: #3f3f3f;
@@ -6297,7 +6305,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-color: inherit; }
     .table-mobile-devices tr {
       border-bottom: 2px solid #ddd !important; }
-    .table-mobile-devices tbody tr td {
+    .table-mobile-devices tbody tr td, .table-mobile-devices tfoot tr th {
       overflow: hidden;
       height: auto;
       font-size: 12px;
@@ -6307,10 +6315,11 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       text-align: left;
       border-bottom: 1px solid #ddd !important;
       white-space: normal !important; }
-      .table-mobile-devices tbody tr td a {
+      .table-mobile-devices tbody tr td a, .table-mobile-devices tfoot tr th a {
         float: left;
-        width: 50%; }
-      .table-mobile-devices tbody tr td:before {
+        width: 50%;
+        text-align: right; }
+      .table-mobile-devices tbody tr td:before, .table-mobile-devices tfoot tr th:before {
         content: attr(data-th);
         display: block;
         height: 100%;
@@ -6322,15 +6331,19 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         float: left;
         clear: both;
         width: 50%; }
-      .table-mobile-devices tbody tr td.without-break {
+      .table-mobile-devices tbody tr td.without-break, .table-mobile-devices tfoot tr th.without-break {
         text-overflow: initial; }
-        .table-mobile-devices tbody tr td.without-break:before {
+        .table-mobile-devices tbody tr td.without-break:before, .table-mobile-devices tfoot tr th.without-break:before {
           float: left;
           background-image: none !important;
           content: attr(data-th);
           position: relative;
           height: 100%;
           width: 50%; }
+    .table-mobile-devices tfoot tr th {
+      text-align: center; }
+      .table-mobile-devices tfoot tr th:nth-of-type(2):before, .table-mobile-devices tfoot tr th:first-of-type:before {
+        display: none; }
   .table tr td, .table tr th {
     font-size: 10px;
     line-height: 12px; }
@@ -7457,7 +7470,7 @@ input.double-checkbox-white {
   margin-bottom: 15px; }
 
 .input-group {
-  width: 315px; }
+  width: 295px; }
   .input-group .form-control {
     border-color: #dbdfe2;
     border-right: none; }
@@ -7690,7 +7703,7 @@ input.double-checkbox-white {
         background-position: -60px 10px; }
 
 .block-filter .btn-group.bootstrap-select, .block-filter .combo-box, .block-filter .input-group, .block-filter .field {
-  margin-left: -10px !important; }
+  margin-left: 0; }
 
 .block-filter .field {
   width: 295px; }
@@ -7722,8 +7735,21 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 .form-date .input-group.date .form-control {
   z-index: 0; }
 
-.help-block {
+.profile .help-block {
   margin: 0; }
+
+.profile > div {
+  padding-left: 5px; }
+  .profile > div > * {
+    margin-left: 10px; }
+  .profile > div > .block-filter {
+    margin-left: 0; }
+    .profile > div > .block-filter > * {
+      margin-left: 10px; }
+    .profile > div > .block-filter > .form-group {
+      margin-left: 0; }
+    .profile > div > .block-filter > .btn-group.bootstrap-select, .profile > div > .block-filter .combo-box, .profile > div > .block-filter .input-group, .profile > div > .block-filter .field {
+      margin-left: 0 !important; }
 
 .profile .separate-line {
   max-width: 500px; }
@@ -7752,18 +7778,20 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 
 @media (max-width: 1210px) {
   .profile .separate-line {
-    margin-left: 0; } }
+    margin-left: 0 !important; } }
 
 @media (max-width: 780px) {
-  .profile .separate-line {
-    margin-left: 0; }
   .profile .block-filter .form-group .field {
     float: none;
     margin-right: 0; }
   .profile .block-filter .form-group .help-block {
     float: none;
     margin-top: 10px;
+    margin-left: 10px;
     max-width: 280px; } }
+
+.input-group-addon {
+  border-color: #dbdfe2; }
 
 .structured-content {
   margin: 0; }
@@ -8176,7 +8204,7 @@ input.checkbox-filter {
 .filters-container {
   color: #3f3f3f;
   border-bottom: 3px solid #ececec;
-  padding: 0 25px 20px 30px; }
+  padding: 0 25px 20px 20px; }
 
 .block-filter {
   margin-bottom: 30px; }
@@ -8247,24 +8275,13 @@ input.checkbox-filter {
       background-size: 21px 20px; } }
 
 .preset-filters-container {
-  padding: 30px 25px 20px 30px; }
+  padding: 30px 25px 20px 20px; }
   .preset-filters-container a, .preset-filters-container .export-queue {
     color: #2a81cb;
     display: block; }
 
 .filters-container .flagged-questions, .filters-container .reset-filters {
   margin: 0; }
-
-.filters .bootstrap-select.btn-group {
-  width: 305px !important; }
-
-.filters .input-group {
-  width: 305px; }
-
-.filters .combo-box {
-  width: 305px; }
-  .filters .combo-box .btn-input .dropdown-toggle {
-    width: 305px; }
 
 .filters .help-block {
   margin-top: 10px; }
@@ -8295,19 +8312,15 @@ input.checkbox-filter {
     padding-top: 105px;
     width: 270px; }
     .filters .bootstrap-select.btn-group {
-      width: calc(100% + 10px) !important; }
-    .filters .input-group {
-      width: calc(100% + 10px); }
-    .filters .combo-box {
+      width: 100% !important; }
+    .filters .input-group, .filters .combo-box, .filters .btn-input .dropdown-toggle {
       width: 100%; }
-      .filters .combo-box .btn-input .dropdown-toggle {
-        width: calc(100% + 10px); }
     .filters .open > .dropdown-menu {
       width: 100%; }
     .filters .foldback-button {
       top: 65px; }
   .preset-filters-container, .filters-container {
-    padding-left: 20px;
+    padding-left: 10px;
     padding-right: 15px; }
   .foldback-button {
     display: block; }
@@ -8376,10 +8389,6 @@ input.checkbox-filter {
       visibility: visible; }
   .fullscreen-hidden-filters .export-types {
     display: none; } }
-
-@media (max-width: 481px) {
-  .fullscreen-hidden-filters .filters .filters-container, .fullscreen-hidden-filters .filters .preset-filters-container {
-    width: 250px; } }
 
 body > .ui-pnotify {
   z-index: 100050; }
@@ -9091,7 +9100,7 @@ table tr th .census-icon, table tr td .census-icon {
 
 .separate-line {
   border-top: 3px solid #dbdfe2;
-  margin-left: -25px;
+  margin-left: -25px !important;
   padding-bottom: 20px; }
 
 @media (max-width: 880px) {
@@ -9187,18 +9196,19 @@ table tr th .census-icon, table tr td .census-icon {
   width: 100%;
   height: 600px;
   padding: 10px; }
-  #interviewChart table.jqplot-table-legend {
-    width: 90%;
-    border: none;
-    margin: 0;
-    border: none; }
-  #interviewChart td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-    width: 20px; }
-  #interviewChart div.jqplot-table-legend-swatch-outline {
-    border: none;
-    margin-right: 5px; }
-  #interviewChart .jqplot-table-legend-swatch {
-    border-width: 10px; }
+
+table.jqplot-table-legend {
+  width: 90%;
+  border: none; }
+
+td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+  width: 20px; }
+
+div.jqplot-table-legend-swatch-outline {
+  border: none; }
+
+.jqplot-table-legend-swatch {
+  border-width: 10px; }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
@@ -10129,7 +10139,7 @@ main .flex-row {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFDBDFE2', endColorstr='#FFDBDFE2', GradientType=1);
   background-repeat: no-repeat;
   background-size: 65px 1px;
-  background-position: 0 100%;
+  background-position: 10px 100%;
   padding: 15px 0; }
 
 .bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.flag:before {
@@ -10674,13 +10684,9 @@ label.inactive {
     padding-top: 105px;
     width: 270px; }
     .web-interview-for-supervisor .filters .bootstrap-select.btn-group {
-      width: calc(100% + 10px) !important; }
-    .web-interview-for-supervisor .filters .input-group {
-      width: calc(100% + 10px); }
-    .web-interview-for-supervisor .filters .combo-box {
+      width: 100% !important; }
+    .web-interview-for-supervisor .filters .input-group, .web-interview-for-supervisor .filters .combo-box, .web-interview-for-supervisor .filters .btn-input .dropdown-toggle {
       width: 100%; }
-      .web-interview-for-supervisor .filters .combo-box .btn-input .dropdown-toggle {
-        width: calc(100% + 10px); }
     .web-interview-for-supervisor .filters .open > .dropdown-menu {
       width: 100%; }
     .web-interview-for-supervisor .filters .foldback-button {
@@ -10690,7 +10696,7 @@ label.inactive {
     .web-interview-for-supervisor .filters .foldback-button {
       top: 75px; }
     .web-interview-for-supervisor .filters .preset-filters-container, .web-interview-for-supervisor .filters .filters-container {
-      padding-left: 20px;
+      padding-left: 10px;
       padding-right: 15px; }
   .content {
     width: 330px;
@@ -11966,9 +11972,9 @@ main .before-search {
   .search-wasnt-started .filters .foldback-button {
     display: none; }
   .search-wasnt-started .filters .filters-container {
-    max-width: 350px;
+    max-width: 310px;
     border: none;
-    padding: 0 15px; }
+    padding: 0 5px; }
     .search-wasnt-started .filters .filters-container > h4, .search-wasnt-started .filters .filters-container > .import-progress {
       display: none; }
 
