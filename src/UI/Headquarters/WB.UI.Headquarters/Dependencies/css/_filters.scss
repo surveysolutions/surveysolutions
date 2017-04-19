@@ -107,12 +107,12 @@ input.checkbox-filter{
 				border-bottom-left-radius: 4px;
 				border-top-left-radius: 4px;
 			}
-			.input-group-addon{
-				background-color: transparent;
-				border-left: none;
-				border-color: $gray_form;
-				padding: 3px 10px; 
-			}
+			// .input-group-addon{
+			// 	background-color: transparent;
+			// 	border-left: none;
+			// 	border-color: $gray_form;
+			// 	padding: 3px 10px; 
+			// }
 		}
 	}
 }
@@ -124,16 +124,16 @@ input.checkbox-filter{
 		cursor: pointer;
 		border-right: none;
 		border-color: $gray_form;
-		background-color: #fff;
+		//background-color: #fff;
 		border-bottom-left-radius: 4px;
 		border-top-left-radius: 4px;
 	}
-	.input-group-addon{
-		background-color: transparent;
-		border-left: none;
-		border-color: $gray_form;
-		padding: 3px 10px; 
-	}
+	// .input-group-addon{
+	// 	background-color: transparent;
+	// 	border-left: none;
+	// 	border-color: $gray_form;
+	// 	padding: 3px 10px; 
+	// }
 }
 .calendar{
 	@include size(21px, 20px); 
