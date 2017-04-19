@@ -2078,15 +2078,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to continue?.
-        /// </summary>
-        public static string Supervisors_ArchiveSupervisorsConfirm {
-            get {
-                return ResourceManager.GetString("Supervisors_ArchiveSupervisorsConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If the interviewer has completed interviews in census mode on his tablet then the data will be lost..
         /// </summary>
         public static string Supervisors_ArchiveSupervisorsConfirmMessage {
@@ -2110,6 +2101,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Supervisors_Unarchive {
             get {
                 return ResourceManager.GetString("Supervisors_Unarchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to continue?.
+        /// </summary>
+        public static string Supervisors_UnarchiveSupervisorsConfirm {
+            get {
+                return ResourceManager.GetString("Supervisors_UnarchiveSupervisorsConfirm", resourceCulture);
             }
         }
         
