@@ -35,7 +35,9 @@
                 const target = $(this.$refs.input)
                 const answer = this.$refs.input.value
 
-                if((answer || "") == (this.$me.answer || "")) return;
+                if(this.handleEmptyAnswer(answer)) {
+                    return
+                }
 
                 if (this.$me.mask && !target.data("maskCompleted")) {
                     this.markAnswerAsNotSavedWithMessage("Please, fill in all the required values")
