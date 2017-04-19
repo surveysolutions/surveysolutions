@@ -42,7 +42,7 @@
                     ? parseInt(answerString)
                     : null
 
-                if (answer == this.$me.answer) {
+                if(this.handleEmptyAnswer(answer)) {
                     return
                 }
 

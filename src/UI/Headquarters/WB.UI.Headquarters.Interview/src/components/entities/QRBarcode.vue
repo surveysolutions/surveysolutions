@@ -25,7 +25,7 @@
                 const target = $(evnt.target)
                 const answer: string = target.val()
 
-                if (answer == this.$me.answer) {
+                if(this.handleEmptyAnswer(answer)) {
                     return
                 }
 
