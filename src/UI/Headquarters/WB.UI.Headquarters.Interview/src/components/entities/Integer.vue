@@ -42,9 +42,7 @@
                     ? parseInt(answerString)
                     : null
 
-                if (answer == this.$me.answer) {
-                    return
-                }
+                if((answer || "") == (this.$me.answer || "")) return;
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as integer value')
