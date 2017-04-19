@@ -25,7 +25,9 @@
                 const target = $(evnt.target)
                 const answer: string = target.val()
 
-                if((answer || "") == (this.$me.answer || "")) return;
+                if(this.handleEmptyAnswer(answer)) {
+                    return
+                }
 
                 if (answer) {
                     this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
