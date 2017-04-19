@@ -359,7 +359,7 @@
                 <div class="row">
                     <div class="page-header clearfix">
                         <div>
-                            <h1><span data-bind="text: SupervisorsCount"></span> @Users.SupervisorsInTeam</h1>
+                            <h1>@Users.Supervisors</h1>
                             @if (authorizedUser.IsAdministrator)
                             {
                                 <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
