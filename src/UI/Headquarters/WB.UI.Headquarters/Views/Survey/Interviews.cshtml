@@ -182,6 +182,10 @@
                                             </td>
                                         </tr>
                                         <!-- /ko -->
+                                    
+                                        <tr class="odd" data-bind="visible : Items().length == 0">
+                                            <td colspan="8" class="dataTables_empty" valign="top">@DataTables.ZeroRecords</td>
+                                        </tr>                                    
                                     </tbody>
                                 </table>
                             </div>
