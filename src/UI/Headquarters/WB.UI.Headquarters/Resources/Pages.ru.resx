@@ -850,4 +850,8 @@
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
   </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Вы хотите продолжить?</value>
+    <comment>Вы хотите продолжить?</comment>
+  </data>
 </root>
