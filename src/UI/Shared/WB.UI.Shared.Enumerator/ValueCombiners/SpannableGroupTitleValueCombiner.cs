@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
@@ -10,10 +11,12 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
         {
             string groupTitle = values[0]?.ToString() ?? string.Empty;
             string rosterTitle = values[1]?.ToString() ?? string.Empty;
+
             string result = groupTitle;
             if (!string.IsNullOrWhiteSpace(rosterTitle))
             {
-                result += $" - <i>{rosterTitle}</i>";
+                string pattern = Regex.Escape(rosterTitle);
+                result = Regex.Replace(groupTitle, @" \- " + pattern, m => $"<i>{m.Value}</i>");
             }
              
             return result;

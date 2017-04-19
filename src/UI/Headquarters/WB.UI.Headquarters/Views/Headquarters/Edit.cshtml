@@ -1,7 +1,8 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
+@using WB.Infrastructure.Native.Sanitizer
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
 @{
-    ViewBag.Title = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.Title = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Headquarter_Profile;
     ViewBag.PageSubTitle = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
 
