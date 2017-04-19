@@ -67,7 +67,7 @@
                         <h5>@Common.Responsible</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
-                                <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                                 <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                 <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -102,7 +102,7 @@
                             <div class="dataTables_filter">
                                 <label>
                                     @Common.Search:
-                                    <input class="" placeholder="text" type="search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                                    <input class="" placeholder="@Common.Search" type="search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
                                 </label>
                             </div>
                             <div class="table-with-scroll">
@@ -120,12 +120,12 @@
                                                 <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
-                                            <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
+                                            <th class="prefield-column first-identifying last-identifying sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                             <!-- /ko -->
                                             <!-- ko ifnot:SelectedTemplate() == '' -->
                                             <!-- ko if:Items().length > 0-->
                                             <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                                            <th class="prefield-column sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }, html: Question'></th>
+                                            <th class="prefield-column sorting_disabled" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.Items()[0].FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, html: Question"></th>
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <!-- /ko -->
@@ -148,11 +148,11 @@
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }, text: Key"></a>
                                             </td>
                                             <!-- ko if:$root.SelectedTemplate() == '' -->
-                                            <td class="prefield-column" data-bind="css: { visible : $root.IsVisiblePrefilledColumns }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
+                                            <td class="prefield-column first-identifying last-identifying" data-bind="css: { visible : $root.IsVisiblePrefilledColumns }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
                                             <!-- /ko -->
                                             <!-- ko ifnot:$root.SelectedTemplate() == '' -->
                                             <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
-                                            <td class="prefield-column" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }, text: Answer'></td>
+                                            <td class="prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, text: Answer"></td>
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <td>
@@ -231,7 +231,7 @@
                 InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
             @Interviews.ChooseResponsibleInterviewer
             <div class="input-group">
-                <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
+                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                 <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                 <div class="input-group-btn" data-bind="click: ClearAssignTo">
                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
