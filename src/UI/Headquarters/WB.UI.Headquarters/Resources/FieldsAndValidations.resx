@@ -220,7 +220,7 @@
     <value>Title</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed</value>
+    <value>Account name has invalid characters. Only letters, dots, spaces and apostrophe are allowed</value>
   </data>
   <data name="PhoneErrorLength" xml:space="preserve">
     <value>Phone number should not contain more than {1} characters</value>
