@@ -21,6 +21,7 @@
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
             @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
             @RenderSection(@"PostDetailsSection", false)
+            @Html.Partial("Profile/ValidationSummary")
         </div>
 
         <div class="col-sm-12">

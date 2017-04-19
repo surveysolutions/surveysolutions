@@ -489,7 +489,7 @@ table{
 }
 .separate-line{
 	border-top: 3px solid  $gray_form;
-	margin-left: -25px;
+	margin-left: -25px !important;
 	padding-bottom: 20px;
 }
 @media (max-width: $screen-sm-min){
@@ -609,21 +609,17 @@ table{
 	width: 100%;
 	height: 600px;
 	padding: 10px;
-
-    table.jqplot-table-legend {
-	    width: 90%;
-	    border: none;
-        margin: 0;
-        border: none;
-    }
-    td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-	    width: 20px;
-    }
-    div.jqplot-table-legend-swatch-outline {
-	    border: none;
-        margin-right: 5px;
-    }
-    .jqplot-table-legend-swatch {
-	    border-width: 10px;
-    }
+}
+table.jqplot-table-legend {
+	width: 90%;
+	border: none;
+}
+td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+	width: 20px;
+}
+div.jqplot-table-legend-swatch-outline {
+	border: none;
+}
+.jqplot-table-legend-swatch {
+	border-width: 10px;
 }

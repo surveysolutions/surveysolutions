@@ -1,5 +1,5 @@
 @using WB.UI.Shared.Web.Extensions
-@if (ViewBag.GlobalNotice != null || Alerts.ALL.Any(TempData.ContainsKey))
+@if (Alerts.ALL.Any(TempData.ContainsKey))
 {
     <div id="alerts" class="alerts">
         @if (TempData.ContainsKey(Alerts.ATTENTION))

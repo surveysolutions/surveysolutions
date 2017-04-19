@@ -1404,6 +1404,7 @@
     <Content Include="Views\Shared\EditorTemplates\CheckboxFormField.cshtml" />
     <Content Include="Views\Shared\Profile\_UserEditorLayout.cshtml" />
     <Content Include="Views\Shared\Profile\_UserCreateLayout.cshtml" />
+    <Content Include="Views\Shared\Profile\ValidationSummary.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
