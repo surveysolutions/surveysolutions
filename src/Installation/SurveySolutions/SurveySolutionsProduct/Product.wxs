@@ -111,10 +111,10 @@
         <InstallExecuteSequence>
 
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
-                <![CDATA[FirstInstall]]>
+                <![CDATA[NOT Installed]]>
             </Custom>
             <Custom Action="InstallIIS" Before="WriteRegistryValues">
-                <![CDATA[FirstInstall]]>
+                <![CDATA[NOT Installed]]>
             </Custom>
 
         </InstallExecuteSequence>
