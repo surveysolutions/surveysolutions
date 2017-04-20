@@ -117,17 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" >
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
     <value>Could not update user information because current user does not exist</value>
-  </data>  
-  <data name="CannotUpdate_CurrentUserIsArchived" >
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
     <value>Could not update user information because current user is archived</value>
   </data>
   <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
     <value>The password and confirmation password do not match</value>
   </data>
   <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Confirm new password</value>
+    <value>Confirm password</value>
   </data>
   <data name="EmailErrorMessage" xml:space="preserve">
     <value>Is not a valid e-mail address</value>
@@ -142,7 +142,7 @@
     <value>Password must contain at least one number, one upper case character and one lower case character</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
-    <value>New password</value>
+    <value>Password</value>
   </data>
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>Password must be at least {2} characters long</value>
@@ -233,5 +233,11 @@
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Please choose another username</value>
+  </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>New password</value>
   </data>
 </root>
