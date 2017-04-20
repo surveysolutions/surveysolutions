@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API user profile.
+        ///   Looks up a localized string similar to API users.
         /// </summary>
         public static string ApiUser_Profile {
             get {

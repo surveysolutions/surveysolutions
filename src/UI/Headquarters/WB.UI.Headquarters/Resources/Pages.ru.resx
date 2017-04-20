@@ -836,7 +836,7 @@
     <comment>API пользователь &lt;b&gt;{0}&lt;/b&gt; успешно создан</comment>
   </data>
   <data name="ApiUser_Profile" xml:space="preserve">
-    <value>Профиль API пользователя</value>
+    <value>API пользователи</value>
     <comment>Профиль API пользователя</comment>
   </data>
   <data name="ApiUser_CreateProfile" xml:space="preserve">
