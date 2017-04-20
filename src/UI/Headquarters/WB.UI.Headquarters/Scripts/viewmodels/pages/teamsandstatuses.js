@@ -5,7 +5,6 @@
     self.Url = new Url(window.location.href);
     self.SelectedTemplate = ko.observable('');
     self.QuestionnaireName = ko.observable();
-    self.TotalRow = ko.observable({});
 
     self.GetFilterMethod = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
@@ -27,26 +26,13 @@
         self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
     }
 
-    self.footerCallback = function () {
-        var api = this.api();
-        var totalRow = self.TotalRow();
-        if (api.column(0).data().length === 0) {
-            $(this).find("tfoot").hide();
-        } else {
-            $(this).find("tfoot").show();
-            $(api.column(1).footer()).text(totalRow.supervisorAssignedCount);
-            $(api.column(2).footer()).text(totalRow.interviewerAssignedCount);
-            $(api.column(3).footer()).text(totalRow.completedCount);
-            $(api.column(4).footer()).text(totalRow.rejectedBySupervisorCount);
-            $(api.column(5).footer()).text(totalRow.approvedBySupervisorCount);
-            $(api.column(6).footer()).text(totalRow.rejectedByHeadquartersCount);
-            $(api.column(7).footer()).text(totalRow.approvedByHeadquartersCount);
-            $(api.column(8).footer()).text(totalRow.totalCount);
-        }
-    };
-
     self.onDataTableDataReceived = function (data) {
-        self.TotalRow(data.totalRow);
+        if (data.data.length > 0) {
+            var totalRow = data.totalRow;
+            totalRow.responsible = $totalTitle;
+            totalRow.DT_RowClass = 'title-row';
+            data.data.unshift(totalRow);
+        }
     };
 
     self.load = function () {
@@ -64,7 +50,7 @@
     };
 
     self.getLinkToInterviews = function(data, row, interviewStatus) {
-        if (data === 0) return "<span>" + data + "</span>";
+        if (data === 0 || row.DT_RowClass === 'title-row') return "<span>" + data + "</span>";
 
         var queryObject = {};
 
