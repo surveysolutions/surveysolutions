@@ -811,7 +811,7 @@
     <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
   </data>
   <data name="ApiUser_Profile" xml:space="preserve">
-    <value>API user profile</value>
+    <value>API users</value>
   </data>
   <data name="ApiUser_CreateProfile" xml:space="preserve">
     <value>Create API user profile</value>
