@@ -179,6 +179,13 @@
             }
         }
     }
+    .total-row{
+        border-top: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        td{
+            font-weight: bold;
+        }
+    }
 }
 .table-striped {
     tbody tr{
@@ -596,8 +603,8 @@
     .table{
         tr{
             td, th{
-                font-size: 10px;
-                line-height: 12px;
+                //font-size: 10px;
+                //line-height: 12px;
                 &.for-tablets{
                     display: none;
                 }
