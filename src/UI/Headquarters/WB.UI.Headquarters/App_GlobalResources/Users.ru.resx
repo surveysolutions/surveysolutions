@@ -220,4 +220,12 @@
     <value>Редактирование супервизора</value>
     <comment>Редактирование супервизора</comment>
   </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>({0} супервизоров)</value>
+    <comment>({0} супервизоров)</comment>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Архив статус</value>
+    <comment>Архив статус</comment>
+  </data>
 </root>
