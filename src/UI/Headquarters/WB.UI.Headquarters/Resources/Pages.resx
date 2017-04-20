@@ -820,7 +820,7 @@
     <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Interviewer_Profile" xml:space="preserve">
-    <value>Interviewers</value>
+    <value>Interviewer profile</value>
   </data>
   <data name="Interviewer_CreateProfile" xml:space="preserve">
     <value>Create interviewer profile</value>

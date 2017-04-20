@@ -862,7 +862,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewers.
+        ///   Looks up a localized string similar to Interviewer profile.
         /// </summary>
         public static string Interviewer_Profile {
             get {
