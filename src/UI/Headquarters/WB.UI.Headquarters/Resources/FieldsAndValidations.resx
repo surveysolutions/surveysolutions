@@ -127,7 +127,7 @@
     <value>The password and confirmation password do not match</value>
   </data>
   <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Confirm new password</value>
   </data>
   <data name="EmailErrorMessage" xml:space="preserve">
     <value>Is not a valid e-mail address</value>
@@ -142,7 +142,7 @@
     <value>Password must contain at least one number, one upper case character and one lower case character</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
-    <value>Password</value>
+    <value>New password</value>
   </data>
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>Password must be at least {2} characters long</value>
