@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived)
+        public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null)
         {
             Func<IQueryable<HqUser>, IQueryable<SupervisorsQueryItem>> query =
                 allUsers => ApplyFilter(allUsers, searchBy, UserRoles.Supervisor, archived)
@@ -234,8 +234,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         UserId = supervisor.Id,
                         UserName = supervisor.UserName,
                         IsArchived = supervisor.IsArchived,
-                        //InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
-                        //NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
                     });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
@@ -262,11 +260,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool archived)
+        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool? archived)
         {
             var selectedRoleId = role.ToUserId();
 
             var allUsers = _.Where(x => x.Roles.FirstOrDefault().RoleId == selectedRoleId);
+
+            if (archived.HasValue)
+                allUsers = _.Where(x => x.IsArchived == archived.Value);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
