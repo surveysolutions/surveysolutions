@@ -267,7 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             var allUsers = _.Where(x => x.Roles.FirstOrDefault().RoleId == selectedRoleId);
 
             if (archived.HasValue)
-                allUsers = _.Where(x => x.IsArchived == archived.Value);
+                allUsers = allUsers.Where(x => x.IsArchived == archived.Value);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
