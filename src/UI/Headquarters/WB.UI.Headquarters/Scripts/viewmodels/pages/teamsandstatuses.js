@@ -5,6 +5,7 @@
     self.Url = new Url(window.location.href);
     self.SelectedTemplate = ko.observable('');
     self.QuestionnaireName = ko.observable();
+    var totalRowClass = 'total-row';
 
     self.GetFilterMethod = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
@@ -30,7 +31,7 @@
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
             totalRow.responsible = $totalTitle;
-            totalRow.DT_RowClass = 'title-row';
+            totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }
     };
@@ -50,7 +51,7 @@
     };
 
     self.getLinkToInterviews = function(data, row, interviewStatus) {
-        if (data === 0 || row.DT_RowClass === 'title-row') return "<span>" + data + "</span>";
+        if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
 
         var queryObject = {};
 
