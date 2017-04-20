@@ -233,8 +233,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         Email = supervisor.Email,
                         UserId = supervisor.Id,
                         UserName = supervisor.UserName,
-                        InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
-                        NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
+                        IsArchived = supervisor.IsArchived,
+                        //InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
+                        //NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
                     });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
@@ -251,8 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 Email = x.Email,
                 UserId = x.UserId,
                 UserName = x.UserName,
-                InterviewersCount = x.InterviewersCount,
-                NotConnectedToDeviceInterviewersCount = x.NotConnectedToDeviceInterviewersCount
+                IsArchived = x.IsArchived,
             }).ToList();
 
             return new SupervisorsView
@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             var selectedRoleId = role.ToUserId();
 
-            var allUsers = _.Where(x => x.IsArchived == archived && x.Roles.FirstOrDefault().RoleId == selectedRoleId);
+            var allUsers = _.Where(x => x.Roles.FirstOrDefault().RoleId == selectedRoleId);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
@@ -278,15 +278,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public class SupervisorsQueryItem
         {
-            public int InterviewersCount { get; set; }
-
-            public int NotConnectedToDeviceInterviewersCount { get; set; }
             public bool IsLockedBySupervisor { get; set; }
             public bool IsLockedByHQ { get; set; }
             public DateTime CreationDate { get; set; }
             public string UserName { get; set; }
             public Guid UserId { get; set; }
             public string Email { get; set; }
+            public bool IsArchived { get; set; }
         }
 
         public class UserQueryItem

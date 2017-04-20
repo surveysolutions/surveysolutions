@@ -156,8 +156,7 @@ namespace WB.UI.Headquarters.Controllers
                     CreationDate = x.CreationDate,
                     Email = x.Email,
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
-                    InterviewersCount = x.InterviewersCount,
-                    NotConnectedToDeviceInterviewersCount = x.NotConnectedToDeviceInterviewersCount
+                    IsArchived = x.IsArchived
                 })
             };
         }
@@ -169,8 +168,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string CreationDate { get; set; }
             public virtual string Email { get; set; }
             public virtual bool IsLocked { get; set; }
-            public virtual int InterviewersCount { get; set; }
-            public virtual int NotConnectedToDeviceInterviewersCount { get; set; }
+            public virtual bool IsArchived { get; set; }
         }
 
         [HttpPost]
