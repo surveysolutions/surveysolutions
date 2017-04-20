@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.Controllers
         public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
         {
             var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),
-                request.Search.Value, request.Archived);
+                request.Search.Value);
 
             return new DataTableResponse<SupervisorListItem>
             {
