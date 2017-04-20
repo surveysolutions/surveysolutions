@@ -691,6 +691,7 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_questionnaire_has_5_prefilled_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthNunitBasedSpecification.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_interviewer_in_SHA1_compatibility_mode.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_Interviewer_with_auth_based_token.cs" />
@@ -1020,7 +1021,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\UserViewFactoryTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
@@ -1085,7 +1085,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_one_multi_option_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_is_nested_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_need_sort_by_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_searching_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\TeamUsersAndQuestionnairesFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamUsersAndQuestionnairesFactoryTests\when_questionnaire_is_deleted.cs" />
