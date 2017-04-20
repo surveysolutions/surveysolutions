@@ -8537,7 +8537,7 @@ input.checkbox-filter {
 .block-filter {
   margin-bottom: 15px; }
   .block-filter h5, .block-filter .preset-filters-container a, .preset-filters-container .block-filter a, .block-filter .preset-filters-container .export-queue, .preset-filters-container .block-filter .export-queue {
-    margin-bottom: 5px; }
+    margin-bottom: 2px; }
     .block-filter h5 label, .block-filter .preset-filters-container a label, .preset-filters-container .block-filter a label, .block-filter .preset-filters-container .export-queue label, .preset-filters-container .block-filter .export-queue label {
       margin-bottom: 0; }
   .block-filter select {
@@ -11818,6 +11818,9 @@ th.prefield-column {
 
 td.prefield-column {
   font-style: italic; }
+
+.prefield-column {
+  max-width: 500px; }
 
 .interview-id {
   min-width: 240px !important;
