@@ -7,6 +7,10 @@
 @section scripts {
     @RenderSection(@"scripts", false)
 }
+@section Breadcrumbs
+{
+    @RenderSection("Breadcrumbs", false)
+}
 <div class="row extra-margin-bottom">
     @if (!hideDetails)
     {
@@ -27,7 +31,7 @@
                 @Html.Partial("Profile/ValidationSummary")
             </div>
 
-            @Html.EditorForModel("UpdateButtonsRow", new { Action = ViewBag.CancelAction })
+            @Html.EditorForModel("UpdateButtonsRow", new { ViewBag.CancelAction })
         }
     }
 
@@ -47,7 +51,7 @@
             @Html.Partial("Profile/ValidationSummary")
         </div>
 
-        @Html.EditorForModel("UpdateButtonsRow", new { Action = ViewBag.CancelAction })
+        @Html.EditorForModel("UpdateButtonsRow", new { ViewBag.CancelAction })
     }
 </div>
 @RenderBody()
