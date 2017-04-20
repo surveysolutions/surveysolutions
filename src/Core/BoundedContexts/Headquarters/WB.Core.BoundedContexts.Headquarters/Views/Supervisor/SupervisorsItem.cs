@@ -16,8 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Supervisor
 
         public string UserName { get; set; }
 
-        public int InterviewersCount { get; set; }
-
-        public int NotConnectedToDeviceInterviewersCount { get; set; }
+        public bool IsArchived { get; set; }
     }
 }
