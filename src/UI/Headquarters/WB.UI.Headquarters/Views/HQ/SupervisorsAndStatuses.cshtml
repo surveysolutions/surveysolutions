@@ -26,7 +26,8 @@
                 return [
                     {
                         render: function (data, type, row) {
-                            return "<a href=\"" + $surveysUrl + "?responsible=" + data + "\">" + data + "</a>";
+                            return model.getLinkToInterviews(data, row);
+                            //return "<a href=\"" + $surveysUrl + "?responsible=" + data + "\">" + data + "</a>";
                         }
                     },
                     {
