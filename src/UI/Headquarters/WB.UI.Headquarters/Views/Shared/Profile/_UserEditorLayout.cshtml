@@ -31,7 +31,7 @@
                 @Html.Partial("Profile/ValidationSummary")
             </div>
 
-            @Html.EditorForModel("UpdateButtonsRow", new { ViewBag.CancelAction })
+            @Html.EditorForModel("UpdateButtonsRow")
         }
     }
 
@@ -51,7 +51,7 @@
             @Html.Partial("Profile/ValidationSummary")
         </div>
 
-        @Html.EditorForModel("UpdateButtonsRow", new { ViewBag.CancelAction })
+        @Html.EditorForModel("UpdateButtonsRow")
     }
 </div>
 @RenderBody()

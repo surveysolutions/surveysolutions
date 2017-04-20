@@ -3,13 +3,12 @@
 @using WB.Core.GenericSubdomains.Portable
 @model UserEditModel
 @{
-    ViewBag.Title = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.InterviewerProfile_Interviewers;
-    ViewBag.PageSubTitle = Pages.Interviewer_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName);
 
     ViewBag.ControllerName = "Interviewer";
     ViewBag.ControllerAction = "Edit";
-    ViewBag.CancelAction = "Back";
+    ViewBag.CancelAction = "Profile";
     ViewBag.CancelArgs = new { id = Model.Id };
     ViewBag.IsEditMode = true;
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
@@ -18,9 +17,8 @@
 }
 @section Breadcrumbs
 {
-    <li>
-        @Html.ActionLink(@Pages.Interviewer_Profile, "Profile", new { id = Model.Id})
-    </li>
+    <li>@Html.ActionLink(@Pages.Profile_InterviewersList, "Back")</li>
+    <li>@Html.ActionLink(@Pages.Profile_InterviewerProfile, "Profile", new { id = Model.Id })</li>
 }
 @section PostDetailsSection
 {

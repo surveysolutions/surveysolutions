@@ -1,9 +1,13 @@
-﻿@using WB.Core.GenericSubdomains.Portable
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
+﻿@model UserModel
 @{
     Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
 
-    ViewBag.Title = Pages.ApiUser_CreateProfile;
-    ViewBag.PageTitle = Pages.ApiUser_Profile;
-    ViewBag.PageSubTitle = Pages.ApiUser_CreateProfile;
+    ViewBag.Title = Pages.Profile_ApiUserCreate;
+    ViewBag.PageTitle = Pages.Profile_ApiUserCreate;
+}
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_ApiUsersList, "Index")
+    </li>
 }
