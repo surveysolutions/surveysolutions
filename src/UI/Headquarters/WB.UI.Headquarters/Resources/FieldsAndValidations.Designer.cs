@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        ///   Looks up a localized string similar to Person name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
         /// </summary>
         public static string PersonNameAllowedCharactersErrorMessage {
             get {
