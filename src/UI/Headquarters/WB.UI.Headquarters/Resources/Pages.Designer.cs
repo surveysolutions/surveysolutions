@@ -2195,7 +2195,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Statuses of issued or conducted interviews.
+        ///   Looks up a localized string similar to Interview statuses.
         /// </summary>
         public static string SurveysAndStatuses_Overview {
             get {

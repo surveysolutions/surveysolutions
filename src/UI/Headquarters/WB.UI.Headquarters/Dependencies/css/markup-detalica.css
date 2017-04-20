@@ -6968,9 +6968,6 @@ a.disabled {
   .form-control.with-clear-btn {
     padding-right: 40px; }
 
-.form-control[disabled] + .input-group-addon, .form-control[readonly] + .input-group-addon, fieldset[disabled] .form-control + .input-group-addon {
-  background-color: #eee; }
-
 .has-error .form-control {
   box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6); }
 
@@ -7462,6 +7459,9 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 .profile .block-filter .form-group .single-checkbox + label {
   margin-left: -5px;
   font-weight: bold; }
+.profile h2 {
+  margin-bottom: 15px;
+  margin-top: 15px; }
 
 @media (max-width: 1210px) {
   .profile .separate-line {
@@ -7955,7 +7955,11 @@ input.checkbox-filter {
   padding: 0 25px 20px 20px; }
 
 .block-filter {
-  margin-bottom: 30px; }
+  margin-bottom: 15px; }
+  .block-filter h5, .block-filter .preset-filters-container a, .preset-filters-container .block-filter a, .block-filter .preset-filters-container .export-queue, .preset-filters-container .block-filter .export-queue {
+    margin-bottom: 5px; }
+    .block-filter h5 label, .block-filter .preset-filters-container a label, .preset-filters-container .block-filter a label, .block-filter .preset-filters-container .export-queue label, .preset-filters-container .block-filter .export-queue label {
+      margin-bottom: 0; }
   .block-filter select {
     border-color: #dbdfe2;
     max-width: 90%; }
@@ -8551,6 +8555,11 @@ body > .ui-pnotify {
         transition: all 0.2s linear 0s;
         text-overflow: ellipsis;
         color: #3f3f3f; }
+  .table .total-row {
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd; }
+    .table .total-row td {
+      font-weight: bold; }
 
 .table-striped tbody tr {
   background-color: #f8f9f9; }
@@ -8857,11 +8866,8 @@ body > .ui-pnotify {
       .table-mobile-devices tfoot tr th:nth-of-type(2):before, .table-mobile-devices tfoot tr th:first-of-type:before {
         display: none; }
 
-  .table tr td, .table tr th {
-    font-size: 10px;
-    line-height: 12px; }
-    .table tr td.for-tablets, .table tr th.for-tablets {
-      display: none; }
+  .table tr td.for-tablets, .table tr th.for-tablets {
+    display: none; }
 
   .dataTables_wrapper .dataTables_filter {
     text-align: right;
@@ -10678,7 +10684,7 @@ label.inactive {
     left: 0; } }
 .map-report {
   padding-bottom: 0; }
-  .map-report .container-fluid {
+  .map-report main .container-fluid {
     padding-right: 15px;
     padding-left: 15px; }
   .map-report .main-information {
