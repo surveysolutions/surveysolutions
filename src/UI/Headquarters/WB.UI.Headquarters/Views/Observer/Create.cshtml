@@ -1,10 +1,13 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
+﻿@model UserModel
 @{
-    ViewBag.Title = Pages.Observer_CreateProfile;
-    ViewBag.PageTitle = Pages.Observer_Profile;
-    ViewBag.PageSubTitle = Pages.Observer_CreateProfile;
+    ViewBag.Title = Pages.Profile_ObserverCreate;
+    ViewBag.PageTitle = Pages.Profile_ObserverCreate;
 
     ViewBag.ControllerName = "Observer";
     ViewBag.ControllerAction = "Create";
     Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
+}
+@section Breadcrumbs
+{
+    <li>@Html.ActionLink(Pages.Profile_ObserversList, "Index")</li>
 }

@@ -2,10 +2,9 @@
 @using WB.Core.BoundedContexts.Headquarters.Services
 @model InterviewerModel
 @{
-    ViewBag.Title = Pages.Interviewer_CreateProfile;
+    ViewBag.Title = Pages.Profile_InterviewerCreate;
 
-    ViewBag.PageTitle = Pages.InterviewerProfile_Interviewers;
-    ViewBag.PageSubTitle = Pages.Interviewer_CreateProfile;
+    ViewBag.PageTitle = Pages.Profile_InterviewerCreate;
 
     ViewBag.ControllerName = "Interviewer";
     ViewBag.ControllerAction = "Create";
@@ -25,6 +24,12 @@
             model.load();
         });
     </script>
+}
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_InterviewersList, "Back")
+    </li>
 }
 @section PreDetailsSection
 {
