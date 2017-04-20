@@ -1,13 +1,18 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @using WB.Infrastructure.Native.Sanitizer
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserEditModel
+@model UserEditModel
 @{
-    ViewBag.Title = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.Headquarter_Profile;
-    ViewBag.PageSubTitle = Pages.Headquarter_EditProfileFormat.FormatString(Model.UserName);
-
+    ViewBag.Title = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName);
+    
     ViewBag.ControllerName = "Headquarters";
     ViewBag.ControllerAction = "Edit";
     ViewBag.IsEditMode = true;
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
+}
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_HeadquartersList, "Index")
+    </li>
 }

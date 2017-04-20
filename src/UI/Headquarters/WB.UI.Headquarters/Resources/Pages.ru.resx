@@ -807,51 +807,65 @@
 Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
     <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
   </data>
-  <data name="Supervisor_Profile" xml:space="preserve">
-    <value>Профиль супервизора</value>
-    <comment>Профиль супервизора</comment>
-  </data>
-  <data name="Supervisor_CreateProfile" xml:space="preserve">
-    <value>Создать профиль супервизора</value>
-    <comment>Создать профиль супервизора</comment>
-  </data>
-  <data name="Supervisor_EditProfileFormat" xml:space="preserve">
-    <value>Редактирование профиля супервизора &lt;strong&gt;{0}&lt;/strong&gt;</value>
-    <comment>Редактировать профиль супервизора &lt;strong&gt;{0}&lt;/strong&gt;</comment>
-  </data>
-  <data name="Interviewer_Profile" xml:space="preserve">
-    <value>Профиль интервьюера</value>
-    <comment>Профиль интервьюера</comment>
-  </data>
-  <data name="Interviewer_CreateProfile" xml:space="preserve">
-    <value>Создание профиля интервьювера</value>
-    <comment>Создание профиля интервьювера</comment>
-  </data>
-  <data name="Interviewer_EditProfileFormat" xml:space="preserve">
-    <value>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</value>
-    <comment>Редактирование профиля интервьювера &lt;strong&gt;{0}&lt;/strong&gt;</comment>
-  </data>
-  <data name="ApiUser_WasCreatedFormat" xml:space="preserve">
-    <value>API пользователь &lt;b&gt;{0}&lt;/b&gt; успешно создан</value>
-    <comment>API пользователь &lt;b&gt;{0}&lt;/b&gt; успешно создан</comment>
-  </data>
-  <data name="ApiUser_Profile" xml:space="preserve">
-    <value>API пользователи</value>
-    <comment>Профиль API пользователя</comment>
-  </data>
-  <data name="ApiUser_CreateProfile" xml:space="preserve">
-    <value>Создание профиля API пользователя</value>
-    <comment>Создание профиля API пользователя</comment>
-  </data>
-  <data name="ApiUser_EditProfileFormat" xml:space="preserve">
-    <value>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-    <comment>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</comment>
-  </data>
   <data name="FilterTitle" xml:space="preserve">
     <value>Фильтры</value>
   </data>
   <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
-    <comment>Вы хотите продолжить?</comment>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Создание профиля интервьюера</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Интервьюеры</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>Профиль интервьюера</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Редактирование профиля наблюдателя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Создание профиля наблюдателя</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Наблюдатели</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Редактирование профиля хедквотера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Создать хедквотера</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>Хедквотеры</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Редактирование профиля супервизора: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Создать супервизора</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Супервизоры</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Создать API пользователя</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>API пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API пользователи</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Используйте форму ниже чтобы сменить пароль аккаунта</value>
+    <comment>Используйте форму ниже чтобы изменить пароль аккаунта</comment>
   </data>
 </root>
