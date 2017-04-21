@@ -207,7 +207,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Problème d'authentification au serveur. Veuillez contacter votre superviseur ou le quartier général</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Mot de passe erroné</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
