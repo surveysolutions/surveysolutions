@@ -472,7 +472,7 @@
     <value>Total number of failed synchronizations</value>
   </data>
   <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
-    <value>Last successfull sync</value>
+    <value>Last successful sync</value>
   </data>
   <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
     <value>Last failed sync</value>
