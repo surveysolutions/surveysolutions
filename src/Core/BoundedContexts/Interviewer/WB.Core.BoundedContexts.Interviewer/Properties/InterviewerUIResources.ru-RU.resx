@@ -242,7 +242,7 @@
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
     <value>Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Неверный пароль</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

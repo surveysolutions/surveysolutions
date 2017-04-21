@@ -321,7 +321,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>មានបញ្ហាមិនអោយទៅមុខ នៅលើការបញ្ជា server។​សូមទាកទងទៅប្រធានរបស់អ្នក។ </value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>ខុសលេខកូដ</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
