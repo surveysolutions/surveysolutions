@@ -37,21 +37,30 @@
     {
         <div class="block-filter">
             <h5>@Html.LabelFor(x => x.SupervisorId)</h5>
-            <div class="combo-box">
-                <div class="btn-group btn-input clearfix">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
-                    <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                    @Html.HiddenFor(x => x.SupervisorId, new { data_bind = @"value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
+            <div class="form-group @(ViewData.ModelState.IsValidField(@"SupervisorId") ? string.Empty : @"has-error")">
+                <div class="combo-box field">
+                    <div class="btn-group btn-input clearfix">
+                       @Html.TextBoxFor(x => x.SupervisorId, new
+                       {
+                           @class = @"form-control",
+                           placeholder = @"Any",
+                           data_bind = @"typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'"
+                       })
+                        <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        @Html.HiddenFor(x => x.SupervisorId, new {data_bind = @"value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId"})
+                    </div>
+                    <button type="button" class="btn btn-link btn-clear" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                        <span></span>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-link btn-clear" data-bind="click: function(){ SelectedSupervisor(undefined); }">
-                    <span></span>
-                </button>
+                
+                @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = @"help-block" })
             </div>
-            @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = @"help-block" })
         </div>
+        @Html.HiddenFor(x => x.IsShowSupervisorSelector)
     }
 }
 @section PostDetailsSection
 {
-     @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+    @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
 }
