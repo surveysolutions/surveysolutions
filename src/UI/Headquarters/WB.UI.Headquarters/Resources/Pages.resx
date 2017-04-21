@@ -409,7 +409,7 @@
     <value>done interviews (completed and approved by hq)</value>
   </data>
   <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
-    <value>Number of assignments that have been started, but not completed</value>
+    <value>Assignments that have been started, but not completed</value>
   </data>
   <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
     <value>Storage (available/total)</value>
@@ -522,13 +522,13 @@
     <value>Last connection statistics</value>
   </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
-    <value>Number of questionnaires recieved by Interviewer</value>
+    <value>Questionnaires received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Number of interviews recieved by Interviewer</value>
+    <value>Interviews received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
-    <value>Number of completed interviews received from Interviewer</value>
+    <value>Completed interviews received from Interviewer</value>
   </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Interviewer: {0}</value>
