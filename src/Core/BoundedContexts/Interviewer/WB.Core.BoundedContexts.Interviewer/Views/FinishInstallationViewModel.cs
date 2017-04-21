@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 if (string.IsNullOrWhiteSpace(UserName))
                 {
-                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_Online_SignIn_Failed);
+                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_WrongPassword);
                 }
 
                 var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
