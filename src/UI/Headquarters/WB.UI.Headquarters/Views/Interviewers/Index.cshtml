@@ -1,9 +1,6 @@
-﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.User
-@using WB.UI.Headquarters.Resources
-@using WB.UI.Shared.Web.Extensions
 
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
     
@@ -259,12 +256,15 @@
                         ,</text>
                         }
                         {
-                            "orderable": true,
+                            orderable: true,
                             data: "enumeratorVersion",
                             name: "EnumeratorVersion", // case-sensitive!
-                            "createdCell": function (td, cellData, rowData, row, col) {
-                                $(td).css('color', rowData.isUpToDate ? 'green' : 'red');
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                if (cellData) {
+                                    $(td).css('color', rowData.isUpToDate ? 'green' : 'red');
+                                }
                             },
+                            "defaultContent": "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
                             "class": "changed-recently"
                         }
                     ],

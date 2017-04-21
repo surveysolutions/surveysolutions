@@ -588,7 +588,7 @@
     <value>Login name</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Account creation date</value>
+    <value>Account created on</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Interviewer's Email</value>
@@ -791,6 +791,9 @@
   </data>
   <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
     <value>Interviewer App version reported during last synchronization of his/her tablet to the server</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Never connected</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Language</value>

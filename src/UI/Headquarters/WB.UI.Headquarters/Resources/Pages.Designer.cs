@@ -1393,7 +1393,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account creation date.
+        ///   Looks up a localized string similar to Account created on.
         /// </summary>
         public static string Interviewers_CreationDateTitle {
             get {
@@ -1425,6 +1425,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_Header {
             get {
                 return ResourceManager.GetString("Interviewers_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never connected.
+        /// </summary>
+        public static string Interviewers_InterviewerNeverConnected {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewerNeverConnected", resourceCulture);
             }
         }
         
