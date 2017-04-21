@@ -210,7 +210,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>มีปัญหาการยืนยันตัวตน กรุณาติดต่อ Supervisor หรือ Headqurater</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>รหัสผ่านไม่ถูกต้อง</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

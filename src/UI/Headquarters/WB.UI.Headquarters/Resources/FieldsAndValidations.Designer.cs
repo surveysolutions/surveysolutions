@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string ConfirmNewPasswordFieldName {
+            get {
+                return ResourceManager.GetString("ConfirmNewPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password and confirmation password do not match.
         /// </summary>
         public static string ConfirmPasswordErrorMassage {
@@ -205,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string NewPasswordFieldName {
+            get {
+                return ResourceManager.GetString("NewPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To change password provide valid existing password.
         /// </summary>
         public static string OldPasswordErrorMessage {
@@ -250,7 +268,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        ///   Looks up a localized string similar to Person name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
         /// </summary>
         public static string PersonNameAllowedCharactersErrorMessage {
             get {

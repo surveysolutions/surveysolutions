@@ -136,16 +136,7 @@
     <value>Change password</value>
   </data>
   <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
-    <value>Use the form below to change the password for the account&lt;br&gt;New password must be at least eight characters including one&lt;br&gt;uppercase letter, one special character and alphanumeric characters.</value>
-  </data>
-  <data name="AccountManage_SupervisorProfile" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="AccountManage_SupervisorProfileCreate" xml:space="preserve">
-    <value>Create supervisor profile</value>
-  </data>
-  <data name="AccountManage_SupervisorProfileEdit" xml:space="preserve">
-    <value>Edit supervisor profile</value>
+    <value>Use the form below to change the password for the account</value>
   </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
@@ -481,7 +472,7 @@
     <value>Total number of failed synchronizations</value>
   </data>
   <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
-    <value>Last successfull sync</value>
+    <value>Last successful sync</value>
   </data>
   <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
     <value>Last failed sync</value>
@@ -573,7 +564,7 @@
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Statuses of issued or conducted interviews</value>
+    <value>Interview statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
     <value>{0} interview(s) from {1} responsible(s)</value>
@@ -700,10 +691,10 @@
   </data>
   <data name="Interviewers_NotSyncedOption" xml:space="preserve">
     <value>Not synced</value>
-  </data>  
+  </data>
   <data name="Interviewers_UpToDateOption" xml:space="preserve">
     <value>Up to date</value>
-  </data>  
+  </data>
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
     <value>Outdated</value>
   </data>
@@ -789,57 +780,7 @@
     <value>This action will create individual user with supervisor rights,
         &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
-  <data name="Supervisor_Profile" xml:space="preserve">
-    <value>Supervisor profile</value>
-  </data>
-  <data name="Supervisor_CreateProfile" xml:space="preserve">
-    <value>Create supervisor profile</value>
-  </data>
-  <data name="Supervisor_EditProfileFormat" xml:space="preserve">
-    <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>
-  <data name="Observer_Profile" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Observer_CreateProfile" xml:space="preserve">
-    <value>Create observer profile</value>
-  </data>
-  <data name="Observer_EditProfileFormat" xml:space="preserve">
-    <value>Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>
-  <data name="ApiUser_WasCreatedFormat" xml:space="preserve">
-    <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
-  </data>
-  <data name="ApiUser_Profile" xml:space="preserve">
-    <value>API user profile</value>
-  </data>
-  <data name="ApiUser_CreateProfile" xml:space="preserve">
-    <value>Create API user profile</value>
-  </data>
-  <data name="ApiUser_EditProfileFormat" xml:space="preserve">
-    <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>
-  <data name="Interviewer_Profile" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Interviewer_CreateProfile" xml:space="preserve">
-    <value>Create interviewer profile</value>
-  </data>
-  <data name="Interviewer_EditProfileFormat" xml:space="preserve">
-    <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>
-    
-  <data name="Headquarter_Profile" xml:space="preserve">
-    <value>Headquarters</value>
-  </data>
-  <data name="Headquarter_CreateProfile" xml:space="preserve">
-    <value>Create headquarters profile</value>
-  </data>
-  <data name="Headquarter_EditProfileFormat" xml:space="preserve">
-    <value>Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
-  </data>
-  
-  <data name="PublicSection">
+  <data name="PublicSection" xml:space="preserve">
     <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
@@ -908,5 +849,56 @@
   </data>
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Unarchive</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Create interviewer profile</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Interviewers</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>Interviewer profile</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Create observer</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Observers</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Create headquarters</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>Headquarters</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Create supervisor</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Supervisors</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Create API user</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API users</value>
   </data>
 </root>

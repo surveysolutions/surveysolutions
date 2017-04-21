@@ -204,7 +204,7 @@ for further instructions</value>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Authentication problem on the remote server. Please contact your Supervisor</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Wrong password</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
