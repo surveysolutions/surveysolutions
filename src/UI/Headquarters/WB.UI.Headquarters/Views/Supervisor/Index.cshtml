@@ -157,6 +157,7 @@
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
+                        self.table.search( '' ).draw();
                         $(this).removeClass("active");
                     } else {
                         $(this).addClass("active");
