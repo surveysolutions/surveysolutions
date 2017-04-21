@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archiving Status.
+        /// </summary>
+        internal static string ArchivingStatusTitle {
+            get {
+                return ResourceManager.GetString("ArchivingStatusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to return to your account..
         /// </summary>
         internal static string ClickToReturn {
@@ -417,6 +426,15 @@ namespace Resources {
         internal static string Supervisors {
             get {
                 return ResourceManager.GetString("Supervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ({0} supervisors).
+        /// </summary>
+        internal static string SupervisorsCountDescription {
+            get {
+                return ResourceManager.GetString("SupervisorsCountDescription", resourceCulture);
             }
         }
         

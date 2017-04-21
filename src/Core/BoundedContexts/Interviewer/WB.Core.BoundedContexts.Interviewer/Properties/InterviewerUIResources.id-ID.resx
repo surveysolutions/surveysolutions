@@ -213,7 +213,7 @@ untuk instruksi lebih lanjut</value>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Masalah otentikasi pada remote server juga. Silahkan hubungi Penyelia Anda atau Kantor Pusat</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Kata sandi salah</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
