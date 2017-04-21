@@ -1465,7 +1465,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not synced.
+        ///   Looks up a localized string similar to Never connected.
         /// </summary>
         public static string Interviewers_NotSyncedOption {
             get {

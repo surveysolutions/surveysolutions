@@ -690,7 +690,7 @@
     <value>Any</value>
   </data>
   <data name="Interviewers_NotSyncedOption" xml:space="preserve">
-    <value>Not synced</value>
+    <value>Never connected</value>
   </data>
   <data name="Interviewers_UpToDateOption" xml:space="preserve">
     <value>Up to date</value>
