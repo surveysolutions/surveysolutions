@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using NConsole;
 using Ninject;
@@ -27,17 +28,38 @@ namespace support
             mode |= EnableVirtualTerminalProcessing;
             SetConsoleMode(handle, mode);
 
+            var logger = LogManager.GetLogger("support");
+
             var ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
             ninjectKernel.Bind<IDatabaseSevice>().To<PostgresDatabaseService>();
             ninjectKernel.Bind<IConfigurationManagerSettings>().To<ConfigurationManagerSettings>().InSingletonScope();
-            ninjectKernel.Bind<ILogger>().ToConstant(LogManager.GetLogger("support"));
+            ninjectKernel.Bind<ILogger>().ToConstant(logger);
 
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
             processor.RegisterCommand<CheckAccessCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
             processor.RegisterCommand<CustomHelpCommand>("");
-            processor.Process(args);
+
+            try
+            {
+                processor.Process(args);
+            }
+            catch (AggregateException e)
+            {
+                var invalidCommandException = e.InnerExceptions.OfType<InvalidOperationException>().FirstOrDefault();
+
+                if (invalidCommandException != null)
+                    Console.WriteLine(invalidCommandException.Message);
+                else
+                    throw;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                Console.WriteLine("Unexpected exception. See logs for more details");
+            }
+            
         }
     }
 }
