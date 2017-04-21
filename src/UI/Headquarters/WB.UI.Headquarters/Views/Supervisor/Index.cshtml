@@ -283,8 +283,12 @@
                                 }
                             });
 
+                        if (newState == true) {
+                            self.table.rows().select();
+                        } else {
+                            self.table.rows().deselect();
+                        }
                         checkboxes.prop('checked', newState);
-
                     });
 
             // Handle click on checkbox to set state of "Select all" control
