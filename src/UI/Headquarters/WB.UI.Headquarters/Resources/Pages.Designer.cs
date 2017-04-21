@@ -1177,7 +1177,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last successfull sync.
+        ///   Looks up a localized string similar to Last successful sync.
         /// </summary>
         public static string InterviewerProfile_LastSuccessSync {
             get {
