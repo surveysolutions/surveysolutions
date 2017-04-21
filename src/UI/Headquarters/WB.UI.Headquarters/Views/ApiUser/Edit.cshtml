@@ -3,9 +3,13 @@
 @{
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 
-    ViewBag.Title = Pages.ApiUser_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.ApiUser_Profile;
-    ViewBag.PageSubTitle = Pages.ApiUser_EditProfileFormat.FormatString(Model.UserName);
-
+    ViewBag.Title = Pages.Profile_ApiUserEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_ApiUserEditFormat.FormatString(Model.UserName);
     ViewBag.HideDetails = true;
+}
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_ApiUsersList, "Index")
+    </li>
 }

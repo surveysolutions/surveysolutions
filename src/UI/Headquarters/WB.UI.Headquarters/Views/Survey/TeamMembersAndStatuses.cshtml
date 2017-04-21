@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+﻿@using Microsoft.Security.Application
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model IEnumerable<WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views.TemplateViewItem>
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -15,6 +16,7 @@
     <script type="text/javascript">
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
+        var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
         $(function () {
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
                                                            new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" })',
@@ -23,7 +25,7 @@
                 return [
                     {
                         render: function (data, type, row) {
-                            return "<a href=\"" + $surveysUrl + "?responsible=" + data + "\">" + data + "</a>";
+                            return model.getLinkToInterviews(data, row);
                         }
                     },
                     {
@@ -127,21 +129,6 @@
                                 <th data-name="TotalCount" data-data="totalCount">@Common.Total</th>
                             </tr>
                             </thead>
-                            <tfoot>
-                            <tr class="title-row">
-                                <th>
-                                    @Common.Total
-                                </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

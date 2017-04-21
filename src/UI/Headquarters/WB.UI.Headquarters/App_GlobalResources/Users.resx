@@ -177,6 +177,9 @@
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>({0} supervisors)</value>
+  </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Edit Supervisor</value>
   </data>
@@ -251,5 +254,8 @@
   </data>
   <data name="AddInterviewer" xml:space="preserve">
     <value>Add interviewer</value>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Archiving Status</value>
   </data>
 </root>

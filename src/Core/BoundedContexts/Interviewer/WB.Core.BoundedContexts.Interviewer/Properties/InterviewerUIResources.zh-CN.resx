@@ -318,7 +318,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>远程服务器身份认证问题。请联系督导员或总部。</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>密码错误</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

@@ -156,6 +156,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             InterviewerIdentity interviewerIdentity = null;
             try
             {
+                if (string.IsNullOrWhiteSpace(UserName))
+                {
+                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_WrongPassword);
+                }
+
                 var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
                 {
                     Username = this.UserName,
@@ -226,10 +231,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public void CancellInProgressTask()
         {
-            if (cancellationTokenSource != null)
-            {
-                cancellationTokenSource.Cancel();
-            }
+            this.cancellationTokenSource?.Cancel();
         }
     }
 }
