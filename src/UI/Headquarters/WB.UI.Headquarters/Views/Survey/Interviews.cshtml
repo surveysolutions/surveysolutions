@@ -233,15 +233,7 @@
     
     <script type="text/html" id="confirm-assign-template">
         <div class="assign-interviewer">
-            <div>
-                @Html.Raw(string.Format(Interviews.AssignConfirmMessage,
-                "<span data-bind='text: CountInterviewsToAssign'></span>",
-                InterviewStatus.SupervisorAssigned.ToLocalizeString(),
-                InterviewStatus.InterviewerAssigned.ToLocalizeString(),
-                InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
-            </div>
             <div data-bind="if: IsExistsItemsToAssign">
-                <br />
                 @Interviews.ChooseResponsibleInterviewer
                 <br />
                 <br />
@@ -252,6 +244,14 @@
                         <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
+                <br />
+            </div>
+            <div>
+                @Html.Raw(string.Format(Interviews.AssignConfirmMessage,
+                "<span data-bind='text: CountInterviewsToAssign'></span>",
+                InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+                InterviewStatus.InterviewerAssigned.ToLocalizeString(),
+                InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
             </div>
             <div data-bind="if: CountReceivedByInterviewerItems > 0">
                 <br />
