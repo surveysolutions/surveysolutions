@@ -215,7 +215,9 @@
                             data: "userName",
                             name: "UserName", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href='@Url.Action("Edit", "Supervisor")/" + row.userId + "'>" + data + "</a>";
+                                return !row.isArchived
+                                    ? "<a href='@Url.Action("Edit", "Supervisor")/" + row.userId + "'>" + data + "</a>"
+                                    : data;
                             }
                         },
                         {
