@@ -1,9 +1,10 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
+﻿@model UserModel
 @{
     Layout = "_EditorLayout.cshtml";
     var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
     var controllerAction = ViewBag.CreateAction as string ?? @"Create";
     var controllerName = ViewBag.ControllerName as string;
+    var hideDetails = (bool?)ViewBag.HideDetails ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
@@ -27,17 +28,20 @@
             @Html.Partial("Profile/ValidationSummary")
         </div>
 
-        <div class="col-sm-12">
-            <div class="separate-line"></div>
-        </div>
+        if (!hideDetails)
+        {
+             <div class="col-sm-12">
+                 <div class="separate-line"></div>
+             </div>
 
-        <div class="col-sm-12">
-            <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
-            @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
-            @Html.EditorFor(x => x.Email, "TextBoxFormField")
-            @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-        </div>
-        
+             <div class="col-sm-12">
+                 <h5 class="extra-margin-bottom">@Html.Raw(Pages.PublicSection)</h5>
+                 @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new {disableClientValidation = true})
+                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
+                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
+             </div>
+        }
+
         @Html.EditorForModel("CreateButtonsRow")
     }
 </div>
