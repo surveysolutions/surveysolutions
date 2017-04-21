@@ -39,7 +39,7 @@
         }
         @if (syncStatistics != null)
         {
-            <li>@Pages.InterviewerProfile_TotalSyncTime: @syncStatistics.TotalSyncDuration.Humanize(precision: 2)</li>
+            <li>@Pages.InterviewerProfile_TotalSyncTime: @syncStatistics.TotalSyncDuration.Humanize()</li>
             <li>@Pages.InterviewerProfile_ConnectionSpeed: @syncStatistics.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
                 @ConnectionType(deviceSyncInfo)</li>
             <li>@string.Format(Pages.InterviewerProfile_DataStatsFormat, 
