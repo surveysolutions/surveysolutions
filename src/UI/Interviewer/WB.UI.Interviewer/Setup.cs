@@ -41,6 +41,7 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 using WB.UI.Shared.Enumerator.Ninject;
 using Xamarin;
 using Xamarin.InsightsCore;
@@ -97,6 +98,7 @@ namespace WB.UI.Interviewer
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+                {typeof (AreaEditorViewModel), typeof (AreaEditorActivity)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

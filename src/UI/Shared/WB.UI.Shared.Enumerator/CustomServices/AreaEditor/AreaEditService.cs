@@ -5,9 +5,10 @@ using Android.Content;
 using MvvmCross.Platform.Droid.Platform;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Infrastructure.Shared.Enumerator;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
-namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
+namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 {
     internal class AreaEditService : IAreaEditService
     {

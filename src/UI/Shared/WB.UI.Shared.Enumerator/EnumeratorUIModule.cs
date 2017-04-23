@@ -1,7 +1,8 @@
 using Ninject.Modules;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -16,6 +17,10 @@ namespace WB.UI.Shared.Enumerator
 
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
             this.Bind<IVirbationService>().To<VibrationService>();
+
+            this.Bind<IAreaEditService>().To<AreaEditService>();
+
+            this.Bind<IMapService>().To<MapService>();
         }
     }
 }
