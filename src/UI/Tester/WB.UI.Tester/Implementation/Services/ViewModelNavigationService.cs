@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Tester.Implementation.Services
@@ -48,5 +49,10 @@ namespace WB.UI.Tester.Implementation.Services
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
+
+        public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
+        {
+            Area = area
+        });
     }
 }
