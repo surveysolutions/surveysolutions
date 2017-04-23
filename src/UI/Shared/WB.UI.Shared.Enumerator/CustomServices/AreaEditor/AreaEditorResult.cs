@@ -1,4 +1,4 @@
-﻿namespace WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor
+﻿namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 {
     public class AreaEditorResult
     {

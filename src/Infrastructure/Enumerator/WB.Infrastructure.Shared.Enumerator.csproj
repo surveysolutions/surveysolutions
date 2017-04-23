@@ -42,10 +42,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esri.ArcGISRuntime, Version=100.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Esri.ArcGISRuntime.Xamarin.Android.100.0.0\lib\MonoAndroid10\Esri.ArcGISRuntime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Flurl, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Flurl.2.2.1\lib\monoandroid\Flurl.dll</HintPath>
       <Private>True</Private>
@@ -202,9 +198,6 @@
   <ItemGroup>
     <Compile Include="AndroidPathUtils.cs" />
     <Compile Include="DevicePasswordHasher.cs" />
-    <Compile Include="Internals\AreaEditor\AreaEditorActivity.cs" />
-    <Compile Include="Internals\AreaEditor\AreaEditorResult.cs" />
-    <Compile Include="Internals\AreaEditor\MapViewModel.cs" />
     <Compile Include="Internals\PictureChooser.cs" />
     <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
@@ -216,7 +209,6 @@
     <Compile Include="Internals\GpsLocationService.cs" />
     <Compile Include="Internals\PortableJsonAllTypesSerializer.cs" />
     <Compile Include="Internals\PortableJsonSerializer.cs" />
-    <Compile Include="Internals\AreaEditor\AreaEditService.cs" />
     <Compile Include="Internals\QRBarcodeScanService.cs" />
     <Compile Include="EnumeratorInfrastructureModule.cs" />
     <Compile Include="Ninject\ModuleExtensions.cs" />

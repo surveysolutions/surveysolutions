@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
+using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
@@ -44,6 +45,11 @@ namespace WB.UI.Interviewer.Implementations.Services
                 interviewId = interviewId,
                 jsonNavigationIdentity = navigationIdentity != null ? this.jsonSerializer.Serialize(navigationIdentity) : null
             });
+
+        public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
+        {
+            Area = area
+        });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();

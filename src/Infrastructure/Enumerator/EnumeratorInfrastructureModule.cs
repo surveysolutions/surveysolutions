@@ -22,7 +22,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator.Internals;
-using WB.Infrastructure.Shared.Enumerator.Internals.AreaEditor;
 using WB.Infrastructure.Shared.Enumerator.Internals.FileSystem;
 
 namespace WB.Infrastructure.Shared.Enumerator
@@ -54,8 +53,6 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
             this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
             this.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
-
-            this.Bind<IAreaEditService>().To<AreaEditService>();
         }
     }
 }
