@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
                 var creationResult = await this.CreateUserAsync(model, UserRoles.ApiUser);
                 if (creationResult.Succeeded)
                 {
-                    this.Success(Pages.ApiUser_WasCreatedFormat.FormatString(model.UserName));
+                    this.Success(Pages.Profile_ApiUserWasCreated.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
                 AddErrors(creationResult);

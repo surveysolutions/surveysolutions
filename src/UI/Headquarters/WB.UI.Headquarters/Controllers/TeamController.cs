@@ -92,11 +92,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
         
         
-        protected async Task<ActionResult> HandleUpdatePasswordAsync(UserEditModel model, string successActionName = "Index", string failAction ="Edit")
+        protected async Task<ActionResult> HandleUpdatePasswordAsync(UserEditModel model, string successActionName = "Index", string failAction ="Edit", object successActionNameArgs = null)
         {
-            // var currentUser = this.userManager.FindByIdAsync(model.Id);
-            //TODO: Add check that same user should provide oldpassword
-
             if (this.ModelState.IsValid)
             {
                 var updateResult = await this.UpdateAccountPasswordAsync(model);
@@ -104,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 if (updateResult.Succeeded)
                 {
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
-                    return RedirectToAction(successActionName);
+                    return RedirectToAction(successActionName, successActionNameArgs);
                 }
                 else
                     this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));

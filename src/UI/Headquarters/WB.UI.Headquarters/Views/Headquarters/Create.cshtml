@@ -1,10 +1,15 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
+﻿@model UserModel
 @{
-    ViewBag.Title = Pages.Headquarter_CreateProfile;
-    ViewBag.PageTitle = Pages.Headquarter_Profile;
-    ViewBag.PageSubTitle = Pages.Headquarter_CreateProfile;
+    ViewBag.Title = Pages.Profile_HeadquartersCreate;
+    ViewBag.PageTitle = Pages.Profile_HeadquartersCreate;
 
     ViewBag.ControllerName = @"Headquarters";
     
     Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
+}
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_HeadquartersList, "Index")
+    </li>
 }

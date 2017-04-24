@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private readonly ILogger logger;
+        private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
 
         public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, 
             IPasswordHasher passwordHasher, IIdentityValidator<string> identityValidator, ILoggerProvider logger)
@@ -28,12 +29,16 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.logger = logger.GetFor<HqUserManager>();
         }
 
-        public Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
         {
-            var passwordStore = this.Store as IUserPasswordStore<HqUser, Guid>;
-            if (passwordStore == null) throw new NotImplementedException();
+            var result = await this.UpdatePassword(PasswordStore, user, newPassword);
+
+            if (result.Succeeded)
+            {
+                return await UpdateAsync(user);
+            }
             
-            return this.UpdatePassword(passwordStore, user, newPassword);
+            return result;
         }
 
         public override async Task<ClaimsIdentity> CreateIdentityAsync(HqUser user, string authenticationType)
@@ -49,14 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
             this.UpdateSha1PasswordIfNeeded(user, newPassword);
-
-            var result = await base.UpdatePassword(passwordStore, user, newPassword);
-            if (result.Succeeded)
-            {
-               return await UpdateAsync(user);
-            }
-
-            return result;
+            return await base.UpdatePassword(passwordStore, user, newPassword);
         }
 
         [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
@@ -67,16 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
         }
-
-        [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
-        private void UpdateSha1PasswordIfNeeded(HqUser user, string newPassword, UserRoles futureRole)
-        {
-            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && (user.IsInRole(UserRoles.Interviewer) || futureRole == UserRoles.Interviewer))
-            {
-                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
-            }
-        }
-
+        
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
             if (user == null || password == null) return false;
@@ -122,11 +111,15 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             user.CreationDate = DateTime.UtcNow;
             user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
-            user.PasswordHash = this.PasswordHasher.HashPassword(password);
 
-            this.UpdateSha1PasswordIfNeeded(user, password, role);
+            var result = await this.UpdatePassword(PasswordStore, user, password);
 
-            return await this.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                return await this.CreateAsync(user);
+            }
+
+            return result;
         }
         
         public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)

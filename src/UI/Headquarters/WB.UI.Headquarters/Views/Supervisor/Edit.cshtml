@@ -1,12 +1,15 @@
 ﻿@using WB.Core.GenericSubdomains.Portable
 @model UserEditModel
 @{
-    ViewBag.Title = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName).RemoveHtmlTags();
-    ViewBag.PageTitle = Pages.Supervisor_Profile;
-    ViewBag.PageSubTitle = Pages.Supervisor_EditProfileFormat.FormatString(Model.UserName);
+    ViewBag.Title = Pages.Profile_SupervisorEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
+    ViewBag.PageTitle = Pages.Profile_SupervisorEditFormat.FormatString(Model.UserName);
   
     ViewBag.ControllerName = "Supervisor";
     ViewBag.ControllerAction = "Edit";
     ViewBag.IsEditMode = true;
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
+}
+@section Breadcrumbs
+{
+    <li>@Html.ActionLink(Pages.Profile_SupervisorsList, "Index")</li>
 }
