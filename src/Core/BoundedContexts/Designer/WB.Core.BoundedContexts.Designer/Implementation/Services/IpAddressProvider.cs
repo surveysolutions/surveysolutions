@@ -1,16 +1,23 @@
 using System.Linq;
 using System.Net;
 using System.Web;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class IpAddressProvider : IIpAddressProvider
     {
+        private ILogger log => ServiceLocator.Current.GetInstance<ILogger>();
+
         public IPAddress GetClientIpAddress()
         {
+            log.Error("================= IP Address =================================");
             IPAddress ip = null;
             var userHostAddress = HttpContext.Current.Request.UserHostAddress ?? "";
+
+            log.Error($"userHostAddress: {userHostAddress}");
 
             IPAddress.TryParse(userHostAddress, out ip);
 
@@ -21,6 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return ip;
 
             var xForwardedFor = HttpContext.Current.Request.ServerVariables[xForwardedForKey];
+
+            log.Error($"xForwardedFor: {xForwardedFor}");
 
             var isForwardedParamIsEmpty = string.IsNullOrEmpty(xForwardedFor);
             if (isForwardedParamIsEmpty)
