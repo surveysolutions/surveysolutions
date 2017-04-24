@@ -43,6 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             result.Items.Skip(1).First().UserName.ShouldEqual("interviewer12");
         };
 
+        It should_return_correct_is_archived_status = () =>
+        {
+            result.Items.Skip(0).First().IsArchived.ShouldEqual(false);
+            result.Items.Skip(1).First().IsArchived.ShouldEqual(false);
+        };
+
+
         private static HqUser supervisor1;
         private static HqUser supervisor2;
         private static InterviewersView result;

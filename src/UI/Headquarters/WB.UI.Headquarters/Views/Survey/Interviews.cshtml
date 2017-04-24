@@ -96,7 +96,6 @@
             </aside>
 
             <div class="main-information">
-                @Html.Partial("_notice")
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <h1>@Common.Interviews</h1>
@@ -234,16 +233,10 @@
     
     <script type="text/html" id="confirm-assign-template">
         <div class="assign-interviewer">
-            <div>
-                @Html.Raw(string.Format(Interviews.AssignConfirmMessage,
-                "<span data-bind='text: CountInterviewsToAssign'></span>",
-                InterviewStatus.SupervisorAssigned.ToLocalizeString(),
-                InterviewStatus.InterviewerAssigned.ToLocalizeString(),
-                InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
-            </div>
             <div data-bind="if: IsExistsItemsToAssign">
-                <br />
                 @Interviews.ChooseResponsibleInterviewer
+                <br />
+                <br />
                 <div class="input-group">
                     <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                     <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
@@ -251,6 +244,14 @@
                         <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
+                <br />
+            </div>
+            <div>
+                @Html.Raw(string.Format(Interviews.AssignConfirmMessage,
+                "<span data-bind='text: CountInterviewsToAssign'></span>",
+                InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+                InterviewStatus.InterviewerAssigned.ToLocalizeString(),
+                InterviewStatus.RejectedBySupervisor.ToLocalizeString()))
             </div>
             <div data-bind="if: CountReceivedByInterviewerItems > 0">
                 <br />
@@ -261,7 +262,6 @@
                 </label>
             </div>
         </div>
-        <br />
     </script>
     <script type="text/html" id="confirm-approve-template">
         @Html.Raw(string.Format(Interviews.ApproveConfirmMessage,

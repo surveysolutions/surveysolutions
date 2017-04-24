@@ -151,7 +151,7 @@
     <value>Создать хедквотера</value>
   </data>
   <data name="CreateObserver" xml:space="preserve">
-    <value>Создать обозревателя</value>
+    <value>Создать наблюдателя</value>
   </data>
   <data name="CreateSupervisor" xml:space="preserve">
     <value>Создать супервизора</value>
@@ -211,7 +211,7 @@
     <value>Имя</value>
   </data>
   <data name="AddObserver" xml:space="preserve">
-    <value>Добавить обозревателя</value>
+    <value>Добавить наблюдателя</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>Электронная почта наблюдателя </value>
@@ -219,5 +219,13 @@
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Редактирование супервизора</value>
     <comment>Редактирование супервизора</comment>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>({0} супервизоров)</value>
+    <comment>({0} супервизоров)</comment>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Архив статус</value>
+    <comment>Архив статус</comment>
   </data>
 </root>
