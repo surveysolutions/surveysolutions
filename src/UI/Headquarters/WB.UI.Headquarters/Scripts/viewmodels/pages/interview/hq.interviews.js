@@ -124,6 +124,10 @@
         messageHtml += $(continueMessageTemplateId).html();
 
         notifier.confirm('Confirmation Needed', messageHtml, function (result) {
+
+            if (model.Users.AssignTo() == undefined)
+                return;
+
             if (result) {
                 var itemsThatShouldBeReassigned = eligibleSelectedItems;
 

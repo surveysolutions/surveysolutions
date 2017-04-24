@@ -29,11 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
 
-        public InterviewerController(ICommandService commandService, 
+        public InterviewerController(ICommandService commandService,
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager,
-                              IQueryableReadSideRepositoryReader<InterviewSummary>  interviewRepository,
+                              IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
                               IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
             : base(commandService, logger, authorizedUser, userManager)
         {
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
         }
-        
+
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> Create(Guid? supervisorId)
         {
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new InterviewerModel {SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName});
+            return this.View(new InterviewerModel { SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName });
         }
 
         [HttpPost]
@@ -93,15 +93,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var approvedByHqCount = this.interviewRepository.Query(interviews => interviews.Count(
                 interview => interview.ResponsibleId == id && interview.Status == InterviewStatus.ApprovedByHeadquarters && !interview.IsDeleted));
-            
+
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(id);
             var hasUpdateForInterviewerApp = false;
 
             if (lastSuccessDeviceInfo != null)
             {
                 int? interviewerApkVersion = interviewerVersionReader.Version;
-                hasUpdateForInterviewerApp =  interviewerApkVersion.HasValue && interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
-            }  
+                hasUpdateForInterviewerApp = interviewerApkVersion.HasValue && interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
+            }
 
             var interviewerProfileModel = new InterviewerProfileModel
             {
@@ -133,15 +133,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!user.IsInRole(UserRoles.Interviewer)) throw new HttpException(403, HQ.NoPermission);
 
             return this.View(new UserEditModel
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    IsLocked = user.IsLockedByHeadquaters,
-                    IsLockedBySupervisor = user.IsLockedBySupervisor,
-                    UserName = user.UserName,
-                    PersonName = user.FullName,
-                    PhoneNumber = user.PhoneNumber
-                });
+            {
+                Id = user.Id,
+                Email = user.Email,
+                IsLocked = user.IsLockedByHeadquaters,
+                IsLockedBySupervisor = user.IsLockedBySupervisor,
+                UserName = user.UserName,
+                PersonName = user.FullName,
+                PhoneNumber = user.PhoneNumber
+            });
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
@@ -169,7 +169,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model, "Back");
+        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model, 
+            failAction: "Edit", 
+            successActionName: "Profile", 
+            successActionNameArgs: new { id = model.Id });
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back()

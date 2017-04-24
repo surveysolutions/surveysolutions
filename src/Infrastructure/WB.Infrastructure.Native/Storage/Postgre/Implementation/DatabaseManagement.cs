@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentMigrator;
+using FluentMigrator.Builders.Create.ForeignKey;
 using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Infrastructure;
 using Npgsql;
@@ -53,6 +54,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName, Func<ICreateTableWithColumnOrSchemaOrDescriptionSyntax, IFluentSyntax> constructTableFunction)
         {
             return !self.Schema.Table(tableName).Exists() ? constructTableFunction(self.Create.Table(tableName)) : null;
+        }
+
+        public static IFluentSyntax CreateForeignKeyFromTableIfNotExists(this MigrationBase self, string constraintName, string tableName, Func<ICreateForeignKeyForeignColumnOrInSchemaSyntax, IFluentSyntax> constructTableFunction)
+        {
+            return !self.Schema.Table(tableName).Constraint(constraintName).Exists() 
+                ? constructTableFunction(self.Create.ForeignKey(constraintName).FromTable(tableName))
+                : null;
         }
 
     }

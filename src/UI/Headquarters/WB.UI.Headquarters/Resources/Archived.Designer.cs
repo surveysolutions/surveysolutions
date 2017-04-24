@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to supervisor will be unarchived..
+        ///   Looks up a localized string similar to Supervisor(s) will be unarchived..
         /// </summary>
         public static string UnarchiveSupervisorWarning {
             get {
