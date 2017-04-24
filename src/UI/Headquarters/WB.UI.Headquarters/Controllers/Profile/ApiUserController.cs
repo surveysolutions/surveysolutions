@@ -33,7 +33,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            return this.View(new UserModel());
+            return this.View(new UserModel
+            {
+                HideDetails = true
+            });
         }
 
         [HttpPost]
@@ -72,7 +75,8 @@ namespace WB.UI.Headquarters.Controllers
                 UserName = user.UserName,
                 Id = user.Id,
                 Email = user.Email,
-                IsLocked = user.IsLockedByHeadquaters
+                IsLocked = user.IsLockedByHeadquaters,
+                HideDetails = true
             });
         }
 
@@ -96,12 +100,6 @@ namespace WB.UI.Headquarters.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model);
 
         public ActionResult Index()
         {

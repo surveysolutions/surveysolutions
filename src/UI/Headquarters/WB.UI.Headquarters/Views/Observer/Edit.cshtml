@@ -4,9 +4,6 @@
     ViewBag.Title = Pages.Profile_ObserverEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Profile_ObserverEditFormat.FormatString(Model.UserName);
 
-    ViewBag.ControllerName = @"Observer";
-    ViewBag.ControllerAction = "Edit";
-    ViewBag.IsEditMode = true;
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section Breadcrumbs

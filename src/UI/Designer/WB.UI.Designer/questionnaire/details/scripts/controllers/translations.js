@@ -23,7 +23,6 @@
             var dataBind = function (translation, translationDto) {
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
-
                 translation.file = null;
                 translation.content = {};
                 translation.content.details = {};
@@ -79,7 +78,7 @@
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                        dataBind(translation.checkpoint, translation);
+                        dataBind(translation.checkpoint || {}, translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
