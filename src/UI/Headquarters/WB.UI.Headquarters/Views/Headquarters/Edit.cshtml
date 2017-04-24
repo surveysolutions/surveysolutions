@@ -5,9 +5,6 @@
     ViewBag.Title = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Profile_HeadquartersEditFormat.FormatString(Model.UserName);
     
-    ViewBag.ControllerName = "Headquarters";
-    ViewBag.ControllerAction = "Edit";
-    ViewBag.IsEditMode = true;
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section Breadcrumbs
