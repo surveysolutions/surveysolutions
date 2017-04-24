@@ -331,7 +331,7 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>пользователь(ей) будут архивированы</value>
+    <value>Пользователь(ей) будут архивированы</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
