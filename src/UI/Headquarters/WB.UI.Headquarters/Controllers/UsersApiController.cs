@@ -203,19 +203,6 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonCommandResponse> DeleteSupervisor(DeleteSupervisorCommandRequest request)
-        {
-            var identityResults = await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
-
-            return new JsonCommandResponse
-            {
-                IsSuccess = identityResults.All(result => result.Succeeded),
-                DomainException = string.Join(@"; ", identityResults.Select(result=>result.Errors))
-            };
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
         public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
             var archiveResults = request.Archive

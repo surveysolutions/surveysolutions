@@ -139,7 +139,9 @@ namespace WB.UI.Headquarters.Controllers
                 PersonName = currentUser.FullName,
                 PhoneNumber = currentUser.PhoneNumber,
                 UserName = currentUser.UserName,
-                Role = currentUser.Roles.FirstOrDefault().Role.ToUiString()
+                Role = currentUser.Roles.FirstOrDefault().Role.ToUiString(),
+                UpdatePasswordAction = nameof(this.UpdateOwnPassword),
+                EditAction = nameof(Manage)
             });
         }
         
@@ -173,7 +175,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdatePassword(ManageAccountModel model)
+        public async Task<ActionResult> UpdateOwnPassword(ManageAccountModel model)
         {
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
             model.Id = currentUser.Id;

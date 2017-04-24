@@ -126,8 +126,8 @@
   <data name="NoPermission" xml:space="preserve">
     <value>Не удалось обновить данные пользователя, потому что у вас нет разрешения на выполнение этой операции.</value>
   </data>
-  <data name="ObserverCreated" xml:space="preserve">
-    <value>Наблюдатель был успешно создан.</value>
+  <data name="ObserverCreatedFormat" xml:space="preserve">
+    <value>Наблюдатель &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
     <value>Вопросник «{0}» успешно клонирован с новым названием «{1}».</value>
@@ -138,14 +138,14 @@
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
     <value>Анкета с id {0} и версия {1} не найден.</value>
   </data>
-  <data name="SuccessfullyCreated" xml:space="preserve">
-    <value>Супервизор был успешно создан.</value>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
+    <value>Супервизор &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Не удалось обновить данные пользователя, поскольку пользователь не существует</value>
   </data>
-  <data name="UserWasCreated" xml:space="preserve">
-    <value>Хедквотер пользователь был успешно создан.</value>
+  <data name="UserWasCreatedFormat" xml:space="preserve">
+    <value>Хедквотер пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
