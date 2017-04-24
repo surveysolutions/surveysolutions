@@ -23,7 +23,6 @@
             var self = this;
 
             self.Url = new Url();
-            self.Archived = ko.observable(false);
             self.SelectedItems = ko.observableArray([]);
             self.SupervisorsCount = ko.observable(0);
 
@@ -78,11 +77,6 @@
 
             self.load = function (updater) {
                 self.updater = updater;
-
-                self.Archived(self.QueryString['archived']);
-                self.Url.query['archived'] = self.QueryString['archived'] || "";
-                self.Archived.subscribe(updater);
-
                 self.SupervisorsCount.subscribe(updater);
             };
 
@@ -194,7 +188,6 @@
                         headers: requestHeaders,
                         "data": function(d) {
                             model.SelectedItems.removeAll(); // move to before filter event
-                            d.Archived = model.Archived();
                         },
                         "dataSrc": function (json) {
                             model.SupervisorsCount(json.recordsTotal);
@@ -222,7 +215,9 @@
                             data: "userName",
                             name: "UserName", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href='@Url.Action("Edit", "Supervisor")/" + row.userId + "'>" + data + "</a>";
+                                return !row.isArchived
+                                    ? "<a href='@Url.Action("Edit", "Supervisor")/" + row.userId + "'>" + data + "</a>"
+                                    : data;
                             }
                         },
                         {
@@ -247,14 +242,15 @@
                         }
                     ],
                     select: {
-                        style: 'single'
+                        style: 'multi',
+                        selector: 'td:first-child input[type="checkbox"]'
                     },
                     searchHighlight: true,
                     rowId: 'userId',
                     pagingType: "full_numbers",
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
-                    "order": [[1, 'desc']],
+                    order: [[1, 'asc']],
                     conditionalPaging: true
                 });
 
@@ -289,8 +285,12 @@
                                 }
                             });
 
+                        if (newState == true) {
+                            self.table.rows().select();
+                        } else {
+                            self.table.rows().deselect();
+                        }
                         checkboxes.prop('checked', newState);
-
                     });
 
             // Handle click on checkbox to set state of "Select all" control
@@ -323,8 +323,6 @@
         });
     </script>
 }
-
-
 <main class="hold-transition">
     <div class="container-fluid">
 
@@ -372,8 +370,8 @@
                         <label for="q1az">
                             <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' @Pages.Supervisors_Selected'"></span>
                         </label>
-                        <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveSupervisors">@Pages.Supervisors_Archive</button>
-                        <button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveSupervisors">@Pages.Supervisors_Unarchive</button>
+                        <button type="button" class="btn btn-default btn-danger" data-bind="disable: IsNothingSelected, click: $root.archiveSupervisors">@Pages.Supervisors_Archive</button>
+                        <button type="button" class="btn btn-default btn-success" data-bind="disable: IsNothingSelected, click: $root.unarchiveSupervisors">@Pages.Supervisors_Unarchive</button>
                     </div>
                 </div>
             }

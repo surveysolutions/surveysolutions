@@ -229,10 +229,6 @@
 
     <script type="text/html" id="assign-interview-template">
         <div class="btn-group assign-interviewer">
-            @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
-                "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
-                InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
-                InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
             @Interviews.ChooseResponsibleInterviewer
             <div class="input-group">
                 <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
@@ -241,7 +237,13 @@
                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                 </div>
             </div>
+            <br />
+            @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
+                "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
+                InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
+                InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
         </div>
+        <br />
     </script>    
     <script type="text/html" id="confirm-delete-template">
         @Html.Raw(Interviews.DeleteConfirmMessageHQ.FormatString(
