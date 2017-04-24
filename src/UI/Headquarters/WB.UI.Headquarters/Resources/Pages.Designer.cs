@@ -1060,7 +1060,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interviews recieved by Interviewer.
+        ///   Looks up a localized string similar to Interviews received by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedInterviewsCount {
             get {
@@ -1069,7 +1069,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of questionnaires recieved by Interviewer.
+        ///   Looks up a localized string similar to Questionnaires received by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedQuestionnairesCount {
             get {
@@ -1258,7 +1258,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of assignments that have been started, but not completed.
+        ///   Looks up a localized string similar to Assignments that have been started, but not completed.
         /// </summary>
         public static string InterviewerProfile_StartedAssignments {
             get {
@@ -1294,7 +1294,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of completed interviews received from Interviewer.
+        ///   Looks up a localized string similar to Completed interviews received from Interviewer.
         /// </summary>
         public static string InterviewerProfile_UploadedInterviewsCount {
             get {
@@ -1393,7 +1393,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account creation date.
+        ///   Looks up a localized string similar to Account created on.
         /// </summary>
         public static string Interviewers_CreationDateTitle {
             get {
@@ -1429,6 +1429,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Never connected.
+        /// </summary>
+        public static string Interviewers_InterviewerNeverConnected {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewerNeverConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App version.
         /// </summary>
         public static string Interviewers_InterviewerVersion {
@@ -1456,7 +1465,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not synced.
+        ///   Looks up a localized string similar to Never connected.
         /// </summary>
         public static string Interviewers_NotSyncedOption {
             get {
