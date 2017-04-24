@@ -23,6 +23,15 @@ var ajustNoticeHeight = function () {
     $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
 };
 
+var fixAdaptiveFooterIfNeeded = function () {
+    if ($(window).width() > 1300) {
+        $('.row').removeClass("fullscreen-hidden-filters");
+        if (!$("footer").hasClass("footer-adaptive")) {
+            $("footer").addClass("footer-adaptive");
+        }
+    }
+};
+
 $(function() {
     var globalSettings = window.input.settings;
 
@@ -80,4 +89,5 @@ $(function() {
 
 $(window).resize(function () {
     ajustNoticeHeight();
+    fixAdaptiveFooterIfNeeded();
 });
