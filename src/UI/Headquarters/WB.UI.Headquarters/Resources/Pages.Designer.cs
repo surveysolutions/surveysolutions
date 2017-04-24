@@ -1339,7 +1339,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to interviewer(s) will be archived..
+        ///   Looks up a localized string similar to Interviewer(s) will be archived..
         /// </summary>
         public static string Interviewers_ArchiveInterviewers {
             get {

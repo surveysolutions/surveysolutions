@@ -594,7 +594,7 @@
     <value>Interviewer's Email</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>interviewer(s) will be archived.</value>
+    <value>Interviewer(s) will be archived.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
