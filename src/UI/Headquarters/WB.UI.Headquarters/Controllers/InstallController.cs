@@ -32,13 +32,13 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Finish()
         {
-            return View(new UserModel());
+            return View(new FinishIntallationModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [PreventDoubleSubmit]
-        public async Task<ActionResult> Finish(UserModel model)
+        public async Task<ActionResult> Finish(FinishIntallationModel model)
         {
             if (ModelState.IsValid)
             {

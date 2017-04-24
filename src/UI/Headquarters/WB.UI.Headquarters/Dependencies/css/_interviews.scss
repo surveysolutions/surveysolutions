@@ -50,6 +50,9 @@ th.prefield-column{
 td.prefield-column{
 	font-style: italic;
 }
+.prefield-column{
+	max-width: 500px;
+}
 .interview-id{
 	min-width: 240px !important;
 	overflow: hidden;

@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" >
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
     <value>Could not update user information because current user does not exist</value>
-  </data>  
-  <data name="CannotUpdate_CurrentUserIsArchived" >
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
     <value>Could not update user information because current user is archived</value>
   </data>
   <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
@@ -220,7 +220,7 @@
     <value>Title</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Account name has invalid characters. Only letters, dots, spaces and apostrophe are allowed</value>
+    <value>Person name has invalid characters. Only letters, dots, spaces and apostrophe are allowed</value>
   </data>
   <data name="PhoneErrorLength" xml:space="preserve">
     <value>Phone number should not contain more than {1} characters</value>
@@ -233,5 +233,11 @@
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Please choose another username</value>
+  </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>New password</value>
   </data>
 </root>
