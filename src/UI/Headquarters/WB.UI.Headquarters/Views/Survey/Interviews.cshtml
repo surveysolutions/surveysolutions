@@ -170,7 +170,7 @@
                                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                                             <td class="errors">
                                                 <!-- ko if:HasErrors -->
-                                                Yes
+                                                @Common.Yes
                                                 <!-- /ko -->
                                                 <!-- ko ifnot:HasErrors -->
                                                 <span class="empty"></span>
@@ -178,10 +178,10 @@
                                             </td>
                                             <td class="status" data-bind="text: Status"></td>
                                             <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
-                                                <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
+                                                <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                             <td>
-                                                <span data-bind="text: CreatedOnClient ? 'Yes' : 'No'"></span>
+                                                <span data-bind="text: CreatedOnClient ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                         </tr>
                                         <!-- /ko -->
@@ -202,9 +202,9 @@
                                 </label>
                             </div>
                             <ul class="list-unstyled">
-                                <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? 'Yes' : 'No'"></span></li>
+                                <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_LastUpdateTitle: <span data-bind="text: LastEntryDate"></span></li>
-                                <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span></li>
+                                <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_ResponsibleTitle: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>
                             </ul>
                         </div>
