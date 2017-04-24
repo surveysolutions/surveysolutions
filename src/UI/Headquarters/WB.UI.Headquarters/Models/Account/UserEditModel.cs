@@ -1,28 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserEditModel
+    public class UserEditModel : UserModelBase, IPasswordRequired
     {
         [Key]
         public Guid Id { get; set; }
 
         public string UserName { get; set; }
-
-        [PasswordStringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordLengthMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
-        [PasswordRegularExpression(ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
-        [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsAndValidations.NewPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 1)]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsAndValidations.ConfirmNewPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 2)]
-        [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
-        public string ConfirmPassword { get; set; }
         
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
         [Display(Name = nameof(FieldsAndValidations.EmailFieldName), ResourceType = typeof(FieldsAndValidations), Order = 3)]
         public string Email { get; set; }
@@ -42,5 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
         public bool IsLockedBySupervisor { get; set; }
+
+        public string UpdatePasswordAction { get; set; } = "UpdatePassword";
     }
 }

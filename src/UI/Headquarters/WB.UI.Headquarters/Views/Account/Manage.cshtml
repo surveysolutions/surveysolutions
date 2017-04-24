@@ -1,10 +1,8 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
+﻿@model ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
     ViewBag.PageTitle = Pages.AccountManage_Title;
     ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
-    ViewBag.ControllerName = @"Account";
-    ViewBag.ControllerAction = @"Manage";
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section PreFormSection
@@ -19,7 +17,5 @@
 @section PreDetailsSection
 {
     @Html.HiddenFor(x => x.Role)
-}
-@section PrePasswordForm{
-    @Html.EditorFor(x => x.OldPassword, "PasswordFormField")
+    @Html.HiddenFor(x => x. UpdatePasswordAction)
 }
