@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 3)]
         [System.ComponentModel.DataAnnotations.Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
-        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]
