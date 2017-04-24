@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -91,8 +92,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }, user.Password, role);
         }
         
-        
-        protected async Task<ActionResult> HandleUpdatePasswordAsync(UserEditModel model, string successActionName = "Index", string failAction ="Edit", object successActionNameArgs = null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<ActionResult> UpdatePassword(UserEditModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -101,13 +105,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 if (updateResult.Succeeded)
                 {
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
-                    return RedirectToAction(successActionName, successActionNameArgs);
+                    return RedirectToAction("Cancel", model);
                 }
                 else
-                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError(nameof(UserEditModel.Password), string.Join(@", ", updateResult.Errors));
             }
 
-            return View(failAction, model);
+            return View("Edit", model);
+        }
+
+        public virtual ActionResult Cancel(Guid? id)
+        {
+            return RedirectToAction(@"Index");
         }
     }
 }

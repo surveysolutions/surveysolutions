@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -48,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (creationResult.Succeeded)
                 {
-                    this.Success(HQ.UserWasCreated);
+                    this.Success(HQ.UserWasCreatedFormat.FormatString(model.UserName));
                     return this.RedirectToAction("Index");
                 }
                 AddErrors(creationResult);
@@ -109,11 +110,5 @@ namespace WB.UI.Headquarters.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model);
     }
 }

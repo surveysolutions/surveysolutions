@@ -1,10 +1,6 @@
 ﻿@model UserModel
 @{
     Layout = "_EditorLayout.cshtml";
-    var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
-    var controllerAction = ViewBag.CreateAction as string ?? @"Create";
-    var controllerName = ViewBag.ControllerName as string;
-    var hideDetails = (bool?)ViewBag.HideDetails ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
@@ -14,8 +10,10 @@
     @RenderSection("Breadcrumbs", false)
 }
 <div class="row extra-margin-bottom">
-    @using (Html.BeginForm(controllerAction, controllerName, FormMethod.Post, new { @class = @"profile" }))
+    @using (Html.BeginForm("Create", null, FormMethod.Post, new { @class = @"profile" }))
     {
+        @Html.HiddenFor(x => x.HideDetails)
+        @Html.HiddenFor(x => x.IsLockedDisabled)
         @Html.AntiForgeryToken()
         @RenderSection(@"PreFormSection", false)
         <div class="col-sm-12">
@@ -23,12 +21,12 @@
             @Html.EditorFor(x => x.UserName, "TextBoxFormField")
             @Html.EditorFor(x => x.Password, "PasswordFormField")
             @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
+            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? (object)new { } : (object)new { @disabled = @"disabled" })
             @RenderSection(@"PostDetailsSection", false)
             @Html.Partial("Profile/ValidationSummary")
         </div>
 
-        if (!hideDetails)
+        if (!Model.HideDetails)
         {
              <div class="col-sm-12">
                  <div class="separate-line"></div>

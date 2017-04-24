@@ -5,7 +5,7 @@ using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class UserModel
+    public class UserModel : UserModelBase
     {
         public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
         public const string PersonNameRegex = @"^[\p{L} '.-]+$";
@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [DataType(DataType.Password)]
         [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof (FieldsAndValidations), Order = 3)]
         [System.ComponentModel.DataAnnotations.Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof (FieldsAndValidations))]
+        [Required(ErrorMessageResourceName = nameof(FieldsAndValidations.RequiredPasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         public string ConfirmPassword { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof (FieldsAndValidations), ErrorMessage = null)]

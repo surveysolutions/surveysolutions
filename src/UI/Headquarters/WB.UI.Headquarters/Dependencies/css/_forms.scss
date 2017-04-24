@@ -567,3 +567,13 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 		color: darken($gray_light, 30%);
 	}
 }
+.compulsory-field{
+	position: relative;
+	&:before{
+		display: block;
+		content: "*";
+		color: $red_error;
+		@include absolute(0, null, null, -10px);
+		font-size: 20px;
+	}
+}
