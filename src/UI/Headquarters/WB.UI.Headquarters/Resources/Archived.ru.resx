@@ -148,7 +148,7 @@
     <value>Восстановить</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>интервьюер(ы) будут восстановлены.</value>
+    <value>Интервьюер(ы) будут восстановлены.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
     <value>Супервизор(ы) будут восстановлены.</value>
