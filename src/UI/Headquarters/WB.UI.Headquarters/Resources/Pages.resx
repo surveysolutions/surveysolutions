@@ -564,7 +564,7 @@
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Interview statuses</value>
+    <value>Surveys and statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
     <value>{0} interview(s) from {1} responsible(s)</value>
