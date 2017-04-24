@@ -668,12 +668,6 @@
     <Content Include="Configuration\Slava.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\TLK.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Configuration\Stacy.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Configuration\Roma.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
