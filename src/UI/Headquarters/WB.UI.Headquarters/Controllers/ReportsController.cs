@@ -108,42 +108,6 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-
-        private readonly PeriodiceReportType[] reportTypesWhichShouldBeReroutedToCustomStatusController =
-        {
-            PeriodiceReportType.AverageOverallCaseProcessingTime,
-            PeriodiceReportType.AverageCaseAssignmentDuration
-        };
-
-        private readonly PeriodiceReportType[] speedReportTypesForHeadquarters =
-        {
-            PeriodiceReportType.AverageInterviewDuration,
-            PeriodiceReportType.AverageSupervisorProcessingTime,
-            PeriodiceReportType.AverageHQProcessingTime,
-            PeriodiceReportType.AverageCaseAssignmentDuration,
-            PeriodiceReportType.AverageOverallCaseProcessingTime
-        };
-
-        private readonly PeriodiceReportType[] speedReportTypesForSupervisor =
-        {
-            PeriodiceReportType.AverageInterviewDuration,
-            PeriodiceReportType.AverageCaseAssignmentDuration,
-        };
-
-        private readonly PeriodiceReportType[] quantityReportTypesForHeadquarters =
-        {
-            PeriodiceReportType.NumberOfCompletedInterviews,
-            PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
-            PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
-            PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
-        };
-
-        private readonly PeriodiceReportType[] quantityReportTypesForSupervisor =
-        {
-            PeriodiceReportType.NumberOfCompletedInterviews,
-            PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
-        };
-
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
@@ -249,6 +213,41 @@ namespace WB.UI.Headquarters.Controllers
                 TotalRowPresent = totalRowPresent
             };
         }
+
+        private readonly PeriodiceReportType[] reportTypesWhichShouldBeReroutedToCustomStatusController =
+{
+            PeriodiceReportType.AverageOverallCaseProcessingTime,
+            PeriodiceReportType.AverageCaseAssignmentDuration
+        };
+
+        private readonly PeriodiceReportType[] speedReportTypesForHeadquarters =
+        {
+            PeriodiceReportType.AverageInterviewDuration,
+            PeriodiceReportType.AverageSupervisorProcessingTime,
+            PeriodiceReportType.AverageHQProcessingTime,
+            PeriodiceReportType.AverageCaseAssignmentDuration,
+            PeriodiceReportType.AverageOverallCaseProcessingTime
+        };
+
+        private readonly PeriodiceReportType[] speedReportTypesForSupervisor =
+        {
+            PeriodiceReportType.AverageInterviewDuration,
+            PeriodiceReportType.AverageCaseAssignmentDuration,
+        };
+
+        private readonly PeriodiceReportType[] quantityReportTypesForHeadquarters =
+        {
+            PeriodiceReportType.NumberOfCompletedInterviews,
+            PeriodiceReportType.NumberOfInterviewTransactionsByHQ,
+            PeriodiceReportType.NumberOfInterviewsApprovedByHQ,
+            PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
+        };
+
+        private readonly PeriodiceReportType[] quantityReportTypesForSupervisor =
+        {
+            PeriodiceReportType.NumberOfCompletedInterviews,
+            PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
+        };
 
         private string GetReportDescriptionByType(PeriodiceReportType reportType)
         {
