@@ -125,12 +125,12 @@
                                                 <a href="#" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
-                                            <th class="prefield-column first-identifying last-identifying sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
+                                            <th class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                             <!-- /ko -->
                                             <!-- ko ifnot:SelectedTemplate() == '' -->
                                             <!-- ko if:Items().length > 0-->
                                             <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                                            <th class="prefield-column sorting_disabled" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.Items()[0].FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, html: Question"></th>
+                                            <th class="sorting_disabled prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.Items()[0].FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, html: Question"></th>
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <!-- /ko -->
@@ -139,12 +139,12 @@
                                             <th class="errors" data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
                                             <th class="status" data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
                                             <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
-                                            <th class="census sorting_disabled">@Pages.Survey_CreatedOnClientTitle</th>
+                                            <th class="sorting_disabled">@Pages.Survey_CreatedOnClientTitle</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="odd" data-bind="visible : Items().length == 0">
-                                            <td colspan="8" class="dataTables_empty" valign="top">@DataTables.ZeroRecords</td>
+                                            <td colspan="9" class="dataTables_empty" valign="top">@DataTables.ZeroRecords</td>
                                         </tr>
 
                                         <!-- ko foreach:Items -->
@@ -170,7 +170,7 @@
                                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                                             <td class="errors">
                                                 <!-- ko if:HasErrors -->
-                                                Yes
+                                                @Common.Yes
                                                 <!-- /ko -->
                                                 <!-- ko ifnot:HasErrors -->
                                                 <span class="empty"></span>
@@ -178,10 +178,10 @@
                                             </td>
                                             <td class="status" data-bind="text: Status"></td>
                                             <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
-                                                <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span>
+                                                <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
-                                            <td class="census" data-bind="css: { 'success-text': CreatedOnClient }">
-                                                <span data-bind="text: CreatedOnClient ? 'Yes' : 'No'"></span>
+                                            <td>
+                                                <span data-bind="text: CreatedOnClient() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
                                         </tr>
                                         <!-- /ko -->
@@ -202,9 +202,9 @@
                                 </label>
                             </div>
                             <ul class="list-unstyled">
-                                <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? 'Yes' : 'No'"></span></li>
+                                <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_LastUpdateTitle: <span data-bind="text: LastEntryDate"></span></li>
-                                <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? 'Yes' : 'No'"></span></li>
+                                <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_ResponsibleTitle: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>
                             </ul>
                         </div>
