@@ -186,4 +186,7 @@
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>Эта функция позволит Вам создать индивидуальное назначение, которое может содержать идентифицирующие вопросы. Только эти назначения появятся на планшете в приложении Interviewer. </value>
   </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Мои опросники</value>
+  </data>
 </root>
