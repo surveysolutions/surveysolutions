@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Platform.Droid.Platform;
 using Plugin.Permissions.Abstractions;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
@@ -14,11 +15,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IPermissions permissions;
+        private IViewModelNavigationService viewModelNavigationService;
 
-        public AreaEditService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, IPermissions permissions)
+        public AreaEditService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, 
+            IPermissions permissions,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.permissions = permissions;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public async Task<AreaEditResult> EditAreaAsync(string area)
@@ -36,18 +41,28 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 {
                     AreaEditorResult result = null;
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
-                    Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaEditorActivity));
 
+                    //old
+                   Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaViewEditActivity));
                     intent.PutExtra(Intent.ExtraText, area);
-
-                    AreaEditorActivity.OnAreaEditCompleted += (editResult =>
+                    AreaViewEditActivity.OnAreaEditCompleted += (editResult =>
                     {
                         result = editResult;
                         waitEditAreaResetEvent.Set();
                     });
                     
                     this.androidCurrentTopActivity.Activity.StartActivity(intent);
+                    //--
 
+                    //new
+                    /*viewModelNavigationService.NavigateToAreaEditor(area);
+                    AreaEditorActivity.OnAreaEditCompleted += (editResult =>
+                    {
+                        result = editResult;
+                        waitEditAreaResetEvent.Set();
+                    });*/
+
+                    //--
                     waitEditAreaResetEvent.WaitOne();
 
                     return result != null ? new AreaEditResult() { Area = result.Area} : null;
