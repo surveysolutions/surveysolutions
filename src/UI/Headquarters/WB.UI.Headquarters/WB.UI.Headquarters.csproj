@@ -1179,7 +1179,7 @@
     <Content Include="Scripts\viewmodels\pages\users.js" />
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
-    <Content Include="Views\HQ\InterviewsChart.cshtml" />
+    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config" />
     <Content Include="Configuration\SPuV.Headquarters.Web.config">
@@ -1283,11 +1283,10 @@
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
-    <Content Include="Views\HQ\MapReport.cshtml" />
+    <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
-    <Content Include="Views\HQ\Status.cshtml" />
-    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
-    <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
+    <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
+    <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
@@ -1351,11 +1350,10 @@
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
-    <Content Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
-    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
+    <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
-    <Content Include="Views\Survey\Status.cshtml" />
-    <Content Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
+    <Content Include="Views\Reports\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\TabletReport\PackagesInfo.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_ControlPanelLayout.cshtml" />
@@ -1597,6 +1595,7 @@
     <Compile Include="Controllers\InterviewersController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SurveySetupController.cs" />

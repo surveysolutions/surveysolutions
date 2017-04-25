@@ -56,12 +56,14 @@ namespace WB.UI.Headquarters.Controllers
             switch (roleForCurrentUser)
             {
                 case UserRoles.Headquarter:
-                    return this.RedirectToAction("SurveysAndStatuses", "HQ");
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
 
                 case UserRoles.Supervisor:
-                    return this.RedirectToAction("Index", "Survey");
+                    return this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
 
                 case UserRoles.Administrator:
+                    return this.RedirectToAction("SurveysAndStatuses", "Reports");
+
                 case UserRoles.Observer:
                     return this.RedirectToAction("Index", "Headquarters");
 
@@ -232,8 +234,8 @@ namespace WB.UI.Headquarters.Controllers
             await this.signInManager.SignInAsObserverAsync(personName);
 
             return user.IsInRole(UserRoles.Headquarter) ?
-                this.RedirectToAction("SurveysAndStatuses", "HQ") :
-                this.RedirectToAction("Index", "Survey");
+                this.RedirectToAction("SurveysAndStatuses", "Reports") :
+                this.RedirectToAction("SurveysAndStatusesForSv", "Reports");
         }
 
         private static readonly UserRoles[] CanReturnFromRoles =

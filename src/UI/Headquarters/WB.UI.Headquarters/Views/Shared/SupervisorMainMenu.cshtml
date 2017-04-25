@@ -8,10 +8,10 @@
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Index", "Survey", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
-            @Html.MainMenuItem("TeamMembersAndStatuses", "Survey", @MainMenu.TeamMembersAndStatuses, MenuItem.Summary)
-            @Html.MainMenuItem("QuantityByInterviewers", "PeriodicStatusReport", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
-            @Html.MainMenuItem("SpeedByInterviewers", "PeriodicStatusReport", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem("SurveysAndStatusesForSv", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
+            @Html.MainMenuItem("TeamMembersAndStatuses", "Reports", @MainMenu.TeamMembersAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem("QuantityByInterviewers", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
+            @Html.MainMenuItem("SpeedByInterviewers", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
         </ul>
     </li>
 
