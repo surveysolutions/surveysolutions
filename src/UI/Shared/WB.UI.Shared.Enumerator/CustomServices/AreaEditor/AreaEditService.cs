@@ -43,7 +43,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
 
                     //old
-                   Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaViewEditActivity));
+                    Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaViewEditActivity));
                     intent.PutExtra(Intent.ExtraText, area);
                     AreaViewEditActivity.OnAreaEditCompleted += (editResult =>
                     {
