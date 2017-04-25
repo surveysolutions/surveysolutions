@@ -868,4 +868,28 @@
     <value>Используйте форму ниже чтобы сменить пароль аккаунта</value>
     <comment>Используйте форму ниже чтобы изменить пароль аккаунта</comment>
   </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>интервьювер(ов) выбрано</value>
+    <comment>интервьювер(ов) выбрано</comment>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>супервизор(ов) выбрано</value>
+    <comment>супервизор(ов) выбрано</comment>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
+    <comment>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Архивировать</value>
+    <comment>Архивировать</comment>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Изменить данные общедоступной информации профиля</value>
+    <comment>Изменить данные общедоступной информации профиля</comment>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+    <comment>Разархивировать</comment>
+  </data>
 </root>
