@@ -273,9 +273,6 @@
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text cannot be empty.</value>
   </data>
-  <data name="WB0072_ChapterItemsLimit" xml:space="preserve">
-    <value>Section cannot contain more than 500 child items.</value>
-  </data>
   <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
     <value>Option titles must be unique.</value>
   </data>
