@@ -3,22 +3,23 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Tests.Abc;
+using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
-    internal class when_request_speed_report_by_interviewers_for_user_in_hq_role : PeriodicStatusReportControllerTestContext
+    internal class when_request_speed_report_by_interviewers_for_user_in_hq_role
     {
         Establish context = () =>
         {
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
-            periodicStatusReportController = CreatePeriodicStatusReportController(authorizedUser: authorizedUser);
+            reportController = Create.Controller.ReportsController(authorizedUser: authorizedUser);
         };
 
         Because of = () =>
-            result = periodicStatusReportController.SpeedByInterviewers(null) as ViewResult;
+            result = reportController.SpeedByInterviewers(null) as ViewResult;
 
         It should_active_page_be_SpeedOfCompletingInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.SpeedOfCompletingInterviews);
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         It should_ReportName_be_Speed = () =>
            ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Speed");
 
-        private static PeriodicStatusReportController periodicStatusReportController;
+        private static ReportsController reportController;
         private static ViewResult result;
     }
 }

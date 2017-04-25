@@ -1280,8 +1280,6 @@
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
-    <Content Include="Views\HQ\ImportSample.cshtml" />
-    <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
@@ -1330,7 +1328,6 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
-    <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <Content Include="Views\Interview\AttachmentPartialView.cshtml" />
     <Content Include="Views\Interview\Details.cshtml" />
@@ -1378,7 +1375,6 @@
     <Content Include="Views\Template\ImportMode.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportVerificationErrors.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportConfirmation.cshtml" />
-    <Content Include="Views\HQ\ImportInterviews.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\DataExport\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
@@ -1588,7 +1584,6 @@
     <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\Profile\InterviewerController.cs" />
@@ -1874,7 +1869,6 @@
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
-    <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ExceptionExtensoins.cs" />
