@@ -79,7 +79,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                     cancellationToken.ThrowIfCancellationRequested();
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 
             }
