@@ -1,8 +1,0 @@
-﻿@using WB.UI.Headquarters.Resources
-<div>
-    @using (Html.BeginForm("Import", "ImportExport", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <input type="file" name="myfile" />
-        <input type="submit" name="Submit" value="@Pages.Upload_Upload" />
-    }
-</div>
