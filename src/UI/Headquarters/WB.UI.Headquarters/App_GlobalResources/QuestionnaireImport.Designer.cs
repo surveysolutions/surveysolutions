@@ -196,6 +196,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designer: My Questionnaires.
+        /// </summary>
+        internal static string MyQuestionnairesTitle {
+            get {
+                return ResourceManager.GetString("MyQuestionnairesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         internal static string QuestionnaireExists {
@@ -259,7 +268,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in to designer.
+        ///   Looks up a localized string similar to Sign in to Designer.
         /// </summary>
         internal static string SignInToDesignerTitle {
             get {
