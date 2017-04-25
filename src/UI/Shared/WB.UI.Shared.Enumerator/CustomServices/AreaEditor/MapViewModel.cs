@@ -10,30 +10,29 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
     {
         public MapViewModel(string pathToMap)
         {
+            UpdateBaseMap(pathToMap);
+        }
+
+        public void UpdateBaseMap(string pathToMap)
+        {
             if (pathToMap != null)
             {
-                var map = new Map();
+                if(this.map == null )
+                    this.map = new Map();
+
                 TileCache titleCache = new TileCache(pathToMap);
                 var layer = new ArcGISTiledLayer(titleCache);
-                map.Basemap.BaseLayers.Add(layer);
-                
-                this.map = map;
+
+                layer.MinScale = 100000000;
+                layer.MaxScale = 1;
+
+                var basemap = new Basemap(layer);
+                this.map.Basemap =  basemap;
             }
             else
             {
                 this.map = null;
             }
-            
-            //var serviceUri = new Uri("http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer");
-            //map.Basemap.BaseLayers.Add(new ArcGISTiledLayer(serviceUri));
-            //----
-
-            //----
-            //map = new Map(Basemap.CreateImagery());
-            //-----
-
-
-            //_map = new Map(Basemap.CreateTopographic());
         }
 
         private Map map;

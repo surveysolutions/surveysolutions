@@ -4,18 +4,32 @@
     android:layout_height="match_parent"
     style="@style/VerticalFullWidthWrappingLayout">
 
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:orientation="vertical" 
-        android:gravity="center">
-        
-        
-            <Esri.ArcGISRuntime.UI.MapView
-            android:id="@+id/AreaMapView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-        
-        
+    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="left">
+        <Button
+          style="@style/Interview_Question_InputButton"
+          android:id="@+id/LoginPage_singin_button1"
+          local:MvxBind="Click StartEditAreaCommand; Text 'Start';" />
+        <Button
+          style="@style/Interview_Question_InputButton"
+          android:id="@+id/LoginPage_troubleshooting_button1"
+          local:MvxBind="Click SaveAreaCommand; 'Save';" />
+        <Button
+          style="@style/Interview_Question_InputButton"
+          android:id="@+id/LoginPage_singin_button11"
+          local:MvxBind="Click SwitchLocatorCommand; Text 'Locator';" />
+        <Button
+          style="@style/Interview_Question_InputButton"
+          android:id="@+id/LoginPage_troubleshooting_button11"
+          local:MvxBind="Click SaveAreaCommand; Text Localization('Interviewer_Diagnostics');" />
     </LinearLayout>
+    <Esri.ArcGISRuntime.UI.MapView
+            android:id="@+id/AreaMapView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            local:MvxBind="Map Map"/>
+        
+    
 </LinearLayout>
