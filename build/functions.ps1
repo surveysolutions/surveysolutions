@@ -84,7 +84,7 @@ function BuildStaticContent($targetLocation, $forceInstall){
     Write-Host "Running npm install"
 
 	#install node js dependencies
-    &npm install --silent --progress false | Write-Host
+    &yarn install | Write-Host
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
