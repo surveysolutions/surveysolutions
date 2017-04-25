@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     case InterviewerOptionFilter.Any:
                         break;
                     case InterviewerOptionFilter.NotSynced:
-                        interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
+                        interviewers = interviewers.Where(x => x.Profile.DeviceAppVersion == null);
                         break;
                     case InterviewerOptionFilter.UpToDate:
                         interviewers = interviewers.Where(x => apkBuildVersion.HasValue && apkBuildVersion <= x.Profile.DeviceAppBuildVersion);
