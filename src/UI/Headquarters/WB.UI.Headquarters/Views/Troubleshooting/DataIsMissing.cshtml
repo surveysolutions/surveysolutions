@@ -142,6 +142,7 @@
                         <input class="form-control"
                                placeholder="@Troubleshooting.NoData_Filters_InterviewKeyPlaceholder"
                                data-vv-name="interviewId"
+                               data-vv-as="interview"
                                v-model="interviewId"
                                v-on:keyup.enter="findInterviews"
                                v-validate="{ 
@@ -163,7 +164,7 @@
                 <div class="main-information">
                     <div class="page-header clearfix">
                         <ol class="breadcrumb">
-                            <li><a href="">@Troubleshooting.Title</a></li>
+                            <li><a href="@Url.Action("Index", "Troubleshooting")">@Troubleshooting.Title</a></li>
                         </ol>
                         <h1>@Troubleshooting.NoData_Title</h1>
                     </div>
