@@ -702,15 +702,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section cannot contain more than 500 child items..
-        /// </summary>
-        internal static string WB0072_ChapterItemsLimit {
-            get {
-                return ResourceManager.GetString("WB0072_ChapterItemsLimit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Option titles must be unique..
         /// </summary>
         internal static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
