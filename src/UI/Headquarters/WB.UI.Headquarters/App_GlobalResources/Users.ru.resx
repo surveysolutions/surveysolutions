@@ -228,4 +228,12 @@
     <value>Архив статус</value>
     <comment>Архив статус</comment>
   </data>
+  <data name="SupervisorEmail" xml:space="preserve">
+    <value>Почта супервизора</value>
+    <comment>Почта супервизора</comment>
+  </data>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Добавить интервьювера</value>
+    <comment>Добавить интервьювера</comment>
+  </data>
 </root>
