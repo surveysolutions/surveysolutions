@@ -11,7 +11,7 @@
     <script type="text/javascript">
         function GetInterviewersUrl(supervisorId) {
             var url = new Url(window.location.href);
-            return '@Url.Action(Model.ReportName + "ByInterviewers", "PeriodicStatusReport")'
+            return '@Url.Action(Model.ReportName + "ByInterviewers", "Reports")'
                 + '?questionnaireId=' + url.query['questionnaireId']
                 + '&questionnaireVersion=' + url.query['questionnaireVersion']
                 + '&from=' + url.query['from']
@@ -22,7 +22,7 @@
         }
         function GetSupervisorsUrl() {
             var url = new Url(window.location.href);
-            return '@Url.Action(Model.ReportName + "BySupervisors", "PeriodicStatusReport")'
+            return '@Url.Action(Model.ReportName + "BySupervisors", "Reports")'
                 + '?questionnaireId=' + url.query['questionnaireId']
                 + '&questionnaireVersion=' + url.query['questionnaireVersion']
                 + '&from=' + url.query['from']
