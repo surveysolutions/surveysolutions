@@ -174,10 +174,17 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             var archiveUserResults = new List<IdentityResult>();
 
             var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
-            foreach (var userToArchive in usersToArhive)
+            foreach (HqUser userToArchive in usersToArhive)
             {
-                var archiveResult = await this.ArchiveUserAsync(userToArchive);
-                archiveUserResults.Add(archiveResult);
+                if (userToArchive.IsInRole(UserRoles.Supervisor))
+                {
+                    archiveUserResults.AddRange(await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id));
+                }
+                else
+                {
+                    var archiveResult = await this.ArchiveUserAsync(userToArchive);
+                    archiveUserResults.Add(archiveResult);
+                }
             }
 
             return archiveUserResults.ToArray();

@@ -238,4 +238,14 @@
     <value>Спрятать</value>
     <comment>Спрятать</comment>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
 </root>

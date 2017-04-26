@@ -1,18 +1,8 @@
-﻿@using Microsoft.Practices.ServiceLocation
-@using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable
+﻿@using WB.Core.GenericSubdomains.Portable
 @model UserEditModel
 @{
     ViewBag.Title = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName).RemoveHtmlTags();
     ViewBag.PageTitle = Pages.Profile_InterviewerEditFormat.FormatString(Model.UserName);
-
-    ViewBag.ControllerName = "Interviewer";
-    ViewBag.ControllerAction = "Edit";
-    ViewBag.CancelAction = "Profile";
-    ViewBag.CancelArgs = new { id = Model.Id };
-    ViewBag.IsEditMode = true;
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-    ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
     Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
 @section Breadcrumbs

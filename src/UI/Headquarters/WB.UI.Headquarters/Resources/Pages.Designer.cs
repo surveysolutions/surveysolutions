@@ -1339,7 +1339,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to interviewer(s) will be archived..
+        ///   Looks up a localized string similar to Interviewer(s) will be archived..
         /// </summary>
         public static string Interviewers_ArchiveInterviewers {
             get {
@@ -2204,7 +2204,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview statuses.
+        ///   Looks up a localized string similar to Surveys and Statuses.
         /// </summary>
         public static string SurveysAndStatuses_Overview {
             get {
@@ -2222,7 +2222,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor (teams).
+        ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         public static string SurveysAndStatuses_SupervisorTitle {
             get {

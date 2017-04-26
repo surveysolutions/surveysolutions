@@ -564,7 +564,7 @@
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Interview statuses</value>
+    <value>Surveys and Statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
     <value>{0} interview(s) from {1} responsible(s)</value>
@@ -594,7 +594,7 @@
     <value>Interviewer's Email</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>interviewer(s) will be archived.</value>
+    <value>Interviewer(s) will be archived.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
@@ -857,7 +857,7 @@
     <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Create interviewer profile</value>
+    <value>Create interviewer</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Interviewers</value>

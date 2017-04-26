@@ -1,32 +1,33 @@
 ﻿@model UserEditModel
 @{
     Layout = "_EditorLayout.cshtml";
-    var lockedDisabled = (bool?)ViewBag.IsLockedDisabled ?? false;
-    var hideDetails = (bool?)ViewBag.HideDetails ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
 }
 @section Breadcrumbs
 {
-    @RenderSection("Breadcrumbs", false)
+    @RenderSection(@"Breadcrumbs", false)
 }
 <div class="row extra-margin-bottom">
-    @if (!hideDetails)
+    @if (!Model.HideDetails)
     {
-        using (Html.BeginForm((string)ViewBag.ControllerAction, (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
+        using (Html.BeginForm(Model.EditAction ?? "Edit", null, FormMethod.Post, new { @class = @"profile" }))
         {
             @Html.AntiForgeryToken()
             @RenderSection(@"PreFormSection", false)
             @Html.HiddenFor(x => x.Id)
             @Html.HiddenFor(x => x.UserName)
+            @Html.HiddenFor(x => x.EditAction)
+            @Html.HiddenFor(x => x.HideDetails)
+            @Html.HiddenFor(x => x.IsLockedDisabled)
             <div class="col-sm-12">
                 @RenderSection(@"PreDetailsSection", false)
 
                 @Html.EditorFor(x => x.PersonName, "TextBoxFormField", new { disableClientValidation = true })
                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
-                @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", lockedDisabled ? new { } : (object)new { @disabled = @"disabled" })
+                @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new { } : (object)new { @disabled = @"disabled" })
                 @RenderSection(@"PostDetailsSection", false)
                 @Html.Partial("Profile/ValidationSummary")
             </div>
@@ -34,23 +35,7 @@
             @Html.EditorForModel("UpdateButtonsRow")
         }
     }
-
-    @using (Html.BeginForm("UpdatePassword", (string)ViewBag.ControllerName, FormMethod.Post, new { @class = @"profile" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(x => x.Id)
-        @Html.HiddenFor(x => x.UserName)
-        <div class="col-sm-7">
-            <h2>@Pages.AccountManage_ChangePassword</h2>
-        </div>
-        <div class="col-sm-12">
-            @RenderSection(@"PrePasswordForm", false)
-            @Html.EditorFor(x => x.Password, "PasswordFormField")
-            @Html.EditorFor(x => x.ConfirmPassword, "PasswordFormField")
-            @Html.Partial("Profile/ValidationSummary")
-        </div>
-
-        @Html.EditorForModel("UpdateButtonsRow")
-    }
+    
+    @Html.Partial("Profile/" + Model.UpdatePasswordAction)
 </div>
 @RenderBody()

@@ -1,16 +1,7 @@
-﻿@using Microsoft.Practices.ServiceLocation
-@using WB.Core.BoundedContexts.Headquarters.Services
-@model InterviewerModel
+﻿@model InterviewerModel
 @{
     ViewBag.Title = Pages.Profile_InterviewerCreate;
-
     ViewBag.PageTitle = Pages.Profile_InterviewerCreate;
-
-    ViewBag.ControllerName = "Interviewer";
-    ViewBag.ControllerAction = "Create";
-    ViewBag.CancelAction = "Back";
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-    ViewBag.IsLockedDisabled = !(authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
     Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
 }
 @section scripts
@@ -36,7 +27,7 @@
     @if (Model.IsShowSupervisorSelector)
     {
         <div class="block-filter">
-            <h5>@Html.LabelFor(x => x.SupervisorId)</h5>
+            <h5 class="compulsory-field">@Html.LabelFor(x => x.SupervisorId)</h5>
             <div class="form-group @(ViewData.ModelState.IsValidField(@"SupervisorId") ? string.Empty : @"has-error")">
                 <div class="combo-box field">
                     <div class="btn-group btn-input clearfix">
