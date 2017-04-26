@@ -558,13 +558,13 @@
     <value>Supervisor</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
-    <value>Supervisor (teams)</value>
+    <value>Supervisor</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Surveys and statuses</value>
+    <value>Surveys and Statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
     <value>{0} interview(s) from {1} responsible(s)</value>
