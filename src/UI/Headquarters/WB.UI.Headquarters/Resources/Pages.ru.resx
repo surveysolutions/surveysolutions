@@ -817,7 +817,7 @@
     <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Создание интервьюера</value>
+    <value>Создать интервьюера</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -829,7 +829,7 @@
     <value>Редактирование профиля наблюдателя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_ObserverCreate" xml:space="preserve">
-    <value>Создание пользователя Наблюдатель</value>
+    <value>Создать пользователя</value>
   </data>
   <data name="Profile_ObserversList" xml:space="preserve">
     <value>Наблюдатели</value>
