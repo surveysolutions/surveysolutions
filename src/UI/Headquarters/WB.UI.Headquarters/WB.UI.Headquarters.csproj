@@ -1195,7 +1195,6 @@
     <Content Include="Scripts\jqPlot\changes.txt" />
     <Content Include="Scripts\jqPlot\copyright.txt" />
     <Content Include="Scripts\jqPlot\excanvas.js" />
-    <Content Include="Scripts\jqPlot\excanvas.min.js" />
     <Content Include="Scripts\jqPlot\gpl-2.0.txt" />
     <Content Include="Scripts\jqPlot\jqPlotCssStyling.txt" />
     <Content Include="Scripts\jqPlot\jqPlotOptions.txt" />
@@ -1203,8 +1202,6 @@
     <Content Include="Scripts\jqPlot\jquery.jqplot.js" />
     <Content Include="Scripts\jqPlot\jquery.jqplot.min.css" />
     <Content Include="Scripts\jqPlot\jquery.jqplot.min.js" />
-    <Content Include="Scripts\jqPlot\jquery.js" />
-    <Content Include="Scripts\jqPlot\jquery.min.js" />
     <Content Include="Scripts\jqPlot\MIT-LICENSE.txt" />
     <Content Include="Scripts\jqPlot\optionsTutorial.txt" />
     <Content Include="Scripts\jqPlot\plugins\jqplot.barRenderer.js" />
