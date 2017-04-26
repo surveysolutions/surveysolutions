@@ -33,21 +33,21 @@
 <main class="main">
     <div class="container-fluid">
         <div class="row">
-            @Html.Partial("_alerts")
             <div class="page-header">
-                <h1></h1>
+                <h1>Settings</h1>
             </div>
+            @Html.Partial("_alerts")
         </div>
 
         <div class="row extra-margin-bottom">
-            <h2>
-                @Settings.ExportEncryption_Title
-            </h2>
             <div class="col-xs-10 info-block">
+                <h2>
+                    @Settings.ExportEncryption_Title
+                </h2>
                 <p>
                     @Settings.ExportEncryption_Description
                 </p>
-                </div>
+            </div>
                 <div class="col-sm-12">
                     <div class="block-filter">
 
@@ -78,8 +78,8 @@
                 </div>
             </div>
         <div class="row extra-margin-bottom">
-            <h2>@Settings.GlobalNoteSettings</h2>
             <div class="col-xs-10 info-block">
+                <h2>@Settings.GlobalNoteSettings</h2>
                 <p>
                     @Settings.GlobalNoteSettings_Description
                 </p>
@@ -98,8 +98,8 @@
                 </form>
             </div>
         <div class="row extra-margin-bottom">
-            <h2>@Settings.LogoSettings</h2>
             <div class="col-xs-10 info-block">
+                <h2>@Settings.LogoSettings</h2>
                 <p>
                     @Settings.LogoSettings_Description
                 </p>
