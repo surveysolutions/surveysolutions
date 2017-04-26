@@ -103,10 +103,10 @@
     @RenderBody()
 <footer class="footer">
     <div class="container-fluid">
-        <div class="text-left">
+        <div class="text-right">
             &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
         </div>
-        <div class="text-left">
+        <div class="text-right">
             @(ServiceLocator.Current.GetInstance<IProductVersion>())
             @if (AppSettings.IsDebugBuilded)
             {
