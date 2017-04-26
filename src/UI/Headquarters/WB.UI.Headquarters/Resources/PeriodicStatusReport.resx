@@ -202,7 +202,7 @@
     <value>A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events.</value>
+    <value>Number of interview completions by a team. Rejected and then completed interviews are counted as separate completion events.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
     <value>Number of interviews collected by a {0} that were approved by HQ.</value>
