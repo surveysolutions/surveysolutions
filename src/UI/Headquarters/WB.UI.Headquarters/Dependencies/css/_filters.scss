@@ -21,49 +21,14 @@
 		width: 100%;    
 	}
 }
-input.checkbox-filter{
-  	display: none;
-  	& ~ label{
-  		position: relative;
-  		padding-left: 35px;
-  		cursor: pointer;
-  	}
-  	& ~ label .tick {
-	    @extend %tick;
-	    @include absolute(0, null, null, 0);
-	    height: 20px;
-	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
-	    background-size: 68px 350px;
-	    background-position: 0 0;
-	    margin-right: 10px;
-		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-  	}
-  	& ~ label:hover .tick,
-  	& ~ label:focus .tick{
-    	background-position: 0px -36px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: 0px -72px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
-    	background-position: 0px -108px;
-  	}
-  	&:disabled ~ label .tick,
-  	&:checked:disabled ~ label .tick {
-    	background-position: 0px -144px;
-  	}
-  	&:disabled ~ label:hover .tick,
-  	&:checked:disabled ~ label:hover .tick,
-  	&:disabled ~ label:focus .tick,
-  	&:checked:disabled ~ label:focus .tick {
-    	background-position: 0px -180px;
-  	}
-}
 .filters{
+	.checkbox-block h5{
+		margin-bottom: 10px;
+	}
 	input.checkbox-filter{
 		& ~ label{
 	  		padding-left: 30px;
+			font-weight: normal;
 	  		.tick {
 	  			left: -5px;
 	  		}
@@ -83,9 +48,6 @@ input.checkbox-filter{
 			margin-bottom: 0;
 		}
 	}
-	.checkbox-block h5{
-		margin-bottom: 10px;
-	}
 	margin-bottom: 15px;
 	select{
 		border-color: $gray_form;
@@ -98,9 +60,9 @@ input.checkbox-filter{
 		margin-bottom: 10px;
 		label{
 			font-size: 14px;
-			line-height: 20px;
+			line-height: 16px;
 			font-family: inherit;
-			font-weight: normal;
+			//font-weight: normal;
 			margin: 0;
 		}
 		&:last-of-type{
