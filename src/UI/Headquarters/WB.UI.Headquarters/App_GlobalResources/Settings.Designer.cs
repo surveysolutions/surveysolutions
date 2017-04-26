@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current logo.
+        /// </summary>
+        internal static string CurrentLogo {
+            get {
+                return ResourceManager.GetString("CurrentLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable encryption.
         /// </summary>
         internal static string EnableEncryption {

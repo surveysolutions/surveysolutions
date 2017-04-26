@@ -196,7 +196,7 @@ input.double-checkbox-white{
 	margin-bottom: 15px; 
 }
 .input-group{
-	width: 295px; 
+	width: $form-width; 
 	&.date{
 		box-shadow: none;
 	}
@@ -231,7 +231,7 @@ input.double-checkbox-white{
 	}
 }
 .bootstrap-select.btn-group{
-	width: 295px !important;	
+	width: $form-width !important;	
 	.dropdown-toggle{
 		box-shadow: none;
 		background-color: transparent;
@@ -293,7 +293,7 @@ input.double-checkbox-white{
    		box-shadow: none;
    		border: 1px solid $gray_form;
    		border-radius: 4px;
-   		width: 295px;
+   		width: $form-width;
    		text-align: left;
    		padding: 7px 12px;
    		overflow: hidden;
@@ -340,7 +340,7 @@ input.double-checkbox-white{
    		}
 	   	&> .dropdown-menu {
 		    display: block;
-		    width: 295px;
+		    width: $form-width;
 		    padding: 5px;
 	   		border: 1px solid $gray_form;
 	   		overflow: auto;
@@ -426,13 +426,13 @@ input.double-checkbox-white{
 		margin-left: 0;
 	}
 	.field{
-		width: 295px;
+		width: $form-width;
 	}
 } 
 
 .combo-box{
 	position: relative;
-	width: 295px;
+	width: $form-width;
 	@extend %combobox;
 	.btn-input .dropdown-toggle {
 		padding: 10px 38px 10px 10px;
@@ -468,33 +468,28 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 .form-date .input-group.date .form-control{
 	z-index: 0;
 }
-.profile{
+.profile, .contain-input{
+	.input-group, .field, .btn-input{
+		margin-left: -10px;
+	}
 	.help-block{
 		margin: 0;
-	}
-	&>div{
-		padding-left: 5px;
-		& > *{
-			margin-left: 10px;
-		}
-		& > .block-filter{ 
-			margin-left: 0;
-			& > *{
-				margin-left: 10px;
-			}
-			& > .form-group{
-				margin-left: 0;
-			}
-			& >.btn-group.bootstrap-select, .combo-box, .input-group, .field{
-				margin-left: 0 !important;
-			}
-		}
-		
 	}
 	.separate-line{
 		max-width: 500px;
 	}
 	.block-filter{
+		&:last-of-type{
+			margin-bottom: 25px;
+		}
+		h5{
+			margin-top: 5px;
+		}
+		label{
+			font-size: 14px;
+    		line-height: 16px;
+			margin-bottom: 2px;
+		}
 		.form-group{
 			.field{
 				float: left;
@@ -513,15 +508,19 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 				clear: both;
 			}
 			.single-checkbox + label{
-				margin-left: -5px;
-				font-weight: bold
+				font-weight: bold;
 			}
 		}
 	}
 	h2{
 		margin-bottom: 15px;
-		margin-top: 15px;
 	}
+	input[type="file"]{
+		margin-left: 10px;
+	}
+}
+.contain-input .block-filter .form-group .single-checkbox + label{
+	margin-top: 10px;
 }
 @media (max-width: $screen-md-min){
     .profile{

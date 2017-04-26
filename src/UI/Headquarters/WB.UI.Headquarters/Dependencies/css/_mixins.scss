@@ -299,16 +299,6 @@
 @mixin tight-filters-aside(){
     .filters{
         padding-top: 105px;
-        width: $filter-small-width;
-        .bootstrap-select.btn-group{
-            width: 100% !important;   
-        } 
-        .input-group, .combo-box, .btn-input .dropdown-toggle{
-            width: 100%;
-        }
-        .open > .dropdown-menu{
-            width: 100%;    
-        }
         .foldback-button{
             top: $indent-foldback-button;
         }

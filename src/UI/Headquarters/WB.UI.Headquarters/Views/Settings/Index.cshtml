@@ -31,16 +31,19 @@
 }
 
 <main class="main">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a>@User.Identity.Name</a></li>
+                </ol>
                 <h1>Settings</h1>
             </div>
             @Html.Partial("_alerts")
         </div>
 
-        <div class="row extra-margin-bottom">
-            <div class="col-xs-10 info-block">
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
                 <h2>
                     @Settings.ExportEncryption_Title
                 </h2>
@@ -48,77 +51,81 @@
                     @Settings.ExportEncryption_Description
                 </p>
             </div>
-                <div class="col-sm-12">
-                    <div class="block-filter">
-
-                        <div class="form-group">
-                            <input class="checkbox-filter single-checkbox" data-bind="checked: isEnabled, click: changeState"
-                                   id="isEnabled" type="checkbox">
-
-                            <label for="isEnabled" style="font-weight: bold">
-                                <span class="tick"></span>@Settings.EnableEncryption
-                            </label>
+            <div class="col-sm-12">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox" data-bind="checked: isEnabled, click: changeState" id="isEnabled" type="checkbox">
+                        <label for="isEnabled" style="font-weight: bold">
+                            <span class="tick"></span>@Settings.EnableEncryption
+                        </label>
+                    </div>
+                </div>
+                <div class="block-filter">
+                    <label for="exportPassword">@Settings.Password:</label>
+                    <div class="form-group ">
+                        <div class="input-group">
+                            <input id="exportPassword" type="text" data-bind="textInput: password" readonly="readonly" class="form-control" />
+                            <span class="input-group-addon" data-bind="visible: isEnabled, click: regeneratePass">
+                                <i class="glyphicon glyphicon-refresh">
+                                </i>
+                            </span>
                         </div>
                     </div>
-                    <div>
-                        <h5><label for="exportPassword">@Settings.Password</label>:</h5>
-                        <div class="form-group ">
-                            <div class="field">
-                                <div class="input-group">
-                                    <input id="exportPassword" type="text" data-bind="textInput: password" readonly="readonly" class="form-control" />
-                                    <span class="input-group-addon" data-bind="visible: isEnabled, click: regeneratePass">
-                                        <i class="glyphicon glyphicon-refresh">
-                                        </i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        <div class="row extra-margin-bottom">
-            <div class="col-xs-10 info-block">
+        </div>
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
                 <h2>@Settings.GlobalNoteSettings</h2>
                 <p>
                     @Settings.GlobalNoteSettings_Description
                 </p>
             </div>
-                <form class="col-sm-7">
-                    <div class="form-group">
-                        <label for="notificationText">@Settings.GlobalNotice: </label>
-                        <input class="form-control" id="notificationText" type="text" data-bind="value: message" maxlength="1000" />
-                    </div>
+            <form class="col-sm-7">
+                <div class="block-filter">
+                    <label for="notificationText">@Settings.GlobalNotice:</label>
+                        <textarea class="form-control" id="notificationText" type="text" data-bind="value: message" maxlength="1000"></textarea>
+                </div>
+                <div class="block-filter">
                     <button type="button" class="btn btn-success" data-bind="click: updateMessage">
                         @Common.Save
                     </button>
                     <span class="text-success" data-bind="visible: messageUpdated">
                         @Settings.GlobalNoteSaved
                     </span>
-                </form>
-            </div>
-        <div class="row extra-margin-bottom">
-            <div class="col-xs-10 info-block">
+                </div>
+            </form>
+        </div>
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
                 <h2>@Settings.LogoSettings</h2>
                 <p>
                     @Settings.LogoSettings_Description
                 </p>
             </div>
-                <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-3" data-bind="submit: onLogoSubmit">
-                    <div class="form-group">
-                        <label for="companyLogo">@Settings.Logo: </label>
-
-                        <input type="file" id="companyLogo" name="logo" accept="image/gif, image/jpeg, image/png" id="logo" />
-                    </div>
+            <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-7" data-bind="submit: onLogoSubmit">
+                <div class="block-filter">
+                    <label for="companyLogo">@Settings.Logo: </label>
+                    <input type="file" id="companyLogo" name="logo" accept="image/gif, image/jpeg, image/png" id="logo"/>
+                </div>
+                <div class="block-filter">
                     <button type="submit" class="btn btn-success" data-bind="click: onLogoSubmit">@Common.Save</button>
-                </form>
-                <div class="col-sm-3">
-                    <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo extra-margin-bottom" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';" />
+                </div>
+            </form>
+            <div class="col-sm-7">
+                <div class="block-filter">
+                    <figure class="logo-wrapper">
+                        <figcaption>@Settings.CurrentLogo:</figcaption>
+                        <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" class="logo extra-margin-bottom" onerror="this.src = '@Url.Content("~/Dependencies/img/HQ-login-3_05.png")';" />
+                    </figure>
+                </div>
+                <div class="block-filter">
                     <form action="@Url.Action("RemoveLogo", "Settings")" method="post">
                         <button type="submit" class="btn btn-danger">@Settings.RemoveLogo</button>
                     </form>
                 </div>
             </div>
+        </div>
         <script type="text/html" id="confirm-regenerate-password">
             <h3>
                 @Settings.RegeneratePasswordConfirm
