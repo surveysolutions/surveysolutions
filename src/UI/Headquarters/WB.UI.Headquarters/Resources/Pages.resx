@@ -558,7 +558,7 @@
     <value>Supervisor</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
-    <value>Supervisor</value>
+    <value>Supervisor (teams)</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
     <value>Interviewer (team)</value>
@@ -857,7 +857,7 @@
     <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Create interviewer profile</value>
+    <value>Create interviewer</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Interviewers</value>
