@@ -45,13 +45,18 @@
                 </label>
             }
         }
-    break;
+        break;
 
     case QuestionType.DateTime:
     case QuestionType.Numeric:
     case QuestionType.Text:
     case QuestionType.QRBarcode:
         @Model.AnswerString
+        break;
+    case QuestionType.Area:
+    {
+        @Model.AnswerString
+    }
         break;
     case QuestionType.GpsCoordinates:
         if (Model.Answer != null)
