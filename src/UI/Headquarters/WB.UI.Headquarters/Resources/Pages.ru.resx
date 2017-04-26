@@ -358,7 +358,7 @@
     <value>Супервизор</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
-    <value>Супервизор</value>
+    <value>Супервизор (команды)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
@@ -817,7 +817,7 @@
     <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Создание профиля интервьюера</value>
+    <value>Создание интервьюера</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -829,7 +829,7 @@
     <value>Редактирование профиля наблюдателя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_ObserverCreate" xml:space="preserve">
-    <value>Создание профиля наблюдателя</value>
+    <value>Создание пользователя Наблюдатель</value>
   </data>
   <data name="Profile_ObserversList" xml:space="preserve">
     <value>Наблюдатели</value>
@@ -869,7 +869,7 @@
     <comment>Используйте форму ниже чтобы изменить пароль аккаунта</comment>
   </data>
   <data name="Interviews_Selected" xml:space="preserve">
-    <value>интервьювер(ов) выбрано</value>
+    <value>интервью выбрано</value>
     <comment>интервьювер(ов) выбрано</comment>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
@@ -891,5 +891,8 @@
   <data name="Supervisors_Unarchive" xml:space="preserve">
     <value>Разархивировать</value>
     <comment>Разархивировать</comment>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Подключен к планшету</value>
   </data>
 </root>
