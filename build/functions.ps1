@@ -105,7 +105,8 @@ function BuildStaticContent($targetLocation, $forceInstall){
     }
 	
 	#will execute script gulpfile.js in target folder
-    &export NODE_ENV=production ^&& gulp --production | Write-Host 
+	&export NODE_ENV=production
+    &gulp --production | Write-Host 
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
     if (-not $wasBuildSuccessfull) {
