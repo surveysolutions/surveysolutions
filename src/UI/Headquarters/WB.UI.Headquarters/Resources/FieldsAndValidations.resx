@@ -240,4 +240,7 @@
   <data name="NewPasswordFieldName" xml:space="preserve">
     <value>New password</value>
   </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Confirm password is required</value>
+  </data>
 </root>
