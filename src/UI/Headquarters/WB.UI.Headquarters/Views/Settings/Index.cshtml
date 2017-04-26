@@ -65,9 +65,8 @@
                     <div class="form-group ">
                         <div class="input-group">
                             <input id="exportPassword" type="text" data-bind="textInput: password" readonly="readonly" class="form-control" />
-                            <span class="input-group-addon" data-bind="visible: isEnabled, click: regeneratePass">
-                                <i class="glyphicon glyphicon-refresh">
-                                </i>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" data-bind="enable: isEnabled, click: regeneratePass"><i class="glyphicon glyphicon-refresh"></i></button>
                             </span>
                         </div>
                     </div>
@@ -83,8 +82,10 @@
             </div>
             <form class="col-sm-7">
                 <div class="block-filter">
-                    <label for="notificationText">@Settings.GlobalNotice:</label>
+                    <div class="form-group">
+                        <label for="notificationText">@Settings.GlobalNotice:</label>
                         <textarea class="form-control" id="notificationText" type="text" data-bind="value: message" maxlength="1000"></textarea>
+                    </div>
                 </div>
                 <div class="block-filter">
                     <button type="button" class="btn btn-success" data-bind="click: updateMessage">
@@ -105,8 +106,10 @@
             </div>
             <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-7" data-bind="submit: onLogoSubmit">
                 <div class="block-filter">
-                    <label for="companyLogo">@Settings.Logo: </label>
-                    <input type="file" id="companyLogo" name="logo" accept="image/gif, image/jpeg, image/png" id="logo"/>
+                    <div class="form-group">
+                        <label for="companyLogo">@Settings.Logo: </label>
+                        <input type="file" id="companyLogo" name="logo" accept="image/gif, image/jpeg, image/png" id="logo" />
+                    </div>
                 </div>
                 <div class="block-filter">
                     <button type="submit" class="btn btn-success" data-bind="click: onLogoSubmit">@Common.Save</button>
