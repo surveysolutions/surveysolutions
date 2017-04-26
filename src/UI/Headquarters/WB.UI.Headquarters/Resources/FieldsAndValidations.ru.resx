@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" >
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
     <value>Невозможно обновить информация по польвателю, потому что он не существует</value>
   </data>
-  <data name="CannotUpdate_CurrentUserIsArchived" >
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
     <value>Невозможно обновить информацию по пользователю, потому что пользователь архивирован</value>
   </data>
   <data name="BatchUploadModel_FileName" xml:space="preserve">
@@ -230,5 +230,8 @@
   </data>
   <data name="OldPasswordFieldName" xml:space="preserve">
     <value>Старый пароль</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Укажите подтверждение пароля</value>
   </data>
 </root>
