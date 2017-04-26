@@ -358,7 +358,7 @@
     <value>Супервизор</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
-    <value>Супервизор (команды)</value>
+    <value>Супервизор</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
