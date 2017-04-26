@@ -403,10 +403,7 @@
 
                     if (currentQuestion.type === 'GpsCoordinates')
                         return o.value !== 'Supervisor';
-
-                    if (currentQuestion.type === 'Area')
-                        return o.value !== 'Supervisor';
-
+                    
                     return o.value !== 'Identifying' && o.value !== 'Supervisor';
                 });
             };
