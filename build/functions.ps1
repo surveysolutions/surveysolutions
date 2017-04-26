@@ -105,12 +105,11 @@ function BuildStaticContent($targetLocation, $forceInstall){
     }
 	
 	#will execute script gulpfile.js in target folder
-	&export NODE_ENV=production
     &gulp --production | Write-Host 
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run export NODE_ENV=production && gulp --production']"
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp --production']"
 		return $wasBuildSuccessfull
     }	
 	
