@@ -8,6 +8,26 @@
 @section styles
 {
     @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
+
+    <style type="text/css">
+        table.jqplot-table-legend {
+            width: 90%;
+            border: none;
+        }
+
+        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+            width: 20px;
+        }
+
+        div.jqplot-table-legend-swatch-outline {
+            border: none;
+        }
+
+        .jqplot-table-legend-swatch {
+            border-width: 10px;
+        }
+    </style>
+
 }
 @section scripts
 {
@@ -62,6 +82,7 @@
             <div class="main-information">
                 <div class="page-header">
                     <h1>@Reports.CumulativeInterviewChart</h1>
+                    <button type="button" class="btn btn-default" data-bind="click: $root.initChart">@Common.Refresh</button>
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-8">

@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class HQ {
@@ -88,11 +88,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observer user was successfully created..
+        ///   Looks up a localized string similar to Observer user &lt;b&gt;{0}&lt;/b&gt; was successfully created..
         /// </summary>
-        internal static string ObserverCreated {
+        internal static string ObserverCreatedFormat {
             get {
-                return ResourceManager.GetString("ObserverCreated", resourceCulture);
+                return ResourceManager.GetString("ObserverCreatedFormat", resourceCulture);
             }
         }
         
@@ -124,11 +124,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor was successfully created..
+        ///   Looks up a localized string similar to Supervisor &lt;b&gt;{0}&lt;/b&gt; was successfully created..
         /// </summary>
-        internal static string SuccessfullyCreated {
+        internal static string SuccessfullyCreatedFormat {
             get {
-                return ResourceManager.GetString("SuccessfullyCreated", resourceCulture);
+                return ResourceManager.GetString("SuccessfullyCreatedFormat", resourceCulture);
             }
         }
         
@@ -151,11 +151,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headquarters user was successfully created..
+        ///   Looks up a localized string similar to Headquarters user {0} was successfully created..
         /// </summary>
-        internal static string UserWasCreated {
+        internal static string UserWasCreatedFormat {
             get {
-                return ResourceManager.GetString("UserWasCreated", resourceCulture);
+                return ResourceManager.GetString("UserWasCreatedFormat", resourceCulture);
             }
         }
         

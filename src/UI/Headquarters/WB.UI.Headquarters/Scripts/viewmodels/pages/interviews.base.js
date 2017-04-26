@@ -96,7 +96,9 @@
 
         self.search();
 
-        self.InitSearchBar();
+        self.InitPrefilledColumnsAndShowSearchBarIfNeed();
+
+        $('.selectpicker').selectpicker('refresh');
     };
 
     self.sendCommandAfterFilterAndConfirm = function (commandName,
@@ -156,7 +158,7 @@
         return false;
     };
 
-    self.InitSearchBar = function() {
+    self.InitPrefilledColumnsAndShowSearchBarIfNeed = function() {
         $('.dataTables_filter label').on('click', function (e) {
             if (e.target !== this)
                 return;

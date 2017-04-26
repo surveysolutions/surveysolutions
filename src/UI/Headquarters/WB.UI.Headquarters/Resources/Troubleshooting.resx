@@ -121,16 +121,16 @@
     <value>Troubleshooting</value>
   </data>
   <data name="InterviewDataIsMissingDescription" xml:space="preserve">
-    <value>Specify an interview key or interivew id to search.</value>
+    <value>Specify an interview key or interview id to search.</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>An interviewer claims an interview was completed and syncronized, but I see no data for that interivew on the server</value>
+    <value>An interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
     <value>Provide an interviewer login name, name of a questionnaire and a date range</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
-    <value>I need to locate an interview in a cesus mode</value>
+    <value>I need to locate an interview in a census mode</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
     <value>Click on the link of an issue you want to resolve. For the problems not listed below, visit Survey Solutions &lt;a href="{0}" target="_blank"&gt;support site&lt;/a&gt;.</value>
@@ -139,7 +139,7 @@
     <value>Filter Conditions</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
-    <value>Search interviews syncronized between two dates</value>
+    <value>Search interviews synchronized between two dates</value>
   </data>
   <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
     <value>Select dates</value>
@@ -189,15 +189,15 @@ Select an interviewer and timeframe to narrow down your search result</value>
     <value>Status</value>
   </data>
   <data name="NoData_Description" xml:space="preserve">
-    <value>Specify an interview key (XX-XX-XX-XX) or interivew id to search.</value>
+    <value>Specify an interview key (XX-XX-XX-XX) or interview id to search.</value>
   </data>
   <data name="NoData_Filters_InterviewKey" xml:space="preserve">
-    <value>Interview key or interivew id</value>
+    <value>Interview key or interview id</value>
   </data>
   <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
     <value>Enter interview key or id</value>
   </data>
   <data name="NoData_Title" xml:space="preserve">
-    <value>I see no data for syncronized interview on the server</value>
+    <value>I see no data for synchronized interview on the server</value>
   </data>
 </root>

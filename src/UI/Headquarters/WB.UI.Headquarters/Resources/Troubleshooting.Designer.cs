@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify an interview key or interivew id to search..
+        ///   Looks up a localized string similar to Specify an interview key or interview id to search..
         /// </summary>
         public static string InterviewDataIsMissingDescription {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An interviewer claims an interview was completed and syncronized, but I see no data for that interivew on the server.
+        ///   Looks up a localized string similar to An interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server.
         /// </summary>
         public static string InterviewDataIsMissingTitle {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search interviews syncronized between two dates.
+        ///   Looks up a localized string similar to Search interviews synchronized between two dates.
         /// </summary>
         public static string MissingCensusInterviews_Filters_Dates {
             get {
@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I need to locate an interview in a cesus mode.
+        ///   Looks up a localized string similar to I need to locate an interview in a census mode.
         /// </summary>
         public static string MissingCensusInterviewsTitle {
             get {
@@ -215,7 +215,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify an interview key (XX-XX-XX-XX) or interivew id to search..
+        ///   Looks up a localized string similar to Specify an interview key (XX-XX-XX-XX) or interview id to search..
         /// </summary>
         public static string NoData_Description {
             get {
@@ -224,7 +224,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview key or interivew id.
+        ///   Looks up a localized string similar to Interview key or interview id.
         /// </summary>
         public static string NoData_Filters_InterviewKey {
             get {
@@ -242,7 +242,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I see no data for syncronized interview on the server.
+        ///   Looks up a localized string similar to I see no data for synchronized interview on the server.
         /// </summary>
         public static string NoData_Title {
             get {

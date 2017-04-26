@@ -52,7 +52,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new InterviewerModel { SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName });
+            return this.View(new InterviewerModel
+            {
+                SupervisorId = supervisorId.Value,
+                SupervisorName = supervisor.UserName,
+                IsLockedDisabled = !(this.authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            });
         }
 
         [HttpPost]
@@ -140,7 +145,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 IsLockedBySupervisor = user.IsLockedBySupervisor,
                 UserName = user.UserName,
                 PersonName = user.FullName,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                CancelAction = "Profile",
+                CancelArg = new { id },
+                IsLockedDisabled = !(this.authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
             });
         }
 
@@ -165,19 +173,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> UpdatePassword(UserEditModel model) => await HandleUpdatePasswordAsync(model, 
-            failAction: "Edit", 
-            successActionName: "Profile", 
-            successActionNameArgs: new { id = model.Id });
-
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back()
         {
             return this.RedirectToAction("Index", "Interviewers");
+        }
+
+        public override ActionResult Cancel(Guid? id)
+        {
+            if (id.HasValue)
+            {
+                return RedirectToAction("Profile", new {id});
+            }
+            else
+            {
+                return RedirectToAction("Back");
+            }
         }
     }
 }

@@ -125,7 +125,7 @@
 &lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другой интервьюер)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другого интервьюера)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Применить на {0} интервью, который интервьюер уже получил</value>
@@ -154,5 +154,9 @@
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;
 &lt;b&gt;Внимание!&lt;/b&gt; Вы можете откатить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;.</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного.</value>
+    <comment>Нет ответственного для некоторых интервью. Пожалуйста выберите интервьюера.</comment>
   </data>
 </root>

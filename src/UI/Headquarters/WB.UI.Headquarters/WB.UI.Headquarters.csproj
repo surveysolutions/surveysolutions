@@ -1195,7 +1195,6 @@
     <Content Include="Scripts\jqPlot\changes.txt" />
     <Content Include="Scripts\jqPlot\copyright.txt" />
     <Content Include="Scripts\jqPlot\excanvas.js" />
-    <Content Include="Scripts\jqPlot\excanvas.min.js" />
     <Content Include="Scripts\jqPlot\gpl-2.0.txt" />
     <Content Include="Scripts\jqPlot\jqPlotCssStyling.txt" />
     <Content Include="Scripts\jqPlot\jqPlotOptions.txt" />
@@ -1203,8 +1202,6 @@
     <Content Include="Scripts\jqPlot\jquery.jqplot.js" />
     <Content Include="Scripts\jqPlot\jquery.jqplot.min.css" />
     <Content Include="Scripts\jqPlot\jquery.jqplot.min.js" />
-    <Content Include="Scripts\jqPlot\jquery.js" />
-    <Content Include="Scripts\jqPlot\jquery.min.js" />
     <Content Include="Scripts\jqPlot\MIT-LICENSE.txt" />
     <Content Include="Scripts\jqPlot\optionsTutorial.txt" />
     <Content Include="Scripts\jqPlot\plugins\jqplot.barRenderer.js" />
@@ -1410,6 +1407,8 @@
     <Content Include="Views\Shared\Profile\_UserEditorLayout.cshtml" />
     <Content Include="Views\Shared\Profile\_UserCreateLayout.cshtml" />
     <Content Include="Views\Shared\Profile\ValidationSummary.cshtml" />
+    <Content Include="Views\Shared\Profile\UpdatePassword.cshtml" />
+    <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1577,7 +1576,7 @@
     <Compile Include="Code\StatusHelper.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -1585,13 +1584,13 @@
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
-    <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
-    <Compile Include="Controllers\InterviewerController.cs" />
+    <Compile Include="Controllers\Profile\InterviewerController.cs" />
     <Compile Include="Controllers\InterviewersController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
@@ -1600,7 +1599,7 @@
     <Compile Include="Controllers\SurveySetupController.cs" />
     <Compile Include="Controllers\TabletReportApiController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
-    <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Controllers\Profile\TeamController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -1611,6 +1610,8 @@
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
+    <Compile Include="Models\Account\IPasswordRequired.cs" />
+    <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
@@ -1684,20 +1685,20 @@
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
-    <Compile Include="Controllers\ObserverController.cs" />
+    <Compile Include="Controllers\Profile\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
-    <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
-    <Compile Include="Controllers\SupervisorController.cs" />
+    <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Implementation\Services\InterviewImportService.cs" />
     <Compile Include="Injections\HeadquartersRegistry.cs" />
