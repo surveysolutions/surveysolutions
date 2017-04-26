@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events..
+        ///   Looks up a localized string similar to Number of interview completions by a team. Rejected and then completed interviews are counted as separate completion events..
         /// </summary>
         public static string NumberOfCompletedInterviewsDescription {
             get {
