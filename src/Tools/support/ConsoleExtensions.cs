@@ -7,13 +7,8 @@ namespace support
 {
     public static class ConsoleExtensions
     {
-        public static void WriteLine(this IConsoleHost host, string text = null, bool isHighlighted = false)
-        {
-            const string underline = "\x1B[4m";
-            const string reset = "\x1B[0m";
-
-            host.WriteMessage(isHighlighted ? $"{underline}{text}{reset}{Environment.NewLine}" : $"{text}{Environment.NewLine}");
-        }
+        public static void WriteLine(this IConsoleHost host, string text = null)
+            => host.WriteMessage($"{text}{Environment.NewLine}");
 
         public static void WriteHighlitedText(this IConsoleHost host, string textToHighlight, ConsoleColor colorOfHighlightedText)
         {
