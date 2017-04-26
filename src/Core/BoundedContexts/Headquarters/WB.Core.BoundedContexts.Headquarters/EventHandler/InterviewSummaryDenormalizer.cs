@@ -39,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
-        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
-
+        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
+        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -364,6 +364,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var responsible = this.users.GetUser(new UserViewInputModel(responsibleId));
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
+        {
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
         }
     }
 }
