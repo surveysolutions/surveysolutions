@@ -1,4 +1,4 @@
-﻿@using Recaptcha.Web.Mvc
+﻿@using WB.UI.Shared.Web.Captcha
 @model WB.UI.Headquarters.Models.WebInterview.ResumeWebInterview
 @{
     Layout = "_WebInterviewLayout.cshtml";
@@ -37,7 +37,7 @@
             }
 
             <div class="form-group">
-                @Html.Recaptcha()
+                @Html.RenderCaptcha()
             </div>
         }
         <div class="form-actions">

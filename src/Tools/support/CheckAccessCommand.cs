@@ -29,8 +29,8 @@ namespace support
         public string PathToHeadquarters { get; set; }
 
         [Description("Check access to Survey Solutions website, connection and permissions to Headquarters database.")]
-        [Switch(LongName = "all")]
-        public bool All { get; set; } = false;
+        [Switch(LongName = "all", ShortName = "all")]
+        public bool All { get; set; } = true;
 
         [Description("Check access to Survey Solutions website.")]
         [Switch(ShortName = "ss", LongName = "survey-solutions")]
@@ -46,9 +46,14 @@ namespace support
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
-            this.PathToHeadquarters = this.PathToHeadquarters.TrimEnd('\\');
-
-            _configurationManagerSettings.SetPhysicalPathToWebsite(this.PathToHeadquarters);
+            try
+            {
+                _configurationManagerSettings.SetPhysicalPathToWebsite(this.PathToHeadquarters);
+            }
+            catch (Exception e)
+            {
+                this._logger.Error(e);
+            }
 
             var dbConnectionString = ConfigurationManager.ConnectionStrings["Postgres"]?.ConnectionString;
             var designerUrl = ConfigurationManager.AppSettings["DesignerAddress"];
@@ -75,6 +80,9 @@ namespace support
                     host.WriteMessage("Permissions to database: ");
                     await host.TryExecuteActionWithAnimationAsync(_logger, _databaseSevice.HasPermissionsAsync(dbConnectionString));
                 }
+
+                if(!this.All && !this.CheckDbConnection && !this.CheckDbPermissions && !this.CheckDesignerWebsite)
+                    host.WriteMessage("No health checks selected. Use [--all] parameter to check all services");
             }
 
             return null;

@@ -35,9 +35,14 @@ namespace support
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
-            this.PathToHeadquarters = this.PathToHeadquarters.TrimEnd('\\');
-
-            _configurationManagerSettings.SetPhysicalPathToWebsite(this.PathToHeadquarters);
+            try
+            {
+                _configurationManagerSettings.SetPhysicalPathToWebsite(this.PathToHeadquarters);
+            }
+            catch (Exception e)
+            {
+                this._logger.Error(e);
+            }
 
             var elmahConfigSection = ConfigurationManager.GetSection("elmah/errorLog") as Hashtable;
             var nlogConfigSection = ConfigurationManager.GetSection("nlog") as XmlLoggingConfiguration;

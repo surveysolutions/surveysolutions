@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using NConsole;
@@ -37,8 +38,11 @@ namespace support
             ninjectKernel.Bind<ILogger>().ToConstant(logger);
 
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
+            ((Dictionary<string, Type>)processor.Commands).Clear();
+
             processor.RegisterCommand<CheckAccessCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
+            processor.RegisterCommand<CustomHelpCommand>("help");
             processor.RegisterCommand<CustomHelpCommand>("");
 
             try

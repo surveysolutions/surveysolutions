@@ -7831,6 +7831,17 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   .input-group-addon:hover, .input-group-addon:focus, .input-group-addon:active {
     color: #595c5d; }
 
+.compulsory-field {
+  position: relative; }
+  .compulsory-field:before {
+    display: block;
+    content: "*";
+    color: #e74924;
+    position: absolute;
+    top: 0;
+    left: -10px;
+    font-size: 20px; }
+
 .structured-content {
   margin: 0; }
   .structured-content .panel + .panel {
