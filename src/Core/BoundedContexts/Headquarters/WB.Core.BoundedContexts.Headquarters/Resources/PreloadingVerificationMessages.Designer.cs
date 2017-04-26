@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0014] Provided question value not allowed..
+        ///   Looks up a localized string similar to Provided question value not allowed..
         /// </summary>
         public static string PL0014_ParsedValueIsNotAllowed {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0015] Type of question is not correct..
+        ///   Looks up a localized string similar to Type of question is not correct..
         /// </summary>
         public static string PL0015_QuestionTypeIsIncorrect {
             get {
