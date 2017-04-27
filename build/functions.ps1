@@ -369,13 +369,12 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
 				
     $file = get-childitem $SupportToolSolution
 	
-	$sourceDir = $file.directoryname + "\bin\" + $BuildConfiguration
-	
-	$destZipDir = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\"
-	$destZipFile = $destZipDir + "support.zip"
-	
-	New-Item -ItemType directory -Path $destZipDir
+	$binDir = file.directoryname + "\bin\"
+	$sourceDir = $binDir + $BuildConfiguration
+	$destZipFile = $binDir + "support.zip"
 	
 	CreateZip $sourceDir $destZipFile
+	MoveArtifacts $destZipFile "Tools"
+	
 	Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
 }
