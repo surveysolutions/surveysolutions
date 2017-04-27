@@ -351,3 +351,11 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$ver)
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}
 }
+
+function CreateZip($sourceFolder, $zipfile)
+{
+	If(Test-path $zipfile) {Remove-item $zipfile}
+	
+	Add-Type -assembly "system.io.compression.filesystem"	
+	[io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
+}

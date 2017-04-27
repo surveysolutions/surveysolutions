@@ -13,6 +13,7 @@ $ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 $MainSolution = 'src\WB.sln'
+$SupportToolSolution = 'src\Tools\support\support.sln'
 
 
 $versionString = (GetVersionString 'src\core')
@@ -57,6 +58,16 @@ try {
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
+	BuildSolution `
+                -Solution $SupportToolSolution `
+                -BuildConfiguration $BuildConfiguration
+				
+    $file = get-childitem $SupportToolSolution
+	$pathToSupportAppDir = $file.directoryname + "\bin\" + $BuildConfiguration
+	$pathToSupportAppZip = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\support.zip"
+	
+	CreateZip $pathToSupportAppDir $pathToSupportAppZip
+	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
@@ -67,6 +78,7 @@ try {
 	Remove-Item $webpackStats
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
 	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+	AddArtifacts $SupportToolSolution $BuildConfiguration -folder "Tools"
 	
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
