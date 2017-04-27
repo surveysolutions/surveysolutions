@@ -64,6 +64,27 @@
             });
     };
 
+    self.clearMessage = function () {
+        var confirmNoteClearing = self.getBindedHtmlTemplate("#confirm-note-clearing");
+
+        bootbox.dialog({
+            closeButton: false,
+            message: confirmNoteClearing,
+            buttons: {
+                cancel: {
+                    label: "No"
+                },
+                success: {
+                    label: "Yes",
+                    callback: function () {
+                        self.message("");
+                        self.updateMessage();
+                    }
+                }
+            }
+        });
+    };
+
 
     self.onLogoSubmit = function() {
         //check whether browser fully supports all File API

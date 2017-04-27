@@ -178,4 +178,7 @@
   <data name="CurrentLogo" xml:space="preserve">
     <value>Текущий логотип</value>
   </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить глобальное сообщение?</value>
+  </data>
 </root>
