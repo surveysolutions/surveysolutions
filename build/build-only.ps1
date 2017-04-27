@@ -69,9 +69,7 @@ try {
 	MoveArtifacts $webpackStats -folder "BuildStats"
 	Remove-Item $webpackStats
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
-	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-	AddArtifacts $SupportToolSolution $BuildConfiguration -folder "Tools"
-	
+	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"	
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }
