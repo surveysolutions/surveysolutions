@@ -8552,7 +8552,6 @@ body > .ui-pnotify {
 
 .modal-content {
   padding: 20px;
-  padding-left: 25px;
   overflow: hidden;
   border: none;
   box-shadow: none;
@@ -8597,11 +8596,11 @@ body > .ui-pnotify {
         .modal-content .modal-header .close span:hover:before, .modal-content .modal-header .close span:hover:after, .modal-content .modal-header .close span:focus:before, .modal-content .modal-header .close span:focus:after, .modal-content .modal-header .close span:active:before, .modal-content .modal-header .close span:active:after {
           background-color: #595c5d; }
   .modal-content .modal-body {
-    padding: 0; }
-    .modal-content .modal-body .bootbox-body {
-      padding: 40px; }
-      .modal-content .modal-body .bootbox-body p:last-child {
-        margin: 0; }
+    padding: 0 0 10px; }
+    .modal-content .modal-body .bootbox-body h3 {
+      font: 18px/20px RobotoRegular; }
+    .modal-content .modal-body .bootbox-body p:last-child {
+      margin: 0; }
     .modal-content .modal-body ul li {
       margin-bottom: 5px; }
       .modal-content .modal-body ul li label {
@@ -8643,9 +8642,11 @@ body > .ui-pnotify {
     padding: 10px;
     color: #a6a8a9; }
 
-@media (max-width: 880px) {
+@media (max-width: 481px) {
   .ui-pnotify {
-    width: 250px !important; } }
+    width: 300px !important; }
+    .ui-pnotify .input-group {
+      width: 100%; } }
 
 @font-face {
   font-family: "RobotoRegular";
