@@ -188,7 +188,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.ModelState.IsValid)
             {
-                var updateResult = await this.UpdateAccountAsync(model);
+                var updateResult = await this.UpdateAccountPasswordAsync(model);
 
                 if (updateResult.Succeeded)
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfully);

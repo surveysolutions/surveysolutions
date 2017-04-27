@@ -171,4 +171,7 @@
   <data name="LogoSettings_Description" xml:space="preserve">
     <value>Company logo shows a custom image on the server login page and on the login page of the interviewer app. Click Choose file button to upload an image on your computer to the server.</value>
   </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Current logo</value>
+  </data>
 </root>
