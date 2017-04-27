@@ -160,7 +160,7 @@
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <td>
-                                                <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
+                                                <a data-bind="attr: { href: $surveysUrl + '?responsible=' + (ResponsibleRole() == '4' ? TeamLeadName() : ResponsibleName()) }, text: ResponsibleName"></a>
                                             </td>
                                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                                             <td class="errors">
