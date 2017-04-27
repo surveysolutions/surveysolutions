@@ -16,7 +16,8 @@
         var $messageUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AdminSettings" })';
 
         $(function () {
-            var model = new Supervisor.VM.ExportSettings($dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
+            var notifier = new Notifier();
+            var model = new Supervisor.VM.ExportSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
             ko.applyBindings(model);
             model.load();
         });
