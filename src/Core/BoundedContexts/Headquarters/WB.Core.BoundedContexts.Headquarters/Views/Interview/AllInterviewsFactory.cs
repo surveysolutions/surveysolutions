@@ -75,6 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient,
                     ReceivedByInterviewer = x.ReceivedByInterviewer,
+                    TeamLeadName = x.TeamLeadName,
                     Key = x.Key
                 }).ToList()
             };
