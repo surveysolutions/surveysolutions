@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
                 return await this.userManager.ChangePasswordAsync(appUser, editModel.Password);
             }
-
+            
             return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
         }
         
