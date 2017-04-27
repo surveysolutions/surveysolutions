@@ -59,16 +59,6 @@ try {
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
-	BuildSolution `
-                -Solution $SupportToolSolution `
-                -BuildConfiguration $BuildConfiguration
-				
-    $file = get-childitem $SupportToolSolution
-	$pathToSupportAppDir = $file.directoryname + "\bin\" + $BuildConfiguration
-	$pathToSupportAppZip = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\support.zip"
-	
-	CreateZip $pathToSupportAppDir $pathToSupportAppZip
-	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
