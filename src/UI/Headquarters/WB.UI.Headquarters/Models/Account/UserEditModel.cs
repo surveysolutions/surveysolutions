@@ -34,6 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
         public bool IsLockedBySupervisor { get; set; }
 
-        public string UpdatePasswordAction { get; set; } = "UpdatePassword";
+        public string UpdatePasswordAction { get; set; }
     }
 }
