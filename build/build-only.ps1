@@ -47,14 +47,16 @@ try {
 	 	Exit 		
 	}
 	
-	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
-
-	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
 	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
 		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 		Exit 
 	}}
+	
+	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
