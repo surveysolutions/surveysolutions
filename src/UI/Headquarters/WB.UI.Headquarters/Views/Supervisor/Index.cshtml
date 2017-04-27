@@ -332,7 +332,7 @@
                 <div class="page-header clearfix">
                     <div>
                         <h1>@Users.Supervisors</h1>
-                        @if (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter)
+                        @if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
                         }
