@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete global note?.
+        /// </summary>
+        internal static string GlobalNoteClearingConfirm {
+            get {
+                return ResourceManager.GetString("GlobalNoteClearingConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note saved.
         /// </summary>
         internal static string GlobalNoteSaved {
