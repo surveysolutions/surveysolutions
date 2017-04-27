@@ -22,8 +22,6 @@ try {
 	BuildSolution `
                 -Solution $MainSolution `
                 -BuildConfiguration $BuildConfiguration
-				
-	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	$PackageName = 'WBCapi.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -64,6 +62,8 @@ try {
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
+	
+	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$webpackStats = "src\UI\Headquarters\WB.UI.Headquarters\InterviewApp\stats.html"
 	MoveArtifacts $webpackStats -folder "BuildStats"
