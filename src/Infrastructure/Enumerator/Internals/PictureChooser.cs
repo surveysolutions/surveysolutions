@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
@@ -25,11 +24,21 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions
             {
-                CompressionQuality = 95,
+                CompressionQuality = 50,
                 PhotoSize = PhotoSize.Full
             };
             var photo = await this.media.TakePhotoAsync(storeCameraMediaOptions).ConfigureAwait(false);
             return photo?.GetStream();
+        }
+
+        public async Task<Stream> ChoosePictureGallery()
+        {
+            await this.permissions.AssureHasPermission(Permission.Storage).ConfigureAwait(false);
+            await this.permissions.AssureHasPermission(Permission.Camera).ConfigureAwait(false);
+            await this.media.Initialize().ConfigureAwait(false);
+
+            MediaFile result = await this.media.PickPhotoAsync().ConfigureAwait(false);
+            return result?.GetStream();
         }
     }
 }
