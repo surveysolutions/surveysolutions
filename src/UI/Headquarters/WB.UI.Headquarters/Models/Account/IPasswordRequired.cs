@@ -10,11 +10,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [PasswordStringLength(100, ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordLengthMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [PasswordRegularExpression(ErrorMessageResourceName = nameof(FieldsAndValidations.PasswordErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsAndValidations.NewPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 1)]
+        
         string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsAndValidations.ConfirmNewPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 2)]
         [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
         string ConfirmPassword { get; set; }
         

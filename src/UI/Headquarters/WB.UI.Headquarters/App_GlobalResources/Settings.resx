@@ -174,4 +174,7 @@
   <data name="CurrentLogo" xml:space="preserve">
     <value>Current logo</value>
   </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Are you sure you want to delete global note?</value>
+  </data>
 </root>

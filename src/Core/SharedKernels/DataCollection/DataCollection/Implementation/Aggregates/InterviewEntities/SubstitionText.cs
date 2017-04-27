@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 textWithReplacedSubstitutions =
                     this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions,
                         substitution.Name,
-                        WebUtility.HtmlEncode(rosterTitle));
+                        shouldAddBrowserTags ? WebUtility.HtmlEncode(rosterTitle) : rosterTitle);
             }
 
             foreach (var substitution in this.substitutionVariables.ByVariables)
@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 textWithReplacedSubstitutions =
                     this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions,
                         substitution.Name,
-                        WebUtility.HtmlEncode(variableValueAsString));
+                        shouldAddBrowserTags ? WebUtility.HtmlEncode(variableValueAsString) : variableValueAsString);
             }
 
             foreach (var substitution in this.substitutionVariables.ByQuestions)
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     ? this.substitutionService.DefaultSubstitutionText
                     : answerString;
 
-                var htmlReadyAnswer = WebUtility.HtmlEncode(answerString);
+                var htmlReadyAnswer = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString) : answerString;
 
                 if (shouldAddBrowserTags && question?.AsDateTime?.IsAnswered == true)
                 {
