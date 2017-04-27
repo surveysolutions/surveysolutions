@@ -369,7 +369,7 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
 				
     $file = get-childitem $SupportToolSolution
 	
-	$binDir = file.directoryname + "\bin\"
+	$binDir = $file.directoryname + "\bin\"
 	$sourceDir = $binDir + $BuildConfiguration
 	$destZipFile = $binDir + "support.zip"
 	
