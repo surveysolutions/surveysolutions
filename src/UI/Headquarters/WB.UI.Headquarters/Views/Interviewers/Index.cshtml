@@ -396,7 +396,7 @@
                 <div class="page-header clearfix">
                     <div>
                         <h1>@Pages.Interviewers_Header</h1>
-                        @if (isVisibleSupervisorColumn)
+                        @if (isVisibleSupervisorColumn && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new {area = string.Empty})">
                                 @Users.AddInterviewer

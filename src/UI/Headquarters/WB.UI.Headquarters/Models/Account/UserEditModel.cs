@@ -10,8 +10,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public Guid Id { get; set; }
 
         public string UserName { get; set; }
-        
+
+        [Display(Name = nameof(FieldsAndValidations.NewPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 1)]
         public string Password { get; set; }
+
+        [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 2)]
         public string ConfirmPassword { get; set; }
 
         [EmailAddress(ErrorMessageResourceName = nameof(FieldsAndValidations.EmailErrorMessage), ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessage = null)]
@@ -34,6 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(Name = nameof(FieldsAndValidations.IsLockedBySupervisorFieldName), ResourceType = typeof(FieldsAndValidations), Order = 7)]
         public bool IsLockedBySupervisor { get; set; }
 
-        public string UpdatePasswordAction { get; set; } = "UpdatePassword";
+        public string UpdatePasswordAction { get; set; } = @"UpdatePassword";
     }
 }

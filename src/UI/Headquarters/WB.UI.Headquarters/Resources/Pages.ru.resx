@@ -791,7 +791,7 @@
     <comment>Логин</comment>
   </data>
   <data name="AccountManage_Title" xml:space="preserve">
-    <value>Редактирование профиля администратора</value>
+    <value>Редактирование профиля {0}</value>
     <comment>Редактирование профиля администратора</comment>
   </data>
   <data name="Update" xml:space="preserve">

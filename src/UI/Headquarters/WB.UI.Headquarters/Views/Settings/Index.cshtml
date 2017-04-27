@@ -16,7 +16,8 @@
         var $messageUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AdminSettings" })';
 
         $(function () {
-            var model = new Supervisor.VM.ExportSettings($dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
+            var notifier = new Notifier();
+            var model = new Supervisor.VM.ExportSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -34,14 +35,10 @@
     <div class="container">
         <div class="row">
             <div class="page-header">
-                <ol class="breadcrumb">
-                    <li><a>@User.Identity.Name</a></li>
-                </ol>
-                <h1>Settings</h1>
+                <h1>@Common.Settings</h1>
             </div>
             @Html.Partial("_alerts")
         </div>
-
         <div class="row extra-margin-bottom contain-input">
             <div class="col-sm-7">
                 <h2>
@@ -91,6 +88,9 @@
                     <button type="button" class="btn btn-success" data-bind="click: updateMessage">
                         @Common.Save
                     </button>
+                    <button type="button" class="btn btn-link" data-bind="click: clearMessage">
+                        @Common.Delete
+                    </button>
                     <span class="text-success" data-bind="visible: messageUpdated">
                         @Settings.GlobalNoteSaved
                     </span>
@@ -139,5 +139,11 @@
                 @Settings.ChangeStateConfirm
             </h3>
         </script>
+        <script type="text/html" id="confirm-note-clearing">
+            <h3>
+                @Settings.GlobalNoteClearingConfirm
+            </h3>
+        </script>
+        
     </div>
 </main>
