@@ -175,4 +175,7 @@
     <value>Глобальное сообщение</value>
     <comment>Глобальное сообщение</comment>
   </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Текущий логотип</value>
+  </data>
 </root>
