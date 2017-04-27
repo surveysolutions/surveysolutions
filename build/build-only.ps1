@@ -57,6 +57,7 @@ try {
 	}}
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
+	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	BuildSolution `
                 -Solution $SupportToolSolution `

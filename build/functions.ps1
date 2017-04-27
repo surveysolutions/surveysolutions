@@ -359,3 +359,23 @@ function CreateZip($sourceFolder, $zipfile)
 	Add-Type -assembly "system.io.compression.filesystem"	
 	[io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
 }
+
+function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
+{
+	Write-Host "##teamcity[blockOpened name='Building and deploying support console application']"
+	BuildSolution `
+                -Solution $SupportToolSolution `
+                -BuildConfiguration $BuildConfiguration
+				
+    $file = get-childitem $SupportToolSolution
+	
+	$sourceDir = $file.directoryname + "\bin\" + $BuildConfiguration
+	
+	$destZipDir = $file.directoryname + "\obj\" + $BuildConfiguration
+	$destZipFile = $destZipDir + "\package\support.zip"
+	
+	New-Item -ItemType directory -Path $destZipDir
+	
+	CreateZip $sourceDir $destZipFile
+	Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
+}
