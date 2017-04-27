@@ -1,7 +1,15 @@
-﻿@model UserModelBase
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
+@model UserModelBase
+@{
+    var isObserving = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsObserving;
+}
 <div class="col-sm-12">
     <div class="block-filter">
-        <button type="submit" class="btn btn-success">@Pages.Update</button>
-        @Html.ActionLink(Common.Cancel, Model.CancelAction, Model.CancelArg, new { @class = "btn btn-default" })
+        @if (!isObserving)
+        {
+            <button type="submit" class="btn btn-success">@Pages.Update</button>
+        }
+        @Html.ActionLink(Common.Cancel, Model.CancelAction, Model.CancelArg, new {@class = "btn btn-default"})
     </div>
 </div>

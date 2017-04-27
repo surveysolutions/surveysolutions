@@ -1,6 +1,7 @@
 ﻿@model UserEditModel
 @{
     Layout = "_EditorLayout.cshtml";
+    var isOwnAccoutEditing = this.ViewBag.IsOwnAccoutEditing ?? false;
 }
 @section scripts {
     @RenderSection(@"scripts", false)
@@ -16,7 +17,6 @@
         @RenderSection(@"PreFormSection", false)
         @Html.HiddenFor(x => x.Id)
         @Html.HiddenFor(x => x.UserName)
-        @Html.HiddenFor(x => x.EditAction)
         @Html.HiddenFor(x => x.HideDetails)
         @Html.HiddenFor(x => x.IsLockedDisabled)
         <div class="col-sm-12">
@@ -27,7 +27,10 @@
                 @Html.EditorFor(x => x.Email, "TextBoxFormField")
                 @Html.EditorFor(x => x.PhoneNumber, "TextBoxFormField")
             }
-            @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
+            @if (!isOwnAccoutEditing)
+            {
+                @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
+            }
             @RenderSection(@"PostDetailsSection", false)
             @Html.Partial("Profile/ValidationSummary")
         </div>
@@ -35,6 +38,6 @@
         @Html.EditorForModel("UpdateButtonsRow")
     }
 
-    @Html.Partial("Profile/" + Model.UpdatePasswordAction)
+    @Html.Partial(@"Profile/" + Model.UpdatePasswordAction ?? @"UpdatePassword")
 </div>
 @RenderBody()

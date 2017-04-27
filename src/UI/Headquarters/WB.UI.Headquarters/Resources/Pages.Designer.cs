@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit admin profile.
+        ///   Looks up a localized string similar to Edit {0} profile.
         /// </summary>
         public static string AccountManage_Title {
             get {
@@ -1861,7 +1861,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create interviewer profile.
+        ///   Looks up a localized string similar to Create interviewer.
         /// </summary>
         public static string Profile_InterviewerCreate {
             get {
@@ -2222,7 +2222,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor.
+        ///   Looks up a localized string similar to Supervisor (teams).
         /// </summary>
         public static string SurveysAndStatuses_SupervisorTitle {
             get {

@@ -134,6 +134,8 @@ namespace WB.UI.Headquarters.Controllers
 
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
+            this.ViewBag.IsOwnAccoutEditing = true;
+
             return View(new ManageAccountModel
             {
                 Id = currentUser.Id,
@@ -171,6 +173,8 @@ namespace WB.UI.Headquarters.Controllers
                     this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
             }
 
+            model.EditAction = nameof(Manage);
+            model.UpdatePasswordAction = nameof(this.UpdateOwnPassword);
             return this.View(model);
         }
 
@@ -193,9 +197,11 @@ namespace WB.UI.Headquarters.Controllers
                 if (updateResult.Succeeded)
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfully);
                 else
-                    this.ModelState.AddModelError("", string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError(nameof(UserEditModel.ConfirmPassword), string.Join(@", ", updateResult.Errors));
             }
-            
+
+            model.EditAction = nameof(Manage);
+            model.UpdatePasswordAction = nameof(this.UpdateOwnPassword);
             return View("Manage", model);
         }
 
