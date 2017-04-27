@@ -164,7 +164,7 @@ body > .ui-pnotify
 }
 .modal-content{
 	padding: 20px;
-    padding-left: 25px;
+    //padding-left: 25px;
     overflow: hidden;
     border: none;
     box-shadow: none;
@@ -190,9 +190,12 @@ body > .ui-pnotify
 		}
 	}
 	.modal-body{
-		padding: 0;
+		padding: 0 0 10px;
         .bootbox-body{
-            padding: 40px;
+            //padding: 40px;
+            h3{
+                font: 18px/20px RobotoRegular;
+            }
             p:last-child{
                 margin: 0;
             }
@@ -255,8 +258,11 @@ body > .ui-pnotify
         }
     }
 }
-@media (max-width: $screen-sm-min){
+@media (max-width: $screen-xs-min){
     .ui-pnotify{
-        width: 250px !important;
+        width: 300px !important;
+        .input-group{
+            width: 100%;
+        }
     }
 }
