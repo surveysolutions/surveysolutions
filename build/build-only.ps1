@@ -22,6 +22,8 @@ try {
 	BuildSolution `
                 -Solution $MainSolution `
                 -BuildConfiguration $BuildConfiguration
+				
+	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	$PackageName = 'WBCapi.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -57,7 +59,6 @@ try {
 	}}
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
-	BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
