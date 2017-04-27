@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             text.SetTree(tree);
 
             text.ReplaceSubstitutions();
-            var textWithSubstitutedValues = text.Text;
+            var textWithSubstitutedValues = text.BrowserReadyText;
 
             Assert.That(textWithSubstitutedValues, Is.Not.Null.Or.Empty);
 
