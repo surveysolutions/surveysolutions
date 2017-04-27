@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Ionic.Zlib;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
@@ -37,6 +39,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
+using CompressionLevel = System.IO.Compression.CompressionLevel;
 
 namespace WB.UI.Headquarters
 {
@@ -56,6 +59,9 @@ namespace WB.UI.Headquarters
         public void Configuration(IAppBuilder app)
         {
             app.Use(RemoveServerNameFromHeaders);
+            
+            app.Use(CompressionForApiRequests); // enforce compression for API clients
+
             ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
@@ -274,6 +280,56 @@ namespace WB.UI.Headquarters
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
             filters.Add(new ApiMaintenanceFilter());
+        }
+
+        private async Task CompressionForApiRequests(IOwinContext ctx, Func<Task> next)
+        {
+            if (IsApiRequest(ctx.Request))
+            {
+                await Compression(ctx, next);
+            }
+            else
+            {
+                await next();
+            }
+        }
+
+        private async Task Compression(IOwinContext context, Func<Task> next)
+        {
+            bool isCompressed = false;
+            isCompressed = isCompressed || await EncodeStream(context, next, @"gzip", 
+                body => new GZipStream(body, CompressionMode.Compress, Ionic.Zlib.CompressionLevel.BestCompression, true));
+
+            if (!isCompressed) // if no compression occure, then next() method were no called
+            {
+                await next();
+            }
+        }
+
+        private async Task<bool> EncodeStream(IOwinContext ctx, Func<Task> next, string contentEncoding, Func<Stream, Stream> factory)
+        {
+            if (!ctx.Request.Headers[@"Accept-Encoding"].Contains(contentEncoding)) return false;
+            if (ctx.Response.Headers.ContainsKey(@"Content-Encoding")) return false; // do not encode twice
+
+            using (var memory = new MemoryStream())
+            {
+                var response = ctx.Response.Body;
+
+                using (var compress = factory(memory))
+                {
+                    ctx.Response.Body = compress;
+                    await next();
+                    await compress.FlushAsync();
+                }
+
+                ctx.Response.Headers.AppendCommaSeparatedValues(@"Content-Encoding", contentEncoding);
+                ctx.Response.ContentLength = memory.Length;
+
+                memory.WriteTo(response);
+                ctx.Response.Body = response;
+            }
+
+            return true;
         }
     }
 }
