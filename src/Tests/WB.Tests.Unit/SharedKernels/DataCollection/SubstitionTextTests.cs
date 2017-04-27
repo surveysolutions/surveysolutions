@@ -107,16 +107,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             text.SetTree(tree);
 
             text.ReplaceSubstitutions();
-            var textWithSubstitutedValues = text.BrowserReadyText;
+            var browserReadyText = text.BrowserReadyText;
 
-            Assert.That(textWithSubstitutedValues, Is.Not.Null.Or.Empty);
+            Assert.That(browserReadyText, Is.Not.Null.Or.Empty);
 
-            Assert.That(textWithSubstitutedValues, Does.Contain(HttpUtility.HtmlEncode(questionRawAnswer)));
-            Assert.That(textWithSubstitutedValues, Does.Contain(HttpUtility.HtmlEncode(variableRawValue)));
-            Assert.That(textWithSubstitutedValues, Does.Contain(HttpUtility.HtmlEncode(rosterRawValue)));
+            Assert.That(browserReadyText, Does.Contain(HttpUtility.HtmlEncode(questionRawAnswer)));
+            Assert.That(browserReadyText, Does.Contain(HttpUtility.HtmlEncode(variableRawValue)));
+            Assert.That(browserReadyText, Does.Contain(HttpUtility.HtmlEncode(rosterRawValue)));
 
-            Assert.That(textWithSubstitutedValues, Does.Not.Contain("<"));
-            Assert.That(textWithSubstitutedValues, Does.Not.Contain(">"));
+            Assert.That(browserReadyText, Does.Not.Contain("<"));
+            Assert.That(browserReadyText, Does.Not.Contain(">"));
+
+            var substitutedRawText = text.Text;
+            Assert.That(substitutedRawText, Is.EqualTo($"{rosterRawValue} {questionRawAnswer} {variableRawValue}"));
         }
 
         private SubstitionText CreateSubstitionText(
