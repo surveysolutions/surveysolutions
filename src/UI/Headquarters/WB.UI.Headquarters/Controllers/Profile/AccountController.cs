@@ -132,6 +132,8 @@ namespace WB.UI.Headquarters.Controllers
 
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
+            this.ViewBag.IsOwnAccoutEditing = true;
+
             return View(new ManageAccountModel
             {
                 Id = currentUser.Id,
