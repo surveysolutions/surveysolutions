@@ -19,5 +19,6 @@ namespace WB.UI.Headquarters.Models
         public int TotalSuccessSynchronizationCount { get; set; }
         public int TotalFailedSynchronizationCount { get; set; }
         public double? AverageSyncSpeedBytesPerSecond { get; set; }
+        public DateTime? DeviceAssignmentDate { get; set; }
     }
 }
