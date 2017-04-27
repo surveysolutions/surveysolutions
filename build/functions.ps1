@@ -371,8 +371,8 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
 	
 	$sourceDir = $file.directoryname + "\bin\" + $BuildConfiguration
 	
-	$destZipDir = $file.directoryname + "\obj\" + $BuildConfiguration
-	$destZipFile = $destZipDir + "\package\support.zip"
+	$destZipDir = $file.directoryname + "\obj\" + $BuildConfiguration + "\package\"
+	$destZipFile = $destZipDir + "support.zip"
 	
 	New-Item -ItemType directory -Path $destZipDir
 	
