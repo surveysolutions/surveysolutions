@@ -16,7 +16,6 @@
         @RenderSection(@"PreFormSection", false)
         @Html.HiddenFor(x => x.Id)
         @Html.HiddenFor(x => x.UserName)
-        @Html.HiddenFor(x => x.EditAction)
         @Html.HiddenFor(x => x.HideDetails)
         @Html.HiddenFor(x => x.IsLockedDisabled)
         <div class="col-sm-12">
@@ -35,6 +34,6 @@
         @Html.EditorForModel("UpdateButtonsRow")
     }
 
-    @Html.Partial("Profile/" + Model.UpdatePasswordAction)
+    @Html.Partial(@"Profile/" + Model.UpdatePasswordAction ?? @"UpdatePassword")
 </div>
 @RenderBody()
