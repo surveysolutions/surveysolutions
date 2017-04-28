@@ -48,7 +48,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
         {
-            Area = area
+            area = area
         });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
