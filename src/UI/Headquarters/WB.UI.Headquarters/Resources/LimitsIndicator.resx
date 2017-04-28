@@ -124,6 +124,6 @@
     <value>You are in TESTING MODE</value>
   </data>
   <data name="YouHaveExceededYourLimitFormat" xml:space="preserve">
-    <value>You have exceeded your limit {0} interview(s). You can't create new interviews any more...</value>
+    <value>You have exceeded your limit of {0} interview(s). You can't create new interviews anymore.</value>
   </data>
 </root>
