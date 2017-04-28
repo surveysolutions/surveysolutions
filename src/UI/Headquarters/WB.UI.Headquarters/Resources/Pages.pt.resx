@@ -567,4 +567,7 @@
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>Sim</value>
   </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Conectado ao servidor</value>
+  </data>
 </root>

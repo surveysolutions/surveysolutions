@@ -211,7 +211,7 @@
     <value>Could not update user information because current user does not exist</value>
   </data>
   <data name="InterviewerController_EditSuccess" xml:space="preserve">
-    <value>Information about  {0}  successfully updated</value>
+    <value>Information about {0} successfully updated</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Index</value>
@@ -361,7 +361,7 @@
     <value>Not found</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
-    <value>Folder which contains the website has a long directory path. Please move a website to the upper folders.</value>
+    <value>Folder that contains the website has a path name that is too long. Please move the website to another folder with a shorter name.</value>
   </data>
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Health check monitor</value>
@@ -534,7 +534,7 @@
     <value>Interviewer: {0}</value>
   </data>
   <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
-    <value>Interviewer did not synchronize yet. There is no information about devices in use.</value>
+    <value>Interviewer has not synchronized yet. There is no information about his/her devices.</value>
   </data>
   <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
     <value>Device id</value>
@@ -564,7 +564,7 @@
     <value>Interviewer (team)</value>
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
-    <value>Surveys and Statuses</value>
+    <value>Surveys and statuses</value>
   </data>
   <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
     <value>{0} interview(s) from {1} responsible(s)</value>
@@ -609,7 +609,7 @@
     <value>Maintenance</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>The application is currently being upgraded to the new version. This a manual operation and may require a noticeable amount of time. Sorry for the inconvenience. After the process is completed you will be automatically redirected to the page you requested.</value>
+    <value>The application is currently being upgraded to a newer version. This a manual operation and may require a noticeable amount of time. Sorry for the inconvenience. After the process is completed, you will be automatically redirected to the page you requested.</value>
   </data>
   <data name="MaintenanceReadSide_Header" xml:space="preserve">
     <value>Under maintenance...</value>
@@ -618,7 +618,7 @@
     <value>Rebooting...</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
-    <value>The application is now rebooting and this may take up to 10 minutes or more. Sorry for the inconvenience. After the process is completed you will be automatically redirected to the page you requested.</value>
+    <value>The application is now rebooting, and this may take up to 10 minutes or more. Sorry for the inconvenience. After the process is completed, you will be automatically redirected to the page you requested.</value>
   </data>
   <data name="Survey_ResponsibleTitle" xml:space="preserve">
     <value>Responsible</value>
@@ -857,7 +857,7 @@
     <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Create interviewer</value>
+    <value>Create interviewer profile</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Interviewers</value>
