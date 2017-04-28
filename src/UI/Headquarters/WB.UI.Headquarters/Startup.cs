@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Mime;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -39,7 +39,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
-using CompressionLevel = System.IO.Compression.CompressionLevel;
 
 namespace WB.UI.Headquarters
 {
@@ -296,37 +295,41 @@ namespace WB.UI.Headquarters
 
         private async Task Compression(IOwinContext context, Func<Task> next)
         {
-            bool isCompressed = false;
-            isCompressed = isCompressed || await EncodeStream(context, next, @"gzip", 
-                body => new GZipStream(body, CompressionMode.Compress, Ionic.Zlib.CompressionLevel.BestCompression, true));
+            bool isCompressed = await this.WrapResponseBodyWithEncodeStream(context, next, @"gzip", 
+                body => new GZipStream(body, CompressionMode.Compress, CompressionLevel.BestCompression, true));
 
-            if (!isCompressed) // if no compression occure, then next() method were no called
+            if (!isCompressed) // if no compression occur, then `next()` method were no called
             {
                 await next();
             }
         }
 
-        private async Task<bool> EncodeStream(IOwinContext ctx, Func<Task> next, string contentEncoding, Func<Stream, Stream> factory)
+        private async Task<bool> WrapResponseBodyWithEncodeStream(IOwinContext ctx, Func<Task> next, string contentEncoding, Func<Stream, Stream> encodingStreamFactory)
         {
-            if (!ctx.Request.Headers[@"Accept-Encoding"].Contains(contentEncoding)) return false;
+            if (!ctx.Request.Headers[@"Accept-Encoding"].Contains(contentEncoding)) return false; // encode only if client accept encoding
             if (ctx.Response.Headers.ContainsKey(@"Content-Encoding")) return false; // do not encode twice
 
             using (var memory = new MemoryStream())
             {
                 var response = ctx.Response.Body;
 
-                using (var compress = factory(memory))
+                try
                 {
-                    ctx.Response.Body = compress;
-                    await next();
-                    await compress.FlushAsync();
+                    using (var compress = encodingStreamFactory(memory))
+                    {
+                        ctx.Response.Body = compress;
+                        await next();
+                        await compress.FlushAsync();
+                    }
+
+                    ctx.Response.Headers.AppendCommaSeparatedValues(@"Content-Encoding", contentEncoding);
+                    ctx.Response.ContentLength = memory.Length;
                 }
-
-                ctx.Response.Headers.AppendCommaSeparatedValues(@"Content-Encoding", contentEncoding);
-                ctx.Response.ContentLength = memory.Length;
-
-                memory.WriteTo(response);
-                ctx.Response.Body = response;
+                finally
+                {
+                    memory.WriteTo(response);
+                    ctx.Response.Body = response;
+                }
             }
 
             return true;
