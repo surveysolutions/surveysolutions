@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
                     IsLinkedToRoster = (categoricalMultiQuestion.LinkedToRosterId.HasValue ||
                          (categoricalMultiQuestion.LinkedToQuestionId.HasValue && !treatAsLinkedToList)),
-                    IsLinkedToListQuestion = treatAsLinkedToList
+                    //IsLinkedToListQuestion = treatAsLinkedToList
                 };
             }
 
@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
                     IsLinkedToRoster = (categoricalSingleQuestion.LinkedToRosterId.HasValue || 
                         (categoricalSingleQuestion.LinkedToQuestionId.HasValue && !treatAsLinkedToList)),
-                    IsLinkedToListQuestion = treatAsLinkedToList
+                    //IsLinkedToListQuestion = treatAsLinkedToList
                 };
             }
 

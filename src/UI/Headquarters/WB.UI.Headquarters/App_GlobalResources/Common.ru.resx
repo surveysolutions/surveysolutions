@@ -169,7 +169,7 @@
     <value>Результаты не найдены</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Предзаполненные вопросы</value>
+    <value>Идентифицирующие вопросы</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Вопросники</value>
@@ -227,5 +227,25 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Параметры</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Идентификатор</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Показать идентифицирующие</value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>Спрятать</value>
+    <comment>Спрятать</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
   </data>
 </root>

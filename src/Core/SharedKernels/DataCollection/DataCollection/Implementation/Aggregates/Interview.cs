@@ -76,6 +76,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly ISubstitionTextFactory substitionTextFactory;
 
+        protected InterviewKey interviewKey;
+
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitionTextFactory substitionTextFactory)
@@ -86,6 +88,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         #region Apply (state restore) methods
+
+        public virtual void Apply(InterviewKeyAssigned @event)
+        {
+            this.interviewKey = @event.Key;
+        }
 
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
@@ -385,7 +392,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
 
             var userRole = @event.UserId == this.properties.InterviewerId
-                ? UserRoles.Operator
+                ? UserRoles.Interviewer
                 : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : UserRoles.Headquarter;
 
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, userRole, @event.CommentTime, @event.Comment,
@@ -566,8 +573,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            itemsCount = itemsCount > 200 ? 200 : itemsCount;
-
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
@@ -1274,20 +1279,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewerAssigned(command.UserId, command.InterviewerId.Value, command.AnswersTime));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
+
+            this.ApplyInterviewKey(command.InterviewKey);
         }
 
-        public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
-            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+        public void CreateInterview(Guid questionnaireId, 
+            long questionnaireVersion, 
+            Guid supervisorId,
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, 
+            DateTime answersTime, 
+            Guid userId)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            this.CreateInterview(new CreateInterviewCommand(this.EventSourceId, userId, questionnaireId, 
+                answersToFeaturedQuestions, answersTime, supervisorId, questionnaireVersion, null));
+        }
+
+        public void CreateInterview(CreateInterviewCommand command)
+        {
+            var userId = command.UserId;
+
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
-            this.ValidatePrefilledAnswers(this.Tree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
+            this.ValidatePrefilledAnswers(this.Tree, questionnaire, command.AnswersToFeaturedQuestions, RosterVector.Empty);
 
-            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
+            Dictionary<Identity, AbstractAnswer> prefilledQuestionsWithAnswers = command.AnswersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (KeyValuePair<Identity, AbstractAnswer> answer in prefilledQuestionsWithAnswers)
             {
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
@@ -1301,13 +1320,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
 
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyInterviewKey(command.InterviewKey);
+        }
+
+        protected void ApplyInterviewKey(InterviewKey key)
+        {
+            if (this.interviewKey == null && key != null)
+            {
+                this.ApplyEvent(new InterviewKeyAssigned(key));
+            }
         }
 
         //todo should respect changes calculated in ExpressionState
@@ -1619,34 +1647,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
         }
 
-        public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
+        public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion);
 
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
-            bool isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
+            bool isInterviewNeedToBeCreated = command.CreatedOnClient && this.Version == 0;
 
             if (isInterviewNeedToBeCreated)
             {
-                this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
+                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion));
             }
             else
             {
-                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
+                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
 
                 if (this.properties.Status == InterviewStatus.Deleted)
-                    this.Restore(userId);
+                    this.Restore(command.UserId);
                 else
-                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+                    propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(command.InterviewStatus);
             }
 
-            foreach (IEvent synchronizedEvent in synchronizedEvents)
+            foreach (IEvent synchronizedEvent in command.SynchronizedEvents)
             {
                 this.ApplyEvent(synchronizedEvent);
             }
 
+            this.ApplyInterviewKey(command.InterviewKey);
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 
@@ -2100,7 +2128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }
@@ -2161,7 +2189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }

@@ -5,11 +5,12 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly IUserPreloadingService userPreloadingService;
 
-        private  readonly IPlainStorageAccessor<UserDocument> userStorage;
+        private  readonly IUserRepository userStorage;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
@@ -33,10 +34,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         readonly Regex loginValidatioRegex;
         readonly Regex emailValidationRegex;
         readonly Regex phoneNumberValidationRegex;
+        readonly Regex fullNameRegex;
 
         public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
-            IPlainStorageAccessor<UserDocument> userStorage, 
+            IUserRepository userStorage, 
             UserPreloadingSettings userPreloadingSettings, 
             ILogger logger)
         {
@@ -48,6 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            this.fullNameRegex = new Regex(this.userPreloadingSettings.PersonNameFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
@@ -94,39 +97,54 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
         {
-            var activeUserNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
-            userStorage.Query(_ => _.Where(u => !u.IsArchived).Select(u => u.UserName.ToLower())).ToHashSet());
+            var allInterviewersAndSupervisors =
+                this.userStorage.Users.Select(x => new
+                {
+                    UserId = x.Id,
+                    UserName = x.UserName,
+                    IsArchived = x.IsArchived,
+                    SupervisorId = x.Profile.SupervisorId,
+                    IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
+                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                }).ToArray();
 
-            var activeSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var activeUserNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
+            
+            var activeSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .Distinct()
+                .ToHashSet();
 
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => !u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower()).Distinct()).ToHashSet()
-                );
+            var archivedSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .ToHashSet();
 
-            var archivedSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
+            var archivedInterviewerNamesMappedOnSupervisorName = allInterviewersAndSupervisors
+                .Where(u => u.IsArchived && u.IsInterviewer)
+                .Select(u =>
+                    new
+                    {
+                        u.UserName,
+                        SupervisorName = allInterviewersAndSupervisors
+                            .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
+                    })
+                .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Supervisor))
-                            .Select(u => u.UserName.ToLower())).ToHashSet()
-                );
-
-            var archivedInterviewerNamesMappedOnSupervisorName = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                userStorage.Query(
-                    _ =>
-                        _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Operator))
-                            .Select(
-                                u => new {u.UserName, SupervisorName = u.Supervisor == null ? "" : u.Supervisor.Name}))
-                    .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower())
-                );
+            var preloadedUsersGroupedByUserName =
+                data.GroupBy(x => x.Login.ToLower()).ToDictionary(x=>x.Key, x=>x.Count());
 
             var validationFunctions = new[]
             {
                 new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row),"PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginDublicationInDataset(data, row), "PLU0002",u => u.Login),
+                new PreloadedDataValidator(row => LoginDublicationInDataset(preloadedUsersGroupedByUserName, row), "PLU0002",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames,row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
@@ -136,12 +154,33 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
                 new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),
                 new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
+                new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
+                new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
+                new PreloadedDataValidator(FullNameAllowedSymbolsValidation, "PLU0014", u => u.FullName),
             };
 
             for (int i = 0; i < validationFunctions.Length; i++)
             {
                 this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
             }
+        }
+
+        private bool FullNameAllowedSymbolsValidation(UserPreloadingDataRecord arg)
+        {
+            if (string.IsNullOrEmpty(arg.FullName))
+                return false;
+
+            return !this.fullNameRegex.IsMatch(arg.FullName);
+        }
+
+        private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
+        {
+            return arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMaxLength;
+        }
+
+        private bool FullNameLengthVerification(UserPreloadingDataRecord record)
+        {
+            return record.FullName?.Length > this.userPreloadingSettings.FullNameMaxLength;
         }
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
@@ -193,23 +232,22 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return activeUserNames.Contains(userPreloadingDataRecord.Login.ToLower());
         }
 
-        private bool LoginDublicationInDataset(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
-        {
-            return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login.ToLower()) > 1;
-        }
+        private bool LoginDublicationInDataset(Dictionary<string, int> data,
+            UserPreloadingDataRecord userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (desiredRole != UserRoles.Operator)
+            if (desiredRole != UserRoles.Interviewer)
                 return false;
 
-            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(userPreloadingDataRecord.Login.ToLower()))
+            var loginName = userPreloadingDataRecord.Login.ToLower();
+            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(loginName))
                 return false;
 
-            if (archivedInterviewerNamesMappedOnSupervisorName[userPreloadingDataRecord.Login.ToLower()] !=
+            if (archivedInterviewerNamesMappedOnSupervisorName[loginName] !=
                 userPreloadingDataRecord.Supervisor.ToLower())
                 return true;
 
@@ -222,14 +260,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
 
+            var loginName = userPreloadingDataRecord.Login.ToLower();
             switch (desiredRole)
             {
-                case UserRoles.Operator:
-                    return archivedSupervisorNames.Contains(userPreloadingDataRecord.Login.ToLower());
+                case UserRoles.Interviewer:
+                    return archivedSupervisorNames.Contains(loginName);
                 case UserRoles.Supervisor:
                     return
                         archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(
-                            userPreloadingDataRecord.Login.ToLower());
+                            loginName);
                 default:
                     return false;
             }
@@ -238,14 +277,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            return role == UserRoles.Undefined;
+            return role == 0;
         }
 
         private bool SupervisorVerification(IList<UserPreloadingDataRecord> data,
             HashSet<string> activeSupervisors, UserPreloadingDataRecord userPreloadingDataRecord)
         {
             var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
-            if (role != UserRoles.Operator)
+            if (role != UserRoles.Interviewer)
                 return false;
 
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor))

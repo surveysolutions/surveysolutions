@@ -1,16 +1,28 @@
-﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Extensions
+@{
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+}
+@functions{
+    public string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+}
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="@TokenHeaderValue()">
+    
     @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))
 
     <!-- cssLibs:css -->
@@ -19,14 +31,17 @@
     <!-- cssApp:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
+    @RenderSection("styles", false)
     <!-- jsLibs:js -->
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
     @Scripts.Render("~/js/new-ui.js")
+    @Scripts.Render("~/js/main-redesigned")
+   
     <title>@ViewBag.Title</title>
     @RenderSection("scripts", false)
 </head>
-<body>
+<body class="wide-navbar">
 <header>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid ">
@@ -43,64 +58,79 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (authorizedUser.IsAdministrator)
                 {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (authorizedUser.IsHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
+                else if (authorizedUser.IsSupervisor)
                 {
-                    @Html.Partial("ObserverMainMenu")
+                    @Html.Partial("SupervisorMainMenu")
                 }
                 else
                 {
-                    @Html.Partial("SupervisorMainMenu")
+                    @Html.Partial("ObserverMainMenu")
                 }
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
 </header>
-    
-    @if (User.Identity.IsObserver())
+    @if (authorizedUser.IsObserving || ViewBag.GlobalNotice != null)
     {
-        <div class="panel panel-warning view-mood">
-            <div class="panel-heading">
+        <div class="panel view-mode">
+        @if (authorizedUser.IsObserving)
+        {
+            <div class="panel-heading panel-warning">
                 @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
             </div>
+        }
+        @if (ViewBag.GlobalNotice != null)
+        {
+            <div class="panel-heading">
+                <div class="alerts">
+                    <div class="alert alert-info alert-dismissible text-center" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        @ViewBag.GlobalNotice
+                    </div>
+                </div>
+            </div>
+        }
         </div>
     }
-
-@RenderBody()
-    
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="text-left">
-                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
-            </div>
-            <div class="text-left">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
-                @if (AppSettings.IsDebugBuilded)
-                {
-                    <span id="build-config">[.NET Debug]</span>
-                }
-
-                @if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    <span id="compile-config" style="color: red">Web Debug</span>
-                }
-                <span>|</span>
-                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
-            </div>
+    @RenderBody()
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="text-right">
+            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
         </div>
-    </footer>
+        <div class="text-right">
+            @(ServiceLocator.Current.GetInstance<IProductVersion>())
+            @if (AppSettings.IsDebugBuilded)
+            {
+                <span id="build-config">[.NET Debug]</span>
+            }
 
-    <!-- jsApp:js -->
-    <!-- endinject -->
-
-    @Html.Partial("Clickjacking")
-    @Html.Partial("GlobalSettings")
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <span id="compile-config" style="color: red">Web Debug</span>
+            }
+            <span>|</span>
+            <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
+            @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
+            {
+                <div>
+                    <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+                </div>
+            }
+        </div>
+    </div>
+</footer>
+<!-- jsApp:js -->
+<!-- endinject -->
+@Html.Partial("Clickjacking")
+@Html.Partial("GlobalSettings")
 </body>
 </html>

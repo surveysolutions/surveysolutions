@@ -159,6 +159,9 @@
   <data name="ImpersonateAsUser" xml:space="preserve">
     <value>Impersonate as this user in read only mode</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Observer" xml:space="preserve">
     <value>Observer</value>
   </data>
@@ -173,6 +176,15 @@
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>({0} supervisors)</value>
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Edit Supervisor</value>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>supervisors in your team</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
@@ -239,5 +251,11 @@
   </data>
   <data name="HeadquartersEmail" xml:space="preserve">
     <value>Headquarter's email</value>
+  </data>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Add interviewer</value>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Archiving Status</value>
   </data>
 </root>

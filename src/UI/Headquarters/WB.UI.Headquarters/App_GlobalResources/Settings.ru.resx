@@ -147,4 +147,38 @@
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите изменить настройки шифрования? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
   </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Настройка уведомления</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Настройки логотипа</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Удалить </value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Установите флажок «Включить шифрование» для шифрования архивов данных экспорта и защиты их с помощью предоставленного пароля. Измените пароль, нажав круговую кнопку. После шифрования только пользователи, знающие пароль, могут открыть архивы данных.</value>
+    <comment>Установите флажок Включить шифрование для шифрования архивов данных экспорта и защиты их с помощью предоставленного пароля. Измените пароль, нажав круговую кнопку ошибки. После шифрования только люди, знающие пароль, могут открыть архивы данных.</comment>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Укажите текст в поле «Глобальное сообщение», который будет отображаться в верхней части каждой страницы на сервере.</value>
+    <comment>Укажите текст в поле Глобальное Сообщение, который будет отображаться в верхней части каждого экрана на сервере.</comment>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Логотип компании показывает пользовательское изображение на странице входа на сервер и на странице входа в приложение интервьюера. Нажмите кнопку «Выбрать файл», чтобы загрузить изображение со своего компьютера на сервер.</value>
+    <comment>Логотип компании показывает пользовательское изображение на странице входа на сервер и на странице входа в приложение интервьюера. Нажмите кнопку «Выбрать файл», чтобы загрузить изображение со своего компьютера на сервер.</comment>
+  </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Глобальное сообщение</value>
+    <comment>Глобальное сообщение</comment>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Текущий логотип</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить глобальное сообщение?</value>
+  </data>
 </root>

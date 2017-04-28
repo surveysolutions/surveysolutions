@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
-using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Plugin.DeviceInfo;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -26,6 +27,9 @@ namespace WB.UI.Interviewer.Settings
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
+
+        private PackageInfo appPackageInfo =>
+            Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, PackageInfoFlags.MetaData);
 
         public InterviewerSettings(
             IPlainStorage<ApplicationSettingsView> settingsStorage, 
@@ -83,42 +87,55 @@ namespace WB.UI.Interviewer.Settings
                 Android.Provider.Settings.Secure.AndroidId);
         }
 
-        public string GetApplicationVersionName()
+        private static string _userAgent = null;
+        public string UserAgent
         {
-            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+            get
+            {
+                if (_userAgent != null) return _userAgent;
+
+                var flags = new List<string>();
+#if DEBUG
+                flags.Add("DEBUG");
+#endif
+                flags.Add($"QuestionnarieVersion/{this.GetSupportedQuestionnaireContentVersion()}");
+                _userAgent = $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
+                return _userAgent;
+            }
         }
+        public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
         public string GetDeviceTechnicalInformation()
         {
             var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.LoadAll().Select(i => i.InterviewId));
             var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Id));
 
-            return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
-                   $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
-                   $"User:{GetUserInformation()} {Environment.NewLine}" +
-                   $"Device model:{this.GetDeviceModel()} {Environment.NewLine}" +
-                   $"Device type:{this.GetDeviceType()} {Environment.NewLine}" +
-                   $"Android version:{GetAndroidVersion()} {Environment.NewLine}" +
-                   $"DeviceId:{this.GetDeviceId()} {Environment.NewLine}" +
-                   $"RAM:{GetRAMInformation()} {Environment.NewLine}" +
-                   $"Disk:{GetDiskInformation()} {Environment.NewLine}" +
-                   $"DBSize:{GetDataBaseSize()} {Environment.NewLine}" +
-                   $"Endpoint:{this.Endpoint}{Environment.NewLine}" +
-                   $"AcceptUnsignedSslCertificate:{this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
-                   $"BufferSize:{this.BufferSize} {Environment.NewLine}" +
-                   $"Timeout:{this.Timeout} {Environment.NewLine}" +
-                   $"CurrentDataTime:{DateTime.Now} {Environment.NewLine}" +
-                   $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" + 
-                   $"EventChunkSize:{this.EventChunkSize} {Environment.NewLine}" +
-                   $"VibrateOnError:{this.VibrateOnError} {Environment.NewLine}" +
-                   $"InterviewsList:{interviewIds}";
+            return $"Version: {this.GetApplicationVersionName()} {Environment.NewLine}" +
+                   $"SyncProtocolVersion: {this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
+                   $"User: {GetUserInformation()} {Environment.NewLine}" +
+                   $"Device model: {this.GetDeviceModel()} {Environment.NewLine}" +
+                   $"Device type: {this.GetDeviceType()} {Environment.NewLine}" +
+                   $"Android version: {GetAndroidVersion()} {Environment.NewLine}" +
+                   $"DeviceId: {this.GetDeviceId()} {Environment.NewLine}" +
+                   $"RAM: {GetRAMInformation()} {Environment.NewLine}" +
+                   $"Disk: {GetDiskInformation()} {Environment.NewLine}" +
+                   $"DBSize: {GetDataBaseSize()} {Environment.NewLine}" +
+                   $"Endpoint: {this.Endpoint}{Environment.NewLine}" +
+                   $"AcceptUnsignedSslCertificate: {this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
+                   $"BufferSize: {this.BufferSize} {Environment.NewLine}" +
+                   $"Timeout: {this.Timeout} {Environment.NewLine}" +
+                   $"CurrentDateTime: {DateTime.Now} {Environment.NewLine}" +
+                   $"QuestionnairesList: {questionnaireIds} {Environment.NewLine}" + 
+                   $"EventChunkSize: {this.EventChunkSize} {Environment.NewLine}" +
+                   $"VibrateOnError: {this.VibrateOnError} {Environment.NewLine}" +
+                   $"InterviewsList: {interviewIds}";
         }
 
-        private string GetDeviceModel() => CrossDeviceInfo.Current.Model;
+        public string GetDeviceModel() => CrossDeviceInfo.Current.Model;
 
-        private string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
+        public string GetDeviceType() => CrossDeviceInfo.Current.Idiom.ToString();
 
-        private string GetAndroidVersion() => Android.OS.Build.VERSION.Release;
+        public string GetAndroidVersion() => Build.VERSION.Release;
 
         public void SetEventChunkSize(int eventChunkSize)
         {
@@ -128,10 +145,7 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public int GetApplicationVersionCode()
-        {
-            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
-        }
+        public int GetApplicationVersionCode() => this.appPackageInfo.VersionCode;
 
         public void SetEndpoint(string endpoint)
         {
@@ -189,6 +203,7 @@ namespace WB.UI.Interviewer.Settings
         public string BackupFolder { get; }
 
         public string RestoreFolder { get; }
+        public string BandwidthTestUri { get; } = @"Dependencies/img/logo.png";
 
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
@@ -213,7 +228,7 @@ namespace WB.UI.Interviewer.Settings
         private string GetDiskInformation()
             => AndroidInformationUtils.GetDiskInformation();
 
-        private string GetDataBaseSize() => 
+        public string GetDataBaseSize() => 
             FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToInternalDirectory()));
     }
 }

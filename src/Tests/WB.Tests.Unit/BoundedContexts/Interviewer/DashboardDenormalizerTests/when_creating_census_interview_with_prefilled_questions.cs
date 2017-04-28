@@ -5,7 +5,7 @@ using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {

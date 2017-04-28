@@ -118,8 +118,8 @@
     <Reference Include="Mvc.Mailer">
       <HintPath>..\..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
-    <Reference Include="NConfig, Version=1.1.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NConfig.1.1.20\lib\Net40\NConfig.dll</HintPath>
+    <Reference Include="NConfig, Version=1.1.22.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NConfig.1.1.22\lib\Net40\NConfig.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -304,6 +304,9 @@
     <Compile Include="Migrations\PlainStore\M001-100\M011_AddColumnResultingQuestionnaireDocument.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M010_Users_indexes.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
@@ -461,6 +464,7 @@
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
+    <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
@@ -531,9 +535,6 @@
     <Content Include="questionnaire\content\designer-start\bootstrap-override.min.css">
       <DependentUpon>bootstrap-override.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\designer-start\designer-list.min.css">
-      <DependentUpon>designer-list.css</DependentUpon>
-    </Content>
     <Content Include="questionnaire\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -543,7 +544,7 @@
     <Content Include="questionnaire\details\scripts\directives\matchOptionsPattern.js" />
     <Content Include="questionnaire\details\scripts\services\optionsService.js" />
     <Content Include="questionnaire\content\designer-start\bootstrap-custom.css" />
-    <Content Include="questionnaire\content\designer-start\designer-list.css" />
+    <Content Include="Content\designer-list.css" />
     <Content Include="questionnaire\content\designer-start\designer-start.css">
       <DependentUpon>designer-start.less</DependentUpon>
     </Content>
@@ -653,7 +654,6 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
-    <Content Include="Content\details.css" />
     <Content Include="Content\images\loader.gif" />
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
@@ -666,12 +666,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Slava.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Configuration\TLK.Designer.Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Configuration\Stacy.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Roma.Designer.Web.config">
@@ -734,7 +728,7 @@
     <Content Include="questionnaire\content\designer-start\bootstrap-custom.less" />
     <Content Include="questionnaire\content\designer-start\bootstrap-override.less" />
     <Content Include="questionnaire\content\designer-start\custom-fonts.less" />
-    <Content Include="questionnaire\content\designer-start\designer-list.less" />
+    <Content Include="Content\designer-list.less" />
     <Content Include="questionnaire\content\designer-start\designer-start.less" />
     <Content Include="questionnaire\content\designer-start\font-styles.less" />
     <Content Include="questionnaire\content\designer-start\inputs.less" />
@@ -745,9 +739,6 @@
     </Content>
     <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.css.map">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-start\designer-list.css.map">
-      <DependentUpon>designer-list.css</DependentUpon>
     </Content>
     <Content Include="Views\Shared\_list_search_form.cshtml" />
     <Content Include="questionnaire\content\designer-start\bootstrap-override.css.map">
@@ -780,6 +771,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
+    <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
+    <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
+    <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

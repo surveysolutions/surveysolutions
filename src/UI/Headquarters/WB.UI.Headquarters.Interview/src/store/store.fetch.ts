@@ -1,5 +1,5 @@
-import * as Vue from "vue"
-import * as Vuex from "vuex"
+import Vue from "vue"
+import Vuex from "vuex"
 
 import { safeStore } from "../errors"
 import router from "./../router"
@@ -10,7 +10,6 @@ const fetch = {
     },
     actions: {
         fetch({ commit, rootState }, {id, ids, done}) {
-
             commit("SET_FETCH", {
                 entityDetails: rootState.entityDetails,
                 id, ids,

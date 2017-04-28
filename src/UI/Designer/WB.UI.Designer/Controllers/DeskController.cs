@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {

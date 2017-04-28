@@ -57,8 +57,6 @@
 </template>
 
 <script lang="ts">
-    import * as Vue from 'vue'
-
     export default {
         name: 'complete-view',
         beforeMount() {

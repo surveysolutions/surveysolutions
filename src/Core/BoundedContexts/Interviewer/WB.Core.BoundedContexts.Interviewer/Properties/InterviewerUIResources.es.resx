@@ -207,7 +207,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Problema de autenticación en el servidor remoto también. Por favor, póngase en contacto con su Supervisor u oficina central</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Contraseña incorrecta</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

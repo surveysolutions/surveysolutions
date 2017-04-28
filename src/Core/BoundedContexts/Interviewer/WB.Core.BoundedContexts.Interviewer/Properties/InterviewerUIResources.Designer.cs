@@ -706,9 +706,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrong password.
         /// </summary>
-        public static string Login_WrondPassword {
+        public static string Login_WrongPassword {
             get {
-                return ResourceManager.GetString("Login_WrondPassword", resourceCulture);
+                return ResourceManager.GetString("Login_WrongPassword", resourceCulture);
             }
         }
         
@@ -1037,7 +1037,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading company logo.
+        ///   Looks up a localized string similar to Downloading logo.
         /// </summary>
         public static string Synchronization_DownloadingLogo {
             get {

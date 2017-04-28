@@ -331,15 +331,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resume interview.
-        /// </summary>
-        public static string Resume {
-            get {
-                return ResourceManager.GetString("Resume", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Interview process requires internet connection, no additional software is needed.
         /// </summary>
         public static string Resume_InvitationSmallText {
@@ -349,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can continue interview in the following survey: &quot;{0}&quot;.
+        ///   Looks up a localized string similar to You can navigate to interview in the following survey: &quot;{0}&quot;.
         /// </summary>
         public static string Resume_InvitationText {
             get {
@@ -417,6 +408,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveyFormatText {
             get {
                 return ResourceManager.GetString("SurveyFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To interview.
+        /// </summary>
+        public static string ToInterview {
+            get {
+                return ResourceManager.GetString("ToInterview", resourceCulture);
             }
         }
         

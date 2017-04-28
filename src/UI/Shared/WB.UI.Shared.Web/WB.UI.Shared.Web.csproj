@@ -54,6 +54,10 @@
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -73,6 +77,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="NConfig, Version=1.1.22.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NConfig.1.1.22\lib\Net40\NConfig.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -156,17 +163,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
+    <Compile Include="Captcha\ICaptchaService.cs" />
     <Compile Include="Captcha\NoCaptchaProvider.cs" />
     <Compile Include="Captcha\HostedCaptchaProvider.cs" />
     <Compile Include="Captcha\ICaptchaProvider.cs" />
     <Compile Include="Captcha\ReCaptchaProvider.cs" />
-    <Compile Include="Captcha\ViewHelper.cs" />
+    <Compile Include="Captcha\Extensions.cs" />
+    <Compile Include="Captcha\WebCacheBasedCaptchaService.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\EventBusConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Configuration\HqSecuritySection.cs" />
     <Compile Include="Controllers\BaseMessageDisplayController.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
@@ -194,35 +204,14 @@
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="Filters\TransactionFilter.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
-    <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
-    <Compile Include="MembershipProvider\Accounts\IAccountRepository.cs" />
-    <Compile Include="MembershipProvider\Accounts\IMembershipAccount.cs" />
-    <Compile Include="MembershipProvider\Accounts\IPasswordPolicy.cs" />
-    <Compile Include="MembershipProvider\Accounts\IPasswordStrategy.cs" />
-    <Compile Include="MembershipProvider\Accounts\MembershipEventType.cs" />
-    <Compile Include="MembershipProvider\Accounts\MembershipProvider.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordExtensions.cs" />
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\ClearTextStrategy.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\PasswordPolicyExtensions.cs" />
-    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\TripleDesStrategy.cs" />
     <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
     <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
     <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
     <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
-    <Compile Include="Membership\IMembershipHelper.cs" />
-    <Compile Include="Membership\MembershipHelper.cs" />
-    <Compile Include="Membership\MembershipWebServiceUser.cs" />
-    <Compile Include="Membership\IMembershipWebServiceUser.cs" />
-    <Compile Include="Membership\MembershipWebUser.cs" />
-    <Compile Include="Membership\IMembershipWebUser.cs" />
-    <Compile Include="Membership\IMembershipUserService.cs" />
-    <Compile Include="Membership\MembershipUserService.cs" />
-    <Compile Include="Modules\CaptchaModule.cs" />
+    <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
-    <Compile Include="Modules\ModulesFactory.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
@@ -252,6 +241,10 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>

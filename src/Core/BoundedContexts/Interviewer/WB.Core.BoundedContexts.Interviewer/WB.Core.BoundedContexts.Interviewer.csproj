@@ -128,32 +128,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\InterviewerUIResources.id-ID.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.id-ID.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.km.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.km.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.th-TH.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.vi-VN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.vi-VN.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.zh-CN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.zh-CN.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\CompanyLogoInfo.cs" />
+    <Compile Include="Services\IBattery.cs" />
+    <Compile Include="Services\IDeviceInformationService.cs" />
+    <Compile Include="Services\IDeviceOrientation.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
@@ -176,6 +154,7 @@
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
+    <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
@@ -199,12 +178,13 @@
     <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\LoadingViewModel.cs" />
+    <Compile Include="Views\LocationAddress.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />
     <Compile Include="Views\ApplicationSettingsView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
-    <Compile Include="Views\SendTabletInformationViewModel.cs" />
+    <Compile Include="Views\BackupViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
@@ -248,43 +228,39 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\InterviewerUIResources.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.es1.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.fr1.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.id-ID.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.km.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.km.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.pt.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.pt1.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx" />
-    <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.vi-VN.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.zh-CN.Designer.cs</LastGenOutput>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

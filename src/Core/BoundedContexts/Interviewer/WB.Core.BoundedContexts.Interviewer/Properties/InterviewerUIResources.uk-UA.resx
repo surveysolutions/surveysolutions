@@ -208,7 +208,7 @@ iнтервью</value>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Проблема аутентифікації на віддаленому сервері. Зверніться до свого супервізора або до штаб-квартири</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Неправильний пароль</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

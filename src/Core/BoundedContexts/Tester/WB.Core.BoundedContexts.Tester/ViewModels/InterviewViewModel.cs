@@ -1,4 +1,9 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -14,6 +19,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class InterviewViewModel : BaseInterviewViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
+
+        private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
         public InterviewViewModel(
             IPrincipal principal,
@@ -31,18 +38,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.NavigateToDashboard);
-        public IMvxCommand ReloadQuestionnaireCommand => new MvxCommand(this.ReloadQuestionnaire);
+        public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
@@ -65,10 +74,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.Dispose();
         }
 
-        private void ReloadQuestionnaire()
+        private async Task ReloadQuestionnaire()
         {
-            this.viewModelNavigationService.NavigateToDashboard();
-            this.Dispose();
+            if (this.IsInProgress) return;
+
+            this.IsInProgress = true;
+            try
+            {
+                var interview = this.interviewRepository.Get(this.interviewId);
+                string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
+
+                bool succeeded = await this.QuestionnaireDownloader.LoadQuestionnaireAsync(
+                    questionnaireId, this.QuestionnaireTitle, new Progress<string>(), CancellationToken.None);
+
+                if (!succeeded) return;
+
+                this.Dispose();
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)

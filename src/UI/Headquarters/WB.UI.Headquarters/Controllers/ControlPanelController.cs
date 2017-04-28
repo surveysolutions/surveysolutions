@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
@@ -26,27 +24,22 @@ namespace WB.UI.Headquarters.Controllers
     [ControlPanelAccess]
     public class ControlPanelController : BaseController
     {
-        private readonly IUserViewFactory userViewFactory;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
+        private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
             ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
+            HqUserManager userManager,
             ILogger logger,
-            IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
-            ITransactionManagerProvider transactionManagerProvider,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
-             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
+             : base(commandService: commandService, logger: logger)
         {
-            this.userViewFactory = userViewFactory;
-            this.passwordHasher = passwordHasher;
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
+            this.userManager = userManager;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
         }
@@ -63,58 +56,60 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateHeadquarters(UserModel model)
+        public async Task<ActionResult> CreateHeadquarters(UserModel model)
         {
-            if (CreateUser(model, UserRoles.Headquarter))
-                return this.RedirectToAction("LogOn", "Account");
+            if (ModelState.IsValid)
+            {
+                var creationResult = await this.userManager.CreateUserAsync(
+                            new HqUser
+                            {
+                                Id = Guid.NewGuid(),
+                                UserName = model.UserName,
+                                Email = model.Email,
+                                FullName = model.PersonName,
+                                PhoneNumber = model.PhoneNumber
+                            }, model.Password, UserRoles.Headquarter);
 
+                if (creationResult.Succeeded)
+                {
+                    this.Success(@"Headquarters successfully created");
+                    return this.RedirectToAction("LogOn", "Account");
+                }
+                AddErrors(creationResult);
+            }
+
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateAdmin(UserModel model)
-        {
-            if (CreateUser(model, UserRoles.Administrator))
-                return this.RedirectToAction("LogOn", "Account");
-
-            return View(model);
-        }
-
-        private bool CreateUser(UserModel model, UserRoles role)
+        public async Task<ActionResult> CreateAdmin(UserModel model)
         {
             if (ModelState.IsValid)
             {
-                UserView userToCheck =
-                    this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-                if (userToCheck == null)
-                {
-                    try
-                    {
-                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
-                            userName: model.UserName,
-                            password: passwordHasher.Hash(model.Password), email: model.Email,
-                            isLockedBySupervisor: false,
-                            isLockedByHQ: false, roles: new[] { role }, supervsor: null,
-                        personName: model.PersonName,
-                        phoneNumber: model.PhoneNumber));
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
-                        this.Error(userErrorMessage);
-                        this.Logger.Error(userErrorMessage, ex);
-                    }
-                }
-                else
-                {
-                    this.Error("User name already exists. Please enter a different user name.");
-                }
-            }
-            return false;
-        }
+                var creationResult = await this.userManager.CreateUserAsync(
+                            new HqUser
+                            {
+                                Id = Guid.NewGuid(),
+                                UserName = model.UserName,
+                                Email = model.Email,
+                                FullName = model.PersonName,
+                                PhoneNumber = model.PhoneNumber
+                            }, model.Password, UserRoles.Administrator);
 
+                if (creationResult.Succeeded)
+                {
+                    this.Success(@"Administrator successfully created");
+                    return this.RedirectToAction("LogOn", "Account");
+                }
+                AddErrors(creationResult);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+        
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
@@ -135,41 +130,25 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetUserPassword(UserModel model)
+        public async Task<ActionResult> ResetUserPassword(UserModel model)
         {
-            UserView userToCheck =
-                this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-            if (userToCheck != null && !userToCheck.IsArchived)
+            if (ModelState.IsValid)
             {
-                try
-                {
-                    this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
-                        email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
-                        isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
-                        passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
+                var user = await this.userManager.FindByNameAsync(model.UserName);
+                var updateResult = await this.userManager.UpdateUserAsync(user, model.Password);
 
-                    this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
-                }
-                catch (Exception ex)
+                if (updateResult.Succeeded)
                 {
-                    var userErrorMessage = "Error when updating password for user";
-                    this.Error(userErrorMessage);
-                    this.Logger.Error(userErrorMessage, ex);
+                    this.Success($"Password for user '{user.UserName}' successfully changed");
                 }
-            }
-            else
-            {
-                this.Error(string.Format("User '{0}' does not exists", model.UserName));
+                AddErrors(updateResult);
             }
 
             return RedirectToAction("ResetPrivilegedUserPassword");
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
-        {
-            get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
-        }
+            => this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>();
 
         public ActionResult Index() => this.View();
 

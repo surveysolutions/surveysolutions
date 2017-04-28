@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Machine.Specifications.It;
 
@@ -15,44 +16,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
     {
         Establish context = () =>
         {
+            var questionnaireIdentity = "11111111111111111111111111111111$1";
             var questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            long questionnaireVersion = 1;
             var variableName = "var";
 
-            input = Mock.Of<MapReportInputModel>(x
-                => x.Variable == variableName
-                   && x.QuestionnaireId == questionnaireId
-                   && x.QuestionnaireVersion == questionnaireVersion &&
-                   x.NorthEastCornerLatitude == 80 &&
-                   x.NorthEastCornerLongtitude == -150 &&
-                   x.SouthWestCornerLatitude == -80 &&
-                   x.SouthWestCornerLongtitude == 160);
+            input = new MapReportInputModel
+            {
+                Variable = variableName,
+                QuestionnaireId = questionnaireIdentity,
+                NorthEastCornerLatitude = 80,
+                NorthEastCornerLongtitude = -150,
+                SouthWestCornerLatitude = -80,
+                SouthWestCornerLongtitude = 160
+            };
 
-            List<MapReportPoint> points = new List<MapReportPoint>();
-            points.Add(new MapReportPoint("id1")
-            {
-                Latitude = -75.11,
-                Longitude = -171.21,
-                InterviewId = interview1Id,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
-                Variable = variableName
-            });
-            points.Add(new MapReportPoint("id2")
-            {
-                Latitude = 72.555,
-                Longitude = 170.32,
-                InterviewId = interview2Id,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
-                Variable = variableName
-            });
-            
             var repositoryReader = new TestInMemoryWriter<MapReportPoint>();
-            foreach (var mapReportPoint in points)
-            {
-                repositoryReader.Store(mapReportPoint, mapReportPoint.Id);
-            }
+
+            repositoryReader.Store(Create.Entity.MapReportPoint("id1", -75.11, -171.21, interview1Id, questionnaireId), "id1");
+            repositoryReader.Store(Create.Entity.MapReportPoint("id2", 72.555, 170.32, interview2Id, questionnaireId), "id2");
 
             mapReport = CreateMapReport(repositoryReader);
         };

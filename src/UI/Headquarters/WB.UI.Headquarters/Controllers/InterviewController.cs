@@ -7,15 +7,16 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewTroubleshootFactory troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
@@ -32,15 +34,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public InterviewController(
             ICommandService commandService, 
-            IGlobalInfoProvider provider, 
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IChangeStatusFactory changeStatusFactory,
             IInterviewTroubleshootFactory troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.troubleshootInterviewViewFactory = troubleshootInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
@@ -50,6 +53,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? filter, string currentGroupId)
         {
+            if (!filter.HasValue)
+                return this.RedirectToAction("Details",
+                    new
+                    {
+                        id = id,
+                        filter = InterviewDetailsFilter.All,
+                        currentGroupId = this.interviewDetailsViewFactory.GetFirstChapterId(id).FormatGuid()
+                    });
+
             this.ViewBag.ActivePage = MenuItem.Docs;
             this.ViewBag.InterviewId = id;
 
@@ -61,8 +73,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null || interviewSummary.IsDeleted)
                 return HttpNotFound();
 
-            bool isAccessAllowed = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ||
-                (this.GlobalInfo.IsSupervisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+            bool isAccessAllowed =
+                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
 
             if (!isAccessAllowed)
                 return HttpNotFound();

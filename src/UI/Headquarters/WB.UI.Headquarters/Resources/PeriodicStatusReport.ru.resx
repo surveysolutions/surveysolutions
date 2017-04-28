@@ -148,7 +148,7 @@
     <value>Среднее время обработки супервизором</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Временной промежуток между завершением интервью и утверждением или отклонением супервизора.</value>
+    <value>Временной промежуток между завершением интервью и интервью, которое утвердил или отклонил супервизор.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
     <value>К супервизорам</value>
@@ -169,25 +169,25 @@
     <value>Количество завершенных интервью</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Количество завершенных интервью по {0}. Отклонение и последующее завершение интервью учитываются как отдельный случай.</value>
+    <value>Количество завершенных интервью командой. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Количество интервью, утвержденных хедквотером</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Количество интервью, собранных {0}, которые были утверждены хедквотером.</value>
+    <value>Количество утвержденных хедквотером интервью, которые собрала {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
     <value>Количество интервью обработанных хедквотером</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Количество утверждений и оклонений интервью, выполненных хедквотером на вопроснике, собранных {0}.</value>
+    <value>Количество утвержденных и отклоненных интервью, выполненных хедквотером по опроснику, который собрала {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Количество интервью обработанных супервизором</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Количество утверждений и оклонений интервью, выполненных супервизором на вопроснике, собранных {0}.</value>
+    <value>Количество утвержденных и отклоненных интервью, выполненных супервизором на опроснике, который собрала {0}.</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Период</value>

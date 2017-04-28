@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Abc.TestFactories;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Tests.Abc
 {
@@ -83,5 +84,22 @@ namespace WB.Tests.Abc
             return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => 
                 _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
         }
+
+        internal class StubAggregateLock : IAggregateLock
+        {
+            public T RunWithLock<T>(string aggregateGuid, Func<T> run)
+            {
+                return run();
+            }
+
+            public void RunWithLock(string aggregateGuid, Action run)
+            {
+                run();
+            }
+        }
+
+        static IAggregateLock stubAggregateLock = new StubAggregateLock();
+
+        public static IAggregateLock Lock() => stubAggregateLock;
     }
 }

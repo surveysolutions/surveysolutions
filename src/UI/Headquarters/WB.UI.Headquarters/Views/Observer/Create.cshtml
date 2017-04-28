@@ -1,37 +1,10 @@
-﻿@using System.Web.Optimization
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
-
+﻿@model UserModel
 @{
-    ViewBag.Title = Users.CreateObserver;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.Profile_ObserverCreate;
+    ViewBag.PageTitle = Pages.Profile_ObserverCreate;
+    Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
 }
-
-@section scripts
+@section Breadcrumbs
 {
-    @Scripts.Render("~/validate")
+    <li>@Html.ActionLink(Pages.Profile_ObserversList, "Index")</li>
 }
-<main>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>@Users.CreateObserver</h1>
-        </div>
-        @Html.Partial("_alerts")
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <fieldset class="form-horizontal">
-                @{
-                    this.Html.RenderPartial("UserCreateForm");
-                }
-                <div class="form-group">
-                    <div class="col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                        @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-                    </div>
-                </div>
-            </fieldset>
-        }
-
-    </div>
-</main>

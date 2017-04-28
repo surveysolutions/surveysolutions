@@ -7,6 +7,7 @@ using Ncqrs;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -54,5 +55,6 @@ public class AssemblyContext : IAssemblyContext
 
         Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
         Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
+        Setup.InstanceToMockedServiceLocator<IInterviewUniqueKeyGenerator>(Mock.Of<IInterviewUniqueKeyGenerator>());
     }
 }

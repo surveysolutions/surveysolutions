@@ -9,27 +9,36 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
+        private readonly bool onlyAllowedAddresses;
+        private IMembershipUserService MembershipService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
+
+        private IAllowedAddressService allowedAddressService => ServiceLocator.Current.GetInstance<IAllowedAddressService>();
+
+        private IIpAddressProvider ipAddressProvider => ServiceLocator.Current.GetInstance<IIpAddressProvider>();
 
         private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private readonly Func<string, string, bool> validateUserCredentials;
 
-        public ApiBasicAuthAttribute()
-            : this(Membership.ValidateUser){}
+        public ApiBasicAuthAttribute(bool onlyAllowedAddresses = false)
+            : this(Membership.ValidateUser, onlyAllowedAddresses)
+        {
+        }
 
-        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials)
+        internal ApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials, bool onlyAllowedAddresses = false)
         {
             this.validateUserCredentials = validateUserCredentials;
+            this.onlyAllowedAddresses = onlyAllowedAddresses;
         }
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -37,7 +46,7 @@ namespace WB.UI.Designer.Api.Attributes
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
-                this.ThrowUnathorizedException(actionContext);
+                this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
                 return;
             }
             this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
@@ -45,7 +54,7 @@ namespace WB.UI.Designer.Api.Attributes
             {
                 if (!this.Authorize(credentials.Username, credentials.Password))
                 {
-                    this.ThrowUnathorizedException(actionContext);
+                    this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
                     return;
                 }
 
@@ -68,6 +77,19 @@ namespace WB.UI.Designer.Api.Attributes
                 {
                     this.ThrowNotApprovedException(actionContext);
                     return;
+                }
+
+                if (this.onlyAllowedAddresses)
+                {
+                    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
+                    {
+                        var clientIpAddress = ipAddressProvider.GetClientIpAddress();
+                        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
+                        {
+                            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                            return;
+                        }
+                    }
                 }
 
                 base.OnAuthorization(actionContext);
@@ -107,11 +129,11 @@ namespace WB.UI.Designer.Api.Attributes
             public string Password { get; set; }
         }
 
-        private void ThrowUnathorizedException(HttpActionContext actionContext)
+        private void ThrowUnathorizedException(HttpActionContext actionContext, string errorMessage)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.User_Not_authorized };
-            actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = errorMessage };
+            actionContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
         }
 
         private void ThrowLockedOutException(HttpActionContext actionContext)
@@ -124,7 +146,7 @@ namespace WB.UI.Designer.Api.Attributes
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
             {
                 ReasonPhrase =
-                    string.Format(ErrorMessages.UserNotApproved, this.UserHelper.WebUser.MembershipUser.Email)
+                    string.Format(ErrorMessages.UserNotApproved, this.MembershipService.WebUser.MembershipUser.Email)
             };
         }
 
@@ -135,12 +157,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         private bool IsAccountLockedOut()
         {
-            return this.UserHelper.WebUser == null || this.UserHelper.WebUser.MembershipUser.IsLockedOut;
+            return this.MembershipService.WebUser == null || this.MembershipService.WebUser.MembershipUser.IsLockedOut;
         }
 
         private bool IsAccountNotApproved()
         {
-            return !this.UserHelper.WebUser.MembershipUser.IsApproved;
+            return !this.MembershipService.WebUser.MembershipUser.IsApproved;
         }
     }
 }

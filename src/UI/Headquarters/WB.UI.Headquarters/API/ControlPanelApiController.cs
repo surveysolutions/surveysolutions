@@ -46,35 +46,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
-        private readonly ITeamViewFactory teamViewFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IInterviewPackagesService interviewPackagesService;
+        private readonly IUserViewFactory userViewFactory;
 
 
         public ControlPanelApiController(
             IReadSideAdministrationService readSideAdministrationService,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
-            ITeamViewFactory teamViewFactory,
             IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
-            IInterviewPackagesService interviewPackagesService)
+            IInterviewPackagesService interviewPackagesService,
+            IUserViewFactory userViewFactory)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
-            this.teamViewFactory = teamViewFactory;
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewPackagesService = interviewPackagesService;
+            this.userViewFactory = userViewFactory;
         }
         
         [NoTransaction]
@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.teamViewFactory.GetAllInterviewers(pageSize: pageSize, searchBy: query);
+            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
 
         [HttpGet]
         public IEnumerable<QuestionnaireView> Questionnaires()

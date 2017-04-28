@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using Nito.AsyncEx.Synchronous;
+using WB.UI.Headquarters.Code;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
@@ -11,13 +13,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     {
         Establish context = () =>
         {
-            attribute = Create((userName, password)=> false);
+            attribute = CreateApiBasicAuthAttribute((userName, password)=> false);
 
             actionContext = CreateActionContext();
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "aaaaaaaa");
         };
 
-        Because of = () => attribute.OnAuthorization(actionContext);
+        Because of = () => attribute.OnAuthorizationAsync(actionContext, CancellationToken.None).WaitAndUnwrapException();
 
         It should_response_not_be_null = () =>
             actionContext.Response.ShouldNotBeNull();

@@ -1,59 +1,34 @@
 .filters{
+    @include transition(width, 0.5s);    
+    @include transition(left, 0.3s);    
+}
+.filters{
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
 	padding: 100px 5px 50px 5px;
 	margin-left: 12px;
-	.input-group, .btn-group.bootstrap-select{
-		margin-left: -10px !important;
-	} 
 	.input-group.date{
 		margin-left: 0 !important;
 	}
-}
-input.checkbox-filter{
-  	display: none;
-  	& ~ label{
-  		position: relative;
-  		padding-left: 35px;
-  		cursor: pointer;
-  	}
-  	& ~ label .tick {
-	    @extend %tick;
-	    @include absolute(0, null, null, 0);
-	    height: 20px;
-	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
-	    background-size: 68px 350px;
-	    background-position: 0 0;
-	    margin-right: 10px;
-		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-  	}
-  	& ~ label:hover .tick,
-  	& ~ label:focus .tick{
-    	background-position: 0px -36px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: 0px -72px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
-    	background-position: 0px -108px;
-  	}
-  	&:disabled ~ label .tick,
-  	&:checked:disabled ~ label .tick {
-    	background-position: 0px -144px;
-  	}
-  	&:disabled ~ label:hover .tick,
-  	&:checked:disabled ~ label:hover .tick,
-  	&:disabled ~ label:focus .tick,
-  	&:checked:disabled ~ label:focus .tick {
-    	background-position: 0px -180px;
-  	}
+	.bootstrap-select.btn-group{
+		width: 100% !important;   
+	} 
+	.input-group, .combo-box, .btn-input .dropdown-toggle{
+		width: 100%;
+	}
+	.open > .dropdown-menu{
+		width: 100%;    
+	}
 }
 .filters{
+	.checkbox-block h5{
+		margin-bottom: 10px;
+	}
 	input.checkbox-filter{
 		& ~ label{
 	  		padding-left: 30px;
+			font-weight: normal;
 	  		.tick {
 	  			left: -5px;
 	  		}
@@ -63,66 +38,93 @@ input.checkbox-filter{
 .filters-container {
 	color: $gray_text;
 	border-bottom: 3px solid $gray-super-light;
-	padding: 0 25px 20px 30px; 
-	.block-filter{
-		margin-bottom: 30px;
-		select{
-			border-color: $gray_form;
-			max-width: 90%;
-			option{
-				width: 200px;
-			}
+	padding: 0 15px 20px 15px; 
+	@extend %filter-indent;
+}
+.block-filter{
+	h5{
+		margin-bottom: 2px;
+		label{
+			margin-bottom: 0;
 		}
-		.form-group{
-			margin-bottom: 10px;
+	}
+	margin-bottom: 15px;
+	select{
+		border-color: $gray_form;
+		max-width: 90%;
+		option{
+			width: 200px;
+		}
+	}
+	.form-group{
+		margin-bottom: 10px;
+		label{
+			font-size: 14px;
+			line-height: 16px;
+			font-family: inherit;
+			//font-weight: normal;
+			margin: 0;
+		}
+		&:last-of-type{
+			margin-bottom: 0;
+		}
+	}
+	.form-date{
+		margin-bottom: 15px;
+		max-width: 275px;
+		.input-group.date{
+			width: 100%;
 			label{
+				display: table-cell;
+				vertical-align: middle;
 				font-size: 14px;
-			    line-height: 20px;
-			    font-family: inherit;
-			    font-weight: normal;
-			    margin: 0;
+				line-height: 16px;
+				width: 50px;
+				font-weight: normal;
 			}
-			&:last-of-type{
-				margin-bottom: 0;
+			.form-control{
+				border-right: none;
+				border-color: $gray_form;
+				border-bottom-left-radius: 4px;
+				border-top-left-radius: 4px;
 			}
-		}
-		.form-date{
-			margin-bottom: 15px;
-			max-width: 275px;
-			.input-group.date{
-				width: 100%;
-				label{
-					display: table-cell;
-					vertical-align: middle;
-					font-size: 14px;
-					line-height: 16px;
-					width: 50px;
-					font-weight: normal;
-				}
-				.form-control{
-					border-right: none;
-					border-color: $gray_form;
-					border-bottom-left-radius: 4px;
-					border-top-left-radius: 4px;
-				}
-				.input-group-addon{
-					background-color: transparent;
-					border-left: none;
-					border-color: $gray_form;
-					padding: 3px 10px; 
-					.calendar{
-						@include size(21px, 20px); 
-						display: inline-block;
-						background: url("#{$assetsPath}/img/calendar.png") no-repeat;
-						@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
-					}
-				}
-			}
+			// .input-group-addon{
+			// 	background-color: transparent;
+			// 	border-left: none;
+			// 	border-color: $gray_form;
+			// 	padding: 3px 10px; 
+			// }
 		}
 	}
 }
+.form-date{
+	&.input-group{
+		max-width: none;
+	}
+	.form-control{
+		cursor: pointer;
+		border-right: none;
+		border-color: $gray_form;
+		//background-color: #fff;
+		border-bottom-left-radius: 4px;
+		border-top-left-radius: 4px;
+	}
+	// .input-group-addon{
+	// 	background-color: transparent;
+	// 	border-left: none;
+	// 	border-color: $gray_form;
+	// 	padding: 3px 10px; 
+	// }
+}
+.calendar{
+	@include size(21px, 20px); 
+	display: inline-block;
+	background: url("#{$assetsPath}/img/calendar.png") no-repeat;
+	@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
+}
 .preset-filters-container{
-	padding: 30px 25px 20px 30px;
+	padding: 30px 15px 20px 15px;
+	@extend %filter-indent;	
 	a, .export-queue{
 		@extend h5;
 		color: $blue;
@@ -132,12 +134,23 @@ input.checkbox-filter{
 .filters-container .flagged-questions{
 	margin: 0;
 }
-.filters {
-	.bootstrap-select.btn-group{
-		width: 305px !important;
-	}
-	.input-group{
-		width: 305px;
+// .filters {
+// 	.bootstrap-select.btn-group{
+// 		width: 305px !important;
+// 	}
+// 	.input-group{
+// 		width: 305px;
+// 	}
+// 	 .combo-box{
+// 		width: 305px;
+// 		.btn-input .dropdown-toggle{
+//  			width: 305px;
+//  		}
+// 	}
+// }
+.filters{
+	.help-block{
+		margin-top: 10px;
 	}
 }
 @media (max-width: 1300px){
@@ -157,16 +170,12 @@ input.checkbox-filter{
 }
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
-	.preset-filters-container, .filters-container{
-		padding-left: 20px;
-		padding-right: 15px;
-	}
 	.foldback-button{
 		display: block;
 	}
 	.fullscreen-hidden-filters{
 		.filters{
-			left: - $filter-small-width - 12px;
+			left: - $filter-width - 12px;
 			overflow: visible;
 			@include hidden-foldback-button();
 			 .foldback-button{
@@ -177,7 +186,7 @@ input.checkbox-filter{
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		left: ((-$filter-small-width)-12px);
+		left: ((-$filter-width)-12px);
 		@include hidden-foldback-button();
 		overflow: visible;
 	}
@@ -208,12 +217,12 @@ input.checkbox-filter{
 	
 }
 
-@media (max-width: $screen-xs-min){
-	.fullscreen-hidden-filters{
-		.filters{
-			.filters-container, .preset-filters-container{
-				width: 250px;
-			}
-		}
-	}
-}
+// @media (max-width: $screen-xs-min){
+// 	.fullscreen-hidden-filters{
+// 		.filters{
+// 			.filters-container, .preset-filters-container{
+// 				width: 250px;
+// 			}
+// 		}
+// 	}
+// }

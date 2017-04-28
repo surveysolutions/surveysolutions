@@ -3,6 +3,9 @@
     width: 100% !important;
     // font: 16px/18px "RobotoRegular";
     font: 14px/16px Arial, sans-serif; 
+    td.type-numeric{
+        text-align: right;
+    }
     tr{
         .without-break{
             white-space: nowrap;
@@ -117,6 +120,10 @@
                 &.title-row{
                     font-size: 18px;
                     line-height: 20px;
+                    a, span{
+                        font-size: 18px;
+                        line-height: 20px;
+                    }
                 }
                 padding: 15px;
                 vertical-align: middle;
@@ -140,6 +147,43 @@
                     }
                 }
             }
+        }
+    }
+    tfoot{
+        tr{
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            td, th{
+                border-top: none;
+                padding: 15px;
+                height: 35px;
+                &.title-row{
+                    font-size: 18px;
+                    line-height: 20px;
+                    a, span{
+                        font-size: 18px;
+                        line-height: 20px;
+                    }
+                }
+                &:hover, &:focus, &:active{
+                    a, a:hover, a:focus, a:active{
+                        color: $blue !important;
+                        text-decoration: none;
+                    }
+                }
+                a{
+                    @include transition(all, 0.2s);
+                    text-overflow: ellipsis;
+                    color: $gray_text;
+                }
+            }
+        }
+    }
+    .total-row{
+        border-top: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        td{
+            font-weight: bold;
         }
     }
 }
@@ -317,7 +361,7 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-53px, 0, null, null);
+        @include absolute(-53px, -10px);
         z-index: 2;
         label{
             font-size: 0;
@@ -433,7 +477,11 @@
         }
     }
 }
-
+.table-wrapper{
+    .dataTables_filter{
+        top: -40px;
+    }
+}
 @media (max-width: 1450px){
     .table-ordered{
         thead{
@@ -476,6 +524,11 @@
     .dataTables_paginate{
         margin-bottom: 30px;
     }
+    .table-wrapper{
+        .dataTables_paginate{
+            margin-bottom: 0;
+        }
+    }
     .table{
         tr{
             td, th{
@@ -500,7 +553,7 @@
         tr {
             border-bottom: 2px solid #ddd !important;
         }
-        tbody tr td {
+        tbody tr td, tfoot tr th {
             overflow: hidden;
             height: auto;
             font-size: 12px;
@@ -513,6 +566,7 @@
             a{
                 float: left;
                 width: 50%;
+                text-align: right;
             }
             &:before { 
                 content: attr(data-th); 
@@ -539,12 +593,18 @@
                 }
             }
         }
+        tfoot tr th {
+            text-align: center;
+            &:nth-of-type(2):before,  &:first-of-type:before{
+                display: none;
+            }
+        }
     }
     .table{
         tr{
             td, th{
-                font-size: 10px;
-                line-height: 12px;
+                //font-size: 10px;
+                //line-height: 12px;
                 &.for-tablets{
                     display: none;
                 }
@@ -647,7 +707,7 @@
         }
     }
 }
-.history{
+.table.history{
     td{
         .comment{
             padding-top: 10px;
@@ -666,4 +726,6 @@
         }
     }
   }
-
+.uploaded-to-hq{
+    min-width: 150px;
+}

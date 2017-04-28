@@ -159,6 +159,9 @@
         VariableNameEndsWithUnderscore,
 
         VariableNameHasConsecutiveUnderscores,
-        GroupYouAreLinkedToIsNotRoster
+
+        GroupYouAreLinkedToIsNotRoster,
+
+        VariableLabelContainsSubstitutionReference,
     }
 }

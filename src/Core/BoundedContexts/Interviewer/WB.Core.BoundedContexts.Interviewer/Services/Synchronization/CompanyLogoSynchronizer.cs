@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             var existingLogo = this.logoStorage.GetById(logoStorageId);
             CompanyLogoInfo remoteLogoInfo = await this.synchronizationService.GetCompanyLogo(existingLogo?.ETag, cancellationToken);
 
-            if (!remoteLogoInfo.HasCustomLogo)
+            if (remoteLogoInfo == null || !remoteLogoInfo.HasCustomLogo)
             {
                 this.logoStorage.Remove(logoStorageId);
             }

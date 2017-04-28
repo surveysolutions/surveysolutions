@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>Невозможно обновить информация по польвателю, потому что он не существует</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>Невозможно обновить информацию по пользователю, потому что пользователь архивирован</value>
+  </data>
   <data name="BatchUploadModel_FileName" xml:space="preserve">
     <value>CSV-файл</value>
   </data>
@@ -163,7 +169,7 @@
     <value>Пароль должен состоять по крайней мере из {2} символов</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Слишком длинное имя</value>
+    <value>Полное имя не должно содержать больше {1} символов</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>Полное имя</value>
@@ -212,5 +218,20 @@
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>Имя пользователя может содержать только буквы, пробелы, точки и апосторофы</value>
+  </data>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>Номер телефона не может содержать больше {1} символов</value>
+  </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Не верный старый пароль</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Старый пароль</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Укажите подтверждение пароля</value>
   </data>
 </root>

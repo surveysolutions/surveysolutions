@@ -12,6 +12,46 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
+            bundles.Add(new ScriptBundle("~/js/troubleshooting").Include(
+                "~/Dependencies/build/vue-libs.js",
+                "~/Dependencies/build/vue/troubleshooting.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
+                "~/Dependencies/js/searchHighlight.js"
+             ));
+
+            //libs.js:
+            //vendor\jquery\dist\jquery.js
+            //vendor\bootstrap - sass\assets\javascripts\bootstrap.js
+            //vendor\knockout\dist\knockout.js
+            //vendor\knockout-mapping\build\output\knockout.mapping-latest.js
+            //vendor\moment\moment.js
+            //vendor\lodash\lodash.js
+            //vendor\datatables.net\js\jquery.dataTables.js
+            //vendor\datatables.net-select\js\dataTables.select.js
+            //vendor\pnotify\dist\pnotify.js
+            //vendor\pnotify\dist\pnotify.animate.js
+            //vendor\pnotify\dist\pnotify.buttons.js
+            //vendor\pnotify\dist\pnotify.callbacks.js
+            //vendor\pnotify\dist\pnotify.confirm.js
+            //vendor\pnotify\dist\pnotify.desktop.js
+            //vendor\pnotify\dist\pnotify.history.js
+            //vendor\pnotify\dist\pnotify.mobile.js
+            //vendor\pnotify\dist\pnotify.nonblock.js
+            //vendor\bootstrap-select\dist\js\bootstrap - select.js
+            //vendor\jQuery-contextMenu\dist\jquery.contextMenu.js
+            //vendor\jquery-highlight\jquery.highlight.js
+            //vendor\flatpickr\dist\flatpickr.js
+            bundles.Add(new ScriptBundle("~/js/main-redesigned").Include(
+                "~/Scripts/modernizr-2.8.3.js",
+                "~/Scripts/director.js",
+                "~/Scripts/query-string.js",
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js",
+                "~/Scripts/viewmodels/surveymanagmentheader.js",
+                "~/Scripts/bootbox.min.js"
+            ));
+
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/font-awesome.min.css",
@@ -77,6 +117,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/bootbox.min.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/main-no-libs").Include(
+                "~/Scripts/modernizr-2.8.3.js",
+                "~/Scripts/query-string.js",
                 "~/Scripts/supervisor.framework.js",
                 "~/Scripts/viewmodels/viewmodelbase.js",
                 "~/Scripts/viewmodels/pagebase.js",
@@ -135,10 +177,10 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/mapreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
-                "~/Scripts/moment.js",
+                "~/Scripts/ko.pager.js",
+                "~/Scripts/components/bindings.js",
+                "~/Scripts/viewmodels/listview.js",
                 "~/Scripts/components/moment-duration-format.js",
-                "~/Scripts/bootstrap-datepicker.js",
-                "~/Scripts/ko.datepicker.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/synclog").Include(
@@ -172,8 +214,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/knockout/ko.extenders.js",
                 "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js",
-                "~/Scripts/pages/import-interviews.js"
+                "~/Scripts/knockout/ko.spin.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews").Include(
@@ -239,6 +280,11 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/chart").Include(
+                "~/Scripts/ko.pager.js",
+                "~/Scripts/viewmodels/listview.js",
+                "~/Scripts/components/bindings.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js",
                 "~/Scripts/query-string.js",
                 "~/Scripts/jqPlot/jquery.jqplot.js",
                 "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js",
@@ -262,6 +308,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
+                "~/Dependencies/js/ajax.js",
                 "~/Scripts/pages/export-settings.js"
                 ));
 

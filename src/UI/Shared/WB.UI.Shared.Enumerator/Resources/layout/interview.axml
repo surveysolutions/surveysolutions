@@ -26,8 +26,11 @@
                                        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        local:MvxBind="ColorByInterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
-                local:MvxBind="Text CurrentStage.Stage.Name.PlainText" />
+                local:MvxBind="Html CurrentStage.Stage.Name.PlainText" />
     </android.support.v7.widget.Toolbar>
+
+    <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+                 local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />
 
     <FrameLayout
       android:animateLayoutChanges="false"

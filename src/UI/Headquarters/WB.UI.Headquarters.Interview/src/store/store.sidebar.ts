@@ -1,14 +1,14 @@
 import * as debounce from "lodash/debounce"
 import * as forEach from "lodash/foreach"
 import * as groupBy from "lodash/groupby"
-import * as Vue from "vue"
+import Vue from "vue"
 import { apiCaller } from "../api"
 import { safeStore } from "../errors"
 import { batchedAction } from "../helpers"
 
 declare interface ISidebarState {
     panels: ISidebarPanel[],
-    sidebarHidden: Boolean
+    sidebarHidden: boolean
 }
 
 export default safeStore({

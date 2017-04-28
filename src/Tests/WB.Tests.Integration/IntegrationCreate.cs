@@ -133,7 +133,8 @@ namespace WB.Tests.Integration
                 preloadedDataDto: preloadedData,
                 answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
-                interviewerId: Guid.NewGuid()));
+                interviewerId: Guid.NewGuid(),
+                interviewKey: Create.Entity.InterviewKey()));
 
             return interview;
         }

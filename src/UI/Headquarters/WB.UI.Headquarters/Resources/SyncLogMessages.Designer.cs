@@ -223,11 +223,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer failed to login.
+        /// </summary>
+        public static string InterviewerFailedToLogin {
+            get {
+                return ResourceManager.GetString("InterviewerFailedToLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer has device already.
         /// </summary>
         public static string InterviewerHasDevice {
             get {
                 return ResourceManager.GetString("InterviewerHasDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer logged in and aquired AuthToken.
+        /// </summary>
+        public static string InterviewerLoggedIn {
+            get {
+                return ResourceManager.GetString("InterviewerLoggedIn", resourceCulture);
             }
         }
         
@@ -268,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload interview: &lt;b&gt;&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;{1}&lt;/a&gt; &lt;/b&gt;.
+        ///   Looks up a localized string similar to Upload interview: {0}.
         /// </summary>
         public static string PostPackage {
             get {

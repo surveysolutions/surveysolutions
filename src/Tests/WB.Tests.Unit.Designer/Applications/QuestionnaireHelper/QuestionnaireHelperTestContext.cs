@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
 {

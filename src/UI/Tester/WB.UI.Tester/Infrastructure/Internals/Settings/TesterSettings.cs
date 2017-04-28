@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Preferences;
@@ -48,6 +49,29 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 
         public bool AcceptUnsignedSslCertificate => SharedPreferences.GetBoolean(AcceptUnsignedSslCertificateParameterName, 
             Application.Context.Resources.GetBoolean(Resource.Boolean.AcceptUnsignedSslCertificate));
+
+        private string GetApplicationVersionName()
+        {
+            var packageInfo = Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0);
+            return packageInfo.VersionName;
+        }
+
+        public string UserAgent
+        {
+            get
+            {
+                var flags = new List<string>();
+#if DEBUG
+                flags.Add("DEBUG");
+#endif
+                if (AcceptUnsignedSslCertificate)
+                {
+                    flags.Add("UNSIGNED_SSL");
+                }
+                
+                return $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
+            }
+        }
 
         public int GpsReceiveTimeoutSec
         {

@@ -10,6 +10,44 @@
         }
     };
 
+    ko.bindingHandlers.flatpickr = {
+        init: function (element, valueAccessor, allBindingsAccessor) {
+            var options = $.extend({
+                dateFormat: 'm/d/Y H:i',
+                enableTime: true,
+                time_24hr: true,
+                minuteIncrement: 1
+            }, allBindingsAccessor().flatpickrOptions);
+            var $el = $(element);
+            var picker;
+
+            if (options.wrap) {
+                picker = new Flatpickr(element.parentNode, options);
+            } else {
+                picker = new Flatpickr(element, options);
+            }
+
+            // Save instance for update method.
+            $el.data('datetimepickr_inst', picker);
+
+            // handle the field changing by registering datepicker's changeDate event
+            ko.utils.registerEventHandler(element, "change", function () {
+                valueAccessor()(picker.parseDate($el.val()));
+            });
+
+            // handle disposal (if KO removes by the template binding)
+            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                $el.flatpickr("destroy");
+            });
+        },
+        update: function (element, valueAccessor, allBindingsAccessor) {
+            // Get datepickr instance.
+            var picker = $(element).data('datetimepickr_inst');
+
+            picker.setDate(ko.unwrap(valueAccessor()));
+        }
+    };
+
     ko.bindingHandlers.sortby = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var listView = bindingContext.$root;

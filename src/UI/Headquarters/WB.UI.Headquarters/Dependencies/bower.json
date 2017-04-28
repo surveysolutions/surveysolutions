@@ -23,17 +23,26 @@
     "knockout-mapping": "^2.4.1",
     "moment": "^2.17.1",
     "lodash": "^4.17.4",
-    "datatables.net": "^2.1.1",
-    "datatables.net-select": "^1.2.1",
+    "datatables.net": "^1.10.15",
+    "datatables.net-select": "^1.2.2",
     "pnotify": "^3.0.0",
     "bootstrap-select": "^1.12.2",
     "jQuery-contextMenu": "^2.4.2",
-    "jquery-highlight": "^3.3.0"
+    "jquery-highlight": "^3.3.0",
+    "vue": "^2.2.2",
+    "vue-resource": "^1.2.1",
+    "flatpickr": "2.4.4",
+    "vee-validate": "2.0.0-beta.22"
   },
   "devDependencies": {},
   "overrides": {
     "knockout-mapping": {
       "main": "build/output/knockout.mapping-latest.js"
+    },
+    "vue": {
+      "main": [
+        "dist/vue.js"
+      ]
     },
     "pnotify": {
       "main": [

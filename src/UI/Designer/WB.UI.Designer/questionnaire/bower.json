@@ -13,25 +13,25 @@
   "dependencies": {
     "jquery": "^3.1.1",
     "ace-builds": "^1.2.6",
-    "angular": "^1.6.2",
-    "angular-animate": "^1.6.2",
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
     "angular-block-ui": "0.2.2",
-    "angular-bootstrap": "^2.1.4",
-    "angular-cookies": "^1.6.2",
+    "angular-bootstrap": "^2.5.0",
+    "angular-cookies": "^1.6.4",
     "angular-elastic": "^2.5.1",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
     "angular-loading-bar": "^0.9.0",
     "angular-perfect-scrollbar": "~0.1.4",
     "angular-pnotify": "^0.1.2",
-    "angular-resource": "^1.6.2",
-    "angular-sanitize": "^1.6.2",
+    "angular-resource": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
     "angular-ui-ace": "~0.2.3",
-    "angular-ui-tree": "^2.22.4",
+    "angular-ui-tree": "^2.22.5",
     "angular-ui-utils": "~0.1.1",
     "angular-unsavedChanges": "0.2.3-alpha.3",
     "bootstrap": "^3.3.7",
     "console-shim": "*",
-    "es5-shim": "~2.1.0",
+    "es5-shim": "^4.5.9",
     "jquery-mousewheel": "^3.1.13",
     "jquery-placeholder": "^2.3.1",
     "jquery.scrollTo": "^2.1.2",
@@ -50,7 +50,7 @@
     "perfect-scrollbar": "^0.6.16"
   },
   "resolutions": {
-    "angular": "^1.5.8"
+    "angular": "^1.6.4"
   },
   "overrides": {
     "prettycheckable": {

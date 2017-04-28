@@ -3,5 +3,6 @@
     public interface IProductVersion
     {
         string ToString();
+        int GetBildNumber();
     }
 }

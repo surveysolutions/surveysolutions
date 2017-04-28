@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             viewModel.IsOnlineLoginButtonVisible.ShouldBeFalse();
 
         It should_set_Login_Online_Signin_Explanation_message = () =>
-            viewModel.ErrorMessage.ShouldEqual(InterviewerUIResources.Login_WrondPassword);
+            viewModel.ErrorMessage.ShouldEqual(InterviewerUIResources.Login_WrongPassword);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

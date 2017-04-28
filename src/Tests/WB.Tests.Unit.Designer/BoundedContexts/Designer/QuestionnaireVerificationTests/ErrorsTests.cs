@@ -11,6 +11,71 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
 
         [Test]
+        public void question_with_validation_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.TextQuestion(validationConditions: new[] { Create.ValidationCondition("System.DateTime.UtcNow.ToString() == self") })
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void question_with_condition_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.TextQuestion(enablementCondition: "DateTime.Now.AddMonth(1) > System.DateTime.Today")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void question_with_option_filter_uses_forbidden_DateTime_properties()
+           => Create.QuestionnaireDocumentWithOneChapter(new[]
+               {
+                    Create.SingleQuestion(optionsFilter: "(System.DateTime.Today.AddMonth(1) - System.DateTime.Today).TotalSeconds > 10")
+               })
+               .ExpectError("WB0118");
+
+        [Test]
+        public void question_with_linked_filter_uses_forbidden_DateTime_properties()
+           => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+               {
+                    Create.TextListQuestion(questionId: Id1),
+                    Create.SingleQuestion(linkedToQuestionId: Id1, linkedFilter: "(System.DateTime.Today.AddMonth(1) - DateTime.Today).TotalSeconds > 10")
+               })
+               .ExpectError("WB0118");
+
+        [Test]
+        public void static_text_with_validation_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.StaticText(validationConditions: new[] { Create.ValidationCondition("System.DateTime.UtcNow.ToString() == self") })
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void static_text_condition_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.StaticText(enablementCondition: "DateTime.Now.AddMonth(1) > System.DateTime.Today")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void group_condition_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Group(enablementCondition: "DateTime.Now.AddMonth(1) > DateTime.Today")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void variable_condition_uses_forbidden_DateTime_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Variable(expression: "(System.DateTime.UtcNow.AddMonth(1) - System.DateTime.Today).TotalSeconds")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
         public void circular_reference_in_enablings()
             => Create.QuestionnaireDocumentWithOneChapter(children: new[]
                 {

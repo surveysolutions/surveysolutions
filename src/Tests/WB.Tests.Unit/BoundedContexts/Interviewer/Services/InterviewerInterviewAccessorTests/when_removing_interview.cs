@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 

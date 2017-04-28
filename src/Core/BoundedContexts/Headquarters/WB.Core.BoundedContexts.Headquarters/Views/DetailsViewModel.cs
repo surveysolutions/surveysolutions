@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views
 {
@@ -17,5 +18,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public bool HasUnprocessedSyncPackages { get; set; }
 
         public IReadOnlyCollection<InterviewTranslationView> Translations { set; get; }
+
+        public string QuestionnaireName { get; set; }
+        public long QuestionnaireVersion { get; set; }
+
+        public string InterviewKey { get; set; }
     }
 }

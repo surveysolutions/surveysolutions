@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteSupervisor;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
@@ -20,7 +19,6 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -30,7 +28,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -41,7 +38,6 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -67,7 +63,8 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
-using WB.Core.Synchronization.Implementation.ImportManager;
+using WB.Core.BoundedContexts.Headquarters.Services.Internal;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -75,7 +72,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -125,9 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
-            this.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
-            //this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
 
             CommandRegistry.Setup<Tablet>()
                 .InitializesWith<RegisterTabletCommand>(command => command.DeviceId, (command, aggregate) => aggregate.CreateClientDevice(command));
@@ -148,28 +142,12 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
                 .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
 
-            this.Bind<User>().ToSelf();
-            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
-
-            CommandRegistry
-                .Setup<User>()
-                .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName, command.PersonName, command.PhoneNumber))
-                .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.PasswordHash, command.PersonName, command.PhoneNumber, command.UserId))
-                .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
-                .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
-                .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
-                .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
-                .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
-                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
-                .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
-
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient))
-                .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewEvents(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.SynchronizedEvents, command.CreatedOnClient))
-                .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
-                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId))
+                .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, aggregate => aggregate.SynchronizeInterviewEvents)
+                .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, aggregate => aggregate.CreateInterview)
+                .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireIdentity, command.SupervisorId, command.AnswersTime, command.UserId, command.InterviewKey))
                 .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command))
                 
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId))
@@ -218,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
@@ -235,7 +213,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
             this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
-            this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
             this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
             this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -246,26 +223,27 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
             this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
 
+            
+            this.Bind<IInterviewLogSummaryReader>().To<InterviewLogSummaryReader>();
+            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
             this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
-            this.Bind<IQuestionnaireQuestionInfoFactory>().To<QuestionnaireQuestionInfoFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<ITakeNewInterviewViewFactory>().To<TakeNewInterviewViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
-            this.Kernel.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Kernel.Bind<IUserListViewFactory>().To<UserListViewFactory>();
-            this.Kernel.Bind<IUserViewFactory>().To<UserViewFactory>();
-            this.Kernel.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
-            this.Kernel.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
-            this.Kernel.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
-            this.Kernel.Bind<IInterviewersViewFactory>().To<InterviewersViewFactory>();
-            this.Kernel.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
-            this.Kernel.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
+            this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
+            this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
+            this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
+            this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
+            this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
+            this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
+            this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
+            this.Bind<ISampleWebInterviewService>().To<SampleWebInterviewService>();
 
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 
@@ -275,6 +253,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
+
+            this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
+            this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
 
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
@@ -287,7 +268,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
-
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
@@ -306,7 +286,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
          
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
-            this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
@@ -330,14 +309,10 @@ namespace WB.Core.BoundedContexts.Headquarters
            
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
-
-            CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
-            CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
-            CommandRegistry.Configure<User, UnarchiveUserAndUpdateCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
-
+            
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
-            this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
 
+            this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
@@ -377,9 +352,12 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IRosterStructureService>().To<RosterStructureService>();
             this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
+            this.Bind<DesignerUserCredentials>().ToSelf();
 
             this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
+            
+            this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
         }
     }
 }

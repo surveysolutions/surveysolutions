@@ -109,6 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<IInterviewTreeNode> GetAllNodes();
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
         InterviewTreeSection FirstSection { get; }
+        Guid CurrentResponsibleId { get; }
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
@@ -139,9 +140,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
 
-        int CountCommentedQuestions();
+        int CountCommentedQuestionsVisibledToInterviewer();
 
-        IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview();
+        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
+
+        IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
+
+        IEnumerable<Identity> GetAllCommentedEnabledQuestions();
 
         string GetLastSupervisorComment();
 
@@ -159,5 +164,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
         bool AcceptsInterviewerAnswers();
+        IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
     }
 }
