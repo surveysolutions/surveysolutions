@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewLimitReached);
 
         It should_throw_exception_that_contains_such_words = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString(), "reached");
+            exception.Message.ToLower().ToSeparateWords().ShouldContain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString());
 
         private static int maxNumberOfInterviews = 1;
         private static InterviewException exception;
