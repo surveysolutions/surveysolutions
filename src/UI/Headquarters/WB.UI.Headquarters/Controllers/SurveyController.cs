@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -19,54 +17,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IInterviewersViewFactory interviewersFactory;
+        private readonly IAuthorizedUser authorizedUser;
 
         private readonly ITeamUsersAndQuestionnairesFactory
             teamUsersAndQuestionnairesFactory;
 
-        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-                                IInterviewersViewFactory interviewersFactory,
-                                ITeamUsersAndQuestionnairesFactory
-                                    teamUsersAndQuestionnairesFactory)
-            : base(commandService, provider, logger)
+        public SurveyController(
+            ICommandService commandService, 
+            IAuthorizedUser authorizedUser, 
+            ILogger logger,
+            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory)
+            : base(commandService, logger)
         {
-            this.interviewersFactory = interviewersFactory;
+            this.authorizedUser = authorizedUser;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
-        }
-
-        public ActionResult Index()
-        {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-            
-            return this.View();
         }
 
         public ActionResult Interviews()
         {
             this.ViewBag.ActivePage = MenuItem.Docs;
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            this.ViewBag.CurrentUser = new UsersViewItem
+            {
+                UserId = this.authorizedUser.Id,
+                UserName = this.authorizedUser.UserName
+            };
             return this.View(this.Filters());
-        }
-
-        public ActionResult TeamMembersAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
-
-        public ActionResult Status()
-        {
-            this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
-            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
+            Guid viewerId = this.authorizedUser.Id;
 
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));

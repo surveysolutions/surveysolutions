@@ -3,7 +3,7 @@ using WB.UI.Designer.Api.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(onlyAllowedAddresses: true)]
     [RoutePrefix("api/hq/user")]
     public class HQUserController : ApiController
     {

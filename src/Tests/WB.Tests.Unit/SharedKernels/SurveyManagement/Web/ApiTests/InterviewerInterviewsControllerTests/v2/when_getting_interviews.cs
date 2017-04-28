@@ -5,14 +5,12 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
@@ -21,14 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         private Establish context = () =>
         {
-            var mockOfGlobalInfoProvider = new Mock<IGlobalInfoProvider>();
-            mockOfGlobalInfoProvider.Setup(x => x.GetCurrentUser()).Returns(new UserLight(interviewerId, "interviewer"));
-
             var interviewInformationFactory = Mock.Of<IInterviewInformationFactory>(
                 x => x.GetInProgressInterviews(interviewId1) == interviewsFromStorage);
 
             controller = CreateInterviewerInterviewsController(
-                globalInfoProvider: mockOfGlobalInfoProvider.Object,
                 interviewsFactory: interviewInformationFactory);
             controller.Request = new HttpRequestMessage();
             controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());

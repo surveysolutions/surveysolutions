@@ -10,7 +10,7 @@ namespace WB.Infrastructure.Shared.Enumerator
     {
         public static async Task AssureHasPermission(this IPermissions permissions, Permission permission)
         {
-            if ((int) Build.VERSION.SdkInt < 23) return;
+            if ((int)Build.VERSION.SdkInt < 23) return;
             if (await permissions.CheckPermissionStatusAsync(permission).ConfigureAwait(false) == PermissionStatus.Granted) return;
 
             var permissionsRequest = await permissions.RequestPermissionsAsync(permission).ConfigureAwait(false);

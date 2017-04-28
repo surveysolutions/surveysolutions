@@ -3,23 +3,23 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Tests.Abc;
+using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
-    internal class when_request_quantity_report_by_interviewers_for_user_in_hq_role : PeriodicStatusReportControllerTestContext
+    internal class when_request_quantity_report_by_interviewers_for_user_in_hq_role
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
-            IGlobalInfoProvider globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_ => _.IsHeadquarter == true);
-            periodicStatusReportController = CreatePeriodicStatusReportController(globalInfoProvider: globalInfoProvider);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
+            reportController = Create.Controller.ReportsController(authorizedUser: authorizedUser);
         };
 
         Because of = () =>
-            result = periodicStatusReportController.QuantityByInterviewers(null) as ViewResult;
+            result = reportController.QuantityByInterviewers(null) as ViewResult;
 
         It should_active_page_be_NumberOfCompletedInterviews = () =>
             ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.NumberOfCompletedInterviews);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
         It should_ReportName_be_Quantity = () =>
            ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Quantity");
 
-        private static PeriodicStatusReportController periodicStatusReportController;
+        private static ReportsController reportController;
         private static ViewResult result;
     }
 }

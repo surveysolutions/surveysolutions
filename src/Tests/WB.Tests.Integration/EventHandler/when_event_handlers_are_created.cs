@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -113,8 +114,8 @@ namespace WB.Tests.Integration.EventHandler
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
             typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage),
-            typeof(IWebInterviewNotificationService), typeof(IStatefulInterviewRepository), typeof(IAggregateRootCacheCleaner)
-            
+            typeof(IWebInterviewNotificationService), typeof(IStatefulInterviewRepository), typeof(IAggregateRootCacheCleaner),
+            typeof(IUserViewFactory)
         };
 
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)

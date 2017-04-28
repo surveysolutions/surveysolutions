@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [AllowAnonymous]
     public class HealthCheckController : BaseController
     {
-        public HealthCheckController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
-            : base(commandService, globalInfo, logger)
+        public HealthCheckController(ICommandService commandService, ILogger logger)
+            : base(commandService, logger)
         {
         }
 

@@ -2,16 +2,15 @@
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <wb-humburger id="sidebarHamburger" />
         <div class="panel-group structured-content">
-            <SidebarPanel :panel="coverSection" v-if="showCover"></SidebarPanel>
-            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel">
-            </SidebarPanel>
-            <SidebarPanel :panel="completeSection"></SidebarPanel>
+            <SidebarPanel :panel="coverSection" v-if="showCover" />
+            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
+            <SidebarPanel :panel="completeSection" />
         </div>
     </aside>
 </template>
 <script lang="ts">
     import SidebarPanel from "./SidebarPanel"
-    import * as Vue from "vue"
+    import Vue from "vue"
 
     export default {
         name: 'sidebar',

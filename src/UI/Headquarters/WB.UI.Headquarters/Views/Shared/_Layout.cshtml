@@ -1,12 +1,12 @@
-﻿@using System.Diagnostics
-@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
-@using WB.UI.Headquarters.Code
+@using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Extensions
+@{
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,45 +29,46 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (authorizedUser.IsAdministrator)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (authorizedUser.IsHeadquarter)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
-                {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
-                }
-                else
+                else if(authorizedUser.IsSupervisor)
                 {
                     <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
                 }
+                else if (authorizedUser.IsObserver)
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Supervisor", new {area = ""})">@Users.Observer</a>
+                }
             </div>
             <div class="collapse navbar-collapse">
-                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                @if (authorizedUser.IsAdministrator)
             {
                     @Html.Partial("AdminMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Headquarter.ToString()))
+                else if (authorizedUser.IsHeadquarter)
                 {
                     @Html.Partial("HeadquartersMainMenu")
                 }
-                else if (User.IsInRole(UserRoles.Observer.ToString()))
-                {
-                    @Html.Partial("ObserverMainMenu")
-                }
-                else
+                else if (authorizedUser.IsSupervisor)
                 {
                     @Html.Partial("SupervisorMainMenu")
                 }
+                else if (authorizedUser.IsObserver)
+                {
+                    @Html.Partial("ObserverMainMenu")
+                }
+
             </div>
 
         </div>
     </div>
-    @if (User.Identity.IsObserver())
+    @if (authorizedUser.IsObserving)
     {
         <div style="background-color: #f5e488; height: 20px; width: 100%; text-align: center;">
             @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account", new {area = string.Empty})">@Users.ClickToReturn</a>
@@ -110,20 +111,24 @@
             </div>
             <div class="text-center">
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())
-
                 @if (AppSettings.IsDebugBuilded)
-            {
+                {
                     <span id="build-config">[.NET Debug]</span>
                 }
 
                 @if (HttpContext.Current.IsDebuggingEnabled)
-            {
+                {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
-
                 <text>|</text>
-                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
-
+                <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">@Common.GetInterviewerApp</a>
+                 
+                @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
+                {
+                    <div>
+                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+                    </div>
+                }
             </div>
         </footer>
     </div>
@@ -154,7 +159,7 @@
                         "#IncomingPackagesQueueIndicator").load();
                 }
 
-                @if (User.Identity.IsObserver())
+                @if (authorizedUser.IsObserver)
             {
                 <text>
                 $('button[type="submit"]').attr("disabled", "disabled");

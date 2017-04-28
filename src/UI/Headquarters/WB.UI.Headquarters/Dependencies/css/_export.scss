@@ -132,9 +132,6 @@
 }
 .footer{
 	@include transition(padding, 0.3s);
-	&.footer-adaptive{
-		padding-left: $filter-width - $margin-container + 12px +30px;
-	}
 }
 .fullscreen-hidden-filters .export-types{
 	padding: 50px 30px 0;
@@ -150,7 +147,7 @@
 	} 
   	.export-types{
   		padding: 50px 20px 0 30px;
-  		margin-left:  $filter-small-width - $margin-container-md-screen + 15px + 12px;
+  		margin-left:  $filter-width - $margin-container-md-screen + 15px + 12px;
   		.size, .last-generated{
   			display: none;
   		}
@@ -224,11 +221,6 @@
 	  		margin-bottom: 15px;
 	  	}
   	}
-  	.footer{
-		&.footer-adaptive{
-			padding-left: $filter-small-width - $margin-container-md-screen + 12px +30px;
-		}
-	}
 }
 @media (max-width: $screen-sm-min){
 	.export-types{
@@ -251,11 +243,11 @@
 			}
 		}
 	}
-	.footer{
-		&.footer-adaptive{
-			padding-left: 0;
-		}
-	}
+	// .footer{
+	// 	&.footer-adaptive{
+	// 		padding-left: 0;
+	// 	}
+	// }
 }
 @media (max-width: $screen-xs-min){
 	.export-types{

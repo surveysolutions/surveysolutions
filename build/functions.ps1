@@ -84,7 +84,7 @@ function BuildStaticContent($targetLocation, $forceInstall){
     Write-Host "Running npm install"
 
 	#install node js dependencies
-    &npm install --silent --progress false | Write-Host
+    &yarn install | Write-Host
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
@@ -154,14 +154,24 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
+function TeamCityEncode([string]$value) {
+    $result = $value.Replace("|", "||")
+    $result = $result.Replace("'", "|'") 
+    $result = $result.Replace("[", "|[")
+    $result = $result.Replace("]", "|]") 
+    $result = $result.Replace("\r", "|r") 
+    $result = $result.Replace("\n", "|n")
+    $result
+}
+
 function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
     $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
     $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
 
-    Write-Host "##teamcity[blockOpened name='$blockMessage']"
-    Write-Host "##teamcity[progressStart '$progressMessage']"
+    Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
+    Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    & (GetPathToMSBuild) $Solution '/t:Build' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -173,8 +183,8 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
         }
     }
 
-    Write-Host "##teamcity[progressFinish '$progressMessage']"
-    Write-Host "##teamcity[blockClosed name='$blockMessage']"
+    Write-Host "##teamcity[progressFinish '$(TeamCityEncode $progressMessage)']"
+    Write-Host "##teamcity[blockClosed name='$(TeamCityEncode $blockMessage)']"
 
     return $wasBuildSuccessfull
 }
@@ -239,56 +249,6 @@ function GetOutputAssembly($Project, $BuildConfiguration) {
     return GetPathRelativeToCurrectLocation $fullPathToAssembly
 }
 
-function RunTestsFromProject($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='$Project']"
-
-    $assembly = GetOutputAssembly $Project $BuildConfiguration
-
-    if (-not (Test-Path $assembly)) {
-
-        Write-Host "##teamcity[message status='WARNING' text='Expected tests assembly $assembly is missing']"
-
-    } else {
-
-        Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
-
-        $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
-        
-	$command = ".\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe $assembly --result:$resultXml --teamcity"
-        Write-Host $command
-        iex $command | Write-Host
-        Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
-    }
-
-    Write-Host "##teamcity[blockClosed name='$Project']"
-}
-
-function RunTests($BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Running tests']"
-
-    $projects = GetProjectsWithTests
-    
-    if ($projects -ne $null) {
-        $parallelRunner = Get-ChildItem 'build\tools\' | 
-                                    Where-Object { $_.Name -like 'Machine.Specifications.TeamCityParallelRunner*'} | 
-                                    Select -First 1
-	if ($parallelRunner) {
-            $assemblies = $projects | ForEach-Object -Process {GetOutputAssembly $_ $BuildConfiguration} | Where-Object {(Test-Path $_) -and ($_ -notlike "*Mono*")}
-            $assembliesJoined = [string]::Join(" ", $assemblies)
-
-            $command = Join-Path "build\tools\$parallelRunner" "\mspec-teamcity-prunner.exe --threads 3 $assembliesJoined"
-            Write-Host $command
-            iex $command | Write-Host
-        }
-
-        foreach ($project in $projects) {
-            RunTestsFromProject $project $BuildConfiguration
-        }
-    }
-
-    Write-Host "##teamcity[blockClosed name='Running tests']"
-}
-
 function RunConfigTransform($Project, $BuildConfiguration){
 	$file = get-childitem $Project
 	$PathToConfigFile = Join-Path $file.directoryname "Web.config"
@@ -331,7 +291,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' '/p:username=' '/p:CodeContractsRunCodeAnalysis=false' | Write-Host
+    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -390,4 +350,31 @@ function UpdateProjectVersion([string]$BuildNumber, [string]$ver)
 	foreach ($file in $foundFiles) {
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}
+}
+
+function CreateZip($sourceFolder, $zipfile)
+{
+	If(Test-path $zipfile) {Remove-item $zipfile}
+	
+	Add-Type -assembly "system.io.compression.filesystem"	
+	[io.compression.zipfile]::CreateFromDirectory($sourceFolder, $zipfile)
+}
+
+function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration)
+{
+	Write-Host "##teamcity[blockOpened name='Building and deploying support console application']"
+	BuildSolution `
+                -Solution $SupportToolSolution `
+                -BuildConfiguration $BuildConfiguration
+				
+    $file = get-childitem $SupportToolSolution
+	
+	$binDir = $file.directoryname + "\bin\"
+	$sourceDir = $binDir + $BuildConfiguration
+	$destZipFile = $binDir + "support.zip"
+	
+	CreateZip $sourceDir $destZipFile
+	MoveArtifacts $destZipFile "Tools"
+	
+	Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
 }

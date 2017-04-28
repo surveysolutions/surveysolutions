@@ -1,9 +1,11 @@
-﻿@using System.Web.Optimization
-@using Main.Core.Entities.SubEntities
-@using WB.Core.GenericSubdomains.Utils
-@using WB.UI.Headquarters.Resources
+﻿@using Main.Core.Entities.SubEntities
+@using Microsoft.Practices.ServiceLocation
+@using WB.Core.BoundedContexts.Headquarters.Services
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var isAdmin = authorizedUser.IsAdministrator;
+    var isAdminOrHeadquarters = isAdmin || authorizedUser.IsHeadquarter;
 }
 
 @section scripts
@@ -11,7 +13,7 @@
     @Scripts.Render("~/js/users")
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
-        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchiveUsers" })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchivedSupervisors" })', $commandExecutionUrl);
             ko.applyBindings(model);
@@ -71,13 +73,14 @@
                     <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
                 </td>
                 <td>
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
+                    @if (isAdminOrHeadquarters)
                     {
-                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?Archived=true&supervisor=' + UserName() }">
+                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?archived=true&supervisor=' + UserName() }">
                             <i class="glyphicon glyphicon-user"></i> @Users.Interviewers
                         </a>
                     }
-                    @if (User.IsInRole("Administrator"))
+
+                    @if (isAdmin)
                     {
                         <div class="btn-group pull-right">
                             <a class="btn btn-success" data-bind="click : $parent.unarchiveUser">

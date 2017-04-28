@@ -3,7 +3,7 @@ using NHibernate;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal interface ISessionProvider
+    public interface ISessionProvider
     {
         ISession GetSession();
     }

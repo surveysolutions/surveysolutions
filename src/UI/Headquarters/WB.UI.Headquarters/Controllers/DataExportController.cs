@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -20,10 +19,10 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
 
-        public DataExportController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+        public DataExportController(ICommandService commandService, ILogger logger,
             IAllUsersAndQuestionnairesFactory
                 allUsersAndQuestionnairesFactory, InterviewDataExportSettings interviewDataExportSettings)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;

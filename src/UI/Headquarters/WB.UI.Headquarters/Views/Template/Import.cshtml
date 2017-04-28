@@ -2,15 +2,20 @@
 @using WB.UI.Headquarters.Models.Template
 @model WB.UI.Headquarters.Models.Template.ImportQuestionnaireListModel
 @{
+    ViewBag.Title = QuestionnaireImport.MyQuestionnairesTitle;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/js/common")
+
     <script type="text/javascript">
         'use strict';
 
         $(function () {
+            var notifier = new Notifier();
+
             var questionnaireListUrl = "@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })";
             var questionnaireImportModeUrl = "@Url.Action("ImportMode", "Template")";
 
@@ -35,8 +40,11 @@
 
             var table = $('table.import-interview')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt', function (e, settings, techNote, message) {
-                    location.reload();
+                .on('xhr.dt', function (e, settings, json, xhr) {
+                    if (xhr.status === 401)
+                        location.reload();
+                    else if (xhr.status != undefined && xhr.status !== 200)
+                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
                 })
                 .DataTable({
                     processing: true,

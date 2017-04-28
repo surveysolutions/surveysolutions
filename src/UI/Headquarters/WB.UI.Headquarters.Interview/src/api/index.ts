@@ -54,7 +54,7 @@ const scriptIncludedPromise = new Promise<any>(resolve =>
             return $.ajax({
                 url: imageUploadUri,
                 xhr() {
-                    let xhr = $.ajaxSettings.xhr()
+                    const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
                         store.dispatch("uploadProgress", {
                             id,
@@ -117,9 +117,7 @@ async function getInterviewHub() {
     return (await getInstance()).server as IWebInterviewApi
 }
 
-interface IServerHubCallback<T> {
-    (n: IWebInterviewApi): T
-}
+type IServerHubCallback<T> = (n: IWebInterviewApi) => T
 
 export async function apiCallerAndFetch<T>(id: string, action: IServerHubCallback<T>) {
     if (id) {

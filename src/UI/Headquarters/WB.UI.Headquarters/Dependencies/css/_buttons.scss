@@ -178,6 +178,11 @@ a.disabled{
 .btn-clear{
 	@include clear();
 }
+.answered{
+	& > .btn-clear{
+		@extend %visibility-visible;
+	}
+}
 .btn-action-questionnaire{
 	background-color: $white;
 	border-color: transparent;
@@ -272,9 +277,12 @@ a.disabled{
 }
 .btn-strips{
 	border-radius: 0;
+	display: block;
+	padding: 0;
 	background-color: transparent;
 	@include square(16px);
 	position: relative;
+	border: none;
 	span{
 		display: block;
 		height: 100%;

@@ -1,6 +1,6 @@
 import * as forEach from "lodash/foreach"
-import * as Vue from "vue"
-import * as Vuex from "vuex"
+import Vue from "vue"
+import Vuex from "vuex"
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -18,8 +18,10 @@ export default {
     SET_SECTION_DATA(state, sectionData: IInterviewEntityWithType[]) {
         state.entities = sectionData
     },
-    CLEAR_ENTITY(state, id) {
-        Vue.delete(state.entityDetails, id)
+    CLEAR_ENTITIES(state, {ids}) {
+        forEach(ids, id => {
+             Vue.delete(state.entityDetails, id)
+        })
     },
     SET_ANSWER_NOT_SAVED(state, { id, message }) {
         const validity = state.entityDetails[id].validity
@@ -40,9 +42,13 @@ export default {
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
-    SET_INTERVIEW_INFO(state, interviewInfo) {
-        Vue.set(state, "questionnaireTitle", interviewInfo.questionnaireTitle)
-        Vue.set(state, "firstSectionId", interviewInfo.firstSectionId)
+    SET_INTERVIEW_INFO(state, interviewInfo: IInterviewInfo) {
+        state.questionnaireTitle = interviewInfo.questionnaireTitle
+        state.firstSectionId = interviewInfo.firstSectionId
+        state.isSampleMode = interviewInfo.isSampleMode
+    },
+    SET_COVER_INFO(state, coverInfo: ISamplePrefilledData) {
+        state.samplePrefilledInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
         Vue.set(state, "completeInfo", completeInfo)

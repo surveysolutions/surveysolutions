@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
@@ -92,6 +93,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     TotalCountByQuery = exceptionTypesByQuery.Count()
                 };
             });
+        }
+
+        public BrokenInterviewPackage GetLastInterviewBrokenPackage(Guid interviewId)
+        {
+            return this.plainStorageAccessor
+                .Query(queryable => queryable.Where(x => x.InterviewId == interviewId)
+                    .OrderByDescending(x => x.IncomingDate)
+                    .Take(1)
+                    .ToList())
+                .SingleOrDefault();
         }
     }
 }

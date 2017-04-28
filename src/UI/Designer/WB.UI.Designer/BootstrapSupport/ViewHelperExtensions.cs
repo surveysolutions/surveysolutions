@@ -10,11 +10,11 @@ using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 
 namespace WB.UI.Designer.BootstrapSupport
 {
     using WB.UI.Designer.Models;
-    using WB.UI.Shared.Web.Membership;
 
     public static class DefaultScaffoldingExtensions
     {

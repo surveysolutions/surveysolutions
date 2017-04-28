@@ -1,5 +1,13 @@
 #questionnaires .title { 
 	width: 40%;
+	&.td{
+		font-size: 18px;
+		line-height: 20px;
+		a, span{
+			font-size: 18px;
+			line-height: 20px;
+		}
+	}
 }
 .context-menu-list{
 	padding: 5px;

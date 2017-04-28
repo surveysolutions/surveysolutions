@@ -120,6 +120,24 @@
   <data name="LogOn_Title" xml:space="preserve">
     <value>Log On</value>
   </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Edit {0} profile</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Edit profile public information details</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Use the form below to change the password for the account</value>
+  </data>
   <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
   </data>
@@ -357,6 +375,161 @@
   <data name="InterviewerCreate_Team" xml:space="preserve">
     <value>team</value>
   </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>Interviewer: {0}</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (assigned to {1})</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>E-mail: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>Full name: {0}</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>Phone number: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>Edit personal info</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>Interviewers</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>new assignments on device</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>rejected assignments again on device</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>waiting for approval</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>done interviews (completed and approved by hq)</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>Assignments that have been started, but not completed</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>Storage (available/total)</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>Memory (available/total)</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>Battery status (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, power source: {1}, battery saver is {2}</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>on</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>off</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Survey Solutions version</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Android version</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>Device model</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>Device ID</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>Device serial number</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>Device language</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>Detailed device info</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>Interviewer App version</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>Up to date</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>Can be updated</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>Last Survey Solutions updated date</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>Total number of success synchronizations</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>Total number of failed synchronizations</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Last successful sync</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Last failed sync</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Synchronization duration</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>Type: {0} {1}, Operator: {2}</value>
+    <comment>{0} - NetworkType, {1} Network subtype, {2} - Mobile operator name, i.e. Vodafon</comment>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>Type: {0}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>Connection type</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Connection speed</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} uploaded, {1} downloaded</value>
+    <comment>{0}, {1} - Data amount </comment>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Average synch speed</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>Signal strength</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>Device location or last known location</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>Device orientation</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>Tablet time at the beginning of synchronization</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>Server time at the beginning of synchronization</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>Device and connection statistics</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>Last connection statistics</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>Questionnaires received by Interviewer</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>Interviews received by Interviewer</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>Completed interviews received from Interviewer</value>
+  </data>
   <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
     <value>Interviewer: {0}</value>
   </data>
@@ -384,23 +557,44 @@
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
     <value>Supervisor</value>
   </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Supervisor (teams)</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>Interviewer (team)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Surveys and Statuses</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
+    <value>{0} interview(s) from {1} responsible(s)</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} interview(s) from {1} responsible(s)</value>
+  </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Connected to the server</value>
   </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>App version</value>
+  </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>Archive status</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
     <value>Archive status</value>
   </data>
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
     <value>Login name</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Account creation date</value>
+    <value>Account created on</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
     <value>Interviewer's Email</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>interviewer(s) will be archived.</value>
+    <value>Interviewer(s) will be archived.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
     <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
@@ -495,6 +689,15 @@
   <data name="AnyOption" xml:space="preserve">
     <value>Any</value>
   </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Never connected</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>Up to date</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Outdated</value>
+  </data>
   <data name="Upload_Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
@@ -515,6 +718,12 @@
   </data>
   <data name="Interviewers_ArchivedUsers" xml:space="preserve">
     <value>Archived interviewers</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Active supervisors</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Archived supervisors</value>
   </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connected</value>
@@ -564,14 +773,27 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>This action will create individual user with supervisor rights,
+        &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Personal information details (optional) &lt;br&gt; will be visible to HQ users only</value>
+  </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date when the interviewer account was created</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Login name of the interviewer’s supervisor</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
-    <value>Whether the interviewer succeeded in initial synchronizing of his/her tablet to the server</value>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>Interviewer App version reported during last synchronization of his/her tablet to the server</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Never connected</value>
   </data>
   <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
     <value>Language</value>
@@ -603,5 +825,83 @@
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>interviewer(s) selected</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>Error occurred please try again later.</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>Operation failed</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>No items satisfying selected filter</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>If the interviewer has completed interviews in census mode on his tablet then the data will be lost.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>supervisor(s) selected</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>interview(s) selected</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Unarchive</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Create interviewer</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Interviewers</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>Interviewer profile</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Edit observer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Create observer</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Observers</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Edit headquarters profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Create headquarters</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>Headquarters</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Edit supervisor profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Create supervisor</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Supervisors</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Edit API user profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Create API user</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>API User &lt;b&gt;{0}&lt;/b&gt; was successfully created</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API users</value>
   </data>
 </root>

@@ -210,8 +210,8 @@
   <data name="Original_Language" xml:space="preserve">
     <value>Original</value>
   </data>
-  <data name="Resume" xml:space="preserve">
-    <value>Resume interview</value>
+  <data name="ToInterview" xml:space="preserve">
+    <value>To interview</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Restart</value>
@@ -226,7 +226,7 @@
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>You can continue interview in the following survey: "{0}"</value>
+    <value>You can navigate to interview in the following survey: "{0}"</value>
     <comment>{0} - name of the questionnaire without version</comment>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">

@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
            
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
-            this.CountOfCommentedQuestions = interview.CountCommentedQuestions();
+            this.CountOfCommentedQuestions = interview.CountCommentedQuestionsVisibledToInterviewer();
             this.CommentedEntities = entitiesListViewModelFactory.GetEntitiesWithComments(interviewId, navigationState).ToList();
 
             this.CommentedEntitiesDescription = CommentedEntities.Count == this.CountOfCommentedQuestions

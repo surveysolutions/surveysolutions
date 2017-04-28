@@ -4,7 +4,6 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -18,8 +17,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id, staticTextId, $"static text title with {searchFor}", responsibleId, chapterId));
-            
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id,
+                staticTextId,
+                $"static text title with {searchFor}",
+                responsibleId,
+                chapterId));
+
             questionnaire.AddTextQuestion(questionId,
                 chapterId,
                 responsibleId,
@@ -34,11 +37,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 chapterId,
                 responsibleId,
                 variableName: $"var_{searchFor}");
-             
+
             questionnaire.AddMultiOptionQuestion(questionId2,
                 chapterId,
                 responsibleId,
-                options: new []
+                options: new[]
                 {
                     new Option(Guid.NewGuid(),"1", $"1"),
                     new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
@@ -50,25 +53,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 isFilteredCombobox: true,
                 options: new[]
                 {
-                                new Option(Guid.NewGuid(),"1", $"1"),
-                                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                    new Option(Guid.NewGuid(),"1", $"1"),
+                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
                 });
-            
+
             questionnaire.AddSingleOptionQuestion(cascadingQuestionId,
              chapterId,
              responsibleId,
              cascadeFromQuestionId: filteredQuestionId,
              options: new[]
              {
-                                new Option(Guid.NewGuid(),"1", $"1"),
-                                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                new Option(Guid.NewGuid(),"1", $"1"),
+                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
              });
 
             questionnaire.AddVariable(
                 variableId,
-                responsibleId:responsibleId,
+                responsibleId: responsibleId,
                 variableExpression: $"expression {searchFor}",
                 parentId: chapterId);
+
+            questionnaire.UpdateVariable(Create.Command.UpdateVariable(
+                questionnaire.Id,
+                variableId,
+                VariableType.String,
+                "name",
+                expression: $"expression {searchFor}",
+                label: $"label {searchFor}",
+                userId: responsibleId
+                ));
 
             questionnaire.AddGroup(groupId,
                 chapterId,
@@ -80,17 +93,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name",
                 $"macro content {searchFor}", "desc", responsibleId));
+
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id,
+                staticTextWithAttachmentId,
+                $"static text title",
+                responsibleId,
+                chapterId));
+
+            questionnaire.UpdateStaticText(Create.Command.UpdateStaticText(questionnaire.Id,
+                staticTextWithAttachmentId,
+                "title",
+                $"attachment {searchFor}",
+                responsibleId,
+                null));
         };
 
         Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor, true, false, false);
 
         It should_find_text_in_static_text = () =>
-            foundReferences.ShouldContain(x => x.Id == staticTextId && 
+            foundReferences.ShouldContain(x => x.Id == staticTextId &&
                                                x.Type == QuestionnaireVerificationReferenceType.StaticText &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         It should_find_text_in_question_title = () =>
-            foundReferences.ShouldContain(x => x.Id == questionId && 
+            foundReferences.ShouldContain(x => x.Id == questionId &&
                                                x.Type == QuestionnaireVerificationReferenceType.Question &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
@@ -110,24 +136,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                                            x.Property == QuestionnaireVerificationReferenceProperty.EnablingCondition);
 
         It should_find_text_in_group = () =>
-            foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group && 
+            foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         It should_find_text_in_variable_name = () =>
-            foundReferences.ShouldContain(x => x.Id == questionId1 && 
+            foundReferences.ShouldContain(x => x.Id == questionId1 &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.VariableName);
 
-        It should_find_variables_by_content = () => 
-            foundReferences.ShouldContain(x => x.Id == variableId && 
-                                               x.Type == QuestionnaireVerificationReferenceType.Variable && 
+        It should_find_text_in_variable_label = () =>
+           foundReferences.ShouldContain(x => x.Id == variableId &&
+                                              x.Property == QuestionnaireVerificationReferenceProperty.VariableLabel);
+
+        It should_find_variables_by_content = () =>
+            foundReferences.ShouldContain(x => x.Id == variableId &&
+                                               x.Type == QuestionnaireVerificationReferenceType.Variable &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.VariableContent);
 
-        It should_find_question_by_option_text = () => 
-            foundReferences.ShouldContain(x => x.Id == questionId2 && 
+        It should_find_question_by_option_text = () =>
+            foundReferences.ShouldContain(x => x.Id == questionId2 &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Option &&
                                                x.IndexOfEntityInProperty == 1);
 
-        It should_not_include_references_to_filtered_combobox_options = () => 
+        It should_find_attachment_name_in_static_text = () =>
+            foundReferences.ShouldContain(x => x.Id == staticTextWithAttachmentId &&
+                                               x.Property == QuestionnaireVerificationReferenceProperty.AttachmentName);
+
+        It should_not_include_references_to_filtered_combobox_options = () =>
             foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);
 
         It should_not_include_references_to_cascading_combobox_options = () =>
@@ -145,6 +179,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        static readonly Guid staticTextWithAttachmentId = Guid.Parse("66666666666666666666666666666666");
+
         const string searchFor = "to_replace";
 
         private static IEnumerable<QuestionnaireNodeReference> foundReferences;

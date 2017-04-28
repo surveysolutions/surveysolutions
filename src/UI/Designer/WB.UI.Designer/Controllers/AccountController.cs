@@ -4,16 +4,15 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI;
 using Recaptcha;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Membership;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
@@ -58,7 +57,7 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
-            return this.View(new LoginModel()
+            return this.View(new LoginModel
             {
                 ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
                 GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"],

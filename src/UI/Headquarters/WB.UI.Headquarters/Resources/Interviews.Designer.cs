@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
         ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned..
         /// </summary>
         public static string AssignToOtherTeamConfirmMessage {
@@ -147,7 +147,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. Resposible supervisor is missing.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. Resposible supervisor is missing.
         /// </summary>
         public static string ImportInterviews_FailedToImportInterview_NoSupervisor {
             get {
@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
         /// </summary>
         public static string ImportInterviews_GenericError {
             get {

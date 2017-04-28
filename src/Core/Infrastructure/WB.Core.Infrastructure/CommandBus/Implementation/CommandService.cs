@@ -129,6 +129,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 switch (aggregateKind)
                 {
                     case AggregateKind.EventSourced:

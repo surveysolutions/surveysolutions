@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        internal static string Assign {
+            get {
+                return ResourceManager.GetString("Assign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment.
         /// </summary>
         internal static string Assignment {
@@ -169,6 +178,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        internal static string HideIdentifying {
+            get {
+                return ResourceManager.GetString("HideIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview Key.
+        /// </summary>
+        internal static string InterviewKey {
+            get {
+                return ResourceManager.GetString("InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviews.
         /// </summary>
         internal static string Interviews {
@@ -223,6 +250,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Version Available:.
+        /// </summary>
+        internal static string NewVersionAvailable {
+            get {
+                return ResourceManager.GetString("NewVersionAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
         internal static string NoResultsFound {
@@ -232,7 +277,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pre-filled Questions.
+        ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         internal static string PrefilledQuestions {
             get {
@@ -322,6 +367,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show identifying.
+        /// </summary>
+        internal static string ShowIdentifying {
+            get {
+                return ResourceManager.GetString("ShowIdentifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign in.
         /// </summary>
         internal static string SignIn {
@@ -381,6 +435,15 @@ namespace Resources {
         internal static string Unapprove {
             get {
                 return ResourceManager.GetString("Unapprove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         

@@ -53,6 +53,28 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
+        public Task<string> SelectOneOptionFromList(string message,
+            string[] options)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var builder = new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity);
+
+            builder.SetTitle(message);
+            builder.SetItems(options, (sender, args) =>
+            {
+                tcs.TrySetResult(options[args.Which]);
+            });
+            builder.SetCancelable(false);
+            builder.SetNegativeButton(UIResources.Cancel, (sender, args) =>
+            {
+                tcs.TrySetResult(null);
+            });
+            builder.Show();
+
+            return tcs.Task;
+        }
+
         public Task AlertAsync(string message, string title = "", string okButton = null)
         {
             var tcs = new TaskCompletionSource<object>();

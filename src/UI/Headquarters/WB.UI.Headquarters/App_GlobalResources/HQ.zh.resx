@@ -126,9 +126,6 @@
   <data name="NoPermission" xml:space="preserve">
     <value>不能更新用户信息，因为您没有权限进行这个操作。</value>
   </data>
-  <data name="ObserverCreated" xml:space="preserve">
-    <value>成功创建了观察员用户。</value>
-  </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
     <value>成功地以一个新标题'{1}'复制了问卷'{0}'。</value>
   </data>
@@ -138,14 +135,8 @@
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
     <value>未找到编号为{0}、版本为{1}的问卷。</value>
   </data>
-  <data name="SuccessfullyCreated" xml:space="preserve">
-    <value>成功创建了督导员用户。</value>
-  </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>不能更新用户信息，因为用户不存在</value>
-  </data>
-  <data name="UserWasCreated" xml:space="preserve">
-    <value>成功创建了总部用户。</value>
   </data>
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>成功更新了&lt;b&gt;{0}&lt;/b&gt;的信息</value>

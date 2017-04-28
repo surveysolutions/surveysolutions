@@ -412,7 +412,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             if (question.QuestionScope == QuestionScope.Interviewer && question.Featured)
             {
-                return "prefilled";
+                return "identifying";
             }
             return question.QuestionScope.ToString();
         }

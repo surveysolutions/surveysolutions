@@ -1,5 +1,5 @@
 import * as toastr from "toastr"
-import * as Vue from "vue"
+import Vue from "vue"
 import { Store } from "vuex"
 import { apiStop } from "../api"
 import modal from "../modal"
@@ -32,7 +32,7 @@ const connectionStore = {
                     message: "<p>Connection to server is lost.</p>" +
                     "<p>Please reload the page to restore connection and continue this interview.</p>",
                     callback: () => {
-                        location.reload()
+                       location.reload()
                     },
                     onEscape: false,
                     closeButton: false,

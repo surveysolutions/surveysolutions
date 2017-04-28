@@ -171,9 +171,6 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>已完成的访谈数量</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>一个{0}已经完成的访谈数量。驳回后完成的访谈另计。</value>
-  </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>总部通过审核的访谈数量</value>
   </data>

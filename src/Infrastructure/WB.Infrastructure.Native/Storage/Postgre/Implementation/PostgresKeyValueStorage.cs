@@ -5,8 +5,6 @@ using Humanizer;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
-using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation

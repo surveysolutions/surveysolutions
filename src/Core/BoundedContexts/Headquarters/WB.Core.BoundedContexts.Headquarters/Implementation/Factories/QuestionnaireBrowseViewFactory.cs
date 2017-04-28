@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using NHibernate.Criterion;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -41,11 +40,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         query = query.Where(x => x.Version == input.Version.Value);
                     }
 
-                    if (!string.IsNullOrEmpty(input.Filter))
-                    {
-                        var filterLowerCase = input.Filter.ToLower();
-                        query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
-                    }
+                }
+
+                if (!string.IsNullOrEmpty(input.Filter))
+                {
+                    var filterLowerCase = input.Filter.ToLower();
+                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                 }
 
                 if (input.OnlyCensus.HasValue)

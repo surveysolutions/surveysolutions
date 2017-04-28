@@ -1,5 +1,4 @@
 ﻿using FluentMigrator;
-using Npgsql;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {

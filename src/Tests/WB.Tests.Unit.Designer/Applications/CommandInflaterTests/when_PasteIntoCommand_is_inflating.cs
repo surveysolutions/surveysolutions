@@ -3,10 +3,10 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
-using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 

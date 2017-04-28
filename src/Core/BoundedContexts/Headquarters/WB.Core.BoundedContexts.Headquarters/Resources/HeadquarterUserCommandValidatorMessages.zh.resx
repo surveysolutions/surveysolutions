@@ -126,7 +126,4 @@
   <data name="UserNameIsTakenFormat" xml:space="preserve">
     <value>用户名'{0}'已被使用</value>
   </data>
-  <data name="YouCantUnarchiveInterviewerUntilSupervisorIsArchived" xml:space="preserve">
-    <value>在督导员被取消归档之前，您不能取消归档调查员</value>
-  </data>
 </root>

@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                         item.UserId, 
                         item.UserName, 
                         item.Email, 
-                        DateTime.Parse(item.CreationDate), 
+                        item.CreationDate, 
                         item.IsLockedByHQ || item.IsLockedBySupervisor,
                         item.DeviceId));
 
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                         item.UserId, 
                         item.UserName, 
                         item.Email, 
-                        DateTime.Parse(item.CreationDate), 
+                        item.CreationDate, 
                         item.IsLockedByHQ || item.IsLockedBySupervisor, 
                         item.DeviceId));
         }

@@ -1,5 +1,5 @@
 import * as forEach from "lodash/foreach"
-import * as Vue from "vue"
+import Vue from "vue"
 
 Vue.directive("dateTimeFormatting", {
     bind: (el, binding) => {

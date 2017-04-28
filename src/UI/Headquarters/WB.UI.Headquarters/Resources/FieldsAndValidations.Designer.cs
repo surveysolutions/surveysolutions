@@ -88,6 +88,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not update user information because current user does not exist.
+        /// </summary>
+        public static string CannotUpdate_CurrentUserDoesNotExists {
+            get {
+                return ResourceManager.GetString("CannotUpdate_CurrentUserDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update user information because current user is archived.
+        /// </summary>
+        public static string CannotUpdate_CurrentUserIsArchived {
+            get {
+                return ResourceManager.GetString("CannotUpdate_CurrentUserIsArchived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire title is required.
         /// </summary>
         public static string CloneQuestionnaireModel_NewTitle_Error_Required {
@@ -102,6 +120,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string CloneQuestionnaireModel_NewTitle_Label {
             get {
                 return ResourceManager.GetString("CloneQuestionnaireModel_NewTitle_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string ConfirmNewPasswordFieldName {
+            get {
+                return ResourceManager.GetString("ConfirmNewPasswordFieldName", resourceCulture);
             }
         }
         
@@ -124,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm password is required.
+        /// </summary>
+        public static string ConfirmPasswordRequired {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is not a valid e-mail address.
         /// </summary>
         public static string EmailErrorMessage {
@@ -133,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email.
+        ///   Looks up a localized string similar to Email address.
         /// </summary>
         public static string EmailFieldName {
             get {
@@ -187,6 +223,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string NewPasswordFieldName {
+            get {
+                return ResourceManager.GetString("NewPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To change password provide valid existing password.
+        /// </summary>
+        public static string OldPasswordErrorMessage {
+            get {
+                return ResourceManager.GetString("OldPasswordErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string OldPasswordFieldName {
+            get {
+                return ResourceManager.GetString("OldPasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {
@@ -214,7 +277,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input name is too long.
+        ///   Looks up a localized string similar to Person name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        /// </summary>
+        public static string PersonNameAllowedCharactersErrorMessage {
+            get {
+                return ResourceManager.GetString("PersonNameAllowedCharactersErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person name should not contain more than {1} characters.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
@@ -228,6 +300,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PersonNameFieldName {
             get {
                 return ResourceManager.GetString("PersonNameFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number should not contain more than {1} characters.
+        /// </summary>
+        public static string PhoneErrorLength {
+            get {
+                return ResourceManager.GetString("PhoneErrorLength", resourceCulture);
             }
         }
         
@@ -327,6 +408,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UserBatchUploadModel_Validation_ErrorMessage {
             get {
                 return ResourceManager.GetString("UserBatchUploadModel_Validation_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please choose another username.
+        /// </summary>
+        public static string UserName_Taken {
+            get {
+                return ResourceManager.GetString("UserName_Taken", resourceCulture);
             }
         }
         

@@ -1,6 +1,6 @@
 import * as $ from "jquery"
 
-export default function () {
+export default function() {
     const resolver = require.ensure(["autoNumeric"], r => {
         require("autoNumeric")
     }, "libs")

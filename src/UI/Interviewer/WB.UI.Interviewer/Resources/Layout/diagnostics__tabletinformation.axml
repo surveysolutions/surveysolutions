@@ -4,7 +4,7 @@
   <LinearLayout style="@style/Diagnostics_TitleSection">
     <TextView
          style="@style/Diagnostics_Section_Title"
-         local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.CreateTabletInformationCommand;  UnderlinePressed ." />
+         local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.CreateBackupCommand;  UnderlinePressed ." />
     <TextView
               style="@style/Diagnostics_Section_Description"
               local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
@@ -29,11 +29,11 @@
     <LinearLayout style="@style/Diagnostic_FormContainer">
       <Button
         style="@style/Diagnostics_Green_Button"
-        local:MvxBind="Text Localization('Diagnostics_Send'); Click TabletInformation.SendTabletInformationCommand" />
+        local:MvxBind="Text Localization('Diagnostics_Send'); Click TabletInformation.SendBackupCommand" />
 
       <Button
           style="@style/Diagnostic_Transparent_Button" 
-          local:MvxBind="Text Localization('Diagnostics_Delete'); Click TabletInformation.DeleteTabletInformationCommand" />
+          local:MvxBind="Text Localization('Diagnostics_Delete'); Click TabletInformation.DeleteBackupCommand" />
     </LinearLayout>
 
   </LinearLayout>

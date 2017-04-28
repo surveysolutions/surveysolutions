@@ -1,13 +1,13 @@
 import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
-import * as Vue from "vue"
+import Vue from "vue"
 
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import { batchedAction } from "../helpers"
 import router from "./../router"
 
 export default {
-    onBeforeNavigate({commit}) {
+    onBeforeNavigate({ commit }) {
         commit("RESET_LOADED_ENTITIES_COUNT")
     },
 
@@ -16,6 +16,7 @@ export default {
         commit("SET_INTERVIEW_INFO", info)
         const flag = await apiCaller(api => api.hasPrefilledQuestions())
         commit("SET_HAS_PREFILLED_QUESTIONS", flag)
+
     },
 
     async getLanguageInfo({ commit }) {
@@ -23,7 +24,7 @@ export default {
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
-    fetchEntity: batchedAction(async ({commit, dispatch}, ids) => {
+    fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
         const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
@@ -183,13 +184,19 @@ export default {
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
+    fetchSamplePrefilled: debounce(async ({ commit }) => {
+        const coverInfo = await apiCaller<ISamplePrefilledData>(api => api.getSamplePrefilled())
+        commit("SET_COVER_INFO", coverInfo)
+    }, 200),
+
     completeInterview({ dispatch }, comment: string) {
         apiCaller(api => api.completeInterview(comment))
     },
 
-    cleanUpEntity({ commit }, id) {
-        commit("CLEAR_ENTITY", id)
-    },
+    cleanUpEntity: batchedAction(({ commit }, ids) => {
+        commit("CLEAR_ENTITIES", { ids })
+    }, null, /* limit */ 100),
+
     changeLanguage({ commit }, language) {
         apiCaller(api => api.changeLanguage(language))
     },

@@ -399,12 +399,43 @@ angular.module('designerApp')
                     }
                 });
             };
-            
-            $scope.aceLoaded = function (editor) {
+
+            var setCommonAceOptions = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
-                
-                // Options
+
+                renderer.setShowGutter(false);
+                renderer.setPadding(12);
+
+                editor.$blockScrolling = Infinity;
+                editor.commands.bindKey("tab", null);
+                editor.commands.bindKey("shift+tab", null);
+
+                editor.on('focus', function () {
+                    $('.ace_focus').parents('.pseudo-form-control').addClass('focused');
+                });
+
+                editor.on('blur', function () {
+                    $('.pseudo-form-control.focused').removeClass('focused');
+                });
+            }
+
+            $scope.setupAceForSubstitutions = function (editor) {
+                editor.setOptions({
+                    maxLines: Infinity,
+                    fontSize: 16,
+                    highlightActiveLine: false,
+                    theme: "ace/theme/github-extended"
+                });
+
+                var textExtendableMode = window.ace.require("ace/mode/text-extended").Mode;
+                editor.getSession().setMode(new textExtendableMode());
+                editor.getSession().setUseWrapMode(true);
+                editor.getSession().setTabSize(0);
+                setCommonAceOptions(editor);
+            };
+
+            $scope.aceLoaded = function (editor) {
                 editor.setOptions({
                     maxLines: Infinity,
                     fontSize: 16,
@@ -413,30 +444,17 @@ angular.module('designerApp')
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
-                renderer.setShowGutter(false);
-                renderer.setPadding(12);
-
                 $scope.aceEditorUpdateMode(editor);
-
-                editor.$blockScrolling = Infinity;
-                editor.commands.bindKey("tab", null);
-                editor.commands.bindKey("shift+tab", null);
-
-                $rootScope.$on('variablesChanged', function() {
+                
+                $rootScope.$on('variablesChanged', function () {
                     $scope.aceEditorUpdateMode(editor);
                 });
 
-                editor.on('focus', function() {
-                    $('.ace_focus').parents('.pseudo-form-control').addClass('focused');
-                });
-
-                editor.on('blur', function () {
-                    $('.pseudo-form-control.focused').removeClass('focused');
-                });
+                setCommonAceOptions(editor);
             };
 
             $scope.getVariablesNames = function () {
-                return _.pluck($rootScope.variableNames, "name");;
+                return _.pluck($rootScope.variableNames, "name");
             }
 
             $scope.aceEditorUpdateMode = function(editor) {

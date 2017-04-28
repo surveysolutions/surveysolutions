@@ -1,11 +1,15 @@
-import * as vue from "vue"
+import Vue from "vue"
 
 import Breadcrumbs from "./Breadcrumbs"
+import CoverReadonly from "./CoverReadonly"
 import Layout from "./Layout"
 import Navbar from "./Navbar"
+import Section from "./Section"
 import Sidebar from "./Sidebar"
 
-vue.component("Layout", Layout)
-vue.component("Navbar", Navbar)
-vue.component("Sidebar", Sidebar)
-vue.component("Breadcrumbs", Breadcrumbs)
+Vue.component("Layout", Layout)
+Vue.component("Navbar", Navbar)
+Vue.component("Sidebar", Sidebar)
+Vue.component("Breadcrumbs", Breadcrumbs)
+Vue.component("CoverReadonly", CoverReadonly)
+Vue.component("Section", Section)

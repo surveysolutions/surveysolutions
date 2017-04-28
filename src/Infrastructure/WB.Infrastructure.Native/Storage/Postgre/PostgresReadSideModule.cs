@@ -63,7 +63,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             catch (Exception exc)
             {
                 this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
-                throw;
+                throw new InitializationException(Subsystem.Database, null, exc);
             }
 
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings

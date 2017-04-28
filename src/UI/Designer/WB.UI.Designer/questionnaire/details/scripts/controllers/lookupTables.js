@@ -18,8 +18,6 @@
             $scope.lookupTables = [];
 
             var dataBind = function (lookupTable, lookupTableDto) {
-                lookupTable.initialLookupTable = _.clone(lookupTableDto);
-
                 lookupTable.itemId = lookupTableDto.itemId;
                 lookupTable.name = lookupTableDto.name;
                 lookupTable.fileName = lookupTableDto.fileName;
@@ -32,10 +30,11 @@
                     return;
 
                 _.each($scope.questionnaire.lookupTables, function (lookupTableDto) {
-                    var lookupTable = {};
+                    var lookupTable = { checkpoint: {} };
                     if (!_.any($scope.lookupTables, function(elem) { return elem.itemId === lookupTableDto.itemId; }))
                     {
                         dataBind(lookupTable, lookupTableDto);
+                        dataBind(lookupTable.checkpoint, lookupTableDto);
                         $scope.lookupTables.push(lookupTable);
                     }
                 });
@@ -50,14 +49,15 @@
             $scope.addNewLookupTable = function () {
                 var newId = utilityService.guid();
 
-                var newLookupTables = {
+                var newLookupTable = {
                     itemId: newId
                 };
 
-                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).then(function () {
-                    var lookupTables = {};
-                    dataBind(lookupTables, newLookupTables);
-                    $scope.lookupTables.push(lookupTables);
+                commandService.addLookupTable($state.params.questionnaireId, newLookupTable).then(function () {
+                    var lookupTable = { checkpoint: {} };
+                    dataBind(lookupTable, newLookupTable);
+                    dataBind(lookupTable.checkpoint, newLookupTable);
+                    $scope.lookupTables.push(lookupTable);
                 });
             };
             $scope.fileSelected = function (lookupTable, file) {
@@ -73,8 +73,8 @@
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
-                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function() {
-                    lookupTable.initialLookupTable = _.clone(lookupTable);
+                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).then(function () {
+                    dataBind(lookupTable.checkpoint, lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     lookupTable.form.$setPristine();
                 }).catch(function() {
@@ -83,8 +83,7 @@
             };
 
             $scope.cancel = function(lookupTable) {
-                var temp = _.clone(lookupTable.initialLookupTable);
-                dataBind(lookupTable, temp);
+                dataBind(lookupTable, lookupTable.checkpoint);
                 lookupTable.form.$setPristine();
             };
 
