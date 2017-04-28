@@ -3,5 +3,7 @@
     public class AreaEditorResult
     {
         public string Area { set; get; }
+        public string MapName { set; get; }
+
     }
 }

@@ -18,7 +18,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         public event Action<AreaEditorResult> OnAreaEditCompleted;
 
         private IMapService mapService;
-        
+        private IUserInteractionService userInteractionService;
+
         public AreaEditorViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
@@ -86,7 +87,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 TileCache titleCache = new TileCache(pathToMap);
                 var layer = new ArcGISTiledLayer(titleCache);
 
-                //calculate from layer
+                //zoom to any level
+                //if area is out of the map
+                // should be available to navigate
                 layer.MinScale = 100000000;
                 layer.MaxScale = 1;
                 //
@@ -114,8 +117,29 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             set { this.map = value; RaisePropertyChanged(); }
         }
 
-        
-        public MapView MapView { set; get; }
+        private MapView mapView;
+        public MapView MapView {
+            set
+            {
+                this.mapView = value;
+                /*if(this.mapView != null)
+                    this.mapView.SpatialReferenceChanged += (s, e) =>
+                    {
+                        if(this.mapView.Map != null)
+                            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.Item.Extent).ConfigureAwait(false);
+
+                        //this.MapView.Map.Basemap.Item.Extent.
+
+
+                        //this.MapView.SetViewpointAsync(new Viewpoint(geometry));
+                        /*                        this.mapView.Map.MinScale = 100000000;
+                        this.mapView.Map.MaxScale = 1;#1#
+                    };*/
+            }
+            get { return this.mapView; }
+        }
+
+        //this.mapView.SpatialReferenceChanged += (s, e) => { this.mapView.Map.MinScale = 100000000; this.mapView.Map.MaxScale = 1; };
 
         public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
         {
@@ -124,7 +148,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 this.MapView.SketchEditor.CompleteCommand.Execute(command);
             else
             {
-                userInteractionService.ShowToast("Empty value cannot be saved");
+                userInteractionService.ShowToast("No changes we made to be saved");
             }
         });
 
@@ -178,7 +202,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             {
                 var geometry = Geometry.FromJson(Area);
 
-                await this.MapView.SetViewpointAsync(new Viewpoint(geometry));
+                await this.MapView.SetViewpointGeometryAsync(geometry, 100);
 
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
@@ -187,7 +211,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             var handler = OnAreaEditCompleted;
             handler?.Invoke(new AreaEditorResult()
             {
-                Area = result?.ToJson()
+                Area = result?.ToJson(),
+                MapName = SelectedMap
             });
 
             this.IsEditing = false;
@@ -232,22 +257,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             set { this.isEditing = value; RaisePropertyChanged(); }
         }
 
+        
         private bool isInProgress;
-        private IUserInteractionService userInteractionService;
-
         public bool IsInProgress
         {
             get { return this.isInProgress; }
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
-
-        public IMvxCommand CancelCommand => new MvxCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
-
-        public void NavigateToPreviousViewModel()
-        {
-            this.cancellationTokenSource.Cancel();
-            //this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
-        }
-
     }
 }
