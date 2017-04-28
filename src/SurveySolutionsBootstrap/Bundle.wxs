@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+    <Bundle Name="SurveySolutions"
+            Version="$(var.SurveySolutionsVersion)"
+            Manufacturer="The World Bank"
+            UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317">
+        
+        <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
+            (VersionNT64 &gt;= v6.3) 
+        </bal:Condition>
+        
+        <!--OR WixBundleAction = 3-->
+        
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
+            <bal:WixStandardBootstrapperApplication 
+                LicenseUrl=""
+                LogoFile="img\logo-50.bmp"
+                LogoSideFile="img\logo-50.bmp"
+                ShowVersion="yes"
+                SuppressOptionsUI="yes"/>
+            
+        <!--SuppressRepair="yes"-->
+        
+        </BootstrapperApplicationRef>
+        
+        <Chain>
+            <PackageGroupRef Id="NetFx462WebLocal" />
+
+            <RollbackBoundary />
+
+            <MsiPackage Id="SurveySolutionsPackage"
+              Cache="no"
+              Compressed="yes"
+              DisplayInternalUI="yes"
+              Vital="yes"
+              InstallCondition="VersionNT64"
+              SourceFile="$(var.SurveySolutions.TargetPath)" >
+            </MsiPackage>
+        </Chain>
+    </Bundle>
+    
+    <?define NetFx462MinRelease = 394802 ?>
+    
+    <Fragment>
+        <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
+        <Property Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Secure="yes" />
+        <SetProperty Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Value="1" After="AppSearch">
+            WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx462MinRelease)"
+        </SetProperty>
+    </Fragment>
+
+    <Fragment>
+        <WixVariable Id="NetFx462WebDetectCondition" Value="NETFRAMEWORK45 &gt;= $(var.NetFx462MinRelease)" Overridable="yes" />
+    
+        <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
+    
+        <PackageGroup Id="NetFx462WebLocal">
+            <ExePackage Id="NetFx462WebLocal"
+                    InstallCommand="/passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
+                    PerMachine="yes"
+                    Cache="no"
+                    Compressed="yes"
+                    Permanent="yes"
+                    Vital="yes"
+                    Name="NDP462-KB3151802-Web.exe"
+                    SourceFile="redist\NDP462-KB3151802-Web.exe"
+                    DetectCondition="!(wix.NetFx462WebDetectCondition)">
+                <ExitCode Behavior="forceReboot" Value="1641" />
+                <ExitCode Behavior="forceReboot" Value="3010" />
+                <ExitCode Behavior="success" Value="0" />
+            </ExePackage>
+            <!--RepairCommand="/passive /showrmui /norestart /repair /ChainingPackage &quot;[WixBundleName]&quot;"
+                    UninstallCommand="/uninstall /passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"-->
+        </PackageGroup>
+    </Fragment>
+</Wix>
