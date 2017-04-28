@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
     public class InterviewViewModel : BaseInterviewViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IUserInteractionService userInteractionService;
 
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
 
@@ -40,14 +39,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            IUserInteractionService userInteractionService,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.userInteractionService = userInteractionService;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
