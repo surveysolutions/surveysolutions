@@ -58,8 +58,6 @@ namespace WB.UI.Headquarters
         public void Configuration(IAppBuilder app)
         {
             app.Use(RemoveServerNameFromHeaders);
-            
-            app.Use(CompressionForApiRequests); // enforce compression for API clients
 
             ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
@@ -279,60 +277,6 @@ namespace WB.UI.Headquarters
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
             filters.Add(new ApiMaintenanceFilter());
-        }
-
-        private async Task CompressionForApiRequests(IOwinContext ctx, Func<Task> next)
-        {
-            if (IsApiRequest(ctx.Request))
-            {
-                await Compression(ctx, next);
-            }
-            else
-            {
-                await next();
-            }
-        }
-
-        private async Task Compression(IOwinContext context, Func<Task> next)
-        {
-            bool isCompressed = await this.WrapResponseBodyWithEncodeStream(context, next, @"gzip", 
-                body => new GZipStream(body, CompressionMode.Compress, CompressionLevel.BestCompression, true));
-
-            if (!isCompressed) // if no compression occur, then `next()` method were no called
-            {
-                await next();
-            }
-        }
-
-        private async Task<bool> WrapResponseBodyWithEncodeStream(IOwinContext ctx, Func<Task> next, string contentEncoding, Func<Stream, Stream> encodingStreamFactory)
-        {
-            if (!ctx.Request.Headers[@"Accept-Encoding"].Contains(contentEncoding)) return false; // encode only if client accept encoding
-            if (ctx.Response.Headers.ContainsKey(@"Content-Encoding")) return false; // do not encode twice
-
-            using (var memory = new MemoryStream())
-            {
-                var response = ctx.Response.Body;
-
-                try
-                {
-                    using (var compress = encodingStreamFactory(memory))
-                    {
-                        ctx.Response.Body = compress;
-                        await next();
-                        await compress.FlushAsync();
-                    }
-
-                    ctx.Response.Headers.AppendCommaSeparatedValues(@"Content-Encoding", contentEncoding);
-                    ctx.Response.ContentLength = memory.Length;
-                }
-                finally
-                {
-                    memory.WriteTo(response);
-                    ctx.Response.Body = response;
-                }
-            }
-
-            return true;
         }
     }
 }
