@@ -35,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -132,7 +133,7 @@ namespace WB.UI.Headquarters
 
                     OnApplyRedirect = ctx =>
                     {
-                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request))
+                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request) && !IsBasicAuthApiUnAuthRequest(ctx.Response))
                         {
                             ctx.Response.Redirect(ctx.RedirectUri);
                         }
@@ -151,6 +152,11 @@ namespace WB.UI.Headquarters
         {
             var userAgent = request.Headers[@"User-Agent"];
             return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
+        }
+
+        private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
+        {
+            return response.Headers[ApiBasicAuthAttribute.AuthHeader] != null;
         }
 
         private static bool IsAjaxRequest(IOwinRequest request)
