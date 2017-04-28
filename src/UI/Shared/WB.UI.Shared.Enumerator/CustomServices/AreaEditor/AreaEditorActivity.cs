@@ -3,7 +3,9 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
+using MvvmCross.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
@@ -31,9 +33,25 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             base.OnCreate(savedInstanceState);
             this.ViewModel.OnAreaEditCompleted += OnAreaEditCompleted;
+            
+            //esri bug
+            //inflated map doesn't work  
+            var container = this.FindViewById<LinearLayout>(Resource.Id.AreaMapViewContainer);
 
-            var map = this.FindViewById<MapView>(Resource.Id.AreaMapView);
-            //map = new MapView();
+            var map = new MapView();
+
+            var bindingSet = this.CreateBindingSet<AreaEditorActivity, AreaEditorViewModel>();
+
+            bindingSet.Bind(map)
+                .For(v => v.Map)
+                .To(vm => vm.Map);
+
+            bindingSet.Apply();
+
+            this.ViewModel.MapView = map;
+
+            container.AddView(map);
         }
+        
     }
 }

@@ -1,35 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/VerticalFullWidthWrappingLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/VerticalFullWidthWrappingLayout">
-
-    <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="left">
-        <Button
-          style="@style/Interview_Question_InputButton"
-          android:id="@+id/LoginPage_singin_button1"
-          local:MvxBind="Click StartEditAreaCommand; Text 'Start';" />
-        <Button
-          style="@style/Interview_Question_InputButton"
-          android:id="@+id/LoginPage_troubleshooting_button1"
-          local:MvxBind="Click SaveAreaCommand; 'Save';" />
-        <Button
-          style="@style/Interview_Question_InputButton"
-          android:id="@+id/LoginPage_singin_button11"
-          local:MvxBind="Click SwitchLocatorCommand; Text 'Locator';" />
-        <Button
-          style="@style/Interview_Question_InputButton"
-          android:id="@+id/LoginPage_troubleshooting_button11"
-          local:MvxBind="Click SaveAreaCommand; Text Localization('Interviewer_Diagnostics');" />
-    </LinearLayout>
-    <Esri.ArcGISRuntime.UI.MapView
+    android:layout_height="match_parent">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/AreaMapViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    <!--<Esri.ArcGISRuntime.UI.MapView
             android:id="@+id/AreaMapView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            local:MvxBind="Map Map"/>
-        
-    
+            android:layout_height="match_parent"
+            local:MvxBind="Map Map" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Interview_Question_InputButton"
+                android:id="@+id/LoginPage_troubleshooting_button1155"
+                local:MvxBind="Click UpdateMapsCommand; Text 'Update maps';"/>
+            <ProgressBar
+                style="@style/Interview_Question_Progress_Indicator"
+                android:indeterminate="true"
+                local:MvxBind="Visible InProgress" />
+            <MvxSpinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap"
+                 />
+            <!--style="@style/spinnerDropDownItemStyle" android:background="@android:drawable/btn_dropdown"-->
+            
+        </LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Interview_Question_InputButton"
+            android:id="@+id/LoginPage_singin_button113"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            local:MvxBind="Click SwitchLocatorCommand; Text '*';" />
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#4DEEEFF0">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Interview_Question_InputButton"
+                android:id="@+id/LoginPage_singin_button1"
+                local:MvxBind="Click StartEditAreaCommand; Text 'Edit';" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Interview_Question_InputButton"
+                android:id="@+id/LoginPage_troubleshooting_button11"
+                local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
+                android:layout_marginLeft="20dp" />
+            <!--<Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Interview_Question_InputButton"
+                android:id="@+id/LoginPage_troubleshooting_button115"
+                local:MvxBind="Click DeleteCommand; Text 'Remove last'; Enabled IsEditing;"
+                android:layout_marginLeft="20dp" />-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Interview_Question_InputButton"
+                android:id="@+id/LoginPage_troubleshooting_button1"
+                android:layout_marginLeft="60dp"
+                local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

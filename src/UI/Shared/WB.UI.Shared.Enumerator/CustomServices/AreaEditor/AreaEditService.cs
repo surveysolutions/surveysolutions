@@ -2,8 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
+using Esri.ArcGISRuntime;
 using MvvmCross.Platform.Droid.Platform;
 using Plugin.Permissions.Abstractions;
+using RuntimeCoreNet.GeneratedWrappers;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator;
@@ -30,6 +32,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             await this.permissions.AssureHasPermission(Permission.Location);
 
+            ArcGISRuntimeEnvironment.SetLicense("runtimebasic,1000,rud000017554,none,4N400PJPXJGH2T8AG192");
+
             return await this.EditArea(area);
         }
 
@@ -42,27 +46,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                     AreaEditorResult result = null;
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
 
-                    //old
-                    Intent intent = new Intent(this.androidCurrentTopActivity.Activity, typeof(AreaViewEditActivity));
-                    intent.PutExtra(Intent.ExtraText, area);
-                    AreaViewEditActivity.OnAreaEditCompleted += (editResult =>
-                    {
-                        result = editResult;
-                        waitEditAreaResetEvent.Set();
-                    });
                     
-                    this.androidCurrentTopActivity.Activity.StartActivity(intent);
-                    //--
-
-                    //new
-                    /*viewModelNavigationService.NavigateToAreaEditor(area);
+                    viewModelNavigationService.NavigateToAreaEditor(area);
                     AreaEditorActivity.OnAreaEditCompleted += (editResult =>
                     {
                         result = editResult;
                         waitEditAreaResetEvent.Set();
-                    });*/
+                    });
 
-                    //--
                     waitEditAreaResetEvent.WaitOne();
 
                     return result != null ? new AreaEditResult() { Area = result.Area} : null;

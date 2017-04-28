@@ -351,13 +351,11 @@
     <Compile Include="CustomControls\NumericEditText.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorActivity.cs" />
-    <Compile Include="CustomServices\AreaEditor\AreaViewEditActivity.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorResult.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditService.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorViewModel.cs" />
     <Compile Include="CustomServices\AreaEditor\IMapService.cs" />
-    <Compile Include="CustomServices\AreaEditor\MapManager.cs" />
-    <Compile Include="CustomServices\AreaEditor\MapViewModel.cs" />
+    <Compile Include="CustomServices\AreaEditor\MapService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
