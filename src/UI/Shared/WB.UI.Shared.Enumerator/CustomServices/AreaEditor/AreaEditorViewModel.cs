@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Esri.ArcGISRuntime.Geometry;
@@ -17,60 +18,95 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         public event Action<AreaEditorResult> OnAreaEditCompleted;
 
         private IMapService mapService;
-        private bool IsEditing = false;
-
+        
         public AreaEditorViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
-            IMapService mapService
-            
-            ) 
+            IMapService mapService,
+            IUserInteractionService userInteractionService) 
             : base(principal, viewModelNavigationService)
         {
+            this.userInteractionService = userInteractionService;
             this.mapService = mapService;
         }
 
         public override void Load()
         {
-            if (!string.IsNullOrWhiteSpace(Area))
-                this.geometry = Geometry.FromJson(Area);
+            AvailableMaps = mapService.GetAvailableMaps();
+            MapsList = AvailableMaps.Keys.ToList();
+            
+            var mapPath = AvailableMaps.Count != 0 ? AvailableMaps.FirstOrDefault().Value : null;
 
-            var mapList = mapService.GetAvailableMaps();
-            var mapPath = mapList.Count != 0 ? mapList.FirstOrDefault().Value : null;
-
-            this.mapViewModel = new MapViewModel(mapPath);
-
+            if (mapPath!= null)
+            {
+                SelectedMap = AvailableMaps.FirstOrDefault().Key;
+            }
+            
             UpdateBaseMap(mapPath);
+        }
+
+        private Dictionary<string,string> AvailableMaps = new Dictionary<string, string>();
+
+        private List<string> mapsList;
+        public List<string> MapsList
+        {
+            get { return mapsList; }
+            set { mapsList = value; RaisePropertyChanged(); }
+        }
+
+        private string selectedMap;
+        public string SelectedMap
+        {
+            get { return selectedMap; }
+            set
+            {
+                selectedMap = value;
+                RaisePropertyChanged();
+
+                if(AvailableMaps.ContainsKey(value))
+                    UpdateBaseMap(AvailableMaps[value]);
+            }
+        }
+
+        public override void Start()
+        {
+            base.Start();
+/*
+            if(!string.IsNullOrEmpty(Area))
+                StartEditAreaCommand.Execute();
+*/
         }
 
         public void UpdateBaseMap(string pathToMap)
         {
             if (pathToMap != null)
             {
-                if (this.map == null)
-                    this.map = new Map();
+                if (this.Map == null)
+                    this.Map = new Map();
 
                 TileCache titleCache = new TileCache(pathToMap);
                 var layer = new ArcGISTiledLayer(titleCache);
 
+                //calculate from layer
                 layer.MinScale = 100000000;
                 layer.MaxScale = 1;
+                //
 
                 var basemap = new Basemap(layer);
-                this.map.Basemap = basemap;
+                this.Map.Basemap = basemap;
             }
             else
             {
-                this.map = null;
+                this.Map = null;
             }
         }
 
-
-        public string QuestionIdentity { get; set; }
+        public void Init(string area)
+        {
+            Area = area;
+        }
 
         public string Area { set; get; }
-
-        private Geometry geometry = null;
-
+        
         private Map map;
         public Map Map
         {
@@ -78,29 +114,51 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             set { this.map = value; RaisePropertyChanged(); }
         }
 
-        private MapViewModel mapViewModel;
-        public MapViewModel MapViewModel
-        {
-            get { return this.mapViewModel; }
-            set { this.mapViewModel = value; RaisePropertyChanged(); }
-        }
-
-
-        MapView mapView = new MapView();
-
+        
+        public MapView MapView { set; get; }
 
         public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
         {
-            var command = this.mapView.SketchEditor.CompleteCommand;
-            if (this.mapView.SketchEditor.CompleteCommand.CanExecute(command))
-                this.mapView.SketchEditor.CompleteCommand.Execute(command);
+            var command = this.MapView.SketchEditor.CompleteCommand;
+            if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
+                this.MapView.SketchEditor.CompleteCommand.Execute(command);
+            else
+            {
+                userInteractionService.ShowToast("Empty value cannot be saved");
+            }
         });
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
-            this.mapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.CompassNavigation;
-            this.mapView.LocationDisplay.IsEnabled = !this.mapView.LocationDisplay.IsEnabled;
+            if(!this.MapView.LocationDisplay.IsEnabled)
+                this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.CompassNavigation;
+
+            this.MapView.LocationDisplay.IsEnabled = !this.MapView.LocationDisplay.IsEnabled;
         });
+
+        public IMvxCommand UpdateMapsCommand => new MvxCommand(async () =>
+        {
+            if (!IsInProgress)
+            {
+                IsInProgress = true;
+                cancellationTokenSource = new CancellationTokenSource();
+                await mapService.SyncMaps(cancellationTokenSource.Token);
+
+                AvailableMaps = mapService.GetAvailableMaps();
+                MapsList = AvailableMaps.Keys.ToList();
+
+                IsInProgress = false;
+            }
+            else
+            {
+                if(cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
+                    this.cancellationTokenSource.Cancel();
+                IsInProgress = false;
+            }
+
+        });
+        
+        private CancellationTokenSource cancellationTokenSource;
 
 
         public IMvxCommand StartEditAreaCommand => new MvxCommand(async () =>
@@ -108,18 +166,21 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             if (this.IsEditing)
                 return;
 
-            if (this.mapView.GraphicsOverlays.Count != 0)
-            {
-                this.mapView.GraphicsOverlays[0].Graphics.Clear();
-            }
+            this.IsEditing = true;
 
             Geometry result = null;
 
-            if (this.geometry == null)
-                result = await this.mapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(Area))
+            {
+                result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
+            }
             else
             {
-                result = await this.mapView.SketchEditor.StartAsync(this.geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
+                var geometry = Geometry.FromJson(Area);
+
+                await this.MapView.SetViewpointAsync(new Viewpoint(geometry));
+
+                result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
 
             //save
@@ -127,19 +188,25 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             handler?.Invoke(new AreaEditorResult()
             {
                 Area = result?.ToJson()
-
             });
 
             this.IsEditing = false;
-
+            Close(this);
             //return to previous activity
         });
-
+        
         private void BtnUndo()
         {
-            var command = this.mapView.SketchEditor.UndoCommand;
-            if (this.mapView.SketchEditor.UndoCommand.CanExecute(command))
-                this.mapView.SketchEditor.UndoCommand.Execute(command);
+            var command = this.MapView?.SketchEditor.UndoCommand;
+            if (this.MapView?.SketchEditor?.UndoCommand.CanExecute(command) ?? false)
+                this.MapView.SketchEditor.UndoCommand.Execute(command);
+        }
+
+        private void BtnDeleteCommand()
+        {
+            var command = this.MapView?.SketchEditor.DeleteCommand;
+            if (this.MapView?.SketchEditor?.DeleteCommand.CanExecute(command) ?? false)
+                this.MapView.SketchEditor.DeleteCommand.Execute(command);
         }
 
         public IMvxCommand UndoCommand
@@ -150,44 +217,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             }
         }
 
-        public IMvxCommand StopCommand
+        public IMvxCommand DeleteCommand
         {
             get
             {
-                return new MvxCommand(BtnStop);
+                return new MvxCommand(BtnDeleteCommand);
             }
         }
 
-
-        private void BtnStop()
+        private bool isEditing;
+        public bool IsEditing
         {
-            var command = this.mapView.SketchEditor.CompleteCommand;
-            if (this.mapView.SketchEditor.CompleteCommand.CanExecute(command))
-                this.mapView.SketchEditor.CompleteCommand.Execute(command);
+            get { return this.isEditing; }
+            set { this.isEditing = value; RaisePropertyChanged(); }
         }
-
-
-        public IMvxCommand NavigationCommand
-        {
-            get
-            {
-                return new MvxCommand(BtnNavigation);
-            }
-        }
-
-        private void BtnNavigation()
-        {
-            this.mapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.CompassNavigation;
-            this.mapView.LocationDisplay.IsEnabled = !this.mapView.LocationDisplay.IsEnabled;
-        }
-
-        public IMvxCommand UpdateMapsCommand => new MvxCommand(async () =>
-        {
-            var cancel = new CancellationToken();
-            await mapService.SyncMaps(cancel);
-        });
 
         private bool isInProgress;
+        private IUserInteractionService userInteractionService;
+
         public bool IsInProgress
         {
             get { return this.isInProgress; }
@@ -195,9 +242,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         }
 
         public IMvxCommand CancelCommand => new MvxCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
-
-
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public void NavigateToPreviousViewModel()
         {

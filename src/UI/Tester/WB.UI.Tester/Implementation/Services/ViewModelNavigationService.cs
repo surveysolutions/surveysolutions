@@ -53,7 +53,7 @@ namespace WB.UI.Tester.Implementation.Services
 
         public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
         {
-            Area = area
+            area = area
         });
     }
 }
