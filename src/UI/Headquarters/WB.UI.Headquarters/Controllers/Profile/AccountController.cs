@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (updateResult.Succeeded)
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfully);
                 else
-                    this.ModelState.AddModelError(nameof(UserEditModel.ConfirmPassword), string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError(nameof(ManageAccountModel.Password), string.Join(@", ", updateResult.Errors));
             }
 
             model.EditAction = nameof(Manage);
