@@ -288,7 +288,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>Tap to enter text  ({0})</value>
+    <value>Tap to enter text ({0})</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative</value>
@@ -457,5 +457,14 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Pick from gallery</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Select an option</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Take photo</value>
   </data>
 </root>

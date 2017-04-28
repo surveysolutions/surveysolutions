@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web.Controllers
@@ -27,6 +28,14 @@ namespace WB.UI.Shared.Web.Controllers
             else
             {
                 this.TempData.Add(key, message);
+            }
+        }
+
+        protected void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error);
             }
         }
     }

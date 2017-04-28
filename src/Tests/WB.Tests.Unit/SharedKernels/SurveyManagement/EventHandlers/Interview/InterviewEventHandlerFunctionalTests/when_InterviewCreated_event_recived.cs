@@ -1,11 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
@@ -19,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             questionnaireId = Guid.Parse("93333333333333333333333333333333");
             questionnaireVersion = 1;
 
-            var userDocument = new UserDocument(){PublicKey = userId};
+            var userDocument = Create.Entity.UserView(userId);
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(user: userDocument);
         };

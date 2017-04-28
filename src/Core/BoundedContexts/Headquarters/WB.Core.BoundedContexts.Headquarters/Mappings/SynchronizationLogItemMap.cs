@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
 
             Property(x => x.InterviewerId);
+            Property(x => x.InterviewId);
             Property(x => x.InterviewerName);
             Property(x => x.DeviceId);
             Property(x => x.LogDate);

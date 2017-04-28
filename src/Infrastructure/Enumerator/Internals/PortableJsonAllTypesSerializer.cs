@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
@@ -19,7 +21,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                Binder = new PortableOldToNewAssemblyRedirectSerializationBinder()
+                Binder = new PortableOldToNewAssemblyRedirectSerializationBinder(),
+                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() }
             };
 #pragma warning restore 612, 618
     }

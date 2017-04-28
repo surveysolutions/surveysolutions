@@ -5,9 +5,11 @@ using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -40,8 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_existing_user_Then_record_verification_error_with_code_PLU0001()
         {
             var userName = "nastya";
-            var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName), "id");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
 
             userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0001", 1, "Login", userName));
-            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, 9));
+            userPreloadingServiceMock.Verify(x => x.UpdateVerificationProgressInPercents(userPreloadingProcess.UserPreloadingProcessId, Moq.It.IsAny<int>()));
         }
 
         [Test]
@@ -78,9 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             var userName = "nastya";
             var supervisorName = "super";
-            var userStorage = new  TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName, supervisorId: Guid.NewGuid(), isArchived:true), "id1");
-            userStorage.Store(Create.Entity.UserDocument(userName: supervisorName), "id2");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName, supervisorId: Guid.NewGuid(), isArchived: true),
+                Create.Entity.HqUser(userName: supervisorName));
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(login: userName, supervisor: supervisorName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -97,8 +97,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_user_in_other_role_Then_record_verification_error_with_code_PLU0004()
         {
             var userName = "nastya";
-            var userStorage = new TestPlainStorage<UserDocument>();
-            userStorage.Store(Create.Entity.UserDocument(userName: userName, isArchived:true), "id");
+            var userStorage = Create.Storage.UserRepository(Create.Entity.HqUser(userName: userName, isArchived: true, role: UserRoles.Supervisor));
+            
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
 
@@ -197,7 +197,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_users_role_is_undefined_Then_record_verification_error_with_code_PLU0009()
         {
             var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord());
-            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, role: UserRoles.Undefined);
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, role: 0);
 
             var userPreloadingVerifier =
                 CreateUserPreloadingVerifier(userPreloadingServiceMock.Object);
@@ -269,18 +269,63 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             userPreloadingServiceMock.Verify(x => x.FinishValidationProcessWithError(userPreloadingProcess.UserPreloadingProcessId, Moq.It.IsAny<string>()));
         }
 
+        [Test]
+        public void when_person_full_name_has_more_than_allowed_length_Should_return_error()
+        {
+            var fullName = new string('a', 101);
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(fullName: fullName));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0012", 1, "FullName", fullName));
+        }
+
+        [Test]
+        public void when_person_full_name_has_illigal_characters_Should_return_error()
+        {
+            var fullName = "Имя 123";
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(fullName: fullName));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0014", 1, "FullName", fullName));
+        }
+
+        [Test]
+        public void when_phone_number_more_than_allowed_length_Should_return_error()
+        {
+            var phone = new string('1', 16);
+            var userPreloadingProcess = Create.Entity.UserPreloadingProcess(dataRecords: Create.Entity.UserPreloadingDataRecord(phoneNumber: phone));
+            var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
+
+            var userPreloadingVerifier =
+                CreateUserPreloadingVerifier(userPreloadingService: userPreloadingServiceMock.Object);
+
+            userPreloadingVerifier.VerifyProcessFromReadyToBeVerifiedQueue();
+
+            userPreloadingServiceMock.Verify(x => x.PushVerificationError(userPreloadingProcess.UserPreloadingProcessId, "PLU0013", 1, "PhoneNumber", phone));
+        }
+
         private UserPreloadingVerifier CreateUserPreloadingVerifier(
             IUserPreloadingService userPreloadingService = null,
-            IPlainStorageAccessor<UserDocument> userStorage = null)
+            IUserRepository userStorage = null)
         {
             return
                 new UserPreloadingVerifier(
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
-                    userStorage ?? new TestPlainStorage<UserDocument>(),
+                    userStorage ?? Mock.Of<IUserRepository>(),
                     Create.Entity.UserPreloadingSettings(), Mock.Of<ILogger>());
         }
 
-        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
+        private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)
         {
             var UserPreloadingProcessIdQueue = new Queue<string>();
             UserPreloadingProcessIdQueue.Enqueue(userPreloadingProcess.UserPreloadingProcessId);

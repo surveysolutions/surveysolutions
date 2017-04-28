@@ -59,20 +59,6 @@
 
         $('#umbrella').hide();
     </script>
-    
-    <script>
-        $(document).ready(function ()
-        {
-            $("footer").addClass("footer-adaptive");
-
-            $("#hide-filters").click(function () {
-                $(".filters").toggleClass("hidden-filters");
-                $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
-                $("footer").toggleClass("footer-adaptive");
-            });
-            $("main").removeClass("hold-transition");
-        });
-    </script>
 }
 
 <main class="export hold-transition">
@@ -101,6 +87,7 @@
                 </div>
             </aside>
             <div class="export-types">
+                @Html.Partial("_alerts")
                 <h2 data-bind="text: selectedTemplate().title"></h2>
                 <div class="row">
                     <div class="col-sm-7 col-xs-10 info-block">

@@ -8,7 +8,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
 {
     public class with_postgres_db
     {
-        Establish context = () =>
+        protected static void Context()
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
@@ -28,15 +28,20 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 }
                 connection.Close();
             }
-        };
+        }
 
-        Cleanup things = () =>
+        Establish context = () => Context();
+
+        Cleanup things = () => Cleanup();
+
+        protected static void Cleanup()
         {
-
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
                 connection.Open();
-                var command = string.Format(@"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};", databaseName);
+                var command = string.Format(
+                    @"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};",
+                    databaseName);
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = command;
@@ -44,7 +49,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 }
                 connection.Close();
             }
-        };
+        }
 
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         protected static string TestConnectionString;

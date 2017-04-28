@@ -2,6 +2,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class SychronizationStatistics
     {
+        public int SuccessfullyDownloadedQuestionnairesCount { get; set; }
         public int NewInterviewsCount { get; set; }
         public int RejectedInterviewsCount { get; set; }
         public int DeletedInterviewsCount { get; set; }
@@ -14,7 +15,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int FailedToUploadInterviwesCount { get; set; }
         public int FailedToCreateInterviewsCount { get; set; }
 
-        public int FailedInterviewsCount => this.FailedToCreateInterviewsCount +
-                                           this.FailedToUploadInterviwesCount;
+        public int FailedInterviewsCount => this.FailedToCreateInterviewsCount + this.FailedToUploadInterviwesCount;
     }
 }

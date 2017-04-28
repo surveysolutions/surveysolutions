@@ -366,9 +366,6 @@
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>已连接</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>已连接到设备</value>
-  </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>创建日期</value>
   </data>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using FluentMigrator;
-using FluentMigrator.Infrastructure;
+﻿using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
@@ -11,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
-    internal static class DbMigrationsRunner
+    public static class DbMigrationsRunner
     {
         public class MigrationOptions : IMigrationProcessorOptions
         {
@@ -22,18 +18,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
         public static void MigrateToLatest(string connectionString, string schemaName, DbUpgradeSettings dbUpgradeSettings)
         {
-            // var announcer = new NullAnnouncer();
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(typeof(DbMigrationsRunner));
-            var announcer = new TextWriterAnnouncer(s => logger.Info(s)); 
+            var announcer = new TextWriterAnnouncer(s => logger.Info(s))
+            {
+                ShowSql = true
+            }; 
 
             var migrationContext = new RunnerContext(announcer)
             {
-                Namespace = dbUpgradeSettings.MigrationsNamespace,
+                Namespace = dbUpgradeSettings.MigrationsNamespace
             };
 
             var options = new MigrationOptions
             {
-                PreviewOnly = false,
+                PreviewOnly = false
             };
 
             var factory = new InSchemaPostgresProcessorFactory(schemaName);

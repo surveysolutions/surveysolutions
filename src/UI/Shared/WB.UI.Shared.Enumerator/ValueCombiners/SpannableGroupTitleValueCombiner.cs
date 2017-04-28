@@ -1,25 +1,25 @@
 ﻿using System.Collections.Generic;
-using Android.Graphics;
-using Android.Text;
-using Android.Text.Style;
+using System.Text.RegularExpressions;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
-    public class SpannableGroupTitleValueCombiner : BaseValueCombiner<SpannableString>
+    public class SpannableGroupTitleValueCombiner : BaseValueCombiner<string>
     {
         protected override int ExpectedParamsCount => 2;
 
-        protected override SpannableString GetValue(List<object> values)
+        protected override string GetValue(List<object> values)
         {
             string groupTitle = values[0]?.ToString() ?? string.Empty;
             string rosterTitle = values[1]?.ToString() ?? string.Empty;
 
-            var spannableTitle = new SpannableString(groupTitle);
-
-            if (!string.IsNullOrEmpty(rosterTitle))
-                spannableTitle.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), groupTitle.Length - rosterTitle.Length, groupTitle.Length, SpanTypes.ExclusiveExclusive);
-
-            return spannableTitle;
+            string result = groupTitle;
+            if (!string.IsNullOrWhiteSpace(rosterTitle))
+            {
+                string pattern = Regex.Escape(rosterTitle);
+                result = Regex.Replace(groupTitle, @" \- " + pattern, m => $"<i>{m.Value}</i>");
+            }
+             
+            return result;
         }
     }
 }

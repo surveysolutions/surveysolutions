@@ -1,6 +1,6 @@
 import indexOf from "lodash/indexOf"
 
-import * as Vue from "vue"
+import Vue from "vue"
 
 function forEachIfNeeded(data, each) {
     if (Array.isArray(data)) {
@@ -20,7 +20,7 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
             forEachIfNeeded(data, id => ctx.dispatch(fetchAction, { id }))
         }
 
-        let isQueueWereEmpty = queue.length === 0
+        const isQueueWereEmpty = queue.length === 0
 
         forEachIfNeeded(data, item => queue.push(item))
 

@@ -31,6 +31,7 @@
             title: title,
             text: message,
             hide: false,
+            insert_brs: false,
             addclass: "centered-modal",
             confirm: {
                 confirm: true
@@ -45,6 +46,37 @@
         })).get()
             .on('pnotify.confirm', confirmCallback)
             .on('pnotify.cancel', cancelCallback);
+    };
+
+    self.alert = function (title, message, callback) {
+        (new PNotify({
+            title: title,
+            text: message,
+            hide: false,
+            insert_brs: false,
+            addclass: "centered-modal",
+            confirm: {
+                confirm: true,
+                buttons: [{
+                    text: 'Ok',
+                    addClass: 'ui-pnotify-action-button btn btn-default',
+                    click: function(notice) {
+                        notice.remove();
+                    }
+                },
+                null]
+            },
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            history: {
+                history: false
+            },
+            stack: stack_modal
+        })).get()
+            .on('pnotify.confirm', callback)
+            .on('pnotify.cancel', callback);
     };
 
     var openPnotifyIfExists = function (pnotify) {
@@ -113,7 +145,7 @@ var Ajax = function (notifier) {
                     notifier.showError(input.settings.messages.forbiddenMessage);
                 }
                 else {
-                    notifier.showError(jqXhr.responseText);
+                    notifier.showError("Error", jqXhr.responseJSON.Message || jqXhr.responseText);
                 }
             } else {
                 notifier.showError(input.settings.messages.unhandledExceptionMessage);

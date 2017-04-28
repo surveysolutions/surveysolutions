@@ -158,5 +158,32 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("PLU0011", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person name should not contain more than 100 characters.
+        /// </summary>
+        public static string PLU0012 {
+            get {
+                return ResourceManager.GetString("PLU0012", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number should not contain more than 15 characters.
+        /// </summary>
+        public static string PLU0013 {
+            get {
+                return ResourceManager.GetString("PLU0013", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        /// </summary>
+        public static string PLU0014 {
+            get {
+                return ResourceManager.GetString("PLU0014", resourceCulture);
+            }
+        }
     }
 }

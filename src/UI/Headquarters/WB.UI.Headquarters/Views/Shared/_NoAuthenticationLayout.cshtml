@@ -1,5 +1,4 @@
-﻿@using WB.UI.Headquarters.Code
-@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Shared.Web.Extensions
 @{
     Layout = "~/Views/Shared/_SharedAuthenticationLayout.cshtml";
 }
@@ -11,7 +10,10 @@
 @section interviewerlink
 {
     <text>|</text>
-    <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+
+    <a href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewerSync", action = "GetLatestVersion" })">
+        @Common.GetInterviewerApp
+    </a>
 }
 
 @section scripts

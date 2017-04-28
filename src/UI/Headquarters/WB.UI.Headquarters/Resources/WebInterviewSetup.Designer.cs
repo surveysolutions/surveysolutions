@@ -79,6 +79,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download ({0}).
+        /// </summary>
+        public static string DownloadTitle {
+            get {
+                return ResourceManager.GetString("DownloadTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can download interviews in status `Interviewer Assigned` to deliver links to respondents.
+        /// </summary>
+        public static string ExportTitle {
+            get {
+                return ResourceManager.GetString("ExportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select interviewer.
         /// </summary>
         public static string SelectInterviwer {
@@ -111,6 +129,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string StartInfo {
             get {
                 return ResourceManager.GetString("StartInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Web Interview.
+        /// </summary>
+        public static string StopWebInterview {
+            get {
+                return ResourceManager.GetString("StopWebInterview", resourceCulture);
             }
         }
         

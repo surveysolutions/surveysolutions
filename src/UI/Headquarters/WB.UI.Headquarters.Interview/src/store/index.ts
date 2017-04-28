@@ -1,5 +1,5 @@
-import * as Vue from "vue"
-import * as Vuex from "vuex"
+import Vue from "vue"
+import Vuex from "vuex"
 
 import { safeStore } from "../errors"
 
@@ -15,10 +15,16 @@ const store = new Vuex.Store(safeStore({
         lastActivityTimestamp: new Date(),
         hasPrefilledQuestions: false,
         loadedEntitiesCount: 0,
+        questionnaireTitle: "",
+        firstSectionId: "",
+        isSampleMode: false,
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
             breadcrumbs: []
+        },
+        samplePrefilledInfo: {
+            questions: []
         }
     },
     actions,

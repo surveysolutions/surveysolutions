@@ -1,4 +1,4 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
@@ -22,6 +22,7 @@
 
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
+    self.IsVisiblePrefilledColumns = ko.observable(false);
 
     self.TemplateName = ko.observable();
 
@@ -94,6 +95,10 @@
         self.SelectedStatus.subscribe(self.filter);
 
         self.search();
+
+        self.InitPrefilledColumnsAndShowSearchBarIfNeed();
+
+        $('.selectpicker').selectpicker('refresh');
     };
 
     self.sendCommandAfterFilterAndConfirm = function (commandName,
@@ -109,13 +114,13 @@
             var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
             if (filteredItems.length === 0) {
-                bootbox.alert(messageHtml);
+                notifier.alert('', messageHtml);
                 return;
             }
 
             messageHtml += $(continueMessageTemplateId).html();
 
-            bootbox.confirm(messageHtml, function (result) {
+            notifier.confirm('', messageHtml, function (result) {
                 if (result) {
                     self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
                 } else {
@@ -144,8 +149,31 @@
         }, true);
     };
 
-    var updateTemplateName = function (value) {
+    var updateTemplateName = function(value) {
         self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    };
+
+    self.ToggleVisiblePrefilledColumns = function () {
+        self.IsVisiblePrefilledColumns(!self.IsVisiblePrefilledColumns());
+        return false;
+    };
+
+    self.InitPrefilledColumnsAndShowSearchBarIfNeed = function() {
+        $('.dataTables_filter label').on('click', function (e) {
+            if (e.target !== this)
+                return;
+
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            } else {
+                $(this).addClass("active");
+                $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+            }
+        });
+
+        if (self.Url.query['searchBy'].length > 0) {
+            $('.dataTables_filter label').addClass("active");
+        }
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

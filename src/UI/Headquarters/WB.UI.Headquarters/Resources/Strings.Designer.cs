@@ -88,11 +88,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account password successfully updated.
+        /// </summary>
+        public static string HQ_AccountController_AccountPasswordChangedSuccessfully {
+            get {
+                return ResourceManager.GetString("HQ_AccountController_AccountPasswordChangedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password for account &lt;b&gt;{0}&lt;/b&gt; successfully updated.
+        /// </summary>
+        public static string HQ_AccountController_AccountPasswordChangedSuccessfullyFormat {
+            get {
+                return ResourceManager.GetString("HQ_AccountController_AccountPasswordChangedSuccessfullyFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account information successfully updated.
         /// </summary>
         public static string HQ_AccountController_AccountUpdatedSuccessfully {
             get {
                 return ResourceManager.GetString("HQ_AccountController_AccountUpdatedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information about &lt;b&gt;{0}&lt;/b&gt; successfully updated.
+        /// </summary>
+        public static string HQ_AccountController_AccountUpdatedSuccessfullyFormat {
+            get {
+                return ResourceManager.GetString("HQ_AccountController_AccountUpdatedSuccessfullyFormat", resourceCulture);
             }
         }
         

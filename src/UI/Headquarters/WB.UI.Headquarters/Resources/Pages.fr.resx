@@ -366,9 +366,6 @@
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connecté</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Connecté à l'appareil</value>
-  </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Date de création</value>
   </data>

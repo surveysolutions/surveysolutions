@@ -5,12 +5,12 @@ using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
-using System.Web.Security;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.AttributesTests
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         {
             var membershipUserServiceMock = new Mock<IMembershipUserService>();
             var membershipWebUserMock = new Mock<IMembershipWebUser>();
-            var membershipUserMock = new Mock<MembershipUser>();
+            var membershipUserMock = new Mock<DesignerMembershipUser>();
             membershipUserMock.Setup(x => x.IsApproved).Returns(true);
             membershipUserMock.Setup(x => x.IsLockedOut).Returns(false);
             membershipWebUserMock.Setup(x => x.MembershipUser).Returns(membershipUserMock.Object);

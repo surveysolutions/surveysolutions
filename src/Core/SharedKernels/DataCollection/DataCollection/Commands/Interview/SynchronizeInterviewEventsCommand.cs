@@ -22,7 +22,16 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public bool CreatedOnClient { get; set; }
 
-        public SynchronizeInterviewEventsCommand(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, IEvent[] synchronizedEvents, InterviewStatus interviewStatus, bool createdOnClient)
+        public InterviewKey InterviewKey { get; }
+
+        public SynchronizeInterviewEventsCommand(Guid interviewId, 
+            Guid userId,
+            Guid questionnaireId,
+            long questionnaireVersion,
+            IEvent[] synchronizedEvents,
+            InterviewStatus interviewStatus,
+            bool createdOnClient,
+            InterviewKey interviewKey)
             : base(interviewId, userId)
         {
             QuestionnaireId = questionnaireId;
@@ -30,6 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             SynchronizedEvents = synchronizedEvents;
             InterviewStatus = interviewStatus;
             CreatedOnClient = createdOnClient;
+            this.InterviewKey = interviewKey;
         }
     }
 }

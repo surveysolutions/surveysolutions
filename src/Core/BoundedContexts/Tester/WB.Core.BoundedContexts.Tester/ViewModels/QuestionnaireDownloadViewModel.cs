@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-        public async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_CheckConnectionToServer);
@@ -74,21 +74,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage, progress, cancellationToken);
 
-                    var fakeQuestionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+                    var dummyQuestionnaireIdentity = GenerateDummyQuestionnaireIdentity(questionnaireId);
 
                     var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
 
-                    this.StoreQuestionnaireWithNewIdentity(fakeQuestionnaireIdentity, questionnairePackage, translations, progress);
+                    this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage, translations, progress);
 
-                    var interviewId = await this.CreateInterview(fakeQuestionnaireIdentity, progress);
+                    var interviewId = await this.CreateInterview(dummyQuestionnaireIdentity, progress);
 
                     this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+
+                    return true;
                 }
             }
             catch (RestException ex)
             {
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
-                    return;
+                    return false;
 
                 string errorMessage;
                 switch (ex.StatusCode)
@@ -116,9 +118,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 this.logger.Error("Import questionnaire exception. ", ex);
             }
+
+            return false;
         }
 
-        private static QuestionnaireIdentity GenerateFakeQuestionnaireIdentity() => new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+        private static QuestionnaireIdentity GenerateDummyQuestionnaireIdentity(string questionnaireId)
+            => new QuestionnaireIdentity(Guid.Parse(questionnaireId), 1);
 
         private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity, IProgress<string> progress)
         {
@@ -131,7 +136,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireIdentity: questionnaireIdentity,
                 answersTime: DateTime.UtcNow,
-                supervisorId: Guid.NewGuid()));
+                supervisorId: Guid.NewGuid(),
+                interviewKey: null));
 
             return interviewId;
         }

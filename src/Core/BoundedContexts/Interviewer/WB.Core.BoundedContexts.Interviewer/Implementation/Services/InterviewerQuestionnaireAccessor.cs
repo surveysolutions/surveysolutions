@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -24,12 +23,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
-        private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
@@ -38,9 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            IPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor,
-            IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
             IOptionsRepository optionsRepository, 
             IPlainStorage<TranslationInstance> translationsStorage)
@@ -48,9 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.questionnaireStorage = questionnaireStorage;
-            this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.interviewFactory = interviewFactory;
             this.questionnaireDocuments = questionnaireDocuments;
             this.optionsRepository = optionsRepository;
             this.translationsStorage = translationsStorage;
@@ -109,25 +102,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireId = questionnaireIdentity.ToString();
-
-            this.DeleteInterviewsByQuestionnaire(questionnaireId);
+            
             this.questionnaireStorage.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             this.questionnaireViewRepository.Remove(questionnaireId);
             this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity);
             optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
             this.RemoveTranslations(questionnaireIdentity);
-        }
-
-        private void DeleteInterviewsByQuestionnaire(string questionnaireId)
-        {
-            var interviewIdsByQuestionnaire = this.interviewViewRepository
-                .Where(interview => interview.QuestionnaireId == questionnaireId)
-                .Select(interview => interview.InterviewId);
-
-            foreach (var interviewId in interviewIdsByQuestionnaire)
-            {
-                this.interviewFactory.RemoveInterview(interviewId);
-            }
         }
 
         public async Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)

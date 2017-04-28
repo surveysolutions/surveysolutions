@@ -1,20 +1,21 @@
-﻿using Machine.Specifications;
+﻿using System;
+using System.Linq;
+using Machine.Specifications;
+using Microsoft.AspNet.Identity;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
-using It = Machine.Specifications.It;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
     [Subject(typeof(UserViewFactory))]
-    class UserViewFactoryTestContext
+    internal class UserViewFactoryTestContext
     {
-        protected static UserViewFactory CreateUserViewFactory(IPlainStorageAccessor<UserDocument> users)
-        {
-            return new UserViewFactory(users ?? Mock.Of<IPlainStorageAccessor<UserDocument>>());
-        }
+        protected static UserViewFactory CreateInterviewersViewFactory(IUserRepository userRepository)
+            => new UserViewFactory(userRepository);
+
+        protected static IUserRepository CreateQueryableReadSideRepositoryReaderWithUsers(params HqUser[] users)
+            => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
     }
 }

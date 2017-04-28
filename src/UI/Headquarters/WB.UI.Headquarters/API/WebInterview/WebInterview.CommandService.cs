@@ -11,7 +11,21 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public partial class WebInterview
     {
-        private Guid commandResponsibleId => this.webInterviewConfigProvider.Get(this.GetCallerInterview().QuestionnaireIdentity).ResponsibleId;
+        private Guid commandResponsibleId
+        {
+            get
+            {
+                var statefulInterview = this.GetCallerInterview();
+                var responsibleId = this.webInterviewConfigProvider.Get(statefulInterview.QuestionnaireIdentity)
+                    .ResponsibleId;
+                if (responsibleId != null)
+                    return responsibleId.Value;
+                else
+                {
+                    return statefulInterview.CurrentResponsibleId;
+                }
+            }
+        }
 
         private void ExecuteQuestionCommand(QuestionCommand command)
         {

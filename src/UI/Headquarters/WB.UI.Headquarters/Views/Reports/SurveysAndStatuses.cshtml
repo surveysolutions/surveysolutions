@@ -1,0 +1,146 @@
+﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section scripts
+{
+
+    @Scripts.Render("~/js/main-no-libs")
+    @Scripts.Render("~/js/list")
+    @Scripts.Render("~/js/surveysandstatuses")
+    @Scripts.Render("~/js/common")
+
+    <script type="text/javascript">
+        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+        $(function() {
+            var $surveyAndStatusesReportUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport"})';
+            var responsiblesUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers"})';
+
+            var statisticsMessage = "@Pages.SurveysAndStatuses_SupervisorStatisticsFormat";
+
+            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl, statisticsMessage);
+            model.getDataTableColumns = function () {
+                return [
+                    {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
+                    },
+                    {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.Completed', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.ApprovedBySupervisor', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.RejectedByHeadquarters', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function (data, type, row) {
+                            return getLinkToInterviews(model, data, row, '@InterviewStatus.ApprovedByHeadquarters', model.Url.query['responsible']);
+                        }
+                    }, {
+                        render: function(data, type, row) {
+                            return getLinkToInterviews(model, data, row);
+                        }
+                    }
+                ];
+            };
+            ko.applyBindings(model);
+            model.load();
+        });
+        function getLinkToInterviews(model, data, row, interviewStatus, responsible) {
+            if (data === 0) return "<span>" + data + "</span>";
+
+            var link = "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
+                '&templateVersion=' + row.questionnaireVersion;
+
+            if (!_.isUndefined(responsible))
+                link += '&responsible=' + model.Url.query['responsible'];
+
+            if (!_.isUndefined(interviewStatus))
+                link += '&status=' + interviewStatus;
+
+            return link + '"\">' + data + "</a>";
+        }
+    </script>
+}
+
+<main class="">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle:</h4>
+                    <div class="block-filter">
+                        <h5>@Pages.SurveysAndStatuses_SupervisorTitle</h5>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                            <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                            <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                                <div class="btn btn-default">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <div class="main-information reports">
+                @Html.Partial("_alerts")
+                <div class="page-header clearfix">
+                    <h1>@Pages.SurveysAndStatuses_Overview</h1>
+                    <p data-bind="text: StatisticsMessage"></p>
+                </div>
+                <div class="dataTables_wrapper no-footer">
+                    <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"
+                           data-order="[[ 1, &quot;asc&quot; ]]" data-searching="false" data-s-Dom="f<&quot;table-with-scroll&quot;t>ip">
+                        <thead>
+                        <tr>
+                            <th class="version" data-class="type-numeric version" data-name="QuestionnaireVersion" data-data="questionnaireVersion" data-th="@Reports.TemplateVersion">@Reports.TemplateVersion</th>
+                            <th class="without-break title-row changed-recently" data-class="without-break title-row changed-recently" data-name="QuestionnaireTitle" data-data="questionnaireTitle">@Reports.SurveyName</th>
+                            <th data-class="type-numeric" data-name="SupervisorAssignedCount" data-data="supervisorAssignedCount">@Reports.SupervisorAssigned</th>
+                            <th data-class="type-numeric" data-name="InterviewerAssignedCount" data-data="interviewerAssignedCount">@Reports.InterviewerAssigned</th>
+                            <th data-class="type-numeric" data-name="CompletedCount" data-data="completedCount">@Reports.Completed</th>
+                            <th data-class="type-numeric" data-name="RejectedBySupervisorCount" data-data="rejectedBySupervisorCount">@Reports.RejectedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="ApprovedBySupervisorCount" data-data="approvedBySupervisorCount">@Reports.ApprovedBySupervisor</th>
+                            <th data-class="type-numeric" data-name="RejectedByHeadquartersCount" data-data="rejectedByHeadquartersCount">@Reports.RejectedByHQ</th>
+                            <th data-class="type-numeric" data-name="ApprovedByHeadquartersCount" data-data="approvedByHeadquartersCount">@Reports.ApprovedByHQ</th>
+                            <th data-class="type-numeric" data-name="TotalCount" data-data="totalCount">@Common.Total</th>
+                        </tr>
+                        </thead>
+                    </table>  
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         {
             base.Setup();
         }
-
+        
         protected static LoginViewModel CreateLoginViewModel(
             IViewModelNavigationService viewModelNavigationService = null,
             IPrincipal principal = null,
@@ -38,9 +38,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 logger ?? Mock.Of<ILogger>());
         }
         
-        protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null)
+        protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null, string token = null)
         {
-            return new InterviewerIdentity { Name = userName, Password = userPasswordHash };
+            return new InterviewerIdentity { Name = userName, PasswordHash = userPasswordHash , Token = token};
         }
     }
 }

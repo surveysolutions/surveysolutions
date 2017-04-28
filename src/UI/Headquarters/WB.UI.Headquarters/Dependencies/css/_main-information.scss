@@ -13,6 +13,9 @@
 				content: "";
 				clear: both;
 			}
+			&.row-without-padding{
+				padding-right: 0;
+			}
 		}
 	} 
 	.panel-table{
@@ -27,6 +30,34 @@
 		left: $filter-width + 12px;
 	}
 }
+.title-row{
+    .interviewer{
+        font-size: 18px;
+        line-height: 20px;
+        &:before{
+            @include opacity(0.8);
+            margin-right: 5px;
+            top: 0;
+        }
+    }
+    span .interviewer{
+        color: $gray_light;
+        &:before{
+            @include opacity(0.3);
+        }
+    }
+}
+.on-line{
+    color: $green_btn;
+    &:before{
+        content: "";
+        display: inline-block;
+        @include square(7px);
+        border-radius: 100%;
+        background-color: $green_btn;
+        margin-right: 5px;
+    }
+}
 @media (max-width: 1300px){
 	@include fullscreen-hidden-filter('main-information');
 	.fullscreen-hidden-filters .main-information .panel-table{
@@ -35,13 +66,13 @@
 }
 @media (max-width: $screen-md-min){
 	.main-information {
-		margin-left: $filter-small-width - $margin-container-md-screen + 15px + 12px;
+		margin-left: $filter-width - $margin-container-md-screen + 15px + 12px;
 		padding-right: 20px;
 		.page-header div{
 			padding-right: 255px;
 		}
 		.panel-table{
-			left: $filter-small-width+ 12px;
+			left: $filter-width+ 12px;
 		}
 	}
 	.fullscreen-hidden-filters{
@@ -80,5 +111,55 @@
 	}
 	.main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter{
 		left: 0;
+	}
+}
+.map-report{
+	padding-bottom: 0;
+	main .container-fluid{
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.main-information{
+		margin-left: 252px;
+	}
+}
+@media (max-width: 1300px){
+	.map-report{
+		.fullscreen-hidden-filters .main-information {
+			margin-left: 0;
+			padding-left: 12px;
+		}
+	}
+}
+@media (max-width: $screen-md-min){
+	.map-report{
+		.main-information{
+			padding-right: 0px;
+		}
+		.fullscreen-hidden-filters {
+			.main-information{
+				margin-left: 0;
+			}
+		}
+		// .footer.footer-adaptive{
+		// 	padding-left: 290px;
+		// }
+	}
+}
+@media (max-width: $screen-sm-min){
+	.map-report{
+		.main-information{
+			margin-left: 12px;
+		}
+		// .footer.footer-adaptive{
+		// 	padding-left: 12px;
+		// }
+	}
+}
+@media (max-width: $screen-xs-min){
+	.map-report{
+		.main-information{
+			padding-top: 0;
+		}
 	}
 }

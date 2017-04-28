@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Reflection;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.UI.Headquarters.Controllers;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ResourceController : BaseController
     {
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        public ResourceController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
+        public ResourceController(ICommandService commandService, ILogger logger,
             IPlainInterviewFileStorage plainFileRepository)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
             this.plainFileRepository = plainFileRepository;
         }
 
         public ActionResult InterviewFile(Guid interviewId, string fileName)
         {
-            var file = plainFileRepository.GetInterviewBinaryData(interviewId, fileName);
+            byte[] file = null; 
+            if(fileName != null)
+                file = this.plainFileRepository.GetInterviewBinaryData(interviewId, fileName);
+
             if (file == null || file.Length == 0)
                 return
                     this.File(

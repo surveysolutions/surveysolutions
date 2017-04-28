@@ -183,4 +183,7 @@
   <data name="TeamMembersAndStatuses" xml:space="preserve">
     <value>Члены команды и статусы</value>
   </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Устранение неполадок</value>
+  </data>
 </root>

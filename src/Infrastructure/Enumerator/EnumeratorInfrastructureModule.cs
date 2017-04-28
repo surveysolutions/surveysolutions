@@ -10,6 +10,9 @@ using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -46,12 +49,10 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
             this.Bind<IPermissions>().ToMethod(context => CrossPermissions.Current);
 
-            FlurlHttp.Configure(c => {
-                c.HttpClientFactory = new ModernHttpClientFactory();
-            });
-
             this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
+            this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
+            this.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
         }
     }
 }

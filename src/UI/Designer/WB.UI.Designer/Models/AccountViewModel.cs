@@ -20,11 +20,14 @@ namespace WB.UI.Designer.Models
         [Key]
         public Guid Id { get; set; }
 
-        [Display(Name = "Is Approved", Order = 5)]
+        [Display(Name = "Is Approved", Order = 6)]
         public bool IsApproved { get; set; }
 
-        [Display(Name = "Is Locked Out", Order = 6)]
+        [Display(Name = "Is Locked Out", Order = 7)]
         public bool IsLockedOut { get; set; }
+
+        [Display(Name = "Can import on HQ", Order = 5)]
+        public bool CanImportOnHq { get; set; }
 
         [Display(Name = "Last Lockout Date", Order = 9)]
         public string LastLockoutDate { get; set; }

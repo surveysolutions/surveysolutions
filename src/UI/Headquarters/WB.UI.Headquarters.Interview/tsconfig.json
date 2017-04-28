@@ -5,6 +5,7 @@
         "allowJs": false,
         "sourceMap": true,
         "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",
         "jsx": "react",
         "jsxFactory": "h",

@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -165,16 +164,13 @@ namespace WB.Tests.Abc.TestFactories
                 Guid.NewGuid());
 
         public CreateInterviewCommand CreateInterviewCommand()
-            => new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now, Guid.NewGuid(), 1);
+            => new CreateInterviewCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), null, DateTime.Now, Guid.NewGuid(), 1, Create.Entity.InterviewKey());
 
         public CreateInterviewControllerCommand CreateInterviewControllerCommand()
             => new CreateInterviewControllerCommand
             {
                 AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
             };
-
-        public CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId = null)
-            => new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.Entity.UserLight(supervisorId), "", "");
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
@@ -190,16 +186,27 @@ namespace WB.Tests.Abc.TestFactories
                 base64StringOfAssembly,
                 questionnaireContentVersion,
                 2);
-
-        public LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
-            => new LinkUserToDevice(userId, deviceId);
-
-        public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
-            => new SynchronizeInterviewEventsCommand(
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new IEvent[0], InterviewStatus.Completed, true);
-
-        public UnarchiveUserCommand UnarchiveUserCommand(Guid userId)
-            => new UnarchiveUserCommand(userId);
+        
+        public SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand(
+            Guid? interviewId = null,
+            Guid? userId = null,
+            Guid? questionnaireId = null,
+            long? questionnaireVersion = null,
+            IEvent[] synchronizedEvents = null,
+            InterviewStatus interviewStatus = InterviewStatus.Completed,
+            bool createdOnClient = true,
+            InterviewKey interviewKey = null
+            )
+        {
+            return new SynchronizeInterviewEventsCommand(interviewId ?? Guid.NewGuid(), 
+                userId ?? Guid.NewGuid(), 
+                questionnaireId ?? Guid.NewGuid(), 
+                questionnaireVersion ?? 15,
+                synchronizedEvents ?? new IEvent[0], 
+                interviewStatus, 
+                createdOnClient,
+                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()));
+        }
 
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
@@ -218,7 +225,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(PreloadedLevelDto[] data = null)
         {
-            return new CreateInterviewWithPreloadedData(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null);
+            return new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
+                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null, null);
         }
 
         public SynchronizeInterviewCommand Synchronize(Guid userId, InterviewSynchronizationDto synchronizationDto)

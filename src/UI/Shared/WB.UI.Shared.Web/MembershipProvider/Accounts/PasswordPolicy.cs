@@ -1,4 +1,6 @@
 ﻿
+using WB.Core.GenericSubdomains.Portable;
+
 namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 {
     /// <summary>

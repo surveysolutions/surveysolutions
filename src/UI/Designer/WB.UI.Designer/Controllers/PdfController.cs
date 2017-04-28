@@ -6,13 +6,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {

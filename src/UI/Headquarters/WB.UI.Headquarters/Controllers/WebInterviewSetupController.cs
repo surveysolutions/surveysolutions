@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
@@ -23,19 +25,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigurator configurator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsInfo;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
             ILogger logger, 
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IWebInterviewConfigurator configurator,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
-            : base(commandService, globalInfo, logger)
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsInfo)
+            : base(commandService, 
+                  logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.configurator = configurator;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.interviewsInfo = interviewsInfo;
         }
 
         public ActionResult Start(string id)
@@ -45,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
             var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
             if (config.Started) return RedirectToAction("Started", new {id = id});
 
-            QuestionnaireBrowseItem questionnaire = this.FindCensusQuestionnaire(id);
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
                 return this.HttpNotFound();
@@ -55,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
             model.UseCaptcha = true;
+            model.IsCensus = questionnaire.AllowCensusMode;
 
             return View(model);
         }
@@ -65,7 +71,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult StartPost(string id, SetupModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            QuestionnaireBrowseItem questionnaire = this.FindCensusQuestionnaire(id);
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
                 return this.HttpNotFound();
@@ -73,12 +79,17 @@ namespace WB.UI.Headquarters.Controllers
 
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireVersion = questionnaire.Version;
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
             if (model.ResponsibleId.HasValue)
             {
-                var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
                 this.configurator.Start(questionnaireIdentity, model.ResponsibleId.Value, model.UseCaptcha);
                 return RedirectToAction("Started", new {id = questionnaireIdentity.ToString()});
+            }
+            if(!questionnaire.AllowCensusMode)
+            {
+                this.configurator.Start(questionnaireIdentity, null, model.UseCaptcha);
+                return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
             }
 
             return View(model);
@@ -87,17 +98,34 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Started(string id)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            QuestionnaireBrowseItem questionnaire = this.FindCensusQuestionnaire(id);
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
                 return this.HttpNotFound();
             }
 
-            var model = new SetupModel();
-            model.QuestionnaireTitle = questionnaire.Title;
-            model.QuestionnaireVersion = questionnaire.Version;
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            model.WebInterviewLink = Url.Action("Start", "WebInterview", new {id=""}, Request.Url.Scheme) + "/" + QuestionnaireIdentity.Parse(id);
+            var model = new SetupModel
+            {
+                QuestionnaireTitle = questionnaire.Title,
+                QuestionnaireVersion = questionnaire.Version,
+                IsCensus = questionnaire.AllowCensusMode,
+                QuestionnaireIdentity = questionnaireIdentity
+            };
+
+            if (questionnaire.AllowCensusMode)
+            {
+                var baseUrl = this.Url.Action("Start", "WebInterview", new {id = ""}, this.Request.Url.Scheme);
+                model.WebInterviewLink = $"{baseUrl}/{questionnaireIdentity}";
+            }
+            else
+            {
+                model.InterviewsCount = this.interviewsInfo.Query(_ => _.Count(
+                    x => x.Status == InterviewStatus.InterviewerAssigned &&
+                        x.QuestionnaireId == questionnaire.QuestionnaireId &&
+                        x.QuestionnaireVersion == questionnaire.Version));
+            }
 
             return this.View(model);
         }
@@ -113,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToAction("Index", "SurveySetup");
         }
 
-        private QuestionnaireBrowseItem FindCensusQuestionnaire(string id)
+        private QuestionnaireBrowseItem FindQuestionnaire(string id)
         {
             QuestionnaireIdentity questionnarieId;
             if (!QuestionnaireIdentity.TryParse(id, out questionnarieId))
@@ -122,12 +150,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnarieId);
-            if (questionnaire != null && questionnaire.AllowCensusMode)
-            {
-                return questionnaire;
-            }
-
-            return null;
+            return questionnaire;
         }
     }
 }

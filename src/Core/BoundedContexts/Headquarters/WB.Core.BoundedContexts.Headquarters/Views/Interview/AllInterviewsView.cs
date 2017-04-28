@@ -10,4 +10,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public int TotalCount { get; set; }
         public IEnumerable<AllInterviewsViewItem> Items { get; set; }
     }
+
+    public class InterviewsWithoutPrefilledView : IListView<InterviewListItem>
+    {
+        public int TotalCount { get; set; }
+        public IEnumerable<InterviewListItem> Items { get; set; }
+    }
 }

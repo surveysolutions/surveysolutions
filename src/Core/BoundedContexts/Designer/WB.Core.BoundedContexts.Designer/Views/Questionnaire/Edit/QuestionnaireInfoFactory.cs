@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption { Value = "Interviewer", Text = "Interviewer" },
             new SelectOption { Value = "Supervisor", Text = "Supervisor" },
             new SelectOption { Value = "Hidden", Text = "Hidden" },
-            new SelectOption { Value = "Prefilled", Text = "Prefilled" }
+            new SelectOption { Value = "Identifying", Text = "Identifying" }
         };
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>

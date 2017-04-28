@@ -14,10 +14,15 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.ComponentModels;
 
-namespace WB.UI.Headquarters.API  
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
@@ -27,13 +32,13 @@ namespace WB.UI.Headquarters.API
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
+        private readonly IAuthorizedUser authorizedUser;
         private readonly ISurveysAndStatusesReport surveysAndStatusesReport;
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
 
         private readonly IMapReport mapReport;
 
-        private readonly IQuestionnaireQuestionInfoFactory questionInforFactory;
   
         private readonly IQuantityReportFactory quantityReport;
 
@@ -41,44 +46,52 @@ namespace WB.UI.Headquarters.API
 
         public ReportDataApiController(
             ICommandService commandService,
-            IGlobalInfoProvider provider,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             ISurveysAndStatusesReport surveysAndStatusesReport,
             IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
             ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IMapReport mapReport, 
-            IQuestionnaireQuestionInfoFactory questionInforFactory,
+            IMapReport mapReport,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IQuantityReportFactory quantityReport, 
             ISpeedReportFactory speedReport)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.surveysAndStatusesReport = surveysAndStatusesReport;
             this.headquartersTeamsAndStatusesReport = headquartersTeamsAndStatusesReport;
             this.supervisorTeamsAndStatusesReport = supervisorTeamsAndStatusesReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.mapReport = mapReport;
-            this.questionInforFactory = questionInforFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.quantityReport = quantityReport;
             this.speedReport = speedReport;
         }
 
         [HttpPost]
-        public TeamsAndStatusesReportView SupervisorTeamMembersAndStatusesReport(SummaryListViewModel data)
+        [CamelCase]
+        public TeamsAndStatusesReportResponse SupervisorTeamMembersAndStatusesReport(TeamsAndStatusesFilter filter)
         {
             var input = new TeamsAndStatusesInputModel
             {
-                ViewerId = this.GlobalInfo.GetCurrentUser().Id,
-                Orders = data.SortOrder,
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                TemplateId = data.TemplateId,
-                TemplateVersion = data.TemplateVersion
+                ViewerId = this.authorizedUser.Id,
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TemplateId = filter.TemplateId,
+                TemplateVersion = filter.TemplateVersion
             };
 
-            return this.supervisorTeamsAndStatusesReport.Load(input);
+            var view = this.supervisorTeamsAndStatusesReport.Load(input);
+            return new TeamsAndStatusesReportResponse
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items,
+                TotalRow = view.TotalRow
+            };
         }
 
         [HttpPost]
@@ -107,9 +120,12 @@ namespace WB.UI.Headquarters.API
             return result;
         }
 
-        public QuestionnaireQuestionInfoView QuestionInfo(QuestionnaireQuestionInfoInputModel input)
+        [HttpGet]
+        public ComboboxModel QuestionInfo(string questionnaireId)
         {
-            return this.questionInforFactory.Load(input);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+            var variables = this.mapReport.GetVariablesForQuestionnaire(questionnaireIdentity);
+            return new ComboboxModel(variables.Select(x => new ComboboxOptionModel(x, x)).ToArray(), variables.Count);
         }
 
         public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel data)
@@ -117,7 +133,7 @@ namespace WB.UI.Headquarters.API
 
             var input = new QuantityByInterviewersReportInputModel
             {
-               SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+               SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                Page = data.PageIndex,
                PageSize = data.PageSize,
@@ -158,7 +174,7 @@ namespace WB.UI.Headquarters.API
             {
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
-                SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+                SupervisorId = data.SupervisorId ?? this.authorizedUser.Id,
                 InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 QuestionnaireVersion = data.QuestionnaireVersion,
                 QuestionnaireId = data.QuestionnaireId,
@@ -205,7 +221,7 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
                 EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                SupervisorId = input.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id
+                SupervisorId = input.SupervisorId ?? this.authorizedUser.Id
             };
 
             return this.speedReport.Load(inputParameters);
@@ -231,49 +247,88 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
-        {
-            var teamLeadName = this.GlobalInfo.GetCurrentUser().Name;
-
-            var input = new SurveysAndStatusesReportInputModel
-            {
-                TeamLeadName = teamLeadName,
-                Page = request.PageIndex,
-                PageSize = request.PageSize,
-                Orders = request.SortOrder,
-                ResponsibleName = request.ResponsibleName == teamLeadName ? null : request.ResponsibleName 
-            };
-
-            return this.surveysAndStatusesReport.Load(input);
-        }
-
-        [HttpPost]
-        public TeamsAndStatusesReportView HeadquarterSupervisorsAndStatusesReport(SummaryListViewModel data)
+        [CamelCase]
+        public DataTableResponse<TeamsAndStatusesReportLine> HeadquarterSupervisorsAndStatusesReport(TeamsAndStatusesFilter filter)
         {
             var input = new TeamsAndStatusesInputModel
             {
-                Orders = data.SortOrder,
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                TemplateId = data.TemplateId,
-                TemplateVersion = data.TemplateVersion
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TemplateId = filter.TemplateId,
+                TemplateVersion = filter.TemplateVersion
             };
 
-            return this.headquartersTeamsAndStatusesReport.Load(input);
+            var view = this.headquartersTeamsAndStatusesReport.Load(input);
+            return new TeamsAndStatusesReportResponse
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items,
+                TotalRow = view.TotalRow
+            };
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveysAndStatusesReportRequest data)
+        [CamelCase]
+        public SurveysAndStatusesDataTableResponse SupervisorSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
         {
-            var input = new SurveysAndStatusesReportInputModel
-            {
-                Orders = data.SortOrder,
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                TeamLeadName = data.ResponsibleName
-            };
+            var teamLeadName = this.authorizedUser.UserName;
 
-            return this.surveysAndStatusesReport.Load(input);
+            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            {
+                TeamLeadName = teamLeadName,
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                Orders = filter.GetSortOrderRequestItems(),
+                ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName
+            });
+
+            return new SurveysAndStatusesDataTableResponse
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items,
+                TotalResponsibleCount = view.TotalResponsibleCount,
+                TotalInterviewCount = view.TotalInterviewCount
+            };
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public SurveysAndStatusesDataTableResponse HeadquarterSurveysAndStatusesReport(SurveysAndStatusesFilter filter)
+        {
+            var view = this.surveysAndStatusesReport.Load(new SurveysAndStatusesReportInputModel
+            {
+                Orders = filter.GetSortOrderRequestItems(),
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                TeamLeadName = filter.ResponsibleName
+            });
+
+            return new SurveysAndStatusesDataTableResponse
+            {
+                Draw = filter.Draw + 1,
+                RecordsTotal = view.TotalCount,
+                RecordsFiltered = view.TotalCount,
+                Data = view.Items,
+                TotalResponsibleCount = view.TotalResponsibleCount,
+                TotalInterviewCount = view.TotalInterviewCount
+            };
+        }
+
+
+        public class SurveysAndStatusesDataTableResponse : DataTableResponse<HeadquarterSurveysAndStatusesReportLine>
+        {
+            public int TotalInterviewCount { get; set; }
+            public int TotalResponsibleCount { get; set; }
+        }
+
+        public class SurveysAndStatusesFilter : DataTableRequest
+        {
+            public string ResponsibleName { get; set; }
         }
 
         [HttpPost]

@@ -151,7 +151,16 @@
     <value>Interviews</value>
   </data>
   <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Pre-filled Questions</value>
+    <value>Identifying Questions</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Show identifying</value>
+  </data>
+  <data name="HideIdentifying" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Interview Key</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
     <value>Last Update</value>
@@ -195,6 +204,9 @@
   <data name="Approve" xml:space="preserve">
     <value>Approve</value>
   </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Assign</value>
+  </data>
   <data name="Reject" xml:space="preserve">
     <value>Reject</value>
   </data>
@@ -227,5 +239,14 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>New Version Available:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

@@ -126,6 +126,15 @@
   <data name="AnyOption" xml:space="preserve">
     <value>Любой</value>
   </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Несинхронизированные</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>Актуальная</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Устаревшая</value>
+  </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Утвердить</value>
   </data>
@@ -322,7 +331,7 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
-    <value>пользователь(ей) будут архивированы</value>
+    <value>Пользователь(ей) будут архивированы</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
@@ -333,8 +342,8 @@
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
     <value>Статус</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Подключен к планшету</value>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>Версия интервьюера</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Создан</value>
@@ -347,6 +356,21 @@
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
     <value>Супервизор</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Супервизор (команды)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Состояние созданных и собранных интервью</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorStatisticsFormat" xml:space="preserve">
+    <value>{0} интервью от {1} ответственных</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} интервью от {1} ответственных</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>Интервьвер (команда)</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
     <value>Интервьюеры</value>
@@ -582,8 +606,8 @@
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
     <value>Имя супервизора</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
-    <value>Была ли произведена первая успешная синхронизация с его/её планшетом</value>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>Версия интервьювера полученная по время последней синхронизации планшета</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (вер. {1})</value>
@@ -597,5 +621,278 @@
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>интервьюер(ов) выбрано</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>Интервьюер: {0}</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (закреплён за {1})</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>E-mail: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>ФИО: {0}</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>Телефон: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>Редактировать данные пользователя</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>Интервьюеры</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>новые интервью на устройстве</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>возвращённые на устройство интервью</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>ожидающие подтверждения</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>заполненые интервью (завершенные и подтвержденные )</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>Кол-во интервью которые были начаты, но не закончены</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>Хранилище данных (доступно/всего)</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>Память (доступно/всего)</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>База данных</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>Состояние батареи (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, источник питания: {1}, экономия заряда батареи: {2}</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>включена</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>выключена</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Версия Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Версия Android</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>Модель устройства</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>Идентификатор устройства</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>Серийный номер устройства</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>Язык устройства</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>Детальная информация о устройстве</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>Версия Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>Актуальная</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>Может быть обновлён</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>Дата последнего обновления Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>Общее количество успешных синхронизаций</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>Общее количество оборванных синхронизаций</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Последняя успешная синхронизация</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Последняя оборванная синхронизация</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Длительность синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>Соединение: тип: {0} {1}, мобильный оператор: {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>Соединение: {0}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Скорость соединения</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} загружено, {1} скаченно</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Средняя скорость синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>Тип соединения</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>Мощность сигнала</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>Местонахождение устройства или последнее известное местонахождение устройства</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>Ориентация экрана</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>Время на устройстве при начале синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>Время на сервере при начале синхронизации</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>Устройство и статистика по соединению</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>Статистика последнего соединения</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>Количество опросников отправленных на устройство</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>Количество интервью отправленных на устройство</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>Количество интервью полученных с устройства</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>Нет элементов, удовлетворяющих выбранному фильтру</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Сменить пароль</value>
+    <comment>Сменить пароль</comment>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Роль</value>
+    <comment>Роль</comment>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>Логин</value>
+    <comment>Логин</comment>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Редактирование профиля {0}</value>
+    <comment>Редактирование профиля администратора</comment>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Обновить</value>
+    <comment>Обновить</comment>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
+    <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
+Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href="{0}" target="_blank"&gt;массового создания пользователей&lt;/a&gt;</value>
+    <comment>&lt;strong&gt;{0}&lt;/strong&gt; - link to batch user creation</comment>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Вы хотите продолжить?</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Редактирование профиля интервьюера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Создать интервьюера</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Интервьюеры</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>Профиль интервьюера</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Редактирование профиля наблюдателя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Создать пользователя</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Наблюдатели</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Редактирование профиля хедквотера: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Создать хедквотера</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>Хедквотеры</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Редактирование профиля супервизора: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Создать супервизора</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Супервизоры</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Редактирование профиля API пользователя: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Создать API пользователя</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>API пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API пользователи</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Используйте форму ниже чтобы сменить пароль аккаунта</value>
+    <comment>Используйте форму ниже чтобы изменить пароль аккаунта</comment>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>интервью выбрано</value>
+    <comment>интервьювер(ов) выбрано</comment>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>супервизор(ов) выбрано</value>
+    <comment>супервизор(ов) выбрано</comment>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
+    <comment>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Архивировать</value>
+    <comment>Архивировать</comment>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Изменить данные общедоступной информации профиля</value>
+    <comment>Изменить данные общедоступной информации профиля</comment>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Разархивировать</value>
+    <comment>Разархивировать</comment>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Подключен к планшету</value>
   </data>
 </root>

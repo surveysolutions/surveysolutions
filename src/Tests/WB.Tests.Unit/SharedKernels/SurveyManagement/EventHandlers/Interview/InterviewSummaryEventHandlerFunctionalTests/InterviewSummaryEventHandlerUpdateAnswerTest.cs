@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -115,6 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var questionId = Guid.Parse("10000000000000000000000000000000");
             var userId = Guid.Parse("20000000000000000000000000000002");
 
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children:Create.Entity.TextQuestion(questionId));
             var savedInterviewSummary = CreateInterviewSummaryQuestions(
                     new QuestionAnswer()
                     {
@@ -126,9 +128,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var featuredQuestionsMeta = new []{ Create.Entity.AnsweredQuestionSynchronizationDto(questionId, new decimal[0], answer ) };
 
-            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(questionnaire);
 
-            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId, 1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
 
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
@@ -178,16 +180,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
-        protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
+        protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire = null)
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            return new InterviewSummaryDenormalizer(mockOfInterviewSummary.Object,
-                new Mock<IPlainStorageAccessor<UserDocument>>().Object,
-                questionnaireStorage:
-                    Mock.Of<IQuestionnaireStorage>(
-                        _ =>
-                            _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
-                            questionnaire));
+            return new InterviewSummaryDenormalizer(
+                mockOfInterviewSummary.Object,
+                new Mock<IUserViewFactory>().Object,
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaire));
         }
 
         protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)

@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly GroupStateViewModel groupState;
@@ -87,6 +87,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Sections = sectionsViewModel;
         }
 
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
+        }
+
         public abstract void NavigateBack();
 
         private NavigationIdentity targetNavigationIdentity;
@@ -117,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = interview.CountCommentedQuestions() > 0;
+            this.HasCommentsFromSupervior = interview.CountCommentedQuestionsVisibledToInterviewer() > 0;
             this.HasPrefilledQuestions = questionnaire
                 .GetPrefilledQuestions()
                 .Any(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates);

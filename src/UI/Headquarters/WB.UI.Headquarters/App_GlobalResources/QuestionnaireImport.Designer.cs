@@ -196,6 +196,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Designer: My Questionnaires.
+        /// </summary>
+        internal static string MyQuestionnairesTitle {
+            get {
+                return ResourceManager.GetString("MyQuestionnairesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         internal static string QuestionnaireExists {
@@ -223,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices..
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices..
         /// </summary>
         internal static string RegularImportSubTitle {
             get {
@@ -259,7 +268,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in to designer.
+        ///   Looks up a localized string similar to Sign in to Designer.
         /// </summary>
         internal static string SignInToDesignerTitle {
             get {

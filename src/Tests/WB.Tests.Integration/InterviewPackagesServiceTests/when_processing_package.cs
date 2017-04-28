@@ -7,8 +7,8 @@ using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -17,9 +17,9 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
 
@@ -51,9 +51,10 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 serializer: newtonJsonSerializer, 
                 interviewPackageStorage: packagesStorage,
                 brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                commandService: mockOfCommandService.Object);
+                commandService: mockOfCommandService.Object,
+                uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>());
 
-            expectedCommand = new SynchronizeInterviewEventsCommand(
+            expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
                 questionnaireId: Guid.Parse("22222222222222222222222222222222"),
                 questionnaireVersion: 111,

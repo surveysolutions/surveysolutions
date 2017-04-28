@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Resources;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
@@ -30,22 +28,24 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
-        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
+        public HQController(ICommandService commandService, 
+            IAuthorizedUser authorizedUser, 
+            ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
-            InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IQuestionnaireVersionProvider questionnaireVersionProvider)
-            : base(commandService, provider, logger)
+            : base(commandService, logger)
         {
+            this.authorizedUser = authorizedUser;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
         }
@@ -56,6 +56,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
+        {
+            if (questionnaireId.HasValue)
+            {
+                this.Success(
+                    $@"{HQ.InterviewWasCreated} <a class=""btn btn-success"" href=""{this.Url.Action("TakeNew", "HQ",
+                        new { id = questionnaireId.Value })}""><i class=""icon-plus""></i>{HQ.CreateOneMore}</a>");
+            }
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            return this.View(this.Filters());
+        }
+
+        public ActionResult InterviewsRedesigned(Guid? questionnaireId)
         {
             if (questionnaireId.HasValue)
             {
@@ -96,7 +108,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.CommandService.Execute(new CloneQuestionnaire(
-                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion: newVersion, userId: this.GlobalInfo.GetCurrentUser().Id));
+                    model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id));
             }
             catch (QuestionnaireException exception)
             {
@@ -121,51 +133,13 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult TakeNew(Guid id, long? version)
         {
             Guid key = id;
-            UserLight user = this.GlobalInfo.GetCurrentUser();
-            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, user.Id));
+            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, this.authorizedUser.Id));
             return this.View(model);
-        }
-
-        public ActionResult SurveysAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
-        }
-
-        public ActionResult SupervisorsAndStatuses()
-        {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
-
-        public ActionResult MapReport()
-        {
-            this.ViewBag.ActivePage = MenuItem.MapReport;
-
-            return this.View();
-        }
-
-        public ActionResult InterviewsChart()
-        {
-            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
-
-            return this.View(this.Filters());
-        }
-
-        public ActionResult Status()
-        {
-            this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.GlobalInfo.IsSupervisor);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

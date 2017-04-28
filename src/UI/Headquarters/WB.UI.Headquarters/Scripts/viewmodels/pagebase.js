@@ -110,6 +110,7 @@
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
         $.ajax({
+            cache: false,
             url: requestUrl,
             type: allowGet === true ? 'get' : 'post',
             data: args,
@@ -120,7 +121,10 @@
                 onSuccess(data);
             }
         }).fail(function (jqXhr, textStatus, errorThrown) {
-            if (jqXhr.status === 403) {
+            if (jqXhr.status === 401) {
+                location.reload();
+            }
+            else if (jqXhr.status === 403) {
                 if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
                     self.ShowError(input.settings.messages.forbiddenMessage);
                 }

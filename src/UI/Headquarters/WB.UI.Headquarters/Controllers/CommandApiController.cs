@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Filters;
@@ -22,9 +21,8 @@ namespace WB.UI.Headquarters.Controllers
         private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
-            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
-                                 IGlobalInfoProvider globalInfo)
-            : base(commandService, globalInfo, logger)
+            ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger)
+            : base(commandService, logger)
         {
             this.commandDeserializer = commandDeserializer;
         }
@@ -75,16 +73,8 @@ namespace WB.UI.Headquarters.Controllers
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        var userException = e.GetSelfOrInnerAs<UserException>();
-                        if (userException == null)
-                        {
-                            this.Logger.Error(DefaultErrorMessage, e);
-                            response.DomainException = Strings.UnexpectedErrorOccurred;
-                        }
-                        else
-                        {
-                            response.DomainException = userException.Message;
-                        }
+                        this.Logger.Error(DefaultErrorMessage, e);
+                        response.DomainException = Strings.UnexpectedErrorOccurred;
                     }
                     else
                     {

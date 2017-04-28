@@ -127,7 +127,7 @@
     <value>Please sign in to designer</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Sign in to designer</value>
+    <value>Sign in to Designer</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Designer Questionnaires</value>
@@ -184,6 +184,9 @@
     <value>Sample mode import</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
-    <value>This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices.</value>
+    <value>This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices.</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: My Questionnaires</value>
   </data>
 </root>

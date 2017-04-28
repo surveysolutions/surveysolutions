@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Specialized;
+using System.IO;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -7,25 +9,35 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
+using System.Linq;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -44,6 +56,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -51,14 +64,17 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
+using WB.UI.Shared.Web.Captcha;
+using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -71,7 +87,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainAggregateRootRepository plainRepository = null,
             IEventBus eventBus = null, 
             IAggregateSnapshotter snapshooter = null,
-            IServiceLocator serviceLocator = null)
+            IServiceLocator serviceLocator = null,
+            IAggregateLock aggregateLock = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
@@ -79,7 +96,7 @@ namespace WB.Tests.Abc.TestFactories
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                new AggregateLock());
+                aggregateLock ?? Stub.Lock());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
@@ -139,22 +156,27 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
 
-        public InterviewDetailsViewFactory InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore = null,
-            IPlainStorageAccessor<UserDocument> userStore = null,
+        public InterviewDetailsViewFactory InterviewDetailsViewFactory(
+            IReadSideKeyValueStorage<InterviewData> interviewStore = null,
+            IUserViewFactory userStore = null,
             IChangeStatusFactory changeStatusFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null)
-            => new InterviewDetailsViewFactory(
-                userStore ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(_
-                    => _.GetById(It.IsAny<object>()) == Create.Entity.UserDocument()),
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
+            ISubstitutionService substitutionService = null)
+        {
+            var userView = Create.Entity.UserView();
+            return new InterviewDetailsViewFactory(
+                userStore ?? Mock.Of<IUserViewFactory>(_=>_.GetUser(It.IsAny<UserViewInputModel>()) == userView),
                 changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                interviewStore ?? new TestInMemoryWriter<InterviewData>());
+                interviewStore ?? new TestInMemoryWriter<InterviewData>(),
+                substitutionService ?? this.SubstitutionService());
+        }
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -231,7 +253,7 @@ namespace WB.Tests.Abc.TestFactories
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
                 new QuestionDataParser(),
-                new UserViewFactory(new TestPlainStorage<UserDocument>()));
+                new UserViewFactory(Mock.Of<IUserRepository>()));
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -253,10 +275,8 @@ namespace WB.Tests.Abc.TestFactories
             => new SubstitutionService();
 
         public TeamViewFactory TeamViewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
-            IPlainStorageAccessor<UserDocument> usersReader = null)
-            => new TeamViewFactory(
-                interviewSummaryReader, usersReader);
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
+            => new TeamViewFactory(interviewSummaryReader);
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();
@@ -323,5 +343,99 @@ namespace WB.Tests.Abc.TestFactories
 
         public CqrsPostgresTransactionManager CqrsPostgresTransactionManager(ISessionFactory sessionFactory = null)
             => new CqrsPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
+
+        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null, NameValueCollection membershipSettings = null)
+        {
+            return new ConfigurationManager(appSettings ?? new NameValueCollection(), membershipSettings ?? new NameValueCollection());
+        }
+
+        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5, int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
+        {
+            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(new NameValueCollection
+            {
+                { "CountOfFailedLoginAttemptsBeforeCaptcha", (failedLoginsCount ?? 5).ToString() },
+                { "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", (timeSpanForLogins ?? 5).ToString() },
+            }));
+        }
+
+        public IRandomValuesSource RandomValuesSource(params int[] sequence)
+        {
+            var result = Substitute.For<IRandomValuesSource>();
+            if (sequence?.Length > 0) result.Next(0).ReturnsForAnyArgs(sequence.First(), sequence.Skip(1).ToArray());
+            else result.Next(0).ReturnsForAnyArgs(1, 2, 3, 4, 5, 7, 8, 9, 10);
+            return result;
+        }
+
+        public ReadSideToTabularFormatExportService ReadSideToTabularFormatExportService(
+            IFileSystemAccessor fileSystemAccessor = null,
+            ICsvWriterService csvWriterService = null,
+            ICsvWriter csvWriter = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null,
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
+            => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(_
+                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                Mock.Of<ILogger>(),
+                Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
+                new TestInMemoryWriter<InterviewSummary>(),
+                new InterviewDataExportSettings(),
+                Mock.Of<IQuestionnaireExportStructureStorage>(_
+                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                Mock.Of<IProductVersion>());
+
+        public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage, IPasswordHasher passwordHasher)
+        {
+            return new InterviewerPrincipal(
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>());
+        }
+
+        public SynchronizationProcess SynchronizationProcess(IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
+            IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
+            ISynchronizationService synchronizationService = null,
+            ILogger logger = null,
+            IUserInteractionService userInteractionService = null,
+            IPasswordHasher passwordHasher = null,
+            IPrincipal principal = null,
+            IMvxMessenger messenger = null,
+            IInterviewerQuestionnaireAccessor questionnaireFactory = null,
+            IInterviewerInterviewAccessor interviewFactory = null,
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IHttpStatistician httpStatistician = null)
+        {
+            var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
+            return new SynchronizationProcess(
+                syncServiceMock,
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
+                principal ?? Mock.Of<IPrincipal>(),
+                logger ?? Mock.Of<ILogger>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
+                interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
+                interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
+                new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
+                Mock.Of<AttachmentsCleanupService>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>());
+        }
+
+        public TroubleshootingService Troubleshooting(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
+            IQuestionnaireBrowseViewFactory questionnaireFactory = null,
+            IInterviewLogSummaryReader syncLogFactory = null,
+            IBrokenInterviewPackagesViewFactory brokenPackagesFactory = null)
+        {
+            return new TroubleshootingService(
+                interviewSummaryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
+                questionnaireFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(), 
+                syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
+                brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
+        }
     }
 }

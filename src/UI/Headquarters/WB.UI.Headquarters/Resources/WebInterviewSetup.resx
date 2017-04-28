@@ -153,4 +153,14 @@
   <data name="UseCaptcha" xml:space="preserve">
     <value>Enable spam protection</value>
   </data>
+  <data name="DownloadTitle" xml:space="preserve">
+    <value>Download ({0})</value>
+    <comment>{0} - count of interviews in file</comment>
+  </data>
+  <data name="ExportTitle" xml:space="preserve">
+    <value>You can download interviews in status `Interviewer Assigned` to deliver links to respondents</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Stop Web Interview</value>
+  </data>
 </root>

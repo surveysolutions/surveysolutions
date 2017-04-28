@@ -1,5 +1,5 @@
 import * as toastr from "toastr"
-import * as Vue from "vue"
+import Vue from "vue"
 import { verboseMode } from "./config"
 
 Vue.config.errorHandler = (error, vm) => {
@@ -19,10 +19,10 @@ function toastErr(err, message) {
 
 function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
-    return function () {
+    return function() {
         try {
             if (verboseMode && !(window as any).NODEBUG) {
-                let argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
+                const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 // tslint:disable-next-line:no-console
                 console.debug("call", section, name, argument) // , new Error().stack)
@@ -46,10 +46,9 @@ function wrap(name, method, section) {
 }
 
 function handleErrors(object, section) {
-    let name
     let method
 
-    for (name in object) {
+    for (const name in object) {
         if (typeof object[name] === "function") {
             method = object[name]
             object[name] = wrap(name, method, section)
@@ -61,8 +60,8 @@ function handleErrors(object, section) {
 
 export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
 
-    for (let field in fieldToSafe) {
-        let item = fieldToSafe[field]
+    for (const field in fieldToSafe) {
+        const item = fieldToSafe[field]
         if (storeConfig[item]) {
             storeConfig[item] = handleErrors(storeConfig[item], item)
         }

@@ -11,6 +11,7 @@ using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -19,7 +20,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer
             var attachmentServiceMock = new Mock<IAttachmentService>();
 
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(questionnaireId))
-                .Returns(attachments.Select(y => new AttachmentSize {Size = y.Content.Size}).ToList());
+                .Returns(attachments.Select(y => new AttachmentSize { AttachmentId = y.Meta.AttachmentId, Size = y.Content.Size}).ToList());
             
             return attachmentServiceMock.Object;
         }

@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return null;
 
             var supervisorsCache = new Dictionary<string, Guid>();
-            var interviewersCache = new Dictionary<string, UserDocument>();
+            var interviewersCache = new Dictionary<string, UserView>();
             var idColumnIndex = this.GetIdColumnIndex(topLevelData);
             var responsibleNameIndex = this.GetResponsibleNameIndex(topLevelData);
             var result = new List<PreloadedDataRecord>();
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var result = new List<PreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
-            var interviewersCache = new Dictionary<string, UserDocument>();
+            var interviewersCache = new Dictionary<string, UserView>();
 
             var responsibleNameIndex = this.GetResponsibleNameIndex(sampleDataFile);
             var topLevelFileName = this.GetValidFileNameForTopLevelQuestionnaire();
@@ -512,7 +512,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         {
             return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
+                var user = this.userViewFactory.GetUser(new UserViewInputModel(UserName: userName, UserEmail: null));
                 if (user == null || user.IsArchived)
                     return null;
                 return user;
@@ -535,7 +535,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return user.PublicKey;
         }
 
-        private UserDocument GetInterviewerIdAndUpdateCache(Dictionary<string, UserDocument> interviewerCache, string name)
+        private UserView GetInterviewerIdAndUpdateCache(Dictionary<string, UserView> interviewerCache, string name)
         {
             if (string.IsNullOrEmpty(name))
                 return null;
@@ -545,7 +545,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 return interviewerCache[userNameLowerCase];
 
             var user = this.GetUserByName(userNameLowerCase);//assuming that user exists
-            if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
+            if (user == null || !user.Roles.Contains(UserRoles.Interviewer)) return null;
 
             interviewerCache.Add(userNameLowerCase, user);
             return user;

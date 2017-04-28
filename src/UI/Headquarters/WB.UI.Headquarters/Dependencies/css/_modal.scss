@@ -160,12 +160,14 @@ body > .ui-pnotify
   max-height: 85%;
   width: 660px;
   overflow-y: auto;
+  @extend %modal-window;
 }
 .modal-content{
-    @extend %modal-window;
 	padding: 20px;
-    padding-left: 25px;
+    //padding-left: 25px;
     overflow: hidden;
+    border: none;
+    box-shadow: none;
     h3{
         font-size: 14px;
         line-height: 16px;
@@ -188,7 +190,16 @@ body > .ui-pnotify
 		}
 	}
 	.modal-body{
-		padding: 0;
+		padding: 0 0 10px;
+        .bootbox-body{
+            //padding: 40px;
+            h3{
+                font: 18px/20px RobotoRegular;
+            }
+            p:last-child{
+                margin: 0;
+            }
+        }
         ul li {
             margin-bottom: 5px;
             label{
@@ -247,8 +258,11 @@ body > .ui-pnotify
         }
     }
 }
-@media (max-width: $screen-sm-min){
+@media (max-width: $screen-xs-min){
     .ui-pnotify{
-        width: 250px !important;
+        width: 300px !important;
+        .input-group{
+            width: 100%;
+        }
     }
 }

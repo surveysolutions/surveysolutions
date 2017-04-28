@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
-using Flurl.Http.Content;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -17,8 +15,8 @@ using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.API
@@ -26,46 +24,41 @@ namespace WB.UI.Headquarters.API
     public class InterviewerSyncController : BaseApiController
     { 
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
-
-        private readonly IUserWebViewFactory userInfoViewFactory;
+        
         private readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
-        private string CapiFileName = "wbcapi.apk";
-        private string pathToSearchVersions = ("~/Client/");
-
 
         public InterviewerSyncController(ICommandService commandService,
-            IGlobalInfoProvider globalInfo,
+            IAuthorizedUser authorizedUser,
             ILogger logger,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IInterviewPackagesService incomingSyncPackagesQueue, 
-            IUserWebViewFactory userInfoViewFactory,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader)
-            : base(commandService, globalInfo, logger)
+            : base(commandService, logger)
         {
-
+            this.authorizedUser = authorizedUser;
             this.plainFileRepository = plainFileRepository;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.userViewFactory = userViewFactory;
             this.androidPackageReader = androidPackageReader;
         }
 
         [HttpGet]
-        [ApiBasicAuth(new[] {UserRoles.Operator})]
+        [ApiBasicAuth(new[] {UserRoles.Interviewer})]
         [Obsolete]
         public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
         {
@@ -77,15 +70,12 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
-        public bool CheckExpectedDevice(string deviceId)
-        {
-            var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
-            return string.IsNullOrEmpty(interviewerInfo.DeviceId) || interviewerInfo.DeviceId == deviceId;
-        }
+        [ApiBasicAuth(new[] {UserRoles.Interviewer})]
+        public bool CheckExpectedDevice(string deviceId) =>
+            string.IsNullOrEmpty(this.authorizedUser.DeviceId) || this.authorizedUser.DeviceId == deviceId;
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage GetHandshakePackage(HandshakePackageRequest request)
         {
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
@@ -95,7 +85,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
             this.plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
@@ -103,7 +93,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Operator })]
+        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
         public HttpResponseMessage PostPackage(PostPackageRequest request)
         {
             this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: request.SynchronizationPackage);
@@ -115,7 +105,7 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(this.pathToSearchVersions), this.CapiFileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -140,7 +130,7 @@ namespace WB.UI.Headquarters.API
         public bool CheckNewVersion(int versionCode)
         {
             string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(this.pathToSearchVersions), this.CapiFileName);
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
 
             int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
@@ -153,7 +143,7 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public void PostInfoPackage(TabletInformationPackage tabletInformationPackage)
         {
-            var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(tabletInformationPackage.AndroidId));
 
             this.tabletInformationService.SaveTabletInformation(
                 content: Convert.FromBase64String(tabletInformationPackage.Content),
