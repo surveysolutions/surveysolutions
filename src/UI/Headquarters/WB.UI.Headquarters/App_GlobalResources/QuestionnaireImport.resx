@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Before log in, please make sure that the 'Designer' website is available</value>
+    <value>Before logging in, please make sure that the 'Designer' website is available</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>Could not connect to Designer. Please check if Designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
-    <value>Please sign in to designer</value>
+    <value>Please sign in to Designer</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Sign in to designer</value>
+    <value>Sign in to Designer</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Designer Questionnaires</value>
@@ -172,7 +172,7 @@
     <value>You have already imported this questionnaire</value>
   </data>
   <data name="CensusImportSubTitle" xml:space="preserve">
-    <value>This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices.</value>
+    <value>This will allow interviewers to create assignments in the field. The questionnaire will be downloaded on all devices.</value>
   </data>
   <data name="CensusImportTitle" xml:space="preserve">
     <value>Census mode import</value>
@@ -184,6 +184,6 @@
     <value>Sample mode import</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
-    <value>This will allow you to create individual assignments that may contain identifying data, and only those assignments will appear on interviewer devices.</value>
+    <value>This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices.</value>
   </data>
 </root>

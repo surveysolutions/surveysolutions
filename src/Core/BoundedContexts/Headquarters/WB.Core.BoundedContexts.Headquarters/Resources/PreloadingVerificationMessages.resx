@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0001_NoQuestionnaire" xml:space="preserve">
-    <value>[PL0001] Questionnaire template is missing.</value>
+    <value>[PL0001] Questionnaire is missing in HQ</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
@@ -136,7 +136,7 @@
     <value>Duplicate Id values found.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
-    <value>One ore more parent Id columns are missing.</value>
+    <value>One or more parent Id column is missing.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
     <value>Roster record does not have a parent.</value>
@@ -145,25 +145,25 @@
     <value>Roster Id is inconsistent with roster size.</value>
   </data>
   <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>Linked question is not supported in data preloading.</value>
+    <value>Linked questions cannot be preloaded.</value>
   </data>
   <data name="PL0011_GeneralError" xml:space="preserve">
     <value>General error occurred.</value>
   </data>
   <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>Question was not found.</value>
+    <value>Question found in the uploaded file(s) that does not exist in the questionnaire</value>
   </data>
   <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
     <value>Provided value is null or empty</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>[PL0014] Provided question value not allowed.</value>
+    <value>[PL0014] Value not allowed for this question in questionnaire</value>
   </data>
   <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
     <value>[PL0015] Type of question is not correct.</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
-    <value>Invalid Date or Time value.</value>
+    <value>Invalid Date or Time value entered in the date question.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
     <value>Invalid GPS value.</value>
@@ -179,34 +179,34 @@
     <value>Roster size question cannot have negative values.</value>
   </data>
   <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>Picture question is not supported in data preloading.</value>
+    <value>Picture question cannot be preloaded.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
-    <value>Preloading data was not found</value>
+    <value>Preloading data were not found</value>
   </data>
   <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>The name of Responsible was not provided</value>
+    <value>Responsible field was not provided for 1 or more observations</value>
   </data>
   <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>Provided Responsible was not found</value>
+    <value>Responsible does not exist for 1 or more observations</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Responsible is locked</value>
+    <value>Responsible is a locked user for 1 or more observations</value>
   </data>
   <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>Provided User is not Supervisor or Interviewer</value>
+    <value>User is not Supervisor or Interviewer for 1 or more observations</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>Answer on roster size question cannot be greater than {0}.</value>
+    <value>Answer to roster size question cannot be greater than {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
-    <value>Gps question required Latitude and Longitude columns</value>
+    <value>GPS questions require separate columns for Latitude and Longitude</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>Identifying gps question requires Latitude and Longitude to be set.</value>
+    <value>Identifying GPS question requires Latitude and Longitude to be set.</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
-    <value>Column name duplicates found.</value>
+    <value>Two or more columns have the same name.</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
     <value>Latitude must be greater than -90° and less than 90°.</value>
@@ -215,6 +215,6 @@
     <value>Longitude must be greater than -180° and less than 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
-    <value>"," symbol is not allowed in numeric answers. Please use "." as decimal separator.</value>
+    <value>Invalid decimal separator. The "," symbol is not allowed in numeric answers. Please use "." instead.</value>
   </data>
 </root>
