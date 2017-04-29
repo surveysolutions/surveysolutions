@@ -184,7 +184,11 @@
                                     </tbody>
                                 </table>
                             </div>
-                         </div>
+                            <!-- ko if:Pager().LastPage() > 1 -->
+                            <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                            <!-- /ko -->
+                            @Html.Partial("_ListDataTablePagingScript")
+                        </div>
                     </div>
                     
                     <div class="screen-small-resolution">
@@ -207,7 +211,7 @@
                         </div>
                         <!-- /ko -->
                     </div>
-                    
+
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
                         <div class="panel-body">
                             <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
