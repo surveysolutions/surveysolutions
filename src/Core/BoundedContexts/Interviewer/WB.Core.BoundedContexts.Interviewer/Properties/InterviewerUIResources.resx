@@ -187,7 +187,7 @@ for further instructions</value>
     <value>{0} assignments for {1}</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>No internet access to the your server. Check server address and(or) network settings</value>
+    <value>No internet access to your server. Check server address and(or) network settings</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Server error. Please contact the support team at support@mysurvey.solutions</value>

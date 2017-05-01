@@ -379,7 +379,7 @@
     <value>Interviewer: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (assigned to {1})</value>
+    <value>{0} (supervisor: {1})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
     <value>E-mail: {0}</value>
