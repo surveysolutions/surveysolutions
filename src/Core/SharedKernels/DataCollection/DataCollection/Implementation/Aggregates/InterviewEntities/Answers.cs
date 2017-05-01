@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
 {
@@ -238,17 +239,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class AreaAnswer : AbstractAnswer
     {
-        private AreaAnswer(string area)
+        private AreaAnswer(Area area)
         {
             if (area == null) throw new ArgumentNullException(nameof(area));
-            this.Area = area;
+            this.Value = area;
         }
 
-        public string Area { get; }
+        //public static AreaAnswer FromGeoPosition(GeoPosition value) => value != null ? new AreaAnswer(value) : null;
 
-        public static AreaAnswer FromString(string fileName) => fileName != null ? new AreaAnswer(fileName) : null;
+        public Area Value { get; }
 
-        public override string ToString() => Area;
+        public static AreaAnswer FromArea(Area area) => area!= null ? new AreaAnswer(area) : null;
+
+        public override string ToString() => Value.ToString();
     }
 
     [DebuggerDisplay("{ToString()}")]

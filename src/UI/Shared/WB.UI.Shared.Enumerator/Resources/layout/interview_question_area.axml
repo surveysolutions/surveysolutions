@@ -11,7 +11,7 @@
                    android:stretchColumns="0">
         <TableRow>
           <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+                    local:MvxBind="Text Answer.AreaSize; Visible QuestionState.IsAnswered" />
           <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
       </TableLayout>

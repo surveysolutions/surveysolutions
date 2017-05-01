@@ -51,9 +51,11 @@ namespace WB.UI.Tester.Implementation.Services
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
 
-        public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
+        public void NavigateToAreaEditor(string geometry, string mapName, double? areaSize) => this.NavigateTo<AreaEditorViewModel>(new
         {
-            area = area
+            geometry = geometry,
+            mapName = mapName,
+            areaSize = areaSize
         });
     }
 }
