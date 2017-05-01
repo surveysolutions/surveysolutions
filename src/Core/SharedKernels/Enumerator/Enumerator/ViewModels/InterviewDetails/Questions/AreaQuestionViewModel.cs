@@ -35,8 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        private string answer;
-        public string Answer
+        private Area answer;
+        public Area Answer
         {
             get { return this.answer; }
             set { this.answer = value; this.RaisePropertyChanged(); }
@@ -94,7 +94,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var areaQuestion = interview.GetAreaQuestion(entityIdentity);
             if (areaQuestion.IsAnswered)
             {
-                this.Answer = areaQuestion.GetAnswer().Area;
+                var answer = areaQuestion.GetAnswer().Value;
+                this.Answer = new Area(answer.Geometry, answer.MapName, answer.AreaSize );
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -103,12 +104,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void SaveAnswer()
         {
             this.IsInProgress = true;
-
             try
             {
-                var area = await this.areaEditService.EditAreaAsync(this.Answer);
+                var answerArea = await this.areaEditService.EditAreaAsync(this.Answer);
 
-                if (area != null)
+                if (answerArea != null)
                 {
                     var command = new AnswerAreaQuestionCommand(
                         interviewId: this.interviewId,
@@ -116,11 +116,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
                         answerTime: DateTime.UtcNow,
-                        answer: area.Geometry);
+                        geometry: answerArea.Geometry,
+                        mapName: answerArea.MapName,
+                        area : answerArea.Area);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = area.Geometry;
+                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area);
                 }
             }
             catch (MissingPermissionsException)

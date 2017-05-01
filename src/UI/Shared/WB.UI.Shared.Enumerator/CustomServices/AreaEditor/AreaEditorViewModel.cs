@@ -34,15 +34,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             AvailableMaps = mapService.GetAvailableMaps();
             MapsList = AvailableMaps.Keys.ToList();
-            
-            var mapPath = AvailableMaps.Count != 0 ? AvailableMaps.FirstOrDefault().Value : null;
 
-            if (mapPath!= null)
+            if (AvailableMaps.Count != 0)
             {
-                SelectedMap = AvailableMaps.FirstOrDefault().Key;
+                if (!string.IsNullOrEmpty(MapName) && AvailableMaps.ContainsKey(MapName))
+                {
+                    SelectedMap = MapName;
+                }
+                else
+                {
+                    SelectedMap = AvailableMaps.FirstOrDefault().Key;
+                }
             }
             
-            UpdateBaseMap(mapPath);
+            UpdateBaseMap(AvailableMaps[SelectedMap]);
         }
 
         private Dictionary<string,string> AvailableMaps = new Dictionary<string, string>();
@@ -111,14 +116,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 this.Map = null;
             }
         }
-
-        public void Init(string area)
+        
+        public void Init(string geometry, string mapName, double areaSize)
         {
-            Area = area;
+            Area = geometry;
+            MapName = mapName;
+            AreaSize = areaSize;
         }
 
         public string Area { set; get; }
-        
+        public string MapName { set; get; }
+        public double? AreaSize { set; get; }
+
+
         private Map map;
         public Map Map
         {

@@ -46,9 +46,11 @@ namespace WB.UI.Interviewer.Implementations.Services
                 jsonNavigationIdentity = navigationIdentity != null ? this.jsonSerializer.Serialize(navigationIdentity) : null
             });
 
-        public void NavigateToAreaEditor(string area) => this.NavigateTo<AreaEditorViewModel>(new
+        public void NavigateToAreaEditor(string geometry, string mapName, double? areaSize) => this.NavigateTo<AreaEditorViewModel>(new
         {
-            area = area
+            geometry = geometry,
+            mapName = mapName,
+            areaSize = areaSize
         });
 
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
