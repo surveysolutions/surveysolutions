@@ -4,7 +4,6 @@
     style="@style/VerticalFullWidthWrappingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,6 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             local:MvxBind="Map Map" />-->
+        <ProgressBar
+                android:layout_alignParentTop="true"
+                style="@style/Interview_Question_Progress_Indicator"
+                android:indeterminate="true"
+                local:MvxBind="Visibility Visibility(IsInProgress);" />    
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,18 +36,20 @@
                 style="@style/Interview_Question_InputButton"
                 android:id="@+id/LoginPage_troubleshooting_button1155"
                 local:MvxBind="Click UpdateMapsCommand; Text 'Update maps';"/>
-            <ProgressBar
-                style="@style/Interview_Question_Progress_Indicator"
-                android:indeterminate="true"
-                local:MvxBind="Visible InProgress" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/AreaEditor_No_Maps_Text"
+                local:MvxBind="Text 'No maps were found. Please update maps'; Visibility Visibility(Map == null);" />
             <MvxSpinner
                 android:id="@+id/spinner1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
-                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap"
+                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap; Visibility Visibility(Map != null);"
                  />
-            <!--style="@style/spinnerDropDownItemStyle" android:background="@android:drawable/btn_dropdown"-->
+            <!--style="@style/spinnerDropDownItemStyle" 
+            android:background="@android:drawable/btn_dropdown"-->
             
         </LinearLayout>
         <Button
@@ -56,6 +62,17 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             local:MvxBind="Click SwitchLocatorCommand; Text '*';" />
+            
+        <TextView
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="95dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:id="@+id/AreaEditor_GeometryArea"
+                local:MvxBind="Text GeometryArea; Visibility Visibility(IsEditing);" />
+            
         <LinearLayout
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="35dp"
@@ -69,7 +86,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Interview_Question_InputButton"
                 android:id="@+id/LoginPage_singin_button1"
-                local:MvxBind="Click StartEditAreaCommand; Text 'Edit';" />
+                local:MvxBind="Click StartEditAreaCommand; Text 'Edit'; Enabled (Map != null);" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

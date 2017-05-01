@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
                     waitEditAreaResetEvent.WaitOne();
 
-                    return result != null ? new AreaEditResult() { Area = result.Area, MapName = result.MapName} : null;
+                    return result != null ? new AreaEditResult() { Geometry = result.Geometry, MapName = result.MapName, Area = result.Area} : null;
                 }
                 catch (Exception)
                 {
