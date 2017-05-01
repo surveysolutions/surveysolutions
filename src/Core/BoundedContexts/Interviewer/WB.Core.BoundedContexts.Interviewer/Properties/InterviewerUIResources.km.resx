@@ -303,9 +303,6 @@
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>ចំនុចបញ្ជប់ ការគ្រប់គ្រងរូម'{0}' តើខុសពីការផ្តល់ដោយ Settings ('{1}').  URLទាញចេញពីsettingsដែរឬទេ?</value>
   </data>
-  <data name="HostUnreachable" xml:space="preserve">
-    <value>មិនអាចភ្ជាប់អ៊ិនធឺណែតបានទៅនឹងគេហទំព័រ Survey Solution supervisor. សូមពិនិត្យអាស័ដ្ឋានServer  និង បណ្តាញប្រពន្ធ័ ស៊ីតធីង។​ </value>
-  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Server មានបញ្ហា។ សូមទាក់ទងក្រុមជំនួយតាមអ៊ីមែល support@mysurvey.solutions</value>
   </data>
