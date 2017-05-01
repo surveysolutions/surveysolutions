@@ -367,6 +367,7 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGenerationV2\V11\OptionsFilterMethodTemplateV11.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGenerationV2\VariableModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\ExpressionsPlayOrderProvider.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Helpers\GuidExtensions.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetGeneratedVariable.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GeneratedVariable.cs" />

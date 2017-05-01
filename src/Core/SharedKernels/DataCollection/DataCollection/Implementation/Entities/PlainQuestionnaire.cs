@@ -1563,5 +1563,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                       || (x.LinkedToRosterId == linkedSourceEntityId))
                     .Select(x => x.PublicKey);
         }
+
+        public bool IsUsingExpressionProcessor()
+        {
+            return this.QuestionnaireDocument.IsUsingExpressionProcessor;
+        }
     }
 }

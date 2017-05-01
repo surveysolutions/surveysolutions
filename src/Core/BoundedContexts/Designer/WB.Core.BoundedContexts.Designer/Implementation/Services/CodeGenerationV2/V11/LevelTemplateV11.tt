@@ -45,7 +45,18 @@
 #>
 		}
 
-		private static Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+		public Func<bool> GetConditionExpressionResult(Identity entitIdentity)
+		{
+			if (!entitIdentity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!enablementConditions.ContainsKey(entitIdentity.Id))
+				return null;
+			
+			return enablementConditions[entitIdentity.Id];
+		}
+
+		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
 
 		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
 
@@ -66,7 +77,7 @@
 	foreach (var question in Model.Questions) 
     {
 #>            
-		public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+		public <#=question.TypeName#> <#=question.Variable#> => state.Get<#=question.AnswerMethodName#>Answer(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
 <# 
 	}
 #>

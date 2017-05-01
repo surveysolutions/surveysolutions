@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string TypeName { get; set; }
         public RosterScope RosterScope { get; set; }
+        public string AnswerMethodName { get; set; }
     }
 
     public class StaticTextModel

@@ -9,23 +9,24 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using static System.String;
 using System.Globalization;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2
 {
     public class CodeGenerationModelsFactory : ICodeGenerationModelsFactory
     {
-        private readonly IExpressionProcessor expressionProcessor;
+        private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
         public CodeGenerationModelsFactory(
-            IExpressionProcessor expressionProcessor,
             IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
         {
-            this.expressionProcessor = expressionProcessor;
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.lookupTableService = lookupTableService;
+            this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
         }
 
         public CodeGenerationModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 Id = questionnaire.PublicKey,
                 ClassName = $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
+                ConditionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire)
             };
 
             Dictionary<RosterScope, Group[]> rosterScopes = questionnaire.Find<Group>()
@@ -85,6 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     Variable = varName,
                     ClassName = levelClassName,
                     TypeName = GenerateQuestionTypeName(question, questionnaire),
+                    AnswerMethodName = GenerateAnswerMethodName(question, questionnaire),
                     RosterScope = rosterScope
                 };
 
@@ -189,7 +192,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "DateTime?";
 
                 case QuestionType.SingleOption:
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "int?";
 
                     if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
                     {
@@ -205,6 +208,59 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 case QuestionType.Multimedia:
                     return "string";
+
+                default:
+                    throw new ArgumentException("Unknown question type.");
+            }
+        }
+
+        private static string GenerateAnswerMethodName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                    return "Text";
+
+                case QuestionType.Numeric:
+                    return ((question as NumericQuestion)?.IsInteger ?? false) ? "Integer" : "Double";
+
+                case QuestionType.QRBarcode:
+                    return "QRBarcode";
+
+                case QuestionType.MultyOption:
+                    var multiOtion = question as MultyOptionsQuestion;
+                    if (multiOtion != null && multiOtion.YesNoView)
+                        return "YesNo";
+
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
+                        return "Multi";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "MultiLinkedToList";
+                    }
+                    return "MultiLinked";
+
+                case QuestionType.DateTime:
+                    return "DateTime";
+
+                case QuestionType.SingleOption:
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "Single";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "SingleLinkedToList";
+                    }
+
+                    return "SingleLinked";
+                case QuestionType.TextList:
+                    return "TextList";
+
+                case QuestionType.GpsCoordinates:
+                    return "Gps";
+
+                case QuestionType.Multimedia:
+                    return "Multimedia";
 
                 default:
                     throw new ArgumentException("Unknown question type.");

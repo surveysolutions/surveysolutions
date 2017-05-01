@@ -56,6 +56,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
             this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
             this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
+            this.Bind<IExpressionsPlayOrderProvider>().To<ExpressionsPlayOrderProvider>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<PdfSettings>().ToConstant(pdfSettings);
             this.Bind<DeskSettings>().ToConstant(deskSettings);
