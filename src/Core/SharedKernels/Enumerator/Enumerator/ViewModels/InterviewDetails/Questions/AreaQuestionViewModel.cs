@@ -116,11 +116,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
                         answerTime: DateTime.UtcNow,
-                        answer: area.Area);
+                        answer: area.Geometry);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = area.Area;
+                    this.Answer = area.Geometry;
                 }
             }
             catch (MissingPermissionsException)

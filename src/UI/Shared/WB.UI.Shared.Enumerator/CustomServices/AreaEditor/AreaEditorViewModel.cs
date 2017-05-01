@@ -63,9 +63,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 selectedMap = value;
                 RaisePropertyChanged();
 
-                if(AvailableMaps.ContainsKey(value))
+                if (AvailableMaps.ContainsKey(value))
+                {
                     UpdateBaseMap(AvailableMaps[value]);
+                    //this.ShowAllMap();
+                }
+                
             }
+        }
+
+        private void ShowAllMap()
+        {
+            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.BaseLayers[0].FullExtent).ConfigureAwait(false);
         }
 
         public override void Start()
@@ -114,7 +123,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         public Map Map
         {
             get { return this.map; }
-            set { this.map = value; RaisePropertyChanged(); }
+            set
+            {
+                this.map = value;
+                RaisePropertyChanged();
+            }
         }
 
         private MapView mapView;
@@ -122,18 +135,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             set
             {
                 this.mapView = value;
-                /*if(this.mapView != null)
-                    this.mapView.SpatialReferenceChanged += (s, e) =>
+                /*if (this.mapView != null)
+                {
+                    //this.mapView.LayerViewStateChanged
+                }*/
+
+                /*this.mapView.SpatialReferenceChanged += (s, e) =>
                     {
                         if(this.mapView.Map != null)
-                            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.Item.Extent).ConfigureAwait(false);
+                            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.BaseLayers[0].FullExtent).ConfigureAwait(false);
 
                         //this.MapView.Map.Basemap.Item.Extent.
-
-
                         //this.MapView.SetViewpointAsync(new Viewpoint(geometry));
-                        /*                        this.mapView.Map.MinScale = 100000000;
-                        this.mapView.Map.MaxScale = 1;#1#
+                        //this.mapView.Map.MinScale = 100000000;
+                        //this.mapView.Map.MaxScale = 1;
                     };*/
             }
             get { return this.mapView; }
@@ -196,6 +211,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
             if (string.IsNullOrWhiteSpace(Area))
             {
+
+                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
+                {
+                    GeometryArea = GeometryEngine.Area(args.NewGeometry);
+
+                };
                 result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
             }
             else
@@ -204,6 +225,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
                 await this.MapView.SetViewpointGeometryAsync(geometry, 100);
 
+                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+                {
+                    GeometryArea = GeometryEngine.Area(args.NewGeometry);
+
+                };
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
 
@@ -211,15 +237,25 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             var handler = OnAreaEditCompleted;
             handler?.Invoke(new AreaEditorResult()
             {
-                Area = result?.ToJson(),
-                MapName = SelectedMap
+                Geometry = result?.ToJson(),
+                MapName = SelectedMap,
+                Area = GeometryEngine.Area(result)
             });
 
             this.IsEditing = false;
             Close(this);
             //return to previous activity
         });
-        
+
+
+        private double geometryArea;
+        public double GeometryArea
+        {
+            get { return this.geometryArea; }
+            set { this.geometryArea = value; RaisePropertyChanged(); }
+        }
+
+
         private void BtnUndo()
         {
             var command = this.MapView?.SketchEditor.UndoCommand;
