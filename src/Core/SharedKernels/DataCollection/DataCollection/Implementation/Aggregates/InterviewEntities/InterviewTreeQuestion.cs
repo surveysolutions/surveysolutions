@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -402,7 +403,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsTextList) { this.AsTextList.SetAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
             if (this.IsSingleLinkedToList) { this.AsSingleLinkedToList.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsMultiLinkedToList) { this.AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
-            if (this.IsArea) { this.AsArea.SetAnswer(AreaAnswer.FromString(answer as string)); return; }
+            if (this.IsArea) { this.AsArea.SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
         }
 
         public string GetAnswerAsString(CultureInfo cultureInfo = null)
@@ -412,7 +413,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
             if (this.IsMultimedia) return this.AsMultimedia.GetAnswer()?.FileName;
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;
-            if (this.IsArea) return this.AsArea.GetAnswer()?.Area;
+            if (this.IsArea) return this.AsArea.GetAnswer()?.Value.ToString();
             if (this.IsInteger) return AnswerUtils.AnswerToString(this.AsInteger.GetAnswer()?.Value);
             if (this.IsDouble) return AnswerUtils.AnswerToString(this.AsDouble.GetAnswer()?.Value);
             if (this.IsDateTime)
@@ -662,7 +663,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeAreaQuestion(object answer)
         {
-            this.answer = AreaAnswer.FromString(answer as string);
+            this.answer = AreaAnswer.FromArea(answer as Area);
         }
 
         public bool IsAnswered => this.answer != null;

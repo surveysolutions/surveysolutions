@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -228,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
-            this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromString(@event.Answer));
+            this.Tree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.AreaSize)));
         }
 
         public virtual void Apply(TextListQuestionAnswered @event)
@@ -1158,12 +1159,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
-        public void AnswerAreaQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
+        public void AnswerAreaQuestion(AnswerAreaQuestionCommand command)
         {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            var questionIdentity = new Identity(questionId, rosterVector);
+            var questionIdentity = new Identity(command.QuestionId, command.RosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1171,14 +1171,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAreaAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
-            changedInterviewTree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromString(answer));
+
+            var answer = new Area(command.Geometry, command.MapName, command.Area);
+            changedInterviewTree.GetQuestion(questionIdentity).AsArea.SetAnswer(AreaAnswer.FromArea(answer));
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, new[] { questionIdentity }, questionnaire);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyEvents(treeDifference, command.UserId);
         }
 
+       
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
             new InterviewPropertiesInvariants(this.properties)
@@ -2057,8 +2060,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
                 if (changedQuestion.IsArea)
                 {
+                    var answer = changedQuestion.AsArea.GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsArea.GetAnswer().Area));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize));
                 }
             }
         }

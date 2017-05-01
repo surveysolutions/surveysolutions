@@ -8,6 +8,7 @@ using Plugin.Permissions.Abstractions;
 using RuntimeCoreNet.GeneratedWrappers;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Infrastructure.Shared.Enumerator;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
@@ -28,7 +29,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(string area)
+        public async Task<AreaEditResult> EditAreaAsync(Area area)
         {
             await this.permissions.AssureHasPermission(Permission.Location);
 
@@ -37,7 +38,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return await this.EditArea(area);
         }
 
-        private Task<AreaEditResult> EditArea(string area)
+        private Task<AreaEditResult> EditArea(Area area)
         {
             return Task.Factory.StartNew<AreaEditResult>((Func<AreaEditResult>)(() =>
             {
@@ -45,9 +46,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 {
                     AreaEditorResult result = null;
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
-
                     
-                    viewModelNavigationService.NavigateToAreaEditor(area);
+                    viewModelNavigationService.NavigateToAreaEditor(area?.Geometry, area?.MapName, area?.AreaSize);
                     AreaEditorActivity.OnAreaEditCompleted += (editResult =>
                     {
                         result = editResult;
