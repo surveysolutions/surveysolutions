@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V11;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
 using WB.Infrastructure.Native.Storage;
@@ -157,6 +158,34 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
+        protected static Interview SetupInterviewWithProcessor(
+            QuestionnaireDocument questionnaireDocument,
+            IEnumerable<object> events = null,
+            IInterviewExpressionProcessorV11 precompiledState = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+            questionnaireDocument.IsUsingExpressionProcessor = true;
+
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+
+            var state = GetLatestExpressionProcessor(questionnaireDocument, precompiledState);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
+
+            var interview = IntegrationCreate.Interview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
+
+            ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
         protected static Interview SetupInterview(
             QuestionnaireDocument questionnaireDocument, 
             IEnumerable<object> events = null, 
@@ -204,6 +233,14 @@ namespace WB.Tests.Integration.InterviewTests
                 Create.Service.SubstitionTextFactory());
 
             return interview;
+        }
+
+        private static IInterviewExpressionProcessorV11 GetLatestExpressionProcessor(
+            QuestionnaireDocument questionnaireDocument,
+            IInterviewExpressionProcessorV11 precompiledState = null)
+        {
+            IInterviewExpressionProcessorV11 state = precompiledState ?? GetInterviewExpressionProcessor(questionnaireDocument);
+            return state;
         }
 
         private static ILatestInterviewExpressionState GetLatestInterviewExpressionState(
@@ -310,6 +347,25 @@ namespace WB.Tests.Integration.InterviewTests
             var compiledAssembly = Assembly.LoadFrom(filePath);
 
             return compiledAssembly;
+        }
+
+        public static IInterviewExpressionProcessorV11 GetInterviewExpressionProcessor(QuestionnaireDocument questionnaireDocument)
+        {
+            var compiledAssembly = CompileAssembly(questionnaireDocument, 21);
+
+            Type interviewExpressionProcessorType =
+                compiledAssembly.GetTypes()
+                    .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionProcessorV11)));
+
+            if (interviewExpressionProcessorType == null)
+                throw new Exception("Type InterviewExpressionState was not found");
+
+
+            var interviewExpressionProcessor = Activator.CreateInstance(interviewExpressionProcessorType) as IInterviewExpressionProcessorV11;
+            if (interviewExpressionProcessor == null)
+                throw new Exception("Error on IInterviewExpressionState generation");
+
+            return interviewExpressionProcessor;
         }
 
         public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)

@@ -253,5 +253,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasStaticText(Guid entityId);
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
+        bool IsUsingExpressionProcessor();
     }
 }

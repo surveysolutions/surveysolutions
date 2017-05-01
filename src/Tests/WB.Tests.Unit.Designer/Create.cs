@@ -201,9 +201,9 @@ namespace WB.Tests.Unit.Designer
         public static CodeGeneratorV2 CodeGeneratorV2()
         {
             return new CodeGeneratorV2(new CodeGenerationModelsFactory(
-                ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
                 DefaultMacrosSubstitutionService(),
-                ServiceLocator.Current.GetInstance<ILookupTableService>()));
+                ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                ServiceLocator.Current.GetInstance<IExpressionsPlayOrderProvider>()));
         }
 
         public static QuestionProperties QuestionProperties()

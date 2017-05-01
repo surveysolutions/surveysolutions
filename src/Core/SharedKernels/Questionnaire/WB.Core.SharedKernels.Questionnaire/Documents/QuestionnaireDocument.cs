@@ -120,6 +120,7 @@ namespace Main.Core.Documents
         }
 
         public long LastEventSequence { get; set; }
+        public bool IsUsingExpressionProcessor { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {

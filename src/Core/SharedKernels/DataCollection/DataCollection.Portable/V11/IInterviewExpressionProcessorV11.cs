@@ -5,12 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.V11
 {
     public interface IInterviewExpressionProcessorV11
     {
-        void RemoveRoster(Identity rosterId);
+        void Initialize(IInterviewState state, IInterviewProperties properties);
 
-        void RemoveAnswer(Identity questionIdentity);
-
-        void SetInterviewProperties(IInterviewProperties properties);
+        // move to questionnaire
+        List<Guid> GetExpressionsOrder();
         
-        IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options);
+        IInterviewLevelV11 GetLevel(Identity rosterIdentity);
+        //IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options);
     }
 }
