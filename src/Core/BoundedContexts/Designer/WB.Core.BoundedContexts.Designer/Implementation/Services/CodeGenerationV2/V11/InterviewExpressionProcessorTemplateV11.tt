@@ -17,24 +17,48 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : IInterviewExpressionProcessorV11
 	{
-		public <#=Model.ClassName#>(IInterviewState state) 
+		List<Guid> expressionsOrder = new List<Guid>();
+		public <#=Model.ClassName#>()
+		{
+<#
+		foreach (Guid id in Model.ConditionsPlayOrder) 
+		{
+			if (Ids.ContainsKey(id))
+            {
+#>
+			expressionsOrder.Add(IdOf.<#=Ids[id]#> );
+<#
+            }
+			else{
+#>
+			expressionsOrder.Add(<#= id.AsBytesString() #>);
+<#
+            }
+		}
+#>	
+		}
+		public void Initialize(IInterviewState state, IInterviewProperties properties) 
 		{
 			this.state = state;
 		}
 
 		internal IInterviewState state;
 
+		// multiple roster Identities to level key 
+		public Dictionary<Identity, string> LevelKeyMap = new Dictionary<Identity, string>();
+
 		public Dictionary<string, IInterviewLevelV11> Levels = new Dictionary<string, IInterviewLevelV11>();
-        public Dictionary<string, List<string>> SiblingLevels = new Dictionary<string, List<string>>();
+		
+		public List<Guid> GetExpressionsOrder()
+		{
+			return this.expressionsOrder;
+		}
 
-		public void RemoveRoster(Identity rosterId)
-        {
-        }
-
-        public void RemoveAnswer(Identity questionIdentity)
-        {
-        }
-
+		public IInterviewLevelV11 GetLevel(Identity parentIdentity)
+		{
+			return CreateLevel(parentIdentity);
+		}
+		
 		public T[] GetLevels<T>(Identity rosterIdentity)
         {
             return new T[0];
@@ -67,31 +91,13 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 	public static class IdOf
 	{
-		public static readonly Guid <#=CodeGeneratorV2.QuestionnaireIdName#> = <#= Model.Id.AsBytesString() #>;
 <#
-		foreach (var question in Model.AllQuestions)
+		foreach (var pair in Ids)
 		{
 #>
-		public static readonly Guid <#=question.Variable#> = <#= question.Id.AsBytesString() #>;
+		public static readonly Guid <#=pair.Value#> = <#= pair.Key.AsBytesString() #>;
 <#
 		}
 #>
-<#
-		foreach (var roster in Model.AllRosters) 
-		{
-#>
-		public static readonly Guid <#=roster.Variable#> = <#= roster.Level.Id.AsBytesString() #>;
-<#
-		}
-#>
-<#
-		foreach (var staticText in Model.AllStaticTexts) 
-		{
-#>
-		public static readonly Guid <#=staticText.Variable#> = <#= staticText.Id.AsBytesString() #>;
-<#
-		}
-#>
-
 	}
 }

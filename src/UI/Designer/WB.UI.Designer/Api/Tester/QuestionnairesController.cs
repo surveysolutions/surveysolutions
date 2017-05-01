@@ -82,6 +82,7 @@ namespace WB.UI.Designer.Api.Tester
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
+            questionnaire.IsUsingExpressionProcessor = true;
 
             return new Questionnaire
             {

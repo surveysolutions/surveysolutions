@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.V11;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -64,7 +65,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorStatePrototype = value;
             }
         }
-       
+
+        protected IInterviewExpressionProcessorV11 GetExpressionProcessor()
+        {
+            return this.expressionProcessorStatePrototypeProvider.GetExpressionProcessor(this.QuestionnaireIdentity);
+        }
+
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
@@ -109,6 +115,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
         }
 
+        public virtual void Apply(InterviewUsesProcessor @event)
+        {
+            this.UsingExpressionProcessor = true;
+        }
         public virtual void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
@@ -140,6 +150,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
             this.Tree.GetQuestion(questionIdentity).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(@event.Answer));
+
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
@@ -149,6 +161,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
             this.Tree.GetQuestion(questionIdentity).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
+
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.RosterVector, @event.PictureFileName);
         }
 
@@ -158,6 +172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
             this.Tree.GetQuestion(questionIdentity).AsDouble.SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer));
+
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.RosterVector, (double)@event.Answer);
         }
 
@@ -168,6 +184,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.GetQuestion(questionIdentity).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
+           
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
@@ -177,6 +195,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
             this.Tree.GetQuestion(questionIdentity).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer));
+
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
@@ -190,6 +210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             question.AsSingleFixedOption?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
             question.AsSingleLinkedToList?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
 
+            if (UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValue);
         }
 
@@ -259,6 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var questionIdentity in @event.Questions)
                 this.Tree.GetQuestion(questionIdentity).MarkValid();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions);
         }
 
@@ -274,6 +296,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.Tree.GetQuestion(failedValidationCondition.Key).MarkInvalid();
                 }
 
+                if (this.UsingExpressionProcessor) return;
                 this.ExpressionProcessorStatePrototype.ApplyFailedValidations(@event.FailedValidationConditions);
             }
             else //handling of old events
@@ -281,6 +304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var invalidQuestionIdentity in @event.Questions)
                     this.Tree.GetQuestion(invalidQuestionIdentity).MarkInvalid();
 
+                if (this.UsingExpressionProcessor) return;
                 this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions);
             }
         }
@@ -299,6 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
                 this.Tree.GetStaticText(staticTextIdentity).MarkInvalid(staticTextsConditions[staticTextIdentity]);
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
 
@@ -319,6 +344,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var groupIdentity in @event.Groups)
                 this.Tree.GetGroup(groupIdentity).Disable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DisableGroups(@event.Groups);
         }
 
@@ -327,6 +353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var groupIdentity in @event.Groups)
                 this.Tree.GetGroup(groupIdentity)?.Enable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups);
         }
 
@@ -335,6 +362,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var variableIdentity in @event.Variables)
                 this.Tree.GetVariable(variableIdentity).Disable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DisableVariables(@event.Variables);
         }
 
@@ -343,6 +371,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var variableIdentity in @event.Variables)
                 this.Tree.GetVariable(variableIdentity)?.Enable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
         }
 
@@ -351,6 +380,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
                 this.Tree.GetVariable(changedVariableValueDto.Identity)?.SetValue(changedVariableValueDto.NewValue);
+                if (this.UsingExpressionProcessor) continue;
                 this.ExpressionProcessorStatePrototype.UpdateVariableValue(changedVariableValueDto.Identity, changedVariableValueDto.NewValue);
             }
         }
@@ -360,6 +390,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var questionIdentity in @event.Questions)
                 this.Tree.GetQuestion(questionIdentity).Disable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions);
         }
 
@@ -368,6 +399,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var questionIdentity in @event.Questions)
                 this.Tree.GetQuestion(questionIdentity)?.Enable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
         }
 
@@ -376,6 +408,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var staticTextIdentity in @event.StaticTexts)
                 this.Tree.GetStaticText(staticTextIdentity)?.Enable();
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.EnableStaticTexts(@event.StaticTexts);
         }
 
@@ -534,6 +567,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public string Language { get; private set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
+
+        public bool UsingExpressionProcessor { get; protected set; } = false;
         public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
@@ -1321,6 +1356,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version));
+            if (questionnaire.IsUsingExpressionProcessor()) this.ApplyEvent(new InterviewUsesProcessor());
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
@@ -2277,6 +2313,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => sourceInterview.Clone().Compare(changedInterview);
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
+        {
+            if (questionnaire.IsUsingExpressionProcessor())
+            {
+                IInterviewExpressionProcessorV11 processor = this.GetExpressionProcessor();
+                processor.Initialize(changedInterviewTree, new InterviewProperties(EventSourceId));
+
+                var playOrder = processor.GetExpressionsOrder();
+                var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+                foreach (var entityId in playOrder)
+                {
+                    var entities = changedInterviewTree.FindEntity(entityId);
+                    foreach (var entity in entities)
+                    {
+                        var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
+                        var level = processor.GetLevel(nearestRoster);
+                        State result = RunConditionExpression(level.GetConditionExpressionResult(entity.Identity));
+                        if (result != State.Disabled)
+                            entity.Enable();
+                        else entity.Disable();
+                    }
+                }
+            }
+            else
+            {
+                this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
+            }
+        }
+
+
+        private State RunConditionExpression(Func<bool> expression)
+        {
+            try
+            {
+                if (expression == null)
+                    return State.Enabled;
+                return expression() ? State.Enabled : State.Disabled;
+            }
+            catch
+            {
+                return State.Disabled;
+            }
+        }
+
+
+        private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
+            IQuestionnaire questionnaire)
         {
             ILatestInterviewExpressionState expressionProcessorState = this.GetClonedExpressionState();
 

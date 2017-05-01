@@ -5,11 +5,13 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V11;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public class InterviewTree
+    public class InterviewTree : IInterviewState
     {
         private class HealthCheckException : Exception
         {
@@ -55,6 +57,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
+
+        public InterviewTreeQuestion GetQuestion(Guid id, RosterVector rosterVector)
+            => this.GetNodeByIdentity(new Identity(id, rosterVector)) as InterviewTreeQuestion;
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
@@ -514,6 +519,131 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (address.Count == 0) return RosterVector.Empty;
 
             return new RosterVector(address.Reverse<int>());
+        }
+
+        public string GetTextAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsText.GetAnswer().Value;
+        }
+
+        public int? GetIntegerAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsInteger.GetAnswer().Value;
+        }
+
+        public double? GetDoubleAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsDouble.GetAnswer().Value;
+        }
+
+        public string GetQRBarcodeAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsText.GetAnswer().Value;
+        }
+
+        public YesNoAnswers GetYesNoAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return new YesNoAnswers(new decimal[0], question.AsYesNo.GetAnswer().ToYesNoAnswersOnly());
+        }
+
+        public int[] GetMultiAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
+        }
+
+        public int[] GetMultiLinkedToListAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsMultiLinkedToList.GetAnswer().CheckedValues.ToArray();
+        }
+
+        public RosterVector[] GetMultiLinkedAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsMultiLinkedOption.GetAnswer().ToRosterVectorArray();
+        }
+        public DateTime? GetDateTimeAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsDateTime.GetAnswer().Value;
+        }
+        public int? GetSingleAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsSingleFixedOption.GetAnswer().SelectedValue;
+        }
+        public int? GetSingleLinkedToListAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsSingleLinkedToList.GetAnswer().SelectedValue;
+        }
+        public RosterVector GetSingleLinkedAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsSingleLinkedOption.GetAnswer().SelectedValue;
+        }
+        public ListAnswerRow[] GetTextListAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsTextList.GetAnswer().Rows.Select(x => new ListAnswerRow(Convert.ToInt32(x.Value), x.Text)).ToArray();
+        }
+        public GeoLocation GetGpsAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            var geoPosition = question.AsGps.GetAnswer().Value;
+            return new GeoLocation(geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Altitude);
+        }
+
+        public string GetMultimediaAnswer(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+            if (!question.IsAnswered() || question.IsDisabled())
+                return null;
+            return question.AsMultimedia.GetAnswer().FileName;
+        }
+
+        public int GetRosterIndex(Identity rosterIdentity)
+        {
+            return 0;
+        }
+
+        public string GetRosterTitle(Identity rosterIdentity)
+        {
+            return "";
         }
     }
 
