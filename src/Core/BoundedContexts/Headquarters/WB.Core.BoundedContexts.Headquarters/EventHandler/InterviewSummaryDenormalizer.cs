@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -368,7 +369,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
         }
     }
 }
