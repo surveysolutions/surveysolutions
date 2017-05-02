@@ -561,4 +561,7 @@
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>是</value>
   </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>已连接到设备</value>
+  </data>
 </root>

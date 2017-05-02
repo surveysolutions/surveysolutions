@@ -151,7 +151,7 @@
     <value>Survey Setup</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of synchronized interviews, but unprocessed yet</value>
+    <value>Number of interviews synchronized but not yet processed</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Reports</value>

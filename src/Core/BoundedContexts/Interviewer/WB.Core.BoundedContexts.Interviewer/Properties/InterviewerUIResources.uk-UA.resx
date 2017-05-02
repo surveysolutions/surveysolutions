@@ -191,7 +191,7 @@ iнтервью</value>
     <value>{0} (v{1})</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>Немає доступу в Інтернет до  веб-сайту. Перевірте настройки адреси серверу та мережі</value>
+    <value>Немає доступу в Інтернет до вашого серверу. Перевірте настройки адреси серверу та мережі</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки на support@mysurvey.solutions.</value>
@@ -212,7 +212,7 @@ iнтервью</value>
     <value>Неправильний пароль</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Сайтзараз у режимі супроводу. Вибачте за незручності</value>
+    <value>Сайт зараз у режимі супроводу. Вибачте за незручності</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Інформаційна панель</value>

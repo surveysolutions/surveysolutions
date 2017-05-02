@@ -1403,6 +1403,7 @@
     <Content Include="Views\Shared\Profile\ValidationSummary.cshtml" />
     <Content Include="Views\Shared\Profile\UpdatePassword.cshtml" />
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
+    <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
