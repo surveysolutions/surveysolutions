@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
         public const string LevelPrefix = "Level_";
         public const string StaticText = "text_";
+        public const string SubSection_ = "subsection_";
 
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
@@ -28,6 +29,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             this.modelsFactory = modelsFactory;
         }
+
+        
 
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
         {
