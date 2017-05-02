@@ -12,5 +12,11 @@
         public string Geometry { set; get; }
         public string MapName { set; get; }
         public double AreaSize { set; get; }
+
+        public override string ToString()
+        {
+            return string.Format($"map:\"{MapName}\", size:\"{AreaSize}\", geometry:\"{Geometry}\"");
+        }
     }
+
 }

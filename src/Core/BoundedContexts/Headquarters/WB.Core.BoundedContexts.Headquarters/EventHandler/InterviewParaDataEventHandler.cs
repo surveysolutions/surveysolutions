@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -634,7 +635,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
-            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize)),
             @event.Payload.RosterVector));
 
             return view;
