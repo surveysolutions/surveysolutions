@@ -61,7 +61,7 @@
 #>
 		}
 
-		public Func<bool> GetConditionExpressionResult(Identity entitIdentity)
+		public Func<bool> GetConditionExpression(Identity entitIdentity)
 		{
 			if (!entitIdentity.RosterVector.Equals(this.RosterVector))
 				return null;
@@ -70,6 +70,17 @@
 				return null;
 			
 			return enablementConditions[entitIdentity.Id];
+		}
+
+		public Func<bool>[] GetValidationExpressions(Identity entitIdentity)
+		{
+			if (!entitIdentity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!validationConditions.ContainsKey(entitIdentity.Id))
+				return null;
+			
+			return validationConditions[entitIdentity.Id];
 		}
 
 		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
