@@ -121,13 +121,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             Area = geometry;
             MapName = mapName;
-            AreaSize = areaSize;
+            GeometryArea = areaSize;
         }
 
         public string Area { set; get; }
         public string MapName { set; get; }
-        public double? AreaSize { set; get; }
-
 
         private Map map;
         public Map Map
@@ -224,7 +222,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
                 this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
                 {
-                    GeometryArea = GeometryEngine.Area(args.NewGeometry);
+                    GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
 
                 };
                 result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
@@ -235,9 +233,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
                 await this.MapView.SetViewpointGeometryAsync(geometry, 100);
 
+
+
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
-                    GeometryArea = GeometryEngine.Area(args.NewGeometry);
+                    GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
 
                 };
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
@@ -257,9 +257,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             //return to previous activity
         });
 
-
-        private double geometryArea;
-        public double GeometryArea
+        private double? geometryArea;
+        public double? GeometryArea
         {
             get { return this.geometryArea; }
             set { this.geometryArea = value; RaisePropertyChanged(); }
