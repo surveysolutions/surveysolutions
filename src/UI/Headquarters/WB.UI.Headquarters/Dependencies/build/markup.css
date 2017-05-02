@@ -7768,8 +7768,9 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   .profile .form-control + .btn-clear, .profile .input-group + .btn-clear, .profile .btn-input + .btn-clear, .contain-input .form-control + .btn-clear, .contain-input .input-group + .btn-clear, .contain-input .btn-input + .btn-clear {
     right: 10px; }
 
-.profile .input-group .form-control, .contain-input .input-group .form-control {
-  margin-left: 0; }
+.profile .input-group .form-control, .profile .btn-input .form-control, .contain-input .input-group .form-control, .contain-input .btn-input .form-control {
+  margin-left: 0;
+  width: 295px; }
 
 .profile .help-block, .contain-input .help-block {
   margin: 0; }
