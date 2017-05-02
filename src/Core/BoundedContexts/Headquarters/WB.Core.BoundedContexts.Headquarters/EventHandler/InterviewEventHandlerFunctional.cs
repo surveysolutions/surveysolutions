@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -827,7 +828,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
-                @event.Payload.Answer, @event.Payload.Answer != null);
+                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize), 
+                true);
         }
     }
 }

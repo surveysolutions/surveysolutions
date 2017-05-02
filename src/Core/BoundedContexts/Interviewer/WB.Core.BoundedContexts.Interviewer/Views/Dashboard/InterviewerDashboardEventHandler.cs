@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -476,7 +477,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize), evnt.Payload.AnswerTimeUtc);
         }
     }
 }
