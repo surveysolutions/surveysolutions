@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
+                    ResponsibleRole = x.ResponsibleRole,
                     Status = x.Status.ToString(),
                     HasErrors = x.HasErrors,
                     CanBeReassigned = x.Status == InterviewStatus.Created

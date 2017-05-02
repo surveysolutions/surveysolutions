@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aria_SortAscending" xml:space="preserve">
-    <value>: activate to sort column ascending</value>
+    <value>: activate to sort column in ascending order</value>
   </data>
   <data name="Aria_SortDescending" xml:space="preserve">
-    <value>: activate to sort column descending</value>
+    <value>: activate to sort column in descending order</value>
   </data>
   <data name="EmptyTable" xml:space="preserve">
     <value>No data available in the table</value>
