@@ -192,4 +192,7 @@
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
   </data>
+  <data name="PostPackage" xml:space="preserve">
+    <value>上传访谈：{0}</value>
+  </data>
 </root>

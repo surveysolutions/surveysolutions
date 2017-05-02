@@ -53,7 +53,7 @@
 			}
 			&>a{
 				@extend %font-header;
-				padding: 24px 9px;
+				padding: 24px 5px;
 				text-align: center;
 				@include transition();
 				&.notifications{

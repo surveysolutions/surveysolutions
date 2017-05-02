@@ -324,4 +324,7 @@
   <data name="VerifySampleData" xml:space="preserve">
     <value>验证样本数据</value>
   </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>下载模板</value>
+  </data>
 </root>

@@ -139,7 +139,7 @@
     <value>Create one more?</value>
   </data>
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Questionnaire with id {0} and version {1} is not found.</value>
+    <value>Questionnaire with id {0} and version {1} cannot be found.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
     <value>Questionnaire '{0}' was successfully cloned.</value>

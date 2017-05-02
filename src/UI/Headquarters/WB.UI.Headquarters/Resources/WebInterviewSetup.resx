@@ -136,7 +136,7 @@
     <value>Starting web interview for {0}</value>
   </data>
   <data name="WebInterviewSetup_Description" xml:space="preserve">
-    <value>To start web interview select interviewer that is going to be used as assignee</value>
+    <value>To start web interview, select the interviewer that is going to be used as the assignee</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Web interview setup</value>
