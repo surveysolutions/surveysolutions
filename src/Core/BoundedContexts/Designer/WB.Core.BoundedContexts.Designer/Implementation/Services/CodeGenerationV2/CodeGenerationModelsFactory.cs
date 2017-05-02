@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 Id = questionnaire.PublicKey,
                 ClassName = $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
-                ConditionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire)
+                ConditionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire),
+                IdMap = CreateIdMap(questionnaire)
             };
 
             Dictionary<RosterScope, Group[]> rosterScopes = questionnaire.Find<Group>()
@@ -146,6 +147,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return codeGenerationModel;
         }
 
+        private Dictionary<Guid, string> CreateIdMap(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var map = questionnaire.Find<IQuestion>().ToDictionary(x => x.PublicKey, this.GetVariable);
+            questionnaire.Find<StaticText>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
+            questionnaire.Find<IGroup>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
+            map.Add(questionnaire.PublicKey, CodeGeneratorV2.QuestionnaireIdName);
+            return map;
+        }
+
         private string GetVariable(StaticText staticText)
         {
             return CodeGeneratorV2.StaticText + staticText.PublicKey.FormatGuid();
@@ -158,7 +168,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private string GetVariable(IGroup group)
         {
-            return !IsNullOrEmpty(group.VariableName) ? group.VariableName :  "__" + group.PublicKey.FormatGuid();
+            return !IsNullOrEmpty(group.VariableName) ? group.VariableName : CodeGeneratorV2.SubSection_ + group.PublicKey.FormatGuid();
         }
 
         private static string GenerateQuestionTypeName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
@@ -391,6 +401,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var group in questionnaire.Find<Group>())
             {
+                var className = model.GetClassNameByRosterScope(questionnaire.GetRosterScope(group));
+                var conditionExpression = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
+                var formattedId = GetVariable(group);
+                if (!string.IsNullOrWhiteSpace(conditionExpression))
+                {
+                    yield return new ConditionMethodModel(
+                        ExpressionLocation.GroupCondition(group.PublicKey),
+                        className,
+                        CodeGeneratorV2.EnablementPrefix + formattedId,
+                        conditionExpression,
+                        false,
+                        formattedId);
+                }
             }
         }
     }

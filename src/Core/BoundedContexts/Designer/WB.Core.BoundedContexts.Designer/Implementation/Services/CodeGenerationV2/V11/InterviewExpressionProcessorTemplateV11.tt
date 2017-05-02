@@ -23,10 +23,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <#
 		foreach (Guid id in Model.ConditionsPlayOrder) 
 		{
-			if (Ids.ContainsKey(id))
+			if (Model.IdMap.ContainsKey(id))
             {
 #>
-			expressionsOrder.Add(IdOf.<#=Ids[id]#> );
+			expressionsOrder.Add(IdOf.<#=Model.IdMap[id]#> );
 <#
             }
 			else{
@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	public static class IdOf
 	{
 <#
-		foreach (var pair in Ids)
+		foreach (var pair in Model.IdMap)
 		{
 #>
 		public static readonly Guid <#=pair.Value#> = <#= pair.Key.AsBytesString() #>;

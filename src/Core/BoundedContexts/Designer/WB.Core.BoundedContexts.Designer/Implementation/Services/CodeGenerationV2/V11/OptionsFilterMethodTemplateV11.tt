@@ -6,10 +6,6 @@
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
@@ -17,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	{   
 		private <#=Model.ReturnType#> <#=Model.MethodName#>(int optioncode)
 		{
-			var self = <#=Model.VariableName#>; 
+			var self = <#=Model.Variable#>; 
 			return <#=Model.Expression#>;
 		}
 	}

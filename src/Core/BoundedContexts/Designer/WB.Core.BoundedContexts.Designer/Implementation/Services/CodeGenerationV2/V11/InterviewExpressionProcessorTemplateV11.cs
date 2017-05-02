@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 		foreach (Guid id in Model.ConditionsPlayOrder) 
 		{
-			if (Ids.ContainsKey(id))
+			if (Model.IdMap.ContainsKey(id))
             {
 
             
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\t\t\texpressionsOrder.Add(IdOf.");
             
             #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Ids[id]));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.IdMap[id]));
             
             #line default
             #line hidden
@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line 94 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
-		foreach (var pair in Ids)
+		foreach (var pair in Model.IdMap)
 		{
 
             
