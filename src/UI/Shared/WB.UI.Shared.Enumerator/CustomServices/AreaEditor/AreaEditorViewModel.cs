@@ -168,7 +168,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             var command = this.MapView.SketchEditor.CompleteCommand;
             if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
-                this.MapView.SketchEditor.CompleteCommand.Execute(command);
+            {
+                if(!GeometryEngine.IsSimple(this.MapView.SketchEditor.Geometry))
+                {
+                    userInteractionService.ShowToast("Area is invalid. Please fix.");
+                    return;
+                }
+                else
+                    this.MapView.SketchEditor.CompleteCommand.Execute(command);
+            }
+            
             else
             {
                 userInteractionService.ShowToast("No changes we made to be saved");
@@ -217,29 +226,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
             Geometry result = null;
 
+            this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
+            {
+                GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+
+            };
+
             if (string.IsNullOrWhiteSpace(Area))
             {
-
-                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
-                {
-                    GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
-
-                };
                 result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
             }
             else
             {
                 var geometry = Geometry.FromJson(Area);
-
                 await this.MapView.SetViewpointGeometryAsync(geometry, 100);
-
-
-
-                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
-                {
-                    GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
-
-                };
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
 
@@ -249,7 +249,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             {
                 Geometry = result?.ToJson(),
                 MapName = SelectedMap,
-                Area = GeometryEngine.Area(result)
+                Area = GeometryEngine.AreaGeodetic(result)
             });
 
             this.IsEditing = false;
