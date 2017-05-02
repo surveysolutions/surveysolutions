@@ -401,9 +401,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var group in questionnaire.Find<Group>())
             {
-                var className = model.GetClassNameByRosterScope(questionnaire.GetRosterScope(group));
-                var conditionExpression = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
-                var formattedId = GetVariable(group);
+                var rosterScope = questionnaire.GetRosterScope(@group);
+                if (group.IsRoster)
+                {
+                    var scopeCoordinate = @group.RosterSizeSource == RosterSizeSourceType.FixedTitles ? @group.PublicKey : @group.RosterSizeQuestionId.Value;
+                    rosterScope = new RosterScope(rosterScope.Coordinates.Union(scopeCoordinate.ToEnumerable()));
+                }
+
+                string className = model.GetClassNameByRosterScope(rosterScope);
+                string conditionExpression = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
+                string formattedId = GetVariable(group);
                 if (!string.IsNullOrWhiteSpace(conditionExpression))
                 {
                     yield return new ConditionMethodModel(
