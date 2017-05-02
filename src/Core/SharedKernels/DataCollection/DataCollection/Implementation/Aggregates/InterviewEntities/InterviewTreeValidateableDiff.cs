@@ -53,5 +53,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         bool IsValid { get; }
         SubstitionText[] ValidationMessages { get; }
         IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
+
+        void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations);
+
+        void MarkValid();
     }
 }
