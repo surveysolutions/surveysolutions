@@ -5769,7 +5769,7 @@ input.checkbox-filter ~ label .tick {
   background: transparent url("../img/pretty-checkable-sprites.png") no-repeat;
   vertical-align: middle; }
 
-.table thead, .dataTables_wrapper .dataTables_paginate, .cancelable-progress .wrapper-progress > span, .selection-box .btn, .signed-name span, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .export-types .data .table-data .no-data-available {
+.table thead, .dataTables_paginate, .cancelable-progress .wrapper-progress > span, .selection-box .btn, .signed-name span, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .export-types .data .table-data .no-data-available {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.13em; }
@@ -6034,6 +6034,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         .table tfoot tr td.title-row a, .table tfoot tr td.title-row span, .table tfoot tr th.title-row a, .table tfoot tr th.title-row span {
           font-size: 18px;
           line-height: 20px; }
+      .table tfoot tr td.type-numeric, .table tfoot tr th.type-numeric {
+        text-align: right; }
       .table tfoot tr td:hover a, .table tfoot tr td:hover a:hover, .table tfoot tr td:hover a:focus, .table tfoot tr td:hover a:active, .table tfoot tr td:focus a, .table tfoot tr td:focus a:hover, .table tfoot tr td:focus a:focus, .table tfoot tr td:focus a:active, .table tfoot tr td:active a, .table tfoot tr td:active a:hover, .table tfoot tr td:active a:focus, .table tfoot tr td:active a:active, .table tfoot tr th:hover a, .table tfoot tr th:hover a:hover, .table tfoot tr th:hover a:focus, .table tfoot tr th:hover a:active, .table tfoot tr th:focus a, .table tfoot tr th:focus a:hover, .table tfoot tr th:focus a:focus, .table tfoot tr th:focus a:active, .table tfoot tr th:active a, .table tfoot tr th:active a:hover, .table tfoot tr th:active a:focus, .table tfoot tr th:active a:active {
         color: #2a81cb !important;
         text-decoration: none; }
@@ -6230,27 +6232,27 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   padding-left: 20px;
   text-align: right; }
 
-.dataTables_wrapper .dataTables_paginate {
+.dataTables_paginate {
   position: relative;
   padding: 40px 0 10px 0;
   overflow: hidden;
   font-size: 14px;
   line-height: 16px; }
-  .dataTables_wrapper .dataTables_paginate > span {
+  .dataTables_paginate > span {
     display: block;
     position: absolute;
     top: 10px;
     left: 0; }
-  .dataTables_wrapper .dataTables_paginate .paginate_button {
+  .dataTables_paginate .paginate_button {
     padding: 6px 12px;
     cursor: pointer; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    .dataTables_paginate .paginate_button.disabled, .dataTables_paginate .paginate_button.disabled:hover, .dataTables_paginate .paginate_button.disabled:active {
       color: #a6a8a9;
       text-decoration: none;
       cursor: not-allowed; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    .dataTables_paginate .paginate_button.current, .dataTables_paginate .paginate_button.current:hover {
       color: #a6a8a9 !important; }
-  .dataTables_wrapper .dataTables_paginate > .paginate_button {
+  .dataTables_paginate > .paginate_button {
     float: left;
     padding: 5px 12px; }
 
@@ -6310,6 +6312,10 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-color: inherit; }
     .table-mobile-devices tr {
       border-bottom: 2px solid #ddd !important; }
+    .table-mobile-devices .total-row .title-row {
+      text-align: right; }
+    .table-mobile-devices .total-row td[data-th*="version"], .table-mobile-devices .total-row th[data-th*="version"] {
+      display: none; }
     .table-mobile-devices tbody tr td, .table-mobile-devices tfoot tr th {
       overflow: hidden;
       height: auto;
@@ -6875,7 +6881,7 @@ a.disabled {
       .navbar .navbar-collapse li.active > a > .caret {
         border-top-color: #fff; }
     .navbar .navbar-collapse li > a {
-      padding: 24px 9px;
+      padding: 24px 5px;
       text-align: center;
       transition: all 0.5s linear 0s; }
       .navbar .navbar-collapse li > a.notifications {
@@ -7762,8 +7768,9 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   .profile .form-control + .btn-clear, .profile .input-group + .btn-clear, .profile .btn-input + .btn-clear, .contain-input .form-control + .btn-clear, .contain-input .input-group + .btn-clear, .contain-input .btn-input + .btn-clear {
     right: 10px; }
 
-.profile .input-group .form-control, .contain-input .input-group .form-control {
-  margin-left: 0; }
+.profile .input-group .form-control, .profile .btn-input .form-control, .contain-input .input-group .form-control, .contain-input .btn-input .form-control {
+  margin-left: 0;
+  width: 295px; }
 
 .profile .help-block, .contain-input .help-block {
   margin: 0; }

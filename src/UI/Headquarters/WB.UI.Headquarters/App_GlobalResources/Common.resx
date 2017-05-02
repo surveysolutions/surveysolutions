@@ -196,7 +196,7 @@
     <value>Get Interviewer App</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading, please wait</value>
+    <value>Loading. Please wait</value>
   </data>
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
