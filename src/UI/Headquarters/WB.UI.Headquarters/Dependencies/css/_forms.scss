@@ -476,9 +476,12 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 			right: 10px;
 		}
 	}
-	.input-group .form-control{
-		margin-left: 0;
-	}
+	.input-group, .btn-input{
+		.form-control{
+			margin-left: 0;
+			width: $form-width;
+		}
+	} 
 	.help-block{
 		margin: 0;
 	}
