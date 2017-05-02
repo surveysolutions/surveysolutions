@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
@@ -2343,10 +2344,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             ? entity.Identity
                             : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
                         var level = processor.GetLevel(nearestRoster);
-                        State result = RunConditionExpression(level.GetConditionExpressionResult(entity.Identity));
+                        State result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
                         if (result != State.Disabled)
                             entity.Enable();
                         else entity.Disable();
+
+                        
+                    }
+                }
+                foreach (var entityId in playOrder)
+                {
+                    var entities = changedInterviewTree.FindEntity(entityId);
+                    foreach (var entity in entities)
+                    {
+                        var validateable = entity as IInterviewTreeValidateable;
+                        if (validateable == null) continue;
+
+                        var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
+                        IInterviewLevelV11 level = processor.GetLevel(nearestRoster);
+                        var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
+                        var validationResult = validationExpressions.Select(this.RunConditionExpression)
+                            .Select((x, i) => x == State.Disabled? new FailedValidationCondition(i) : null)
+                            .Where(x => x!=null)
+                            .ToArray();
+                                
+                        if (validationResult.Any())
+                            validateable.MarkInvalid(validationResult);
+                        else
+                            validateable.MarkValid();
                     }
                 }
             }
