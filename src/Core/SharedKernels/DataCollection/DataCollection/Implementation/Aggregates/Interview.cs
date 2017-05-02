@@ -141,6 +141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
             this.Tree.GetQuestion(questionIdentity).AsText.SetAnswer(TextAnswer.FromString(@event.Answer));
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
@@ -424,7 +425,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
                 this.Tree.GetStaticText(staticTextIdentity).Disable();
-
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DisableStaticTexts(@event.StaticTexts);
         }
 
@@ -483,6 +484,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.isFixedRostersInitialized = true;
             }
 
+            if (this.UsingExpressionProcessor) return;
             foreach (var instance in @event.Instances)
             {
                 this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector,
@@ -492,6 +494,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(RosterInstancesRemoved @event)
         {
+            if (this.UsingExpressionProcessor) return;
             foreach (var instance in @event.Instances)
             {
                 this.ExpressionProcessorStatePrototype.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
@@ -557,6 +560,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // can be removed from removed roster. No need for this event anymore
                 this.Tree.GetQuestion(identity)?.RemoveAnswer();
                 this.ActualizeRostersIfQuestionIsRosterSize(identity.Id);
+                if (this.UsingExpressionProcessor) continue;
                 this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(identity.Id, identity.RosterVector));
             }
         }
@@ -566,6 +570,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
 
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
         }
 
@@ -2334,7 +2339,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var entities = changedInterviewTree.FindEntity(entityId);
                     foreach (var entity in entities)
                     {
-                        var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
+                        var nearestRoster = entity is InterviewTreeRoster 
+                            ? entity.Identity
+                            : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
                         var level = processor.GetLevel(nearestRoster);
                         State result = RunConditionExpression(level.GetConditionExpressionResult(entity.Identity));
                         if (result != State.Disabled)

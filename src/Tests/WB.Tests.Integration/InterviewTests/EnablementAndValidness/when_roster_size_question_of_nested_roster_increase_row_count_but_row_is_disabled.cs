@@ -30,19 +30,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new[] { "1" },
+                    Abc.Create.Entity.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new[] { "1" },
                         children: new IComposite[]
                         {
                             Abc.Create.Entity.NumericIntegerQuestion(nestedRosterSizeQuestionId, variable: "a"),
-                            Abc.Create.Entity.Roster(nestedRosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
-                                rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new[]
-                                {
-                                    Abc.Create.Entity.Question()
-                                })
+                            Abc.Create.Entity.Roster(nestedRosterId, variable:"nested", rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: "a > 1",
+                                rosterSizeQuestionId: nestedRosterSizeQuestionId)
                         })
                     );
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithProcessor(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
