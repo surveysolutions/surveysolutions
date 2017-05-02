@@ -8,8 +8,24 @@
 
 	internal partial class <#=Model.ClassName#> : IInterviewLevelV11
 	{
+		public bool IsAnswered(string answer) => !string.IsNullOrWhiteSpace(answer);
+
+		public bool IsAnswered<TY>(TY? answer) where TY : struct => answer.HasValue;
+
+		public bool IsAnswered(GeoLocation answer) => !(answer == null || (answer.Altitude == 0 && answer.Longitude == 0 && answer.Accuracy == 0 && answer.Latitude == 0));
+
+		public bool IsAnswered(decimal[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(decimal[][] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(Tuple<decimal, string>[] answer) => !(answer == null || !answer.Any());
+
+		public bool IsAnswered(YesNoAnswers answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
+
 		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Processor.ClassName #> processor) 
 		{
+		    
+
 			this.processor = processor;
 <#
 	if (Model.RosterScope.Length == 0)

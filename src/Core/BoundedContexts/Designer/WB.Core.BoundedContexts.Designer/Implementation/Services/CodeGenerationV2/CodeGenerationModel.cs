@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -41,7 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<LookupTableTemplateModel> LookupTables { get; set; }
         public string ClassName { get; set; }
-        
+        public Dictionary<Guid, string> IdMap { get; set; }
+
 
         public QuestionModel GetQuestionById(Guid questionId)
         {

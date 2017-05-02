@@ -6,10 +6,22 @@
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V3.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
+using WB.Core.SharedKernels.DataCollection.V9;
+using WB.Core.SharedKernels.DataCollection.V10;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
@@ -21,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			if(Model.GenerateSelf) 
 			{
 #>
-			var self = <#=Model.VariableName#>;
+			var self = <#=Model.Variable#>;
 <# 
 			} 
 #>

@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -37,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Abc.Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
                     });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithProcessor(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {
