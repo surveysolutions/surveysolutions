@@ -148,7 +148,7 @@
     <value>Click to return to your account.</value>
   </data>
   <data name="CreateAdmin" xml:space="preserve">
-    <value>To complete installation, please, create a new Administrator user</value>
+    <value>To complete installation, please create a new Administrator user</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Finish installation</value>
@@ -157,7 +157,7 @@
     <value>Headquarters</value>
   </data>
   <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Impersonate as this user in read only mode</value>
+    <value>Impersonate this user in read only mode</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>

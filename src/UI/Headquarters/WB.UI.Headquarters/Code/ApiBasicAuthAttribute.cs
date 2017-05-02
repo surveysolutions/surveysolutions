@@ -17,6 +17,8 @@ namespace WB.UI.Headquarters.Code
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
+        public static string AuthHeader = @"WWW-Authenticate";
+
         private HqSignInManager userManager => ServiceLocator.Current.GetInstance<HqSignInManager>();
 
         private IReadSideStatusService readSideStatusService
@@ -74,8 +76,11 @@ namespace WB.UI.Headquarters.Code
 
         private void RespondWithMessageThatUserDoesNotExists(HttpActionContext actionContext)
         {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = string.Format(TabletSyncMessages.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority)) };
-            actionContext.Response.Headers.Add(@"WWW-Authenticate", $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                ReasonPhrase = string.Format(TabletSyncMessages.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority))
+            };
+            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
         }
 
         private void RespondWithMaintenanceMessage(HttpActionContext actionContext)
@@ -86,8 +91,13 @@ namespace WB.UI.Headquarters.Code
         private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = TabletSyncMessages.InvalidUserRole };
+            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
         }
+
         private void RespondWithMessageThatUserIsLockedOut(HttpActionContext actionContext)
-            => actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) {ReasonPhrase = @"lock"};
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) {ReasonPhrase = @"lock"};
+            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
+        }
     }
 }

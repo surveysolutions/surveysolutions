@@ -24,6 +24,7 @@
         var $surveysUrl = '@Url.Action("SurveysAndStatusesForSv", "Reports")';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
+        var $profileUrl = '@Url.Action("Profile", "Interviewer")';
         $(function () {
             var notifier = new Notifier();
             var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
@@ -165,7 +166,12 @@
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <td>
-                                                <a data-bind="attr: { href: $surveysUrl + '?responsible=' + ResponsibleName() }, text: ResponsibleName"></a>
+                                                <!-- ko if:ResponsibleRole() == 4 -->
+                                                <a data-bind="attr: { href: $profileUrl + '/' + ResponsibleId() }, text: ResponsibleName"></a>
+                                                <!-- /ko -->
+                                                <!-- ko ifnot:ResponsibleRole() == 4 -->
+                                                <span data-bind="text: ResponsibleName"></span>
+                                                <!-- /ko -->
                                             </td>
                                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                                             <td class="errors">
@@ -182,12 +188,16 @@
                                             </td>
                                             <td>
                                                 <span data-bind="text: CreatedOnClient() ? '@Common.Yes' : '@Common.No'"></span>
-                                            </td>
+                                            </td> 
                                         </tr>
                                         <!-- /ko -->
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- ko if:Pager().LastPage() > 1 -->
+                            <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                            <!-- /ko -->
+                            @Html.Partial("_ListDataTablePagingScript")
                         </div>
                     </div>
                     <div class="screen-small-resolution">
@@ -210,9 +220,6 @@
                         </div>
                         <!-- /ko -->
                     </div>
-
-
-
 
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
                         <div class="panel-body">
