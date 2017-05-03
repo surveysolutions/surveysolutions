@@ -521,6 +521,30 @@
   <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
     <value>Device and connection statistics</value>
   </data>
+  <data name="InterviewerProfile_Sync_Activity_Census_Desc" xml:space="preserve">
+    <value>Census template update</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc" xml:space="preserve">
+    <value>Downloaded assignment</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Uploaded to server for approval</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Successful connection, nothing to sync</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Failed synchronizations attempt</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Census_Timeline_Desc" xml:space="preserve">
+    <value>Census templates updates</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Started_Interview_Desc" xml:space="preserve">
+    <value>Number of unfinished or unsynchronized assignments on device every given moment</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Recent synchronizations activity</value>
+  </data>
   <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
     <value>Last connection statistics</value>
   </data>
