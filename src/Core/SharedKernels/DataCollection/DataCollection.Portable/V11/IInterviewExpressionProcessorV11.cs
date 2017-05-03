@@ -11,6 +11,5 @@ namespace WB.Core.SharedKernels.DataCollection.V11
         List<Guid> GetExpressionsOrder();
         
         IInterviewLevelV11 GetLevel(Identity rosterIdentity);
-        //IEnumerable<CategoricalOption> FilterOptionsForQuestion(Identity questionIdentity, IEnumerable<CategoricalOption> options);
     }
 }

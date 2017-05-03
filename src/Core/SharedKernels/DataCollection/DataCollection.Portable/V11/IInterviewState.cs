@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.V11
         GeoLocation GetGpsAnswer(Guid questionId, IEnumerable<int> rosterVector);
         string GetMultimediaAnswer(Guid questionId, IEnumerable<int> rosterVector);
 
+        IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity);
+
         int GetRosterIndex(Identity rosterIdentity);
 
         string GetRosterTitle(Identity rosterIdentity);
