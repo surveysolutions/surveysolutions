@@ -77,28 +77,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="0dp"
             android:gravity="center">
         <!--android:background="#CCFFFFFF"-->
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Start_Edit"
+                android:layout_marginTop="5dp"
                 local:MvxBind="Click StartEditAreaCommand; Text 'Edit'; Enabled (Map != null);" />
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Undo"
+                android:layout_paddingTop="5dp"
                 local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
                 android:layout_marginLeft="20dp" />
-        <!--<Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Interview_Question_InputButton"
-                android:id="@+id/LoginPage_troubleshooting_button115"
-                local:MvxBind="Click DeleteCommand; Text 'Remove last'; Enabled IsEditing;"
-                android:layout_marginLeft="20dp" />-->
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Save"
+                android:layout_paddingTop="5dp"
                 android:layout_marginLeft="120dp"
                 local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
         </LinearLayout>
