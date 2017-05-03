@@ -102,32 +102,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 		}
 
 		internal IInterviewState state;
-
-		// multiple roster Identities to level key 
-		public Dictionary<Identity, string> LevelKeyMap = new Dictionary<Identity, string>();
-
-		public Dictionary<string, IInterviewLevelV11> Levels = new Dictionary<string, IInterviewLevelV11>();
-		
+	
 		public List<Guid> GetExpressionsOrder()
 		{
 			return this.expressionsOrder;
 		}
 
-		public IInterviewLevelV11 GetLevel(Identity parentIdentity)
+		public IInterviewLevelV11 GetLevel(Identity rosterIdentity)
 		{
-			return CreateLevel(parentIdentity);
+			return CreateLevel(rosterIdentity);
 		}
 		
-		public T[] GetLevels<T>(Identity rosterIdentity)
+		public T[] GetLevels<T>(Guid levelId, Identity forRosterIdentity)
         {
-            return new T[0];
+			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
+            return rosterIdentities.Select(CreateLevel).Cast<T>().ToArray();
         }
 
 		private IInterviewLevelV11 CreateLevel(Identity rosterIdentity)
 		{
 ");
             
-            #line 69 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 65 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
 		foreach (var level in Model.AllLevels) 
 		{
@@ -137,21 +133,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t\t\tif (rosterIdentity.Id == IdOf.");
             
-            #line 73 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 69 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(level.Variable));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t\t{\r\n\t\t\t\treturn new ");
             
-            #line 75 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 71 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(level.ClassName));
             
             #line default
             #line hidden
             this.Write("(rosterIdentity.RosterVector, this);\r\n\t\t\t}\r\n");
             
-            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 73 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
 		}
 
@@ -160,11 +156,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t\t\t\r\n\t\t\treturn null;\r\n\t\t}\r\n\t}\r\n\r\n");
             
-            #line 84 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 80 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
 	foreach (var level in Model.AllLevels) 
 	{
-		LevelTemplateV11 template = CreateLevelTemplate(level, Model);
+		var template = CreateLevelTemplate(level, Model);
 		this.Write(template.TransformText());
 	}
 
@@ -173,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\r\n\tpublic static class IdOf\r\n\t{\r\n");
             
-            #line 94 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 90 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
 		foreach (var pair in Model.IdMap)
 		{
@@ -183,21 +179,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t\tpublic static readonly Guid ");
             
-            #line 98 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 94 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(pair.Value));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 98 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 94 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(pair.Key.AsBytesString()));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 99 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
+            #line 95 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGenerationV2\V11\InterviewExpressionProcessorTemplateV11.tt"
 
 		}
 

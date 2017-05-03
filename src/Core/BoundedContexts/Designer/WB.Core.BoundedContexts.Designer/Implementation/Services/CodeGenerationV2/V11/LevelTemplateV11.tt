@@ -112,7 +112,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels<<#=roster.Level.ClassName#>>(Identity);
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
 <# 
 	}
 #>

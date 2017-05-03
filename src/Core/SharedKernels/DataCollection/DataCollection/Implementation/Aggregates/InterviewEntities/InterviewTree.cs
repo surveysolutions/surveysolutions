@@ -456,12 +456,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return null;
         }
 
-        public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
+        public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
         {
-            var rosterVectorLength = questionIdentity.RosterVector.Length;
-            return this.FindEntity(entityId)
+            var rosterVectorLength = startingSearchPointIdentity.RosterVector.Length;
+            return this.FindEntity(entityIdToSearch)
                 .Select(x => x.Identity)
-                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(questionIdentity.RosterVector));
+                .Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(startingSearchPointIdentity.RosterVector));
         }
 
         public void ReplaceSubstitutions()
