@@ -44,43 +44,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             if (call.Duration.HasValue)
             {
                 var duration = call.Duration.Value;
-
-                // From total call duration substracting time that it took server to process response. 
-                // this way interview upload speed will not be affected by very long server side interview processing
-                var serverTimingHeaderValues = this.GetServerTimingKeyValuePairs(call.Response.Headers);
-                var serverTimings = serverTimingHeaderValues.ToLookup(h => h.Key, h => h.Value);
-
-                foreach (var actionDuration in serverTimings["action"])
-                {
-                    double serverReportedActionDuration;
-
-                    if (double.TryParse(actionDuration, NumberStyles.Any, CultureInfo.InvariantCulture, out serverReportedActionDuration))
-                    {
-                        duration = duration.Subtract(TimeSpan.FromSeconds(serverReportedActionDuration));
-                    }
-                }
-                
                 this.Track(request, response, duration);
-            }
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetServerTimingKeyValuePairs(HttpResponseHeaders headers)
-        {
-            IEnumerable<string> perfHeaders;
-
-            if (!headers.TryGetValues("Server-Timing", out perfHeaders)) yield break;
-
-            // Server-Timing header can contain several key=value pairs, where value is time in seconds: "db=1, action=0.125 , serialization=2"
-            foreach (var header in perfHeaders)
-            {
-                var serverTimingValues = header.Split(',');
-
-                foreach (var serverTimingValue in serverTimingValues)
-                {
-                    var split = serverTimingValue.Split('=');
-                    
-                    yield return new KeyValuePair<string,string>(split[0].Trim(), split.Length > 1 ? split[1].Trim() : null);
-                }
             }
         }
 
