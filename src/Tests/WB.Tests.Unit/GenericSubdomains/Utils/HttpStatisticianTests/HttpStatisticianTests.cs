@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
     {
         [TestCase("en-US")]
         [TestCase("ru-RU")]
-        [TestCase("de-GE")]
+        [TestCase("de-DE")]
         public async Task should_collect_uploaded_data(string cultureInfo)
         {
             // arrange
