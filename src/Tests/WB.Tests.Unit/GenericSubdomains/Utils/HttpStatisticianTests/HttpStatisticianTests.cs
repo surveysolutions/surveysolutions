@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
                         {
                             // setting call duration to 1.125 seconds
                             var timepoint = DateTime.UtcNow;
-                            httpCall.StartedUtc = timepoint.AddSeconds(-1.125);
+                            httpCall.StartedUtc = timepoint.AddSeconds(-1);
                             httpCall.EndedUtc = timepoint;
 
                             // act
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
             Assert.That(stats.DownloadedBytes, Is.EqualTo(60 + 60 /* body + headers = 120 */), "Should take into account estimated headers size.");
             Assert.That(stats.UploadedBytes, Is.EqualTo(69 + 42 /*body + headers = 111*/), "Should take into account estimated headers size.");
 
-            Assert.That(stats.Speed, Is.EqualTo(120 + 111), "Duration should be 1 second, so speed is equal to bytes");
+            Assert.That(stats.Speed, Is.EqualTo(120 + 111), "Duration should be 1 second, or equal to bytes");
 
             Assert.That(stats.Duration, Is.EqualTo(TimeSpan.FromSeconds(1)), "Should take into account server side action processing time");
         }
