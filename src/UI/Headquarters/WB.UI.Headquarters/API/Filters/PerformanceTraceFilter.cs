@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.API.Filters
 
             if (sw != null)
             {
-                actionExecutedContext.Response?.Headers.Add(@"Server-Timing", @"action=" + sw.Elapsed.TotalSeconds);
+                actionExecutedContext.Response?.Headers.Add(@"Server-Timing", @"action=" + sw.Elapsed.TotalSeconds.ToString(NumberFormatInfo.InvariantInfo));
             }
         }
     }
