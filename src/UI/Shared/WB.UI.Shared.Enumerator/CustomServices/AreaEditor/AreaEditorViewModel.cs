@@ -40,15 +40,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             {
                 if (!string.IsNullOrEmpty(MapName) && AvailableMaps.ContainsKey(MapName))
                 {
-                    SelectedMap = MapName;
+                    this.SelectedMap = MapName;
                 }
                 else
                 {
-                    SelectedMap = AvailableMaps.FirstOrDefault().Key;
+                    this.SelectedMap = AvailableMaps.FirstOrDefault().Key;
                 }
             }
-            
-            UpdateBaseMap(AvailableMaps[SelectedMap]);
         }
 
         private Dictionary<string,string> AvailableMaps = new Dictionary<string, string>();
@@ -72,7 +70,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 if (AvailableMaps.ContainsKey(value))
                 {
                     UpdateBaseMap(AvailableMaps[value]);
-                    //this.ShowAllMap();
                 }
                 
             }
@@ -154,10 +151,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                                 if (StartEditAreaCommand.CanExecute())
                                     StartEditAreaCommand.Execute();
                         };
-                    /*this.mapView.LayerViewStateChanged += delegate(object sender, LayerViewStateChangedEventArgs args)
-                    {
-                       
-                    };*/
                 }
             }
             get { return this.mapView; }
@@ -222,15 +215,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 return;
 
             this.IsEditing = true;
-
-            Geometry result = null;
-
             this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
             {
                 GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
 
             };
 
+            Geometry result = null;
             if (string.IsNullOrWhiteSpace(Area))
             {
                 result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
@@ -253,7 +244,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
             this.IsEditing = false;
             Close(this);
-            //return to previous activity
         });
 
         private double? geometryArea;
