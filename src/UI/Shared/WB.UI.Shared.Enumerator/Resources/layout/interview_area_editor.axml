@@ -87,13 +87,13 @@
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Undo"
-                android:layout_paddingTop="5dp"
+                android:layout_marginTop="5dp"
                 local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
                 android:layout_marginLeft="20dp" />
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Save"
-                android:layout_paddingTop="5dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginLeft="120dp"
                 local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
         </LinearLayout>
