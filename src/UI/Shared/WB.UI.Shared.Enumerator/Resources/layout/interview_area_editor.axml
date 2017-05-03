@@ -77,8 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="0"
-            android:gravity="center=">
+            android:layout_marginTop="0dp"
+            android:gravity="center">
         <!--android:background="#CCFFFFFF"-->
             <Button
                 style="@style/Interview_Complete_Screen_Button"
