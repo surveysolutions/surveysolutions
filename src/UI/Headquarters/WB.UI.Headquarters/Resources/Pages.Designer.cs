@@ -988,6 +988,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Device assignment date.
+        /// </summary>
+        public static string InterviewerProfile_DeviceAssignmentDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_DeviceAssignmentDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tablet time at the beginning of synchronization.
         /// </summary>
         public static string InterviewerProfile_DeviceDate {
@@ -1861,7 +1870,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create interviewer profile.
+        ///   Looks up a localized string similar to Create interviewer.
         /// </summary>
         public static string Profile_InterviewerCreate {
             get {
