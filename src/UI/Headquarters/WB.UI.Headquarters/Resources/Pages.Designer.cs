@@ -1285,6 +1285,78 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Census template update.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Census_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Census_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Census templates updates.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Census_Timeline_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Census_Timeline_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded assignment.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed synchronizations attempt.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Failed_Sync {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Failed_Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successful connection, nothing to sync.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Nothing_To_Sync {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Nothing_To_Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of unfinished or unsynchronized assignments on device every given moment.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Started_Interview_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Started_Interview_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recent synchronizations activity.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Title {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded to server for approval.
+        /// </summary>
+        public static string InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer: {0}.
         /// </summary>
         public static string InterviewerProfile_TitleFormat {
