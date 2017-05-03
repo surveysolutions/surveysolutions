@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Android.Views;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
@@ -85,18 +86,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         public override void Start()
         {
             base.Start();
-/*
-            if(!string.IsNullOrEmpty(Area))
-                StartEditAreaCommand.Execute();
-*/
         }
 
         public void UpdateBaseMap(string pathToMap)
         {
             if (pathToMap != null)
             {
-                if (this.Map == null)
-                    this.Map = new Map();
+                var map = new Map();
 
                 TileCache titleCache = new TileCache(pathToMap);
                 var layer = new ArcGISTiledLayer(titleCache);
@@ -108,8 +104,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 layer.MaxScale = 1;
                 //
 
-                var basemap = new Basemap(layer);
-                this.Map.Basemap = basemap;
+                map.Basemap = new Basemap(layer);
+                
+                map.MinScale = 100000000;
+                map.MaxScale = 1;
+
+                this.Map = map;
             }
             else
             {
@@ -143,38 +143,37 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             set
             {
                 this.mapView = value;
-                /*if (this.mapView != null)
+
+
+                if (this.mapView != null)
                 {
-                    //this.mapView.LayerViewStateChanged
-                }*/
-
-                /*this.mapView.SpatialReferenceChanged += (s, e) =>
+                    this.mapView.ViewAttachedToWindow +=
+                        delegate(object sender, View.ViewAttachedToWindowEventArgs args)
+                        {
+                            if (!string.IsNullOrEmpty(Area))
+                                if (StartEditAreaCommand.CanExecute())
+                                    StartEditAreaCommand.Execute();
+                        };
+                    /*this.mapView.LayerViewStateChanged += delegate(object sender, LayerViewStateChangedEventArgs args)
                     {
-                        if(this.mapView.Map != null)
-                            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.BaseLayers[0].FullExtent).ConfigureAwait(false);
-
-                        //this.MapView.Map.Basemap.Item.Extent.
-                        //this.MapView.SetViewpointAsync(new Viewpoint(geometry));
-                        //this.mapView.Map.MinScale = 100000000;
-                        //this.mapView.Map.MaxScale = 1;
+                       
                     };*/
+                }
             }
             get { return this.mapView; }
         }
-
-        //this.mapView.SpatialReferenceChanged += (s, e) => { this.mapView.Map.MinScale = 100000000; this.mapView.Map.MaxScale = 1; };
 
         public IMvxCommand SaveAreaCommand => new MvxCommand(() =>
         {
             var command = this.MapView.SketchEditor.CompleteCommand;
             if (this.MapView.SketchEditor.CompleteCommand.CanExecute(command))
             {
-                if(!GeometryEngine.IsSimple(this.MapView.SketchEditor.Geometry))
+                /*if(!GeometryEngine.IsSimple(this.MapView.SketchEditor.Geometry))
                 {
                     userInteractionService.ShowToast("Area is invalid. Please fix.");
                     return;
                 }
-                else
+                else*/
                     this.MapView.SketchEditor.CompleteCommand.Execute(command);
             }
             
@@ -239,7 +238,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             else
             {
                 var geometry = Geometry.FromJson(Area);
-                await this.MapView.SetViewpointGeometryAsync(geometry, 100);
+                await this.MapView.SetViewpointGeometryAsync(geometry, 120);
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
 

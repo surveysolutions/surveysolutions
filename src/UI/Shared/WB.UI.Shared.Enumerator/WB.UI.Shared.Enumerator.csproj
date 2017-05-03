@@ -1065,7 +1065,7 @@
       <SubType>Designer</SubType>
     </None>
     <AndroidResource Include="Resources\layout\interview_complete_status_change.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_active_group.axml">
       <SubType>Designer</SubType>
