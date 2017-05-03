@@ -44,40 +44,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             if (call.Duration.HasValue)
             {
                 var duration = call.Duration.Value;
-
-                // From total call duration substracting time that it took server to process response. 
-                // this way interview upload speed will not be affected by very long server side interview processing
-                IEnumerable<string> perfHeaders;
-                if (call.Response.Headers.TryGetValues("Server-Timing", out perfHeaders))
-                {
-                    foreach (var perfValue in perfHeaders.SelectMany(h => h.Split(',')).Select(h => h.Trim()))
-                    {
-                        if (perfValue.StartsWith(@"action", StringComparison.Ordinal))
-                        {
-                            var actionTime = perfValue.Split('=');
-
-                            if (actionTime.Length > 1)
-                            {
-                                var actionTimeValue = actionTime[1].Replace(',', '.');
-                                double serverReportedActionDuration;
-
-                                if (double.TryParse(actionTimeValue, NumberStyles.Any, CultureInfo.InvariantCulture, out serverReportedActionDuration))
-                                {
-                                    duration = duration.Subtract(TimeSpan.FromSeconds(serverReportedActionDuration));
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-
                 this.Track(request, response, duration);
             }
         }
 
         private long GetHeadersEstimatedSize(HttpHeaders headers)
         {
-            return headers?.Sum(h => h.Key.Length + h.Value.Sum(hv => hv.Length)) ?? 0;
+            return headers?.Sum(h => h.Key.Length + h.Value.Sum(hv => hv.Length) + 3 /* ': \n' */ ) ?? 0;
         }
     }
 

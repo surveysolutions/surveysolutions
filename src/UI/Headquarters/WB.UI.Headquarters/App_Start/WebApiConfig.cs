@@ -38,7 +38,6 @@ namespace WB.UI.Headquarters
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 
-            config.Filters.Add(new PerformanceTraceFilter());
             config.Filters.Add(new UnhandledExceptionFilter());
             config.MessageHandlers.Add(new DecompressionHandler());
 
