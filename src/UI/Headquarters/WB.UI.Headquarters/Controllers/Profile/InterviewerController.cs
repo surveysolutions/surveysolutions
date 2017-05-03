@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var creationResult = await this.CreateUserAsync(model, UserRoles.Interviewer, model.SupervisorId);
+                var creationResult = await this.CreateUserAsync(model, UserRoles.Interviewer, model.SupervisorId, isLockedBySupervisor: model.IsLockedBySupervisor);
                 if (creationResult.Succeeded)
                 {
                     this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
