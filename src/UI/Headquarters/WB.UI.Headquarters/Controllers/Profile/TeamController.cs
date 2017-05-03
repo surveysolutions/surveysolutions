@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
         }
         
-        protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
+        protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null, bool? isLockedBySupervisor = null)
         {
             if (supervisorId != null)
             {
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return await this.userManager.CreateUserAsync(new HqUser
             {
                 Id = Guid.NewGuid(),
-                IsLockedBySupervisor = false,
+                IsLockedBySupervisor = isLockedBySupervisor ?? false,
                 IsLockedByHeadquaters = user.IsLocked,
                 FullName = user.PersonName,
                 Email = user.Email,

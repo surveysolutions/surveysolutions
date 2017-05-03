@@ -895,4 +895,8 @@
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
     <value>Подключен к планшету</value>
   </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Дата подключения устройства</value>
+    <comment>Дата подключения устройства</comment>
+  </data>
 </root>

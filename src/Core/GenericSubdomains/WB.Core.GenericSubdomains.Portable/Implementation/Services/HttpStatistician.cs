@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
 using Flurl.Http;
@@ -43,32 +44,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             if (call.Duration.HasValue)
             {
                 var duration = call.Duration.Value;
-
-                // From total call duration substracting time that it took server to process response. 
-                // this way interview upload speed will not be affected by very long server side interview processing
-                IEnumerable<string> perfHeaders;
-                if (call.Response.Headers.TryGetValues("Server-Timing", out perfHeaders))
-                {
-                    foreach (var perfHeader in perfHeaders)
-                    {
-                        var actionTiming = perfHeader.Split(',').FirstOrDefault(s => s.Trim().StartsWith("action", StringComparison.Ordinal));
-
-                        if (actionTiming != null)
-                        {
-                            var actionTime = actionTiming.Split('=');
-                            duration = duration.Subtract(TimeSpan.FromSeconds(double.Parse(actionTime[1])));
-                            break;
-                        }
-                    }
-                }
-
                 this.Track(request, response, duration);
             }
         }
 
         private long GetHeadersEstimatedSize(HttpHeaders headers)
         {
-            return headers?.Sum(h => h.Key.Length + h.Value.Sum(hv => hv.Length)) ?? 0;
+            return headers?.Sum(h => h.Key.Length + h.Value.Sum(hv => hv.Length) + 3 /* ': \n' */ ) ?? 0;
         }
     }
 
@@ -76,7 +58,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         public static IFlurlClient CollectHttpStats(this IFlurlClient client, IHttpStatistician statistician)
         {
-            client.Settings.AfterCall = statistician.CollectHttpCallStatistics;
+            client.Settings.AfterCall = call =>
+            {
+                try
+                {
+                    statistician.CollectHttpCallStatistics(call);
+                }
+                catch (Exception)
+                {
+                    // om nom nom - ignore everything. Just work.
+                }
+            };
             return client;
         }
     }
