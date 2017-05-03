@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Flurl.Http.Testing;
@@ -11,8 +13,10 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
 {
     public class HttpStatisticianTests
     {
-        [Test]
-        public async Task should_collect_uploaded_data()
+        [TestCase("en-US")]
+        [TestCase("ru-RU")]
+        [TestCase("de-GE")]
+        public async Task should_collect_uploaded_data(string cultureInfo)
         {
             // arrange
             var statistician = new HttpStatistician();
@@ -37,7 +41,10 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
                             httpCall.EndedUtc = timepoint;
 
                             // act
+                            var culture = Thread.CurrentThread.CurrentCulture;
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureInfo);
                             statistician.CollectHttpCallStatistics(httpCall);
+                            Thread.CurrentThread.CurrentCulture = culture;
                         };
                     })
                     .PostStringAsync("Just a sample text to add some content to fake request with length 70");
