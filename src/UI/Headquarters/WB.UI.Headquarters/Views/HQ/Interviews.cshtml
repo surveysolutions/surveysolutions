@@ -215,11 +215,11 @@
                             </ul>
                         </div>
                         <!-- /ko -->
+                        <!-- ko if:Pager().LastPage() > 1 -->
                         <div class="row-unit">
-                            <!-- ko if:Pager().LastPage() > 1 -->
                             <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
-                            <!-- /ko -->
                         </div>
+                        <!-- /ko -->
                     </div>
 
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">

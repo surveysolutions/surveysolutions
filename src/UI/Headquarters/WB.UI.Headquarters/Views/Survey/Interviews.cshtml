@@ -218,11 +218,11 @@
                             </ul>
                         </div>
                         <!-- /ko -->
+                        <!-- ko if:Pager().LastPage() > 1 -->
                         <div class="row-unit">
-                            <!-- ko if:Pager().LastPage() > 1 -->
                             <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
-                            <!-- /ko -->
                         </div>
+                        <!-- /ko -->
                     </div>
                     @Html.Partial("_ListDataTablePagingScript")
 
