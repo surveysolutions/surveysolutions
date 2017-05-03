@@ -210,7 +210,7 @@
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0001_NoQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="[PL0001] Questionnaire is missing in HQ" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0001] 问卷模板缺失。" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="[PL0001] 问卷模板缺失。" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="[PL0001] Modelo de questionário está faltando." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -289,7 +289,7 @@
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0012_QuestionWasNotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question found in the uploaded file(s) that does not exist in the questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="未找到问题。" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="未找到问题。" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Pergunta não foi encontrada." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -303,7 +303,7 @@
         <it rn="Resources\PreloadingVerificationMessages.resx" nm="PL0014_ParsedValueIsNotAllowed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarters.Resources" cln="PreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="[PL0014] Value not allowed for this question in questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0014] 提供的问题数值不被允许。" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="[PL0014] 提供的问题数值不被允许。" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="[PL0014] Valor da pergunta fornecido não é permitido." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -759,10 +759,10 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreateSample" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create interviews from this data" ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Создание интервью" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Создание интервью" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Créer l'échantillons à partir de ces données" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="从数据中创建样本" ts="Changed" qs="ToReview" />
-            <li lc="pt" tx="Criar amostra apartir destes dados" er="" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Criar amostra apartir destes dados" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="CreateUsers" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -985,7 +985,7 @@
           <lis>
             <li lc="nn-nn" tx="Choose a file to upload" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы должны выбрать файл для загрузки" ts="Translated" qs="Approved" />
-            <li lc="fr" tx="Vous devez choisir un fichier à importer" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Vous devez choisir un fichier à importer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您必须选择一个文件上传" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Você deve escolher um arquivo para carregar" ts="Translated" qs="ToReview" />
           </lis>
@@ -1085,7 +1085,7 @@
           <lis>
             <li lc="nn-nn" tx="Last date updated" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновлено" ts="Translated" qs="Approved" />
-            <li lc="fr" tx="Date de dernière mise à jour" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Date de dernière mise à jour" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="最近一次更新日期" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data da última atualização" ts="Translated" qs="ToReview" />
           </lis>
@@ -1484,7 +1484,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UsersHaveBeenCreated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="user(s) have been created" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="пользователей было создано." er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="пользователей было создано." ts="Translated" qs="Approved" />
             <li lc="fr" tx="compte(s) d'utilisateur ont été créé(s)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="个用户被创建" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="usuário (s) foram criadas" ts="Translated" qs="ToReview" />
@@ -1493,7 +1493,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Validated" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validated" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверено" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Проверено" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Validé" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已验证" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Validado" ts="Translated" qs="ToReview" />
@@ -1511,7 +1511,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ValidationFinishedWithError" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validated" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ошибки" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Ошибки" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Validé" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已验证" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Validado" ts="Translated" qs="ToReview" />
@@ -1627,7 +1627,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="CreatedOnClient" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Created on Client" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создан на клиенте" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Создан на клиенте" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Créé sur la tablette" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已在客户端创建" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Criado no cliente" ts="Translated" qs="ToReview" />
@@ -1776,7 +1776,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="ReceivedByInterviewer" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Received by Interviewer" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Получил интервьюер" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Получил интервьюер" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Reçu(s) par l’enquêteur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="调查员已收到" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Recebidos pelo entrevistador" ts="Translated" qs="ToReview" />
@@ -1839,7 +1839,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="Settings" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Settings" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Параметры" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Параметры" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Paramètres" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Configurações" ts="Translated" qs="ToReview" />
@@ -1881,7 +1881,7 @@
         <it rn="App_GlobalResources\Common.resx" nm="TheWorldBankGroup" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="The World Bank Group" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="The World Bank Group" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="The World Bank Group" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Le groupe de la Banque mondiale" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="世界银行集团" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="O Grupo Banco Mundial" ts="Translated" qs="ToReview" />
@@ -2293,7 +2293,7 @@
           <lis>
             <li lc="nn-nn" tx="Last update date" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновлено" ts="Changed" qs="Approved" />
-            <li lc="fr" tx="Dernière date de mise à jour" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Dernière date de mise à jour" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="最近一次更新日期" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Data da última atualização" ts="Translated" qs="ToReview" />
           </lis>
@@ -2495,10 +2495,10 @@
         <it rn="App_GlobalResources\Import.resx" nm="CreateSample" rc="" dnt="false" nms="Resources" cln="Import" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Create sample from this data" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создание образца из данных" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Создание образца из данных" ts="Translated" qs="Approved" />
             <li lc="fr" tx="Créer l'échantillons à partir de ces données" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="从数据中创建样本" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="Criar a amostra de dados" er="" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="Criar a amostra de dados" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Import.resx" nm="ParsingCompleted" rc="" dnt="false" nms="Resources" cln="Import" bac="Content" hgt="0" wdt="0">
@@ -2540,7 +2540,7 @@
         <it rn="App_GlobalResources\MainMenu.resx" nm="ApiUsers" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="API Users" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="API пользователи" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="API пользователи" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Utilisateurs de l’API" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="API用户" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Usuários do API" ts="Translated" qs="ToReview" />
@@ -3002,7 +3002,7 @@
         <it rn="App_GlobalResources\Reports.resx" nm="ApprovedByHQ" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Approved by HQ" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Утверждено хедквотером" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Утверждено хедквотером" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Approuvé par le quartier général" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="总部已审核通过" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovado pela HQ" ts="Translated" qs="ToReview" />
@@ -3011,7 +3011,7 @@
         <it rn="App_GlobalResources\Reports.resx" nm="ApprovedBySupervisor" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Approved by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Утверждено супервизором" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Утверждено супервизором" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Approuvé par superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="督导员已审核通过" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovado pelo supervisor" ts="Translated" qs="ToReview" />
@@ -3083,7 +3083,7 @@
         <it rn="App_GlobalResources\Reports.resx" nm="RejectedByHQ" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Rejected by HQ" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отклонено хедквотером" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Отклонено хедквотером" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Rejeté par quartier général" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="总部已驳回" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Rejeitado pela HQ" ts="Translated" qs="ToReview" />
@@ -3092,7 +3092,7 @@
         <it rn="App_GlobalResources\Reports.resx" nm="RejectedBySupervisor" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Rejected by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отклонено супервизором" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Отклонено супервизором" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Rejeté par superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="督导员已驳回" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Rejeitado pelo supervisor" ts="Translated" qs="ToReview" />
@@ -3101,7 +3101,7 @@
         <it rn="App_GlobalResources\Reports.resx" nm="SupervisorAssigned" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor assigned" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор назначен" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Супервизор назначен" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Affecté au superviseur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已分配督导员" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Supervisor atribuído" ts="Translated" qs="ToReview" />
@@ -3299,7 +3299,7 @@
         <it rn="App_GlobalResources\Settings.resx" nm="Settings_Title" rc="" dnt="false" nms="Resources" cln="Settings" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Settings" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Настройки" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Настройки" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Paramètres" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Configurações" ts="Translated" qs="ToReview" />
@@ -3372,7 +3372,7 @@
         <it rn="App_GlobalResources\Users.resx" nm="APIUsers" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="API Users" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="API Пользователи" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="API Пользователи" ts="Changed" qs="Approved" />
             <li lc="fr" tx="Utilisateurs de l’API" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="API用户" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Usuários do API" ts="Translated" qs="ToReview" />
@@ -3487,7 +3487,7 @@
           <lis>
             <li lc="nn-nn" tx="Email" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Электронная почта" ts="Changed" qs="Approved" />
-            <li lc="fr" tx="Courriel" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Courriel" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="电子邮箱" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Email" ts="Translated" qs="ToReview" />
           </lis>
@@ -3695,7 +3695,7 @@
           <lis>
             <li lc="fr" tx="Enquêteurs actifs" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Active interviewers" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Активные интервьюеры" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Активные интервьюеры" ts="Translated" qs="Approved" />
             <li lc="zh" tx="活动的调查员" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="pt" tx="Entrevistadores ativos" ts="Translated" qs="ToReview" />
           </lis>
@@ -3747,7 +3747,7 @@
         </it>
         <it rn="Resources\Archived.resx" nm="Email" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Archived" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Courriel" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Courriel" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Email" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Электронная почта" ts="Translated" qs="Approved" />
             <li lc="zh" tx="电子邮箱" ts="Translated" qs="ToReview" />
@@ -3776,7 +3776,7 @@
           <lis>
             <li lc="fr" tx="Désarchiver" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Unarchive" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Восстановить" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Восстановить" ts="Translated" qs="Approved" />
             <li lc="zh" tx="取消归档" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Desarquivar" ts="Translated" qs="ToReview" />
           </lis>
@@ -3982,7 +3982,7 @@
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="BatchUploadModel_Required" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Sélectionner un fichier à importer" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Sélectionner un fichier à importer" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="You must choose a file to upload" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы должны выбрать файл для загрузки" ts="Translated" qs="Approved" />
             <li lc="zh" tx="您必须选择一个文件上传" ts="Translated" qs="ToReview" />
@@ -4068,7 +4068,7 @@
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="EmailFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Adresse courriel" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Adresse courriel" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Email address" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Электронная почта" ts="Changed" qs="Approved" />
             <li lc="zh" tx="电子邮箱" ts="Changed" qs="ToReview" />
@@ -4172,11 +4172,11 @@
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PersonNameErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Entrée trop longue &gt; {1}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Entrée trop longue &gt; {1}" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Person name cannot contain more than {1} characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Полное имя не должно содержать больше {1} символов" ts="Changed" qs="Approved" />
-            <li lc="zh" tx="输入的名称太长 &gt; {1}" er="" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="Nome de entrada é muito longo &gt; {1}" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="输入的名称太长 &gt; {1}" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="Nome de entrada é muito longo &gt; {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PersonNameFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4277,7 +4277,7 @@
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="UserBatchUploadModel_Required_ErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Sélectionner un fichier à importer" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Sélectionner un fichier à importer" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="You must choose a file to upload" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы должны выбрать файл для загрузки" ts="Translated" qs="Approved" />
             <li lc="zh" tx="您必须选择一个文件上传" ts="Translated" qs="ToReview" />
@@ -4369,11 +4369,11 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="ApproveConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt; {0} &lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt;&lt;b&gt; {0} &lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
             <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." er="" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4607,7 +4607,7 @@
         <it rn="Resources\Pages.resx" nm="AccountManage_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Edit {0} profile" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Редактирование профиля {0}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Редактирование профиля {0}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="AnyOption" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4632,7 +4632,7 @@
           <lis>
             <li lc="fr" tx="Approuvés par le superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Approved by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Утверждена супервизором" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Утверждена супервизором" ts="Translated" qs="Approved" />
             <li lc="zh" tx="督导员已审核通过" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovado pelo supervisor" ts="Translated" qs="ToReview" />
           </lis>
@@ -4838,7 +4838,7 @@
           <lis>
             <li lc="fr" tx="Vous n’êtes pas autorisé à prendre cette action." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="You do not have permission for this action." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У вас нет прав для выполнения этого действия" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="У вас нет прав для выполнения этого действия" ts="Translated" qs="Approved" />
             <li lc="zh" tx="您没有权限进行这个操作。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Você não tem permissão para esta ação." ts="Translated" qs="ToReview" />
           </lis>
@@ -4883,7 +4883,7 @@
           <lis>
             <li lc="fr" tx="Aucune coordonnées GPS à charger" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="There is no any information about geolocation points." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Нет никакой информации об отметках геолокации" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Нет никакой информации об отметках геолокации" ts="Translated" qs="Approved" />
             <li lc="zh" tx="没有关于位置点的信息。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="pt" tx="Não há nenhuma informações sobre pontos de geolocalização." ts="Translated" qs="ToReview" />
           </lis>
@@ -5033,7 +5033,7 @@
           <lis>
             <li lc="fr" tx="Statut défini par l’équipe de soutien de Solutions d’enquête" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Status set by Survey Solutions support team" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Статус установлен службой поддержки Survey Solutions" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Статус установлен службой поддержки Survey Solutions" ts="Translated" qs="Approved" />
             <li lc="zh" tx="由Survey Solutions支持团队设置的状态" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Status definido pela equipe de suporte de soluções de pesquisa" ts="Translated" qs="ToReview" />
           </lis>
@@ -5322,8 +5322,8 @@
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_AssignedToFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="{0} (assigned to {1})" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{0} (закреплён за {1})" ts="Translated" qs="Approved" />
+            <li lc="nn-nn" tx="{0} (supervisor: {1})" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{0} (супервизор: {1})" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_AverageSyncSpeed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5618,7 +5618,7 @@
           <lis>
             <li lc="fr" tx="Utilisateurs actifs" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Active interviewers" ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Активные пользователи" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Активные пользователи" ts="Changed" qs="Approved" />
             <li lc="zh" tx="活动的用户" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="pt" tx="Entrevistadores ativos" ts="Translated" qs="ToReview" />
           </lis>
@@ -5645,7 +5645,7 @@
           <lis>
             <li lc="fr" tx="enquêteurs seront archivés." ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewer(s) will be archived." ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Пользователь(ей) будут архивированы" er="" ts="Changed" qs="Approved" />
+            <li lc="ru" tx="Пользователь(ей) будут архивированы" ts="Changed" qs="Approved" />
             <li lc="zh" tx="调查员将被归档。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="pt" tx="entrevistador (s) serão arquivadas." ts="Changed" qs="ToReview" />
           </lis>
@@ -5802,7 +5802,7 @@
           <lis>
             <li lc="fr" tx="Désarchiver" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Unarchive" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Разархивировать" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Разархивировать" ts="Translated" qs="Approved" />
             <li lc="zh" tx="取消归档" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Desarquivar" ts="Translated" qs="ToReview" />
           </lis>
@@ -5859,7 +5859,7 @@
           <lis>
             <li lc="fr" tx="Tous droits réservés." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="All Rights Reserved." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Все права защищены" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Все права защищены" ts="Translated" qs="Approved" />
             <li lc="zh" tx="版权所有." ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Todos os direitos reservados." ts="Translated" qs="ToReview" />
           </lis>
@@ -5868,7 +5868,7 @@
           <lis>
             <li lc="fr" tx="Le groupe de la Banque mondiale" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="The World Bank Group" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Группа Всемирного Банка" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Группа Всемирного Банка" ts="Translated" qs="Approved" />
             <li lc="zh" tx="世界银行集团" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="O Grupo Banco Mundial" ts="Translated" qs="ToReview" />
           </lis>
@@ -6184,7 +6184,7 @@
           <lis>
             <li lc="fr" tx="Rejeté par le superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Rejected by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отклонено руководителем" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Отклонено руководителем" ts="Translated" qs="Approved" />
             <li lc="zh" tx="督导员已驳回" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Rejeitado pelo supervisor" ts="Translated" qs="ToReview" />
           </lis>
@@ -6226,7 +6226,7 @@
           <lis>
             <li lc="fr" tx="Affecté au superviseur" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Supervisor assigned" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Назначен руководитель" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Назначен руководитель" ts="Translated" qs="Approved" />
             <li lc="zh" tx="已分配督导员" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Supervisor atribuído" ts="Translated" qs="ToReview" />
           </lis>
@@ -6280,7 +6280,7 @@
           <lis>
             <li lc="fr" tx="Créé sur la tablette" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Created on Client" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Создано на клиенте" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Создано на клиенте" ts="Translated" qs="Approved" />
             <li lc="zh" tx="已在客户端创建" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Criado no cliente" ts="Translated" qs="ToReview" />
           </lis>
@@ -6316,7 +6316,7 @@
           <lis>
             <li lc="fr" tx="Reçu par l’enquêteur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Received by Interviewer" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Получено интервьюером" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Получено интервьюером" ts="Translated" qs="Approved" />
             <li lc="zh" tx="调查员已收到" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Recebidos pelo entrevistador" ts="Translated" qs="ToReview" />
           </lis>
@@ -6391,7 +6391,7 @@
           <lis>
             <li lc="fr" tx="Approuvé par quartier général" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Approved by HQ" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Утверждено Хедквотером" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Утверждено Хедквотером" ts="Translated" qs="Approved" />
             <li lc="zh" tx="总部已审核通过" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovado pela HQ" ts="Translated" qs="ToReview" />
           </lis>
@@ -6400,7 +6400,7 @@
           <lis>
             <li lc="fr" tx="Approuvé par superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Approved by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Утверждено Супервизором" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Утверждено Супервизором" ts="Translated" qs="Approved" />
             <li lc="zh" tx="督导员已审核通过" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Aprovado pelo supervisor" ts="Translated" qs="ToReview" />
           </lis>
@@ -6427,7 +6427,7 @@
           <lis>
             <li lc="fr" tx="Rejeté par quartier général" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Rejected by HQ" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отклонено Хедквотером" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Отклонено Хедквотером" ts="Translated" qs="Approved" />
             <li lc="zh" tx="总部已驳回" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Rejeitado pela HQ" ts="Translated" qs="ToReview" />
           </lis>
@@ -6436,7 +6436,7 @@
           <lis>
             <li lc="fr" tx="Rejeté par superviseur" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Rejected by supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отклонено Супервизором" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Отклонено Супервизором" ts="Translated" qs="Approved" />
             <li lc="zh" tx="督导员已驳回" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Rejeitado pelo supervisor" ts="Translated" qs="ToReview" />
           </lis>
@@ -6445,7 +6445,7 @@
           <lis>
             <li lc="fr" tx="Affecté au superviseur" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Supervisor assigned" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор назначен" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Супервизор назначен" ts="Translated" qs="Approved" />
             <li lc="zh" tx="已分配督导员" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Supervisor atribuído" ts="Translated" qs="ToReview" />
           </lis>
@@ -6906,7 +6906,7 @@
           <lis>
             <li lc="fr" tx="État défini par l’équipe de soutien de Survey Solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Status set by Survey Solutions support team" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Статус установлен командой поддержки Survey Solutions" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Статус установлен командой поддержки Survey Solutions" ts="Translated" qs="Approved" />
             <li lc="zh" tx="由Survey Solutions支持团队设置的状态" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Status definido pela equipe de suporte de soluções de pesquisa" ts="Translated" qs="ToReview" />
           </lis>
@@ -7059,7 +7059,7 @@
           <lis>
             <li lc="fr" tx="Affecté au superviseur" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Supervisor assigned" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор назначен" er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Супервизор назначен" ts="Translated" qs="Approved" />
             <li lc="zh" tx="已分配督导员" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Supervisor atribuído" ts="Translated" qs="ToReview" />
           </lis>
@@ -7316,11 +7316,11 @@
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="PostPackage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Importer l'entretien: {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Importer l'entretien: {0}" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Upload interview: {0}" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Загружено интервью: {0}" ts="Changed" qs="Approved" />
-            <li lc="zh" tx="上传访谈：{0}" er="" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="Upload de entrevista:{0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="上传访谈：{0}" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="Upload de entrevista:{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="QuestionnaireAssemblyProcessed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">

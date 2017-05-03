@@ -444,6 +444,9 @@
   <data name="InterviewerProfile_DeviceId" xml:space="preserve">
     <value>Device ID</value>
   </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Device assignment date</value>
+  </data>
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>Device serial number</value>
   </data>
