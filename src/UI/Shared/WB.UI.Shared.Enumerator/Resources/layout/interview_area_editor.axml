@@ -18,83 +18,78 @@
             android:layout_height="match_parent"
             local:MvxBind="Map Map" />-->
         <ProgressBar
-                android:layout_alignParentTop="true"
-                style="@style/Interview_Question_Progress_Indicator"
-                android:indeterminate="true"
-                local:MvxBind="Visibility Visibility(IsInProgress);" />    
+            android:layout_alignParentTop="true"
+            style="@style/Interview_Question_Progress_Indicator"
+            android:indeterminate="true"
+            local:MvxBind="Visibility Visibility(IsInProgress);" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Interview_Question_InputButton"
-                android:id="@+id/LoginPage_troubleshooting_button1155"
-                local:MvxBind="Click UpdateMapsCommand; Text 'Update maps';"/>
+                style="@style/Interview_Complete_Screen_Button"
+                android:id="@+id/AreaEditor_Update_Maps"
+                local:MvxBind="Click UpdateMapsCommand; Text 'Update maps';" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/AreaEditor_No_Maps_Text"
                 local:MvxBind="Text 'No maps were found. Please update maps'; Visibility Visibility(Map == null);" />
             <MvxSpinner
-                android:id="@+id/spinner1"
+                android:id="@+id/AreaEditor_Maps_Selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
-                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap; Visibility Visibility(Map != null);"
-                 />
-            <!--style="@style/spinnerDropDownItemStyle" 
+                local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap; Visibility Visibility(Map != null);" />
+        <!--style="@style/spinnerDropDownItemStyle" 
+            android:background="#2A81CB"
             android:background="@android:drawable/btn_dropdown"-->
-            
         </LinearLayout>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Interview_Question_InputButton"
-            android:id="@+id/LoginPage_singin_button113"
+            style="@style/Interview_Complete_Screen_Button"
+            android:id="@+id/AreaEditor_Location"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
-            local:MvxBind="Click SwitchLocatorCommand; Text '*';" />
-            
+            local:MvxBind="Click SwitchLocatorCommand; Text 'Location';" />
         <TextView
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="95dp"
-                android:layout_marginLeft="10dp"
-                android:textStyle="bold"
-                android:id="@+id/AreaEditor_GeometryArea"
-                local:MvxBind="Text GeometryArea; Visibility Visibility(IsEditing);" />
-            
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="95dp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:id="@+id/AreaEditor_GeometryArea"
+            local:MvxBind="Text GeometryArea; Visibility Visibility(IsEditing);" />
         <LinearLayout
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="55dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:background="#4DEEEFF0">
+            android:layout_marginTop="0"
+            android:gravity="center=">
+        <!--android:background="#CCFFFFFF"-->
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Interview_Question_InputButton"
-                android:id="@+id/LoginPage_singin_button1"
+                style="@style/Interview_Complete_Screen_Button"
+                android:id="@+id/AreaEditor_Start_Edit"
                 local:MvxBind="Click StartEditAreaCommand; Text 'Edit'; Enabled (Map != null);" />
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Interview_Question_InputButton"
-                android:id="@+id/LoginPage_troubleshooting_button11"
+                style="@style/Interview_Complete_Screen_Button"
+                android:id="@+id/AreaEditor_Undo"
                 local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
                 android:layout_marginLeft="20dp" />
-            <!--<Button
+        <!--<Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Interview_Question_InputButton"
@@ -102,11 +97,9 @@
                 local:MvxBind="Click DeleteCommand; Text 'Remove last'; Enabled IsEditing;"
                 android:layout_marginLeft="20dp" />-->
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Interview_Question_InputButton"
-                android:id="@+id/LoginPage_troubleshooting_button1"
-                android:layout_marginLeft="60dp"
+                style="@style/Interview_Complete_Screen_Button"
+                android:id="@+id/AreaEditor_Save"
+                android:layout_marginLeft="120dp"
                 local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
         </LinearLayout>
     </RelativeLayout>
