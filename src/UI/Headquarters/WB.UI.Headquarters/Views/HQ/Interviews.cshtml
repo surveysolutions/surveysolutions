@@ -193,7 +193,6 @@
                             <!-- ko if:Pager().LastPage() > 1 -->
                             <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
                             <!-- /ko -->
-                            @Html.Partial("_ListDataTablePagingScript")
                         </div>
                     </div>
                     
@@ -216,6 +215,11 @@
                             </ul>
                         </div>
                         <!-- /ko -->
+                        <!-- ko if:Pager().LastPage() > 1 -->
+                        <div class="row-unit">
+                            <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                        </div>
+                        <!-- /ko -->
                     </div>
 
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
@@ -232,6 +236,9 @@
                         </div>
                     </div>
                 </div>
+                @Html.Partial("_ListDataTablePagingScript")
+
+
 
 
             </div>
