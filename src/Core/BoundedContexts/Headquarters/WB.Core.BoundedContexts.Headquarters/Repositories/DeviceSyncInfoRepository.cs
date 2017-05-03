@@ -45,5 +45,101 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public int GetFailedSynchronizationsCount(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
+
+        public SynchronizationActivity GetSynchronizationActivity(Guid id)
+        {
+            return new SynchronizationActivity
+            {
+                Days = new []
+                {
+                    new SyncDay
+                    {
+                        Day = new DateTime(2017, 01, 01),
+                        Quarters = new []
+                        {
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 1,
+                                DownloadedQuestionnairesCount = 1,
+                                StartedInterviewsCount = 3,
+                                UploadedInterviewsCount = 0,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 2
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 0,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 0,
+                                FailedSynchronizationsCount = 2,
+                                SynchronizationsWithoutChangesCount = 0
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 0,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 0,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 3
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 2,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 0,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 0
+                            },
+                        }
+                    },
+                    new SyncDay
+                    {
+                        Day = new DateTime(2017, 01, 03),
+                        Quarters = new []
+                        {
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 0,
+                                DownloadedQuestionnairesCount = 3,
+                                StartedInterviewsCount = 8,
+                                UploadedInterviewsCount = 2,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 1
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 5,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 2,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 1
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 0,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 0,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 1
+                            },
+                            new SyncDayQuarter
+                            {
+                                DownloadedInterviewsCount = 0,
+                                DownloadedQuestionnairesCount = 0,
+                                StartedInterviewsCount = 0,
+                                UploadedInterviewsCount = 3,
+                                FailedSynchronizationsCount = 0,
+                                SynchronizationsWithoutChangesCount = 1
+                            },
+                        }
+                    },
+                }
+            };
+        }
     }
 }
