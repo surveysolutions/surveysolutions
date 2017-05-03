@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
             {
                 httpTest.ResponseQueue.Enqueue(new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StringContent("response content with the length long enough and equal to 61"),
-                    Headers = { {"Server-Timing", "db=1, action=0.125 , hardwork=2"} } // estimated headers size ~ 43
+                    Content = new StringContent("response content with the length long enough and equal to 60"),
+                    Headers = { {"Server-Timing", "db=1, action=0.125 , hardwork=2, brokenvalue"} } // estimated headers size ~ 43
                 });
 
                 await "http://example.com"
@@ -47,16 +47,16 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.HttpStatisticianTests
                             Thread.CurrentThread.CurrentCulture = culture;
                         };
                     })
-                    .PostStringAsync("Just a sample text to add some content to fake request with length 70");
+                    .PostStringAsync("Just a sample text to add some content to fake request with length 69");
             }
 
             // assert
             var stats = statistician.GetStats();
 
-            Assert.That(stats.DownloadedBytes, Is.EqualTo(104), "Should take into account estimated headers size.");
-            Assert.That(stats.UploadedBytes, Is.EqualTo(108), "Should take into account estimated headers size.");
+            Assert.That(stats.DownloadedBytes, Is.EqualTo(60 + 60 /* body + headers = 120 */), "Should take into account estimated headers size.");
+            Assert.That(stats.UploadedBytes, Is.EqualTo(69 + 42 /*body + headers = 111*/), "Should take into account estimated headers size.");
 
-            Assert.That(stats.Speed, Is.EqualTo(104 + 108), "Duration should be 1 second, so speed is equal to bytes");
+            Assert.That(stats.Speed, Is.EqualTo(120 + 111), "Duration should be 1 second, so speed is equal to bytes");
 
             Assert.That(stats.Duration, Is.EqualTo(TimeSpan.FromSeconds(1)), "Should take into account server side action processing time");
         }
