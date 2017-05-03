@@ -333,7 +333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
         public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
-            => this.Tree.FindQuestionsFromSameOrDeeperLevel(entityId, questionIdentity);
+            => this.Tree.FindEntitiesFromSameOrDeeperLevel(entityId, questionIdentity);
 
         public bool IsQuestionPrefilled(Identity entityIdentity)
         {

@@ -125,8 +125,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 foreach (var rosterScopePairs in rosterScopes)
                 {
                     var rosterScope = rosterScopePairs.Key;
-                    if (!rosterScope.IsSameOrParentScopeFor(level.RosterScope))
+                    if (!rosterScope.IsSameOrParentScopeFor(level.RosterScope) )
+                    {
+                        if (!rosterScope.IsChildScopeFor(level.RosterScope, 1))
                         continue;
+                    }
 
                     var rosters = rosterScopePairs.Value.Where(x => x.IsRoster);
                     foreach (var roster in rosters)
