@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
 using Flurl.Http;
@@ -49,14 +50,22 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 IEnumerable<string> perfHeaders;
                 if (call.Response.Headers.TryGetValues("Server-Timing", out perfHeaders))
                 {
-                    foreach (var perfHeader in perfHeaders)
+                    foreach (var perfValue in perfHeaders.SelectMany(h => h.Split(',')).Select(h => h.Trim()))
                     {
-                        var actionTiming = perfHeader.Split(',').FirstOrDefault(s => s.Trim().StartsWith("action", StringComparison.Ordinal));
-
-                        if (actionTiming != null)
+                        if (perfValue.StartsWith(@"action", StringComparison.Ordinal))
                         {
-                            var actionTime = actionTiming.Split('=');
-                            duration = duration.Subtract(TimeSpan.FromSeconds(double.Parse(actionTime[1])));
+                            var actionTime = perfValue.Split('=');
+
+                            if (actionTime.Length > 1)
+                            {
+                                var actionTimeValue = actionTime[1].Replace(',', '.');
+                                double serverReportedActionDuration;
+
+                                if (double.TryParse(actionTimeValue, NumberStyles.Any, CultureInfo.InvariantCulture, out serverReportedActionDuration))
+                                {
+                                    duration = duration.Subtract(TimeSpan.FromSeconds(serverReportedActionDuration));
+                                }
+                            }
                             break;
                         }
                     }
@@ -76,7 +85,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         public static IFlurlClient CollectHttpStats(this IFlurlClient client, IHttpStatistician statistician)
         {
-            client.Settings.AfterCall = statistician.CollectHttpCallStatistics;
+            client.Settings.AfterCall = call =>
+            {
+                try
+                {
+                    statistician.CollectHttpCallStatistics(call);
+                }
+                catch (Exception)
+                {
+                    // om nom nom - ignore everything. Just work.
+                }
+            };
             return client;
         }
     }
