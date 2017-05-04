@@ -73,7 +73,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="55dp"
+            android:layout_marginBottom="45dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -82,18 +82,18 @@
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Start_Edit"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="1dp"
                 local:MvxBind="Click StartEditAreaCommand; Text 'Edit'; Enabled (Map != null);" />
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Undo"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="1dp"
                 local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
                 android:layout_marginLeft="20dp" />
             <Button
                 style="@style/Interview_Complete_Screen_Button"
                 android:id="@+id/AreaEditor_Save"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginLeft="120dp"
                 local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
         </LinearLayout>
