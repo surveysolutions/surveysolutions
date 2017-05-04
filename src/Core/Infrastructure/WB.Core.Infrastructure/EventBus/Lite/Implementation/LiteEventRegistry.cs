@@ -93,7 +93,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 ICollection<LiteEventRegistryEntity> handlersForEventType = this.handlers.GetOrAdd(handlerKey, () => new ConcurrentHashSet<LiteEventRegistryEntity>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
-                    throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
+                    throw new InvalidOperationException($"This handler {handler} already subscribed to event {eventType.Name}");
 
                 var liteEventRegistryEntity = new LiteEventRegistryEntity(handler, raiseFilter);
                 handlersForEventType.Add(liteEventRegistryEntity);
