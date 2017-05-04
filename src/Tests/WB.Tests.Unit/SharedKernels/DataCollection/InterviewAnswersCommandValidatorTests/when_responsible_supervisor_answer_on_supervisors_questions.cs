@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
         It should_not_any_interview_exceptions = () =>
             exceptions.ShouldEachConformTo(x => x == null);
 
-        private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-        private static readonly StatefulInterview interview = Create.AggregateRoot.StatefulInterview(interviewId);
+        static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+        static readonly StatefulInterview interview = Create.AggregateRoot.StatefulInterview(interviewId, shouldBeInitialized: false);
 
-        private static readonly Action[] commandValidations =
+        static readonly Action[] commandValidations =
         {
             () => commandValidator.Validate(interview, Create.Command.AnswerDateTimeQuestionCommand(interviewId: interviewId, userId: responsibleId)),
             () => commandValidator.Validate(interview, Create.Command.AnswerTextListQuestionCommand(interviewId: interviewId, userId: responsibleId)),
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             () => commandValidator.Validate(interview, Create.Command.AnswerYesNoQuestion(interviewId: interviewId, userId: responsibleId, answer: new List<AnsweredYesNoOption>())),
             () => commandValidator.Validate(interview, Create.Command.AnswerGeoLocationQuestionCommand(interviewId: interviewId, userId: responsibleId))
         };
-        private static readonly List<InterviewException> exceptions = new List<InterviewException>();
-        private static InterviewAnswersCommandValidator commandValidator;
+        static readonly List<InterviewException> exceptions = new List<InterviewException>();
+        static InterviewAnswersCommandValidator commandValidator;
     }
 }

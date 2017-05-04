@@ -300,9 +300,6 @@
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
     <value>Bạn có phiên bản mới nhất của ứng dụng</value>
   </data>
-  <data name="HostUnreachable" xml:space="preserve">
-    <value>Không có truy cập internet cho các trang web khảo sát giải pháp giám sát. Kiểm tra cài đặt mạng máy chủ địa chỉ and(or)</value>
-  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions.</value>
   </data>
@@ -318,7 +315,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Xác thực các vấn đề trên máy chủ từ xa quá. Xin vui lòng liên hệ với quản lý của bạn hoặc trụ sở chính</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Mật khẩu sai</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -28,6 +29,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         #region Apply
+
+        public override void Apply(InterviewCreated @event)
+        {
+            base.Apply(@event);
+            this.sourceInterview = this.Tree.Clone();
+        }
+
+        public override void Apply(InterviewFromPreloadedDataCreated @event)
+        {
+            base.Apply(@event);
+            this.sourceInterview = this.Tree.Clone();
+        }
 
         public override void Apply(InterviewOnClientCreated @event)
         {
@@ -477,6 +490,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
 
         public InterviewTreeSection FirstSection => this.Tree.Sections.First();
+
+        public Guid CurrentResponsibleId
+        {
+            get
+            {
+                var result = this.properties.InterviewerId ?? this.properties.SupervisorId;
+                if (result == null) throw new InterviewException($"Interview has no responsible assigned. Interview key: {this.interviewKey}");
+                return result.Value;
+            }
+        }
 
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());

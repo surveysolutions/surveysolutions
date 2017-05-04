@@ -1,16 +1,7 @@
 @using WB.UI.Shared.Web.Extensions
-
-@if (ViewBag.GlobalNotice != null || Alerts.ALL.Any(TempData.ContainsKey))
+@if (Alerts.ALL.Any(TempData.ContainsKey))
 {
     <div id="alerts" class="alerts">
-        @if (ViewBag.GlobalNotice != null)
-        {
-            <div class="alert alert-info alert-dismissible text-center " role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @ViewBag.GlobalNotice
-            </div>
-        }
-
         @if (TempData.ContainsKey(Alerts.ATTENTION))
         {
             <div class="alert alert-warning">

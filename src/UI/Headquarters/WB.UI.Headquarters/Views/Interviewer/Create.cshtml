@@ -1,19 +1,13 @@
-﻿@using System.Web.Optimization
-@using WB.Core.GenericSubdomains.Portable
-@using WB.UI.Headquarters.Resources
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
-
+﻿@model InterviewerModel
 @{
-    ViewBag.Title = Pages.InterviewerCreate_Title;
+    ViewBag.Title = Pages.Profile_InterviewerCreate;
+    ViewBag.PageTitle = Pages.Profile_InterviewerCreate;
+    Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
 }
-
 @section scripts
 {
     @Scripts.Render("~/js/interviewer")
-    @Scripts.Render("~/validate")
     <script type="text/javascript">
-        $('#umbrella').hide();
-
         var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
         $(document).ready(function () {
             var model = new Supervisor.VM.CreateInterviewer($supervisorsUrl);
@@ -22,49 +16,47 @@
         });
     </script>
 }
-<div class="main">
-    @Html.Partial("_alerts")
-    <div class="page-header">
-        <h2> @Pages.InterviewerCreate_CreateIn <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> @Pages.InterviewerCreate_Team</h2>
-    </div>
-
-
-    <form class="form-horizontal" method="POST">
-        @Html.AntiForgeryToken()
-        
-        @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger"} })
-
-        @Html.HiddenFor(x => x.IsShowSupervisorSelector)
-
-
-        @if (Model.IsShowSupervisorSelector)
-        {
-            <div class="form-group">
-                @Html.LabelFor(x => x.SupervisorId, new { @class = "col-sm-2 control-label required" })
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+@section Breadcrumbs
+{
+    <li>
+        @Html.ActionLink(@Pages.Profile_InterviewersList, "Back")
+    </li>
+}
+@section PreDetailsSection
+{
+    @if (Model.IsShowSupervisorSelector)
+    {
+        <div class="block-filter">
+            <h5 class="compulsory-field">@Html.LabelFor(x => x.SupervisorId)</h5>
+            <div class="form-group @(ViewData.ModelState.IsValidField(@"SupervisorId") ? string.Empty : @"has-error")">
+                <div class="combo-box field">
+                    <div class="btn-group btn-input clearfix">
+                        @Html.TextBoxFor(x => x.SupervisorName, new
+                        {
+                            @class = @"form-control",
+                            placeholder = @"Any",
+                            data_bind = @"typeahead: SelectedSupervisor, 
+                                          typeaheadOptions: {
+                                             source: Supervisors, 
+                                             displayText: function(item) { return item.UserName; }
+                                          }, 
+                                          valueupdate:'afterkeydown'"
+                        })
                         <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                        <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
-                            <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
-                        </div>
+                        @Html.HiddenFor(x => x.SupervisorId, new {data_bind = @"value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId"})
                     </div>
-                    @Html.HiddenFor(x => x.SupervisorId, new { data_bind = "value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
+                    <button type="button" class="btn btn-link btn-clear" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                        <span></span>
+                    </button>
                 </div>
-                <div class="col-sm-4">
-                    @Html.ValidationMessageFor(x => x.SupervisorId, null, new {@class = "help-block"})
-                </div>
-            </div>
-        }
-
-        @{
-            this.Html.RenderPartial("UserCreateForm");
-        }
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
-                @Html.ActionLink(Pages.Cancel, "Back", new {  }, new { @class = "btn btn-default" })
+                
+                @Html.ValidationMessageFor(x => x.SupervisorName, null, new { @class = @"help-block" })
             </div>
         </div>
-    </form>
-</div>
+        @Html.HiddenFor(x => x.IsShowSupervisorSelector)
+    }
+}
+@section PostDetailsSection
+{
+    @Html.EditorFor(x => x.IsLockedBySupervisor, "CheckboxFormField")
+}

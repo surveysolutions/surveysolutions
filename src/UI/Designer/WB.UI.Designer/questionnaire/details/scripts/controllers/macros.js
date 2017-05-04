@@ -17,8 +17,6 @@
             $scope.macros = [];
 
             var dataBind = function (macro, macroDto) {
-                macro.initialMacro = _.clone(macroDto);
-
                 macro.itemId = macroDto.itemId;
                 macro.name = macroDto.name;
                 macro.description = macroDto.description;
@@ -31,9 +29,10 @@
                     return;
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
-                    var macro = {};
+                    var macro = { checkpoint: {} };
                     if (!_.any($scope.macros, function (elem) { return elem.itemId === macroDto.itemId; })) {
                         dataBind(macro, macroDto);
+                        dataBind(macro.checkpoint, macroDto);
                         $scope.macros.push(macro);
                     }
                 });
@@ -48,27 +47,27 @@
             $scope.addNewMacro = function () {
                 var newId = utilityService.guid();
 
-                var newMacros = {
+                var newMacro = {
                     itemId: newId
                 };
 
-                commandService.addMacro($state.params.questionnaireId, newMacros).then(function () {
-                    var macros = {};
-                    dataBind(macros, newMacros);
-                    $scope.macros.push(macros);
+                commandService.addMacro($state.params.questionnaireId, newMacro).then(function () {
+                    var macro = { checkpoint: {} };
+                    dataBind(macro, newMacro);
+                    dataBind(macro.checkpoint, newMacro);
+                    $scope.macros.push(macro);
                 });
             };
 
             $scope.saveMacro = function (macro) {
                 commandService.updateMacro($state.params.questionnaireId, macro).then(function () {
-                    dataBind(macro, _.clone(macro));
+                    dataBind(macro.checkpoint, macro);
                     macro.form.$setPristine();
                 });
             };
 
             $scope.cancel = function (macro) {
-                var temp = macro.initialMacro;
-                dataBind(macro, temp);
+                dataBind(macro, macro.checkpoint);
                 macro.form.$setPristine();
             };
 

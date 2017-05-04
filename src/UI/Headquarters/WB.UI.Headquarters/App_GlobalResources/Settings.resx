@@ -121,7 +121,7 @@
     <value>Export Encryption</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Are you sure you want to regenerate password? You will need to regenerate exported data in order to open it.</value>
+    <value>Are you sure you want to create a new password? You will need to regenerate exported data in order to open them.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
@@ -149,5 +149,32 @@
   </data>
   <data name="ChangeStateConfirm" xml:space="preserve">
     <value>Are you sure you want to change protection state? You will need to regenerate exported data in order to open it.</value>
+  </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Global note</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Company logo</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Remove logo</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Note saved</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password can open the exported data.</value>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Specify text in the Global Note field to be shown on the top of every screen on the server.</value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Company logo shows a custom image on the server login page and on the login page of the Interviewer app. Click the Choose file button to upload an image from your computer to the server.</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Current logo</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Are you sure you want to delete global note?</value>
   </data>
 </root>

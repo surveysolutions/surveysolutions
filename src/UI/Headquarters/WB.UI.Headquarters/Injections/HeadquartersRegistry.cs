@@ -78,6 +78,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
 
             this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
+            this.Kernel.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
         }
 
         protected virtual void RegisterEventHandlers()
@@ -158,7 +159,11 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
-            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
+            this.Bind<IRestService>()
+                .To<RestService>()
+                .WithConstructorArgument("networkService", _ => null)
+                .WithConstructorArgument("restServicePointManager", _ => null)
+                .WithConstructorArgument("httpStatistican", _ => _.Kernel.Get<IHttpStatistician>());
 
             this.Bind<IExportSettings>().To<ExportSettings>();
 
@@ -179,6 +184,7 @@ namespace WB.UI.Headquarters.Injections
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
+            this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
         }
     }
 }

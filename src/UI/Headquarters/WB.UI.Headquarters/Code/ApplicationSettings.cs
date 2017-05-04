@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Configuration;
+using NConfig;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Code
@@ -22,8 +23,7 @@ namespace WB.UI.Headquarters.Code
         {
             get
             {
-                CustomErrorsSection customErrors =
-                    (CustomErrorsSection) WebConfigurationManager.GetSection("system.web/customErrors");
+                CustomErrorsSection customErrors = NConfigurator.Default.GetSection<CustomErrorsSection>(@"system.web/customErrors");
                 return customErrors.Mode;
             }
         }

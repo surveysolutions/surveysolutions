@@ -5,8 +5,8 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" placeholder="Enter decimal" title="Enter decimal"
-                            :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion" 
-                            v-numericFormatting="{aSep: groupSeparator, mDec: countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
+                            :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
+                            v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer />
                     </div>
                 </div>
@@ -44,11 +44,9 @@
                     ? parseFloat(answerString)
                     : null
 
-                if (answer == null) {
-                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
+                if(this.handleEmptyAnswer(answer)) {
                     return
                 }
-
                 if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage('Entered value can not be parsed as decimal value')
                     return

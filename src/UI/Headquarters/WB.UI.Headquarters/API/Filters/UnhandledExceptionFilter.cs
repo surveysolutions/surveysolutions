@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Http.Filters;
+﻿using System.Web.Http.Filters;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.Filters

@@ -57,26 +57,28 @@ namespace WB.UI.Designer.App_Start
 
         private static IKernel CreateKernel()
         {
+            var settingsProvider = new SettingsProvider();
+
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+            var dynamicCompilerSettings = settingsProvider.GetSection<DynamicCompilerSettingsGroup>("dynamicCompilerSettingsGroup");
 
-            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            string appDataDirectory = settingsProvider.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
                 appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
             }
 
             var cacheSettings = new ReadSideCacheSettings(
-                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
-                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
-                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
-                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
+                enableEsentCache: settingsProvider.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, settingsProvider.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                ConnectionString = settingsProvider.ConnectionStrings["Postgres"].ConnectionString,
                 SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
@@ -86,11 +88,11 @@ namespace WB.UI.Designer.App_Start
                 }
             };
 
-            var pdfSettings = (PdfConfigSection)WebConfigurationManager.GetSection("pdf");
+            var pdfSettings = settingsProvider.GetSection<PdfConfigSection>("pdf");
 
-            var deskSettings = (DeskConfigSection)WebConfigurationManager.GetSection("desk");
+            var deskSettings = settingsProvider.GetSection<DeskConfigSection>("desk");
 
-            var membershipSection = (MembershipSection)WebConfigurationManager.GetSection("system.web/membership");
+            var membershipSection = settingsProvider.GetSection<MembershipSection>("system.web/membership");
             var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
 
             var kernel = new StandardKernel(

@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileRosterLevel, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
-                .Returns(new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid>(new[] { Guid.NewGuid() }) });
+                .Returns(new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>(new[] { Guid.NewGuid() }) });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
                 .Returns(preloadedDataByFileTopLevel);
 

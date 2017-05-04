@@ -186,7 +186,7 @@ namespace WB.Tests.Abc
                 && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
         }
 
-        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
+        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -195,7 +195,8 @@ namespace WB.Tests.Abc
             return Create.AggregateRoot.StatefulInterview(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
-                questionnaireRepository: questionnaireRepository);
+                questionnaireRepository: questionnaireRepository,
+                shouldBeInitialized: census);
         }
 
         public static ISupportedVersionProvider SupportedVersionProvider(int supportedVerstion)

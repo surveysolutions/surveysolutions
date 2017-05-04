@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer
 {

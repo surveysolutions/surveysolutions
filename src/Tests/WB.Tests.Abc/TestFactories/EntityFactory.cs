@@ -12,8 +12,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting.Views;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -30,14 +33,13 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -48,6 +50,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -422,7 +425,9 @@ namespace WB.Tests.Abc.TestFactories
             UserRoles role = UserRoles.Interviewer,
             string key = null,
             DateTime? updateDate = null,
-            bool? wasCreatedOnClient= null)
+            bool? wasCreatedOnClient= null,
+            bool isDeleted = false,
+            bool receivedByInterviewer = false)
             => new InterviewSummary
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -436,7 +441,9 @@ namespace WB.Tests.Abc.TestFactories
                 ResponsibleRole = role,
                 Key = key,
                 UpdateDate = updateDate ?? new DateTime(2017, 3, 23),
-                WasCreatedOnClient = wasCreatedOnClient ?? false
+                WasCreatedOnClient = wasCreatedOnClient ?? false,
+                IsDeleted = isDeleted,
+                ReceivedByInterviewer = receivedByInterviewer
             };
 
         public InterviewSynchronizationDto InterviewSynchronizationDto(
@@ -1102,13 +1109,12 @@ namespace WB.Tests.Abc.TestFactories
                 UserName = userName,
                 IsLockedByHQ = isLockedByHQ,
                 Supervisor = new UserLight(supervisorId ?? Guid.NewGuid(), "supervisor"),
-                DeviceId = deviceId,
                 Roles = new SortedSet<UserRoles>(new[] {role})
             };
 
         public HqUser HqUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
-            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null)
+            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null, int? interviewerBuild = null)
         {
             var user = new HqUser
             {
@@ -1119,7 +1125,9 @@ namespace WB.Tests.Abc.TestFactories
                 Profile = new HqUserProfile
                 {
                     SupervisorId = supervisorId,
-                    DeviceId = deviceId
+                    DeviceId = deviceId,
+                    DeviceAppBuildVersion = interviewerBuild,
+                    DeviceAppVersion = interviewerVersion
                 },
                 PasswordHash = passwordHash,
                 PasswordHashSha1 = passwordHashSha1
@@ -1186,7 +1194,8 @@ namespace WB.Tests.Abc.TestFactories
                 5, 5, 12, 1, 10000, 100, 100, "^[a-zA-Z0-9_]{3,15}$",
                 @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",
                 "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
-                @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$", 100, 15);
+                @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$", 100, 15,
+                UserModel.PersonNameRegex);
 
         public UserPreloadingVerificationError UserPreloadingVerificationError()
             => new UserPreloadingVerificationError();
@@ -1280,12 +1289,16 @@ namespace WB.Tests.Abc.TestFactories
                     outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                     rosterInstanceId ?? 0, sortIndex ?? 0, rosterTitle ?? "roster title");
 
-        public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
+        public MapReportPoint MapReportPoint(string id, double latitude, double longitude, Guid? interviewId = null, Guid? questionnaireId = null, string variable = "var", long version = 1)
         {
             return new MapReportPoint(id)
             {
                 Latitude = latitude,
-                Longitude = longitude
+                Longitude = longitude,
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                QuestionnaireVersion = version,
+                Variable = variable,
+                InterviewId = interviewId ?? Guid.NewGuid()
             };
         }
 
@@ -1476,6 +1489,46 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewKey InterviewKey(int key = 289)
         {
             return new InterviewKey(key);
+        }
+
+        public BrokenInterviewPackagesView BrokenInterviewPackagesView(params BrokenInterviewPackageView[] brokenPackages)
+        {
+            return new BrokenInterviewPackagesView
+            {
+                Items = brokenPackages,
+                TotalCount = brokenPackages.Length
+            };
+        }
+
+        public BrokenInterviewPackageView BrokenInterviewPackageView()
+        {
+            return new BrokenInterviewPackageView();
+        }
+
+        public BrokenInterviewPackage BrokenInterviewPackage(DateTime? processingDate = null, DateTime? incomingDate = null,
+            InterviewDomainExceptionType? exceptionType =null)
+        {
+            return new BrokenInterviewPackage
+            {
+                ProcessingDate = processingDate ?? DateTime.Now,
+                IncomingDate = incomingDate ?? DateTime.Now,
+                ExceptionType = exceptionType?.ToString() ?? "Unexpected"
+            };
+        }
+
+        public InterviewSyncLogSummary InterviewSyncLogSummary(
+            DateTime? firstDownloadInterviewDate = null,
+            DateTime? lastDownloadInterviewDate = null,
+            DateTime? lastLinkDate = null,
+            DateTime? lastUploadInterviewDate = null)
+        {
+            return new InterviewSyncLogSummary
+            {
+                FirstDownloadInterviewDate = firstDownloadInterviewDate,
+                LastDownloadInterviewDate = lastDownloadInterviewDate,
+                LastLinkDate = lastLinkDate,
+                LastUploadInterviewDate = lastUploadInterviewDate
+            };
         }
     }
 }

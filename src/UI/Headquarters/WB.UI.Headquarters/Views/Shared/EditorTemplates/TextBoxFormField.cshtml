@@ -1,0 +1,5 @@
+﻿@model String
+@{
+    Layout = "~/Views/Shared/Profile/_FormFieldPartialLayout.cshtml";
+}
+@Html.TextBoxFor(v => v, new {@class = @"form-control with-clear-btn", data_val = (!ViewData.ContainsKey("disableClientValidation")).ToString().ToLower() })

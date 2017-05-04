@@ -2,76 +2,80 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Ninject.Selection;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
-    public class UserViewFactory : IUserViewFactory
+    internal class UserViewFactory : IUserViewFactory
     {
-        private readonly object lockObject = new object();
-        protected readonly IUserRepository UserRepository;
+        private readonly IUserRepository userRepository;
+
+        protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
         public UserViewFactory(IUserRepository UserRepository)
         {
-            this.UserRepository = UserRepository;
+            this.userRepository = UserRepository;
+        }
+
+        public UserViewFactory()
+        {
         }
 
         public UserView GetUser(UserViewInputModel input)
         {
-            HqUser user;
-            lock (lockObject)
+            var repository = this.UserRepository;
+            var query = repository.Users.Select(user => new UserQueryItem
             {
-                var users = this.UserRepository.Users;
-                if (input.PublicKey != null)
-                    users = users.Where(x => x.Id == input.PublicKey);
-                else if (!string.IsNullOrEmpty(input.UserName))
-                    users = users.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
-                else if (!string.IsNullOrEmpty(input.UserEmail))
-                    users = users.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
-                else if (!string.IsNullOrEmpty(input.DeviceId))
-                    users = users.Where(x => x.Profile.DeviceId == input.DeviceId);
-
-                user = users.FirstOrDefault();
-            }
-
-            if (user == null) return null;
-
-            UserLight supervisor = null;
-            lock (lockObject)
-            {
-                var superVisorId = user.Profile?.SupervisorId;
-                if (superVisorId != null)
-                {
-                    var supervisorUser = AsyncHelper.RunSync(() => this.UserRepository.FindByIdAsync(user.Profile.SupervisorId.Value));
-
-                    supervisor = new UserLight(superVisorId.Value, supervisorUser?.UserName);
-                }
-            }
-
-            HashSet<UserRoles> userRole;
-            lock (lockObject)
-            {
-                userRole = new HashSet<UserRoles>(new[] { user.Roles.First().Role });
-            }
-            return new UserView
-            {
-                CreationDate = user.CreationDate,
+                PublicKey = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
-                IsLockedBySupervisor = user.IsLockedBySupervisor,
-                IsLockedByHQ = user.IsLockedByHeadquaters,
-                PublicKey = user.Id,
-                Supervisor = supervisor,
                 PersonName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 IsArchived = user.IsArchived,
-                Roles = userRole
+                IsLockedByHQ = user.IsLockedByHeadquaters,
+                IsLockedBySupervisor = user.IsLockedBySupervisor,
+                CreationDate = user.CreationDate,
+                RoleId = user.Roles.FirstOrDefault().RoleId,
+                DeviceId = user.Profile.DeviceId,
+                SupervisorId = user.Profile.SupervisorId,
+                SupervisorName = repository.Users.Select(x => new {Id = x.Id, Name = x.UserName})
+                    .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
+                    .Name
+            });
+
+            if (input.PublicKey != null)
+                query = query.Where(x => x.PublicKey == input.PublicKey);
+            else if (!string.IsNullOrEmpty(input.UserName))
+                query = query.Where(x => x.UserName.ToLower() == input.UserName.ToLower());
+            else if (!string.IsNullOrEmpty(input.UserEmail))
+                query = query.Where(x => x.Email.ToLower() == input.UserEmail.ToLower());
+            else if (!string.IsNullOrEmpty(input.DeviceId))
+                query = query.Where(x => x.DeviceId == input.DeviceId);
+
+            var dbUser = query.FirstOrDefault();
+            if (dbUser == null) return null;
+
+            return new UserView
+            {
+                PublicKey = dbUser.PublicKey,
+                UserName = dbUser.UserName,
+                Email = dbUser.Email,
+                PersonName = dbUser.PersonName,
+                PhoneNumber = dbUser.PhoneNumber,
+                IsArchived = dbUser.IsArchived,
+                IsLockedByHQ = dbUser.IsLockedByHQ,
+                IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
+                CreationDate = dbUser.CreationDate,
+                Supervisor = dbUser.SupervisorId.HasValue
+                        ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
+                        : null,
+                Roles = new HashSet<UserRoles>(new[] {dbUser.RoleId.ToUserRole()})
             };
+
         }
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
@@ -137,15 +141,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, bool? hasDevice, Guid? supervisorId)
+        public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, 
+            bool archived, InterviewerOptionFilter interviewerOptionFilter, int? apkBuildVersion, Guid? supervisorId)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
                 var interviewers = ApplyFilter(allUsers, searchBy, UserRoles.Interviewer, archived);
 
-                if (hasDevice.HasValue)
-                    interviewers = interviewers.Where(x => (x.Profile.DeviceId != null) == hasDevice.Value);
-
+                switch (interviewerOptionFilter)
+                {
+                    case InterviewerOptionFilter.Any:
+                        break;
+                    case InterviewerOptionFilter.NotSynced:
+                        interviewers = interviewers.Where(x => x.Profile.DeviceAppVersion == null);
+                        break;
+                    case InterviewerOptionFilter.UpToDate:
+                        interviewers = interviewers.Where(x => apkBuildVersion.HasValue && apkBuildVersion <= x.Profile.DeviceAppBuildVersion);
+                        break;
+                    case InterviewerOptionFilter.Outdated:
+                        interviewers = interviewers.Where(x => !(apkBuildVersion.HasValue && apkBuildVersion <= x.Profile.DeviceAppBuildVersion));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(interviewerOptionFilter), interviewerOptionFilter, null);
+                }
+                
                 if (supervisorId.HasValue)
                     interviewers = interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
 
@@ -159,7 +178,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     UserName = x.UserName,
                     SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
                     DeviceId = x.Profile.DeviceId,
-                    IsArchived = x.IsArchived
+                    IsArchived = x.IsArchived,
+                    EnumeratorVersion = x.Profile.DeviceAppVersion,
+                    EnumeratorBuild = x.Profile.DeviceAppBuildVersion
                 });
             };
 
@@ -200,7 +221,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived)
+        public SupervisorsView GetSupervisors(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived = null)
         {
             Func<IQueryable<HqUser>, IQueryable<SupervisorsQueryItem>> query =
                 allUsers => ApplyFilter(allUsers, searchBy, UserRoles.Supervisor, archived)
@@ -212,8 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         Email = supervisor.Email,
                         UserId = supervisor.Id,
                         UserName = supervisor.UserName,
-                        InterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.IsArchived == false),
-                        NotConnectedToDeviceInterviewersCount = allUsers.Count(pr => pr.Profile.SupervisorId == supervisor.Id && pr.Profile.DeviceId == null && pr.IsArchived == false)
+                        IsArchived = supervisor.IsArchived,
                     });
 
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
@@ -230,8 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 Email = x.Email,
                 UserId = x.UserId,
                 UserName = x.UserName,
-                InterviewersCount = x.InterviewersCount,
-                NotConnectedToDeviceInterviewersCount = x.NotConnectedToDeviceInterviewersCount
+                IsArchived = x.IsArchived,
             }).ToList();
 
             return new SupervisorsView
@@ -241,11 +260,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool archived)
+        private static IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string searchBy, UserRoles role, bool? archived)
         {
             var selectedRoleId = role.ToUserId();
 
-            var allUsers = _.Where(x => x.IsArchived == archived && x.Roles.FirstOrDefault().RoleId == selectedRoleId);
+            var allUsers = _.Where(x => x.Roles.FirstOrDefault().RoleId == selectedRoleId);
+
+            if (archived.HasValue)
+                allUsers = allUsers.Where(x => x.IsArchived == archived.Value);
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
@@ -257,15 +279,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public class SupervisorsQueryItem
         {
-            public int InterviewersCount { get; set; }
-
-            public int NotConnectedToDeviceInterviewersCount { get; set; }
             public bool IsLockedBySupervisor { get; set; }
             public bool IsLockedByHQ { get; set; }
             public DateTime CreationDate { get; set; }
             public string UserName { get; set; }
             public Guid UserId { get; set; }
             public string Email { get; set; }
+            public bool IsArchived { get; set; }
+        }
+
+        public class UserQueryItem
+        {
+            public DateTime CreationDate { get; set; }
+            public string Email { get; set; }
+            public bool IsLockedByHQ { get; set; }
+            public bool IsArchived { get; set; }
+            public bool IsLockedBySupervisor { get; set; }
+            public Guid PublicKey { get; set; }
+            public string UserName { get; set; }
+            public Guid RoleId { get; set; }
+            public string PersonName { get; set; }
+            public string PhoneNumber { get; set; }
+            public Guid? SupervisorId { get; set; }
+            public string SupervisorName { get; set; }
+            public string DeviceId { get; set; }
         }
     }
 }

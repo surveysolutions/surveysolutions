@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__roster_pre_filled_ = () =>
-            new[] { "pre-filled", "roster" }.ShouldEachConformTo(
+            new[] { "identifying", "roster" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

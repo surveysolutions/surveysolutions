@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly ISubstitionTextFactory substitionTextFactory;
 
-        private InterviewKey interviewKey;
+        protected InterviewKey interviewKey;
 
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
@@ -573,8 +573,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            //itemsCount = itemsCount > 200 ? 200 : itemsCount;
-
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
@@ -2130,7 +2128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }
@@ -2191,7 +2189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     default:
                         throw new InterviewException(
-                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
+                            $"Question {questionId} has type {questionType} which is not supported as initial identifying question. InterviewId: {this.EventSourceId}");
                 }
             }
         }

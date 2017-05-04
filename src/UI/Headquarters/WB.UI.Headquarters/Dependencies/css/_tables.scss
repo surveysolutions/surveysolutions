@@ -3,6 +3,9 @@
     width: 100% !important;
     // font: 16px/18px "RobotoRegular";
     font: 14px/16px Arial, sans-serif; 
+    td.type-numeric{
+        text-align: right;
+    }
     tr{
         .without-break{
             white-space: nowrap;
@@ -144,6 +147,46 @@
                     }
                 }
             }
+        }
+    }
+    tfoot{
+        tr{
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            td, th{
+                border-top: none;
+                padding: 15px;
+                height: 35px;
+                &.title-row{
+                    font-size: 18px;
+                    line-height: 20px;
+                    a, span{
+                        font-size: 18px;
+                        line-height: 20px;
+                    }
+                }
+                &.type-numeric{
+                    text-align: right;
+                }
+                &:hover, &:focus, &:active{
+                    a, a:hover, a:focus, a:active{
+                        color: $blue !important;
+                        text-decoration: none;
+                    }
+                }
+                a{
+                    @include transition(all, 0.2s);
+                    text-overflow: ellipsis;
+                    color: $gray_text;
+                }
+            }
+        }
+    }
+    .total-row{
+        border-top: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        td{
+            font-weight: bold;
         }
     }
 }
@@ -385,7 +428,9 @@
         padding-left: 20px;
         text-align: right;
     }
-    .dataTables_paginate{
+    
+}
+.dataTables_paginate{
         position: relative;
         padding: 40px 0 10px 0;
         overflow: hidden;
@@ -415,7 +460,6 @@
             padding: 5px 12px;
         }
     }
-}
 .dataTables_processing{
     @extend %loading-indicator;
 }
@@ -513,7 +557,15 @@
         tr {
             border-bottom: 2px solid #ddd !important;
         }
-        tbody tr td {
+        .total-row{
+            .title-row{
+                text-align: right;
+            }
+            td[data-th*="version"], th[data-th*="version"]{
+                display: none;
+            }
+        }
+        tbody tr td, tfoot tr th {
             overflow: hidden;
             height: auto;
             font-size: 12px;
@@ -526,6 +578,7 @@
             a{
                 float: left;
                 width: 50%;
+                text-align: right;
             }
             &:before { 
                 content: attr(data-th); 
@@ -552,12 +605,18 @@
                 }
             }
         }
+        tfoot tr th {
+            text-align: center;
+            &:nth-of-type(2):before,  &:first-of-type:before{
+                display: none;
+            }
+        }
     }
     .table{
         tr{
             td, th{
-                font-size: 10px;
-                line-height: 12px;
+                //font-size: 10px;
+                //line-height: 12px;
                 &.for-tablets{
                     display: none;
                 }
@@ -660,7 +719,7 @@
         }
     }
 }
-.history{
+.table.history{
     td{
         .comment{
             padding-top: 10px;

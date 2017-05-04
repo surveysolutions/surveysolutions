@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only one GPS question could be marked as prefilled.
+        ///   Looks up a localized string similar to Only one GPS question could be marked as identifying.
         /// </summary>
         internal static string WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot be marked as prefilled..
+        ///   Looks up a localized string similar to Question with title substitution cannot be marked as identifying..
         /// </summary>
         internal static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
@@ -251,7 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question of this type cannot be prefilled..
+        ///   Looks up a localized string similar to Question of this type cannot be identifying..
         /// </summary>
         internal static string WB0022_PrefilledQuestionsOfIllegalType {
             get {
@@ -314,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with options filter expression cannot be prefilled..
+        ///   Looks up a localized string similar to Question with options filter expression cannot be identifying..
         /// </summary>
         internal static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefilled questions cannot be inside a roster..
+        ///   Looks up a localized string similar to Identifying questions cannot be inside a roster..
         /// </summary>
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
@@ -405,7 +405,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List question cannot be prefilled..
+        ///   Looks up a localized string similar to List question cannot be identifying..
         /// </summary>
         internal static string WB0039_TextListQuestionCannotBePrefilled {
             get {
@@ -504,7 +504,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Barcode question cannot be prefilled..
+        ///   Looks up a localized string similar to Barcode question cannot be identifying..
         /// </summary>
         internal static string WB0050_QRBarcodeQuestionIsPreFilledQuestion {
             get {
@@ -1279,7 +1279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No prefilled (identifying) questions are defined. Define at least one prefilled question..
+        ///   Looks up a localized string similar to No identifying questions are defined. Define at least one identifying question..
         /// </summary>
         internal static string WB0216_NoPrefilledQuestions {
             get {
@@ -1333,7 +1333,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single-choice question is marked as prefilled. Consider using a text question..
+        ///   Looks up a localized string similar to Single-choice question is marked as identifying. Consider using a text question..
         /// </summary>
         internal static string WB0222_SingleOptionPrefilled {
             get {

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -45,5 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual int Id { get; set; }
         public virtual string DeviceId { get; set; }
         public virtual Guid? SupervisorId { get; set; }
+        public virtual string DeviceAppVersion { get; set; }
+        public virtual int? DeviceAppBuildVersion { get; set; }
     }
 }

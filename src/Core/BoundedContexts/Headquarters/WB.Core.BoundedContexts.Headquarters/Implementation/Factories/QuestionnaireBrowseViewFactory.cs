@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using NHibernate.Criterion;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;

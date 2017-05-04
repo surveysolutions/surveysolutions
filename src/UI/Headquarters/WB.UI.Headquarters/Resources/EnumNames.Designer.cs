@@ -95,5 +95,59 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("InterviewStatus_InterviewerAssigned", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Administrator.
+        /// </summary>
+        public static string UserRoles_Administrator {
+            get {
+                return ResourceManager.GetString("UserRoles_Administrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ApiUser.
+        /// </summary>
+        public static string UserRoles_ApiUser {
+            get {
+                return ResourceManager.GetString("UserRoles_ApiUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headquarters.
+        /// </summary>
+        public static string UserRoles_Headquarter {
+            get {
+                return ResourceManager.GetString("UserRoles_Headquarter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer.
+        /// </summary>
+        public static string UserRoles_Interviewer {
+            get {
+                return ResourceManager.GetString("UserRoles_Interviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer.
+        /// </summary>
+        public static string UserRoles_Observer {
+            get {
+                return ResourceManager.GetString("UserRoles_Observer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor.
+        /// </summary>
+        public static string UserRoles_Supervisor {
+            get {
+                return ResourceManager.GetString("UserRoles_Supervisor", resourceCulture);
+            }
+        }
     }
 }

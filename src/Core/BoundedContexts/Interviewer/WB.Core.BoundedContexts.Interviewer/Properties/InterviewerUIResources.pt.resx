@@ -189,9 +189,6 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
-  <data name="HostUnreachable" xml:space="preserve">
-    <value>Sem acesso à internet para o site do Survey Solutions Supervisor. Verifique o endereço do servidor e/ou as configurações de rede</value>
-  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Erro de servidor. Favor entrar em contato com a equipe de suporte em support@mysurvey.solutions.</value>
   </data>
@@ -207,7 +204,7 @@
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Problema de autenticação no servidor remoto também. Entre em contato com seu Supervisor ou sede</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Senha errada</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

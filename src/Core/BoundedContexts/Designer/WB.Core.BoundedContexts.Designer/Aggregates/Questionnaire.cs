@@ -327,11 +327,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var questionnaireVariable = questionnaireItem as IVariable;
-                if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                if (questionnaireVariable != null)
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableContent);
+                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
+                    {
+                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
+                    }
+
+                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                    {
+                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
+                    }
                 }
-             
+
+                var staticText = questionnaireItem as IStaticText;
+                if (staticText != null && MatchesSearchTerm(staticText.AttachmentName, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
+                }
             }
 
             foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
@@ -424,6 +437,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var questionnaireVariable = questionnaireItem as IVariable;
                 if (questionnaireVariable != null)
                 {
+                    if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
+                    {
+                        replacedAny = true;
+                        questionnaireVariable.Label = ReplaceUsingSearchTerm(questionnaireVariable.Label, searchRegex, command.ReplaceWith);
+                    }
+
                     if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                     {
                         replacedAny = true;
@@ -472,6 +491,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                 fixedRosterTitle.Title = ReplaceUsingSearchTerm(fixedRosterTitle.Title, searchRegex, command.ReplaceWith);
                             }
                         }
+                    }
+                }
+
+                var staticText = questionnaireItem as IStaticText;
+                if (staticText != null)
+                {
+                    if (MatchesSearchTerm(staticText.AttachmentName, searchRegex))
+                    {
+                        replacedAny = true;
+                        staticText.AttachmentName = ReplaceUsingSearchTerm(staticText.AttachmentName, searchRegex, command.ReplaceWith);
                     }
                 }
 
@@ -2030,7 +2059,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
         {
             if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException("Question inside roster sub-section can not be pre-filled.");
+                throw new QuestionnaireException("Question inside roster sub-section cannot have Identifying scope");
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
@@ -2326,7 +2355,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                    "Question that linked to another question can not be pre-filled");
+                    "Question that linked to another question can not be identifying");
             }
         }
 
@@ -2603,7 +2632,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.substitutionService.GetAllSubstitutionVariableNames(text).Length > 0  && prefilled)
             {
                 throw new QuestionnaireException(DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "It is not allowed to use substitutins in Prefilled question title");
+                    "It is not allowed to use substitutins in identifying question title");
             }    
 
             this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(text, variableName, questionId, parentGroup);
@@ -2912,7 +2941,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             throw new QuestionnaireException(
                 string.Format(
-                    "This sub-section can't become a roster because contains pre-filled questions: {0}. Toggle off pre-filled property for that questions to complete this operation",
+                    "This sub-section can't become a roster because contains identifying questions: {0}. Toggle off identifying property for that questions to complete this operation",
                     string.Join(Environment.NewLine, questionVariables)));
         }
 

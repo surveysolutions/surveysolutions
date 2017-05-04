@@ -8,9 +8,9 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
-using NHibernate.Util;
 using NSubstitute;
 using System.Linq;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -19,12 +19,14 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -33,7 +35,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -60,10 +64,11 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -384,6 +389,53 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewerPrincipal(
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
+        }
+
+        public SynchronizationProcess SynchronizationProcess(IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
+            IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
+            ISynchronizationService synchronizationService = null,
+            ILogger logger = null,
+            IUserInteractionService userInteractionService = null,
+            IPasswordHasher passwordHasher = null,
+            IPrincipal principal = null,
+            IMvxMessenger messenger = null,
+            IInterviewerQuestionnaireAccessor questionnaireFactory = null,
+            IInterviewerInterviewAccessor interviewFactory = null,
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IHttpStatistician httpStatistician = null)
+        {
+            var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
+            return new SynchronizationProcess(
+                syncServiceMock,
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
+                principal ?? Mock.Of<IPrincipal>(),
+                logger ?? Mock.Of<ILogger>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
+                interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
+                interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
+                new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
+                Mock.Of<AttachmentsCleanupService>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>());
+        }
+
+        public TroubleshootingService Troubleshooting(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
+            IQuestionnaireBrowseViewFactory questionnaireFactory = null,
+            IInterviewLogSummaryReader syncLogFactory = null,
+            IBrokenInterviewPackagesViewFactory brokenPackagesFactory = null)
+        {
+            return new TroubleshootingService(
+                interviewSummaryReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
+                questionnaireFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(), 
+                syncLogFactory ?? Mock.Of<IInterviewLogSummaryReader>(), 
+                brokenPackagesFactory ?? Mock.Of<IBrokenInterviewPackagesViewFactory>());
         }
     }
 }

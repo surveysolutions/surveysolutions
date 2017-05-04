@@ -210,4 +210,7 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nom d’utilisateur</value>
   </data>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>Entrée trop longue &gt; {1}</value>
+  </data>
 </root>

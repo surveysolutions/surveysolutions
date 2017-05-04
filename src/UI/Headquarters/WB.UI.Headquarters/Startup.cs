@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Mime;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Ionic.Zlib;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
@@ -33,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -42,7 +45,11 @@ namespace WB.UI.Headquarters
 {
     public class Startup
     {
-        internal static void SetupNConfig() => NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        internal static void SetupNConfig()
+        {
+            NConfigurator.RegisterSectionMerger(new DeepMerger<HqSecuritySection>());
+            NConfigurator.UsingFiles(@"~\Configuration\Headquarters.Web.config").SetAsSystemDefault();
+        }
 
         static Startup()
         {
@@ -52,6 +59,7 @@ namespace WB.UI.Headquarters
         public void Configuration(IAppBuilder app)
         {
             app.Use(RemoveServerNameFromHeaders);
+
             ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
@@ -85,6 +93,7 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
+            
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -105,7 +114,7 @@ namespace WB.UI.Headquarters
 
         private void ConfigureAuth(IAppBuilder app)
         {
-            var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
+            var applicationSecuritySection = NConfigurator.Default.GetSection<HqSecuritySection>(@"applicationSecurity");
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
@@ -124,7 +133,7 @@ namespace WB.UI.Headquarters
 
                     OnApplyRedirect = ctx =>
                     {
-                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request))
+                        if (!IsAjaxRequest(ctx.Request) && !IsApiRequest(ctx.Request) && !IsBasicAuthApiUnAuthRequest(ctx.Response))
                         {
                             ctx.Response.Redirect(ctx.RedirectUri);
                         }
@@ -143,6 +152,11 @@ namespace WB.UI.Headquarters
         {
             var userAgent = request.Headers[@"User-Agent"];
             return (userAgent?.ToLowerInvariant().Contains(@"org.worldbank.solutions.") ?? false) || (userAgent?.Contains(@"okhttp/") ?? false);
+        }
+
+        private static bool IsBasicAuthApiUnAuthRequest(IOwinResponse response)
+        {
+            return response.Headers[ApiBasicAuthAttribute.AuthHeader] != null;
         }
 
         private static bool IsAjaxRequest(IOwinRequest request)

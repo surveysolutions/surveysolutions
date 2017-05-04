@@ -70,7 +70,6 @@
                 if (item.text == text) return
 
                 if (!text || !text.trim()) {
-                    this.markAnswerAsNotSavedWithMessage('Empty value cannot be saved')
                     return
                 }
                 item.text = text;

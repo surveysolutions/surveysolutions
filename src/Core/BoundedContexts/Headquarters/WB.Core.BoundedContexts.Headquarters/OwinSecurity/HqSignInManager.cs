@@ -35,7 +35,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if (user.IsInRole(UserRoles.Interviewer) || user.IsLockedByHeadquaters || user.IsLockedBySupervisor || user.IsArchived)
                 return SignInStatus.LockedOut;
 
-            return await this.PasswordSignInAsync(userName, password, isPersistent: isPersistent, shouldLockout: false);
+            await this.SignInAsync(user, isPersistent, false);
+
+            return SignInStatus.Success;
         }
      
         public async Task SignInAsObserverAsync(string userName)

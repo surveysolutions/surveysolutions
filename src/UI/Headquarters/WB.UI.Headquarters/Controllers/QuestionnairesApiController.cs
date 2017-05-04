@@ -21,7 +21,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter")]
+   
     [ApiValidationAntiForgeryToken]
     public class QuestionnairesApiController : BaseApiController
     {
@@ -45,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromBody] DataTableRequest request)
         {
             var input = new QuestionnaireBrowseInputModel
@@ -78,6 +79,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
         public QuestionnaireBrowseView AllQuestionnaires(AllQuestionnairesListViewModel data)
         {
             var input = new QuestionnaireBrowseInputModel
@@ -101,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [CamelCase]
         public ComboboxModel QuestionnairesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool censusOnly = false)
         {

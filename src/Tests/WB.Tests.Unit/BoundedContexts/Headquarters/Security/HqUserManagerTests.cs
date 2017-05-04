@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Security
             
             var userManager = Create.Storage.HqUserManager(userRepository);
 
-            var archiveResult = await userManager.ArchiveUsersAsync(new[] {interviewer.Id}, false);
+            var archiveResult = await userManager.UnarchiveUsersAsync(new[] {interviewer.Id});
 
             Assert.IsFalse(archiveResult[0].Succeeded);
         }

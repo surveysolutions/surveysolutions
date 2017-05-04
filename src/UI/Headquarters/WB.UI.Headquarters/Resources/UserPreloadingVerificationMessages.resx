@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PLU0001" xml:space="preserve">
-    <value> The User with such Login already exists</value>
+    <value> A user with that Login already exists</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
     <value> There are duplicate values of Login in the file</value>
@@ -130,10 +130,10 @@
     <value> Login of an archived user cannot be re-used because it exists in another role</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
-    <value> Login should be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
+    <value> Login should be between 3 and 15 characters, and should contain only letters, digits and the underscore symbol</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
-    <value> Password must contain at least one number, one upper case character and one lower case character. Length should be between 10 and 100 characters.</value>
+    <value> Password must contain at least one number, one upper case character, and one lower case character. Length should be between 10 and 100 characters.</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
     <value> Email is invalid</value>
@@ -142,18 +142,21 @@
     <value> Phone number is invalid</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value> Role is invalid. Only "Supervisor" or "Interviewer" values are allowed</value>
+    <value> Role is invalid. Only "Supervisor" or "Interviewer" are allowed</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
-    <value> Supervisor must be an active user in the system or present in the file</value>
+    <value> Supervisor must be either an existing user or one created in the present file</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
     <value> Supervisor column must be empty for user in "Supervisor" role</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
-    <value>Person name should not contain more than 100 characters</value>
+    <value>Full name should not contain more than 100 characters</value>
   </data>
   <data name="PLU0013" xml:space="preserve">
     <value>Phone number should not contain more than 15 characters</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>User name has invalid characters. Only letters, dots, spaces, and apostrophes are allowed</value>
   </data>
 </root>

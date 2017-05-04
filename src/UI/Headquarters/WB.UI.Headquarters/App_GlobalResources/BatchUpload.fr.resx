@@ -324,4 +324,7 @@
   <data name="VerifySampleData" xml:space="preserve">
     <value>Vérifier les données de l’échantillon</value>
   </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Télécharger l'archive modèle</value>
+  </data>
 </root>
