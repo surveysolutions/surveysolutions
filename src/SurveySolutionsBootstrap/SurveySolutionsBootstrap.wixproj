@@ -6,12 +6,12 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ab07cf13-d4cb-471a-81fd-ab9fa0b2a05c</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>SurveySolutions</OutputName>
     <OutputType>Bundle</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <Name>SurveySolutionsBootstrap</Name>
-    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.0.0.0</SurveySolutionsVersion>
+    <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
+    <OutputName>SurveySolutions.$(SurveySolutionsVersion)</OutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -37,6 +37,10 @@
     <Compile Include="Bundle.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
@@ -47,7 +51,11 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions.wixproj">
+    <Folder Include="img\" />
+    <Folder Include="redist\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurveySolutionsProduct\SurveySolutions.wixproj">
       <Name>SurveySolutions</Name>
       <Project>{c575970b-d09a-4c43-95b8-0867a617ddb8}</Project>
       <Private>True</Private>
@@ -57,10 +65,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="img\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="img\logo.png" />
+    <Content Include="img\logo-50.bmp" />
+    <Content Include="img\logo-50.png" />
+    <Content Include="redist\NDP462-KB3151802-Web.exe" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />
   <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
