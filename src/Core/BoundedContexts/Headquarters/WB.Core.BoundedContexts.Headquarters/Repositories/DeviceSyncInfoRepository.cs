@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
@@ -46,100 +47,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
 
-        public SynchronizationActivity GetSynchronizationActivity(Guid id)
+        public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId)
         {
+            var dbDaysGroupedBySyncDate = this.dbContext.DeviceSyncInfo
+                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId)
+                .Select(syncInfo => new DbDay
+                {
+                    Statistics = syncInfo.Statistics == null ? null : new DbDayStatistics
+                    {
+                        DownloadedQuestionnairesCount = syncInfo.Statistics.DownloadedQuestionnairesCount,
+                        DownloadedInterviewsCount = syncInfo.Statistics.DownloadedInterviewsCount,
+                        UploadedInterviewsCount = syncInfo.Statistics.UploadedInterviewsCount
+                    },
+                    StartedInterviewsCount = syncInfo.NumberOfStartedInterviews,
+                    SyncDate = syncInfo.SyncDate
+                })
+                .ToList()
+                .GroupBy(syncInfo => syncInfo.SyncDate.ToString("MMM dd"));
+
             return new SynchronizationActivity
             {
-                Days = new []
-                {
-                    new SyncDay
-                    {
-                        Day = new DateTime(2017, 01, 01),
-                        Quarters = new []
-                        {
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 1,
-                                DownloadedQuestionnairesCount = 1,
-                                StartedInterviewsCount = 3,
-                                UploadedInterviewsCount = 0,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 2
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 0,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 0,
-                                FailedSynchronizationsCount = 2,
-                                SynchronizationsWithoutChangesCount = 0
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 0,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 0,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 3
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 2,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 0,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 0
-                            },
-                        }
-                    },
-                    new SyncDay
-                    {
-                        Day = new DateTime(2017, 01, 03),
-                        Quarters = new []
-                        {
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 0,
-                                DownloadedQuestionnairesCount = 3,
-                                StartedInterviewsCount = 8,
-                                UploadedInterviewsCount = 2,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 1
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 5,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 2,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 1
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 0,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 0,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 1
-                            },
-                            new SyncDayQuarter
-                            {
-                                DownloadedInterviewsCount = 0,
-                                DownloadedQuestionnairesCount = 0,
-                                StartedInterviewsCount = 0,
-                                UploadedInterviewsCount = 3,
-                                FailedSynchronizationsCount = 0,
-                                SynchronizationsWithoutChangesCount = 1
-                            },
-                        }
-                    },
-                }
+                Days = dbDaysGroupedBySyncDate.Select(x => ToSyncDay(x.Key, x.ToArray())).ToArray()
             };
+        }
+
+        private static SyncDay ToSyncDay(string dayAndMonth, DbDay[] dbDays) => new SyncDay
+        {
+            Day = dayAndMonth,
+            Quarters = new[]
+            {
+                ToSyncDayQuarter(dbDays.Where(x => x.SyncDate.Hour >= 0 && x.SyncDate.Hour < 6)),
+                ToSyncDayQuarter(dbDays.Where(x => x.SyncDate.Hour >= 6 && x.SyncDate.Hour < 12)),
+                ToSyncDayQuarter(dbDays.Where(x => x.SyncDate.Hour >= 12 && x.SyncDate.Hour < 18)),
+                ToSyncDayQuarter(dbDays.Where(x => x.SyncDate.Hour >= 18 && x.SyncDate.Hour < 24))
+            }
+        };
+
+        private static SyncDayQuarter ToSyncDayQuarter(IEnumerable<DbDay> quarter) => new SyncDayQuarter
+        {
+            StartedInterviewsCount = quarter.Select(x=>x.StartedInterviewsCount).DefaultIfEmpty().Max(),
+            DownloadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedInterviewsCount),
+            DownloadedQuestionnairesCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedQuestionnairesCount),
+            UploadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.UploadedInterviewsCount),
+            FailedSynchronizationsCount = quarter.Count(x => x.Statistics == null),
+            SynchronizationsWithoutChangesCount = quarter.Where(x => x.Statistics != null)
+                .Count(x =>
+                    x.Statistics.DownloadedQuestionnairesCount == 0 &&
+                    x.Statistics.DownloadedInterviewsCount == 0 &&
+                    x.Statistics.UploadedInterviewsCount == 0)
+        };
+
+        public class DbDay
+        {
+            public DateTime SyncDate { get; set; }
+            public int StartedInterviewsCount { get; set; }
+            public DbDayStatistics Statistics { get; set; }
+        }
+
+        public class DbDayStatistics
+        {
+            public int DownloadedInterviewsCount { get; set; }
+            public int DownloadedQuestionnairesCount { get; set; }
+            public int UploadedInterviewsCount { get; set; }
         }
     }
 }

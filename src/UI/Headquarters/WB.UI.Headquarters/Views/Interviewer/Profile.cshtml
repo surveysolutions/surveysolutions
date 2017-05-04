@@ -21,14 +21,14 @@
 }
 @helper ConnectionType(DeviceSyncInfo deviceSync)
 {
-    if (deviceSync.NetworkType == @"WIFI")
-    {
+if (deviceSync.NetworkType == @"WIFI")
+{
         <text>(@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, deviceSync.NetworkType))</text>
-    }
-    else
-    {
+}
+else
+{
         <text>(@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, deviceSync.NetworkType, deviceSync.NetworkSubType, deviceSync.MobileOperator))</text>
-    }
+}
 }
 @helper ConnectionStats(string prefix, DeviceSyncInfo deviceSyncInfo)
 {
@@ -40,11 +40,15 @@
         @if (syncStatistics != null)
         {
             <li>@Pages.InterviewerProfile_TotalSyncTime: @syncStatistics.TotalSyncDuration.Humanize()</li>
-            <li>@Pages.InterviewerProfile_ConnectionSpeed: @syncStatistics.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
-                @ConnectionType(deviceSyncInfo)</li>
-            <li>@string.Format(Pages.InterviewerProfile_DataStatsFormat, 
-               syncStatistics.TotalUploadedBytes.Bytes().Humanize(@"0.00"), 
-               syncStatistics.TotalDownloadedBytes.Bytes().Humanize(@"0.00"))</li>
+            <li>
+                @Pages.InterviewerProfile_ConnectionSpeed: @syncStatistics.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
+                @ConnectionType(deviceSyncInfo)
+            </li>
+                <li>
+                    @string.Format(Pages.InterviewerProfile_DataStatsFormat,
+               syncStatistics.TotalUploadedBytes.Bytes().Humanize(@"0.00"),
+               syncStatistics.TotalDownloadedBytes.Bytes().Humanize(@"0.00"))
+            </li>
         }
     </ul>
 }
@@ -124,167 +128,167 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 clearfix">
-                <h3>@Pages.InterviewerProfile_Sync_Activity_Title</h3>
-                <div class="graphic-wrapper clearfix">
-                    <div class="graphic census">
-                        <div class="day-unit">
-                            <div class="quarter-of-day">
-                                <div class="recent-activity">
-
-                                </div>
-                                <div class="unfinished-assignments">
-                                    <div class="half-of-quarter"></div>
-                                    <div class="half-of-quarter"></div>
-                                </div>
-                            </div>
-                        </div>
-                        @{
-                            int maxActivitiesInColumn = 6;
-                        }
-                        @foreach (var syncDay in Model.SynchronizationActivity.Days)
-                        {
-                            <div class="day-unit">
-                                <div class="day">
-                                    @syncDay.Day.ToString(@"MMM dd")
-                                </div>
-                                @foreach (var syncDayQuarter in syncDay.Quarters)
-                                {
-                                    <div class="quarter-of-day">
-                                        @{
-                                            int countOfActivitiesInColumn = 0;
-                                        }
-                                        <div class="recent-activity">
-                                            @for (int i = 0; i < syncDayQuarter.FailedSynchronizationsCount; i++)
-                                            {
-                                                if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                {
-                                                    <div class="over-limit">
-                                                        <span></span>
-                                                    </div>
-                                                    break;
-                                                }
-
-                                                <div class="failed-connection"></div>
-
-                                                countOfActivitiesInColumn++;
-                                            }
-                                            
-                                            @for (int i = 0; i < syncDayQuarter.SynchronizationsWithoutChangesCount; i++)
-                                            {
-                                                if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                {
-                                                    <div class="over-limit">
-                                                        <span></span>
-                                                    </div>
-                                                    break;
-                                                }
-
-                                                <div class="successful-connection"></div>
-
-                                                countOfActivitiesInColumn++;
-                                            }
-
-                                            @for (int i = 0; i < syncDayQuarter.DownloadedQuestionnairesCount; i++)
-                                            {
-                                                if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                {
-                                                    <div class="over-limit">
-                                                        <span></span>
-                                                    </div>
-                                                    break;
-                                                }
-
-                                                <div class="census-template"></div>
-
-                                                countOfActivitiesInColumn++;
-                                            }
-
-                                            @for (int i = 0; i < syncDayQuarter.DownloadedInterviewsCount; i++)
-                                            {
-                                                if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                {
-                                                    <div class="over-limit">
-                                                        <span></span>
-                                                    </div>
-                                                    break;
-                                                }
-
-                                                <div class="downloaded"></div>
-
-                                                countOfActivitiesInColumn++;
-                                            }
-
-                                            @for (int i = 0; i < syncDayQuarter.UploadedInterviewsCount; i++)
-                                            {
-                                                if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                {
-                                                    <div class="over-limit">
-                                                        <span></span>
-                                                    </div>
-                                                    break;
-                                                }
-
-                                                <div class="uploaded"></div>
-
-                                                countOfActivitiesInColumn++;
-                                            }
-
-                                        </div>
-                                        <div class="unfinished-assignments @(syncDayQuarter.DownloadedQuestionnairesCount > 0 ? @"census-update" : "")">
-                                            <div class="half-of-quarter">
-                                                @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
-                                                {
-                                                    <div class="unfinished-unit"></div>
-                                                }
-                                            </div>
-                                            <div class="half-of-quarter">
-                                                @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
-                                                {
-                                                    <div class="unfinished-unit"></div>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        <div class="day-unit">
-                            <div class="quarter-of-day">
-                                <div class="recent-activity">
-
-                                </div>
-                                <div class="unfinished-assignments">
-                                    <div class="half-of-quarter"></div>
-                                    <div class="half-of-quarter"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="graphic-explanation">
-                        <div class="recent-activity">
-                            <ul class="list-unstyled">
-                                <li><span class="census-template"></span>@Pages.InterviewerProfile_Sync_Activity_Census_Desc</li>
-                                <li><span class="downloaded"></span>@Pages.InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc</li>
-                                <li><span class="uploaded"></span>@Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc</li>
-                                <li><span class="successful-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync</li>
-                                <li><span class="failed-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Failed_Sync</li>
-                            </ul>
-                        </div>
-                        <div class="unfinished-assignments">
-                            <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Census_Timeline_Desc</p>
-                            <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Started_Interview_Desc</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
     @if (Model.LastSuccessDeviceInfo != null)
     {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 clearfix">
+                    <h3>@Pages.InterviewerProfile_Sync_Activity_Title</h3>
+                    <div class="graphic-wrapper clearfix">
+                        <div class="graphic census">
+                            <div class="day-unit">
+                                <div class="quarter-of-day">
+                                    <div class="recent-activity">
+
+                                    </div>
+                                    <div class="unfinished-assignments">
+                                        <div class="half-of-quarter"></div>
+                                        <div class="half-of-quarter"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            @{
+                                int maxActivitiesInColumn = 6;
+                            }
+                            @foreach (var syncDay in Model.SynchronizationActivity.Days)
+                            {
+                                <div class="day-unit">
+                                    <div class="day">
+                                        @syncDay.Day
+                                    </div>
+                                    @foreach (var syncDayQuarter in syncDay.Quarters)
+                                    {
+                                        <div class="quarter-of-day">
+                                            @{
+                                                int countOfActivitiesInColumn = 0;
+                                            }
+                                            <div class="recent-activity">
+                                                @for (int i = 0; i < syncDayQuarter.FailedSynchronizationsCount; i++)
+                                                {
+                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    {
+                                                        <div class="over-limit">
+                                                            <span></span>
+                                                        </div>
+                                                        break;
+                                                    }
+
+                                                    <div class="failed-connection"></div>
+
+                                                    countOfActivitiesInColumn++;
+                                                }
+
+                                                @for (int i = 0; i < syncDayQuarter.SynchronizationsWithoutChangesCount; i++)
+                                                {
+                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    {
+                                                        <div class="over-limit">
+                                                            <span></span>
+                                                        </div>
+                                                        break;
+                                                    }
+
+                                                    <div class="successful-connection"></div>
+
+                                                    countOfActivitiesInColumn++;
+                                                }
+
+                                                @for (int i = 0; i < syncDayQuarter.DownloadedQuestionnairesCount; i++)
+                                                {
+                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    {
+                                                        <div class="over-limit">
+                                                            <span></span>
+                                                        </div>
+                                                        break;
+                                                    }
+
+                                                    <div class="census-template"></div>
+
+                                                    countOfActivitiesInColumn++;
+                                                }
+
+                                                @for (int i = 0; i < syncDayQuarter.DownloadedInterviewsCount; i++)
+                                                {
+                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    {
+                                                        <div class="over-limit">
+                                                            <span></span>
+                                                        </div>
+                                                        break;
+                                                    }
+
+                                                    <div class="downloaded"></div>
+
+                                                    countOfActivitiesInColumn++;
+                                                }
+
+                                                @for (int i = 0; i < syncDayQuarter.UploadedInterviewsCount; i++)
+                                                {
+                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    {
+                                                        <div class="over-limit">
+                                                            <span></span>
+                                                        </div>
+                                                        break;
+                                                    }
+
+                                                    <div class="uploaded"></div>
+
+                                                    countOfActivitiesInColumn++;
+                                                }
+
+                                            </div>
+                                            <div class="unfinished-assignments @(syncDayQuarter.DownloadedQuestionnairesCount > 0 ? @"census-update" : "")">
+                                                <div class="half-of-quarter">
+                                                    @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
+                                                    {
+                                                        <div class="unfinished-unit"></div>
+                                                    }
+                                                </div>
+                                                <div class="half-of-quarter">
+                                                    @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
+                                                    {
+                                                        <div class="unfinished-unit"></div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            <div class="day-unit">
+                                <div class="quarter-of-day">
+                                    <div class="recent-activity">
+
+                                    </div>
+                                    <div class="unfinished-assignments">
+                                        <div class="half-of-quarter"></div>
+                                        <div class="half-of-quarter"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graphic-explanation">
+                            <div class="recent-activity">
+                                <ul class="list-unstyled">
+                                    <li><span class="census-template"></span>@Pages.InterviewerProfile_Sync_Activity_Census_Desc</li>
+                                    <li><span class="downloaded"></span>@Pages.InterviewerProfile_Sync_Activity_Downloaded_Interview_Desc</li>
+                                    <li><span class="uploaded"></span>@Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc</li>
+                                    <li><span class="successful-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync</li>
+                                    <li><span class="failed-connection"></span>@Pages.InterviewerProfile_Sync_Activity_Failed_Sync</li>
+                                </ul>
+                            </div>
+                            <div class="unfinished-assignments">
+                                <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Census_Timeline_Desc</p>
+                                <p class="primary-text">@Pages.InterviewerProfile_Sync_Activity_Started_Interview_Desc</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 connection-statistics">
@@ -309,12 +313,14 @@
                     <ul class="list-unstyled">
                         <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>
                         <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
-                        <li>@Pages.InterviewerProfile_AverageSyncSpeed: @(Model.AverageSyncSpeedBytesPerSecond == null 
-                                    ? "n/a" 
-                                    : Model.AverageSyncSpeedBytesPerSecond.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00"))</li>      
+                        <li>
+                            @Pages.InterviewerProfile_AverageSyncSpeed: @(Model.AverageSyncSpeedBytesPerSecond == null
+                                                                              ? "n/a"
+                                                                              : Model.AverageSyncSpeedBytesPerSecond.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00"))
+                        </li>
                     </ul>
                     @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessDeviceInfo)
-                  
+
                     @if (Model.LastFailedDeviceInfo != null)
                     {
                         @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedDeviceInfo)
@@ -327,63 +333,63 @@
                     <h3>@Pages.InterviewerProfile_DeviceInfo</h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceId</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceId</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceSerial</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceSerialNumber</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceModel</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceType @Model.LastSuccessDeviceInfo.DeviceManufacturer @Model.LastSuccessDeviceInfo.DeviceModel (@Model.LastSuccessDeviceInfo.DeviceBuildNumber)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceLanguage</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceLanguage</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_AndroidVersion</td>
-                                <td>@string.Format(@"{0} {1}({2})", Model.LastSuccessDeviceInfo.AndroidVersion, Model.LastSuccessDeviceInfo.AndroidSdkVersionName, Model.LastSuccessDeviceInfo.AndroidSdkVersion)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_InterviewerVersion</td>
-                                <td>@Model.LastSuccessDeviceInfo.AppVersion</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_InterviewerUpdatedDate</td>
-                                <td>@Model.LastSuccessDeviceInfo.LastAppUpdatedDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceLocation</td>
-                                <td id="device-address">
-                                    @if (Model.LastSuccessDeviceInfo.DeviceLocationLat.HasValue && Model.LastSuccessDeviceInfo.DeviceLocationLong.HasValue)
-                                    {
-                                        <text>@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</text>
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceOrientation</td>
-                                <td>@Model.LastSuccessDeviceInfo.AppOrientation</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_BatteryStatus</td>
-                                <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.LastSuccessDeviceInfo.BatteryChargePercent, Model.LastSuccessDeviceInfo.BatteryPowerSource, Model.LastSuccessDeviceInfo.IsPowerInSaveMode ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_StorageInfo</td>
-                                <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageTotalInBytes)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_MemoryInfo</td>
-                                <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMTotalInBytes)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DatabaseInfo</td>
-                                <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.DBSizeInfo)</td>
-                            </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceId</td>
+                            <td>@Model.LastSuccessDeviceInfo.DeviceId</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceSerial</td>
+                            <td>@Model.LastSuccessDeviceInfo.DeviceSerialNumber</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceModel</td>
+                            <td>@Model.LastSuccessDeviceInfo.DeviceType @Model.LastSuccessDeviceInfo.DeviceManufacturer @Model.LastSuccessDeviceInfo.DeviceModel (@Model.LastSuccessDeviceInfo.DeviceBuildNumber)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceLanguage</td>
+                            <td>@Model.LastSuccessDeviceInfo.DeviceLanguage</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_AndroidVersion</td>
+                            <td>@string.Format(@"{0} {1}({2})", Model.LastSuccessDeviceInfo.AndroidVersion, Model.LastSuccessDeviceInfo.AndroidSdkVersionName, Model.LastSuccessDeviceInfo.AndroidSdkVersion)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_InterviewerVersion</td>
+                            <td>@Model.LastSuccessDeviceInfo.AppVersion</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_InterviewerUpdatedDate</td>
+                            <td>@Model.LastSuccessDeviceInfo.LastAppUpdatedDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceLocation</td>
+                            <td id="device-address">
+                                @if (Model.LastSuccessDeviceInfo.DeviceLocationLat.HasValue && Model.LastSuccessDeviceInfo.DeviceLocationLong.HasValue)
+                                {
+                                    <text>@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</text>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceOrientation</td>
+                            <td>@Model.LastSuccessDeviceInfo.AppOrientation</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_BatteryStatus</td>
+                            <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.LastSuccessDeviceInfo.BatteryChargePercent, Model.LastSuccessDeviceInfo.BatteryPowerSource, Model.LastSuccessDeviceInfo.IsPowerInSaveMode ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_StorageInfo</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageTotalInBytes)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_MemoryInfo</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMTotalInBytes)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DatabaseInfo</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.DBSizeInfo)</td>
+                        </tr>
                         </tbody>
                     </table>
 
@@ -394,44 +400,44 @@
                     <h3>@Pages.InterviewerProfile_LastConnectionStatistics</h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_ServerDate</td>
-                                <td>@Model.LastSuccessDeviceInfo.SyncDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DeviceDate</td>
-                                <td>@Model.LastSuccessDeviceInfo.DeviceDate.ToUniversalTime().ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_ConnectionType</td>
-                                <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
-                            </tr>
-                            @*@if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
+                        <tr>
+                            <td>@Pages.InterviewerProfile_ServerDate</td>
+                            <td>@Model.LastSuccessDeviceInfo.SyncDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DeviceDate</td>
+                            <td>@Model.LastSuccessDeviceInfo.DeviceDate.ToUniversalTime().ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_ConnectionType</td>
+                            <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
+                        </tr>
+                        @*@if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
                                 {
                                     <tr>
                                         <td>@Pages.InterviewerProfile_SignalStrength</td>
                                         <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
                                     </tr>
                                 }*@
-                            @if (Model.LastSuccessDeviceInfo.Statistics != null)
-                            {
-                                <tr>
-                                    <td>@Pages.InterviewerProfile_DownloadedQuestionnairesCount</td>
-                                    <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedQuestionnairesCount</td>
-                                </tr>
-                                <tr>
-                                    <td>@Pages.InterviewerProfile_DownloadedInterviewsCount</td>
-                                    <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedInterviewsCount</td>
-                                </tr>
-                                <tr>
-                                    <td>@Pages.InterviewerProfile_UploadedInterviewsCount</td>
-                                    <td>@Model.LastSuccessDeviceInfo.Statistics.UploadedInterviewsCount</td>
-                                </tr>
-                            }
+                        @if (Model.LastSuccessDeviceInfo.Statistics != null)
+                        {
                             <tr>
-                                <td>@Pages.InterviewerProfile_StartedAssignments</td>
-                                <td>@Model.LastSuccessDeviceInfo.NumberOfStartedInterviews</td>
+                                <td>@Pages.InterviewerProfile_DownloadedQuestionnairesCount</td>
+                                <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedQuestionnairesCount</td>
                             </tr>
+                            <tr>
+                                <td>@Pages.InterviewerProfile_DownloadedInterviewsCount</td>
+                                <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedInterviewsCount</td>
+                            </tr>
+                            <tr>
+                                <td>@Pages.InterviewerProfile_UploadedInterviewsCount</td>
+                                <td>@Model.LastSuccessDeviceInfo.Statistics.UploadedInterviewsCount</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>@Pages.InterviewerProfile_StartedAssignments</td>
+                            <td>@Model.LastSuccessDeviceInfo.NumberOfStartedInterviews</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
