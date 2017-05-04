@@ -64,11 +64,14 @@
                 </h3>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6 col-xs-10 info-block">
-                <p>@WebInterviewSetup.WebInterviewSetup_Description</p>
+        @if (Model.IsCensus)
+        {
+            <div class="row">
+                <div class="col-sm-6 col-xs-10 info-block">
+                    <p>@WebInterviewSetup.WebInterviewSetup_Description</p>
+                </div>
             </div>
-        </div>
+        }
         <form action="@Url.Action("Start", "WebInterviewSetup")" method="post">
             @Html.AntiForgeryToken()
 
