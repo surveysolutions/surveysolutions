@@ -1058,6 +1058,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .AsSingleFixedOption;
         }
 
+        public InterviewTreeQuestion GetCascadingParentTreeQuestion()
+        {
+            return (this.question.Parent as InterviewTreeGroup)?.GetQuestionFromThisOrUpperLevel(this.cascadingParentQuestionId);
+        }
+
         public Guid CascadingParentQuestionId => this.cascadingParentQuestionId;
 
         public InterviewTreeCascadingQuestion Clone(InterviewTreeQuestion question)

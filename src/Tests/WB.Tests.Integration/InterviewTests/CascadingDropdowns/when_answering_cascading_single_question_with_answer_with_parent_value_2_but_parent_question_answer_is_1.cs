@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterview(questionnaire, new List<object>
+                var interview = SetupInterviewWithProcessor(questionnaire, new List<object>
                 {
                     Abc.Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null

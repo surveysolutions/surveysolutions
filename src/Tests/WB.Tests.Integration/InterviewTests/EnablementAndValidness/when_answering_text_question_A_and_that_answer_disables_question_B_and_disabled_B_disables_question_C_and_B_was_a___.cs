@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Abc.Create.Entity.Question(questionCId, "c", enablementCondition: "b == 1.ToString()")
                 );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithProcessor(questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {

@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.petToys.Sum(x => x.toy_age))) > 10"));
 
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithProcessor(questionnaireDocument);
 
                 interview.AnswerNumericIntegerQuestion(userId, membersQuestionId, RosterVector.Empty, DateTime.Now, 1);
                 interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 1);

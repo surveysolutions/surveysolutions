@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterviewWithProcessor(questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

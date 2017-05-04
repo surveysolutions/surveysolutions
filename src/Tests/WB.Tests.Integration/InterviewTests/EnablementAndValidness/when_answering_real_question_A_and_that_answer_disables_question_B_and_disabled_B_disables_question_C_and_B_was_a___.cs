@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                      Abc.Create.Entity.NumericRealQuestion(questionCId, variable: "c", enablementCondition: "b < 0")
                 );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithProcessor(questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {
