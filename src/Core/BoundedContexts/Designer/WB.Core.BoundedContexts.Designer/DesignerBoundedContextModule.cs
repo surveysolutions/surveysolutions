@@ -69,6 +69,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
             this.Bind<IAllowedAddressService>().To<AllowedAddressService>();
+            this.Bind<IIpAddressProvider>().To<IpAddressProvider>();
             this.Bind<ITranslationsService>().To<TranslationsService>();
             this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
 

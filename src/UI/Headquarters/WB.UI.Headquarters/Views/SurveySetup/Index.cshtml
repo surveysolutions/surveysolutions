@@ -116,7 +116,7 @@
                 @if (ApplicationSettings.WebInterviewEnabled && !isObserver)
                 {
                     <text>
-                    if (!selectedRow.isDisabled && selectedRow.allowCensusMode) {
+                    if (!selectedRow.isDisabled) {
                         items["webSetup"] = {
                             name: "@Dashboard.WebInterviewSetup",
                             callback: webInterviewSetup
@@ -239,8 +239,8 @@
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
                     "order": [[2, 'desc']],
-                    dom: "frtp",
-                    conditionalPaging: true
+                    //dom: "frtp",
+                    dom: 'f<"table-with-scroll"t>ip',                    conditionalPaging: true
                 });
 
             return self;

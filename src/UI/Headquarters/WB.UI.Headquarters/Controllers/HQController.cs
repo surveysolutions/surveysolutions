@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -19,8 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -32,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IMapReport mapReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
 
@@ -41,17 +43,17 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
-            InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IQuestionnaireVersionProvider questionnaireVersionProvider)
+            IQuestionnaireVersionProvider questionnaireVersionProvider, 
+            IMapReport mapReport)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.mapReport = mapReport;
         }
 
         public ActionResult Index()
@@ -60,6 +62,18 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
+        {
+            if (questionnaireId.HasValue)
+            {
+                this.Success(
+                    $@"{HQ.InterviewWasCreated} <a class=""btn btn-success"" href=""{this.Url.Action("TakeNew", "HQ",
+                        new { id = questionnaireId.Value })}""><i class=""icon-plus""></i>{HQ.CreateOneMore}</a>");
+            }
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            return this.View(this.Filters());
+        }
+
+        public ActionResult InterviewsRedesigned(Guid? questionnaireId)
         {
             if (questionnaireId.HasValue)
             {
@@ -150,7 +164,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.MapReport;
 
-            return this.View();
+            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
+
+            return this.View(new MapReportModel
+            {
+                Questionnaires = new ComboboxModel(questionnaires.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.Count)
+            });
         }
 
         public ActionResult InterviewsChart()

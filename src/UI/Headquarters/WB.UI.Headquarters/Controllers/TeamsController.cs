@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -66,7 +67,7 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public ComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
+            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
             var options = users.Users.Select(x => new ComboboxOptionModel(x.UserId.FormatGuid(), x.UserName)).ToArray();
             return new ComboboxModel(options, users.TotalCountByQuery);
         }

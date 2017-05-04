@@ -139,7 +139,7 @@
     <value>Creating users</value>
   </data>
   <data name="DataIsValid" xml:space="preserve">
-    <value>Data is valid</value>
+    <value>Data are valid</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -160,10 +160,10 @@
     <value>Finished</value>
   </data>
   <data name="FinishedWithError" xml:space="preserve">
-    <value>Finished with error</value>
+    <value>Finished with error(s)</value>
   </data>
   <data name="FinishedWithErrorMessage" xml:space="preserve">
-    <value>Finished with error, Reason:</value>
+    <value>Finished with error(s). Reason:</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>is in verification process, verified</value>
@@ -172,7 +172,7 @@
     <value>is invalid. Please fix error(s) below and upload again.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
-    <value>Last update date</value>
+    <value>Last date updated</value>
   </data>
   <data name="Message" xml:space="preserve">
     <value>Message</value>
@@ -211,13 +211,13 @@
     <value>Upload sample</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>To upload the sample to be interviewed, please prepare a file (size up to 300MB) with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
+    <value>To upload the sample to be interviewed, please prepare a file (size up to 300MB) with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as identifying.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
     <value>Batch User Upload</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed in the 'role' column.</value>
+    <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' are allowed in the 'role' column.</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
     <value>Batch User Upload</value>
@@ -238,7 +238,7 @@
     <value>Verify</value>
   </data>
   <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Are you sure you want to delete file</value>
+    <value>Are you sure you want to delete this file ?</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
     <value>User preloading process is missing</value>
@@ -253,10 +253,10 @@
     <value>Batch upload</value>
   </data>
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>File does not contain column(s) for the required identifying questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
-    <value>You must choose a file to upload</value>
+    <value>Choose a file to upload</value>
   </data>
   <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
     <value>Select supervisor</value>
@@ -271,19 +271,19 @@
     <value>Import sample</value>
   </data>
   <data name="FileNotParsed" xml:space="preserve">
-    <value>File wasn't parsed. Only tab-delimited file can be uploaded.</value>
+    <value>File wasn't parsed. Only tab-delimited files are allowed.</value>
   </data>
   <data name="FormatNotSupported" xml:space="preserve">
-    <value>File format is not supported, data inside it will be ignored</value>
+    <value>File format is not supported. The data inside the file will be ignored</value>
   </data>
   <data name="SampleCreationResult" xml:space="preserve">
-    <value>Sample Creation Result</value>
+    <value>Interview Creation Result</value>
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Processing...</value>
   </data>
   <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>Sample creation was successfully completed.</value>
+    <value>Interview creation completed successfully.</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
     <value>Upload new data</value>
@@ -298,16 +298,16 @@
     <value>Verify data</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process.</value>
+    <value>Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and then upload a new sample file. Follow the link if you want to get more detailed progress information about the other import process.</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
     <value>Create interviews from this data</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Interview import is successfully completed</value>
+    <value>Interview import successfully completed</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Interview import is completed with errors</value>
+    <value>Interview import completed with errors</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
     <value>Import status</value>
@@ -322,7 +322,7 @@
     <value>Download invalid interviews</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Responsible will be assigned automatically</value>
+    <value>The responsible user will be assigned automatically</value>
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Verify panel data</value>
@@ -331,32 +331,31 @@
     <value>Go to running interview import process</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
-    <value>Upload archive with prefilled tab file and collected data.
-                            You can use files generated by "Data export"</value>
+    <value>Upload archive with identifying tab file and collected data.</value>
   </data>
   <data name="BatchTitle" xml:space="preserve">
-    <value>Prefilled and collected data (archive)</value>
+    <value>Identifying and collected data (archive)</value>
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
     <value>Creating multiple interviews</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>If usernames are not specified you will need to assign a supervisor to all interviews later.</value>
+    <value>If usernames are not specified you will need to assign a supervisor to all interviews in a later step.</value>
   </data>
   <data name="ManualModeDescription" xml:space="preserve">
-    <value>You can create single interiew by entering all required data in {0}</value>
+    <value>You can create individual interiews by entering all required data in {0}</value>
   </data>
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>manual mode</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with necessary prefilled data. Optionally, specify usernames of supervisors or enumerators in the _responsible column.</value>
+    <value>Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
-    <value>Prefilled data only</value>
+    <value>Identifying data only</value>
   </data>
   <data name="UploadDescription" xml:space="preserve">
-    <value>Upload a file with prefilled data to create new interviews.
+    <value>Upload a file with identifying data to create new interviews.
 Specify usernames for supervisors or enumerators to make batch interview assignments.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
@@ -366,25 +365,25 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Upload .zip file</value>
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
-    <value>View list of required prefilled data</value>
+    <value>View list of required identifying data</value>
   </data>
   <data name="DownloadTabTemplate" xml:space="preserve">
     <value>Download .tab template for this questionnaire</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>List of variables, marked as Prefilled in Designer, required to create an interview. Download a</value>
+    <value>Variables marked as Identifying in Designer. Download a</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
     <value>.tab template.</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
-    <value>Hide list of required prefilled data</value>
+    <value>Hide list of required identifying data</value>
   </data>
   <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Required prefilled data</value>
+    <value>Required identifying data</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
-    <value>Verification of uploaded file failed</value>
+    <value>Verification of the uploaded file failed</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
     <value>creating multiple interviews</value>
@@ -486,13 +485,13 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Only files with {0} and {1} extensions are allowed for upload.</value>
   </data>
   <data name="Prerequisite_FileOpen" xml:space="preserve">
-    <value>Uploaded file cannot be opened. Please check it is in correct format.</value>
+    <value>Uploaded file cannot be opened. Please check that it is in correct format.</value>
   </data>
   <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
     <value>Only .tab and .txt files are allowed for upload.</value>
   </data>
   <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
-    <value>Following files are not supported: {0}.</value>
+    <value>The following files are not supported: {0}.</value>
   </data>
   <data name="Prerequisite_ZipFile" xml:space="preserve">
     <value>Only .zip files are allowed for upload.</value>

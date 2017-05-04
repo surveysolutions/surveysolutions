@@ -366,12 +366,6 @@
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Conectado</value>
   </data>
-  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Conectado ao servidor</value>
-  </data>
-  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
-    <value>Se o entrevistador conseguiu uma sincronização inicial de seu tablet para o servidor</value>
-  </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
     <value>Data de criação de conta</value>
   </data>
@@ -572,5 +566,8 @@
   </data>
   <data name="YesNoQuestion_Yes" xml:space="preserve">
     <value>Sim</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Conectado ao servidor</value>
   </data>
 </root>

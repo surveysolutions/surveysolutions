@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 {
@@ -15,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
             this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<FeaturedQuestionView>();
 
-            foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
+            foreach (IQuestion q in questionnaire.Find<IQuestion>(x => x.Featured))
             {
                 var questionView = new FeaturedQuestionView(q, null);
                 this.FeaturedQuestions.Add(questionView);

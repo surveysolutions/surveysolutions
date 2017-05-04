@@ -21,11 +21,8 @@
             $scope.translations = [];
 
             var dataBind = function (translation, translationDto) {
-                translation.initialTranslation = _.clone(translationDto);
-
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
-
                 translation.file = null;
                 translation.content = {};
                 translation.content.details = {};
@@ -51,9 +48,10 @@
                     return;
 
                 _.each($scope.questionnaire.translations, function (translationDto) {
-                    var translation = {};
+                    var translation = { checkpoint: {} };
                     if (!_.any($scope.translations, function (elem) { return elem.translationId === translationDto.translationId; })) {
                         dataBind(translation, translationDto);
+                        dataBind(translation.checkpoint, translationDto);
                         $scope.translations.push(translation);
                     }
                 });
@@ -80,7 +78,7 @@
 
                 $scope.fileSelected(translation, file, function () {
                     commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                        translation.initialTranslation = _.clone(translation);
+                        dataBind(translation.checkpoint || {}, translation);
                         $scope.translations.push(translation);
                         setTimeout(function () { utilityService.focus("focusTranslation" + translation.translationId); }, 500);
                     });
@@ -127,7 +125,7 @@
 
             $scope.saveTranslation = function (translation) {
                 commandService.updateTranslation($state.params.questionnaireId, translation).then(function () {
-                    translation.initialTranslation = _.clone(translation);
+                    dataBind(translation.checkpoint, translation);
                     translation.form.$setPristine();
                 });
             };
@@ -143,8 +141,7 @@
             });
 
             $scope.cancel = function (translation) {
-                var temp = _.clone(translation.initialTranslation);
-                dataBind(translation, temp);
+                dataBind(translation, translation.checkpoint);
                 translation.form.$setPristine();
             };
 

@@ -127,7 +127,7 @@
     <value>Interviewer</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>Interview with id '{0}' is absent</value>
+    <value>Interview with id '{0}' is missing</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Supervisor</value>

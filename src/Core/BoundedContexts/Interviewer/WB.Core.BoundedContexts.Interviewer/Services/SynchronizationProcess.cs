@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -45,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IHttpStatistician httpStatistician;
 
         private RestCredentials restCredentials;
         private bool remoteLoginRequired = false;
@@ -62,7 +65,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IPlainStorage<InterviewFileView> interviewFileViewStorage,
             CompanyLogoSynchronizer logoSynchronizer, 
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IHttpStatistician httpStatistician)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -78,6 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.logoSynchronizer = logoSynchronizer;
             this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
+            this.httpStatistician = httpStatistician;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -85,6 +90,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             SychronizationStatistics statistics = new SychronizationStatistics();
             try
             {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                
+                this.httpStatistician.Reset();
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
@@ -157,7 +166,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 try
                 {
                     await this.synchronizationService.SendSyncStatisticsAsync(
-                        statistics: ToSyncStatisticsApiView(statistics),
+                        statistics: ToSyncStatisticsApiView(statistics, stopwatch),
                         token: cancellationToken, credentials: this.restCredentials).ConfigureAwait(false);
                 }
                 catch (Exception e)
@@ -496,6 +505,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 catch (Exception exception)
                 {
                     statistics.FailedToCreateInterviewsCount++;
+
+                    await this.TrySendUnexpectedExceptionToServerAsync(exception, cancellationToken).ConfigureAwait(false);
                     this.logger.Error($"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}", exception);
                 }
             }
@@ -545,6 +556,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 catch (Exception syncException)
                 {
                     statistics.FailedToUploadInterviwesCount++;
+                    await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken).ConfigureAwait(false);
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
             }
@@ -579,15 +591,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
 
-        private SyncStatisticsApiView ToSyncStatisticsApiView(SychronizationStatistics statistics)
+        private SyncStatisticsApiView ToSyncStatisticsApiView(SychronizationStatistics statistics, Stopwatch stopwatch)
         {
+            var httpStats = this.httpStatistician.GetStats();
+
             return new SyncStatisticsApiView
             {
                 DownloadedInterviewsCount = statistics.NewInterviewsCount,
                 UploadedInterviewsCount = statistics.SuccessfullyUploadedInterviewsCount,
                 DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
                 RejectedInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
-                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted)
+                NewInterviewsOnDeviceCount = this.interviewViewRepository.Count(inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
+                TotalDownloadedBytes = httpStats.DownloadedBytes,
+                TotalUploadedBytes = httpStats.UploadedBytes,
+                TotalConnectionSpeed = httpStats.Speed,
+                TotalSyncDuration = stopwatch.Elapsed
             };
         }
 

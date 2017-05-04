@@ -9,11 +9,6 @@
 <main>
     <div class="container-fluid">
         <div class="row">
-            @Html.Partial("_alerts")
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li>
@@ -31,28 +26,44 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-7 col-xs-12 action-block">
-                <div class="import-progress">
-                    <p>@WebInterviewSetup.Done</p>
-                    <p class="success-text">
-                        @WebInterviewSetup.WebLinkTitle:
-                        <a href="@Model.WebInterviewLink">@Model.WebInterviewLink</a>
-                    </p>
-                </div>
-                <div>
-                    <form method="post">
-                        @Html.AntiForgeryToken()
-                        <div class="action-buttons">
-
-                            <input type="submit" class="btn btn-danger" value="Stop Web Interview" />
-
-                            <a href="@Url.Action("Index", "SurveySetup")" class="back-link">
-                                @WebInterviewSetup.BackToQuestionnaires
-                            </a>
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <div class="col-sm-7 col-xs-12 action-buttons">
+                    @if (Model.IsCensus)
+                    {
+                        <div class="import-progress">
+                            <p>@WebInterviewSetup.Done</p>
+                            <p class="success-text">
+                                @WebInterviewSetup.WebLinkTitle:
+                                <a href="@Model.WebInterviewLink">@Model.WebInterviewLink</a>
+                            </p>
                         </div>
-                    </form>
+                    }
+                    else
+                    {
+                        <div class="import-progress">
+                            <p>@WebInterviewSetup.Done</p>
+                            <p class="success-text">
+                                @WebInterviewSetup.ExportTitle
+                            </p>
+                        </div>
+                    }
+
+                    <input type="submit" class="btn btn-danger" value="@WebInterviewSetup.StopWebInterview"/>
+
+                    @if (!Model.IsCensus)
+                    {
+                        <a class="btn btn-primary" href="@Url.HttpRouteUrl("DefaultApiWithAction", 
+                                                          new {controller= "LinksExport", action= "Download", id=Model.QuestionnaireIdentity.ToString() })">
+                            @string.Format(WebInterviewSetup.DownloadTitle, Model.InterviewsCount)
+                        </a>
+                    }
+
+                    <a href="@Url.Action("Index", "SurveySetup")" class="back-link">
+                        @WebInterviewSetup.BackToQuestionnaires
+                    </a>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </main>

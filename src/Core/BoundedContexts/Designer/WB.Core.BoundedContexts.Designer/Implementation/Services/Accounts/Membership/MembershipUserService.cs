@@ -17,13 +17,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Memb
             this.webServiceUser = webServiceUser;
         }
 
-        public string ADMINROLENAME => this.helper.ADMINROLENAME;
+        public string ADMINROLENAME => this.helper.AdminRoleName;
 
         public IMembershipWebServiceUser WebServiceUser => this.webServiceUser;
 
         public IMembershipWebUser WebUser => this.user;
 
-        public string USERROLENAME => this.helper.USERROLENAME;
+        public string USERROLENAME => this.helper.UserRoleName;
 
         public void Logout()
         {

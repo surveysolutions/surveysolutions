@@ -1,47 +1,21 @@
-﻿@using System.Web.Optimization
-@using WB.UI.Headquarters.Resources
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.ManageAccountModel
-
+﻿@model ManageAccountModel
 @{
     ViewBag.Title = Strings.HQ_Views_Manage_Title;
+    ViewBag.PageTitle = string.Format(Pages.AccountManage_Title, Model.UserName);
+    ViewBag.PageSubTitle = Pages.AccountManage_EditPublicInformation;
+    Layout = "~/Views/Shared/Profile/_UserEditorLayout.cshtml";
 }
-
-@section scripts
+@section PreFormSection
 {
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
+    <div class="col-sm-7">
+        <ul class="list-unstyled">
+            <li><b>@Pages.AccountManage_Login: @Model.UserName</b></li>
+            <li><b>@Pages.AccountManage_Role: @Model.Role</b></li>
+        </ul>
+    </div>
 }
-@Html.Partial("_alerts")
-
-<div class="page-header">
-    <h2>
-        @ViewBag.Title
-    </h2>
-</div>
-
-
-@using (Html.BeginForm())
+@section PreDetailsSection
 {
-    @Html.AntiForgeryToken()
-    <fieldset class="form-horizontal">
-        <div class="col-md-6">
-            <div class="form-group @Html.HasErrorClassFor(x => x.OldPassword)">
-                @Html.LabelFor(x => x.OldPassword, new { @class = "col-sm-4 control-label" })
-                <div class="col-sm-8">
-                    @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", autocomplete = "off" })
-                    @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-block" })
-                </div>
-            </div>
-
-            @{this.Html.RenderPartial("UserEditFormWithoutLock");}
-
-            <div class="form-group">
-                <div class="col-sm-offset-3">
-                    <button type="submit" class="btn btn-primary">@Pages.AccountManage_SaveChanges</button>
-                </div>
-            </div>
-        </div>
-    </fieldset>
+    @Html.HiddenFor(x => x.Role)
+    @Html.HiddenFor(x => x. UpdatePasswordAction)
 }

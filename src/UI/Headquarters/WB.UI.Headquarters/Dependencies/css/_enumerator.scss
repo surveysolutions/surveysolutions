@@ -174,7 +174,7 @@
     height: $graphic-height/2;
     padding-bottom: 3px;
     & {
-        .uploaded, .downloaded, .successful-connection, .failed-connection{
+        .uploaded, .downloaded, .census-template, .successful-connection, .failed-connection{
             display: flex;
             flex-shrink: 0;
         } 
@@ -192,6 +192,9 @@
 }
 .uploaded {
     @include synchronizations-arrow($green, 45deg, -45deg);
+}
+.census-template{
+    @include synchronizations-arrow(#00ceed, -45deg, 45deg);
 }
 .successful-connection{
     @include connection-status($gray_form);
@@ -231,7 +234,7 @@
     height: 100%;
     font-size: 12px;
     line-height: 14px;
-    .downloaded, .uploaded, .successful-connection, .failed-connection{
+    .downloaded, .uploaded, .census-template, .successful-connection, .failed-connection{
         display: inline-block;
     }
 }
@@ -244,12 +247,13 @@
          ul li{
             padding-left: 25px;
             position: relative;
-            .uploaded, .downloaded, .successful-connection, .failed-connection{
+            .uploaded, .downloaded, .census-template, .successful-connection, .failed-connection{
                 @include absolute(0,null, null, 0);
             }
          }
     }
     .unfinished-assignments{
+        flex-direction: column;
         padding-left: 20px;
         p{
             margin: 10px 0 0 25px;
@@ -265,6 +269,29 @@
     background: rgba(42, 129, 203, 0.7);
     position: relative;
     z-index: 2;
+    &.census{
+        background: rgba(42, 129, 203, 0.9);
+        &.census-update{
+             @include gradient-horizontal(#00ceed, rgba(42, 129, 203, 0.9), 60%, 100%);            
+        }
+    }
+}
+.census{
+    .unfinished-assignments{
+        padding-top: 7px;
+        position: relative;
+        &.census-update:before{
+             @include gradient-horizontal(#00ceed, rgba(42, 129, 203, 0.9), 60%, 100%);            
+        }
+        &:before{
+            display: block;
+            content: "";
+            width: 100%;
+            height: 7px;
+            @include absolute(0,0);
+            @include gradient-horizontal(rgba(42, 129, 203, 0.9), rgba(42, 129, 203, 0.9), 0%, 100%);
+        }
+    }
 }
 @media (max-width: $screen-sm-min){
     .graphic-wrapper{
@@ -331,7 +358,7 @@
         padding-right: 5px;
         width: 50%;
     }
-    .downloaded, .uploaded{
+    .downloaded, .uploaded, .census-template{
         display: block;
         width: 10px;
         height: 15px;
@@ -401,6 +428,23 @@
             width: 100%;
             border-left: none;
             border-top: 2px solid #f0f0f0;
+        }
+    }
+    .census{
+        .unfinished-assignments{
+            padding-top: 0;
+            padding-left: 7px;
+
+            &.census-update:before{
+                @include gradient-vertical(#00ceed, rgba(42, 129, 203, 0.9), 60%, 100%);            
+            }
+            &:before{
+                width: 7px;
+                height: 100%;
+                right: auto;
+                left: 0;
+                @include gradient-vertical(rgba(42, 129, 203, 0.9), rgba(42, 129, 203, 0.9), 0%, 100%);
+            }
         }
     }
 }

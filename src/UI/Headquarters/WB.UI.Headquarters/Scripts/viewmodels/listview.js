@@ -133,5 +133,57 @@
             item.IsSelected(isCheckboxSelected);
         });
     };
+
+    var datatable;
+    self.initDataTable = function(onDataReceivedCallback) {
+        $.fn.dataTable.ext.errMode = 'none';
+
+        var tableColumns = self.getDataTableColumns();
+        var tableColumnDefs = [];
+        for (var columnIndex = 0; columnIndex < tableColumns.length; columnIndex ++) {
+            tableColumnDefs.push({
+                "targets": columnIndex,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    var $td = $(td);
+                    var $th = $("table thead tr th").eq($td.index());
+                    $td.attr("data-th", $th.text());
+                }
+            });
+        }
+
+        datatable = $('table#data_holder').DataTable(
+        {
+            language:
+            {
+                "url": window.input.settings.config.dataTableTranslationsUrl
+            },
+            ajax: function(data, callback, settings) {
+                var request = self.Filter() || {};
+
+                $.extend(request, data);
+
+                self.SendRequest(serviceUrl, request, function (d) {
+                    if (!_.isUndefined(onDataReceivedCallback))
+                        onDataReceivedCallback(d);
+                    callback(d);
+                });
+            },
+            columns: tableColumns,
+            columnDefs: tableColumnDefs,
+            pageLength: 50,
+            pagingType: "full_numbers",
+            lengthChange: false,
+            conditionalPaging: true,
+            processing: true,
+            serverSide: true,
+            deferRender: true,
+            footerCallback: self.footerCallback
+        });
+    };
+    self.reloadDataTable = function() {
+        datatable.ajax.reload();
+    };
+
+    self.getDataTableColumns = function () { return []; }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ListView, Supervisor.VM.BasePage);

@@ -36,7 +36,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                      InterviewsCount = g.Count()
                                  }).ToList();
 
-
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
                 foreach (var questionnaire in interviews.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle}).Distinct())
                 {
@@ -82,6 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                    
                                    Responsible = GetResponsibleName(doc)
                            }).ToList();
+
+            var totalInterviewCount = currentPage.Sum(x => x.TotalCount);
+
             currentPage = currentPage.Skip((input.Page - 1) * input.PageSize)
                 .Take(input.PageSize).ToList();
             int totalCount = this.interviewSummaryReader.Query(_ =>
@@ -95,11 +97,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 return result;
             });
 
+            var totalResponsibleCount = this.interviewSummaryReader.Query(_ =>
+            {
+                IQueryable<InterviewSummary> filetredInterviews = ApplyFilter(input, _);
+                return filetredInterviews.Select(x => x.ResponsibleId).Distinct().Count();
+            });
+
             return new SurveysAndStatusesReportView
-                {
-                    TotalCount = totalCount,
-                    Items = currentPage
-                };
+            {
+                TotalResponsibleCount = totalResponsibleCount,
+                TotalInterviewCount = totalInterviewCount,
+                TotalCount = totalCount,
+                Items = currentPage
+            };
         }
 
         private static string GetResponsibleName(StatisticsLineGroupedByUserAndTemplate doc)

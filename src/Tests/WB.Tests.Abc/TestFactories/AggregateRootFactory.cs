@@ -57,22 +57,6 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());
 
-        public StatefulInterview StatefulInterview(Guid interviewId)
-        {
-            var textFactoryMock = new Mock<ISubstitionTextFactory> { DefaultValue = DefaultValue.Mock };
-            var interview = new StatefulInterview(Mock.Of<IQuestionnaireStorage>(),
-                Stub.InterviewExpressionStateProvider(),
-                textFactoryMock.Object);
-
-            interview.SetId(interviewId);
-
-            interview.Apply(Create.Event.InterviewCreated(
-                questionnaireId: Guid.NewGuid(),
-                questionnaireVersion: 1));
-
-            return interview;
-        }
-
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
             Guid? userId = null,

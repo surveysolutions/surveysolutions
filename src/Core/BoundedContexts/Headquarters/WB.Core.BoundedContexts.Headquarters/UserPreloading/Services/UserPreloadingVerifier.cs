@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         readonly Regex loginValidatioRegex;
         readonly Regex emailValidationRegex;
         readonly Regex phoneNumberValidationRegex;
+        readonly Regex fullNameRegex;
 
         public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
             this.phoneNumberValidationRegex = new Regex(this.userPreloadingSettings.PhoneNumberFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            this.fullNameRegex = new Regex(this.userPreloadingSettings.PersonNameFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
@@ -136,10 +138,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     })
                 .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
+            var preloadedUsersGroupedByUserName =
+                data.GroupBy(x => x.Login.ToLower()).ToDictionary(x=>x.Key, x=>x.Count());
+
             var validationFunctions = new[]
             {
                 new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row),"PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginDublicationInDataset(data, row), "PLU0002",u => u.Login),
+                new PreloadedDataValidator(row => LoginDublicationInDataset(preloadedUsersGroupedByUserName, row), "PLU0002",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003",u => u.Login),
                 new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames,row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
@@ -151,12 +156,21 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
                 new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
                 new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
+                new PreloadedDataValidator(FullNameAllowedSymbolsValidation, "PLU0014", u => u.FullName),
             };
 
             for (int i = 0; i < validationFunctions.Length; i++)
             {
                 this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
             }
+        }
+
+        private bool FullNameAllowedSymbolsValidation(UserPreloadingDataRecord arg)
+        {
+            if (string.IsNullOrEmpty(arg.FullName))
+                return false;
+
+            return !this.fullNameRegex.IsMatch(arg.FullName);
         }
 
         private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
@@ -218,10 +232,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return activeUserNames.Contains(userPreloadingDataRecord.Login.ToLower());
         }
 
-        private bool LoginDublicationInDataset(IList<UserPreloadingDataRecord> data, UserPreloadingDataRecord userPreloadingDataRecord)
-        {
-            return data.Count(row => row.Login.ToLower() == userPreloadingDataRecord.Login.ToLower()) > 1;
-        }
+        private bool LoginDublicationInDataset(Dictionary<string, int> data,
+            UserPreloadingDataRecord userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
@@ -231,10 +243,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             if (desiredRole != UserRoles.Interviewer)
                 return false;
 
-            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(userPreloadingDataRecord.Login.ToLower()))
+            var loginName = userPreloadingDataRecord.Login.ToLower();
+            if (!archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(loginName))
                 return false;
 
-            if (archivedInterviewerNamesMappedOnSupervisorName[userPreloadingDataRecord.Login.ToLower()] !=
+            if (archivedInterviewerNamesMappedOnSupervisorName[loginName] !=
                 userPreloadingDataRecord.Supervisor.ToLower())
                 return true;
 
@@ -247,14 +260,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         {
             var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
 
+            var loginName = userPreloadingDataRecord.Login.ToLower();
             switch (desiredRole)
             {
                 case UserRoles.Interviewer:
-                    return archivedSupervisorNames.Contains(userPreloadingDataRecord.Login.ToLower());
+                    return archivedSupervisorNames.Contains(loginName);
                 case UserRoles.Supervisor:
                     return
                         archivedInterviewerNamesMappedOnSupervisorName.ContainsKey(
-                            userPreloadingDataRecord.Login.ToLower());
+                            loginName);
                 default:
                     return false;
             }

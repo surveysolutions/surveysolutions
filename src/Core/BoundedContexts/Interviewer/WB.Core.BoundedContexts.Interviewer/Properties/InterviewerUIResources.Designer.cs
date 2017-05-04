@@ -632,7 +632,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
+        ///   Looks up a localized string similar to No internet access to your server. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
             get {
@@ -706,9 +706,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Wrong password.
         /// </summary>
-        public static string Login_WrondPassword {
+        public static string Login_WrongPassword {
             get {
-                return ResourceManager.GetString("Login_WrondPassword", resourceCulture);
+                return ResourceManager.GetString("Login_WrongPassword", resourceCulture);
             }
         }
         

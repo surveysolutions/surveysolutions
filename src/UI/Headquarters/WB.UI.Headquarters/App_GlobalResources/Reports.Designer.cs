@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Name.
+        ///   Looks up a localized string similar to Questionnaire Template.
         /// </summary>
         internal static string SurveyName {
             get {
@@ -201,6 +201,15 @@ namespace Resources {
         internal static string TeamsAndStatuses {
             get {
                 return ResourceManager.GetString("TeamsAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template Version.
+        /// </summary>
+        internal static string TemplateVersion {
+            get {
+                return ResourceManager.GetString("TemplateVersion", resourceCulture);
             }
         }
         

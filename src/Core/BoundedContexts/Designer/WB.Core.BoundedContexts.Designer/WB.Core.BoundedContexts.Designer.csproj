@@ -341,11 +341,14 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
+    <Compile Include="Implementation\Services\IpAddressProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
     <Compile Include="Mappings\AllowedAddressMap.cs" />
     <Compile Include="Services\Accounts\IAccountRepository.cs" />
     <Compile Include="Services\Accounts\IMembershipAccount.cs" />
     <Compile Include="Services\Accounts\IPasswordStrategy.cs" />
+    <Compile Include="Services\IAllowedAddressService.cs" />
+    <Compile Include="Services\IIpAddressProvider.cs" />
     <Compile Include="ValueObjects\RosterScope.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
@@ -512,7 +515,7 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\AllowedAddresses\AllowedAddress.cs" />
-    <Compile Include="Views\AllowedAddresses\AllowedAddressService.cs" />
+    <Compile Include="Implementation\Services\AllowedAddressService.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />

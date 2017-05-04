@@ -148,13 +148,13 @@
     <value>one error</value>
   </data>
   <data name="ServerUnderLoad" xml:space="preserve">
-    <value>This website is under heavy load. We're sorry, too many people are accessing this website at the same time. We're working on this problem. Please try again later.</value>
+    <value>We're sorry, too many people are accessing this website at the same time. We're working on this problem. Please try again later.</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>Refresh page</value>
   </data>
   <data name="InvitationSmallText" xml:space="preserve">
-    <value>Interview process requires internet connection, no additional software is needed</value>
+    <value>The interview process requires an internet connection. No additional software is needed.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
     <value>You have been invited to take part in the following survey: "{0}"</value>
@@ -202,7 +202,7 @@
     <value>Web Survey</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Please fill in captcha</value>
+    <value>Please fill in the captcha field</value>
   </data>
   <data name="Stopped" xml:space="preserve">
     <value>Web interview stopped</value>
@@ -210,8 +210,8 @@
   <data name="Original_Language" xml:space="preserve">
     <value>Original</value>
   </data>
-  <data name="Resume" xml:space="preserve">
-    <value>Resume interview</value>
+  <data name="ToInterview" xml:space="preserve">
+    <value>To interview</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Restart</value>
@@ -226,7 +226,7 @@
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>You can continue interview in the following survey: "{0}"</value>
+    <value>You can navigate to interview in the following survey: "{0}"</value>
     <comment>{0} - name of the questionnaire without version</comment>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
@@ -245,6 +245,6 @@
     <value>Only image files are accepted</value>
   </data>
   <data name="Error_CookiesTurnedOff" xml:space="preserve">
-    <value>Cookies are not enabled on your browser. Please enable cookies in your browser preferences to continue</value>
+    <value>Cookies are not enabled in your browser. Please enable cookies in your browser preferences to continue</value>
   </data>
 </root>

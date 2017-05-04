@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private readonly ILogger logger;
+        private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
 
         public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, 
             IPasswordHasher passwordHasher, IIdentityValidator<string> identityValidator, ILoggerProvider logger)
@@ -28,12 +29,16 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.logger = logger.GetFor<HqUserManager>();
         }
 
-        public Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
         {
-            var passwordStore = this.Store as IUserPasswordStore<HqUser, Guid>;
-            if (passwordStore == null) throw new NotImplementedException();
+            var result = await this.UpdatePassword(PasswordStore, user, newPassword);
+
+            if (result.Succeeded)
+            {
+                return await UpdateAsync(user);
+            }
             
-            return this.UpdatePassword(passwordStore, user, newPassword);
+            return result;
         }
 
         public override async Task<ClaimsIdentity> CreateIdentityAsync(HqUser user, string authenticationType)
@@ -46,11 +51,10 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return userIdentity;
         }
 
-        protected override Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
+        protected override async Task<IdentityResult> UpdatePassword(IUserPasswordStore<HqUser, Guid> passwordStore, HqUser user, string newPassword)
         {
             this.UpdateSha1PasswordIfNeeded(user, newPassword);
-
-            return base.UpdatePassword(passwordStore, user, newPassword);
+            return await base.UpdatePassword(passwordStore, user, newPassword);
         }
 
         [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
@@ -61,16 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
             }
         }
-
-        [Obsolete("Since 5.19. Can be removed as soon as there is no usages of IN app version < 5.19")]
-        private void UpdateSha1PasswordIfNeeded(HqUser user, string newPassword, UserRoles futureRole)
-        {
-            if (this.hashCompatibilityProvider.IsInSha1CompatibilityMode() && (user.IsInRole(UserRoles.Interviewer) || futureRole == UserRoles.Interviewer))
-            {
-                user.PasswordHashSha1 = this.hashCompatibilityProvider.GetSHA1HashFor(user, newPassword);
-            }
-        }
-
+        
         protected override async Task<bool> VerifyPasswordAsync(IUserPasswordStore<HqUser, Guid> store, HqUser user, string password)
         {
             if (user == null || password == null) return false;
@@ -115,16 +110,16 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
-            
-            var creationStatus = await this.CreateAsync(user, password);
+            user.Roles.Add(new HqUserRole {UserId = user.Id, RoleId = role.ToUserId()});
 
-            if (creationStatus.Succeeded)
+            var result = await this.UpdatePassword(PasswordStore, user, password);
+
+            if (result.Succeeded)
             {
-                UpdateSha1PasswordIfNeeded(user, password, role);
-                creationStatus = await this.AddToRoleAsync(user.Id, Enum.GetName(typeof(UserRoles), role));
+                return await this.CreateAsync(user);
             }
 
-            return creationStatus;
+            return result;
         }
         
         public virtual async Task<IdentityResult> UpdateUserAsync(HqUser user, string password)
@@ -174,15 +169,36 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.UpdateUser(currentUser, null);
         }
 
-        public virtual async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive)
+        public virtual async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds)
         {
             var archiveUserResults = new List<IdentityResult>();
 
             var usersToArhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
-            foreach (var userToArchive in usersToArhive)
+            foreach (HqUser userToArchive in usersToArhive)
             {
-                var archiveResult = archive ? await this.ArchiveUserAsync(userToArchive) : await this.UnarchiveUserAsync(userToArchive);
-                archiveUserResults.Add(archiveResult);
+                if (userToArchive.IsInRole(UserRoles.Supervisor))
+                {
+                    archiveUserResults.AddRange(await this.ArchiveSupervisorAndDependentInterviewersAsync(userToArchive.Id));
+                }
+                else
+                {
+                    var archiveResult = await this.ArchiveUserAsync(userToArchive);
+                    archiveUserResults.Add(archiveResult);
+                }
+            }
+
+            return archiveUserResults.ToArray();
+        }
+
+        public virtual async Task<IdentityResult[]> UnarchiveUsersAsync(Guid[] userIds)
+        {
+            var archiveUserResults = new List<IdentityResult>();
+
+            var usersToUnarhive = this.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            foreach (var userToUnarchive in usersToUnarhive)
+            {
+                var unArchiveResult = await this.UnarchiveUserAsync(userToUnarchive);
+                archiveUserResults.Add(unArchiveResult);
             }
 
             return archiveUserResults.ToArray();

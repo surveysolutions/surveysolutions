@@ -29,8 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
         };
 
-        Because of = () =>
-            result = interviewersViewFactory.GetInterviewers(0, 20, null, "interviewer", false, null, supervisor1Id);
+        Because of = () => result = interviewersViewFactory.GetInterviewers(0, 20, null, "interviewer", false, InterviewerOptionFilter.Any, null, supervisor1Id);
 
         It should_return_2_interviewers = () =>
         {
@@ -43,6 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             result.Items.Skip(0).First().UserName.ShouldEqual("interviewer11");
             result.Items.Skip(1).First().UserName.ShouldEqual("interviewer12");
         };
+
+        It should_return_correct_is_archived_status = () =>
+        {
+            result.Items.Skip(0).First().IsArchived.ShouldEqual(false);
+            result.Items.Skip(1).First().IsArchived.ShouldEqual(false);
+        };
+
 
         private static HqUser supervisor1;
         private static HqUser supervisor2;

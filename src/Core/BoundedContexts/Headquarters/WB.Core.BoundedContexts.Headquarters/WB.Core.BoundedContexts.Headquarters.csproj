@@ -59,11 +59,11 @@
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib.Portable">
@@ -93,24 +93,24 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.Cookies.3.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.OAuth.3.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -147,10 +147,6 @@
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Polly, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Polly.4.3.0\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
@@ -350,6 +346,9 @@
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
+    <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
+    <Compile Include="Troubleshooting\TroubleshootingService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\AssemblyInfoMap.cs" />
@@ -368,17 +367,16 @@
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
-    <Compile Include="Mappings\UserDocumentMap.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
     <Compile Include="OwinSecurityModule.cs" />
+    <Compile Include="OwinSecurity\FluentMigratorInitializer.cs" />
     <Compile Include="OwinSecurity\HqPasswordValidator.cs" />
     <Compile Include="OwinSecurity\Providers\ApiAuthTokenProvider.cs" />
     <Compile Include="OwinSecurity\Providers\HashCompatibilityProvider.cs" />
     <Compile Include="OwinSecurity\HqSignInManager.cs" />
     <Compile Include="OwinSecurity\HqUserManager.cs" />
     <Compile Include="OwinSecurity\HqUserStore.cs" />
-    <Compile Include="OwinSecurity\Configuration.cs" />
     <Compile Include="OwinSecurity\HQIdentityDbContext.cs" />
     <Compile Include="OwinSecurity\AuthorizedUser.cs" />
     <Compile Include="OwinSecurity\IApiTokenProvider.cs" />
@@ -433,6 +431,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\TroubleshootingMessages.Designer.cs">
+      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TroubleshootingMessages.ru.Designer.cs">
+      <DependentUpon>TroubleshootingMessages.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\UserPreloadingServiceMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -463,6 +471,7 @@
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
+    <Compile Include="Troubleshooting\ITroubleshootingService.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataVerifier.cs" />
@@ -565,6 +574,7 @@
     <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
     <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
     <Compile Include="Views\Interview\HardDeletedInterview.cs" />
+    <Compile Include="Views\Interview\IAllInterviewsFactory.cs" />
     <Compile Include="Views\Interview\IInterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
     <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
@@ -626,7 +636,6 @@
     <Compile Include="Views\Reposts\Factories\IMapReport.cs" />
     <Compile Include="Views\Reposts\Factories\MapReport.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
-    <Compile Include="Views\Reposts\Factories\QuestionnaireQuestionInfoFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SurveysAndStatusesReport.cs" />
@@ -634,7 +643,6 @@
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
@@ -655,7 +663,6 @@
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
     <Compile Include="Views\Reposts\Views\QuantityTotalRow.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
-    <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
     <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
@@ -678,6 +685,7 @@
     <Compile Include="Views\Survey\SurveysViewItem.cs" />
     <Compile Include="Views\Survey\SurveyUsersView.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
+    <Compile Include="Troubleshooting\Views\InterviewLog.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLog.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogDevicesView.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogFilter.cs" />
@@ -700,6 +708,7 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\HqUser.cs" />
+    <Compile Include="Views\User\InterviewerOptionFilter.cs" />
     <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserViewFactory.cs" />
     <Compile Include="Views\User\RoleExtensions.cs" />
@@ -711,6 +720,8 @@
     <Compile Include="Views\User\UserView.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
     <Compile Include="Views\ViewerStatus.cs" />
+    <Compile Include="WebInterview\ISampleWebInterviewService.cs" />
+    <Compile Include="WebInterview\Impl\SampleWebInterviewService.cs" />
     <Compile Include="WebInterview\WebInterviewConfig.cs" />
     <Compile Include="WebInterview\IWebInterviewConfigProvider.cs" />
     <Compile Include="WebInterview\IWebInterviewConfigurator.cs" />
@@ -807,6 +818,16 @@
       <LastGenOutput>SurveyManagementInterviewCommandValidatorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TroubleshootingMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">

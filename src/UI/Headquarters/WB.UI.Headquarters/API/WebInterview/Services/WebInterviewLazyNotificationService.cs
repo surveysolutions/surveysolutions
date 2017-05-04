@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Practices.ServiceLocation;
@@ -39,6 +40,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 {
                     this.transactionManager.ExecuteInQueryTransaction(() =>
                         this.readTransactionManager.ExecuteInQueryTransaction(action));
+                }
+                catch (NotSupportedException)
+                {
+                    // read side may not be avaliable for now
+                    Task.Delay(TimeSpan.FromSeconds(5)).Wait();
                 }
                 catch { /* nom nom nom */ }
             }

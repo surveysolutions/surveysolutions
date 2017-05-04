@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -55,6 +54,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 variableExpression: $"var expression {searchFor}",
                 parentId: chapterId);
 
+            questionnaire.UpdateVariable(Create.Command.UpdateVariable(
+                questionnaire.Id,
+                variableId,
+                VariableType.String,
+                "name",
+                expression: $"var expression {searchFor}",
+                label: $"label {searchFor}",
+                userId: responsibleId
+                ));
+
             questionnaire.AddGroup(groupId, chapterId, 
                 title: $"group title with {searchFor}",
                 enablingCondition: $"group enablement {searchFor}", responsibleId: responsibleId);
@@ -63,6 +72,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
             questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name", 
                 $"macro content {searchFor}", "desc", responsibleId));
+
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id,
+               staticTextWithAttachmentId,
+               $"static text title",
+               responsibleId,
+               chapterId));
+
+            questionnaire.UpdateStaticText(Create.Command.UpdateStaticText(questionnaire.Id,
+                staticTextWithAttachmentId,
+                "title",
+                $"attachment {searchFor}",
+                responsibleId,
+                null));
 
             command = Create.Command.ReplaceTextsCommand(searchFor, replaceWith, matchCase: true, userId: responsibleId);
         };
@@ -105,6 +127,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_repalce_variable_expressions = () => 
             questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
 
+        It should_repalce_variable_lablel = () =>
+        questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Label.ShouldEqual($"label {replaceWith}");
+
         It should_replace_variable_names = () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");
 
@@ -112,7 +137,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
 
         It should_record_number_of_affected_entities = () => 
-            questionnaire.GetLastReplacedEntriesCount().ShouldEqual(6);
+            questionnaire.GetLastReplacedEntriesCount().ShouldEqual(7);
+
+        It should_replace_text_in_attachment_name = () => 
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextWithAttachmentId).AttachmentName.ShouldEqual($"attachment {replaceWith}");
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
@@ -123,6 +151,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        static readonly Guid staticTextWithAttachmentId = Guid.Parse("66666666666666666666666666666666");
         private static ReplaceTextsCommand command;
         private static Guid responsibleId;
         const string replaceWith = "replaced";

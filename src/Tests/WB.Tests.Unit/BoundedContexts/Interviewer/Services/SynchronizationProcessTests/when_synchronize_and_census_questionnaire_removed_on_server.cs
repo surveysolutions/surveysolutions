@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Machine.Specifications;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -10,11 +11,13 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Tests.Abc.Storage;
+using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    internal class when_synchronize_and_census_questionnaire_removed_on_server : SynchronizationProcessTestsContext
+    [Subject(typeof(SynchronizationProcess))]
+    internal class when_synchronize_and_census_questionnaire_removed_on_server 
     {
         [Test]
         public async Task should_progress_report_1_deleted_interview()
@@ -53,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var mockOFInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
 
-            var viewModel = CreateSynchronizationProcess(principal: principal,
+            var viewModel = Create.Service.SynchronizationProcess(principal: principal,
                 interviewViewRepository: interviewViewRepository,
                 synchronizationService: synchronizationService,
                 questionnaireFactory: interviewerQuestionnaireAccessor,

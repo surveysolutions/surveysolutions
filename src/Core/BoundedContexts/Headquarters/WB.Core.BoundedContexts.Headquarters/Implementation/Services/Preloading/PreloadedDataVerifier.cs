@@ -242,10 +242,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
             var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray(); 
+            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName).ToList();
 
             foreach (var columnName in levelData.Header)
             {
                 if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                if (listOfServiceVariableNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
                     continue;
 
                 if (listOfParentIdColumns.Contains(columnName))

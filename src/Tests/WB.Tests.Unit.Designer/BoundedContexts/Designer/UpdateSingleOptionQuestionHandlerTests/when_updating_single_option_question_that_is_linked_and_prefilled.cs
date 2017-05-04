@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__linked_question_cannot_be_prefilled_ = () =>
-            new[] { "question that linked to another question can not be pre-filled" }.ShouldEachConformTo(
+            new[] { "question that linked to another question can not be identifying" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

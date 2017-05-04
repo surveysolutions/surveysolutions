@@ -115,9 +115,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             long questionnaireVersion)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
+            
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
 
             this.questionnaireStorage.StoreQuestionnaire(identity.QuestionnaireId, identity.Version, questionnaireDocument);
-            this.questionnaireAssemblyFileAccessor.StoreAssembly(identity.QuestionnaireId, identity.Version, assemblyAsBase64);
 
             string projectionId = GetProjectionId(identity);
 

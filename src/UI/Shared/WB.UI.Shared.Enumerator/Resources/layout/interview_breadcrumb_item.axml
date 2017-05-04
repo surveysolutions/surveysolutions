@@ -10,7 +10,7 @@
             android:ellipsize="end"
             android:maxEms="20"
             android:singleLine="true"
-            local:MvxBind="HideKeyboardOnClick .;Text Text.PlainText; Click NavigateCommand" />
+            local:MvxBind="HideKeyboardOnClick .;Html Text.PlainText; Click NavigateCommand" />
   <TextView
             style="@style/Interview_BreadCrumbs"
             android:text=" / "/>

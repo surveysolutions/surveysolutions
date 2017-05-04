@@ -9,20 +9,22 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     {
         public HQIdentityDbContext() : base("Postgres")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<HQIdentityDbContext, Configuration>());
+           
         }
+
+        private const string SchemaName = "users";
 
         // Here you define your own DbSet's
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<HqUser>().ToTable("users", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<HqRole>().ToTable("roles", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<HqUserRole>().ToTable("userroles", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<HqUserLogin>().ToTable("userlogins", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", OwinSecurity.Configuration.SchemaName);
-            modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", OwinSecurity.Configuration.SchemaName);
+            modelBuilder.Entity<HqUser>().ToTable("users", SchemaName);
+            modelBuilder.Entity<HqRole>().ToTable("roles", SchemaName);
+            modelBuilder.Entity<HqUserRole>().ToTable("userroles", SchemaName);
+            modelBuilder.Entity<HqUserLogin>().ToTable("userlogins", SchemaName);
+            modelBuilder.Entity<HqUserClaim>().ToTable("userclaims", SchemaName);
+            modelBuilder.Entity<HqUserProfile>().ToTable("userprofiles", SchemaName);
         }
     }
 }

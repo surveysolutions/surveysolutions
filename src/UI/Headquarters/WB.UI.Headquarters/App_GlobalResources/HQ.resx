@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UserWasCreated" xml:space="preserve">
-    <value>Headquarters user was successfully created.</value>
+  <data name="UserWasCreatedFormat" xml:space="preserve">
+    <value>Headquarters user {0} was successfully created.</value>
   </data>
   <data name="UserNotExists" xml:space="preserve">
     <value>Could not update user information because user does not exist</value>
@@ -139,7 +139,7 @@
     <value>Create one more?</value>
   </data>
   <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Questionnaire with id {0} and version {1} is not found.</value>
+    <value>Questionnaire with id {0} and version {1} cannot be found.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
     <value>Questionnaire '{0}' was successfully cloned.</value>
@@ -147,10 +147,10 @@
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
     <value>Questionnaire '{0}' was successfully cloned with a new title '{1}'.</value>
   </data>
-  <data name="ObserverCreated" xml:space="preserve">
-    <value>Observer user was successfully created.</value>
+  <data name="ObserverCreatedFormat" xml:space="preserve">
+    <value>Observer user &lt;b&gt;{0}&lt;/b&gt; was successfully created.</value>
   </data>
-  <data name="SuccessfullyCreated" xml:space="preserve">
-    <value>Supervisor was successfully created.</value>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
+    <value>Supervisor &lt;b&gt;{0}&lt;/b&gt; was successfully created.</value>
   </data>
 </root>

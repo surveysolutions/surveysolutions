@@ -423,13 +423,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var linkedToEntityId = new Identity(interviewTreeSingleLinkedToRosterQuestion.LinkedSourceId, interviewTreeSingleLinkedToRosterQuestion.GetAnswer()?.SelectedValue);
                 
                 return this.Tree.GetQuestion(linkedToEntityId)?.GetAnswerAsString() ?? 
-                       this.Tree.GetRoster(linkedToEntityId).RosterTitle;
+                       this.Tree.GetRoster(linkedToEntityId)?.RosterTitle ?? string.Empty;
             }
             if (this.IsMultiLinkedOption)
             {
                 var formattedAnswers = this.AsMultiLinkedOption.GetAnswer()?.CheckedValues
                     .Select(x => new Identity(this.AsMultiLinkedOption.LinkedSourceId, x))
-                    .Select(x => this.Tree.GetQuestion(x)?.GetAnswerAsString() ?? this.Tree.GetRoster(x).RosterTitle);
+                    .Select(x => this.Tree.GetQuestion(x)?.GetAnswerAsString() ?? this.Tree.GetRoster(x)?.RosterTitle ?? string.Empty);
                 return string.Join(", ", formattedAnswers);
             }
 

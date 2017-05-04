@@ -1,43 +1,13 @@
-﻿@using System.Web.Optimization
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
-
+﻿@model UserModel
 @{
-    ViewBag.Title = Users.CreateAPIUser;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-}
+    Layout = "~/Views/Shared/Profile/_UserCreateLayout.cshtml";
 
-@section scripts
+    ViewBag.Title = Pages.Profile_ApiUserCreate;
+    ViewBag.PageTitle = Pages.Profile_ApiUserCreate;
+}
+@section Breadcrumbs
 {
-    @Scripts.Render("~/validate")
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
+    <li>
+        @Html.ActionLink(@Pages.Profile_ApiUsersList, "Index")
+    </li>
 }
-<main>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>@Users.CreateAPIUser</h1>
-        </div>
-
-        @Html.Partial("_alerts")
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, null, new Dictionary<string, object> { { "class", "alert alert-danger" } })
-
-            <fieldset class="form-horizontal">
-                @{
-                    this.Html.RenderPartial("ApiUserCreateForm");
-                }
-                <div class="form-group">
-                    <div class="col-sm-offset-2">
-                        <button type="submit" class="btn btn-primary">@Common.SaveChanges</button>
-                        @Html.ActionLink(Common.Cancel, "Index", null, new { @class = "btn btn-default" })
-                    </div>
-                </div>
-            </fieldset>
-                    }
-    </div>
-</main>
-
