@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
 
     public class SyncDay
     {
-        public DateTime Day { get; set; }
+        public string Day { get; set; }
         public SyncDayQuarter[] Quarters { get; set; }
     }
 
