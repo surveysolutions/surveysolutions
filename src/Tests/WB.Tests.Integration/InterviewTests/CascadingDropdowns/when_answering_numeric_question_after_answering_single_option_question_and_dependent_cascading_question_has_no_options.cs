@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, "numeric")
                 });
 
-                var interview = SetupInterview(questionnaire, new object[]{});
+                var interview = SetupInterviewWithProcessor(questionnaire, new object[]{});
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1m);
                 interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 11m);
@@ -52,16 +52,16 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     interview.AnswerNumericIntegerQuestion(actorId, numericId, new decimal[] { }, DateTime.Now, 2);
 
                     return new InvokeResults
-                           {
-                               DisabledQuestions =
-                                   eventContext.AnyEvent<QuestionsDisabled>()
-                                       ? eventContext.GetSingleEvent<QuestionsDisabled>().Questions.Select(identity => identity.Id).ToArray()
-                                       : null,
-                               EnabledQuestions =
-                                    eventContext.AnyEvent<QuestionsEnabled>()
-                                       ? eventContext.GetSingleEvent<QuestionsEnabled>().Questions.Select(identity => identity.Id).ToArray()
-                                       : null,
-                           };
+                    {
+                        DisabledQuestions =
+                            eventContext.AnyEvent<QuestionsDisabled>()
+                                ? eventContext.GetSingleEvent<QuestionsDisabled>().Questions.Select(identity => identity.Id).ToArray()
+                                : null,
+                        EnabledQuestions =
+                            eventContext.AnyEvent<QuestionsEnabled>()
+                                ? eventContext.GetSingleEvent<QuestionsEnabled>().Questions.Select(identity => identity.Id).ToArray()
+                                : null,
+                    };
                 }
             });
 

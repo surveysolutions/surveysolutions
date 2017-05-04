@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterview(questionnaireDocument);
+                var interview = SetupInterviewWithProcessor(questionnaireDocument);
                 interview.AnswerNumericRealQuestion(userId, rosterSizeQuestionId, new decimal[] { }, DateTime.Now, 10);
 
                 using (var eventContext = new EventContext())

@@ -20,7 +20,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-
                 Setup.MockedServiceLocator();
                 var  numericQuestionId = Guid.Parse("11111111111111111111111111111111");
                 var parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
@@ -28,9 +27,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var grandChildCascadedComboboxId = Guid.Parse("4C603B8A-3237-4915-96FA-8D1568C679E2");
 
                 var questionnaireId = Guid.NewGuid();
-
-                var nonAnsweredCombo = Guid.NewGuid();
-                var comboShouldNotBeRemoved = Guid.NewGuid();
 
                 var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
@@ -54,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                var interview = SetupInterview(questionnaire);
+                var interview = SetupInterviewWithProcessor(questionnaire);
 
                 using (var eventContext = new EventContext())
                 {

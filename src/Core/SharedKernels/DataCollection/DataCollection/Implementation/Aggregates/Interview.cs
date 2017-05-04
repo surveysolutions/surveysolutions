@@ -2349,7 +2349,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             entity.Enable();
                         else entity.Disable();
 
-                        
+                        if (entity is InterviewTreeQuestion)
+                        {
+                            var question = entity as InterviewTreeQuestion;
+                            if (question.IsCascading)
+                            {
+                                //move to cascading
+                                var cascadingParent = question.AsCascading.GetCascadingParentTreeQuestion();
+                                if (cascadingParent.IsDisabled() || !cascadingParent.IsAnswered())
+                                {
+                                    if (question.IsAnswered())
+                                        question.RemoveAnswer();
+                                    question.Disable();
+                                }
+                                else
+                                {
+                                    question.Enable();
+                                }
+                            }
+                        }
                     }
                 }
                 foreach (var entityId in playOrder)
