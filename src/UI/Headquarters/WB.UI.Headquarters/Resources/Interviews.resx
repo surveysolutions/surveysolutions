@@ -137,7 +137,10 @@
 &lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>No responsible chosen for some interview(s). Please, choose responsible.</value>
+    <value>No responsible chosen for some interview(s). Please choose a responsible interviewer.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>No responsible chosen for some interview(s). Please choose a responsible supervisor.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Do you want to continue?</value>

@@ -527,9 +527,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (IsRosterByQuestion(roster))
             {
                 var question = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
-                var questionMaxAnswersCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers
-                    ?? (question as TextListQuestion)?.MaxAnswerCount
-                    ?? Constants.MaxRosterRowCount;
+                int questionMaxAnswersCount = Constants.MaxRosterRowCount;
+
+                var multioptionQuestion = question as MultyOptionsQuestion;
+                if (multioptionQuestion != null)
+                {
+                    questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers.Count;
+                }
+                var textListTrigger = question as TextListQuestion;
+                if (textListTrigger?.MaxAnswerCount != null)
+                {
+                    questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                }
 
                 return questionMaxAnswersCount;
             }

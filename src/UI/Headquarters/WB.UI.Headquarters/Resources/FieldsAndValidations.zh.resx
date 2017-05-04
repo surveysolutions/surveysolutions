@@ -210,4 +210,7 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>用户名</value>
   </data>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>输入的名称太长 &gt; {1}</value>
+  </data>
 </root>

@@ -308,6 +308,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
+                "~/Dependencies/js/ajax.js",
                 "~/Scripts/pages/export-settings.js"
                 ));
 

@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit admin profile.
+        ///   Looks up a localized string similar to Edit {0} profile.
         /// </summary>
         public static string AccountManage_Title {
             get {
@@ -763,7 +763,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Information about  {0}  successfully updated.
+        ///   Looks up a localized string similar to Information about {0} successfully updated.
         /// </summary>
         public static string InterviewerController_EditSuccess {
             get {
@@ -826,7 +826,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer did not synchronize yet. There is no information about devices in use..
+        ///   Looks up a localized string similar to Interviewer has not synchronized yet. There is no information about his/her devices..
         /// </summary>
         public static string InterviewerEdit_NoDeviceHistory {
             get {
@@ -871,7 +871,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} (assigned to {1}).
+        ///   Looks up a localized string similar to {0} (supervisor: {1}).
         /// </summary>
         public static string InterviewerProfile_AssignedToFormat {
             get {
@@ -1645,7 +1645,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application is currently being upgraded to the new version. This a manual operation and may require a noticeable amount of time. Sorry for the inconvenience. After the process is completed you will be automatically redirected to the page you requested..
+        ///   Looks up a localized string similar to The application is currently being upgraded to a newer version. This a manual operation and may require a noticeable amount of time. Sorry for the inconvenience. After the process is completed, you will be automatically redirected to the page you requested..
         /// </summary>
         public static string Maintenance_Description {
             get {
@@ -1654,7 +1654,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application is now rebooting and this may take up to 10 minutes or more. Sorry for the inconvenience. After the process is completed you will be automatically redirected to the page you requested..
+        ///   Looks up a localized string similar to The application is now rebooting, and this may take up to 10 minutes or more. Sorry for the inconvenience. After the process is completed, you will be automatically redirected to the page you requested..
         /// </summary>
         public static string Maintenance_RebuildDescription {
             get {
@@ -2204,7 +2204,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surveys and Statuses.
+        ///   Looks up a localized string similar to Surveys and statuses.
         /// </summary>
         public static string SurveysAndStatuses_Overview {
             get {
@@ -2222,7 +2222,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor.
+        ///   Looks up a localized string similar to Supervisor (teams).
         /// </summary>
         public static string SurveysAndStatuses_SupervisorTitle {
             get {
@@ -2384,7 +2384,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Folder which contains the website has a long directory path. Please move a website to the upper folders..
+        ///   Looks up a localized string similar to Folder that contains the website has a path name that is too long. Please move the website to another folder with a shorter name..
         /// </summary>
         public static string WebsitePathIsTooLong_Title {
             get {
