@@ -442,9 +442,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (this.IsSingleLinkedToList)
             {
-                var singleToListAnswer = Convert.ToDecimal(this.AsSingleLinkedToList.GetAnswer()?.SelectedValue);
+                var singleToListAnswer = Convert.ToDecimal(this.AsSingleLinkedToList.GetAnswer().SelectedValue);
                 var refListQuestion = this.Tree.FindEntityInQuestionBranch(this.AsSingleLinkedToList.LinkedSourceId, Identity) as InterviewTreeQuestion;
-                var refListOption = refListQuestion?.AsTextList?.GetAnswer()?.Rows.Single(x => x.Value == singleToListAnswer);
+                var refListOption = refListQuestion?.AsTextList?.GetAnswer()?.Rows.SingleOrDefault(x => x.Value == singleToListAnswer);
                 return refListOption?.Text;
             }
             if (this.IsMultiLinkedToList)

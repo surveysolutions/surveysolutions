@@ -551,6 +551,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.CategoricalSingle.Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_apply_SubstitutionTitlesChanged_for_question_from_deleted_roster_instance.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_removing_answer_from_text_list_question_that_is_used_as_source.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_census_interview_for_the_first_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_synchronizing_interview_events_of_interview_with_key_assigned.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
