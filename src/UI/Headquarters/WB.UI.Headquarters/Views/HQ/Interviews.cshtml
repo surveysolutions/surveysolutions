@@ -7,6 +7,7 @@
 @using WB.UI.Headquarters.Resources
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 @{
+    ViewBag.Title = Common.Interviews;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -21,13 +22,14 @@
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var $profileUrl = '@Url.Action("Profile", "Interviewer")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
         var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
         var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
         $(function() {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier);
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier, $profileUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -160,7 +162,12 @@
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <td>
-                                                <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
+                                                <!-- ko if:ResponsibleRole() == 4 -->
+                                                <a data-bind="attr: { href: $profileUrl + '/' + ResponsibleId() }, text: ResponsibleName"></a>
+                                                <!-- /ko -->
+                                                <!-- ko ifnot:ResponsibleRole() == 4 -->
+                                                <span data-bind="text: ResponsibleName"></span>
+                                                <!-- /ko -->
                                             </td>
                                             <td class="date last-update" data-bind="text: LastEntryDate"></td>
                                             <td class="errors">
@@ -183,7 +190,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                         </div>
+                            <!-- ko if:Pager().LastPage() > 1 -->
+                            <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                            <!-- /ko -->
+                        </div>
                     </div>
                     
                     <div class="screen-small-resolution">
@@ -205,8 +215,13 @@
                             </ul>
                         </div>
                         <!-- /ko -->
+                        <!-- ko if:Pager().LastPage() > 1 -->
+                        <div class="row-unit">
+                            <div data-bind="template: { name: 'datatable-pager', data: Pager }"></div>
+                        </div>
+                        <!-- /ko -->
                     </div>
-                    
+
                     <div class="panel panel-table" data-bind="visible: SelectedItems().length > 0">
                         <div class="panel-body">
                             <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
@@ -221,6 +236,9 @@
                         </div>
                     </div>
                 </div>
+                @Html.Partial("_ListDataTablePagingScript")
+
+
 
 
             </div>
@@ -229,7 +247,7 @@
 
     <script type="text/html" id="assign-interview-template">
         <div class="btn-group assign-interviewer">
-            @Interviews.ChooseResponsibleInterviewer
+            @Interviews.ChooseResponsibleSupervisor
             <div class="input-group">
                 <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                 <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>

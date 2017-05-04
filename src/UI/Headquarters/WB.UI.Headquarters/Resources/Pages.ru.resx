@@ -626,7 +626,7 @@
     <value>Интервьюер: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{0} (закреплён за {1})</value>
+    <value>{0} (супервизор: {1})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
     <value>E-mail: {0}</value>
@@ -791,7 +791,7 @@
     <comment>Логин</comment>
   </data>
   <data name="AccountManage_Title" xml:space="preserve">
-    <value>Редактирование профиля администратора</value>
+    <value>Редактирование профиля {0}</value>
     <comment>Редактирование профиля администратора</comment>
   </data>
   <data name="Update" xml:space="preserve">

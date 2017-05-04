@@ -14,8 +14,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsAndValidations.ConfirmNewPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 2)]
         [Compare(nameof(Password), ErrorMessageResourceName = nameof(FieldsAndValidations.ConfirmPasswordErrorMassage), ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [Display(Name = nameof(FieldsAndValidations.ConfirmPasswordFieldName), ResourceType = typeof(FieldsAndValidations), Order = 2)]
         string ConfirmPassword { get; set; }
         
         Guid Id { get; set; }

@@ -300,9 +300,6 @@
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
     <value>您的应用程序是最新版。</value>
   </data>
-  <data name="HostUnreachable" xml:space="preserve">
-    <value>未能连接到Survey Solutions督导员网站。请检查服务器网址和（或）网络设置。</value>
-  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>服务器错误。请联系支持团队：support@mysurvey.solutions。</value>
   </data>

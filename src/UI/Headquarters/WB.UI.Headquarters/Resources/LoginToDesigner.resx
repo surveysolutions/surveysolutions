@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DesignerAppDescription" xml:space="preserve">
-    <value>This is free tool for creating questionnaires for The World Bank’s CAPI platform. It could be found at</value>
+    <value>This is free tool for creating questionnaires for The World Bank’s CAPI platform. It can be found at</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
     <value>User is not authorized. Please check your login and password.</value>

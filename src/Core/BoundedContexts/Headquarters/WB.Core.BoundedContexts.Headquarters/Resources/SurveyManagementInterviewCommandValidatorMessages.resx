@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LimitIsReachedErrorMessageFormat" xml:space="preserve">
-    <value>Limit of interviews that are allowed to be created is reached. Establised limit for this survey is {0}. Contact Survey Solutions team in case you need to create more interviews.</value>
+    <value>More interviews have been created than the allowed limit. Establised limit for this survey is {0}. Contact Survey Solutions team in case you need to create more interviews.</value>
   </data>
 </root>

@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current logo.
+        /// </summary>
+        internal static string CurrentLogo {
+            get {
+                return ResourceManager.GetString("CurrentLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable encryption.
         /// </summary>
         internal static string EnableEncryption {
@@ -102,6 +111,15 @@ namespace Resources {
         internal static string ExportEncryption_Title {
             get {
                 return ResourceManager.GetString("ExportEncryption_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete global note?.
+        /// </summary>
+        internal static string GlobalNoteClearingConfirm {
+            get {
+                return ResourceManager.GetString("GlobalNoteClearingConfirm", resourceCulture);
             }
         }
         

@@ -192,4 +192,7 @@
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Mise à jour de l'entretien : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;</value>
   </data>
+  <data name="PostPackage" xml:space="preserve">
+    <value>Importer l'entretien: {0}</value>
+  </data>
 </root>

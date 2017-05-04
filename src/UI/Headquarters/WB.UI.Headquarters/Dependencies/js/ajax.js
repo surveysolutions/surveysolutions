@@ -145,7 +145,7 @@ var Ajax = function (notifier) {
                     notifier.showError(input.settings.messages.forbiddenMessage);
                 }
                 else {
-                    notifier.showError(jqXhr.responseText);
+                    notifier.showError("Error", jqXhr.responseJSON.Message || jqXhr.responseText);
                 }
             } else {
                 notifier.showError(input.settings.messages.unhandledExceptionMessage);
