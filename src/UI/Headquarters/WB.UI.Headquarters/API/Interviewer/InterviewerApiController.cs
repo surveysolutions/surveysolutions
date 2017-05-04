@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -60,13 +61,10 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToInterviewerApp))
-            };
+            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/vnd.android.package-archive");
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
                 FileName = RESPONSEAPPLICATIONFILENAME
             };
