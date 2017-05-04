@@ -46,8 +46,6 @@
             };
 
             var dataBind = function (attachment, attachmentDto) {
-                attachment.initialAttachment = angular.copy(attachmentDto);
-
                 attachment.attachmentId = attachmentDto.attachmentId;
                 attachment.name = attachmentDto.name;
 
@@ -82,9 +80,10 @@
                     return;
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
-                    var attachment = {};
+                    var attachment = { checkpoint: {} };
                     if (!_.any($scope.attachments, function(elem) { return elem.attachmentId === attachmentDto.attachmentId;})) {
                         dataBind(attachment, attachmentDto);
+                        dataBind(attachment.checkpoint, attachmentDto);
                         $scope.attachments.push(attachment);
                     }
                 });
@@ -119,11 +118,11 @@
                     return;
                 }
 
-                var attachment = { attachmentId: utilityService.guid() };
+                var attachment = { attachmentId: utilityService.guid(), checkpoint: {} };
 
                 $scope.fileSelected(attachment, file, function() {
                     commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
-                        attachment.initialAttachment = angular.copy(attachment);
+                        dataBind(attachment.checkpoint, attachment);
                         $scope.attachments.push(attachment);
                         setTimeout(function () { utilityService.focus("focusAttachment" + attachment.attachmentId); }, 500);
                     });
@@ -181,7 +180,7 @@
                 commandService.updateAttachment($state.params.questionnaireId, newAttachmentId, attachment).then(function () {
                     // only if request didn't fail, we update id of attachment with new value to not loose connection with content id.
                     attachment.attachmentId = newAttachmentId;
-                    attachment.initialAttachment = _.clone(attachment);
+                    dataBind(attachment.checkpoint, attachment);
                     attachment.form.$setPristine();
                 });
             };
@@ -197,8 +196,7 @@
             });
 
             $scope.cancel = function (attachment) {
-                var temp = _.clone(attachment.initialAttachment);
-                dataBind(attachment, temp);
+                dataBind(attachment, attachment.checkpoint);
                 attachment.form.$setPristine();
             };
 

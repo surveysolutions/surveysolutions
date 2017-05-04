@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -57,6 +60,7 @@ using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
+using WB.UI.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
@@ -71,21 +75,24 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
+    [Localizable(false)]
     public static class NinjectConfig
     {
         public static IKernel CreateKernel()
         {
-            var useBackgroundJobForProcessingPackages = WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false);
+            var settingsProvider = new SettingsProvider();
+            
+            var useBackgroundJobForProcessingPackages = settingsProvider.AppSettings.GetBool("Synchronization.UseBackgroundJobForProcessingPackages", @default: false);
             var interviewDetailsDataLoaderSettings =
                 new SyncPackagesProcessorBackgroundJobSetting(useBackgroundJobForProcessingPackages,
                     ApplicationSettings.InterviewDetailsDataSchedulerSynchronizationInterval,
                     synchronizationBatchCount:
-                    WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
+                    settingsProvider.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
                     synchronizationParallelExecutorsCount:
-                    WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount",
+                    settingsProvider.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount",
                         @default: 1));
 
-            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            string appDataDirectory = settingsProvider.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
                 appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
@@ -102,7 +109,7 @@ namespace WB.UI.Headquarters
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
                 SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
@@ -113,55 +120,57 @@ namespace WB.UI.Headquarters
             };
 
             var cacheSettings = new ReadSideCacheSettings(
-                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                enableEsentCache: settingsProvider.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
                 esentCacheFolder:
                 Path.Combine(appDataDirectory,
-                    WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
-                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
-                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
+                    settingsProvider.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
-            var applicationSecuritySection = (HqSecuritySection)WebConfigurationManager.GetSection(@"applicationSecurity");
+            var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
+
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
+                new NLogLoggingModule(),
                 new ServiceLocationModule(),
-                new OwinSecurityModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new CaptchaModule(),
-                new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
                 new HeadquartersRegistry(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                    "readside",
-                    new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace),
+                    settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                    "readside", DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
                     mappingAssemblies)
             );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
-            var eventStoreSettings = new PostgreConnectionSettings();
-            eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings[dbConnectionStringName].ConnectionString;
-            eventStoreSettings.SchemaName = "events";
+            var eventStoreSettings = new PostgreConnectionSettings
+            {
+                ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                SchemaName = "events"
+            };
+
             var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
-            var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
+            var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
                 ? (int?) null
                 : int.Parse(interviewCountLimitString);
 
-            var userPreloadingConfigurationSection =
-                (UserPreloadingConfigurationSection)
-                (WebConfigurationManager.GetSection("userPreloadingSettingsGroup/userPreloadingSettings") ??
-                 new UserPreloadingConfigurationSection());
+            var userPreloadingConfigurationSection = 
+                settingsProvider.GetSection<UserPreloadingConfigurationSection>("userPreloadingSettingsGroup/userPreloadingSettings") ??
+                new UserPreloadingConfigurationSection();
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
@@ -177,23 +186,24 @@ namespace WB.UI.Headquarters
                     passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex,
                     fullNameMaxLength: UserModel.PersonNameMaxLength,
-                    phoneNumberMaxLength: UserModel.PhoneNumberLength);
+                    phoneNumberMaxLength: UserModel.PhoneNumberLength,
+                    personNameFormatRegex: UserModel.PersonNameRegex);
 
             var readSideSettings = new ReadSideSettings(
-                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+                settingsProvider.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
             var exportSettings = new ExportSettings(
-                WebConfigurationManager.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
+                settingsProvider.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
             var interviewDataExportSettings =
                 new InterviewDataExportSettings(basePath,
-                    bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
-                    WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
-                    WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
-                    WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
-                    WebConfigurationManager.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
+                    bool.Parse(settingsProvider.AppSettings["Export.EnableInterviewHistory"]),
+                    settingsProvider.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
+                    settingsProvider.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
+                    settingsProvider.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
+                    settingsProvider.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
 
             var sampleImportSettings = new SampleImportSettings(
-                WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
+                settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
             //for assembly relocation during migration
             kernel.Bind<LegacyAssemblySettings>().ToConstant(new LegacyAssemblySettings()
@@ -215,10 +225,11 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     interviewCountLimit),
-                new WebInterviewNinjectModule());
+                new WebInterviewNinjectModule(),
+                new OwinSecurityModule());
 
             kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
-            kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
+            kernel.Bind<ISettingsProvider>().ToConstant(settingsProvider);
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
@@ -227,7 +238,7 @@ namespace WB.UI.Headquarters
             CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>()
-                .ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
+                .ToConstant(new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
@@ -260,7 +271,7 @@ namespace WB.UI.Headquarters
                 {
                     AssembliesToInclude =
                     {
-                        typeof(API.WebInterview.WebInterview).Assembly,
+                        typeof(WebInterview).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }
@@ -274,7 +285,7 @@ namespace WB.UI.Headquarters
             });
 
             kernel.Bind<GoogleApiSettings>()
-                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"GoogleApiKey"]))
+                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"Google.Map.ApiKey"]))
                 .InSingletonScope();
 
             return kernel;
@@ -282,8 +293,7 @@ namespace WB.UI.Headquarters
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var eventBusConfigSection =
-                (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
+            var eventBusConfigSection = kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus");
 
             var bus = new NcqrCompatibleEventDispatcher(
                 kernel.Get<IEventStore>(),

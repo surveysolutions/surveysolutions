@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Filters
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
                 }
 
-                if (webInterviewConfig.ResponsibleId != interviewSummary.ResponsibleId)
+                if (webInterviewConfig.ResponsibleId.HasValue && webInterviewConfig.ResponsibleId != interviewSummary.ResponsibleId)
                 {
                     throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
                 }

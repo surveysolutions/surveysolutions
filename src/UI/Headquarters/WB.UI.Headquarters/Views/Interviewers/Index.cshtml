@@ -1,8 +1,6 @@
-﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.UI.Headquarters.Resources
-@using WB.UI.Shared.Web.Extensions
+@using WB.Core.BoundedContexts.Headquarters.Views.User
 
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
     
@@ -21,23 +19,7 @@
     @Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/interviewers")
-
     @Scripts.Render("~/js/common")
-
-    <script type="text/javascript">
-        $(document)
-            .ready(function() {
-                $("footer").addClass("footer-adaptive");
-
-                $("#hide-filters")
-                    .click(function() {
-                        $(".filters").toggleClass("hidden-filters");
-                        $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
-                        $("footer").toggleClass("footer-adaptive");
-                    });
-                $("main").removeClass("hold-transition");
-            });
-    </script>
 
     <script type="text/javascript">
         'use strict';
@@ -71,17 +53,15 @@
             self.SelectedSupervisor = ko.observable();
 
             self.Archived = ko.observable(false);
-            self.ConnectedToDevice = ko.observable('');
+            self.InterviewerOptionFilter = ko.observable('');
 
             self.SelectedItems = ko.observableArray([]);
-
 
             self.getConfirmAndSendRequest = function(confirmMessage, archive) {
                 notifier.confirm("@Pages.ConfirmationNeededTitle",
                     confirmMessage,
                     // confirm
                     function() {
-
                         var request = {
                             userIds: self.SelectedItems(),
                             archive: archive
@@ -102,6 +82,7 @@
                                             return input.settings.messages.unhandledExceptionMessage;
                                         }
                                     });
+
                                     $.each(failedDomainExceptions, function (index, message) {
                                         notifier.showError("@Pages.OperationFailedTitle", message);
                                     });
@@ -113,7 +94,6 @@
                     // cancel
                     function() {});
             }
-
 
             self.unarchiveInterviewers = function() {
                 self.getConfirmAndSendRequest("@Archived.UnarchiveInterviewerWarning \r\n @Pages.Interviewers_ArchiveInterviewersConfirm", false);
@@ -133,15 +113,15 @@
                 }
 
                 self.Archived(self.QueryString['archived']);
-                self.ConnectedToDevice(self.QueryString['connectedToDevice']);
+                self.InterviewerOptionFilter(self.QueryString['InterviewerOptionFilter']);
 
                 self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
                 self.Url.query['archived'] = self.QueryString['archived'] || "";
-                self.Url.query['connectedToDevice'] = self.QueryString['connectedToDevice'] || "";
+                self.Url.query['InterviewerOptionFilter'] = self.QueryString['InterviewerOptionFilter'] || "";
 
                 self.SelectedSupervisor.subscribe(updater);
                 self.Archived.subscribe(updater);
-                self.ConnectedToDevice.subscribe(updater);
+                self.InterviewerOptionFilter.subscribe(updater);
             };
 
             self.IsNothingSelected = ko.computed(function() {
@@ -153,21 +133,13 @@
 
         var InterviewersListModel = function(ajax, notifier) {
 
-            var allInterviewersApiUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
+            var allInterviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
             var editUrl = '@Url.Action("Profile", "Interviewer", new {area = string.Empty})';
-
-
             var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
-            var $interviewersApiUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
-            var $supervisorsUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
-            var $commandExecutionUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
-
-            var $archiveUsersUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
+            var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "AllInterviewers"})';
+            var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+            var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
+            var $archiveUsersUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "ArchiveUsers"})';
 
             var model = new Supervisor.VM.InterviewersNew(
                 $interviewersApiUrl,
@@ -223,7 +195,7 @@
                                 ? null
                                 : model.SelectedSupervisor().UserName;
                             d.Archived = model.Archived();
-                            d.ConnectedToDevice = model.ConnectedToDevice();
+                            d.InterviewerOptionFilter = model.InterviewerOptionFilter();
                         }
                     },
                     columns: [
@@ -284,12 +256,15 @@
                         ,</text>
                         }
                         {
-                            "orderable": false,
-                            data: "deviceId",
-                            name: "DeviceId", // case-sensitive!
-                            render: function(data, type, row) {
-                                return (row.deviceId === null ? "No" : "Yes");
+                            orderable: true,
+                            data: "enumeratorVersion",
+                            name: "EnumeratorVersion", // case-sensitive!
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                if (cellData) {
+                                    $(td).css('color', rowData.isUpToDate ? 'green' : 'red');
+                                }
                             },
+                            "defaultContent": "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
                             "class": "changed-recently"
                         }
                     ],
@@ -396,13 +371,13 @@
                             </div>
                         </div>
                     }
-
                     <div class="block-filter">
-                        <h5>@Pages.Interviewers_ConnectedToDeviceTitle</h5>
-                        <select data-bind="value: ConnectedToDevice" class="selectpicker">
-                            <option value="">@Pages.AnyOption</option>
-                            <option value="true">@Pages.Interviewers_Connected</option>
-                            <option value="false">@Pages.Interviewers_NotConnected</option>
+                        <h5>@Pages.Interviewers_InterviewerVersion</h5>
+                        <select data-bind="value: InterviewerOptionFilter" class="selectpicker">
+                            <option value="@InterviewerOptionFilter.Any.ToString()">@Pages.AnyOption</option>
+                            <option value="@InterviewerOptionFilter.NotSynced.ToString()">@Pages.Interviewers_NotSyncedOption</option>
+                            <option value="@InterviewerOptionFilter.UpToDate.ToString()">@Pages.Interviewers_UpToDateOption</option>
+                            <option value="@InterviewerOptionFilter.Outdated.ToString()">@Pages.Interviewers_OutdatedOption</option>
                         </select>
                     </div>
 
@@ -421,10 +396,10 @@
                 <div class="page-header clearfix">
                     <div>
                         <h1>@Pages.Interviewers_Header</h1>
-                        @if (isVisibleSupervisorColumn)
+                        @if (isVisibleSupervisorColumn && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new {area = string.Empty})">
-                                @Pages.Create
+                                @Users.AddInterviewer
                             </a>
                         }
                     </div>
@@ -448,7 +423,7 @@
                         {
                             <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
                         }
-                        <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                        <th title="@Pages.Interviewers_InterviewerVersionTooltip">@Pages.Interviewers_InterviewerVersion</th>
                     </tr>
                     </thead>
                 </table>

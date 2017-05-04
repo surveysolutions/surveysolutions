@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -24,18 +25,21 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory usersFactory;
         private readonly HqUserManager userManager;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
 
         public UsersApiController(
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
             IUserViewFactory usersFactory,
-            HqUserManager userManager)
+            HqUserManager userManager, 
+            IInterviewerVersionReader interviewerVersionReader)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
             this.userManager = userManager;
+            this.interviewerVersionReader = interviewerVersionReader;
         }
 
         [HttpPost]
@@ -54,15 +58,23 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUserRole == UserRoles.Supervisor)
                 supervisorId = this.authorizedUser.Id;
 
-            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.GetSortOrder(),
-                filter.Search.Value, filter.Archived, filter.ConnectedToDevice, supervisorId);
+            var interviewerApkVersion = interviewerVersionReader.Version;
 
+            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, 
+                filter.PageSize, 
+                filter.GetSortOrder(), 
+                filter.Search.Value, 
+                filter.Archived, 
+                filter.InterviewerOptionFilter, 
+                interviewerApkVersion,
+                supervisorId);
+            
             return new DataTableResponse<InterviewerListItem>
             {
                 Draw = filter.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
-                Data = interviewers.Items.ToList().Select(x => new InterviewerListItem
+                Data = interviewers.Items.Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
@@ -70,7 +82,9 @@ namespace WB.UI.Headquarters.Controllers
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId,
-                    IsArchived = x.IsArchived
+                    IsArchived = x.IsArchived,
+                    EnumeratorVersion = x.EnumeratorVersion,
+                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild
                 })
             };
 
@@ -86,9 +100,9 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string DeviceId { get; set; }
             public virtual bool IsLocked { get; set; }
             public virtual bool IsArchived { get; set; }
+            public virtual string EnumeratorVersion { get; set; }
+            public bool IsUpToDate { get; set; }
         }
-
-
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
@@ -99,8 +113,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView ArchivedSupervisors(UsersListViewModel data)
-            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+        {
+            return this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize,
+                data.SortOrder.GetOrderRequestString(),
                 data.SearchBy, true);
+        }
 
         [HttpPost]
         [CamelCase]
@@ -121,10 +138,37 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
-        [Authorize(Roles = "Administrator")]
-        public DataTableResponse<InterviewerListItem> AllSupervisors([FromBody] DataTableRequest request)
+        [Authorize(Roles = "Administrator, Headquarter, Observer")]
+        public DataTableResponse<SupervisorListItem> AllSupervisors([FromBody] DataTableRequestWithFilter request)
         {
-            return this.GetUsersInRoleForDataTable(request, UserRoles.Supervisor);
+            var users = this.usersFactory.GetSupervisors(request.PageIndex, request.PageSize, request.GetSortOrder(),
+                request.Search.Value);
+
+            return new DataTableResponse<SupervisorListItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = users.TotalCount,
+                RecordsFiltered = users.TotalCount,
+                Data = users.Items.ToList().Select(x => new SupervisorListItem
+                {
+                    UserId = x.UserId,
+                    UserName = x.UserName,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                    IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
+                    IsArchived = x.IsArchived
+                })
+            };
+        }
+
+        public class SupervisorListItem
+        {
+            public virtual Guid UserId { get; set; }
+            public virtual string UserName { get; set; }
+            public virtual string CreationDate { get; set; }
+            public virtual string Email { get; set; }
+            public virtual bool IsLocked { get; set; }
+            public virtual bool IsArchived { get; set; }
         }
 
         [HttpPost]
@@ -159,22 +203,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<JsonCommandResponse> DeleteSupervisor(DeleteSupervisorCommandRequest request)
-        {
-            var identityResults = await this.userManager.ArchiveSupervisorAndDependentInterviewersAsync(request.SupervisorId);
-
-            return new JsonCommandResponse
-            {
-                IsSuccess = identityResults.All(result => result.Succeeded),
-                DomainException = string.Join(@"; ", identityResults.Select(result=>result.Errors))
-            };
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
         public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
-            var archiveResults = await this.userManager.ArchiveUsersAsync(request.UserIds, request.Archive);
+            var archiveResults = request.Archive
+                ? await this.userManager.ArchiveUsersAsync(request.UserIds)
+                : await this.userManager.UnarchiveUsersAsync(request.UserIds);
 
             return new JsonBundleCommandResponse
             {

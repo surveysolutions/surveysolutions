@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
@@ -11,7 +10,7 @@ using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
-using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 
@@ -24,6 +23,8 @@ namespace WB.UI.Designer.Api.Attributes
         private IMembershipUserService MembershipService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
         private IAllowedAddressService allowedAddressService => ServiceLocator.Current.GetInstance<IAllowedAddressService>();
+
+        private IIpAddressProvider ipAddressProvider => ServiceLocator.Current.GetInstance<IIpAddressProvider>();
 
         private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
@@ -78,19 +79,18 @@ namespace WB.UI.Designer.Api.Attributes
                     return;
                 }
 
-                //if (this.onlyAllowedAddresses)
-                //{
-                //    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
-                //    {
-                //        var clientIpAddress = this.GetClientIpAddress();
-                //        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
-                //        {
-                //            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
-                //            return;
-                //        }
-                //    }
-                //}
-
+                if (this.onlyAllowedAddresses)
+                {
+                    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
+                    {
+                        var clientIpAddress = ipAddressProvider.GetClientIpAddress();
+                        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
+                        {
+                            this.ThrowUnathorizedException(actionContext, ErrorMessages.UserNeedToContactSupport);
+                            return;
+                        }
+                    }
+                }
 
                 base.OnAuthorization(actionContext);
             }
@@ -98,50 +98,6 @@ namespace WB.UI.Designer.Api.Attributes
             {
                 this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
-        }
-
-        private IPAddress GetClientIpAddress()
-        {
-            IPAddress ip = null;
-            var userHostAddress = HttpContext.Current.Request.UserHostAddress;
-
-            IPAddress.TryParse(userHostAddress, out ip);
-
-            var xForwardedForKey = HttpContext.Current.Request.ServerVariables.AllKeys.FirstOrDefault(x => x.ToUpper() == "X_FORWARDED_FOR");
-
-            if (string.IsNullOrEmpty(xForwardedForKey))
-                return ip;
-
-            var xForwardedFor = HttpContext.Current.Request.ServerVariables[xForwardedForKey];
-
-            if (string.IsNullOrEmpty(xForwardedFor))
-                return ip;
-
-            return xForwardedFor.Split(',').Select(IPAddress.Parse).LastOrDefault(x => !IsPrivateIpAddress(x));
-        }
-
-        private static bool IsPrivateIpAddress(IPAddress ip)
-        {
-            // http://en.wikipedia.org/wiki/Private_network
-            // Private IP Addresses are: 
-            //  24-bit block: 10.0.0.0 through 10.255.255.255
-            //  20-bit block: 172.16.0.0 through 172.31.255.255
-            //  16-bit block: 192.168.0.0 through 192.168.255.255
-            //  Link-local addresses: 169.254.0.0 through 169.254.255.255 (http://en.wikipedia.org/wiki/Link-local_address)
-
-            var octets = ip.GetAddressBytes();
-
-            var is24BitBlock = octets[0] == 10;
-            if (is24BitBlock) return true; // Return to prevent further processing
-
-            var is20BitBlock = octets[0] == 172 && octets[1] >= 16 && octets[1] <= 31;
-            if (is20BitBlock) return true; // Return to prevent further processing
-
-            var is16BitBlock = octets[0] == 192 && octets[1] == 168;
-            if (is16BitBlock) return true; // Return to prevent further processing
-
-            var isLinkLocalAddress = octets[0] == 169 && octets[1] == 254;
-            return isLinkLocalAddress;
         }
 
         private static BasicCredentials ParseCredentials(HttpActionContext actionContext)
@@ -177,7 +133,7 @@ namespace WB.UI.Designer.Api.Attributes
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = errorMessage };
-            actionContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", host));
+            actionContext.Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{host}\"");
         }
 
         private void ThrowLockedOutException(HttpActionContext actionContext)

@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify an interview key or interivew id to search. Alternatively, open the interview details page and press &quot;Troubleshoot&quot;  button..
+        ///   Looks up a localized string similar to Specify an interview key or interview id to search..
         /// </summary>
         public static string InterviewDataIsMissingDescription {
             get {
@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An interviewer claims an interview was completed and syncronized, but I see no data for that interivew on the server.
+        ///   Looks up a localized string similar to An interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server.
         /// </summary>
         public static string InterviewDataIsMissingTitle {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search interviews syncronized between two dates.
+        ///   Looks up a localized string similar to Search interviews synchronized between two dates.
         /// </summary>
         public static string MissingCensusInterviews_Filters_Dates {
             get {
@@ -170,15 +170,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization..
-        /// </summary>
-        public static string MissingCensusInterviews_NoBrokenPackages_Message {
-            get {
-                return ResourceManager.GetString("MissingCensusInterviews_NoBrokenPackages_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No interviews satisfy filter conditions.
         /// </summary>
         public static string MissingCensusInterviews_NothingFound_Message {
@@ -206,15 +197,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the interview you are trying to locate is not in the list, please instruct the interviewer to complete the interview and repeat syncronization and repeat the search. If the interview is not located on the second search, contuct support team..
-        /// </summary>
-        public static string MissingCensusInterviews_SomeBrokenPackages_Message {
-            get {
-                return ResourceManager.GetString("MissingCensusInterviews_SomeBrokenPackages_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Provide an interviewer login name, name of a questionnaire and a date range.
         /// </summary>
         public static string MissingCensusInterviewsDescription {
@@ -224,11 +206,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I need to locate an interview in a cesus mode.
+        ///   Looks up a localized string similar to I need to locate an interview in a census mode.
         /// </summary>
         public static string MissingCensusInterviewsTitle {
             get {
                 return ResourceManager.GetString("MissingCensusInterviewsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify an interview key (XX-XX-XX-XX) or interview id to search..
+        /// </summary>
+        public static string NoData_Description {
+            get {
+                return ResourceManager.GetString("NoData_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview key or interview id.
+        /// </summary>
+        public static string NoData_Filters_InterviewKey {
+            get {
+                return ResourceManager.GetString("NoData_Filters_InterviewKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter interview key or id.
+        /// </summary>
+        public static string NoData_Filters_InterviewKeyPlaceholder {
+            get {
+                return ResourceManager.GetString("NoData_Filters_InterviewKeyPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I see no data for synchronized interview on the server.
+        /// </summary>
+        public static string NoData_Title {
+            get {
+                return ResourceManager.GetString("NoData_Title", resourceCulture);
             }
         }
         

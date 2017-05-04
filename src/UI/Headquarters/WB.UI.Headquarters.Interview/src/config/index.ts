@@ -1,4 +1,4 @@
-declare var INTERVIEW_APP_CONFIG: any
+declare const INTERVIEW_APP_CONFIG: any
 
 export const virtualPath: string = INTERVIEW_APP_CONFIG.virtualPath
 export const imageUploadUri: string = INTERVIEW_APP_CONFIG.imageUploadUri
@@ -9,3 +9,4 @@ export const supportedTransports: string[] = ["webSockets", "longPolling"]
 export const verboseMode = INTERVIEW_APP_CONFIG.verboseLogging
 export const assetsPath = INTERVIEW_APP_CONFIG.assetsPath
 export const appVersion = INTERVIEW_APP_CONFIG.appVersion
+export const googleApiKey: string = INTERVIEW_APP_CONFIG.googleApiKey

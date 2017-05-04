@@ -375,8 +375,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 bool viewExists;
 
-                using (connection.Lock())
-                    viewExists = connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                viewExists = connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
 
                 if (viewExists)
                 {
@@ -389,12 +388,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 int currentStreamVersion;
                 var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-                using (connection.Lock())
-                {
-                    var sqLiteCommand = connection.CreateCommand(commandText, eventStream.SourceId);
-                    var scalarValue = sqLiteCommand.ExecuteScalar<string>();
-                    currentStreamVersion = scalarValue == null ? 0 : Convert.ToInt32(scalarValue);
-                }
+                var sqLiteCommand = connection.CreateCommand(commandText, eventStream.SourceId);
+                var scalarValue = sqLiteCommand.ExecuteScalar<string>();
+                currentStreamVersion = scalarValue == null ? 0 : Convert.ToInt32(scalarValue);
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
@@ -476,7 +472,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 FloatParseHandling = FloatParseHandling.Decimal,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
-                Converters = new List<JsonConverter> { IdentityJsonConverter.Instance, RosterVectorConverter.Instance }
+                Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() }
             };
 
             private readonly IEventTypeResolver eventTypesResolver;

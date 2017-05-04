@@ -231,7 +231,7 @@
     <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>Невозможно подключиться к сайту Survey Solutions Supervisor. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
+    <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions</value>
@@ -242,7 +242,7 @@
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
     <value>Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен</value>
   </data>
-  <data name="Login_WrondPassword" xml:space="preserve">
+  <data name="Login_WrongPassword" xml:space="preserve">
     <value>Неверный пароль</value>
   </data>
   <data name="Maintenance" xml:space="preserve">

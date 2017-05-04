@@ -313,7 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefilled gps question requires Latitude and Longitude to be set..
+        ///   Looks up a localized string similar to Identifying gps question requires Latitude and Longitude to be set..
         /// </summary>
         public static string PL0030_GpsMandatoryFilds {
             get {

@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 writer.WriteValue(FullRosterVectorTypeName);
                 writer.WritePropertyName("$values");
                 writer.WriteStartArray();
-                foreach (var coordinate in vector.CoordinatesAsDecimals)
+                foreach (var coordinate in vector.Coordinates)
                 {
                     writer.WriteValue(coordinate);
                 }
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             else
             {
-                serializer.Serialize(writer, vector.CoordinatesAsDecimals);
+                serializer.Serialize(writer, vector.Coordinates);
             }
         }
 
@@ -78,9 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         }
 
         private static readonly Type RosterVectorType = typeof(RosterVector);
-
-        private static RosterVectorConverter instance;
+        
         private static readonly string FullRosterVectorTypeName = typeof(RosterVector).FullName + ", " + typeof(RosterVector).GetTypeInfo().Assembly.GetName().Name;
-        public static RosterVectorConverter Instance => instance ?? (instance = new RosterVectorConverter());
     }
 }

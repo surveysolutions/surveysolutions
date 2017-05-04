@@ -7,12 +7,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Memb
     {
         public MembershipHelper()
         {
-            this.ADMINROLENAME = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.Administrator);
-            this.USERROLENAME = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.User);
+            this.AdminRoleName = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.Administrator);
+            this.UserRoleName = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.User);
         }
 
-        public string ADMINROLENAME { get; private set; }
+        public string AdminRoleName { get; private set; }
 
-        public string USERROLENAME { get; private set; }
+        public string UserRoleName { get; private set; }
     }
 }

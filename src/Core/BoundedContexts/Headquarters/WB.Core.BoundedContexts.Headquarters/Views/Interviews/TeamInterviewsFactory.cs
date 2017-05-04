@@ -43,7 +43,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
             });
 
             var selectedSummaries = interviewsPage.Select(x => x.SummaryId).ToArray();
-            var answersToFeaturedQuestions = this.featuredQuestionAnswersReader.Query(_ => _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId)).ToList());
+            var answersToFeaturedQuestions = this.featuredQuestionAnswersReader.Query(_ => 
+                                                        _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId))
+                                                        .OrderBy(x => x.Position)
+                                                        .ToList());
 
             var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
@@ -56,9 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                             Type = a.Type
                         }).ToList(),
                     InterviewId = x.InterviewId,
+                    Key = x.Key,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
+                    ResponsibleRole = x.ResponsibleRole,
                     Status = x.Status.ToString(),
                     HasErrors = x.HasErrors,
                     CanBeReassigned = x.Status == InterviewStatus.Created
@@ -86,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
+                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
             }
 
             if (input.Status.HasValue)

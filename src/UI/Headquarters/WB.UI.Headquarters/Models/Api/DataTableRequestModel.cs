@@ -14,7 +14,14 @@ namespace WB.UI.Headquarters.Models.Api
 
         public class SearchInfo
         {
-            public string Value { get; set; }
+            private string value;
+
+            public string Value
+            {
+                get { return this.value?.Trim(); }
+                set { this.value = value; }
+            }
+
             public bool Regex { get; set; }
         }
 
@@ -38,7 +45,7 @@ namespace WB.UI.Headquarters.Models.Api
 
         public string GetSortOrder()
         {
-            var order = this.Order.FirstOrDefault();
+            var order = this.Order?.FirstOrDefault();
             if (order == null)
                 return string.Empty;
 
@@ -50,7 +57,7 @@ namespace WB.UI.Headquarters.Models.Api
 
         public IEnumerable<OrderRequestItem> GetSortOrderRequestItems()
         {
-            var order = this.Order.FirstOrDefault();
+            var order = this.Order?.FirstOrDefault();
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 

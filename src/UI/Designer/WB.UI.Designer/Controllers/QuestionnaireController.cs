@@ -211,11 +211,13 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
+        [ValidateInput(false)]
         public ActionResult Index(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
+        [ValidateInput(false)]
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
             var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f);

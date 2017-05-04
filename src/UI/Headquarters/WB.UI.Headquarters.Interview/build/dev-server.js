@@ -81,6 +81,11 @@ app.get('/*', function(req, res){
 
 var uri = 'http://localhost:' + port
 
+var _resolve
+var readyPromise = new Promise(resolve => {
+  _resolve = resolve
+})
+
 console.log("Waiting for dev server")
 
 devMiddleware.waitUntilValid(function () {
@@ -92,11 +97,14 @@ devMiddleware.waitUntilValid(function () {
     }
 
     spinner.succeed();
+    _resolve()
 })
 
-module.exports = app.listen(port, function (err) {
-    if (err) {
-        console.log(err)
-        return
-    }
-})
+var server = app.listen(port)
+
+module.exports = {
+  ready: readyPromise,
+  close: () => {
+    server.close()
+  }
+}

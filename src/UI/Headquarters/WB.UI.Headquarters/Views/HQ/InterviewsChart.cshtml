@@ -3,9 +3,32 @@
 
 @{
     ViewBag.Title = Reports.InterviewChart;
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
+@section styles
+{
+    @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
 
+    <style type="text/css">
+        table.jqplot-table-legend {
+            width: 90%;
+            border: none;
+        }
+
+        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+            width: 20px;
+        }
+
+        div.jqplot-table-legend-swatch-outline {
+            border: none;
+        }
+
+        .jqplot-table-legend-swatch {
+            border-width: 10px;
+        }
+    </style>
+
+}
 @section scripts
 {
     @Scripts.Render("~/js/chart")
@@ -19,72 +42,56 @@
             ko.applyBindings(model);
             model.load();
         });
-</script>
+    </script>
 }
 
-@section styles
-{
-    @Styles.Render(
-        "~/Scripts/jqPlot/jquery.jqplot.min.css",
-        "~/Content/datepicker3.css",
-        "~/Scripts/dateRangePicker/daterangepicker.css")
-    <style type="text/css">
-        table.jqplot-table-legend {
-            width: 90%;
-            border: none;
-        }
-        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
-            width: 20px;
-        }
-        div.jqplot-table-legend-swatch-outline {
-            border: none;
-        }
-        .jqplot-table-legend-swatch {
-            border-width: 10px;
-        }
-        
-    </style>
-}
-
-@section header
-{
-    <h3>@Reports.CumulativeInterviewChart</h3>
-}
-
-@section filters
-{
-    <ul class="list-group">
-        <li class="list-group-item">
-            <h4 class="list-group-item-heading">@Common.Template</h4>
-            <p class="list-group-item-text">
-                <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
-                    @foreach (var item in Model.Templates)
-                    {
-                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
-                    }
-                </select>
-            </p>
-        </li>
-        <li class="list-group-item" id="dates-range">
-            <h4 class="list-group-item-heading">@Reports.DatesRange</h4>
-            <div class="input-group">
-                <input type="text" class="form-control" data-bind="value: SelectedRange" readonly="readonly"/>
-                <span style="cursor: pointer" class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+<main class="hold-transition">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle</h4>
+                    <div class="block-filter">
+                        <h5>@Common.Template</h5>
+                        <select id="templateSelector" class="selectpicker" data-bind="value: SelectedTemplate" class="form-control">
+                            @foreach (var item in Model.Templates)
+                            {
+                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="block-filter">
+                        <h5>@Reports.DatesRange</h5>
+                        <div class="form-date input-group" id="dates-range">
+                            <input type="text" placeholder="Select range" class="form-control flatpickr-input" readonly="readonly" data-input>
+                            <button type="submit" class="btn btn-link btn-clear">
+                                <span></span>
+                            </button>
+                            <span class="input-group-addon"  data-toggle>
+                                <span class="calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <div class="main-information">
+                <div class="page-header">
+                    <h1>@Reports.CumulativeInterviewChart</h1>
+                    <button type="button" class="btn btn-default" data-bind="click: $root.initChart">@Common.Refresh</button>
+                </div>
+                <div class="clearfix">
+                    <div class="col-sm-8">
+                        <h2 data-bind="text: TemplateName"></h2>
+                        <h2 id="NoResultsFound">@Common.NoResultsFound</h2>
+                    </div>
+                </div>
+                <div id="interviewChart"></div>
             </div>
-        </li>
-    </ul>
-}
-
-@section  actionbar
-{
-    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default" data-bind="click: $root.initChart">@Common.Refresh</button>
+        </div>
     </div>
-}
-
-@section chart
-{
-    <div class="sinle-line-header" id="NoResultsFound">@Common.NoResultsFound</div>
-    <div id="interviewChart"></div>
-}
+</main>

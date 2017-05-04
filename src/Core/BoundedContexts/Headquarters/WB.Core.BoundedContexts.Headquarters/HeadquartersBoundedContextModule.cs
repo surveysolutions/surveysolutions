@@ -61,10 +61,10 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
+using WB.Core.BoundedContexts.Headquarters.Troubleshooting;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -225,11 +225,13 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
             this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
 
+            
+            this.Bind<IInterviewLogSummaryReader>().To<InterviewLogSummaryReader>();
+            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
             this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
             this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
             this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
             this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
-            this.Bind<IQuestionnaireQuestionInfoFactory>().To<QuestionnaireQuestionInfoFactory>();
             this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<ITakeNewInterviewViewFactory>().To<TakeNewInterviewViewFactory>();
@@ -237,12 +239,13 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
             this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Bind<IUserViewFactory>().To<UserViewFactory>();
+            this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
             this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
             this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
             this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
+            this.Bind<ISampleWebInterviewService>().To<SampleWebInterviewService>();
 
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 

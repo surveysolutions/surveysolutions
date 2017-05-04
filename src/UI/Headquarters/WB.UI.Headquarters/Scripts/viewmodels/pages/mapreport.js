@@ -95,70 +95,43 @@
     };
 
     self.load = function () {
-        self.loadQuestionnaires();
     };
 
-    self.questionnaires = ko.observable(null);
     self.selectedQuestionnaire = ko.observable();
-    self.selectedVersion = ko.observable();
     self.selectedVariable = ko.observable();
 
     self.markerlimitReached = ko.observable(false);
     self.readyToUpdate = ko.observable(false);
 
-    self.questionnaireVersions = ko.computed(function () {
-        return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : [];
-    });
-
     self.questionnaireVariables = ko.observableArray(null);
 
-    self.isVariablesEnabled = ko.observable(false);
-    self.isVersionsEnabled = ko.computed(function () {
-        return self.selectedQuestionnaire() ? true  : false;
-    });
-    
-    self.selectedQuestionnaire.subscribe(function () {
-        if (!_.isUndefined(self.selectedQuestionnaire()) && self.selectedQuestionnaire().Versions.length === 1) {
-            self.selectedVersion(undefined);
-            self.selectedVersion(self.selectedQuestionnaire().Versions[0]);
-        } else {
-            self.selectedVersion(undefined);
-        }
-        self.selectedVariable(undefined);
-        self.isVariablesEnabled(false);
+    self.selectedQuestionnaire.subscribe(function (value) {
         self.questionnaireVariables([]);
-    });
-
-    self.selectedVersion.subscribe(function (value) {
-        self.questionnaireVariables([]);
-        self.isVariablesEnabled(false);
+      
         self.selectedVariable(undefined);
         
         if (_.isUndefined(value))
             return;
 
         var params = {
-            QuestionType: 'GpsCoordinates',
-            QuestionnaireId: self.selectedQuestionnaire().QuestionnaireId,
-            QuestionnaireVersion: self.selectedVersion()
+            QuestionnaireId: self.selectedQuestionnaire()
         };
 
         self.SendRequest(self.questionsUrl, params, function (data) {
-            self.questionnaireVariables(data.Variables);
-            if (self.questionnaireVariables().length > 0) {
-                self.isVariablesEnabled(true);
+            self.questionnaireVariables(data.Options);
+            if (data.Total > 0) {
+               
                 if (self.questionnaireVariables().length === 1) {
-                    self.selectedVariable(self.questionnaireVariables()[0]);
+                    self.selectedVariable(data.Options[0].Key);
                 }
             } else {
-                self.isVariablesEnabled(false);
+               
                 self.ShowNotification("No Geo Location question", "There are no any Geo Locations in chosen questionnaire");
             }
-        }, true);
+        }, true, true);
     });
 
     self.selectedVariable.subscribe(function (value) {
-
         self.clearAllMarkers();
 
         if (_.isUndefined(value)) {
@@ -177,35 +150,14 @@
         self.search(self.SortOrder);
     });
     self.Pager().CanChangeCurrentPage = ko.computed(function () { return self.IsAjaxComplete(); });
-
-    self.loadQuestionnaires = function () {
-        var params = {
-            Pager: {
-                Page: self.Pager().CurrentPage(),
-                PageSize: self.Pager().PageSize()
-            }
-        };
-
-        self.SendRequest(self.questionnaireUrl, params, function (data) {
-            self.questionnaires(data.Items);
-            self.TotalCount(data.TotalCount);
-            if (self.questionnaires.length === 1) {
-                self.selectedQuestionnaire(self.questionnaires()[0]);
-            }
-        }, true);
-    };
-
+    
     self.interviewDetailsTooltip = new InfoBubble();
     self.markers = [];
 
     self.showPointsOnMap = function (northEastCornerLongtitude, northEastCornerLatitude, southWestCornerLongtitude, southWestCornerLatitude, extendBounds) {
-
-        var key = self.selectedVariable().Variable + "-" + self.selectedQuestionnaire().QuestionnaireId + "-" + self.selectedVersion();
-
         var params = {
-                Variable: self.selectedVariable().Variable,
-                QuestionnaireId: self.selectedQuestionnaire().QuestionnaireId,
-                QuestionnaireVersion: self.selectedVersion(),
+                Variable: self.selectedVariable(),
+                QuestionnaireId: self.selectedQuestionnaire(),
 
                 NorthEastCornerLongtitude: northEastCornerLongtitude,
                 NorthEastCornerLatitude: northEastCornerLatitude,

@@ -29,7 +29,7 @@
 	@include gradient-horizontal($gray_form, $gray_form);
 	background-repeat: no-repeat;
 	background-size: 65px 1px;
-	background-position: 0 100%;
+	background-position: 10px 100%;
 	padding: 15px 0;
 }
 .bootstrap-select .dropdown-menu > li > a.flagged{
@@ -647,15 +647,15 @@ label.inactive{
 	}
 }
 
-.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: $filter-width + $content-width;
-}
-.footer.footer-adaptive-content{
-	padding-left: $content-width;
-}
-.footer.footer-adaptive-filters{
-	padding-left: $filter-width;
-}
+// .footer.footer-adaptive-content.footer-adaptive-filters{
+// 	padding-left: $filter-width + $content-width;
+// }
+// .footer.footer-adaptive-content{
+// 	padding-left: $content-width;
+// }
+// .footer.footer-adaptive-filters{
+// 	padding-left: $filter-width;
+// }
 .web-interview-for-supervisor,
 .web-interview-for-supervisor.fullscreen-hidden-content,
 .web-interview-for-supervisor.fullscreen-hidden-filters,
@@ -726,7 +726,7 @@ label.inactive{
 	            top: $indent-foldback-button-hd;
 	        }
 	        .preset-filters-container, .filters-container{
-				padding-left: 20px;
+				padding-left: 10px;
 				padding-right: 15px;
 			}
 		}
@@ -749,15 +749,6 @@ label.inactive{
 		.unit-title{
 			width: auto;
 		}
-	}
-	.footer.footer-adaptive-content.footer-adaptive-filters{
-		padding-left: $filter-small-width + $content-width-small;
-	}
-	.footer.footer-adaptive-content{
-		padding-left: $content-width-small;
-	}
-	.footer.footer-adaptive-filters{
-		padding-left: $filter-small-width;
 	}
 	.web-interview-for-supervisor,
 	.web-interview-for-supervisor.fullscreen-hidden-content,
@@ -990,15 +981,6 @@ label.inactive{
 	.modal-img{
 		top: 60px;
 	}
-	.footer.footer-adaptive-content.footer-adaptive-filters{
-	padding-left: $content-width-small;
-	}
-	.footer.footer-adaptive-content{
-		padding-left: $filter-small-width;
-	}
-	.footer.footer-adaptive-filters{
-		padding-left: $content-width-small;
-	}
 }
 @media (max-width: $screen-sm-min){
 	.web-interview{
@@ -1074,15 +1056,15 @@ label.inactive{
 	        margin-right: 0;
 	    }
 	}
-	.footer.footer-adaptive-content.footer-adaptive-filters{
-		padding-left: 0;
-	}
-	.footer.footer-adaptive-content{
-		padding-left: 0;
-	}
-	.footer.footer-adaptive-filters{
-		padding-left: 0;
-	}
+	// .footer.footer-adaptive-content.footer-adaptive-filters{
+	// 	padding-left: 0;
+	// }
+	// .footer.footer-adaptive-content{
+	// 	padding-left: 0;
+	// }
+	// .footer.footer-adaptive-filters{
+	// 	padding-left: 0;
+	// }
 }
 @media only screen and (max-width: 615px){
 	.web-interview{
@@ -1137,17 +1119,17 @@ label.inactive{
 			}
 		}
 	}
-	.footer.footer-adaptive-content.footer-adaptive-filters{
-		padding-left: 0;
-	}
-	.footer.footer-adaptive-content{
-		display: block;
-		padding-left: 0;
-	}
-	.footer.footer-adaptive-filters{
-		display: block;
-		padding-left: 0;
-	}
+	// .footer.footer-adaptive-content.footer-adaptive-filters{
+	// 	padding-left: 0;
+	// }
+	// .footer.footer-adaptive-content{
+	// 	display: block;
+	// 	padding-left: 0;
+	// }
+	// .footer.footer-adaptive-filters{
+	// 	display: block;
+	// 	padding-left: 0;
+	// }
 }
 @media (max-width: $screen-xs-min){
 	.web-interview{

@@ -25,14 +25,11 @@
 		&.visible{
 			display: table-cell;
 		}
-		&.prefield-column{
-			border-color: $gray-form !important;
-			&.enumeration-area{
-				border-left: 2px solid $blue !important;
-			}
-			&.deelling-address{
-				border-right: 2px solid $blue !important;
-			}
+		&.prefield-column.first-identifying{
+			border-left: 2px solid $blue !important;
+		}
+		&.prefield-column.last-identifying{
+			border-right: 2px solid $blue !important;
 		}
 	}
 	tr:last-child{
@@ -52,6 +49,9 @@ th.prefield-column{
 }
 td.prefield-column{
 	font-style: italic;
+}
+.prefield-column{
+	max-width: 500px;
 }
 .interview-id{
 	min-width: 240px !important;

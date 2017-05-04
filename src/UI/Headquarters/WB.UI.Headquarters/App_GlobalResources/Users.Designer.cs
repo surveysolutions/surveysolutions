@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add interviewer.
+        /// </summary>
+        internal static string AddInterviewer {
+            get {
+                return ResourceManager.GetString("AddInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add observer.
         /// </summary>
         internal static string AddObserver {
@@ -129,6 +138,15 @@ namespace Resources {
         internal static string ArchivedSupervisors {
             get {
                 return ResourceManager.GetString("ArchivedSupervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archiving Status.
+        /// </summary>
+        internal static string ArchivingStatusTitle {
+            get {
+                return ResourceManager.GetString("ArchivingStatusTitle", resourceCulture);
             }
         }
         
@@ -367,6 +385,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         internal static string Supervisor {
@@ -399,6 +426,33 @@ namespace Resources {
         internal static string Supervisors {
             get {
                 return ResourceManager.GetString("Supervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ({0} supervisors).
+        /// </summary>
+        internal static string SupervisorsCountDescription {
+            get {
+                return ResourceManager.GetString("SupervisorsCountDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to supervisors in your team.
+        /// </summary>
+        internal static string SupervisorsInTeam {
+            get {
+                return ResourceManager.GetString("SupervisorsInTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Supervisor.
+        /// </summary>
+        internal static string Supervisors_Edit {
+            get {
+                return ResourceManager.GetString("Supervisors_Edit", resourceCulture);
             }
         }
         

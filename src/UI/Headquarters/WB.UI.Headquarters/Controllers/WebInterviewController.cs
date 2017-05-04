@@ -6,8 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Recaptcha.Web;
-using Recaptcha.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -27,6 +25,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Captcha;
 using Filter = NLog.Filters.Filter;
 using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 
@@ -43,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IUserViewFactory usersRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
+        private readonly ICaptchaProvider captchaProvider;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IConnectionLimiter connectionLimiter;
@@ -75,7 +75,8 @@ namespace WB.UI.Headquarters.Controllers
             IConnectionLimiter connectionLimiter,
             IWebInterviewNotificationService webInterviewNotificationService,
             ILogger logger, IUserViewFactory usersRepository,
-            IInterviewUniqueKeyGenerator keyGenerator)
+            IInterviewUniqueKeyGenerator keyGenerator,
+            ICaptchaProvider captchaProvider)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -89,6 +90,7 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.usersRepository = usersRepository;
             this.keyGenerator = keyGenerator;
+            this.captchaProvider = captchaProvider;
         }
 
         private string CreateInterview(QuestionnaireIdentity questionnaireId)
@@ -97,7 +99,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
             var responsibleId = webInterviewConfig.ResponsibleId;
-            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId));
+            if (!responsibleId.HasValue)
+                throw new InvalidOperationException("Web interview configuration has no responsible for census interview creation");
+
+            var interviewer = this.usersRepository.GetUser(new UserViewInputModel(responsibleId.Value));
 
             var interviewId = Guid.NewGuid();
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
@@ -174,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         public async Task<ActionResult> Image(string interviewId, string questionId, HttpPostedFileBase file)
         {
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(interviewId);
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
@@ -191,8 +196,8 @@ namespace WB.UI.Headquarters.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => (int)rv))}{DateTime.UtcNow.GetHashCode().ToString()}.jpg";
-                    var responsibleId = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).ResponsibleId;
+                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
+                    var responsibleId = interview.CurrentResponsibleId;
 
                     this.plainInterviewFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray());
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
@@ -248,7 +253,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> StartPost(string id)
+        public ActionResult StartPost(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var webInterviewConfig = this.configProvider.Get(questionnaireIdentity);
@@ -264,9 +269,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (webInterviewConfig.UseCaptcha)
             {
-                var helper = this.GetRecaptchaVerificationHelper();
-                var verifyResult = await helper.VerifyRecaptchaResponseTaskAsync();
-                if (verifyResult != RecaptchaVerificationResult.Success)
+                if (!this.captchaProvider.IsCaptchaValid(this))
                 {
                     var model = this.GetStartModel(questionnaireIdentity, webInterviewConfig);
                     this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
@@ -348,22 +351,9 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Resume")]
         [WebInterviewAuthorize]
-        public async Task<ActionResult> ResumePost(string id, string returnUrl)
+        public ActionResult ResumePost(string id, string returnUrl)
         {
-            var captchaHelper = this.GetRecaptchaVerificationHelper();
-          
-            RecaptchaVerificationResult verifyResult;
-
-            try
-            {
-                verifyResult = await captchaHelper.VerifyRecaptchaResponseTaskAsync();
-            }
-            catch
-            {
-                verifyResult = RecaptchaVerificationResult.UnknownError;
-            }
-
-            if (verifyResult != RecaptchaVerificationResult.Success)
+            if (!this.captchaProvider.IsCaptchaValid(this))
             {
                 var model = this.GetResumeModel(id);
                 this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);

@@ -1,5 +1,4 @@
 <template>
-
     <div class="unit-section" :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs />

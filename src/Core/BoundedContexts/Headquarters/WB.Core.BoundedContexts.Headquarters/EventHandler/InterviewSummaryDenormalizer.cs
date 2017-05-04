@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AnswersRemoved>, 
+        IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IUserViewFactory users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IUserViewFactory users, IQuestionnaireStorage questionnaireStorage)
+            IUserViewFactory users, 
+            IQuestionnaireStorage questionnaireStorage)
             : base(interviewSummary)
         {
             this.users = users;
@@ -85,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         return;
 
                     var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
-                    if (question == null || question.Answers == null) 
+                    if (question == null || question.Answers == null)
                         return;
 
                     var optionStrings = answers.Select(answerValue => question.Answers.First(x => decimal.Parse(x.AnswerValue) == answerValue).AnswerText)
@@ -213,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp,@event.Payload.SelectedValue);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.SelectedValue);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
@@ -314,21 +315,31 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     if (@event.Payload.FeaturedQuestionsMeta != null)
                     {
-                        foreach (var answeredQuestionSynchronizationDto in @event.Payload.FeaturedQuestionsMeta)
+                        foreach (var questionFromDto in @event.Payload.FeaturedQuestionsMeta)
                         {
-                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == answeredQuestionSynchronizationDto.Id))
+                            if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionFromDto.Id))
                             {
-                                interview.AnswerFeaturedQuestion(answeredQuestionSynchronizationDto.Id, answeredQuestionSynchronizationDto.Answer.ToString());
+                                var questionnaire = GetQuestionnaire(interview.QuestionnaireId, interview.QuestionnaireVersion);
+                                var questionType = questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == questionFromDto.Id).QuestionType;
+                                if (questionType == QuestionType.SingleOption)
+                                {
+                                    decimal[] answer = { Convert.ToDecimal(questionFromDto.Answer) };
+                                    AnswerFeaturedQuestionWithOptions(interview, questionFromDto.Id, @event.EventTimeStamp, answer);
+                                }
+                                else
+                                {
+                                    interview.AnswerFeaturedQuestion(questionFromDto.Id, AnswerUtils.AnswerToString(questionFromDto.Answer));
+                                }
                             }
                         }
                     }
                     var responsible = this.users.GetUser(new UserViewInputModel(state.ResponsibleId));
-                    if (responsible != null && responsible.Supervisor != null)
+                    if (responsible?.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;
                         state.TeamLeadName = responsible.Supervisor.Name;
                     }
-                    state.Status = @event.Payload.Status;    
+                    state.Status = @event.Payload.Status;
                 }
             });
         }

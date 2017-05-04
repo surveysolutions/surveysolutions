@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -6,12 +7,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public interface IAllInterviewsFactory
-    {
-        AllInterviewsView Load(AllInterviewsInputModel input);
-        InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input);
-    }
-
     public class AllInterviewsFactory : IAllInterviewsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
@@ -88,21 +83,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewsWithoutPrefilledView LoadInterviewsWithoutPrefilled(InterviewsWithoutPrefilledInputModel input)
         {
-            var interviews = this.reader.Query(_ =>
+            List<InterviewSummary> interviews = new List<InterviewSummary>();
+            int totalCount;
+            if (input.InterviewId.HasValue)
             {
-                var items = ApplyFilter(input, _);
-                if (input.Orders != null)
+                var interviewSummary = this.reader.GetById(input.InterviewId.Value);
+                if (interviewSummary!=null)
                 {
-                    items = this.DefineOrderBy(items, input);
+                    interviews = interviewSummary.ToEnumerable().ToList();
                 }
+                totalCount = interviews.Count;
+            }
+            else
+            {
+                interviews = this.reader.Query(_ =>
+                {
+                    var items = ApplyFilter(input, _);
+                    if (input.Orders != null)
+                    {
+                        items = this.DefineOrderBy(items, input);
+                    }
 
-                return items.Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize)
-                    .ToList();
-            });
+                    return items.Skip((input.Page - 1)*input.PageSize)
+                        .Take(input.PageSize)
+                        .ToList();
+                });
 
-            var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
-
+                totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+            }
             var result = new InterviewsWithoutPrefilledView
             {
                 TotalCount = totalCount,
@@ -128,6 +136,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private static IQueryable<InterviewSummary> ApplyFilter(InterviewsWithoutPrefilledInputModel input, IQueryable<InterviewSummary> _)
         {
             var items = _.Where(x => !x.IsDeleted);
+
+            if (input.SupervisorId.HasValue)
+            {
+                items = items.Where(x => x.TeamLeadId == input.SupervisorId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.InterviewKey))
+            {
+                items = items.Where(x => x.Key == input.InterviewKey);
+            }
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {

@@ -190,16 +190,16 @@
     <value>A time difference between the moment an interview is assigned to an interviewer and the moment when the complete button is pressed on a tablet.</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>A time difference between the moment a supervisor approves a questionnaire and that questionnaire is approved or rejected on HQ.</value>
+    <value>Time difference between the moment when a supervisor approves a questionnaire and when that questionnaire is either approved or rejected by HQ.</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>A time difference between the moment when the first answer is recorded on a tablet and when the complete button is pressed.</value>
+    <value>Time difference between the moment when the interviewer records the first answer and when the the interviewer presses the Complete button.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>A time difference between the first assignment and the moment when the interview is approved by HQ.</value>
+    <value>Time difference between when the interview is first assignmed and when HQ approves the interview.</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>A time difference between the complete button being pressed and the supervisor accepts or rejects that questionnaire.</value>
+    <value>Time difference between when the interviewer presses the the Complete button and when the supervisor either accepts or rejects that questionnaire.</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
     <value>Number of interview completions by a {0}. Rejected and then completed interviews are counted as separate completion events.</value>
@@ -221,5 +221,8 @@
   </data>
   <data name="From" xml:space="preserve">
     <value>From</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>in the {0} team</value>
   </data>
 </root>

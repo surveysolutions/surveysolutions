@@ -1,8 +1,13 @@
-﻿using Npgsql;
+﻿using System;
+using FluentMigrator;
+using FluentMigrator.Builders.Create.ForeignKey;
+using FluentMigrator.Builders.Create.Table;
+using FluentMigrator.Infrastructure;
+using Npgsql;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal static class DatabaseManagement
+    public static class DatabaseManagement
     {
         public static void InitDatabase(string connectionString, string schemaName)
         {
@@ -28,7 +33,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     var createCommand = connection.CreateCommand();
                     createCommand.CommandText = $@"CREATE DATABASE ""{databaseName}"" ENCODING = 'UTF8'";
-                        // unfortunately there is no way to use parameters based syntax here 
+                    // unfortunately there is no way to use parameters based syntax here 
                     createCommand.ExecuteNonQuery();
                 }
             }
@@ -45,5 +50,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 checkSchemaExistsCommand.ExecuteNonQuery();
             }
         }
+
+        public static IFluentSyntax CreateTableIfNotExists(this MigrationBase self, string tableName, Func<ICreateTableWithColumnOrSchemaOrDescriptionSyntax, IFluentSyntax> constructTableFunction)
+        {
+            return !self.Schema.Table(tableName).Exists() ? constructTableFunction(self.Create.Table(tableName)) : null;
+        }
+
+        public static IFluentSyntax CreateForeignKeyFromTableIfNotExists(this MigrationBase self, string constraintName, string tableName, Func<ICreateForeignKeyForeignColumnOrInSchemaSyntax, IFluentSyntax> constructTableFunction)
+        {
+            return !self.Schema.Table(tableName).Constraint(constraintName).Exists() 
+                ? constructTableFunction(self.Create.ForeignKey(constraintName).FromTable(tableName))
+                : null;
+        }
+
     }
 }

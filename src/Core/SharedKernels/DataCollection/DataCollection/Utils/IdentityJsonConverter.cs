@@ -55,8 +55,5 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         {
             return objectType == IdentityType;
         }
-
-        private static IdentityJsonConverter instance;
-        public static IdentityJsonConverter Instance => instance ?? (instance = new IdentityJsonConverter());
     }
 }
