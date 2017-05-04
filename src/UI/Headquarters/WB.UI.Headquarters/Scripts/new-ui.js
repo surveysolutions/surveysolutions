@@ -23,26 +23,13 @@ var ajustNoticeHeight = function () {
     $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
 };
 
-var fixAdaptiveFooterIfNeeded = function () {
-    if ($(window).width() > 1300) {
-        $('.row').removeClass("fullscreen-hidden-filters");
-        if (!$("footer").hasClass("footer-adaptive")) {
-            $("footer").addClass("footer-adaptive");
-        }
-    }
-};
 
 $(function() {
     var globalSettings = window.input.settings;
-
-    if ($('#hide-filters').length > 0) {
-        $("footer").addClass("footer-adaptive");
-    }
     
     $("#hide-filters").click(function () {
         $(".filters").toggleClass("hidden-filters");
         $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
-        $("footer").toggleClass("footer-adaptive");
     });
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
@@ -89,5 +76,4 @@ $(function() {
 
 $(window).resize(function () {
     ajustNoticeHeight();
-    fixAdaptiveFooterIfNeeded();
 });

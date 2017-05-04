@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return await this.userManager.UpdateAsync(appUser);
         }
 
-        private async Task<IdentityResult> UpdateAccountPasswordAsync(UserEditModel editModel)
+        protected async Task<IdentityResult> UpdateAccountPasswordAsync(UserEditModel editModel)
         {
             if (editModel.Password != null && editModel.Password == editModel.ConfirmPassword)
             {
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
                 return await this.userManager.ChangePasswordAsync(appUser, editModel.Password);
             }
-
+            
             return IdentityResult.Failed(FieldsAndValidations.ConfirmPasswordErrorMassage);
         }
         

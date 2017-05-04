@@ -101,8 +101,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         private void WriteHeaderRow(CsvWriter csvWriter, InterviewReference sampleInterviewId)
         {
-            csvWriter.WriteField("Link");
-            csvWriter.WriteField("Interview Key");
+            csvWriter.WriteField("interview__link");
+            csvWriter.WriteField("interview__key");
+            csvWriter.WriteField("id");
 
             if (sampleInterviewId != null)
             {
@@ -130,6 +131,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             {
                 csvWriter.WriteField($"{baseUrl}/{interviewReference.Id}/Cover");
                 csvWriter.WriteField(interviewReference.Key ?? "");
+                csvWriter.WriteField(interviewReference.Id ?? "");
+
                 foreach (var prefilledQuestion in prefilledQuestions.Where(x => x.InterviewId == interviewReference.Id))
                 {
                     csvWriter.WriteField(prefilledQuestion.Answer);

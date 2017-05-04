@@ -1,5 +1,5 @@
 ﻿<div class="block-filter">
-    <h5 class="@(ViewData.ModelMetadata.IsRequired ? "compulsory-field" : "")">@Html.LabelForModel():</h5>
+    @Html.LabelForModel(new { @class=(ViewData.ModelMetadata.IsRequired ? "compulsory-field" : "") }):
     <div class="form-group @(ViewData.ModelState.IsValidField(ViewData.ModelMetadata.PropertyName) ? string.Empty : "has-error")">
         <div class="field">
             @RenderBody()
