@@ -236,4 +236,20 @@
     <value>Добавить интервьювера</value>
     <comment>Добавить интервьювера</comment>
   </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>({0} наблюдатель(ей) )</value>
+    <comment>({0} наблюдатель(ей) )</comment>
+  </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>({0} интервьювер(ов) )</value>
+    <comment>({0} интервьювер(ов) )</comment>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>({0} API пользователь(ей) )</value>
+    <comment>({0} API пользователь(ей) )</comment>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>({0} хедквотер(ов) )</value>
+    <comment>({0} хедквотер(ов) )</comment>
+  </data>
 </root>
