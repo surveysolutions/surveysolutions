@@ -186,10 +186,10 @@
                         url: supervisorsListUrl,
                         type: "POST",
                         headers: requestHeaders,
-                        "data": function(d) {
+                        data: function(d) {
                             model.SelectedItems.removeAll(); // move to before filter event
                         },
-                        "dataSrc": function (json) {
+                        dataSrc: function (json) {
                             model.SupervisorsCount(json.recordsTotal);
                             return json.data;
                         }
@@ -336,7 +336,7 @@
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
                         }
-                        <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: SupervisorsCount'></span>"))<h1>
+                        <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: SupervisorsCount'></span>"))</h1>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">

@@ -56,6 +56,7 @@
             self.InterviewerOptionFilter = ko.observable('');
 
             self.SelectedItems = ko.observableArray([]);
+            self.InterviewersCount = ko.observable(0);
 
             self.getConfirmAndSendRequest = function(confirmMessage, archive) {
                 notifier.confirm("@Pages.ConfirmationNeededTitle",
@@ -122,6 +123,7 @@
                 self.SelectedSupervisor.subscribe(updater);
                 self.Archived.subscribe(updater);
                 self.InterviewerOptionFilter.subscribe(updater);
+                self.InterviewersCount.subscribe(updater);
             };
 
             self.IsNothingSelected = ko.computed(function() {
@@ -188,7 +190,7 @@
                         url: allInterviewersApiUrl,
                         type: "POST",
                         headers: requestHeaders,
-                        "data": function(d) {
+                        data: function(d) {
                             model.SelectedItems.removeAll(); // move to before filter event
 
                             d.SupervisorName = _.isUndefined(model.SelectedSupervisor())
@@ -196,6 +198,10 @@
                                 : model.SelectedSupervisor().UserName;
                             d.Archived = model.Archived();
                             d.InterviewerOptionFilter = model.InterviewerOptionFilter();
+                        },
+                        dataSrc: function (json) {
+                            model.InterviewersCount(json.recordsTotal);
+                            return json.data;
                         }
                     },
                     columns: [
@@ -402,6 +408,7 @@
                                 @Users.AddInterviewer
                             </a>
                         }
+                        <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.InterviewersCountDescription, @"<span data-bind='text: InterviewersCount'></span>"))</h1>
                     </div>
                 </div>
                 <table id="interviewers" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
