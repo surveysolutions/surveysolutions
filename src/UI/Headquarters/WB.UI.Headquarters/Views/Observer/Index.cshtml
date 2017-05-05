@@ -15,6 +15,7 @@
             var self = this;
 
             self.table = null;
+            self.ObserversCount = ko.observable(0);
 
             var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllObservers" })';
 
@@ -55,7 +56,11 @@
                     ajax: {
                         url: headquartersListUrl,
                         type: "POST",
-                        headers: requestHeaders
+                        headers: requestHeaders,
+                        dataSrc: function (json) {
+                            self.ObserversCount(json.recordsTotal);
+                            return json.data;
+                        }
                     },
                     "createdRow": function (row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
@@ -96,6 +101,7 @@
         $(function () {
             var notifier = new Notifier();
             var model = new HeadquartersModel(new Ajax(notifier), notifier);
+            ko.applyBindings(model);
         });
     </script>
 }
@@ -107,6 +113,7 @@
                 <div>
                     <h1>@Users.Observers</h1>
                     <a class="btn btn-success" href="@Url.Action("Create", "Observer", new {area = string.Empty})">@Users.AddObserver</a>
+                    <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: ObserversCount'></span>"))</h1>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">

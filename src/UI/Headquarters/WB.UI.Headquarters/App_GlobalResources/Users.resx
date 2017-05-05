@@ -180,6 +180,18 @@
   <data name="SupervisorsCountDescription" xml:space="preserve">
     <value>({0} supervisors)</value>
   </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>({0} interviewers)</value>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>({0} api users)</value>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>({0} headquarters)</value>
+  </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>({0} observers)</value>
+  </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Edit Supervisor</value>
   </data>

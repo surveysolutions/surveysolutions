@@ -17,6 +17,7 @@
             var self = this;
 
             self.table = null;
+            self.HeadquartersCount = ko.observable(0);
 
             var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllHeadquarters" })';
             var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
@@ -101,7 +102,11 @@
                     ajax: {
                         url: headquartersListUrl,
                         type: "POST",
-                        headers: requestHeaders
+                        headers: requestHeaders,
+                        dataSrc: function (json) {
+                            self.HeadquartersCount(json.recordsTotal);
+                            return json.data;
+                        }
                     },
                     "createdRow": function (row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
@@ -147,6 +152,7 @@
         $(function () {
             var notifier = new Notifier();
             var model = new HeadquartersModel(new Ajax(notifier), notifier);
+            ko.applyBindings(model);
         });
     </script>
 }
@@ -161,6 +167,7 @@
                     {
                         <a class="btn btn-success" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">@Users.AddHeadquarters</a>
                     }
+                    <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.HeadquartersCountDescription, @"<span data-bind='text: HeadquartersCount'></span>"))</h1>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
