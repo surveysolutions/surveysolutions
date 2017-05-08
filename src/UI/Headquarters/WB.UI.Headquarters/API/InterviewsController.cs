@@ -77,8 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
         {
-            InterviewDetailsFilter filter = new InterviewDetailsFilter();
-            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, filter:filter);
+            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, questionsTypes: InterviewDetailsFilter.All);
             if (interview == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
