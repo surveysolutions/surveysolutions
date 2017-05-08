@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         [Obsolete("version 5.19. started transition to ints as vector. should be removed later")]
         public decimal[] CoordinatesAsDecimals => this.coordinatesAsDecimals
-            ?? (this.coordinatesAsDecimals = this.coordinates.Select(Convert.ToDecimal).ToArray());
+            ?? (this.coordinatesAsDecimals = this.coordinates.Select(System.Convert.ToDecimal).ToArray());
 
         public override bool Equals(object obj)
         {
