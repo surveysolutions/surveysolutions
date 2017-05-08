@@ -478,57 +478,5 @@ namespace Main.Core.Documents
 
             return doc;
         }
-
-        public void CheckIsQuestionHeadAndUpdateRosterProperties(Guid itemToCheckId, Guid? groupPublicKey)
-        {
-            IQuestion item = this.GetItemOrLogWarning(itemToCheckId) as IQuestion;
-            if (item != null && item.Capital)
-            {
-                RemoveHeadPropertiesFromRosters(itemToCheckId);
-                MoveHeadQuestionPropertiesToRoster(itemToCheckId, groupPublicKey);
-            }
-        }
-
-        public void MoveHeadQuestionPropertiesToRoster(Guid questionId, Guid? groupPublicKey)
-        {
-            if (groupPublicKey == null)
-            {
-                IComposite questionParent = this.GetParentById(questionId);
-                groupPublicKey = questionParent.PublicKey;
-            }
-
-            var foundGroup = this.Find<IGroup>(group => group.PublicKey == groupPublicKey).FirstOrDefault() as Group;
-            if (foundGroup == null)
-            {
-                return;
-            }
-            if (foundGroup.IsRoster)
-            {
-                foundGroup.RosterTitleQuestionId = questionId;
-            }
-
-            if (foundGroup.RosterSizeQuestionId != null)
-            {
-                var scopeGroups = this.Find<IGroup>(group => group.RosterSizeQuestionId == foundGroup.RosterSizeQuestionId);
-                foreach (var scopeGroup in scopeGroups)
-                {
-                    var @group = scopeGroup as Group;
-                    if (@group != null && @group.IsRoster)
-                        @group.RosterTitleQuestionId = questionId;
-                }
-            }
-        }
-
-        public void RemoveHeadPropertiesFromRosters(Guid questionId)
-        {
-            var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == questionId);  
-          
-            foreach (var scopeGroup in scopeGroups)
-                    {
-                        var @group = scopeGroup as Group;
-                        if (@group != null)
-                            @group.RosterTitleQuestionId = null;
-                    }
-        }
     }
 }
