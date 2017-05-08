@@ -1216,7 +1216,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\KeywordsProviderTests\when_getting_all_reserved_keywords.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDocumentTests.cs" />
     <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
