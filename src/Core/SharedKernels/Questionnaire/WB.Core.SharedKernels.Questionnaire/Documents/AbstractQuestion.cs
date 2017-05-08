@@ -24,9 +24,6 @@ namespace Main.Core.Entities.SubEntities
 
         public List<Answer> Answers { get; set; } = new List<Answer>();
 
-        [Obsolete("long time ago")]
-        public bool Capital { get; set; }
-
         private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
 
         public ReadOnlyCollection<IComposite> Children

@@ -927,7 +927,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 mask: null,
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: null,
-                capital: false,
                 answerOrder: null,
                 answers: null,
                 isInteger: null,
@@ -943,7 +942,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (command.Index.HasValue)
             {
                 this.innerDocument.MoveItem(command.QuestionId, command.ParentGroupId, command.Index.Value);
-                this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(command.QuestionId, command.ParentGroupId);
             }
         }
 
@@ -958,7 +956,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
             this.innerDocument.RemoveEntity(questionId);
-            this.innerDocument.RemoveHeadPropertiesFromRosters(questionId);
+           
         }
 
         public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
@@ -993,7 +991,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.innerDocument.MoveItem(questionId, targetGroupId, targetIndex);
-            this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(questionId, targetGroupId);
         }
 
         public void UpdateTextQuestion(UpdateTextQuestion command)
@@ -1022,7 +1019,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         command.HideIfDisabled,
                         null,
                         command.IsPreFilled,
-                        false,
                         command.Instructions,
                         command.Properties,
                         command.Mask,
@@ -1062,7 +1058,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         command.HideIfDisabled,
                         Order.AZ,
                         command.IsPreFilled,
-                        false,
                         command.Instructions,
                         command.Properties,
                         null, null, null, null,
@@ -1102,7 +1097,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.HideIfDisabled,
                 null,
                 command.IsPreFilled,
-                false,
                 command.Instructions,
                 command.Properties,
                 null, null, null, null, null,null, null, null, null, null, null,null,
@@ -1143,7 +1137,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel,
                 enablementCondition,
                 hideIfDisabled,
-                null, false, false,
+                null, false, 
                 instructions,
                 properties,
                 null,
@@ -1219,7 +1213,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 hideIfDisabled,
                 null,
                 isPreFilled,
-                false,
                 instructions,
                 properties,
                 null,
@@ -1267,7 +1260,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.HideIfDisabled,
                 null,
                 categoricalOneAnswerQuestion.Featured,
-                false,
                 categoricalOneAnswerQuestion.Instructions,
                 categoricalOneAnswerQuestion.Properties,
                 null,
@@ -1311,7 +1303,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.HideIfDisabled,
                 null,
                 categoricalOneAnswerQuestion.Featured,
-                false,
                 categoricalOneAnswerQuestion.Instructions,
                 categoricalOneAnswerQuestion.Properties,
                 null,
@@ -1360,7 +1351,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.HideIfDisabled,
                 Order.AZ,
                 command.IsPreFilled,
-                false,
                 command.Instructions,
                 command.Properties,
                 null,
@@ -1411,7 +1401,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.HideIfDisabled,
                     Order.AZ,
                     false,
-                    false,
                     command.Instructions,
                     command.Properties,
                     null,
@@ -1460,7 +1449,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     enablementCondition,
                     hideIfDisabled,
                     Order.AZ,
-                    false,
                     false,
                     instructions,
                     properties,
@@ -1512,7 +1500,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.EnablementCondition,
                     command.HideIfDisabled,
                     Order.AZ,
-                    false,
                     false,
                     command.Instructions,
                     command.Properties,
@@ -1785,10 +1772,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
                 question.PublicKey = pasteItemId;
                 this.innerDocument.Insert(targetIndex, question, targetToPasteIn.PublicKey);
-
-                if (entityToInsertAsQuestion.Capital)
-                    this.innerDocument.MoveHeadQuestionPropertiesToRoster(pasteItemId, targetToPasteIn.PublicKey);
-
                 return;
             }
 
@@ -3594,7 +3577,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         
         private static IQuestion CreateQuestion(Guid publicKey, QuestionType questionType, QuestionScope questionScope,
             string questionText, string stataExportCaption, string variableLabel, string conditionExpression,
-            bool hideIfDisabled, Order? answerOrder, bool featured, bool capital, string instructions,
+            bool hideIfDisabled, Order? answerOrder, bool featured, string instructions,
             QuestionProperties questionProperties, string mask, Answer[] answers,
             Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isInteger,
             int? countOfDecimalPlaces, bool? areAnswersOrdered, int? maxAllowedAnswers,
@@ -3679,7 +3662,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             question.Featured = featured;
             question.Instructions = instructions;
             question.Properties = questionProperties ?? new QuestionProperties(false, false);
-            question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;
             question.LinkedFilterExpression = linkedFilterExpression;

@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
             this.Instructions = doc.Instructions;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
-            this.Capital = doc.Capital;
             this.LinkedToQuestionId = doc.LinkedToQuestionId;
             this.Answers = null;
             this.Triggers = null;
@@ -92,8 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
         public bool Featured { get; set; }
 
         public string Instructions { get; set; }
-
-        public bool Capital { get; set; }
 
         public Guid Id { get; set; }
 
