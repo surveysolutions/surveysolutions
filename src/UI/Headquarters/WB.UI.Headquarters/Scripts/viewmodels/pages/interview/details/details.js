@@ -61,7 +61,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
             var flagsCounterElement = $("#flagsCounter");
 
             if (question.isAnswerFlagged) {
-                if (filter.filteredBy == 'Flagged') {
+                if (filter.filteredBy === 'Flagged') {
                     var answerRowElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow") + '"]');
                     answerRowElement.remove();
                 } else {

@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.Controllers
         {
         }
        
-        public ActionResult Index(InterviewersFilter filter)
+        public ActionResult Index(InterviewersFilter interviewersFilter)
         {
             this.ViewBag.ActivePage = MenuItem.Interviewers;
 
