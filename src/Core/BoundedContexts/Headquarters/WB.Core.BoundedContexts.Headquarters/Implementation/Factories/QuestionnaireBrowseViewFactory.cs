@@ -42,9 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
                 }
 
-                if (!string.IsNullOrEmpty(input.Filter))
+                if (!string.IsNullOrEmpty(input.SearchFor))
                 {
-                    var filterLowerCase = input.Filter.ToLower();
+                    var filterLowerCase = input.SearchFor.ToLower();
                     query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                 }
 
