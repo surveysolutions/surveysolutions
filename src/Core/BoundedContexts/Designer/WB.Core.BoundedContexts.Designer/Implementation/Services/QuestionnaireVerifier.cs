@@ -149,9 +149,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             ErrorForTranslation<IComposite>(this.IsNotSupportSubstitution, "WB0268", VerificationMessages.WB0268_DoesNotSupportSubstitution),
 
-
-            Error<IQuestion>(QuestionTitleEmpty, "WB0269", VerificationMessages.WB0269_QuestionTitleIsEmpty),
-
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
@@ -1278,9 +1275,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool QuestionTitleIsTooLong(IQuestion question)
             => question.QuestionText?.Length > 500;
-
-        private static bool QuestionTitleEmpty(IQuestion question)
-            => string.IsNullOrWhiteSpace(question.QuestionText);
 
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;

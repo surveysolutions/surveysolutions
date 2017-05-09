@@ -1855,6 +1855,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
 
             int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(questionType)
                 ? DefaultRestrictedVariableLengthLimit
@@ -2112,6 +2113,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
                     string.Format("sub-section with public key {0} can't be found", groupPublicKey));
+            }
+        }
+
+        private void ThrowDomainExceptionIfTitleIsEmptyOrTooLong(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question text can't be empty");
+
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge,
+                    string.Format("Question text can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
