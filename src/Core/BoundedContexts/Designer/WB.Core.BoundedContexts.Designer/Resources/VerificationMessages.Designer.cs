@@ -1637,14 +1637,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0268_DoesNotSupportSubstitution", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty text..
-        /// </summary>
-        internal static string WB0269_QuestionTitleIsEmpty {
-            get {
-                return ResourceManager.GetString("WB0269_QuestionTitleIsEmpty", resourceCulture);
-            }
-        }
     }
 }
