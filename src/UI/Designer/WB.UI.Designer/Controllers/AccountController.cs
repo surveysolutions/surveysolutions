@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI;
-using Recaptcha;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Extensions;
@@ -12,6 +12,7 @@ using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WebMatrix.WebData;
 
@@ -25,14 +26,21 @@ namespace WB.UI.Designer.Controllers
         private readonly ILogger logger;
         private readonly IConfigurationManager configurationManager;
         private readonly IAuthenticationService authenticationService;
+        private readonly ICaptchaService captchaService;
+        private readonly ICaptchaProvider captchaProvider;
+        private readonly IAccountRepository accountRepository;
 
         public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger,
-            IConfigurationManager configurationManager, IAuthenticationService authenticationService) : base(userHelper)
+            IConfigurationManager configurationManager, IAuthenticationService authenticationService, 
+            ICaptchaService captchaService, ICaptchaProvider captchaProvider, IAccountRepository accountRepository) : base(userHelper)
         {
             this.mailer = mailer;
             this.logger = logger;
             this.configurationManager = configurationManager;
             this.authenticationService = authenticationService;
+            this.captchaService = captchaService;
+            this.captchaProvider = captchaProvider;
+            this.accountRepository = accountRepository;
         }
 
         [AllowAnonymous]
@@ -57,11 +65,10 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
-            return this.View(new LoginModel
+            return this.View(new LogonModel
             {
                 ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
-                GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"],
-                HomeUrl = Url.Action("Index", "Questionnaire")
+                StaySignedIn = false
             });
         }
 
@@ -173,12 +180,11 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [RecaptchaControlMvc.CaptchaValidatorAttribute]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public async Task<ActionResult> Register(RegisterModel model, bool captchaValid)
+        public async Task<ActionResult> Register(RegisterModel model)
         {
             var isUserRegisterSuccessfully = false;
-            if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
+            if (AppSettings.Instance.IsReCaptchaEnabled && !this.captchaProvider.IsCaptchaValid(this))
             {
                 this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
             }
@@ -223,6 +229,103 @@ namespace WB.UI.Designer.Controllers
             }
 
             return isUserRegisterSuccessfully ? this.RegisterStepTwo() : this.View(model);
+        }
+
+        private bool ShouldShowCaptchaByUserName(string userName)
+        {
+            return this.authenticationService.ShouldShowCaptcha() ||
+                   this.authenticationService.ShouldShowCaptchaByUserName(userName);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
+        public ActionResult Login(LogonModel model, string returnUrl)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+            }
+
+            if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+                this.Error("User name or password is empty.");
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+             }
+
+             var shouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+
+             if (shouldShowCaptcha && !this.captchaProvider.IsCaptchaValid(this))
+             {
+                this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+             }
+
+             var user = this.accountRepository.Get(model.UserName);
+             if (user == null)
+             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+
+                this.Error("Login or password is incorrect. Please try again.");
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+             }
+
+             if (user.IsLockedOut)
+             {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+                this.Error("Your account is blocked. Contact the administrator to unblock your account.");
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+             }
+
+            if (!user.IsConfirmed)
+            {
+                var message = "Please, confirm your account first. " +
+                              $"We've sent a confirmation link to {user.Email}. " +
+                              "Didn't get it? " +
+                              $"<a href='{GlobalHelper.GenerateUrl("ResendConfirmation", "Account", new {id = user.UserName})}'>Request another one.</a>";
+
+                this.Error(message);
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+                
+            }
+
+            var userIsAuthorized = this.authenticationService.Login(model.UserName, model.Password, model.StaySignedIn);
+
+            if (!userIsAuthorized && !shouldShowCaptcha && this.ShouldShowCaptchaByUserName(model.UserName))
+            {
+                //Captcha Required
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+            }
+
+            if (!userIsAuthorized)
+            {
+                this.captchaService.RegisterFailedLogin(model.UserName);
+                this.Error("Login or password is incorrect. Please try again.");
+                model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
+                return this.View(model);
+            }
+
+            return this.RedirectToLocal(returnUrl: returnUrl);
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (string.IsNullOrWhiteSpace(returnUrl))
+                return RedirectToAction("Index", "Questionnaire");
+            
+            if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
+
+            return RedirectToAction("NotFound", "Error");
         }
 
         [AllowAnonymous]

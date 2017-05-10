@@ -1,5 +1,6 @@
 ﻿@using Recaptcha
 @using WB.UI.Designer
+@using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.RegisterModel
 
@@ -36,14 +37,14 @@
     if (AppSettings.Instance.IsReCaptchaEnabled)
     {
         <div style="line-height: 0">
-            @Html.Raw(Html.GenerateCaptcha())
+            @Html.RenderCaptcha()
         </div>
     }
 
     <div class="form-actions">
         <input type="submit" class="btn btn-success btn-lg" value="Register" />
-        <a class="btn btn-link" href="@Url.Action("Login")">log in</a>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset")">forgot password?</a>
+        <a class="btn btn-link" href="@Url.Action("Login")">Log in</a>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot password?</a>
     </div>
 }
 
