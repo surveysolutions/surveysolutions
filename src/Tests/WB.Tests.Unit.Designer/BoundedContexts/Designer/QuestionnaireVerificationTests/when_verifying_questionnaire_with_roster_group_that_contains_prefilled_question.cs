@@ -20,12 +20,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion()
-                {
-                    PublicKey = rosterSizeQiestionId,
-                    IsInteger = true,
-                    StataExportCaption = "var1"
-                },
+                Create.NumericIntegerQuestion(
+                    rosterSizeQiestionId,
+                    variable: "var1"
+                ),
                 new Group()
                 {
                     PublicKey = Guid.Parse("10000000000000000000000000000000"),
@@ -34,7 +32,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     RosterSizeQuestionId = rosterSizeQiestionId,
                     Children = new List<IComposite>()
                     {
-                        new TextQuestion("Title"){ PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2" }
+                        new TextQuestion("Title")
+                        {
+                            PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2"
+                        }
                     }.ToReadOnlyCollection()
                 });
 

@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var rosterSizeLevel5Id = Guid.Parse("60000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new TextListQuestion() {PublicKey = rosterSizeLevel1Id, QuestionType = QuestionType.TextList, StataExportCaption = "var1", MaxAnswerCount = 5},
-                new Group()
+                Create.TextListQuestion(rosterSizeLevel1Id, variable: "var1", maxAnswerCount: 5),
+                new Group
                 {
                     PublicKey = Guid.NewGuid(),
                     IsRoster = true,
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     RosterSizeQuestionId = rosterSizeLevel1Id,
                     Children = new List<IComposite>()
                     {
-                        new TextListQuestion() {PublicKey = rosterSizeLevel2Id, QuestionType = QuestionType.TextList, StataExportCaption = "var2", MaxAnswerCount = 5},
+                        Create.TextListQuestion(rosterSizeLevel2Id, variable: "var2", maxAnswerCount: 5),
                         new Group()
                         {
                             PublicKey = Guid.NewGuid(),
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             RosterSizeQuestionId = rosterSizeLevel2Id,
                             Children = new List<IComposite>()
                             {
-                                new TextListQuestion() {PublicKey = rosterSizeLevel3Id, QuestionType = QuestionType.TextList, StataExportCaption = "var3", MaxAnswerCount = 5},
+                                Create.TextListQuestion(rosterSizeLevel3Id, variable: "var3", maxAnswerCount: 5),
                                 new Group()
                                 {
                                     PublicKey = Guid.NewGuid(),
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                     RosterSizeQuestionId = rosterSizeLevel3Id,
                                     Children = new List<IComposite>()
                                     {
-                                        new TextListQuestion() {PublicKey = rosterSizeLevel4Id, QuestionType = QuestionType.TextList, StataExportCaption = "var4", MaxAnswerCount = 5},
+                                        Create.TextListQuestion(rosterSizeLevel4Id, variable: "var4", maxAnswerCount: 5),
                                         new Group()
                                         {
                                             PublicKey = Guid.NewGuid(),
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                             RosterSizeQuestionId = rosterSizeLevel4Id,
                                             Children = new List<IComposite>()
                                             {
-                                                new TextListQuestion() {PublicKey = rosterSizeLevel5Id, QuestionType = QuestionType.TextList, StataExportCaption = "var5", MaxAnswerCount = 5},
+                                                Create.TextListQuestion(rosterSizeLevel5Id, variable: "var5", maxAnswerCount: 5),
                                                 new Group()
                                                 {
                                                     PublicKey = rosterGroupId,

@@ -20,18 +20,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             Guid rosterSizeQuestionForChildRoster1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion
-                {
-                    PublicKey = rosterSizeQuestionId,
-                    StataExportCaption = "var1",
-                    IsInteger = true
-                },
-                new NumericQuestion
-                {
-                    PublicKey = rosterSizeQuestionForChildRoster1Id,
-                    StataExportCaption = "var2",
-                    IsInteger = true
-                },
+                Create.NumericIntegerQuestion(
+                    id: rosterSizeQuestionId,
+                    variable: "var1"
+                ),
+                Create.NumericIntegerQuestion
+                (
+                    rosterSizeQuestionForChildRoster1Id,
+                    variable: "var2"
+                ),
                 new Group
                 {
                     IsRoster = true,
@@ -46,12 +43,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             RosterSizeQuestionId = rosterSizeQuestionForChildRoster1Id,
                             Children = new List<IComposite>
                             {
-                                new NumericQuestion
-                                {
-                                    PublicKey = rosterSizeQuestionWithInvalidRosterLevelId,
-                                    StataExportCaption = "var3",
-                                    IsInteger = true
-                                }
+                                Create.NumericIntegerQuestion
+                                (
+                                    id: rosterSizeQuestionWithInvalidRosterLevelId,
+                                    variable: "var3"
+                                )
                             }.ToReadOnlyCollection()
                         },
                         new Group

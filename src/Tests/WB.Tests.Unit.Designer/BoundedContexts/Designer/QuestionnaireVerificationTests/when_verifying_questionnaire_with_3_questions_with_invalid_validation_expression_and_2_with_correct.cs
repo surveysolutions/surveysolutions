@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -24,41 +24,46 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             secondCorrectQuestionId = Guid.Parse("2222EEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion
-                {
-                    PublicKey = firstIncorrectQuestionId,
-                    ValidationExpression = InvalidExpression,
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var1"
-                },
-                new NumericQuestion
-                {
-                    PublicKey = secondIncorrectQuestionId,
-                    ValidationExpression = InvalidExpression,
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var2"
-                },
-                new NumericQuestion
-                {
-                    PublicKey = thirdIncorrectQuestionId,
-                    ValidationExpression = InvalidExpression,
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var3"
-                },
-                new NumericQuestion
-                {
-                    PublicKey = firstCorrectQuestionId,
-                    ValidationExpression = ValidExpression,
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var4"
-                },
-                new NumericQuestion
-                {
-                    PublicKey = secondCorrectQuestionId,
-                    ValidationExpression = ValidExpression,
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var5"
-                }
+                Create.NumericRealQuestion(
+                    firstIncorrectQuestionId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition(InvalidExpression, "some message")
+                    },
+                    variable: "var1"
+                ),
+                Create.NumericRealQuestion(
+                    secondIncorrectQuestionId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition(InvalidExpression, "some message")
+                    },
+                    variable: "var2"
+                ),
+                Create.NumericRealQuestion(
+                    thirdIncorrectQuestionId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition(InvalidExpression, "some message")
+                    },
+                    variable: "var3"
+                ),
+                Create.NumericRealQuestion(
+                    firstCorrectQuestionId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition(ValidExpression, "some message")
+                    },
+                    variable: "var4"
+                ),
+                Create.NumericRealQuestion(
+                    secondCorrectQuestionId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        Create.ValidationCondition(ValidExpression, "some message")
+                    },
+                    variable: "var5"
+                )
                 );
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());

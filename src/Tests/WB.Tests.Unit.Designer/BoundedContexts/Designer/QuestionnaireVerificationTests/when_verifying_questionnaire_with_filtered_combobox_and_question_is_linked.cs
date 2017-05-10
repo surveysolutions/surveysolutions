@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         fixedTitles: new[] {"fixed title", "fixed title 2"},
                         children: new IComposite[]
                         {
-                            new TextQuestion()
+                            new TextQuestion("text 1")
                             {
                                 PublicKey = linkedQuestionId,
                                 StataExportCaption = "var2",
@@ -29,19 +29,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             }
                         }),
 
-                    new SingleQuestion()
-                    {
-                        PublicKey = filteredComboboxId,
-                        StataExportCaption = "var",
-                        IsFilteredCombobox = true,
-                        Answers =
+                    Create.SingleQuestion(
+                        filteredComboboxId,
+                        variable: "var",
+                        isFilteredCombobox: true,
+                        options:
                             new List<Answer>()
                             {
                                 new Answer() {AnswerValue = "1", AnswerText = "text 1"},
                                 new Answer() {AnswerValue = "2", AnswerText = "text 2"}
                             },
-                        LinkedToQuestionId = linkedQuestionId
-                    });
+                        linkedToQuestionId: linkedQuestionId
+                    ));
 
             verifier = CreateQuestionnaireVerifier();
         };

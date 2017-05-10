@@ -21,12 +21,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Children = new List<IComposite>
                 {
-                    new SingleQuestion
-                    {
-                        PublicKey = singleOptionId,
-                        StataExportCaption = "var",
-                        IsFilteredCombobox = false,
-                        Answers =
+                    Create.SingleOptionQuestion(
+                    
+                        singleOptionId,
+                        isComboBox: false,
+                        answers :
                             new List<Answer>(
                                 new Answer[201].Select(
                                     answer =>
@@ -35,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                             AnswerValue = incrementer.ToString(),
                                             AnswerText = (incrementer++).ToString()
                                         }))
-                    }
+                    )
                 }.ToReadOnlyCollection()
             });
 

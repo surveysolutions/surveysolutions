@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
-                new TextQuestion() { StataExportCaption = "var" },
+                Create.TextQuestion(variable: "var"),
                 Create.FixedRoster(rosterId: rosterGroupId, fixedTitles: new[] { "fixed title 1" }, variable:"a"));
 
             verifier = CreateQuestionnaireVerifier();

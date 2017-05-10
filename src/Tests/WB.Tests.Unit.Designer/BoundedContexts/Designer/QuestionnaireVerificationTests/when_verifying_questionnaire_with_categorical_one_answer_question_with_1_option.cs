@@ -14,12 +14,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
-            {
-                PublicKey = questionId,
-                StataExportCaption = "var",
-                Answers = new List<Answer>() {new Answer() {AnswerValue = "1", AnswerText = "option text"}}
-            });
+            questionnaire = CreateQuestionnaireDocument(Create.SingleQuestion(
+                questionId,
+                variable: "var",
+                options: new List<Answer>() {new Answer() {AnswerValue = "1", AnswerText = "option text"}}
+            ));
          
             verifier = CreateQuestionnaireVerifier();
         };

@@ -17,12 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new NumericQuestion
-                {
-                    PublicKey = questionId,
-                    ValidationExpression = validationExpression,
-                    StataExportCaption = "var1"
-                });
+                Create.NumericRealQuestion(
+                    questionId,
+                    validationExpression: validationExpression,
+                    variable: "var1"
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };
