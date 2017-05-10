@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(
-                new SingleQuestion()
+                new SingleQuestion("test")
                 {
                     PublicKey = categoricalQuestionId,
                     StataExportCaption = "var1",
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
                         }
                 },
-                new NumericQuestion
+                new NumericQuestion("test")
                 {
                     PublicKey = questionWithEnablementConditionId,
                     ConditionExpression = "some condition",

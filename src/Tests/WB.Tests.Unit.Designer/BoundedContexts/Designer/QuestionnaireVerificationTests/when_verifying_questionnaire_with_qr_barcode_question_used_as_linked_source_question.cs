@@ -14,38 +14,38 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_qr_barcode_question_used_as_linked_source_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion()
-            {
-                PublicKey = rosterSizeQuestionId,
-                IsInteger = true,
-                StataExportCaption = "var1"
-            },
-                new MultyOptionsQuestion()
-            {
-                PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
-                StataExportCaption = "var2",
-                LinkedToQuestionId = qrBarcodeQuestionId,
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            },
-                new Group()
-            {
-                PublicKey = groupId,
-                IsRoster = true,
-                VariableName = "a",
-                RosterSizeSource = RosterSizeSourceType.Question,
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                Children = new List<IComposite>()
-                {
-                    new QRBarcodeQuestion()
+                Create.NumericIntegerQuestion(
+                    rosterSizeQuestionId,
+                    variable: "var1"
+                ),
+                Create.MultyOptionsQuestion(
+                    multiQuestionLinkedToQRBarcodeQuestionId,
+                    variable: "var2",
+                    linkedToQuestionId: qrBarcodeQuestionId,
+                    options: new List<Answer>()
                     {
-                        PublicKey = qrBarcodeQuestionId,
-                        StataExportCaption = "var3"
+                        new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
                     }
-                }.ToReadOnlyCollection()
-            });
+                ),
+                new Group()
+                {
+                    PublicKey = groupId,
+                    IsRoster = true,
+                    VariableName = "a",
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>()
+                    {
+                        Create.QRBarcodeQuestion(
+                            qrBarcodeQuestionId,
+                            variable: "var3"
+                        )
+                    }.ToReadOnlyCollection()
+                });
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_message_with_2_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_message_reference_with_type_Question = () =>
+        It should_return_message_reference_with_type_Question = () =>
             verificationMessages.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 

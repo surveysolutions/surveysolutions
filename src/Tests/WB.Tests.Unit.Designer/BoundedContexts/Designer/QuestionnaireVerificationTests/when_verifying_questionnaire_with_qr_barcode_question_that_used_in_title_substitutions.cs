@@ -11,19 +11,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new TextQuestion()
-            {
-                PublicKey = questionWithSubstitutionToQRBarcodeId,
-                StataExportCaption = "var",
-                QuestionText = string.Format("question with substitution to %{0}%", qrBarcodeQuestionVariableName)
-            },
-            new QRBarcodeQuestion()
-            {
-                PublicKey = qrBarcodeQuestionId,
-                StataExportCaption = qrBarcodeQuestionVariableName
-            });
+            questionnaire = CreateQuestionnaireDocument(
+                Create.TextQuestion(
+                    questionWithSubstitutionToQRBarcodeId,
+                    variable: "var",
+                    text: $"question with substitution to %{qrBarcodeQuestionVariableName}%"
+                ),
+                Create.QRBarcodeQuestion(
+                    qrBarcodeQuestionId,
+                    variable: qrBarcodeQuestionVariableName
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -31,8 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_messages_be_empty = () =>
-            verificationMessages.ShouldBeEmpty();
+        It should_messages_be_empty = () => verificationMessages.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

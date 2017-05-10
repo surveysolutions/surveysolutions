@@ -4,8 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -17,15 +15,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new TextQuestion() { PublicKey = questionWithUnicodeVariableNameId, StataExportCaption = nonUnicodeVariableName, QuestionType = QuestionType.Text },
-                new TextQuestion() { PublicKey = questionStartsWithNumberVariableNameId, StataExportCaption = startsWithNumberVariableName, QuestionType = QuestionType.Text },
-                new TextQuestion() { PublicKey = questionStartsWithLongThen32SymbolVariableNameId, StataExportCaption = longThen32SymbolVariableName, QuestionType = QuestionType.Text },
-                new TextQuestion() { PublicKey = questionStartsWithUnderscoreId, StataExportCaption = startsWithUnderscoreVariableName, QuestionType = QuestionType.Text },
-                new TextQuestion() { PublicKey = questionEndsWithUnderscoreId, StataExportCaption = endsWithUnderscoreVariableName, QuestionType = QuestionType.Text },
+                Create.TextQuestion( questionWithUnicodeVariableNameId, variable: nonUnicodeVariableName),
+                Create.TextQuestion( questionStartsWithNumberVariableNameId, variable: startsWithNumberVariableName),
+                Create.TextQuestion( questionStartsWithLongThen32SymbolVariableNameId, variable: longThen32SymbolVariableName),
+                Create.TextQuestion( questionStartsWithUnderscoreId, variable: startsWithUnderscoreVariableName),
+                Create.TextQuestion( questionEndsWithUnderscoreId, variable: endsWithUnderscoreVariableName),
+                
+                Create.TextQuestion( questioncontainsConsecutiveUnderscores, variable: containsConsecutiveUnderscoresVariableName),
 
-                new TextQuestion() { PublicKey = questioncontainsConsecutiveUnderscores, StataExportCaption = containsConsecutiveUnderscoresVariableName, QuestionType = QuestionType.Text },
-
-                new GpsCoordinateQuestion() { PublicKey = questionWith20SymbolVariableNameId , StataExportCaption = longThen20SymbolVariableName, QuestionType = QuestionType.GpsCoordinates}
+                Create.GpsCoordinateQuestion(questionWith20SymbolVariableNameId , variable: longThen20SymbolVariableName)
 
             });
             verifier = CreateQuestionnaireVerifier();

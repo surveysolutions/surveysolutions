@@ -14,12 +14,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new QRBarcodeQuestion()
-            {
-                PublicKey = questionId,
-                StataExportCaption = "var",
-                QuestionScope = QuestionScope.Supervisor
-            });
+            questionnaire = CreateQuestionnaireDocument(
+                Create.QRBarcodeQuestion(
+                    questionId,
+                    variable: "var",
+                    scope: QuestionScope.Supervisor
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

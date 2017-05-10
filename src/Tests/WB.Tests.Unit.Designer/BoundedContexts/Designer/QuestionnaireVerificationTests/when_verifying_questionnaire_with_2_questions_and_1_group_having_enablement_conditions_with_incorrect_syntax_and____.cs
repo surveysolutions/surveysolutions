@@ -25,20 +25,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion
+                new TextQuestion("text 1")
                 {
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var1"
                 },
-                new TextQuestion
+                new TextQuestion("text 1")
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var2"
                 },
                 new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
-                new NumericQuestion
+                new NumericQuestion("text 1")
                 {
                     PublicKey = correctQuestionId,
                     ConditionExpression = ValidExpression,
