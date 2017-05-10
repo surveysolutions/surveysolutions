@@ -499,20 +499,6 @@
     <Content Include="questionnaire\vendor\html5shiv\MIT and GPL2 licenses.md" />
     <Content Include="questionnaire\vendor\html5shiv\package.json" />
     <Content Include="questionnaire\vendor\html5shiv\readme.md" />
-    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.1.1.min.map" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js" />
     <Content Include="questionnaire\details\scripts\controllers\attachments.js" />
     <Content Include="questionnaire\details\scripts\controllers\variable.js" />
     <Content Include="questionnaire\details\scripts\controllers\lookupTables.js" />
@@ -687,11 +673,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\custom\common.js" />
-    <Content Include="Scripts\jquery-migrate-1.1.1.js" />
-    <Content Include="Scripts\jquery-migrate-1.1.1.min.js" />
     <Content Include="Scripts\custom\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\lib\Placeholders.js" />
@@ -772,7 +754,6 @@
     <Content Include="Views\Pdf\_RenderVariable.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
     <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
     <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
