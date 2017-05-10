@@ -45,28 +45,6 @@ namespace WB.UI.Designer
                     "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
                     "~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
                     "~/Scripts/common.js"));
-
-            bundles.Add(
-                new ScriptBundle("~/readsidebundle").Include(
-                    "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lodash.underscore.js",
-                    "~/Scripts/moment.js",
-                    "~/Scripts/components/moment-duration-format.js",
-                    "~/Scripts/components/bindings.js",
-                    "~/Scripts/viewmodels/designer.framework.js",
-                    "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/pages/controlpanel/readside.js"));
-
-            bundles.Add(
-                new ScriptBundle("~/login").Include(
-                    "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lodash.underscore.js",
-                    "~/Scripts/components/query-string.js",
-                    "~/Scripts/viewmodels/designer.framework.js",
-                    "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/pages/login.js"));
         }
     }
 }

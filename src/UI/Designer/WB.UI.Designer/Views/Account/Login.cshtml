@@ -1,12 +1,11 @@
-﻿@using WB.UI.Designer.BootstrapSupport
+﻿@using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
-@model WB.UI.Designer.Models.LoginModel
+@model WB.UI.Designer.Models.LogonModel
 
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
-
 
 <!--[if lt IE 9]>
     <div class="hero-unit">
@@ -17,7 +16,8 @@
     </div>
 <![endif]-->
 
-<form action="#" autocomplete="off" id="start-log-in" method="post" novalidate="novalidate">
+@using (Html.BeginForm("login", "account", null, FormMethod.Post, new { @id = "start-log-in", autocomplete = "off" }))
+{
     @Html.AntiForgeryToken()
     <h1>
         Welcome to Survey Solutions<br />
@@ -25,50 +25,40 @@
     </h1>
     <p class="note">Please log in or @Html.ActionLink("Register", "register", "Account")</p>
 
-    @if (TempData.ContainsKey(Alerts.ERROR))
+    if (TempData.ContainsKey(Alerts.ERROR))
     {
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
-
-    <p class="note has-error server-response-holder" data-bind="visible: userIsNotAuthorized"></p>
-    <div class="form-group" data-bind="css: { 'has-error': invalidUserNameOrPassword }">
-        <input class="form-control" placeholder="Login" type="text" data-bind="value: userName"/>
-    </div>
-    <div class="form-group" data-bind="css: { 'has-error': invalidUserNameOrPassword }">
-        <input class="form-control" placeholder="Password" type="password" data-bind="value: password">
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = "Login" })
+        @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
-        <input class="wb-checkbox" id="cb-stay-logged-in" type="checkbox" data-bind="checked: staySignedIn">
-        <label for="cb-stay-logged-in">
-            <span></span>Stay logged in for a day
-        </label><br>
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
+        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
-    <p class="note has-error" data-bind="visible: invalidCaptcha">Please click the checkbox to prove that you are a human</p>
-    <div id="recaptcha" class="recaptcha" data-bind="visible: shouldUseRecaptcha"></div>
+
+    <div class="form-group">
+        @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = "Stay logged in for a day" })
+
+        <label for="StaySignedIn">
+            <span></span>Stay logged in for a day
+        </label>
+        
+        <br>
+    </div>
+
+    if (this.Model.ShouldShowCaptcha)
+    {
+        <div class="recaptcha">
+            @Html.RenderCaptcha()
+        </div>
+    }
     <div class="form-actions">
-        <input class="btn btn-success btn-lg" type="submit" value="Log in" data-bind="click: login, enable: IsAjaxComplete"/>
+        <input class="btn btn-success btn-lg" type="submit" value="Log in"/>
         <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">Forgot Password?</a>
     </div>
-</form>
-
+}
 @section Scripts {
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptchaJavascript&render=explicit" async defer></script>
-    @Scripts.Render("~/login")
-    <script type="text/javascript">
-        var viewModel;
-        var onloadRecaptchaJavascript = function() {
-            viewModel.renderCaptcha();
-        };
-        $(function() {
-            var signInApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Users", action = "Login"})';
-            var homePageUrl = '@Model.HomeUrl';
-
-            var shouldUseRecaptcha = @Model.ShouldShowCaptcha.ToString().ToLower();
-
-            viewModel = new Designer.VM.Login(signInApiUrl, homePageUrl, shouldUseRecaptcha, '@Model.GoogleRecaptchaSiteKey');
-            viewModel.load();
-
-            ko.applyBindings(viewModel);
-        });
-    </script>
+    @Scripts.Render("~/editform")
 }
