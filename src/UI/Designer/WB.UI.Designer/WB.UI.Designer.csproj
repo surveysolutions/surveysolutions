@@ -157,9 +157,9 @@
       <HintPath>..\..\..\..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
+    <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -309,6 +309,7 @@
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
+    <Compile Include="Models\LogonModel.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
@@ -392,7 +393,6 @@
     <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\UpdateAccountModel.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
-    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
@@ -466,6 +466,7 @@
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
+    <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -492,18 +493,12 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js" />
-    <Content Include="Scripts\knockout-3.4.0.debug.js" />
-    <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\viewmodels\pagebase.js" />
-    <Content Include="Scripts\viewmodels\pages\login.js" />
-    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
-    <Content Include="Scripts\viewmodels\designer.framework.js" />
     <Content Include="questionnaire\details\scripts\controllers\attachments.js" />
     <Content Include="questionnaire\details\scripts\controllers\variable.js" />
     <Content Include="questionnaire\details\scripts\controllers\lookupTables.js" />
@@ -774,6 +769,7 @@
     <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
     <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -786,7 +782,6 @@
     </Content>
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
