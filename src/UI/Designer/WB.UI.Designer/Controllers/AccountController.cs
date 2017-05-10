@@ -13,7 +13,6 @@ using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
-using WB.UI.Shared.Web.Configuration;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
@@ -24,19 +23,17 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ISystemMailer mailer;
         private readonly ILogger logger;
-        private readonly IConfigurationManager configurationManager;
         private readonly IAuthenticationService authenticationService;
         private readonly ICaptchaService captchaService;
         private readonly ICaptchaProvider captchaProvider;
         private readonly IAccountRepository accountRepository;
 
         public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger,
-            IConfigurationManager configurationManager, IAuthenticationService authenticationService, 
+            IAuthenticationService authenticationService, 
             ICaptchaService captchaService, ICaptchaProvider captchaProvider, IAccountRepository accountRepository) : base(userHelper)
         {
             this.mailer = mailer;
             this.logger = logger;
-            this.configurationManager = configurationManager;
             this.authenticationService = authenticationService;
             this.captchaService = captchaService;
             this.captchaProvider = captchaProvider;
