@@ -12,17 +12,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(
-                new SingleQuestion()
-            {
-                PublicKey = linkedQuestionId,
-                LinkedToQuestionId = Guid.NewGuid(),
-                StataExportCaption = "var",
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+                Create.SingleQuestion(
+                    linkedQuestionId,
+                    linkedToQuestionId: Guid.NewGuid(),
+                    variable: "var",
+                    options: new List<Answer>
+                    {
+                        new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
+                    }
+                ));
             verifier = CreateQuestionnaireVerifier();
         };
 

@@ -36,21 +36,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         RosterSizeQuestionId = rosterSizeQuestion,
                         Children = new List<IComposite>()
                         {
-                            new TextQuestion("TextQuestion")
-                            {
-                                StataExportCaption = "var2",
-                                QuestionType = QuestionType.Text,
-                                PublicKey = linkedQuestionId
-                            }
+                            Create.TextQuestion(
+                                variable: "var2",
+                                questionId: linkedQuestionId
+                            )
                         }.ToReadOnlyCollection()
                     },
-                    new MultyOptionsQuestion()
-                    {
-                        StataExportCaption = "var3",
-                        PublicKey = multyOptionsQuestionId,
-                        MaxAllowedAnswers = 3,
-                        LinkedToQuestionId = linkedQuestionId
-                    });
+                    Create.MultyOptionsQuestion(
+                        variable: "var3",
+                        id: multyOptionsQuestionId,
+                        maxAllowedAnswers: 3,
+                        linkedToQuestionId: linkedQuestionId
+                    ));
 
             verifier = CreateQuestionnaireVerifier();
         };

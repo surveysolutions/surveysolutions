@@ -12,12 +12,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     internal class when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_empty_title : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument(new TextQuestion() { StataExportCaption = "var" },
-                   Create.FixedRoster(rosterId: rosterGroupId, variable:"a",
-                        fixedTitles: new[] { "fixed title 1", " ", "fixed title 3" }));
+            questionnaire = CreateQuestionnaireDocument(
+                Create.TextQuestion(variable: "var"),
+                Create.FixedRoster(rosterId: rosterGroupId, variable: "a",
+                    fixedTitles: new[] {"fixed title 1", " ", "fixed title 3"}));
             verifier = CreateQuestionnaireVerifier();
         };
 
