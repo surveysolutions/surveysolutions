@@ -467,13 +467,13 @@
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
-    <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
+    <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <EmbeddedResource Include="Resources\AccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Scripts\editForm.js" />
+    <Content Include="Scripts\custom\editForm.js" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -494,6 +494,11 @@
     <Content Include="questionnaire\vendor\jquery.validate.unobtrusive.bootstrap\jquery.validate.unobtrusive.bootstrap.min.js.map" />
     <Content Include="questionnaire\vendor\jquery.validate.unobtrusive.bootstrap\LICENSE" />
     <Content Include="questionnaire\vendor\jquery.validate.unobtrusive.bootstrap\README.md" />
+    <Content Include="questionnaire\vendor\html5shiv\.bower.json" />
+    <Content Include="questionnaire\vendor\html5shiv\bower.json" />
+    <Content Include="questionnaire\vendor\html5shiv\MIT and GPL2 licenses.md" />
+    <Content Include="questionnaire\vendor\html5shiv\package.json" />
+    <Content Include="questionnaire\vendor\html5shiv\readme.md" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -681,11 +686,10 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\common.js" />
-    <Content Include="Scripts\html5shiv.js" />
+    <Content Include="Scripts\custom\common.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
+    <Content Include="Scripts\custom\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />

@@ -33,18 +33,16 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
-                    "~/questionnaire/vendor/jquery-validation/dist/jquery.validate.js",
-                    "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
-                    "~/Scripts/bootstrap3-unobtrusive-hack.js",
+                    "~/Scripts/jquery.validate.js",
+                    "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
+                    "~/Scripts/custom/bootstrap3-unobtrusive-hack.js",
                     "~/questionnaire/vendor/jquery-placeholder/jquery.placeholder.js",
-                    "~/Scripts/editForm.js"
-                    ));
-
+                    "~/Scripts/custom/editForm.js"));
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
                     "~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js",
-                    "~/Scripts/common.js"));
+                    "~/Scripts/custom/common.js"));
         }
     }
 }
