@@ -28,12 +28,12 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/simplepage").Include(
-                    "~/questionnaire/vendor/jquery/dist/jquery.js",
+                    "~/questionnaire/vendor/jquery/dist/jquery.min.js",
                     "~/questionnaire/vendor/bootstrap/dist/bootstrap.js"));
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
-                    "~/questionnaire/vendor/jquery/dist/jquery.js",
+                    "~/questionnaire/vendor/jquery/dist/jquery.min.js",
                     "~/questionnaire/vendor/jquery-validation/dist/jquery.validate.js", 
                     "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
                     "~/Scripts/custom/bootstrap3-unobtrusive-hack.js",
