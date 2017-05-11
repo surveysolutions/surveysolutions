@@ -312,8 +312,14 @@ namespace WB.UI.Headquarters
                 "~/Scripts/pages/export-settings.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/js/new-ui.js").Include(
+            bundles.Add(new ScriptBundle("~/js/new-ui").Include(
                 "~/Scripts/new-ui.js"));
+
+            bundles.Add(new ScriptBundle("~/js/supervisors").Include(
+                "~/Scripts/viewmodels/pages/supervisors.js"));
+
+            bundles.Add(new ScriptBundle("~/js/users").Include(
+                "~/Scripts/viewmodels/pages/users.js"));
         }
     }
 }
