@@ -1,5 +1,4 @@
-﻿@using Main.Core.Entities.SubEntities
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.BoundedContexts.Headquarters.Services
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -9,109 +8,20 @@
 
 @section scripts
 {
+    @Scripts.Render("~/js/main-no-libs")
     @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/list")
+    @Scripts.Render("~/js/users")
+
     <script type="text/javascript">
-        'use strict';
 
-        var HeadquartersModel = function (ajax, notifier) {
-            var self = this;
+        var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllHeadquarters" })';
+        var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
 
-            self.table = null;
-            self.HeadquartersCount = ko.observable(0);
-
-            var headquartersListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "AllHeadquarters" })';
-            var $impersonateUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
-
-            var requestHeaders = {};
-            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-            $.fn.dataTable.ext.errMode = 'none';
-
-            var selectRowAndGetData = function (selectedItem) {
-                var rowIndex = selectedItem.parent().children().index(selectedItem);
-                self.table.row(rowIndex).select();
-                var selectedRows = self.table.rows({ selected: true }).data()[0];
-                return selectedRows;
-            }
-            @if (authorizedUser.IsObserver)
-            {
-                <text>
-                var impersonateAsUser = function (key, opt) {
-                    var selectedRow = selectRowAndGetData(opt.$trigger);
-                    window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
-                };
-
-                var buildMenuItem = function(selectedRow) {
-                    var items = {}
-
-                    items["impersonate"] =
-                        {
-                            name: "@Users.ImpersonateAsUser",
-                        callback: impersonateAsUser
-                    };
-                    return items;
-                }
-
-                self.contextMenuOptions = {
-                    selector: "table#headquarters .with-context-menu",
-                    autoHide: false,
-                    build: function ($trigger, e) {
-                        var selectedRow = selectRowAndGetData($trigger);
-                        var items = buildMenuItem(selectedRow);
-                        return { items: items };
-                    },
-                    trigger: 'left'
-                };
-            </text>
-            }
-            var onTableInitComplete = function () {
-                $('.dataTables_filter label').on('click', function (e) {
-                    if (e.target !== this)
-                        return;
-                    if ($(this).hasClass("active")) {
-                        $(this).removeClass("active");
-                    } else {
-                        $(this).addClass("active");
-                        $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
-                    }
-                });
-                @if (authorizedUser.IsObserver)
-                {
-                    <text>
-                    $.contextMenu(self.contextMenuOptions);
-                    </text>
-                }
-            };
-
-            self.table = $('table#headquarters')
-                .on('init.dt', onTableInitComplete)
-                .on('xhr.dt', function (e, settings, json, xhr) {
-                    if (xhr.status === 401)
-                        location.reload();
-                    else if (xhr.status != undefined && xhr.status !== 200)
-                        notifier.showError("@Pages.OperationFailedTitle", "@Pages.OperationFailedDescription");
-                })
-                .DataTable({
-                    processing: true,
-                    language:
-                    {
-                        "url": window.input.settings.config.dataTableTranslationsUrl,
-                        searchPlaceholder: "@Pages.Search"
-                    },
-                    serverSide: true,
-                    ajax: {
-                        url: headquartersListUrl,
-                        type: "POST",
-                        headers: requestHeaders,
-                        dataSrc: function (json) {
-                            self.HeadquartersCount(json.recordsTotal);
-                            return json.data;
-                        }
-                    },
-                    "createdRow": function (row, data, dataIndex) {
-                        $(row).addClass('with-context-menu');
-                    },
-                    columns: [
+        $(function() {
+            var model = new Supervisor.VM.Users(headquartersListUrl);
+            model.getDataTableColumns = function() {
+                return [
                         {
                             data: "userName",
                             name: "UserName", // case-sensitive!
@@ -132,30 +42,76 @@
                             },
                             "class": "date"
                         }
-                    ],
-                    select: {
-                        style: 'single'
-                    },
-                    searchHighlight: true,
-                    rowId: 'userId',
-                    pagingType: "full_numbers",
-                    lengthChange: false, // do not show page size selector
-                    pageLength: 50, // page size
-                    "order": [[1, 'desc']],
-                    dom: "frtp",
-                    conditionalPaging: true
-                });
+                    ];
+            };
 
-            return self;
-        };
+            model.onTableInitComplete = function () {
+                $('.dataTables_filter label')
+                    .on('click',
+                        function (e) {
+                            if (e.target !== this)
+                                return;
+                            if ($(this).hasClass("active")) {
+                                $(this).removeClass("active");
+                            } else {
+                                $(this).addClass("active");
+                                $(this)
+                                    .children("input[type='search']")
+                                    .delay(200)
+                                    .queue(function () {
+                                        $(this).focus();
+                                        $(this).dequeue();
+                                    });
+                            }
+                        });
 
-        $(function () {
-            var notifier = new Notifier();
-            var model = new HeadquartersModel(new Ajax(notifier), notifier);
+                @if (authorizedUser.IsObserver)
+                {
+                <text>
+
+                    var impersonateAsUser = function (key, opt) {
+                        var selectedItem = opt.$trigger;
+
+                        var rowIndex = selectedItem.parent().children().index(selectedItem);
+                        model.Datatable.row(rowIndex).select();
+                        var selectedRow = model.Datatable.rows({ selected: true }).data()[0];
+                            
+                        window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
+                    };
+
+                    var buildMenuItem = function(selectedRow) {
+                        var items = {}
+
+                        items["impersonate"] =
+                        {
+                            name: "@Users.ImpersonateAsUser",
+                            callback: impersonateAsUser
+                        };
+                        return items;
+                    };
+
+                    var contextMenuOptions = {
+                            selector: "table#data_holder .with-context-menu",
+                            autoHide: false,
+                            build: function($trigger, e) {
+                                var selectedRow = selectRowAndGetData($trigger);
+                                var items = buildMenuItem(selectedRow);
+                                return { items: items };
+                            },
+                            trigger: 'left'
+                    };
+
+                    $.contextMenu(contextMenuOptions);
+                </text>
+                }
+            };
+
             ko.applyBindings(model);
+            model.load();
         });
     </script>
 }
+
 <main>
     <div class="container-fluid">
         @Html.Partial("_alerts")
@@ -167,13 +123,14 @@
                     {
                         <a class="btn btn-success" href="@Url.Action("Create", "Headquarters", new {area = string.Empty})">@Users.AddHeadquarters</a>
                     }
-                    <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.HeadquartersCountDescription, @"<span data-bind='text: HeadquartersCount'></span>"))</h1>
+                    <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.HeadquartersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
             </div>
         </div>
-        <table id="headquarters" class="table table-striped table-ordered table-bordered table-hover">
+        <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover"
+               data-order="[[ 0, &quot;asc&quot; ]]" data-searching="true">
             <thead>
             <tr>
                 <th>@Users.UserName</th>
