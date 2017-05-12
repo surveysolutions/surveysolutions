@@ -5,8 +5,6 @@
     self.Url = new Url(window.location.href);
     self.UsersCount = ko.observable(0);
     
-    self.onTableInitComplete = function () { }
-
     self.onDataTableDataReceived = function(data) {
         self.UsersCount(data.recordsTotal);
     };
@@ -16,6 +14,28 @@
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
         self.reloadDataTable();
     };
+
+    self.onTableInitComplete = function () {
+        $('.dataTables_filter label')
+            .on('click',
+                function (e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else {
+                        $(this).addClass("active");
+                        $(this)
+                            .children("input[type='search']")
+                            .delay(200)
+                            .queue(function () {
+                                $(this).focus();
+                                $(this).dequeue();
+                            });
+                    }
+                });
+    };
+
 };
 
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Users, Supervisor.VM.ListView);
