@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                 foreach (var interviewGroupView in interview.Groups)
                 {
                     if (interviewGroupView.Id.RosterVector.Length == 0)
-                        AddQuestionsToRoster(this.Questions, interviewGroupView.Entities.OfType<InterviewQuestionView>());
+                        AddQuestionsToRoster(this.Questions, interviewGroupView.Entities?.OfType<InterviewQuestionView>());
                     else
                     {
                         var key = CreateLeveKeyFromPropagationVector(interviewGroupView.Id.RosterVector);
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                             rosters.Add(key, item);
                         }
 
-                        AddQuestionsToRoster(item.Questions, interviewGroupView.Entities.OfType<InterviewQuestionView>());
+                        AddQuestionsToRoster(item.Questions, interviewGroupView.Entities?.OfType<InterviewQuestionView>());
                     }
                 }
 
@@ -70,7 +70,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 
         private static void AddQuestionsToRoster(List<QuestionApiItem> questions, IEnumerable<InterviewQuestionView> questionsToAdd)
         {
-            questions.AddRange(questionsToAdd.Select(question => new QuestionApiItem(question.Variable, question.Answer ?? string.Empty)));
+            if(questionsToAdd != null)
+                questions.AddRange(questionsToAdd.Select(question => new QuestionApiItem(question.Variable, question.Answer ?? string.Empty)));
         }
 
         [DataMember]
