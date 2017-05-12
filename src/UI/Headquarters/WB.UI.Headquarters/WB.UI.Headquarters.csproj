@@ -1171,9 +1171,9 @@
     <Content Include="Scripts\viewmodels\pages\interview\new\newinterview.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\mapreport.js" />
+    <Content Include="Scripts\viewmodels\pages\editable-users.js" />
     <Content Include="Scripts\viewmodels\pages\users.js" />
     <Content Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
-    <Content Include="Scripts\viewmodels\pages\supervisors.js" />
     <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
     <Content Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />

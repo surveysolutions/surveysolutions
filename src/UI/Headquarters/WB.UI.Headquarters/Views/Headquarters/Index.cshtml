@@ -69,13 +69,15 @@
                 {
                 <text>
 
-                    var impersonateAsUser = function (key, opt) {
-                        var selectedItem = opt.$trigger;
+                var selectRowAndGetData = function (selectedItem) {
+                    var rowIndex = selectedItem.parent().children().index(selectedItem);
+                    model.Datatable.row(rowIndex).select();
+                    var selectedRows = model.Datatable.rows({ selected: true }).data()[0];
+                    return selectedRows;
+                }
 
-                        var rowIndex = selectedItem.parent().children().index(selectedItem);
-                        model.Datatable.row(rowIndex).select();
-                        var selectedRow = model.Datatable.rows({ selected: true }).data()[0];
-                            
+                    var impersonateAsUser = function (key, opt) {
+                        var selectedRow = selectRowAndGetData(opt.$trigger);
                         window.location.href = $impersonateUrl + '?personName=' + selectedRow.userName;
                     };
 

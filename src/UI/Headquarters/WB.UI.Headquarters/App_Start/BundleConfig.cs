@@ -249,14 +249,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/create-interviewer.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/interviewers").Include(
-                "~/Scripts/bootstrap3-typeahead.js",
-                "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/viewmodels/pages/interviewers.js",
-                "~/Scripts/query-string.js"
-                ));
-
+            
             bundles.Add(new ScriptBundle("~/js/users").Include(
                 "~/Scripts/viewmodels/pages/users.js"
                 ));
@@ -320,6 +313,20 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/users").Include(
                 "~/Scripts/viewmodels/pages/users.js"));
+
+            bundles.Add(new ScriptBundle("~/js/editableusers").Include(
+                "~/Scripts/viewmodels/pages/users.js",
+                "~/Scripts/viewmodels/pages/editable-users.js"));
+
+            bundles.Add(new ScriptBundle("~/js/interviewers").Include(
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/query-string.js",
+                "~/Scripts/viewmodels/pages/users.js",
+                "~/Scripts/viewmodels/pages/editable-users.js",
+                "~/Scripts/viewmodels/pages/interviewers.js"
+                ));
         }
     }
 }
