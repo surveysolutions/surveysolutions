@@ -1157,6 +1157,7 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
+    <Content Include="Scripts\viewmodels\pages\questionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
@@ -1172,6 +1173,7 @@
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\pages\editable-users.js" />
+    <Content Include="Scripts\viewmodels\pages\importquestionaires.js" />
     <Content Include="Scripts\viewmodels\pages\users.js" />
     <Content Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
     <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />

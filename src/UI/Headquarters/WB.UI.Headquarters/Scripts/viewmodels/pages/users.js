@@ -15,6 +15,8 @@
         self.reloadDataTable();
     };
 
+    self.onTableInitCompleteExtra = function () { };
+
     self.onTableInitComplete = function () {
         $('.dataTables_filter label')
             .on('click',
@@ -34,6 +36,8 @@
                             });
                     }
                 });
+
+        self.onTableInitCompleteExtra();
     };
 
 };
