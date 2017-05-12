@@ -182,6 +182,9 @@
             footerCallback: self.footerCallback,
             "createdRow": function(row, data, dataIndex) {
                 $(row).addClass('with-context-menu');
+                if (data.isDisabled) {
+                    $(row).addClass('disabled');
+                }
             },
             "initComplete": function (settings, json) {
                 if (!_.isUndefined(onTableInitComplete))
@@ -194,5 +197,6 @@
     };
 
     self.getDataTableColumns = function () { return []; }
+
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ListView, Supervisor.VM.BasePage);
