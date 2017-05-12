@@ -9,8 +9,6 @@
         return $(self.SelectedItems()).length === 0;
     });
 
-    self.onTableInitCompleteExtra = function() {};
-
     self.getConfirmAndSendRequest = function (notifier, confirmTitle, confirmMessage, operationFaildTitle, archive) {
         notifier.confirm(confirmTitle,
             confirmMessage,

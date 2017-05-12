@@ -327,6 +327,12 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/editable-users.js",
                 "~/Scripts/viewmodels/pages/interviewers.js"
                 ));
+
+            bundles.Add(new ScriptBundle("~/js/importquestionaires").Include(
+                "~/Scripts/viewmodels/pages/importquestionaires.js"));
+
+            bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
+                "~/Scripts/viewmodels/pages/questionnaires.js"));
         }
     }
 }

@@ -1,0 +1,83 @@
+﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl) {
+    Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
+
+    var self = this;
+    self.Url = new Url(window.location.href);
+
+    self.onDataTableDataReceived = function (data) {};
+
+    self.load = function () {
+
+        self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
+        self.reloadDataTable();
+    };
+
+    self.onTableInitCompleteExtra = function () { };
+
+    self.onTableInitComplete = function () {
+
+        $('#data_holder_filter label').on('click', function (e) {
+                if (e.target !== this)
+                    return;
+                if ($(this).hasClass("active")) {
+                    $(this).removeClass("active");
+                }
+                else {
+                    $(this).addClass("active");
+                }
+                $(".column-questionnaire-title").toggleClass("padding-left-slide");
+            });
+        
+        self.onTableInitCompleteExtra();
+    };
+
+    self.selectRowAndGetData = function (selectedItem) {
+        var rowIndex = selectedItem.parent().children().index(selectedItem);
+        self.Datatable.row(rowIndex).select();
+        var selectedRows = self.Datatable.rows({ selected: true }).data()[0];
+        return selectedRows;
+    }
+
+    self.sendDeleteQuestionnaireCommand = function (item) {
+        ajax.sendRequest($deleteQuestionnaireUrl, "post", { questionnaireId: item.questionnaireId, version: item.version }, false,
+            // onSuccess
+            function () {
+                setTimeout(function () { self.reloadDataTable();; }, 1000);
+            });
+    }
+
+    self.addNewInterview = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+        console.log(selectedRow);
+    };
+
+    self.webInterviewSetup = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
+        console.log(selectedRow);
+    };
+
+    self.interviewsBatchUpload = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
+
+    self.cloneQuestionnaire = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
+
+    self.deleteQuestionnaire = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+
+        notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
+            // confirm
+            function () { sendDeleteQuestionnaireCommand(selectedRow); },
+            // cancel
+            function () { });
+    };
+};
+
+Supervisor.Framework.Classes.inherit(Supervisor.VM.Questionnaires, Supervisor.VM.ListView);
