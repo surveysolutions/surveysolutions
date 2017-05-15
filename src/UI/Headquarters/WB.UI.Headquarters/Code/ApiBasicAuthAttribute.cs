@@ -52,6 +52,12 @@ namespace WB.UI.Headquarters.Code
             {
                 if (result.Errors.Any())
                 {
+                    if (result.Errors.Any(err => err.Contains(@"UpgradeRequired")))
+                    {
+                        RespondWithMessageThatUserRequireUpgrade(actionContext);
+                        return;
+                    }
+
                     if (result.Errors.Any(err => err.Contains(@"Role")))
                     {
                         RespondWithMessageThatUserIsNoPermittedRole(actionContext);
@@ -91,6 +97,12 @@ namespace WB.UI.Headquarters.Code
         private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = TabletSyncMessages.InvalidUserRole };
+            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
+        }
+
+        private void RespondWithMessageThatUserRequireUpgrade(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.UpgradeRequired) { ReasonPhrase = TabletSyncMessages.InterviewerApplicationShouldBeUpdated };
             actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
         }
 
