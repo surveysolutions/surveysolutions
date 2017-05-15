@@ -27,7 +27,7 @@ if (!(Test-Path $HQsitePath)) {
 	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
 }
 
-$supportPath = Join-path $workdir "Support"
+$supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse

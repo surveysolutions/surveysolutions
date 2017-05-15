@@ -36,7 +36,7 @@
 
         <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
 
-        <Property Id="INSTALLFOLDER" Value="[WindowsVolume]SurveySolutions"> 
+        <Property Id="INSTALLFOLDER" Value="c:\SurveySolutions"> 
             <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Name="Install Path" Win64='yes'></RegistrySearch>
         </Property>
 
@@ -135,6 +135,8 @@
                       Impersonate="no"/>
 
         <InstallExecuteSequence>
+            
+            
 
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
                 <![CDATA[NOT Installed]]>
