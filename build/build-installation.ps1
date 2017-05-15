@@ -31,7 +31,7 @@ $supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
-Copy-Item $supportPath\* $targetSupportPath -Force -Recurse
+Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
 $version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
