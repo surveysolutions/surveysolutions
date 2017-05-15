@@ -117,136 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Admin" xml:space="preserve">
-    <value>管理员</value>
+  <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+    <value>请指定一个要搜索的访谈键（XX-XX-XX-XX）或访谈编号。</value>
   </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>版权所有</value>
+  <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+    <value>调查员声称一个访谈已经完成并同步，但我在服务器上并没有看到这个访谈的数据</value>
   </data>
-  <data name="Any" xml:space="preserve">
-    <value>任意</value>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>搜索在两个日期间同步的访谈</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-    <value>审核通过</value>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>选择日期</value>
   </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>任务</value>
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>调查员</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>取消</value>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+    <value>选择调查员</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>创建</value>
-  </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>已在客户端创建</value>
-  </data>
-  <data name="CreateNewInterview" xml:space="preserve">
-    <value>新建访谈</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>删除</value>
-  </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>错误日志</value>
-  </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>获得调查员程序</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>访谈</value>
-  </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>最近一次更新</value>
-  </data>
-  <data name="Legal" xml:space="preserve">
-    <value>法律</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>加载中，请稍候</value>
-  </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>注销</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>名称</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>未找到结果</value>
-  </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>预填写问题</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
     <value>问卷</value>
   </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>调查员已收到</value>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>选择问卷</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>刷新</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>驳回</value>
-  </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>负责人</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>保存</value>
-  </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>保存修改</value>
-  </data>
-  <data name="Search" xml:space="preserve">
+  <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
     <value>搜索</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>设置</value>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>过滤条件</value>
   </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>登录</value>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>为了查找一个访谈，请提供问卷的名称。&lt;br&gt;选择调查员和时间范围以缩小搜索结果</value>
   </data>
-  <data name="Status" xml:space="preserve">
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>{0}个访谈满足过滤条件</value>
+  </data>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>没有满足过滤条件的访谈</value>
+  </data>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>1个满足过滤条件的访谈</value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>正在查找特定的普查模式的访谈</value>
+  </data>
+  <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+    <value>请提供一个调查员登录名、问卷名称和日期范围</value>
+  </data>
+  <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+    <value>我需要查找处于普查模式的一个访谈</value>
+  </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>请指定一个要搜索的访谈键（XX-XX-XX-XX）或访谈编号。</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>访谈键或访谈编号</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>输入访谈键或编号</value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>服务器上未找到已同步的访谈</value>
+  </data>
+  <data name="SupportSite" xml:space="preserve">
+    <value>点击您要解决的问题的链接。如果您的问题没有出现在列表中，请访问Survey Solutions&lt;a href="{0}" target="_blank"&gt;支持网站&lt;/a&gt;。</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>访谈编号</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>最近一次更新</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
     <value>状态</value>
   </data>
-  <data name="Template" xml:space="preserve">
-    <value>模板</value>
-  </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>世界银行集团</value>
-  </data>
   <data name="Title" xml:space="preserve">
-    <value>标题</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>合计</value>
-  </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>取消审核</value>
-  </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>有错误</value>
-  </data>
-  <data name="Assign" xml:space="preserve">
-    <value>分配</value>
-  </data>
-  <data name="HideIdentifying" xml:space="preserve">
-    <value>隐藏</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>访谈键</value>
-  </data>
-  <data name="NewVersionAvailable" xml:space="preserve">
-    <value>有新版本：</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>否</value>
-  </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>显示识别</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>是</value>
+    <value>故障排除</value>
   </data>
 </root>

@@ -261,6 +261,7 @@
       <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.zh.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

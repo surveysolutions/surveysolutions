@@ -150,4 +150,13 @@
   <data name="PLU0011" xml:space="preserve">
     <value>督导员角色Supervisor一列必须为空</value>
   </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>全名不应超过100个字符</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>电话号码不应超过15个字符</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>用户名含有无效字符。 只允许使用字母、点、空格和单引号。</value>
+  </data>
 </root>

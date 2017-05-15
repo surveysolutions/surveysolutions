@@ -129,4 +129,22 @@
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>已分配调查员</value>
   </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>管理员</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>API用户</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>总部</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>观察员</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>督导员</value>
+  </data>
 </root>
