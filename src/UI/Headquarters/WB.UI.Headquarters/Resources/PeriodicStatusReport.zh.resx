@@ -223,6 +223,6 @@
     <value>在{0}的团队中</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>一个{0}已经完成的访谈数量。驳回后完成的访谈另计。</value>
+    <value>一个已经完成的访谈数量。驳回后完成的访谈另计。</value>
   </data>
 </root>
