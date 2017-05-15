@@ -825,6 +825,7 @@
       <LastGenOutput>TroubleshootingMessages.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TroubleshootingMessages.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingServiceMessages.resx">

@@ -141,4 +141,16 @@
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>成功更新了&lt;b&gt;{0}&lt;/b&gt;的信息</value>
   </data>
+  <data name="ObserverCreatedFormat" xml:space="preserve">
+    <value>成功创建了观察员用户&lt;b&gt;{0}&lt;/b&gt;。</value>
+  </data>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
+    <value>成功创建了督导员&lt;b&gt;{0}&lt;/b&gt;。</value>
+  </data>
+  <data name="SupervisorNotFound" xml:space="preserve">
+    <value>不能创建调查员。选择的督导员不存在</value>
+  </data>
+  <data name="UserWasCreatedFormat" xml:space="preserve">
+    <value>成功创建了总部用户{0}。</value>
+  </data>
 </root>
