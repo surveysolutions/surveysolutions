@@ -117,136 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Admin" xml:space="preserve">
-    <value>管理员</value>
+  <data name="Aria_SortAscending" xml:space="preserve">
+    <value>：激活按升序排列</value>
   </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>版权所有</value>
+  <data name="Aria_SortDescending" xml:space="preserve">
+    <value>：激活按降序排列</value>
   </data>
-  <data name="Any" xml:space="preserve">
-    <value>任意</value>
+  <data name="EmptyTable" xml:space="preserve">
+    <value>表格中没有数据</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-    <value>审核通过</value>
+  <data name="Info" xml:space="preserve">
+    <value>显示_TOTAL_个条目中的_START_-_END_个</value>
   </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>任务</value>
+  <data name="InfoEmpty" xml:space="preserve">
+    <value>显示0个条目中的0-0个</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>取消</value>
+  <data name="InfoFiltered" xml:space="preserve">
+    <value>（从_MAX_个总条目中过滤）</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>创建</value>
+  <data name="InfoThousands" xml:space="preserve">
+    <value>，</value>
   </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>已在客户端创建</value>
+  <data name="LengthMenu" xml:space="preserve">
+    <value>显示_MENU_条目</value>
   </data>
-  <data name="CreateNewInterview" xml:space="preserve">
-    <value>新建访谈</value>
+  <data name="LoadingRecords" xml:space="preserve">
+    <value>加载中</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>删除</value>
+  <data name="Paginate_First" xml:space="preserve">
+    <value>第一个</value>
   </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>错误日志</value>
+  <data name="Paginate_Last" xml:space="preserve">
+    <value>最后一个</value>
   </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>获得调查员程序</value>
+  <data name="Paginate_Next" xml:space="preserve">
+    <value>下一个</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>访谈</value>
+  <data name="Paginate_Previous" xml:space="preserve">
+    <value>上一个</value>
   </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>最近一次更新</value>
-  </data>
-  <data name="Legal" xml:space="preserve">
-    <value>法律</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>加载中，请稍候</value>
-  </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>注销</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>名称</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>未找到结果</value>
-  </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>预填写问题</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>问卷</value>
-  </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>调查员已收到</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>刷新</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>驳回</value>
-  </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>负责人</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>保存</value>
-  </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>保存修改</value>
+  <data name="Processing" xml:space="preserve">
+    <value>处理中</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>搜索</value>
+    <value>搜索：</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>设置</value>
-  </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>登录</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>状态</value>
-  </data>
-  <data name="Template" xml:space="preserve">
-    <value>模板</value>
-  </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>世界银行集团</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>标题</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>合计</value>
-  </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>取消审核</value>
-  </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>有错误</value>
-  </data>
-  <data name="Assign" xml:space="preserve">
-    <value>分配</value>
-  </data>
-  <data name="HideIdentifying" xml:space="preserve">
-    <value>隐藏</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>访谈键</value>
-  </data>
-  <data name="NewVersionAvailable" xml:space="preserve">
-    <value>有新版本：</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>否</value>
-  </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>显示识别</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>是</value>
+  <data name="ZeroRecords" xml:space="preserve">
+    <value>未找到匹配的记录</value>
   </data>
 </root>

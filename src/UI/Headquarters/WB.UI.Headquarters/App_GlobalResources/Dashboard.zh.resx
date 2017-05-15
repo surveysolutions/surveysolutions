@@ -174,4 +174,22 @@
   <data name="Version" xml:space="preserve">
     <value>版本</value>
   </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>删除问卷</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>导入日期</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>问卷</value>
+  </data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>1. 点击导入模板按钮从问卷设计网站导入一个问卷</value>
+  </data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>2. 点击列表中的一个问卷创建新的访谈任务</value>
+  </data>
+  <data name="WebInterviewSetup" xml:space="preserve">
+    <value>网络访谈设置</value>
+  </data>
 </root>
