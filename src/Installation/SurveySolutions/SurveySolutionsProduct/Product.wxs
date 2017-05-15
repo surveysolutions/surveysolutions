@@ -6,10 +6,10 @@
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
     <Product Id="*" 
-             Name="SurveySolutions" 
+             Name="Survey Solutions" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
-             Manufacturer="The World Bank" 
+             Manufacturer="World Bank" 
              UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA">
         <!--EE5F1DD2-13D8-442C-9978-8E8918EA789D-->
         
@@ -37,7 +37,7 @@
         <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
 
         <Property Id="INSTALLFOLDER" Value="c:\SurveySolutions"> 
-            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Name="Install Path" Win64='yes'></RegistrySearch>
+            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Name="Install Path" Win64='yes'></RegistrySearch>
         </Property>
 
 <!--        <Condition Message="Path was not found.">
@@ -177,7 +177,7 @@
     <Fragment>
         <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
             <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
-                <RegistryKey Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Action="createAndRemoveOnUninstall">
+                <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
                     <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
                 </RegistryKey>
             </Component>
