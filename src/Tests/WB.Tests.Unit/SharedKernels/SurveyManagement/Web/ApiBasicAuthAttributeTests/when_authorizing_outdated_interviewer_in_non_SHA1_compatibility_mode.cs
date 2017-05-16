@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests
 {
-    public class when_authorizing_interviewer_in_SHA1_compatibility_mode : ApiBasicAuthNunitBasedSpecification
+    public class when_authorizing_outdated_interviewer_in_non_SHA1_compatibility_mode : ApiBasicAuthNunitBasedSpecification
     {
         protected override void Context()
         {
             this.SetupInterviwer(Create.Entity.HqUser(role: UserRoles.Interviewer, passwordHashSha1: "open sesame"));
-            this.HashCompatibilityProvider.Setup(h => h.IsInSha1CompatibilityMode()).Returns(true);
+            this.HashCompatibilityProvider.Setup(h => h.IsInSha1CompatibilityMode()).Returns(false);
 
             this.attribute = this.CreateApiBasicAuthAttribute();
             this.actionContext = CreateActionContext();
@@ -23,6 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected override Task BecauseAsync() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None);
         
         [Test]
-        public void Should_not_return_any_errors() => this.actionContext.Response.ShouldBeNull();
+        public void Should_return_upgrade_error() => this.actionContext.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
     }
 }
