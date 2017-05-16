@@ -22,7 +22,7 @@
             Result="state"/>
 
         <bal:Condition Message="Please uninstsall previous version of Survey Solutions.">
-            (OldProductInstalled &lt;= 2)
+            (OldProductInstalled = 2)
         </bal:Condition>
 
         <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense" >
