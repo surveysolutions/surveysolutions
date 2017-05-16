@@ -18,8 +18,8 @@
                        Visible IsLoaded;" />
   </android.support.v7.widget.Toolbar>
   
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress)" />
+  <ProgressBar style="@style/Progress_Indicator"
+               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility Visibility(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
   
   <include layout="@layout/synchronization_panel" />
 
