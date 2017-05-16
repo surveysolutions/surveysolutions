@@ -15,8 +15,8 @@
         style="@style/ToolbarTitle"
         local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
   </android.support.v7.widget.Toolbar>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-            local:MvxBind="ShowProgress IsInProgress" />
+  <ProgressBar style="@style/Progress_Indicator"
+            local:MvxBind="ShowProgress IsInProgress; Visibility Visibility(IsInProgress)" />
   <ScrollView
       android:layout_width="match_parent"
       android:layout_height="0dp"
@@ -75,7 +75,7 @@
           <Button
             style="@style/Login_Button"
             android:id="@+id/LoginPage_singin_button"
-            local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
+            local:MvxBind="Click SignInCommand; Text Localization('LoginText')" />
           <Button
             style="@style/Login_Troubleshotting_Button"
             android:id="@+id/LoginPage_troubleshooting_button"
