@@ -10,14 +10,16 @@
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
              Manufacturer="World Bank" 
-             UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA">
-        <!--EE5F1DD2-13D8-442C-9978-8E8918EA789D-->
-        
+             UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+
+        <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+
+        <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
 
         <!--not supported in wix 3.10 should be in 3.11 and 4-->
         <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" />
-        
+
         <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again.">
             <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
         </Condition>
@@ -36,7 +38,7 @@
 
         <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
 
-        <Property Id="INSTALLFOLDER" Value="c:\SurveySolutions"> 
+        <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions"> 
             <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Name="Install Path" Win64='yes'></RegistrySearch>
         </Property>
 
@@ -110,7 +112,7 @@
 
             <Property Id="ARPNOMODIFY" Value="1" />
             
-            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="SurveySolutions has been succesfully installed." />
+            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Survey Solutions has been succesfully installed." />
 
         </UI>
         
@@ -135,32 +137,34 @@
                       Impersonate="no"/>
 
         <InstallExecuteSequence>
-            
-            
-
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
                 <![CDATA[NOT Installed]]>
             </Custom>
             <Custom Action="InstallIIS" Before="WriteRegistryValues">
                 <![CDATA[NOT Installed]]>
             </Custom>
-
         </InstallExecuteSequence>
-        
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowDowngrades="no"
-                      Schedule="afterInstallExecute"/>
-        
-        <MediaTemplate  EmbedCab="yes" />
 
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." 
+                      AllowDowngrades="no"
+                      Schedule="afterInstallExecute" /> <!--preserves settings-->
+        
+        
         <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
             <ComponentGroupRef Id="SettingsUpdate"  />
         </Feature>
         
     </Product>
+
+   <Fragment>
+        <util:ProductSearch Id="OldProductSearch" UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" Variable="OldProductInstalled" Result="state"></util:ProductSearch>
+        <Condition Message="Please uninstsall previous version of Survey Solutions.">
+            <![CDATA[(OldProductInstalled <= 2)]]>
+        </Condition>
+    </Fragment>
             
     <Fragment>
-
         <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
 
         <Directory Id="TARGETDIR" Name="SourceDir">
@@ -191,7 +195,7 @@
                         ManagedPipelineMode="integrated"
                         Identity="applicationPoolIdentity" />
 
-                    <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
+                    <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
                         <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
                         <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
                         <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SyrveySolutions" />
