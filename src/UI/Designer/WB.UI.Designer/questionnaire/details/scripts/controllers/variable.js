@@ -14,7 +14,7 @@
                 $scope.activeVariable.breadcrumbs = variable.breadcrumbs;
 
                 $scope.activeVariable.itemId = $state.params.itemId;
-                $scope.activeVariable.variable = variable.name;
+                $scope.activeVariable.variable = variable.variable;
                 $scope.activeVariable.expression = variable.expression;
                 $scope.activeVariable.type = variable.type;
 
