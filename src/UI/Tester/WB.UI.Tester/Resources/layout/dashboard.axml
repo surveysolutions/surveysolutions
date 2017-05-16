@@ -29,8 +29,8 @@
         local:MvxBind="Click ClearSearchCommand;"/>
     </LinearLayout>
   </android.support.v7.widget.Toolbar>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress IsInProgress" />
+  <ProgressBar style="@style/Progress_Indicator"
+               local:MvxBind="ShowProgress IsInProgress; Visibility Visibility(IsInProgress)" />
   <LinearLayout style="@style/Dashboard_Questionnaires_Header">
     <LinearLayout  style="@style/Dashboard_Questionnaires_Header_Body">
       <TextView style="@style/Dashboard_MyQuestionnairesLink"
