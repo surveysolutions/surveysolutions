@@ -74,7 +74,7 @@
 
         notifier.confirm('Confirmation Needed', input.settings.messages.deleteQuestionnaireConfirmationMessage,
             // confirm
-            function () { sendDeleteQuestionnaireCommand(selectedRow); },
+            function () { self.sendDeleteQuestionnaireCommand(selectedRow); },
             // cancel
             function () { });
     };
