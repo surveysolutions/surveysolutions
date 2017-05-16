@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
             var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower();
-            if (extension != ".tab" && extension != ".txt")
+            if (extension != ".tab" && extension != ".txt" && extension != ".zip")
             {
                 return this.View("InterviewImportVerificationErrors",
                     PreloadedDataVerificationErrorsView.CreatePrerequisiteError(
