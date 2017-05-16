@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers
         
         public ActionResult ResetPrivilegedUserPassword()
         {
-            return this.View(new UserModel());
+            return this.View(new UserEditModel());
         }
 
         public ActionResult RestoreAllDeletedQuestionnaireProjections()
@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetUserPassword(UserModel model)
+        public async Task<ActionResult> ResetUserPassword(UserEditModel model)
         {
             if (ModelState.IsValid)
             {
