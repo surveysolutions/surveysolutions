@@ -160,7 +160,7 @@
    <Fragment>
         <util:ProductSearch Id="OldProductSearch" UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" Variable="OldProductInstalled" Result="state"></util:ProductSearch>
         <Condition Message="Please uninstsall previous version of Survey Solutions.">
-            <![CDATA[(OldProductInstalled <= 2)]]>
+            <![CDATA[(OldProductInstalled = 2)]]>
         </Condition>
     </Fragment>
             
