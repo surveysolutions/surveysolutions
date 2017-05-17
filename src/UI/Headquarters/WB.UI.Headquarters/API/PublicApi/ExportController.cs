@@ -80,13 +80,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
-        public IHttpActionResult StartProcess(string id, string exportType)
+        public IHttpActionResult StartProcess(string id, DataExportFormat exportType)
         {
-            DataExportFormat dataExportType;
-            if (!Enum.TryParse(exportType, true, out dataExportType))
-                return this.Content(HttpStatusCode.NotFound, @"Unknown export type");
-
-            switch (dataExportType)
+            switch (exportType)
             {
                 case DataExportFormat.Paradata:
                     this.dataExportProcessesService.AddParaDataExport(DataExportFormat.Tabular);
@@ -102,7 +98,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-                    this.dataExportProcessesService.AddDataExport(questionnaireIdentity, dataExportType);
+                    this.dataExportProcessesService.AddDataExport(questionnaireIdentity, exportType);
                     break;
             }
 
@@ -111,7 +107,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
-        public IHttpActionResult CancelProcess(string id, string exportType)
+        public IHttpActionResult CancelProcess(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
@@ -121,22 +117,18 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            DataExportFormat exportFormat;
-            if (!Enum.TryParse(exportType, true, out exportFormat))
-                return this.Content(HttpStatusCode.NotFound, @"Unknown export type");
-
-            var dataExportType = exportFormat == DataExportFormat.Paradata
+            var dataExportType = exportType == DataExportFormat.Paradata
                 ? DataExportType.ParaData
                 : DataExportType.Data;
 
-            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportFormat, dataExportType);
+            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType, dataExportType);
 
             return this.Ok();
         }
 
         [HttpGet]
         [Route(@"{exportType}/{id}/details")]
-        public IHttpActionResult ProcessDetails(string id, string exportType)
+        public IHttpActionResult ProcessDetails(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
@@ -146,14 +138,10 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            DataExportFormat exportFormat;
-            if (!Enum.TryParse(exportType, true, out exportFormat))
-                return this.Content(HttpStatusCode.NotFound, @"Unknown export type");
-
             DataExportType dataExportType;
-            if (exportFormat == DataExportFormat.Paradata)
+            if (exportType == DataExportFormat.Paradata)
             {
-                exportFormat = DataExportFormat.Tabular;
+                exportType = DataExportFormat.Tabular;
                 dataExportType = DataExportType.ParaData;
             }
             else
@@ -164,7 +152,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
 
             var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
-                x.DataExportFormat == exportFormat &&
+                x.DataExportFormat == exportType &&
                 x.DataExportType == dataExportType);
 
             if (exportStatusByExportType == null)
@@ -172,7 +160,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var runningExportStatus = allExportStatuses.RunningDataExportProcesses.FirstOrDefault(x =>
                 (x.QuestionnaireIdentity == null || x.QuestionnaireIdentity.Equals(questionnaireIdentity)) &&
-                x.Format == exportFormat &&
+                x.Format == exportType &&
                 x.Type == dataExportType);
 
             return this.Ok(new ExportDetails

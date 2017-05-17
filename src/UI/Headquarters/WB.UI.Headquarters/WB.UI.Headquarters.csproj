@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -1436,7 +1440,7 @@
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
-    <Compile Include="API\PublicApi\HqIncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
     <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
