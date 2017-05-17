@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     {
         void AddOrUpdate(DeviceSyncInfo deviceSyncInfo);
         DeviceSyncInfo GetLastByInterviewerId(Guid interviewerId);
+        DateTime? GetLastSyncronizationDate(Guid interviewerId);
         DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId);
         DeviceSyncInfo GetLastFailedByInterviewerId(Guid interviewerId);
         int GetSuccessSynchronizationsCount(Guid interviewerId);

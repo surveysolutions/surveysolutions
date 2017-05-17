@@ -132,6 +132,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 TotalSuccessSynchronizationCount = this.deviceSyncInfoRepository.GetSuccessSynchronizationsCount(id),
                 TotalFailedSynchronizationCount = this.deviceSyncInfoRepository.GetFailedSynchronizationsCount(id),
                 LastSuccessDeviceInfo = lastSuccessDeviceInfo,
+                LastSyncronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(id),
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(id),
                 AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(id),
                 SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(id, interviewer.Profile.DeviceId),
