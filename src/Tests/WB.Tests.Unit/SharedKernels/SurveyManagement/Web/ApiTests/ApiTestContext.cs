@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {

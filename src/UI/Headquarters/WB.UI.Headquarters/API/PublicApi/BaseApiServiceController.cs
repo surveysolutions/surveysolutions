@@ -2,7 +2,7 @@
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
+namespace WB.UI.Headquarters.API.PublicApi
 {
     public abstract class BaseApiServiceController : ApiController
     {

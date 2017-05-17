@@ -1,8 +1,8 @@
-﻿using Main.Core.Entities.SubEntities;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -14,12 +14,12 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
+namespace WB.UI.Headquarters.API.PublicApi
 {
     [RoutePrefix("api/v1/interviews")]
     [ApiBasicAuth(new [] {UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey, DateTime.UtcNow));
+            return this.TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new RejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new RejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
         }
 
         [HttpPost]
@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
 
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
 
@@ -163,7 +163,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.authorizedUser.Id, request.Comment));
         }
 
         [HttpPost]
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
             
-            return TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.authorizedUser.Id));
+            return this.TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.authorizedUser.Id));
         }
 
         [HttpPost]
@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
             
-            return TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey));
+            return this.TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey));
         }
 
         #endregion
@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 throw new HttpResponseException(HttpStatusCode.ServiceUnavailable);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         private void ThrowIfInterviewDoesnotExist(Guid id)
