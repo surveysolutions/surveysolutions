@@ -381,12 +381,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\DashboardCompletednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardQuestionnairesFragment.cs" />
+    <Compile Include="Activities\DashboardRejectednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardStartedInterviewsFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\MvxFragmentStatePagerAdapter.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\RecyclerViewFragment.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
@@ -492,6 +498,9 @@
     <AndroidResource Include="Resources\Layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\Layout\diagnostics__test_bandwidth_to_server.axml" />
     <AndroidResource Include="Resources\Layout\loading.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

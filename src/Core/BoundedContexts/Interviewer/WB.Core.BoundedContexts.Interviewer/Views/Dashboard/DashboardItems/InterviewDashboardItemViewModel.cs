@@ -4,10 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -21,7 +19,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IMvxMessenger messenger;
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -35,10 +32,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string Comment { get; private set; }
         public bool HasComment { get; private set; }
 
+        public event EventHandler OnItemRemoved;
+
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
-            IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
@@ -46,7 +44,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.messenger = messenger;
             this.externalAppLauncher = externalAppLauncher;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -172,12 +169,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool IsSupportedRemove { get; set; }
 
-        public IMvxCommand RemoveInterviewCommand
-        {
-            get { return new MvxAsyncCommand(RemoveInterview, () => this.isInterviewReadyToLoad); }
-        }
+        public IMvxAsyncCommand RemoveInterviewCommand
+            => new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad);
 
-        private async Task RemoveInterview()
+        private async Task RemoveInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
 
@@ -192,17 +187,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 return;
             }
             this.interviewerInterviewFactory.RemoveInterview(this.InterviewId);
-            RaiseRemovedDashboardItem();
+            this.OnItemRemoved(this, EventArgs.Empty);
         }
 
-        public IMvxCommand LoadDashboardItemCommand
-        {
-            get { return new MvxAsyncCommand(LoadInterview, () => this.isInterviewReadyToLoad); }
-        }
+        public IMvxAsyncCommand LoadDashboardItemCommand
+            => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
 
         private bool isInterviewReadyToLoad = true;
 
-        public async Task LoadInterview()
+        public async Task LoadInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
             try
@@ -227,11 +220,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 this.isInterviewReadyToLoad = true;
             }
-        }
-
-        private void RaiseRemovedDashboardItem()
-        {
-            messenger.Publish(new RemovedDashboardItemMessage(this));
         }
     }
 }
