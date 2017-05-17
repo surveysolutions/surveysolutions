@@ -148,14 +148,14 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Completed {0}</value>
+    <value>Completed ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Create
 interview</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>New {0}</value>
+    <value>New ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Synchronize</value>
@@ -175,13 +175,13 @@ for further instructions</value>
     <value>This interview is completed. Do you want to restart the interview?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rejected {0}</value>
+    <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Are you sure you want to delete this interview "{0}" ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Started {0}</value>
+    <value>Started ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} assignments for {1}</value>
