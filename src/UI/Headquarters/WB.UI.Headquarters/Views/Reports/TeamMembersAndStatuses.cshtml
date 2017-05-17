@@ -14,7 +14,7 @@
 
 
     <script type="text/javascript">
-        var $surveysUrl = '@Url.Action("Index", "Survey")';
+        
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
         var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
         $(function () {
@@ -31,22 +31,22 @@
                     {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
@@ -56,7 +56,7 @@
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters','', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
@@ -77,7 +77,6 @@
         });
     </script>
 }
-
 
 <main class="main">
     <div class="container-fluid">
