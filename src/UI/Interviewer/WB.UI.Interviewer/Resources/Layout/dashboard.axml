@@ -5,67 +5,46 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
+  <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="?attr/colorPrimary"
       local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView
+      local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      local:layout_scrollFlags="scroll|enterAlways">
+      <TextView
         style="@style/ToolbarTitle"
         local:MvxBind="Text DashboardTitle;
                        Visible IsLoaded;" />
-  </android.support.v7.widget.Toolbar>
-  
+    </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:tabGravity="center"
+        local:tabMode="scrollable"
+        local:MvxBind="Visible IsExistsAnyCensusQuestionnairesOrInterviews;"/>
+  </android.support.design.widget.AppBarLayout>
+
   <ProgressBar style="@style/Progress_Indicator"
                local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility Visibility(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
-  
+
   <include layout="@layout/synchronization_panel" />
 
-  <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-    
-    <LinearLayout style="@style/Dashboard_Interviews_Header" local:MvxBind="Visible IsLoaded;">
-      <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
-        <TextView style="@style/Dashboard_NewItemsLink"
-                  local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
-                               Click ShowNewItemsInterviewsCommand;
-                               Visible Or(IsExistsAnyCensusQuestionniories, IsExistsAnyNewInterview, IsExistsAnyStartedInterview, IsExistsAnyCompletedInterview, IsExistsAnyRejectedInterview);
-                               IsCurrentDashboardTab IsNewInterviewsCategorySelected;" />
-        <TextView style="@style/Dashboard_StartedLink"
-                  local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
-                               Click ShowStartedInterviewsCommand;
-                               Visible IsExistsAnyStartedInterview;
-                               IsCurrentDashboardTab IsStartedInterviewsCategorySelected;" />
-        <TextView style="@style/Dashboard_CompletedLink"
-                  local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsCount); 
-                               Click ShowCompletedInterviewsCommand;
-                               Visible IsExistsAnyCompletedInterview;
-                               IsCurrentDashboardTab IsCompletedInterviewsCategorySelected;" />
-        <TextView style="@style/Dashboard_RejectedLink"
-                  local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsCount); 
-                               Click ShowRejectedInterviewsCommand;
-                               Visible IsExistsAnyRejectedInterview;
-                               IsCurrentDashboardTab IsRejectedInterviewsCategorySelected;" />
-      </LinearLayout>
-    </LinearLayout>
-    <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled Not(Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice));
-                                 Clickable Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice);"
-                  android:layout_height="match_parent">
-    </LinearLayout>
-  </FrameLayout>
-
   <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-    <MvxRecyclerView
-      style="@style/Dashboard_InterviewsList"
-      android:id="@+id/interviewsList"
-      android:scrollbars="vertical"
-      local:MvxTemplateSelector ="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
-      local:MvxBind="ItemsSource DashboardItems" />
-
-    <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 
-                  local:MvxBind="Visible And(Not(Or(IsExistsAnyNewInterview, IsExistsAnyCensusQuestionniories)), IsNewInterviewsCategorySelected, IsLoaded);">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+    <LinearLayout style="@style/Dashboard_NoInterviewsPanel"
+                    local:MvxBind="Visible And(Not(IsExistsAnyCensusQuestionnairesOrInterviews), IsLoaded);">
       <TextView style="@style/Dashboard_NoInterviewsTitle"
                 local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 
@@ -76,13 +55,11 @@
                 local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
                                Enabled Not(Synchronization.IsSynchronizationInProgress);
                                Click SynchronizationCommand;" />
-    </LinearLayout>    
+    </LinearLayout>
     <LinearLayout style="@style/Interview_GroupWithDivider"
                   local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
                                  Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>
-  
-  
 </LinearLayout>
