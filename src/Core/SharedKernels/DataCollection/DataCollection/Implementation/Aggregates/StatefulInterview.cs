@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.ReplaceSubstitutions();
 
-            CalculateLinkedToListOptionsOnTree(this.Tree, false); 
+            CalculateLinkedToListOptionsOnTree(this.Tree, this.ExpressionProcessorStatePrototype, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
             
