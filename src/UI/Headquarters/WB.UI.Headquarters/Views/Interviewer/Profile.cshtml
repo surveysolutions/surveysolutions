@@ -138,9 +138,7 @@ else
                         <div class="graphic census">
                             <div class="day-unit">
                                 <div class="quarter-of-day">
-                                    <div class="recent-activity">
-
-                                    </div>
+                                    <div class="recent-activity"></div>
                                     <div class="unfinished-assignments">
                                         <div class="half-of-quarter"></div>
                                         <div class="half-of-quarter"></div>
@@ -324,6 +322,13 @@ else
                     @if (Model.LastFailedDeviceInfo != null)
                     {
                         @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedDeviceInfo)
+                    }
+                    
+                    @if (Model.LastSyncronizationDate.HasValue)
+                    {
+                        <ul class="list-unstyled">
+                            <li>@Pages.InterviewerProfile_LastSyncronizationDate: @Model.LastSyncronizationDate.Value.ToString(@"MMM dd, hh:mm") (@Model.LastSyncronizationDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
+                        </ul>
                     }
                 </div>
             </div>
