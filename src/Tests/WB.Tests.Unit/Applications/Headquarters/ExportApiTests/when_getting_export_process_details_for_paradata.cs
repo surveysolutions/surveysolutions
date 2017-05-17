@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportStatusReader: dataExportStatusReader);
         };
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
