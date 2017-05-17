@@ -14,8 +14,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
@@ -33,6 +33,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IProductVersion productVersion;
         private readonly HqSignInManager signInManager;
 
         public InterviewerApiController(
@@ -42,6 +43,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             IAndroidPackageReader androidPackageReader,
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
+            IProductVersion productVersion,
             HqSignInManager signInManager)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -50,6 +52,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             this.androidPackageReader = androidPackageReader;
             this.syncVersionProvider = syncVersionProvider;
             this.authorizedUser = authorizedUser;
+            this.productVersion = productVersion;
             this.signInManager = signInManager;
         }
 
@@ -104,7 +107,7 @@ namespace WB.UI.Headquarters.API.Interviewer
             var httpContent = multipartMemoryStreamProvider.Contents.Single();
             var fileContent = await httpContent.ReadAsByteArrayAsync();
 
-            var deviceId = this.Request.Headers.GetValues("DeviceId").Single();
+            var deviceId = this.Request.Headers.GetValues(@"DeviceId").Single();
             var userId = User.Identity.GetUserId();
 
             var user = userId != null 
@@ -132,10 +135,31 @@ namespace WB.UI.Headquarters.API.Interviewer
 
             if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
-            
+
+            var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
+            var interviewerVersion = GetInterviewerVersionFromUserAgent(this.Request);
+
+            if (interviewerVersion != null && interviewerVersion > currentVersion)
+            {
+                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
             return this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                : this.Request.CreateResponse(HttpStatusCode.OK, "449634775");
+                : this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
+        }
+        
+        private Version GetInterviewerVersionFromUserAgent(HttpRequestMessage request)
+        {
+            foreach (var product in request.Headers.UserAgent)
+            {
+                if (product.Product.Name.Equals(@"org.worldbank.solutions.interviewer", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new Version(product.Product.Version);
+                }
+            }   
+
+            return null;
         }
     }
 }

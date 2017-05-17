@@ -592,7 +592,7 @@ for further instructions</value>
     <value>Removing {0} questionnaire out of {1}</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website</value>
+    <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Loading</value>
@@ -607,7 +607,7 @@ for further instructions</value>
     <value>Failed to open interview</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time</value>
+    <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>

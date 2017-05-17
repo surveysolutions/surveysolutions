@@ -13,7 +13,6 @@ using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
