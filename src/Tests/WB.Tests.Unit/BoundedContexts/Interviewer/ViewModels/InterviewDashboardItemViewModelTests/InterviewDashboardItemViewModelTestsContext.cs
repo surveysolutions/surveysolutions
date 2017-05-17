@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -32,7 +31,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
         {
             return new InterviewDashboardItemViewModel(viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(),
                 userInteractionService ?? Substitute.For<IUserInteractionService>(),
-                messenger ?? Substitute.For<IMvxMessenger>(),
                 Substitute.For<IExternalAppLauncher>(),
                 questionnaireViewRepository ?? Substitute.For<IPlainStorage<QuestionnaireView>>(),
                 prefilledQuestions ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
