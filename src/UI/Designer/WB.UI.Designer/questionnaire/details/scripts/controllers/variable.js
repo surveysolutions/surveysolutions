@@ -26,6 +26,7 @@
             $scope.setType = function (type) {
                 $scope.activeVariable.type = type;
                 $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: type }).text;
+                $rootScope.addOrUpdateLocalVariable($scope.activeVariable.itemId, $scope.activeVariable.variable, type);
 
                 markFormAsChanged();
             };
@@ -37,7 +38,8 @@
                         $rootScope.$emit('variableUpdated', {
                             itemId: $scope.activeVariable.itemId,
                             name: $scope.activeVariable.variable,
-                            label: $scope.activeVariable.label
+                            label: $scope.activeVariable.label,
+                            type: $scope.activeVariable.type
                     });
                         if (_.isFunction(callback)) {
                             callback();
