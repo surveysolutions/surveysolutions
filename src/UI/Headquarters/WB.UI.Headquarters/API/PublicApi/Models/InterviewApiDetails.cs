@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
+namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class InterviewApiDetails
     {

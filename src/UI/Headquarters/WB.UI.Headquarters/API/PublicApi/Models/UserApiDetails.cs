@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
+namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class UserApiDetails 
     {

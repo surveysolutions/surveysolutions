@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests

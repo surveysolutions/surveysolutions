@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
+namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class InterviewApiView : BaseApiView
     {
