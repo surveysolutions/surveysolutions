@@ -32,6 +32,7 @@
     };
 
     self.selectRowAndGetData = function (selectedItem) {
+        self.Datatable.rows().deselect();
         var rowIndex = selectedItem.parent().children().index(selectedItem);
         self.Datatable.row(rowIndex).select();
         var selectedRows = self.Datatable.rows({ selected: true }).data()[0];
