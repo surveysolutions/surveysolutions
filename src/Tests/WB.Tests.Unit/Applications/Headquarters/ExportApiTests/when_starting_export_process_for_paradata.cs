@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportProcessesService: mockOfDataExportProcessesService.Object);
         };
 
-        Because of = () => result = controller.StartProcess(null, "paradata");
+        Because of = () => result = controller.StartProcess(null, DataExportFormat.Paradata);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkResult>();

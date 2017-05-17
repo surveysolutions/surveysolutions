@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportProcessesService: mockOfDataExportProcessesService.Object);
         };
 
-        Because of = () => result = controller.CancelProcess(questionnaireIdentity.ToString(), "tabular");
+        Because of = () => result = controller.CancelProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkResult>();
