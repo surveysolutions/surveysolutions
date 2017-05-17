@@ -193,7 +193,8 @@
                                 itemId: $scope.activeRoster.itemId,
                                 variable: $scope.activeRoster.variableName,
                                 title: $scope.activeRoster.title,
-                                hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition))
+                                hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition)),
+                                type: 'Roster'
                             });
                             if (_.isFunction(callback)) {
                                 callback();
