@@ -11,10 +11,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Headquarters.API.PublicApi
 {
     [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
     [RoutePrefix(@"api/v1/export")]
@@ -189,7 +188,6 @@ namespace WB.UI.Headquarters.API
             });
         }
 
-
         public class ExportDetails
         {
             public bool HasExportedFile { get; set; }
@@ -204,6 +202,4 @@ namespace WB.UI.Headquarters.API
             public int ProgressInPercents { get; set; }
         }
     }
-
-    
 }

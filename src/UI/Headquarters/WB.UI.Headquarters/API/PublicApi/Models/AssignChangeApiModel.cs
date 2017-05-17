@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
+namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class AssignChangeApiModel
     {

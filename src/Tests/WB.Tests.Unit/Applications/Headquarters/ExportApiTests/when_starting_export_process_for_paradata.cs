@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests

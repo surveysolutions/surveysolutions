@@ -269,6 +269,10 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -1431,8 +1435,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
-    <Compile Include="API\BaseApiServiceController.cs" />
-    <Compile Include="API\ExportController.cs" />
+    <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
+    <Compile Include="API\PublicApi\HqIncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
     <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
@@ -1455,16 +1460,16 @@
     <Compile Include="API\Interviewer\v2\InterviewsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\UsersApiV2Controller.cs" />
-    <Compile Include="API\InterviewsController.cs" />
+    <Compile Include="API\PublicApi\InterviewsController.cs" />
     <Compile Include="API\ProgressiveDownloadResult.cs" />
-    <Compile Include="API\QuestionnairesController.cs" />
+    <Compile Include="API\PublicApi\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
-    <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IConnectionLimiter.cs" />
@@ -1552,6 +1557,7 @@
     </Compile>
     <Compile Include="App_Start\NlogExceptionFilter.cs" />
     <Compile Include="App_Start\NLogExceptionLogger.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
@@ -1654,23 +1660,23 @@
     <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewKey.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\Api\AssignChangeApiModel.cs" />
+    <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\DataTableRequestModelWithFilter.cs" />
     <Compile Include="Models\Api\DataTableResponseModel.cs" />
     <Compile Include="Models\Api\DataTableRequestModel.cs" />
-    <Compile Include="Models\Api\InterviewApiDetails.cs" />
-    <Compile Include="Models\Api\InterviewApiItem.cs" />
-    <Compile Include="Models\Api\InterviewApiView.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiDetails.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
     <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
     <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiView.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
     <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
-    <Compile Include="Models\Api\StatusChangeApiModel.cs" />
-    <Compile Include="Models\Api\UserApiDetails.cs" />
-    <Compile Include="Models\Api\UserApiItem.cs" />
-    <Compile Include="Models\Api\UserApiView.cs" />
+    <Compile Include="API\PublicApi\Models\StatusChangeApiModel.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiView.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
