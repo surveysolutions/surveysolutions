@@ -1195,6 +1195,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last syncronization date.
+        /// </summary>
+        public static string InterviewerProfile_LastSyncronizationDate {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_LastSyncronizationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Memory (available/total).
         /// </summary>
         public static string InterviewerProfile_MemoryInfo {
@@ -1942,7 +1951,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create interviewer.
+        ///   Looks up a localized string similar to Create interviewer profile.
         /// </summary>
         public static string Profile_InterviewerCreate {
             get {

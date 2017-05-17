@@ -26,9 +26,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
 
+        public DateTime? GetLastSyncronizationDate(Guid interviewerId) => this.dbContext.DeviceSyncInfo.OrderByDescending(di => di.Id)
+            .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId)?.SyncDate;
+
         public DeviceSyncInfo GetLastSuccessByInterviewerId(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
-                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId != null);
+                .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
+                    deviceInfo.StatisticsId != null
+                    && (deviceInfo.Statistics.DownloadedInterviewsCount > 0
+                        || deviceInfo.Statistics.UploadedInterviewsCount > 0
+                        || deviceInfo.Statistics.DownloadedQuestionnairesCount > 0
+                        || deviceInfo.Statistics.RejectedInterviewsOnDeviceCount > 0));
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)

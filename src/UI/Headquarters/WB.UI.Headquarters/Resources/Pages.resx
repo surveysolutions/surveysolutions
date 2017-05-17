@@ -480,6 +480,9 @@
   <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
     <value>Last failed sync</value>
   </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Last syncronization date</value>
+  </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Synchronization duration</value>
   </data>
