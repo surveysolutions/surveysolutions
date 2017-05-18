@@ -46,18 +46,14 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route(@"{exportType}/{id}")]
-        public IHttpActionResult Get(string id, string exportType)
+        public IHttpActionResult Get(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
                 return this.Content(HttpStatusCode.NotFound, @"Invalid questionnaire identity");
 
-            DataExportFormat dataExportType;
-            if (!Enum.TryParse(exportType, true, out dataExportType))
-                return this.Content(HttpStatusCode.NotFound, @"Unknown export type");
-
             string exportedFilePath;
-            switch (dataExportType)
+            switch (exportType)
             {
                 case DataExportFormat.DDI:
                     exportedFilePath = this.ddiMetadataAccessor.GetFilePathToDDIMetadata(questionnaireIdentity);
@@ -66,7 +62,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     exportedFilePath = this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     break;
                 default:
-                    exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataExportType);
+                    exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, exportType);
                     break;
             }
 

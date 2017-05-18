@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(filebasedExportedDataAccessor: filebasedExportedDataAccessor, fileSystemAccessor: fileSystemAccessor);
         };
 
-        Because of = () => result = controller.Get(new QuestionnaireIdentity().ToString(), "spss");
+        Because of = () => result = controller.Get(new QuestionnaireIdentity().ToString(), DataExportFormat.SPSS);
 
         It should_return_http_not_found_response = () =>
             result.ShouldBeOfExactType<NotFoundResult>();
