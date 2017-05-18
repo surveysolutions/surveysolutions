@@ -17,7 +17,7 @@
 
         public override string ToString()
         {
-            return string.Format($"map:\"{MapName}\", size:\"{AreaSize}\", geometry:\"{Geometry}\"");
+            return $"map:{MapName}, size:{AreaSize}, geometry:{Geometry}";
         }
     }
 }
