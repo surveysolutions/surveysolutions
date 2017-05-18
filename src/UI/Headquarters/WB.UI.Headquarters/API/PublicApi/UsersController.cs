@@ -4,8 +4,6 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 
@@ -23,20 +21,35 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.usersFactory = usersFactory;
         }
 
+        /// <summary>
+        /// Gets list of supervisors
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
         [HttpGet]
         [Route("api/v1/supervisors")]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, null, null, false, UserRoles.Supervisor));
 
+        /// <summary>
+        /// Gets list of interviewers in the specific supervisor team
+        /// </summary>
+        /// <param name="supervisorId">Id of supervisor</param>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
         [HttpGet]
         [Route("api/v1/supervisors/{supervisorId:guid}/interviewers")]
-        public UserApiView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
+        public UserApiView Interviewers(Guid supervisorId, int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetInterviewers(offset, limit, null, null, false, InterviewerOptionFilter.Any, null, supervisorId));
 
+        /// <summary>
+        /// Gets detailed info about single user
+        /// </summary>
+        /// <param name="id">User id</param>
         [HttpGet]
-        [Route("api/v1/supervisors/{id:guid}/details")]
-        [Route("api/v1/interviewers/{id:guid}/details")]
-        [Route("api/v1/users/{id:guid}/details")]
+        [Route("api/v1/supervisors/{id:guid}")]
+        [Route("api/v1/interviewers/{id:guid}")]
+        [Route("api/v1/users/{id:guid}")]
         public UserApiDetails Details(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
