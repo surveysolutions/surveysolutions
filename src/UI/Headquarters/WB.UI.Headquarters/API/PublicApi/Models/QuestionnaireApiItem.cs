@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
@@ -14,15 +15,19 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         }
 
         [DataMember]
+        [Required]
         public Guid QuestionnaireId { get; set; }
 
         [DataMember]
+        [Required]
         public long Version { get; set; }
 
         [DataMember]
+        [Required]
         public string Title { get; set; }
 
         [DataMember]
+        [Required]
         public DateTime LastEntryDate { get; set; }
         
     }

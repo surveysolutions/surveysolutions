@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
@@ -8,12 +9,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
         public string Order { get; protected set; }
 
         [DataMember]
+        [Required]
         public int Limit { get; protected set; }
 
         [DataMember]
+        [Required]
         public int TotalCount { get; protected set; }
 
         [DataMember]
+        [Required]
         public int Offset { get; protected set; }
     }
 }

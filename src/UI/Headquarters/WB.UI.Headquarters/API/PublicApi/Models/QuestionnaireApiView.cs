@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;

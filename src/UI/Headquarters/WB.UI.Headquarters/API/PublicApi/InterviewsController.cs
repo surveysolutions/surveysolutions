@@ -14,8 +14,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 
@@ -102,6 +100,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
 #region POST
+        /// <summary>
+        /// Assigns interview to interviewer
+        /// </summary>
+        /// <response code="200">Interview was reassigned</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target responsible was not found or it is not an interviewer</response>
         [HttpPost]
         [Route("assign")]
         public HttpResponseMessage PostAssign(AssignChangeApiModel request)
