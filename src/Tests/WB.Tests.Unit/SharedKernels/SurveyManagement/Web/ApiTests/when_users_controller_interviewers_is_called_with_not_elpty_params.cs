@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
         Because of = () =>
         {
-            actionResult = controller.Intervievers(supervisorId, 10, 1);
+            actionResult = controller.Interviewers(supervisorId, 10, 1);
         };
 
         It should_return_UserApiView = () =>
