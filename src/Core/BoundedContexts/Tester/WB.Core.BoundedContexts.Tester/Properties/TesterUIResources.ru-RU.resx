@@ -210,4 +210,7 @@
   <data name="MenuItem_Title_Reload" xml:space="preserve">
     <value>Обновить опросник</value>
   </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Данные интервью не могут быть зааплаены на новую версию опросника. Будет открыто пустое интервью.</value>
+  </data>
 </root>
