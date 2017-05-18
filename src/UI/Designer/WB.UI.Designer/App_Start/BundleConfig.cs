@@ -33,9 +33,8 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
-                    "~/questionnaire/vendor/jquery/dist/jquery.min.js",
-                    "~/questionnaire/vendor/jquery-validation/dist/jquery.validate.js", 
-                    "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
+                    "~/questionnaire/vendor/jquery-validation/dist/jquery.validate.js",
+                    "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
                     "~/Scripts/custom/bootstrap3-unobtrusive-hack.js",
                     "~/questionnaire/vendor/jquery-placeholder/jquery.placeholder.js",
                     "~/Scripts/custom/editForm.js"));
