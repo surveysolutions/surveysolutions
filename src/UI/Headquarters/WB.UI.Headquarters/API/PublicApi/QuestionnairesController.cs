@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
+using Swashbuckle.Swagger;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -37,6 +39,11 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireStorage = questionnaireStorage;
         }
 
+        /// <summary>
+        /// Gets list of imported questionnaires 
+        /// </summary>
+        /// <param name="limit">Limit number of returned rows. Max allowed value is 40</param>
+        /// <param name="offset">Skip rows</param>
         [HttpGet]
         [Route("")]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
@@ -69,8 +76,13 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new QuestionnaireApiView(questionnaires);
         }
         
+        /// <summary>
+        /// Gets list of possible interview statuses 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("statuses")]
+        [ResponseType(typeof(InterviewStatus))]
         public IEnumerable<string> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));

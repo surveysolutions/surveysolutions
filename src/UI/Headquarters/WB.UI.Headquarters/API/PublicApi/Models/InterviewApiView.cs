@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
@@ -24,7 +26,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.TotalCount = questionnaireBrowseView.TotalCount;
             this.Interviews = questionnaireBrowseView.Items.Select(
                 item => new InterviewApiItem(item.InterviewId, item.QuestionnaireId, item.QuestionnaireVersion,
-                    item.ResponsibleId, item.ResponsibleName, item.HasErrors, item.Status, item.LastEntryDate, 
+                    item.ResponsibleId, item.ResponsibleName, item.HasErrors, (InterviewStatus)Enum.Parse(typeof(InterviewStatus), item.Status), item.LastEntryDate, 
                     item.FeaturedQuestions));
 
 
