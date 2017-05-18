@@ -471,6 +471,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.InterviewerId = @event.InterviewerId;
             this.properties.IsReceivedByInterviewer = false;
+            this.properties.InterviewerAssignedDateTime = @event.AssignTime;
         }
 
         public virtual void Apply(InterviewDeleted @event) { }
@@ -501,6 +502,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(InterviewRejected @event)
         {
             this.properties.WasCompleted = false;
+            this.properties.RejectDateTime = @event.RejectTime;
         }
 
         public virtual void Apply(InterviewRejectedByHQ @event) { }
