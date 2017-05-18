@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -93,7 +92,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         [Authorize(Roles = "Administrator")]

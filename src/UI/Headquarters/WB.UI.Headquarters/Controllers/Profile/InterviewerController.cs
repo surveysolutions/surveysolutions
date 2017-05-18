@@ -20,7 +20,6 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -67,7 +66,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(InterviewerModel model)
