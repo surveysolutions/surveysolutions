@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public DateTime CreationDate { get; private set; }
 
         [DataMember]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Email { get; private set; }
 
         [DataMember]
