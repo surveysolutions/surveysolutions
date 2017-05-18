@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
-            jsonResult.ExportStatus.ShouldEqual(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess.ToString());
+            jsonResult.ExportStatus.ShouldEqual(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess);
             jsonResult.HasExportedFile.ShouldEqual(dataExportStatusView.DataExports[0].HasDataToExport);
             jsonResult.LastUpdateDate.ShouldEqual(dataExportStatusView.DataExports[0].LastUpdateDate);
             jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(

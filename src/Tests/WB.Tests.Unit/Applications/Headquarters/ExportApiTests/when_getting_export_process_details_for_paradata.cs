@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
-            jsonResult.ExportStatus.ShouldEqual(paraDataExportProcessDetails.Status.ToString());
+            jsonResult.ExportStatus.ShouldEqual(paraDataExportProcessDetails.Status);
             jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(paraDataExportProcessDetails.ProgressInPercents);
         };
             
