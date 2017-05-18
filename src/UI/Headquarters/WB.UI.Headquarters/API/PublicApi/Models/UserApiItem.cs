@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
@@ -25,9 +26,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public DateTime CreationDate { get; private set; }
 
         [DataMember]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Email { get; private set; }
 
         [DataMember]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string DeviceId { get; private set; }
 
         [DataMember]
