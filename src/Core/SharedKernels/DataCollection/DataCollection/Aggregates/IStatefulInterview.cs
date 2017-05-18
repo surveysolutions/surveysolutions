@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -165,5 +166,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
         bool AcceptsInterviewerAnswers();
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
+        InterviewSynchronizationDto GetSynchronizationDto();
     }
 }
