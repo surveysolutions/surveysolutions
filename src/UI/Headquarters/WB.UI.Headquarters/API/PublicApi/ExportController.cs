@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
@@ -15,6 +16,9 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
+    /// <summary>
+    /// Provides a methods for managing export related actions
+    /// </summary>
     [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
     [RoutePrefix(@"api/v1/export")]
     public class ExportController : ApiController
@@ -44,13 +48,21 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.dataExportStatusReader = dataExportStatusReader;
         }
 
+        /// <summary>
+        /// Downloads export file
+        /// </summary>
+        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        /// <param name="exportType">Format of export data to download</param>
+        /// <response code="200">Returns content of the export file as zip archrive</response>
+        /// <response code="404">Export file was not generated yet</response>
+        /// <response code="400">Questionnaire id is malformed</response>
         [HttpGet]
         [Route(@"{exportType}/{id}")]
         public IHttpActionResult Get(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
-                return this.Content(HttpStatusCode.NotFound, @"Invalid questionnaire identity");
+                return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             string exportedFilePath;
             switch (exportType)
@@ -73,7 +85,15 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new ProgressiveDownloadResult(this.Request, exportedFilePath, exportedFileName, @"application/zip");
         }
-        
+
+        /// <summary>
+        /// Starts export file creation
+        /// </summary>
+        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        /// <param name="exportType">Format of export data to download</param>
+        /// <response code="200">Export started</response>
+        /// <response code="400">Questionnaire id is malformed</response>
+        /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
         public IHttpActionResult StartProcess(string id, DataExportFormat exportType)
@@ -88,7 +108,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 default:
                     QuestionnaireIdentity questionnaireIdentity;
                     if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
-                        return this.Content(HttpStatusCode.NotFound, @"Invalid questionnaire identity");
+                        return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
                     var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                     if (questionnaireBrowseItem == null)
@@ -100,14 +120,22 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return this.Ok();
         }
-        
+
+        /// <summary>
+        /// Stops export file creation if one is in progress 
+        /// </summary>
+        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        /// <param name="exportType">Format of export data to download</param>
+        /// <response code="200">Canceled</response>
+        /// <response code="400">Questionnaire id is malformed</response>
+        /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
         public IHttpActionResult CancelProcess(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
-                return this.Content(HttpStatusCode.NotFound, @"Invalid questionnaire identity");
+                return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
@@ -122,13 +150,23 @@ namespace WB.UI.Headquarters.API.PublicApi
             return this.Ok();
         }
 
+        /// <summary>
+        /// Gets info about currently running exports
+        /// </summary>
+        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        /// <param name="exportType">Format of export data to download</param>
+        /// 
+        /// <response code="200"></response>
+        /// <response code="400">Questionnaire id is malformed</response>
+        /// <response code="404">Questionnaire was not found</response>
         [HttpGet]
         [Route(@"{exportType}/{id}/details")]
+        [ResponseType(typeof(ExportDetails))]
         public IHttpActionResult ProcessDetails(string id, DataExportFormat exportType)
         {
             QuestionnaireIdentity questionnaireIdentity;
             if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
-                return this.Content(HttpStatusCode.NotFound, @"Invalid questionnaire identity");
+                return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
