@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -201,7 +204,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             {
                 HasExportedFile = exportStatusByExportType.HasDataToExport,
                 LastUpdateDate = exportStatusByExportType.LastUpdateDate,
-                ExportStatus = exportStatusByExportType.StatusOfLatestExportProcess.ToString(),
+                ExportStatus = exportStatusByExportType.StatusOfLatestExportProcess,
                 RunningProcess = runningExportStatus == null ? null : new RunningProcess
                 {
                     StartDate = runningExportStatus.BeginDate,
@@ -212,15 +215,21 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         public class ExportDetails
         {
+            [Required]
             public bool HasExportedFile { get; set; }
             public DateTime? LastUpdateDate { get; set; }
-            public string ExportStatus { get; set; }
+
+            [JsonConverter(typeof(StringEnumConverter))]
+            [Required]
+            public DataExportStatus ExportStatus { get; set; }
             public RunningProcess RunningProcess { get; set; }
         }
 
         public class RunningProcess
         {
+            [Required]
             public DateTime StartDate { get; set; }
+            [Required]
             public int ProgressInPercents { get; set; }
         }
     }
