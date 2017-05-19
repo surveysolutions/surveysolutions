@@ -123,9 +123,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>问卷设计网站中的问卷</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>导入</value>
-  </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>以普查模式导入</value>
   </data>
@@ -181,7 +178,7 @@
     <value>这将允许您创建包含识别数据的单个任务。</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
-    <value>抽样模式导入</value>
+    <value/>
   </data>
   <data name="Rosters" xml:space="preserve">
     <value>登记表</value>
