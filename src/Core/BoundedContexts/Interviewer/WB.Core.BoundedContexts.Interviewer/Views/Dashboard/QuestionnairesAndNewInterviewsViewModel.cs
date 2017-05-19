@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardQuestionnairesAndNewInterviewsViewModel : ListViewModel<IDashboardItem>
+    public class QuestionnairesAndNewInterviewsViewModel : ListViewModel<IDashboardItem>
     {
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int NewInterviewsCount => this.Items.OfType<InterviewDashboardItemViewModel>().Count();
         public int CensusQuestionnairesCount => this.Items.Count() - this.NewInterviewsCount;
 
-        public DashboardQuestionnairesAndNewInterviewsViewModel(
+        public QuestionnairesAndNewInterviewsViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewViewModelFactory viewModelFactory,

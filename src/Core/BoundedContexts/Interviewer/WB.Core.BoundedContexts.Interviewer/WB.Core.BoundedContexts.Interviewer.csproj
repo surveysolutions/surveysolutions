@@ -152,11 +152,13 @@
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\CompanyLogo.cs" />
-    <Compile Include="Views\DashboardCompletedInterviewsViewModel.cs" />
-    <Compile Include="Views\DashboardQuestionnairesAndNewInterviewsViewModel.cs" />
-    <Compile Include="Views\DashboardRejectedInterviewsViewModel.cs" />
-    <Compile Include="Views\DashboardStartedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\ListViewModel.cs" />
+    <Compile Include="Views\Dashboard\QuestionnairesAndNewInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
+    <Compile Include="Views\Dashboard\TabPanel.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
@@ -177,7 +179,6 @@
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
-    <Compile Include="Views\ListViewModel.cs" />
     <Compile Include="Views\LoadingViewModel.cs" />
     <Compile Include="Views\LocationAddress.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
@@ -190,7 +191,6 @@
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
     <Compile Include="Views\CheckNewVersionViewModel.cs" />
-    <Compile Include="Views\ViewModelWithTitle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

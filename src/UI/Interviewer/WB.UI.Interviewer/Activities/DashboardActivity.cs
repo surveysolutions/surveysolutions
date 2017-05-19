@@ -69,10 +69,10 @@ namespace WB.UI.Interviewer.Activities
             {
                 fragments[fragmentIndex].ViewModel.PropertyChanged += (s, e) =>
                 {
-                    if (e.PropertyName != nameof(ViewModelWithTitle.Title)) return;
+                    if (e.PropertyName != nameof(TabPanel.Title)) return;
 
                     var tabIndex = fragments.FindIndex(fragmentInfo => fragmentInfo.ViewModel == s);
-                    tabLayout.GetTabAt(tabIndex).SetText(((ViewModelWithTitle)s).Title);
+                    tabLayout.GetTabAt(tabIndex).SetText(((TabPanel)s).Title);
                 };
             }
         }

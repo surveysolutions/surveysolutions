@@ -18,19 +18,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
 
-        public DashboardQuestionnairesAndNewInterviewsViewModel QuestionnairesAndNewInterviewes { get; }
-        public DashboardStartedInterviewsViewModel StartedInterviews { get; }
-        public DashboardCompletedInterviewsViewModel CompletedInterviews { get; }
-        public DashboardRejectedInterviewsViewModel RejectedInterviews { get; }
+        public QuestionnairesAndNewInterviewsViewModel QuestionnairesAndNewInterviewes { get; }
+        public StartedInterviewsViewModel StartedInterviews { get; }
+        public CompletedInterviewsViewModel CompletedInterviews { get; }
+        public RejectedInterviewsViewModel RejectedInterviews { get; }
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
-            DashboardQuestionnairesAndNewInterviewsViewModel dashboardQuestionnairesViewModel,
-            DashboardStartedInterviewsViewModel dashboardStartedInterviewsViewModel,
-            DashboardCompletedInterviewsViewModel dashboardCompletedInterviewsViewModel,
-            DashboardRejectedInterviewsViewModel dashboardRejectedInterviewsViewModel) : base(principal, viewModelNavigationService)
+            QuestionnairesAndNewInterviewsViewModel dashboardQuestionnairesViewModel,
+            StartedInterviewsViewModel dashboardStartedInterviewsViewModel,
+            CompletedInterviewsViewModel dashboardCompletedInterviewsViewModel,
+            RejectedInterviewsViewModel dashboardRejectedInterviewsViewModel) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;

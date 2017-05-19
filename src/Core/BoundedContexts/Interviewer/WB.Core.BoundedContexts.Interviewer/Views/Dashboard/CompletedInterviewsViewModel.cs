@@ -2,17 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardStartedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
+    public class CompletedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -20,7 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public event EventHandler OnInterviewRemoved;
 
-        public DashboardStartedInterviewsViewModel(
+        public CompletedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IPrincipal principal)
@@ -32,24 +30,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public void Load()
         {
-            this.Items = this.GetStartedInterviews().ToList();
-            this.Title = string.Format(InterviewerUIResources.Dashboard_StartedLinkText, this.Items.Count);
+            this.Items = this.GetCompletedInterviews().ToList();
+            this.Title = string.Format(InterviewerUIResources.Dashboard_CompletedLinkText, this.Items.Count);
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> GetStartedInterviews()
+        private IEnumerable<InterviewDashboardItemViewModel> GetCompletedInterviews()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;
 
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
-                (interview.Status == InterviewStatus.InterviewerAssigned && interview.StartedDateTime != null || 
-                interview.Status == InterviewStatus.Restarted));
+                interview.Status == InterviewStatus.Completed);
 
             foreach (var interviewView in interviewViews)
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(interviewView);
-                interviewDashboardItem.OnItemRemoved += InterviewDashboardItem_OnItemRemoved;
+                interviewDashboardItem.OnItemRemoved += this.InterviewDashboardItem_OnItemRemoved;
                 yield return interviewDashboardItem;
             }
         }
