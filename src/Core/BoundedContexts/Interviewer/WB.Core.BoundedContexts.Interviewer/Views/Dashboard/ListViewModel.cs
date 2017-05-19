@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class ListViewModel<TListItem> : ViewModelWithTitle where TListItem: class
+    public abstract class ListViewModel<TListItem> : TabPanel where TListItem: class
     {
         private IList<TListItem> items;
         public IList<TListItem> Items

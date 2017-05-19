@@ -1,22 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardRejectedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
+    public class RejectedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPrincipal principal;
 
-        public DashboardRejectedInterviewsViewModel(
+        public RejectedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IPrincipal principal)
