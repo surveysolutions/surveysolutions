@@ -3,7 +3,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities

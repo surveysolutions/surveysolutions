@@ -62,21 +62,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     dashboardRejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel());
         }
 
-        private static DashboardQuestionnairesAndNewInterviewsViewModel DashboardQuestionnairesViewModel()
-            => new DashboardQuestionnairesAndNewInterviewsViewModel(
+        private static QuestionnairesAndNewInterviewsViewModel DashboardQuestionnairesViewModel()
+            => new QuestionnairesAndNewInterviewsViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
 
-        private static DashboardStartedInterviewsViewModel DashboardStartedInterviewsViewModel()
-            => new DashboardStartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+        private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
+            => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
 
-        private static DashboardCompletedInterviewsViewModel DashboardCompletedInterviewsViewModel()
-            => new DashboardCompletedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+        private static CompletedInterviewsViewModel DashboardCompletedInterviewsViewModel()
+            => new CompletedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
 
-        private static DashboardRejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
-            => new DashboardRejectedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
+        private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
+            => new RejectedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
     }
 }

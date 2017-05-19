@@ -1,8 +1,8 @@
 using MvvmCross.Core.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class ViewModelWithTitle : MvxViewModel
+    public abstract class TabPanel : MvxViewModel
     {
         private string title;
         public string Title
