@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         [Required]
+        [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IList<UserRoles> Roles { get; private set; }
 
         [DataMember]
