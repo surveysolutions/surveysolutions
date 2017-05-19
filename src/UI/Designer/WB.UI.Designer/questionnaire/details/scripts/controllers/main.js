@@ -204,7 +204,7 @@ angular.module('designerApp')
                 Text: 'icon-text',
                 SingleOption: 'icon-singleoption',
                 Multimedia: 'icon-photo',
-                Area: 'icon-gpscoordinates'
+                Area: 'icon-area'
             };
 
             $scope.items = [];
