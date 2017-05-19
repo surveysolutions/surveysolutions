@@ -138,9 +138,6 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Données approuvées Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Importation par lots</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Données binaires</value>
   </data>
