@@ -296,11 +296,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewFromSnapshot(CreateInterviewFromSnapshotCommand command)
         {
-            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
+            var questionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
+            this.QuestionnaireIdentity = questionnaireIdentity;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
 
-            base.CreateInterviewFromSynchronizationMetadata(command.SynchronizedInterview.Id,
+            base.CreateInterviewFromSynchronizationMetadata(command.InterviewId,
                 command.UserId,
                 command.SynchronizedInterview.QuestionnaireId,
                 command.SynchronizedInterview.QuestionnaireVersion,
@@ -315,7 +317,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var answeredQuestions = this.Tree.AllNodes.OfType<InterviewTreeQuestion>().Where(q => q.IsAnswered()).Select(q => q.Identity);
             this.UpdateTreeWithDependentChanges(this.Tree, answeredQuestions, questionnaire);
         }
