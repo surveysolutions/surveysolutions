@@ -196,6 +196,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidClientFactory.cs" />
     <Compile Include="AndroidPathUtils.cs" />
     <Compile Include="DevicePasswordHasher.cs" />
     <Compile Include="Internals\PictureChooser.cs" />
