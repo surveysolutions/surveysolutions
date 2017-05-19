@@ -239,5 +239,13 @@ namespace WB.Tests.Abc.TestFactories
                 initialStatus: synchronizationDto.Status,
                 sycnhronizedInterview: synchronizationDto);
         }
+
+        public CreateInterviewFromSnapshotCommand CreateInterviewFromSnapshot(Guid userId, InterviewSynchronizationDto synchronizationDto)
+        {
+            return new CreateInterviewFromSnapshotCommand(
+                interviewId: synchronizationDto.Id,
+                userId: userId,
+                sycnhronizedInterview: synchronizationDto);
+        }
     }
 }

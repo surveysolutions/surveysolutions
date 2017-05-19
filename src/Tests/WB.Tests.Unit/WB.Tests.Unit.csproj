@@ -583,6 +583,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_getting_answer_as_string_for_question_linked_to_list_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level4_and_linked_question_is_on_level4.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_when_question_type_is_wrong.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_all_enabled_questions_and_census_interview_and_has_prefilled_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_all_enabled_questions_and_interview_is_not_census_and_has_prefilled_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_enabled_questions_and_interview_not_census_and_has_prefilled_question.cs" />
@@ -590,6 +591,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_get_rejected_interview__with_linked_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_supervisor_leaves_a_comment.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_for_questionnaire_with_numeric_rosters.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_with_questions_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\ObservableRangeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_setting_FilterText_and_text_contains_special_regex_characters.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToRosterQuestionViewModelTests.cs" />
