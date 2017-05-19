@@ -479,16 +479,16 @@ angular.module('designerApp')
 
             $scope.setupAceForSubstitutions = function (editor) {
                 editor.setOptions({
-                    maxLines: Infinity,
+                    maxLines: 30,
                     fontSize: 16,
                     highlightActiveLine: false,
+                    indentedSoftWrap: false,
+                    showLineNumbers: false,
                     theme: "ace/theme/github-extended"
                 });
 
                 var textExtendableMode = window.ace.require("ace/mode/text-extended").Mode;
                 editor.getSession().setMode(new textExtendableMode());
-                editor.getSession().setUseWrapMode(true);
-                editor.getSession().setTabSize(0);
                 setCommonAceOptions(editor);
             };
 
