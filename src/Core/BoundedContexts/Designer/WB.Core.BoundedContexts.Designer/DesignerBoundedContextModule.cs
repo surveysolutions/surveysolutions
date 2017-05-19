@@ -2,6 +2,7 @@
 using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -37,7 +38,6 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
 
 namespace WB.Core.BoundedContexts.Designer
 {

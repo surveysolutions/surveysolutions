@@ -1,0 +1,127 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Main.Core.Entities.SubEntities" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+
+	internal partial class <#=Model.ClassName#> : <#=typeof(IInterviewLevel).Name#> 
+	{
+		public bool IsAnswered(string answer) => !string.IsNullOrWhiteSpace(answer);
+
+		public bool IsAnswered<TY>(TY? answer) where TY : struct => answer.HasValue;
+
+		public bool IsAnswered(GeoLocation answer) => !(answer == null || (answer.Altitude == 0 && answer.Longitude == 0 && answer.Accuracy == 0 && answer.Latitude == 0));
+
+		public bool IsAnswered(decimal[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(decimal[][] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(Tuple<decimal, string>[] answer) => !(answer == null || !answer.Any());
+
+		public bool IsAnswered(YesNoAnswers answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
+
+		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Processor.ClassName #> processor) 
+		{
+			this.processor = processor;
+<#
+	if (Model.RosterScope.Length == 0)
+	{
+#>
+			this.RosterVector = RosterVector.Empty;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, RosterVector.Empty);
+<#
+	}
+	else
+	{
+#>
+			this.RosterVector = rosterVector;
+			this.Identity = new Identity(IdOf.<#=Model.Variable#>, rosterVector);
+<#
+    }
+#>
+<#
+	foreach (var method in Processor.GetEnablementConditions(Model.ClassName)) 
+    {
+#>            
+			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
+<#
+	foreach (var methodGroup in Processor.GetValidationConditions(Model.ClassName)) 
+    {
+#>
+			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
+<# 
+	}
+#>
+		}
+
+		public Func<bool> GetConditionExpression(Identity entitIdentity)
+		{
+			if (!entitIdentity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!enablementConditions.ContainsKey(entitIdentity.Id))
+				return null;
+			
+			return enablementConditions[entitIdentity.Id];
+		}
+
+		public Func<bool>[] GetValidationExpressions(Identity entitIdentity)
+		{
+			if (!entitIdentity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!validationConditions.ContainsKey(entitIdentity.Id))
+				return null;
+			
+			return validationConditions[entitIdentity.Id];
+		}
+
+		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
+		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
+
+		private readonly <#= Processor.ClassName #> processor;
+
+		private IInterviewState state => processor.state;
+
+		public RosterVector RosterVector { get; private set; }
+
+		public Identity Identity  { get; private set; }
+
+		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
+		public int @rowindex => state.GetRosterIndex(Identity);
+
+		public string @rowname => state.GetRosterTitle(Identity);
+<#
+	foreach (var question in Model.Questions) 
+    {
+#>            
+		public <#=question.TypeName#> <#=question.Variable#> => state.Get<#=question.AnswerMethodName#>Answer(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+<# 
+	}
+#>
+<#
+	foreach (var roster in Model.Rosters) 
+    {
+#>            
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
+<# 
+	}
+#>
+
+<#
+	foreach (var variable in Model.Variables) 
+    {
+#>            
+		public <#=variable.ClassName#>[] <#=variable.Variable#> => <#=variable.ExpressionMethod#>();
+<# 
+	}
+#>
+	}
