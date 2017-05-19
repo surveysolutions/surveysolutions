@@ -146,9 +146,6 @@ else
                                     </div>
                                 </div>
                             </div>
-                            @{
-                                int maxActivitiesInColumn = 6;
-                            }
                             @foreach (var syncDay in Model.SynchronizationActivity.Days)
                             {
                                 <div class="day-unit">
@@ -158,95 +155,51 @@ else
                                     @foreach (var syncDayQuarter in syncDay.Quarters)
                                     {
                                         <div class="quarter-of-day">
-                                            @{
-                                                int countOfActivitiesInColumn = 0;
-                                            }
                                             <div class="recent-activity">
-                                                @for (int i = 0; i < syncDayQuarter.FailedSynchronizationsCount; i++)
+                                                @if (!syncDayQuarter.HasAnyActivity)
                                                 {
-                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
+                                                    if (syncDayQuarter.FailedSynchronizationsCount > 0)
+                                                    {
+                                                        <div class="failed-connection"></div>
+                                                    }
+                                                    else if(syncDayQuarter.SynchronizationsWithoutChangesCount > 0)
+                                                    {
+                                                        <div class="successful-connection"></div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 0; i < syncDayQuarter.DownloadedQuestionnairesInProportionCount; i++)
+                                                    {
+                                                        <div class="census-template"></div>
+                                                    }
+
+                                                    for (int i = 0; i < syncDayQuarter.DownloadedInterviewsInProportionCount; i++)
+                                                    {
+                                                        <div class="downloaded"></div>
+                                                    }
+
+                                                    for (int i = 0; i < syncDayQuarter.UploadedInterviewsInProportionCount; i++)
+                                                    {
+                                                        <div class="uploaded"></div>
+                                                    }
+                                                    if (syncDayQuarter.HasMoreThanMaxActionsCount)
                                                     {
                                                         <div class="over-limit">
                                                             <span></span>
                                                         </div>
-                                                        break;
                                                     }
-
-                                                    <div class="failed-connection"></div>
-
-                                                    countOfActivitiesInColumn++;
                                                 }
-
-                                                @for (int i = 0; i < syncDayQuarter.SynchronizationsWithoutChangesCount; i++)
-                                                {
-                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                    {
-                                                        <div class="over-limit">
-                                                            <span></span>
-                                                        </div>
-                                                        break;
-                                                    }
-
-                                                    <div class="successful-connection"></div>
-
-                                                    countOfActivitiesInColumn++;
-                                                }
-
-                                                @for (int i = 0; i < syncDayQuarter.DownloadedQuestionnairesCount; i++)
-                                                {
-                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                    {
-                                                        <div class="over-limit">
-                                                            <span></span>
-                                                        </div>
-                                                        break;
-                                                    }
-
-                                                    <div class="census-template"></div>
-
-                                                    countOfActivitiesInColumn++;
-                                                }
-
-                                                @for (int i = 0; i < syncDayQuarter.DownloadedInterviewsCount; i++)
-                                                {
-                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                    {
-                                                        <div class="over-limit">
-                                                            <span></span>
-                                                        </div>
-                                                        break;
-                                                    }
-
-                                                    <div class="downloaded"></div>
-
-                                                    countOfActivitiesInColumn++;
-                                                }
-
-                                                @for (int i = 0; i < syncDayQuarter.UploadedInterviewsCount; i++)
-                                                {
-                                                    if (countOfActivitiesInColumn == maxActivitiesInColumn)
-                                                    {
-                                                        <div class="over-limit">
-                                                            <span></span>
-                                                        </div>
-                                                        break;
-                                                    }
-
-                                                    <div class="uploaded"></div>
-
-                                                    countOfActivitiesInColumn++;
-                                                }
-
                                             </div>
                                             <div class="unfinished-assignments @(syncDayQuarter.DownloadedQuestionnairesCount > 0 ? @"census-update" : "")">
                                                 <div class="half-of-quarter">
-                                                    @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
+                                                    @for (int i = 0; i < syncDayQuarter.NewInterviewsOnDeviceCount; i++)
                                                     {
                                                         <div class="unfinished-unit"></div>
                                                     }
                                                 </div>
                                                 <div class="half-of-quarter">
-                                                    @for (int i = 0; i < syncDayQuarter.StartedInterviewsCount; i++)
+                                                    @for (int i = 0; i < syncDayQuarter.NewInterviewsOnDeviceCount; i++)
                                                     {
                                                         <div class="unfinished-unit"></div>
                                                     }
@@ -255,6 +208,7 @@ else
                                         </div>
                                     }
                                 </div>
+                                
                             }
                             <div class="day-unit">
                                 <div class="quarter-of-day">
@@ -284,7 +238,7 @@ else
                             </div>
                         </div>
                     </div>
-
+                    
                 </div>
             </div>
         </div>

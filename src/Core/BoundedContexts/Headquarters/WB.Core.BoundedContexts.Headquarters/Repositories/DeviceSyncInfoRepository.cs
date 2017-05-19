@@ -57,19 +57,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId)
         {
+            var limitByNumberOfDays = DateTime.UtcNow.AddDays(-7);
+
             var dbDaysGroupedBySyncDate = this.dbContext.DeviceSyncInfo
-                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId)
+                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId && syncInfo.SyncDate > limitByNumberOfDays)
                 .Select(syncInfo => new DbDay
                 {
                     Statistics = syncInfo.Statistics == null ? null : new DbDayStatistics
                     {
                         DownloadedQuestionnairesCount = syncInfo.Statistics.DownloadedQuestionnairesCount,
                         DownloadedInterviewsCount = syncInfo.Statistics.DownloadedInterviewsCount,
-                        UploadedInterviewsCount = syncInfo.Statistics.UploadedInterviewsCount
+                        UploadedInterviewsCount = syncInfo.Statistics.UploadedInterviewsCount,
+                        NewInterviewsOnDeviceCount = syncInfo.Statistics.NewInterviewsOnDeviceCount
                     },
-                    StartedInterviewsCount = syncInfo.NumberOfStartedInterviews,
                     SyncDate = syncInfo.SyncDate
                 })
+                .OrderBy(syncInfo=> syncInfo.SyncDate)
                 .ToList()
                 .GroupBy(syncInfo => syncInfo.SyncDate.ToString("MMM dd"));
 
@@ -93,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         private static SyncDayQuarter ToSyncDayQuarter(IEnumerable<DbDay> quarter) => new SyncDayQuarter
         {
-            StartedInterviewsCount = quarter.Select(x=>x.StartedInterviewsCount).DefaultIfEmpty().Max(),
+            NewInterviewsOnDeviceCount = quarter.Where(x => x.Statistics != null).Select(x => x.Statistics.NewInterviewsOnDeviceCount).DefaultIfEmpty().Max(),
             DownloadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedInterviewsCount),
             DownloadedQuestionnairesCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.DownloadedQuestionnairesCount),
             UploadedInterviewsCount = quarter.Where(x => x.Statistics != null).Sum(x => x.Statistics.UploadedInterviewsCount),
@@ -108,7 +111,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public class DbDay
         {
             public DateTime SyncDate { get; set; }
-            public int StartedInterviewsCount { get; set; }
             public DbDayStatistics Statistics { get; set; }
         }
 
@@ -117,6 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             public int DownloadedInterviewsCount { get; set; }
             public int DownloadedQuestionnairesCount { get; set; }
             public int UploadedInterviewsCount { get; set; }
+            public int NewInterviewsOnDeviceCount { get; set; }
         }
     }
 }
