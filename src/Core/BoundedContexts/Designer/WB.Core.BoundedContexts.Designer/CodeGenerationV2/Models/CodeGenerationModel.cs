@@ -33,8 +33,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
         public List<LinkedFilterMethodModel> LinkedFilterMethodModel { private set;  get; } = new List<LinkedFilterMethodModel>();
 
-        public List<Guid> ConditionsPlayOrder { get; set; }
-
         public string[] AdditionalInterfaces { get; set; }
         public string[] Namespaces { get; set; }
 

@@ -202,8 +202,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new CodeGeneratorV2(new CodeGenerationModelsFactory(
                 DefaultMacrosSubstitutionService(),
-                ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                ServiceLocator.Current.GetInstance<IExpressionsPlayOrderProvider>()));
+                ServiceLocator.Current.GetInstance<ILookupTableService>()));
         }
 
         public static QuestionProperties QuestionProperties()

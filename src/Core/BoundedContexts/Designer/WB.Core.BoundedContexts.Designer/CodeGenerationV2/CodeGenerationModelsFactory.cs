@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,18 +15,15 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public class CodeGenerationModelsFactory : ICodeGenerationModelsFactory
     {
-        private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
         public CodeGenerationModelsFactory(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            ILookupTableService lookupTableService, 
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
+            ILookupTableService lookupTableService)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.lookupTableService = lookupTableService;
-            this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
         }
 
         public CodeGenerationModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
@@ -36,7 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             {
                 Id = questionnaire.PublicKey,
                 ClassName = $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
-                ConditionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire),
                 IdMap = this.CreateIdMap(questionnaire)
             };
 
