@@ -1195,7 +1195,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last syncronization date.
+        ///   Looks up a localized string similar to Last communication date.
         /// </summary>
         public static string InterviewerProfile_LastSyncronizationDate {
             get {
