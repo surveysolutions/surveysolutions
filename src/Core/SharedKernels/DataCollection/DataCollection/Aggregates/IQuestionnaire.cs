@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId);
 
-        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
+        IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor);
 
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 

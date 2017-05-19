@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests

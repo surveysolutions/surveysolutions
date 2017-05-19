@@ -195,4 +195,13 @@
   <data name="PostPackage" xml:space="preserve">
     <value>上传访谈：{0}</value>
   </data>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
+  </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>调查员登录失败</value>
+  </data>
+  <data name="InterviewerLoggedIn" xml:space="preserve">
+    <value>调查员已登录并获得了认证令牌</value>
+  </data>
 </root>

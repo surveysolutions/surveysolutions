@@ -17,19 +17,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionWithSubstitutionReferenceTomultiAnswerQuestionId = Guid.Parse("10000000000000000000000000000000");
             multiAnswerQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument(
-                new TextListQuestion
-                {
-                    PublicKey = multiAnswerQuestionId,
-                    StataExportCaption = unsupported,
-                    QuestionType = QuestionType.TextList
-                },
-                new SingleQuestion
-                {
-                    PublicKey = questionWithSubstitutionReferenceTomultiAnswerQuestionId,
-                    StataExportCaption = "var",
-                    QuestionText = string.Format("hello %{0}%!", unsupported),
-                    Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-                });
+                Create.TextListQuestion(
+                    multiAnswerQuestionId,
+                    variable: unsupported
+                ),
+                Create.SingleQuestion
+                (
+                    questionWithSubstitutionReferenceTomultiAnswerQuestionId,
+                    variable: "var",
+                    title: string.Format("hello %{0}%!", unsupported),
+                    options: new List<Answer> { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

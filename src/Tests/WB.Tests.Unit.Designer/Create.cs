@@ -281,7 +281,7 @@ namespace WB.Tests.Unit.Designer
                 : Guid.Parse(questionnaireItemParentId);
         }
 
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = "test test test",
             string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false)
         {
             return new GpsCoordinateQuestion()
@@ -373,7 +373,7 @@ namespace WB.Tests.Unit.Designer
 
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string title = null, QuestionScope scope = QuestionScope.Interviewer
+            string variable = null, string validationMessage = null, string title = "test", QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false)
         {
             return new MultimediaQuestion("Question T")
@@ -392,7 +392,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
-            string title = null,
+            string title = "test",
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -415,7 +415,7 @@ namespace WB.Tests.Unit.Designer
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, string optionsFilterExpression = null,
-            int? maxAllowedAnswers = null, string title = null)
+            int? maxAllowedAnswers = null, string title = "test", bool featured = false)
         {
             return new MultyOptionsQuestion
             {
@@ -428,7 +428,9 @@ namespace WB.Tests.Unit.Designer
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                QuestionText = title,
                 MaxAllowedAnswers = maxAllowedAnswers,
+                Featured = featured,
                 Properties = new QuestionProperties(false, true)
                 {
                     OptionsFilterExpression = optionsFilterExpression
@@ -439,7 +441,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = null)
+            string title = "test")
         {
             return new NumericQuestion
             {
@@ -459,7 +461,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
-            string title = null)
+            string title = "test test")
         {
             return new NumericQuestion
             {
@@ -498,7 +500,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
+            string variable = null, string validationMessage = null, string text = "test", QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
             bool hideIfDisabled = false)
         {
             return new QRBarcodeQuestion()
@@ -780,7 +782,7 @@ namespace WB.Tests.Unit.Designer
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
             bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false,
-            string linkedFilter = null, string title = null)
+            string linkedFilter = null, string title = "test")
         {
             return new SingleQuestion
             {
@@ -826,7 +828,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = null)
+            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = "test", QuestionScope scope = QuestionScope.Interviewer, bool featured = false)
         {
             return new TextListQuestion("Question TL")
             {
@@ -838,6 +840,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.TextList,
                 StataExportCaption = variable,
                 QuestionText = title,
+                QuestionScope = scope,
+                Featured = featured
             };
         }
 
@@ -845,7 +849,7 @@ namespace WB.Tests.Unit.Designer
             string mask = null,
             string variable = "text_question",
             string validationMessage = null,
-            string text = "Question T",
+            string text = "Question Text test",
             QuestionScope scope = QuestionScope.Interviewer,
             bool preFilled = false,
             string label = null,

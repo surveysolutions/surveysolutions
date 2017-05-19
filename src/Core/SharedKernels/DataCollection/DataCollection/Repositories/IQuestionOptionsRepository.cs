@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     public interface IQuestionOptionsRepository
     {
         IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity,
-            Guid questionId, int? parentQuestionValue, string filter, Translation translationId);
+            Guid questionId, int? parentQuestionValue, string searchFor, Translation translationId);
 
         CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translationId);
 

@@ -14,6 +14,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {

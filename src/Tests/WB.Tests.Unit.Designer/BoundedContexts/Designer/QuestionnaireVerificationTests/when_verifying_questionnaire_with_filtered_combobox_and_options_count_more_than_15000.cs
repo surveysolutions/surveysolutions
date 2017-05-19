@@ -17,12 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             int incrementer = 0;
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                    new SingleQuestion()
-                    {
-                        PublicKey = filteredComboboxId,
-                        StataExportCaption = "var",
-                        IsFilteredCombobox = true,
-                        Answers =
+                    Create.SingleQuestion(
+                        filteredComboboxId,
+                        variable: "var",
+                        isFilteredCombobox: true,
+                        options:
                             new List<Answer>(
                                 new Answer[15001].Select(
                                     answer =>
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                             AnswerValue = incrementer.ToString(),
                                             AnswerText = (incrementer++).ToString()
                                         }))
-                    });
+                    ));
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -59,6 +58,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
 
-        private static Guid filteredComboboxId = Guid.Parse("10000000000000000000000000000000");
+        private static readonly Guid filteredComboboxId = Guid.Parse("10000000000000000000000000000000");
     }
 }

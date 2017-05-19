@@ -53,6 +53,8 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<ITranslationStorage>().To<TranslationsStorage>();
             this.Bind<IPasswordHasher>().To<DevicePasswordHasher>().InSingletonScope();
             this.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
+
+            FlurlHttp.Configure(c => c.HttpClientFactory = new AndroidClientFactory());
         }
     }
 }

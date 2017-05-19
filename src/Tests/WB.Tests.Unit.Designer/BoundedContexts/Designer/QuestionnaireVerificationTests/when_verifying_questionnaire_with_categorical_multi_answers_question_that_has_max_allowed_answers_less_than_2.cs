@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -15,13 +14,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
-            {
-                PublicKey = multyOptionsQuestionId,
-                StataExportCaption = "var",
-                Answers = new List<Answer>() { new Answer() { AnswerValue = "2", AnswerText = "2" }, new Answer() { AnswerValue = "1", AnswerText = "1" } },
-                MaxAllowedAnswers = -1
-            });
+            questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                id: multyOptionsQuestionId,
+                variable: "var",
+                options: new List<Answer> { new Answer { AnswerValue = "2", AnswerText = "2" }, new Answer { AnswerValue = "1", AnswerText = "1" } },
+                maxAllowedAnswers: -1
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -40,6 +38,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
 
-        private static Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
+        private static readonly Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
     }
 }

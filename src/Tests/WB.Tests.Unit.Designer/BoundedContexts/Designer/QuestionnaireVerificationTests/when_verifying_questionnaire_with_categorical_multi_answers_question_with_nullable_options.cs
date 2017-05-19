@@ -13,11 +13,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
-            {
-                PublicKey = questionId,
-                StataExportCaption = "var"
-            });
+            questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                questionId,
+                variable: "var"
+            ));
          
             verifier = CreateQuestionnaireVerifier();
         };
@@ -29,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0060 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0060");
+            verificationMessages.ShouldContainError("WB0060");
 
         It should_return_message_with_1_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);

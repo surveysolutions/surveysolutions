@@ -27,7 +27,6 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -132,7 +131,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        [PreventDoubleSubmit]
         [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionnaireViewModel model)
         {
@@ -214,13 +212,13 @@ namespace WB.UI.Designer.Controllers
         [ValidateInput(false)]
         public ActionResult Index(int? p, string sb, int? so, string f)
         {
-            return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
+            return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f));
         }
 
         [ValidateInput(false)]
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
-            var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f);
+            var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f);
             return this.View(questionnairePublicListViewModels);
         }
 
@@ -467,15 +465,15 @@ namespace WB.UI.Designer.Controllers
         #endregion
 
         private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            int? pageIndex, string sortBy, int? sortOrder, string filter)
+            int? pageIndex, string sortBy, int? sortOrder, string searchFor)
         {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
 
             return this.questionnaireHelper.GetPublicQuestionnaires(
                 pageIndex: pageIndex,
                 sortBy: sortBy,
                 sortOrder: sortOrder,
-                filter: filter,
+                searchFor: searchFor,
                 viewerId: UserHelper.WebUser.UserId,
                 isAdmin: UserHelper.WebUser.IsAdmin);
         }
@@ -498,24 +496,24 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
-        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string filter)
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor)
         {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
 
             return this.questionnaireHelper.GetQuestionnaires(
                 pageIndex: pageIndex,
                 sortBy: sortBy,
                 sortOrder: sortOrder,
-                filter: filter,
+                searchFor: searchFor,
                 viewerId: UserHelper.WebUser.UserId,
                 isAdmin: UserHelper.WebUser.IsAdmin);
         }
         
-        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
+        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor)
         {
             this.ViewBag.PageIndex = pageIndex;
             this.ViewBag.SortBy = sortBy;
-            this.ViewBag.Filter = filter;
+            this.ViewBag.SearchFor = searchFor;
             this.ViewBag.SortOrder = sortOrder;
 
             if (sortOrder.ToBool())

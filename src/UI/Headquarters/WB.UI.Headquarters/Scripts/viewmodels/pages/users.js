@@ -1,72 +1,45 @@
 ﻿Supervisor.VM.Users = function (listViewUrl) {
     Supervisor.VM.Users.superclass.constructor.apply(this, arguments);
-    var archiveUserCommad = "ArchiveUserCommad";
-    var unArchiveUserCommad = "UnarchiveUserCommand";
+
     var self = this;
+    self.Url = new Url(window.location.href);
+    self.UsersCount = ko.observable(0);
+    
+    self.onDataTableDataReceived = function(data) {
+        self.UsersCount(data.recordsTotal);
+    };
+    
+    self.load = function () {
 
-    self.load = function() {
-        self.search();
+        self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
+        self.reloadDataTable();
     };
 
-    self.archiveUser = function (userViewItem) {
-        self.sendUserCommands([userViewItem], archiveUserCommad);
+    self.onTableInitCompleteExtra = function () { };
+
+    self.onTableInitComplete = function () {
+        $('.dataTables_filter label')
+            .on('click',
+                function (e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    } else {
+                        $(this).addClass("active");
+                        $(this)
+                            .children("input[type='search']")
+                            .delay(200)
+                            .queue(function () {
+                                $(this).focus();
+                                $(this).dequeue();
+                            });
+                    }
+                });
+
+        self.onTableInitCompleteExtra();
     };
 
-    self.archiveSupervisor = function (userViewItem) {
-        self.AskConfirmationAndRunActionIfTrue(function (filteredItems) {
-            self.SendCommand({ supervisorId: userViewItem.UserId() }, function () {
-                setTimeout(function() { self.search(); }, 100);
-            });
-        }, [userViewItem]);
-    };
-
-    self.unarchiveUser = function (userViewItem) {
-        self.AskConfirmationAndRunActionIfTrue(function (filteredItems) {
-            self.SendCommands({ userIds: [userViewItem.UserId()], archive: false }, function () {
-                setTimeout(function () { self.search(); }, 100);
-            });
-        }, [userViewItem]);
-    };
-
-    self.unarchiveInterviewers = function () {
-        self.sendUserCommands(self.GetSelectedItemsAfterFilter(function (item) { return true; }), unArchiveUserCommad);
-    };
-
-    self.archiveInterviewers = function () {
-        self.sendUserCommands(self.GetSelectedItemsAfterFilter(function (item) { return true; }), archiveUserCommad);
-    };
-
-    self.sendUserCommands = function(filteredItems, commandName) {
-        self.AskConfirmationAndRunActionIfTrue(function(filteredItems) {
-            var commands = ko.utils.arrayMap(filteredItems, function (rawItem) {
-                return ko.toJSON({ userId: rawItem.UserId() });
-            });
-
-            var command = {
-                type: commandName,
-                commands: commands
-            };
-            self.SendCommands(command, function () {
-                setTimeout(function () { self.search(); }, 100);
-            });
-        }, filteredItems);
-    };
-
-    self.AskConfirmationAndRunActionIfTrue = function (action, filteredItems) {
-        var messageHtml = self.getBindedHtmlTemplate("#confirm-delete-template", filteredItems);
-
-        if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
-            return;
-        }
-
-        messageHtml += $("#confirm-continue-message-template").html();
-
-        bootbox.confirm(messageHtml, function (result) {
-            if (result) {
-                action(filteredItems);
-            }
-        });
-    };
 };
+
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Users, Supervisor.VM.ListView);

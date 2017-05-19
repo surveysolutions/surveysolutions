@@ -26,12 +26,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>
                     {
-                        new NumericQuestion
-                        {
-                            PublicKey = rosterSizeQuestionId,
-                            StataExportCaption = "var",
-                            IsInteger = true
-                        }
+                        Create.NumericIntegerQuestion(
+                            rosterSizeQuestionId,
+                            variable: "var"
+                        )
                     }.ToReadOnlyCollection()
                 }
             });

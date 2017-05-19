@@ -72,6 +72,7 @@
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewFromSnapshotCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\RejectInterviewToInterviewerCommand.cs" />
     <Compile Include="Commands\Interview\SwitchTranslation.cs" />

@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(filebasedExportedDataAccessor: filebasedExportedDataAccessor, fileSystemAccessor: fileSystemAccessor);
         };
 
-        Because of = () => result = controller.Get(new QuestionnaireIdentity().ToString(), "spss");
+        Because of = () => result = controller.Get(new QuestionnaireIdentity().ToString(), DataExportFormat.SPSS);
 
         It should_return_http_not_found_response = () =>
             result.ShouldBeOfExactType<NotFoundResult>();

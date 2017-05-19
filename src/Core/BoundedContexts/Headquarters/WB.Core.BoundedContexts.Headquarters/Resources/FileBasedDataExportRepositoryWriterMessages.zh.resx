@@ -133,7 +133,7 @@
     <value>调查员</value>
   </data>
   <data name="InterviewWithIdIsAbsentFormat" xml:space="preserve">
-    <value>没有编号为'{0}'的访谈</value>
+    <value>编号为'{0}'的访谈缺失</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>督导员</value>

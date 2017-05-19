@@ -36,6 +36,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +49,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
@@ -267,6 +271,10 @@
     </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
@@ -654,7 +662,9 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
+    <EmbeddedResource Include="Content\swagger.css" />
     <Content Include="Dependencies\build\vue\troubleshooting.js" />
+    <Content Include="Dependencies\css\jqplot-override.css" />
     <Content Include="Dependencies\dist\*.*" />
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
@@ -797,11 +807,13 @@
     <EmbeddedResource Include="Resources\DataTables.ru.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.zh.resx" />
     <EmbeddedResource Include="Resources\Details.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Details.zh.resx" />
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
@@ -844,6 +856,7 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ru.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.zh.resx" />
     <EmbeddedResource Include="Resources\Interviews.fr.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -885,6 +898,7 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.ru.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.zh.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OutdatedBrowser.Designer.cs</LastGenOutput>
@@ -892,6 +906,7 @@
     <EmbeddedResource Include="Resources\OutdatedBrowser.ru.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OutdatedBrowser.zh.resx" />
     <EmbeddedResource Include="Resources\Pages.fr.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
@@ -988,6 +1003,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1009,6 +1025,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterview.zh.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1018,6 +1035,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSetup.zh.resx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1157,6 +1175,7 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
+    <Content Include="Scripts\viewmodels\pages\questionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
@@ -1171,12 +1190,13 @@
     <Content Include="Scripts\viewmodels\pages\interview\new\newinterview.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\mapreport.js" />
+    <Content Include="Scripts\viewmodels\pages\editable-users.js" />
+    <Content Include="Scripts\viewmodels\pages\importquestionaires.js" />
+    <Content Include="Scripts\viewmodels\pages\users.js" />
     <Content Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
-    <Content Include="Scripts\viewmodels\pages\questionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
     <Content Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
-    <Content Include="Scripts\viewmodels\pages\users.js" />
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
@@ -1296,7 +1316,6 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
-    <Content Include="Views\Supervisor\Archived.cshtml" />
     <Content Include="Views\BatchUserUpload\NewUserBatchUpload.cshtml" />
     <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserPreloadigVerificationDetails.cshtml" />
@@ -1404,6 +1423,7 @@
     <Content Include="Views\Shared\Profile\UpdatePassword.cshtml" />
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
+    <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1420,8 +1440,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
-    <Compile Include="API\BaseApiServiceController.cs" />
-    <Compile Include="API\ExportController.cs" />
+    <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
+    <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
     <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
@@ -1444,16 +1465,17 @@
     <Compile Include="API\Interviewer\v2\InterviewsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\UsersApiV2Controller.cs" />
-    <Compile Include="API\InterviewsController.cs" />
+    <Compile Include="API\PublicApi\InterviewsController.cs" />
     <Compile Include="API\ProgressiveDownloadResult.cs" />
-    <Compile Include="API\QuestionnairesController.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
+    <Compile Include="API\PublicApi\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\TroubleshootingApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
-    <Compile Include="API\UsersController.cs" />
+    <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="API\WebInterview\IConnectionLimiter.cs" />
@@ -1541,6 +1563,7 @@
     </Compile>
     <Compile Include="App_Start\NlogExceptionFilter.cs" />
     <Compile Include="App_Start\NLogExceptionLogger.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
@@ -1643,23 +1666,23 @@
     <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewKey.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\Api\AssignChangeApiModel.cs" />
+    <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\DataTableRequestModelWithFilter.cs" />
     <Compile Include="Models\Api\DataTableResponseModel.cs" />
     <Compile Include="Models\Api\DataTableRequestModel.cs" />
-    <Compile Include="Models\Api\InterviewApiDetails.cs" />
-    <Compile Include="Models\Api\InterviewApiItem.cs" />
-    <Compile Include="Models\Api\InterviewApiView.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiDetails.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
     <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
     <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiItem.cs" />
-    <Compile Include="Models\Api\QuestionnaireApiView.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
     <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
-    <Compile Include="Models\Api\StatusChangeApiModel.cs" />
-    <Compile Include="Models\Api\UserApiDetails.cs" />
-    <Compile Include="Models\Api\UserApiItem.cs" />
-    <Compile Include="Models\Api\UserApiView.cs" />
+    <Compile Include="API\PublicApi\Models\StatusChangeApiModel.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
+    <Compile Include="API\PublicApi\Models\UserApiView.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />

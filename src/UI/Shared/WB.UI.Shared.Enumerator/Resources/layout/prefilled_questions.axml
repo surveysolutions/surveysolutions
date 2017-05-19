@@ -17,6 +17,9 @@
           local:MvxBind="Text QuestionnaireTitle" />
   </android.support.v7.widget.Toolbar>
 
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+             local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />
+
   <MvxRecyclerView
     style="@style/PrefilledQuestions_List"
     android:id="@+id/questionnaireEntitiesList"

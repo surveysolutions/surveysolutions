@@ -32,42 +32,42 @@
                     {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.SupervisorAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.InterviewerAssigned', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.Completed', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedBySupervisor', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedBySupervisor');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedBySupervisor', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.RejectedByHeadquarters', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedByHeadquarters');
+                            return model.getLinkToInterviews(data, row, '@InterviewStatus.ApprovedByHeadquarters', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }, {
                         className: "type-numeric",
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row);
+                            return model.getLinkToInterviews(data, row, '', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     }
                 ];

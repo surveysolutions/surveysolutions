@@ -88,13 +88,13 @@
    <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
-      match="/configuration/appSettings/add[@key='ReCaptchaPrivateKey']/@value" />
+      match="/configuration/appSettings/add[@key='reCaptchaPrivateKey']/@value" />
    </parameter>
   <parameter name="ReCaptcha public key">
    <parameterValidation kind="AllowEmpty" />
    <parameterEntry kind="XmlFile"
       scope="\\web.config$"
-      match="/configuration/appSettings/add[@key='ReCaptchaPublicKey']/@value" />
+      match="/configuration/appSettings/add[@key='reCaptchaPublicKey']/@value" />
    </parameter>
    <parameter name="Enable Tracking"
       defaultValue="true">

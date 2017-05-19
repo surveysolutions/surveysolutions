@@ -156,4 +156,76 @@
   <data name="StartDate" xml:space="preserve">
     <value>开始日期</value>
   </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>二进制数据存档（图片等）</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>兆</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>未生成</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>数据文档倡议（DDI）XML数据</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>您不能改变导出设置，因为导出过程已经开始运行</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>点击生成按钮创建一个数据归档。表格中将显示归档创建的时间和大小。最近一次生成的数据归档可以通过点击下载按钮下载。要创建新的归档，请再次点击生成按钮。</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>导出范围：</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>文件大小</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>生成</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>生成中</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>导出队列中的项目：</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>最近一次生成</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>调查主数据</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>没有数据</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>访谈过程的元数据（事件及时间）</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>队列</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>已导出访谈的状态</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>（版本）调查模板</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Tabular格式</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>XML格式</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>访谈主数据的zip压缩包</value>
+  </data>
 </root>
