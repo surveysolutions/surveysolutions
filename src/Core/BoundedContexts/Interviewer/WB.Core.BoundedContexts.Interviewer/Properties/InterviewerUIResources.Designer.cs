@@ -1001,6 +1001,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string Synchronization_Done {
+            get {
+                return ResourceManager.GetString("Synchronization_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization completed with errors.
         /// </summary>
         public static string Synchronization_DoneWithErrors_Title {

@@ -615,4 +615,7 @@
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Загрузка логотипа</value>
   </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
 </root>

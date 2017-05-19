@@ -264,6 +264,9 @@ for further instructions</value>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
   </data>
