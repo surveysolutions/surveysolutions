@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
-            IStatefulInterview interview, NavigationState navigationState, IProgress<string> progress, CancellationToken cancellationToken)
+            IStatefulInterview interview, NavigationIdentity navigationIdentity, IProgress<string> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         sycnhronizedInterview: synchronizationDto);
                     await this.commandService.ExecuteAsync(createInterviewCommand, null, cancellationToken);
 
-                    this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationState.CurrentNavigationIdentity);
+                    this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
                 }
                 catch (Exception)
                 {
