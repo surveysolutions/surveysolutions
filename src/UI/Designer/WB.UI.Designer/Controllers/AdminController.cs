@@ -251,16 +251,16 @@ namespace WB.UI.Designer.Controllers
 
                 bool isAttachmentEntry =
                     zipEntryPathChunks.Length == 4 &&
-                    zipEntryPathChunks[1].ToLower() == "attachments";
+                    string.Equals(zipEntryPathChunks[1], "attachments", StringComparison.CurrentCultureIgnoreCase);
 
                 bool isLookupTableEntry =
                     zipEntryPathChunks.Length == 3 &&
-                    zipEntryPathChunks[1].ToLower() == "lookup tables" &&
+                    string.Equals(zipEntryPathChunks[1], "lookup tables", StringComparison.CurrentCultureIgnoreCase) &&
                     zipEntryPathChunks[2].ToLower().EndsWith(".txt");
 
                 bool isTranslationEntry =
                     zipEntryPathChunks.Length == 3 &&
-                    zipEntryPathChunks[1].ToLower() == "translations" &&
+                    string.Equals(zipEntryPathChunks[1], "translations", StringComparison.CurrentCultureIgnoreCase) &&
                     (".xlsx".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase) ||
                     ".ods".Equals(Path.GetExtension(zipEntryPathChunks[2]), StringComparison.InvariantCultureIgnoreCase));
 
@@ -285,7 +285,7 @@ namespace WB.UI.Designer.Controllers
                     var attachmentId = Guid.Parse(zipEntryPathChunks[2]);
                     var fileName = zipEntryPathChunks[3];
 
-                    if (fileName.ToLower() == "content-type.txt")
+                    if (string.Equals(fileName, "content-type.txt", StringComparison.CurrentCultureIgnoreCase))
                     {
                         string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 

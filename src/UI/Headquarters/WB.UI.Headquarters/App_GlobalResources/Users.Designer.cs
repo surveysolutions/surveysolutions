@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ({0} api users).
+        /// </summary>
+        internal static string ApiUsersCountDescription {
+            get {
+                return ResourceManager.GetString("ApiUsersCountDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archived supervisors.
         /// </summary>
         internal static string ArchivedSupervisors {
@@ -160,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To complete installation, please, create a new Administrator user.
+        ///   Looks up a localized string similar to To complete installation, please create a new Administrator user.
         /// </summary>
         internal static string CreateAdmin {
             get {
@@ -277,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ({0} headquarters).
+        /// </summary>
+        internal static string HeadquartersCountDescription {
+            get {
+                return ResourceManager.GetString("HeadquartersCountDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Headquarter&apos;s email.
         /// </summary>
         internal static string HeadquartersEmail {
@@ -286,7 +304,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Impersonate as this user in read only mode.
+        ///   Looks up a localized string similar to Impersonate this user in read only mode.
         /// </summary>
         internal static string ImpersonateAsUser {
             get {
@@ -309,6 +327,15 @@ namespace Resources {
         internal static string Interviewers {
             get {
                 return ResourceManager.GetString("Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ({0} interviewers).
+        /// </summary>
+        internal static string InterviewersCountDescription {
+            get {
+                return ResourceManager.GetString("InterviewersCountDescription", resourceCulture);
             }
         }
         
@@ -372,6 +399,15 @@ namespace Resources {
         internal static string Observers {
             get {
                 return ResourceManager.GetString("Observers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ({0} observers).
+        /// </summary>
+        internal static string ObserversCountDescription {
+            get {
+                return ResourceManager.GetString("ObserversCountDescription", resourceCulture);
             }
         }
         

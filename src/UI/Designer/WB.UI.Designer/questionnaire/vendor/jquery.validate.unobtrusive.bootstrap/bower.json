@@ -1,0 +1,25 @@
+{
+  "name": "jquery.validate.unobtrusive.bootstrap",
+  "main": "jquery.validate.unobtrusive.bootstrap.js",
+  "homepage": "https://github.com/sandrocaseiro/jquery.validate.unobtrusite.bootstrap",
+  "authors": [
+    "Sandro Caseiro <sandromc@gmail.com>"
+  ],
+  "description": "A jQuery Validate Unobtrusive extension for Bootstrap 3",
+  "keywords": [
+    "jquery",
+    "validate",
+    "unobtrusive",
+    "bootstrap",
+    "validation",
+    "validator"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

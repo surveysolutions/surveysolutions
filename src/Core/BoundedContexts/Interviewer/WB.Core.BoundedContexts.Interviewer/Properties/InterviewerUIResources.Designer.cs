@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed {0}.
+        ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
             get {
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New {0}.
+        ///   Looks up a localized string similar to New ({0}).
         /// </summary>
         public static string Dashboard_NewItemsLinkText {
             get {
@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected {0}.
+        ///   Looks up a localized string similar to Rejected ({0}).
         /// </summary>
         public static string Dashboard_RejectedLinkText {
             get {
@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Started {0}.
+        ///   Looks up a localized string similar to Started ({0}).
         /// </summary>
         public static string Dashboard_StartedLinkText {
             get {
@@ -794,7 +794,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Supervisor website.
+        ///   Looks up a localized string similar to You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website.
         /// </summary>
         public static string NotSupportedServerSyncProtocolVersion {
             get {
@@ -997,6 +997,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Check_Obsolete_Questionnaires_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string Synchronization_Done {
+            get {
+                return ResourceManager.GetString("Synchronization_Done", resourceCulture);
             }
         }
         
@@ -1496,7 +1505,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Supervisor website address is valid and your device has corrent current date and time.
+        ///   Looks up a localized string similar to Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time.
         /// </summary>
         public static string UnacceptableSSLCertificate {
             get {

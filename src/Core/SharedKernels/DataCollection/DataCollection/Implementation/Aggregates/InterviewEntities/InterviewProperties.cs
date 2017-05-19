@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsHardDeleted { get; set; }
         public DateTime? StartedDate { get; set; }
         public DateTime? CompletedDate { get; set; }
+        public DateTime? RejectDateTime { get; set; }
+        public DateTime? InterviewerAssignedDateTime { get; set; }
 
         private Guid? supervisorId;
         public Guid? SupervisorId

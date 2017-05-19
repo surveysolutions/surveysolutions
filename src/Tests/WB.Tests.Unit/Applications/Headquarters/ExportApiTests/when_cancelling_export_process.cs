@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportProcessesService: mockOfDataExportProcessesService.Object);
         };
 
-        Because of = () => result = controller.CancelProcess(questionnaireIdentity.ToString(), "tabular");
+        Because of = () => result = controller.CancelProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkResult>();

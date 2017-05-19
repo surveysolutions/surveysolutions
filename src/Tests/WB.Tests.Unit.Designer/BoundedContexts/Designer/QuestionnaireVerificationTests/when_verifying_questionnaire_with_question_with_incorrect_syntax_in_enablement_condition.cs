@@ -15,12 +15,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion
-                {
-                    PublicKey = questionId,
-                    ConditionExpression = "[hehe] &=+< 5",
-                    StataExportCaption = "var1"
-                });
+                Create.TextQuestion(
+                    questionId,
+                    enablementCondition: "[hehe] &=+< 5",
+                    variable: "var1"
+                ));
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };

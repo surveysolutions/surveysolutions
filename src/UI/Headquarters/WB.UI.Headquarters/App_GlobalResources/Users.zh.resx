@@ -216,4 +216,46 @@
   <data name="UserName" xml:space="preserve">
     <value>用户名</value>
   </data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>账号创建日期</value>
+  </data>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>添加调查员</value>
+  </data>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>归档状态</value>
+  </data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
+    <value>总部账户创建日期</value>
+  </data>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>总部电子邮箱</value>
+  </data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve">
+    <value>平板电脑尚未与服务器成功同步的调查员数量</value>
+  </data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve">
+    <value>团队中的调查员数量</value>
+  </data>
+  <data name="ObserversEmail" xml:space="preserve">
+    <value>观察员电子邮箱</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>督导员账号创建日期</value>
+  </data>
+  <data name="SupervisorEmail" xml:space="preserve">
+    <value>督导员电子邮箱</value>
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>编辑督导员</value>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>（{0}个调查员）</value>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>您团队中的督导员</value>
+  </data>
 </root>

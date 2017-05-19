@@ -40,8 +40,8 @@ namespace WB.UI.Designer.Implementation.Services
         }
 
         private bool IsCaptchaEnabled => AppSettings.Instance.IsReCaptchaEnabled 
-            && !string.IsNullOrEmpty(this.configurationManager.AppSettings["ReCaptchaPrivateKey"]) 
-            && !string.IsNullOrEmpty(this.configurationManager.AppSettings["ReCaptchaPublicKey"]);
+            && !string.IsNullOrEmpty(this.configurationManager.AppSettings["recaptchaPrivateKey"]) 
+            && !string.IsNullOrEmpty(this.configurationManager.AppSettings["recaptchaPublicKey"]);
 
         public bool ShouldShowCaptcha()
         {

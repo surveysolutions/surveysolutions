@@ -27,26 +27,25 @@ if (!(Test-Path $HQsitePath)) {
 	New-Item (Join-Path $HQsitePath "App_Data") -ItemType Directory
 }
 
+$supportPath = Join-path $workdir "SupportPackage"
+$targetSupportPath = Join-path $HQsitePath "Support"
+
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
+Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
-	$file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
-	$version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
-	
-	#[System.Reflection.Assembly]::ReflectionOnlyLoadFrom($file).ImageRuntimeVersion;
+$file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
+$version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
-    & (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" "/p:SurveySolutionsVersion=$version" | Write-Host
+& (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" "/p:SurveySolutionsVersion=$version" | Write-Host
 
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
-	if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build installation']"
-
-        if (-not $MultipleSolutions) {
-            Write-Host "##teamcity[buildProblem description='Failed to build installation']"
-        }
+if (-not $wasBuildSuccessfull) {
+    Write-Host "##teamcity[message status='ERROR' text='Failed to build installation']"
+    if (-not $MultipleSolutions) {
+        Write-Host "##teamcity[buildProblem description='Failed to build installation']"
     }
-	
-
+}
 
 Set-Location $workdir
 

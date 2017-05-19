@@ -21,19 +21,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     fixedTitles: new[] {"1", "2"},
                     variable: "a12345678901234567890123456789012",
                     children: new IComposite[]
-                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var1"}}),
+                    {Create.TextListQuestion(variable: "var1")}),
 
                 Create.FixedRoster(rosterId: rosterWithVariableNameStartingFromNumberId,
                     fixedTitles: new[] {"1", "2"},
                     variable: "1number",
                     children: new IComposite[]
-                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var2"}}),
+                    {Create.TextListQuestion(variable: "var2")}),
 
                 Create.FixedRoster(rosterId: rosterWithVariableNameWithInvalidSymbolsId,
                     fixedTitles: new[] {"1", "2"},
                     variable: "numberЫ",
                     children: new IComposite[]
-                    {new TextListQuestion() {PublicKey = Guid.NewGuid(), StataExportCaption = "var3"}})
+                    {Create.TextListQuestion(variable: "var3")})
             });
 
             verifier = CreateQuestionnaireVerifier();

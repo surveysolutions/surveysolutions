@@ -14,8 +14,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly string[] predefinedVariables = {"self", "@optioncode", "@rowindex", "@rowname", "@rowcode" };
-
+        private readonly IReadOnlyList<VariableName> predefinedVariables = new List<VariableName>
+        {
+            new VariableName(null, "self", null),
+            new VariableName(null, "@optioncode", "int"),
+            new VariableName(null, "@rowindex", "int"),
+            new VariableName(null, "@rowname", "string"),
+            new VariableName(null, "@rowcode", "decimal")
+        };
 
         public ChapterInfoViewFactory(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
@@ -125,18 +131,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
                 LinkedToRosterId = question.LinkedToRosterId?.FormatGuid(),
-                LinkedFilterExpression = question.LinkedFilterExpression,
+                LinkedFilterExpression = question.LinkedFilterExpression
             };
         }
 
         private VariableName[] CollectVariableNames(QuestionnaireDocument document)
         {
-            List<VariableName> variables = predefinedVariables.Select(x => new VariableName(null, x)).ToList();
+            List<VariableName> variables = predefinedVariables.ToList();
 
             var questionnaireItems = document.TreeToEnumerable<IComposite>(x => x.Children);
 
             var variableNames = questionnaireItems
-                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable()))
+                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable(), x.GetQuestionType(document)))
                 .Where(variableName => !string.IsNullOrWhiteSpace(variableName.Name))
                 .ToList();
 

@@ -57,6 +57,8 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("")]
+        //in next version of API rename filter to smth like SearchFor
+        //to comply with Amason firewall
         public HttpResponseMessage Get(string filter = "", string sortOrder = "", [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
@@ -66,7 +68,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 Page = pageIndex,
                 PageSize = pageSize,
                 Order = sortOrder,
-                Filter = filter
+                SearchFor = filter
             });
 
             var questionnaires = new PagedQuestionnaireCommunicationPackage

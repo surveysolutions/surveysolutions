@@ -130,13 +130,13 @@
     <value>Seu aplicativo não é compatível com o servidor 1. Atualizar seu aplicativo do entrevistador.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>{0} concluído</value>
+    <value>({0}) concluído</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Criar entrevista</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Nova {0}</value>
+    <value>Nova ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Sincronizar</value>
@@ -154,13 +154,13 @@
     <value>Esta entrevista é concluída. Quer reiniciar a entrevista?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>{0} rejeitado</value>
+    <value>({0}) rejeitado</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Tem certeza que deseja excluir esta entrevista "{0}" ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Começou {0}</value>
+    <value>Começou ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} atribuições para {1}</value>

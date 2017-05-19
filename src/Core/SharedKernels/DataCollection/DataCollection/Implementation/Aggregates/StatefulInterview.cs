@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.ReplaceSubstitutions();
 
-            CalculateLinkedToListOptionsOnTree(this.Tree, false); 
+            CalculateLinkedToListOptionsOnTree(this.Tree, this.ExpressionProcessorStatePrototype, false); 
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
             
@@ -293,7 +293,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
         }
-        
+
+        public void CreateInterviewFromSnapshot(CreateInterviewFromSnapshotCommand command)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(command.SynchronizedInterview.QuestionnaireId, command.SynchronizedInterview.QuestionnaireVersion);
+            this.QuestionnaireIdentity = questionnaireIdentity;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
+
+            base.CreateInterviewFromSynchronizationMetadata(command.InterviewId,
+                command.UserId,
+                command.SynchronizedInterview.QuestionnaireId,
+                command.SynchronizedInterview.QuestionnaireVersion,
+                command.SynchronizedInterview.Status,
+                new AnsweredQuestionSynchronizationDto[0], 
+                command.SynchronizedInterview.Comments,
+                command.SynchronizedInterview.RejectDateTime,
+                command.SynchronizedInterview.InterviewerAssignedDateTime,
+                true,
+                command.SynchronizedInterview.CreatedOnClient
+            );
+
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
+
+            var answeredQuestions = this.Tree.AllNodes.OfType<InterviewTreeQuestion>().Where(q => q.IsAnswered()).Select(q => q.Identity);
+            this.UpdateTreeWithDependentChanges(this.Tree, answeredQuestions, questionnaire);
+        }
+
+
+
         #endregion
 
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
@@ -598,6 +627,144 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IReadOnlyCollection<IInterviewTreeNode> GetAllSections()
         {
             return this.Tree.Sections;
+        }
+
+        public InterviewSynchronizationDto GetSynchronizationDto()
+        {
+            var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
+            var disabledGroups = new HashSet<InterviewItemId>();
+            var disabledQuestions = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new List<Identity>();
+            var validAnsweredQuestions = new HashSet<InterviewItemId>();
+            var invalidAnsweredQuestions = new HashSet<InterviewItemId>();
+            var validStaticTexts = new List<Identity>();
+            var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
+            var failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
+
+            foreach (var question in Tree.FindQuestions())
+            {
+                CommentSynchronizationDto[] comments = question.AnswerComments.Select(ac => new CommentSynchronizationDto()
+                {
+                    Date = ac.CommentTime,
+                    Text = ac.Comment,
+                    UserId = ac.UserId,
+                    UserRole = ac.UserRole
+                }).ToArray();
+
+                var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
+                    question.Identity.RosterVector,
+                    GetAnswerAsObject(question),
+                    comments);
+
+                if (question.IsAnswered() || answeredQuestion.HasComments())
+                {
+                    answeredQuestions.Add(answeredQuestion);
+                }
+
+                if (question.IsDisabled())
+                {
+                    disabledQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                }
+                else
+                {
+                    if (question.IsAnswered() && !question.IsValid)
+                    {
+                        invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                        failedValidationConditions.Add(question.Identity, question.FailedValidations.ToList());
+                    }
+                    if (question.IsValid)
+                    {
+                        validAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
+                    }
+                }
+            }
+
+            foreach (var group in Tree.AllNodes.OfType<InterviewTreeGroup>())
+            {
+                if (group.IsDisabled())
+                    disabledGroups.Add(new InterviewItemId(group.Identity.Id, group.Identity.RosterVector));
+            }
+
+            foreach (var staticText in Tree.FindStaticTexts())
+            {
+                var staticTextIdentity = staticText.Identity;
+                if (!staticText.IsDisabled())
+                {
+                    if (!staticText.IsValid)
+                    {
+                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
+                            staticTextIdentity, staticText.FailedValidations.ToList()));
+                    }
+                }
+                else
+                {
+                    disabledStaticTexts.Add(staticTextIdentity);
+                }
+            }
+
+            Dictionary<InterviewItemId, object> variableValues = new Dictionary<InterviewItemId, object>();
+            HashSet<InterviewItemId> disabledVariables = new HashSet<InterviewItemId>();
+
+            foreach (var variable in Tree.AllNodes.OfType<InterviewTreeVariable>())
+            {
+                if (variable.IsDisabled())
+                {
+                    disabledVariables.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector));
+                }
+                else if (variable.HasValue)
+                {
+                    variableValues.Add(new InterviewItemId(variable.Identity.Id, variable.Identity.RosterVector), variable.Value);
+                }
+            }
+
+            return new InterviewSynchronizationDto(
+                id: Id,
+                status: Status,
+                comments: SupervisorRejectComment,
+                rejectDateTime:  this.properties.RejectDateTime,
+                interviewerAssignedDateTime : this.properties.InterviewerAssignedDateTime,
+                userId: CurrentResponsibleId,
+                supervisorId: this.properties.SupervisorId,
+                questionnaireId: QuestionnaireIdentity.QuestionnaireId,
+                questionnaireVersion: QuestionnaireIdentity.Version,
+                answers: answeredQuestions.ToArray(),
+                disabledGroups: disabledGroups,
+                disabledQuestions: disabledQuestions,
+                disabledStaticTexts: disabledStaticTexts,
+                validAnsweredQuestions: validAnsweredQuestions,
+                invalidAnsweredQuestions: invalidAnsweredQuestions,
+                validStaticTexts: validStaticTexts,
+                invalidStaticTexts: invalidStaticTexts,
+                rosterGroupInstances: null /* Obsolete */,
+                failedValidationConditions: failedValidationConditions.ToList(),
+                linkedQuestionOptions: null /* Obsolete */,
+                variables: variableValues,
+                disabledVariables: disabledVariables,
+                wasCompleted: this.properties.WasCompleted,
+                createdOnClient: CreatedOnClient);
+        }
+
+        private object GetAnswerAsObject(InterviewTreeQuestion question)
+        {
+            if (!question.IsAnswered()) return null;
+
+            if (question.IsText) return question.AsText.GetAnswer()?.Value;
+            if (question.IsMultimedia) return question.AsMultimedia.GetAnswer()?.FileName;
+            if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer()?.DecodedText;
+            if (question.IsInteger) return question.AsInteger.GetAnswer()?.Value;
+            if (question.IsDouble) return question.AsDouble.GetAnswer()?.Value;
+            if (question.IsDateTime) return question.AsDateTime.GetAnswer()?.Value;
+            if (question.IsGps) return question.AsGps.GetAnswer()?.Value;
+            if (question.IsTextList) return question.AsTextList.GetAnswer()?.ToTupleArray();
+            if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer()?.SelectedValue;
+            if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer()?.CheckedValues;
+            if (question.IsSingleFixedOption) return question.AsSingleFixedOption.GetAnswer()?.SelectedValue;
+            if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray();
+            if (question.IsYesNo) return question.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray();
+            if (question.IsSingleLinkedToList) return question.AsSingleLinkedToList.GetAnswer().SelectedValue;
+            if (question.IsMultiLinkedToList) return question.AsMultiLinkedToList.GetAnswer()?.ToDecimals()?.ToHashSet();
+
+            return null;
         }
     }
 }

@@ -516,6 +516,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.properties.InterviewerId = @event.InterviewerId;
             this.properties.IsReceivedByInterviewer = false;
+            this.properties.InterviewerAssignedDateTime = @event.AssignTime;
         }
 
         public virtual void Apply(InterviewDeleted @event) { }
@@ -546,6 +547,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(InterviewRejected @event)
         {
             this.properties.WasCompleted = false;
+            this.properties.RejectDateTime = @event.RejectTime;
         }
 
         public virtual void Apply(InterviewRejectedByHQ @event) { }
@@ -2515,7 +2517,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 CalculateLinkedOptionsOnTree(interviewTree);
             }
             
-            CalculateLinkedToListOptionsOnTree(interviewTree);
+            CalculateLinkedToListOptionsOnTree(interviewTree, interviewExpressionState);
         }
 
         [Obsolete("v 5.10, release 01 jul 16")]
@@ -2537,12 +2539,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected static void CalculateLinkedToListOptionsOnTree(InterviewTree tree, bool resetAnswerOnOptionChange = true)
+        protected static void CalculateLinkedToListOptionsOnTree(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState, bool resetAnswerOnOptionChange = true)
         {
             IEnumerable<InterviewTreeQuestion> linkedToListQuestions = tree.FindQuestions().Where(x => x.IsLinkedToListQuestion);
             foreach (InterviewTreeQuestion linkedQuestion in linkedToListQuestions)
             {
                 linkedQuestion.CalculateLinkedToListOptions(resetAnswerOnOptionChange);
+                if (!linkedQuestion.IsAnswered())
+                {
+                    interviewExpressionState.RemoveAnswer(linkedQuestion.Identity);
+                }
             }
         }
 

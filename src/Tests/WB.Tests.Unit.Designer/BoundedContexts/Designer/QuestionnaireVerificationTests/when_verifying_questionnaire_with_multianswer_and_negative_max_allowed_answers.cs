@@ -16,14 +16,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
-            {
-                PublicKey = multyOptionsQuestionId,
-                StataExportCaption = "var",
-                Answers = new List<Answer>() { new Answer() { AnswerValue = "1", AnswerText = "Hello, 1"},
+            questionnaire = CreateQuestionnaireDocument(Create.MultyOptionsQuestion(
+                multyOptionsQuestionId,
+                variable: "var",
+                options: new List<Answer>() { new Answer() { AnswerValue = "1", AnswerText = "Hello, 1"},
                     new Answer() { AnswerValue = "2", AnswerText = "Hello, 2" } },
-                MaxAllowedAnswers = 3
-            });
+                maxAllowedAnswers: 3
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

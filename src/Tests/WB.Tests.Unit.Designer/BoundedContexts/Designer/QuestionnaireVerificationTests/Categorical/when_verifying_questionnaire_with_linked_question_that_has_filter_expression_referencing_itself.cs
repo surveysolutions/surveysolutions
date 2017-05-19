@@ -24,12 +24,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     fixedTitles: new[] {"fixed title 1", "fixed title 2"},
                     children: new IComposite[]
                     {
-                        new TextQuestion()
-                        {
-                            PublicKey = linkedSourceQuestionId,
-                            QuestionType = QuestionType.Text,
-                            StataExportCaption = "var"
-                        }
+                        Create.TextQuestion(
+                            linkedSourceQuestionId,
+                            variable: "var"
+                        )
                     }),
                 Create.SingleOptionQuestion(questionId: questionWithFilterId,
                     variable: "s546i",
