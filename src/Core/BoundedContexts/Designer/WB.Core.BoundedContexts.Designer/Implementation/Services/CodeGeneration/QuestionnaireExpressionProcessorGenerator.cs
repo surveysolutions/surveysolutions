@@ -2,7 +2,7 @@
 using System.Linq;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 

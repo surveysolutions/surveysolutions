@@ -6,11 +6,11 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V11;
 using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             }
         }
 
-        public IInterviewExpressionProcessorV11 GetExpressionProcessor(QuestionnaireIdentity questionnaireIdentity)
+        public IInterviewExpressionStorage GetExpressionProcessor(QuestionnaireIdentity questionnaireIdentity)
         {
             var assemblyExists = this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 var compiledAssembly = this.questionnaireAssemblyFileAccessor.LoadAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
                 TypeInfo interviewExpressionStateTypeInfo = compiledAssembly.DefinedTypes.ToList().
-                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof(IInterviewExpressionProcessorV11)) && x.IsPublic);
+                    SingleOrDefault(x => !(x.IsAbstract || x.IsGenericTypeDefinition || x.IsInterface) && x.ImplementedInterfaces.Contains(typeof(IInterviewExpressionStorage)) && x.IsPublic);
 
                 if (interviewExpressionStateTypeInfo == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 Type interviewExpressionStateType = interviewExpressionStateTypeInfo.AsType();
                 try
                 {
-                    var initialExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionProcessorV11;
+                    var initialExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionStorage;
                     return initialExpressionState;
                 }
                 catch (Exception e)

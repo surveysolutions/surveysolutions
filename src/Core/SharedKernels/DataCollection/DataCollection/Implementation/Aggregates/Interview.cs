@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -20,7 +21,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.V11;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected IInterviewExpressionProcessorV11 GetExpressionProcessor()
+        protected IInterviewExpressionStorage GetExpressionStorage()
         {
             return this.expressionProcessorStatePrototypeProvider.GetExpressionProcessor(this.QuestionnaireIdentity);
         }
@@ -2332,10 +2332,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (questionnaire.IsUsingExpressionProcessor())
             {
-                IInterviewExpressionProcessorV11 processor = this.GetExpressionProcessor();
-                processor.Initialize(changedInterviewTree, new InterviewProperties(EventSourceId));
+                IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
+                expressionStorage.Initialize(changedInterviewTree, new InterviewProperties(EventSourceId));
 
-                var playOrder = processor.GetExpressionsOrder();
+                var playOrder = expressionStorage.GetExpressionsOrder();
                 var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
                 foreach (var entityId in playOrder)
                 {
@@ -2345,7 +2345,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         var nearestRoster = entity is InterviewTreeRoster 
                             ? entity.Identity
                             : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
-                        var level = processor.GetLevel(nearestRoster);
+                        var level = expressionStorage.GetLevel(nearestRoster);
                         State result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
                         if (result != State.Disabled)
                             entity.Enable();
@@ -2381,7 +2381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         if (validateable == null) continue;
 
                         var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
-                        IInterviewLevelV11 level = processor.GetLevel(nearestRoster);
+                        IInterviewLevel level = expressionStorage.GetLevel(nearestRoster);
                         var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
                         var validationResult = validationExpressions.Select(this.RunConditionExpression)
                             .Select((x, i) => x == State.Disabled? new FailedValidationCondition(i) : null)

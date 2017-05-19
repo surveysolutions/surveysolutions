@@ -5,9 +5,9 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V11;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -519,6 +519,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (address.Count == 0) return RosterVector.Empty;
 
             return new RosterVector(address.Reverse<int>());
+        }
+
+        public T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector) where T : class
+        {
+            var question = this.GetQuestion(questionId, new RosterVector(rosterVector));
+
+            if (!question.IsAnswered() || question.IsDisabled())
+                return default(T);
+
+            if (question.IsText) return question.AsText.GetAnswer()?.Value as T;
+            if (question.IsMultimedia) return question.AsMultimedia.GetAnswer()?.FileName as T;
+            if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer()?.DecodedText as T;
+            if (question.IsInteger) return question.AsInteger.GetAnswer()?.Value as T;
+            if (question.IsDouble) return question.AsDouble.GetAnswer()?.Value as T;
+
+            return default(T);
         }
 
         public string GetTextAnswer(Guid questionId, IEnumerable<int> rosterVector)
