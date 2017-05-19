@@ -91,8 +91,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 try
                 {
+                    progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
+
+                    var interviewId = Guid.NewGuid();
                     InterviewSynchronizationDto synchronizationDto = interview.GetSynchronizationDto();
-                    var interviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     var createInterviewCommand = new CreateInterviewFromSnapshotCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
