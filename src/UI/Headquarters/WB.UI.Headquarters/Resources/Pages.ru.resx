@@ -924,7 +924,6 @@
     <comment>Дата подключения устройства</comment>
   </data>
   <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
-    <value>Дата последней синхронизации</value>
-    <comment>Дата последней синхронизации</comment>
+    <value>Дата последнего соединения</value>
   </data>
 </root>

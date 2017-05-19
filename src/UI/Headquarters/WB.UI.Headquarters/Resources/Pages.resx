@@ -481,7 +481,7 @@
     <value>Last failed sync</value>
   </data>
   <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
-    <value>Last syncronization date</value>
+    <value>Last communication date</value>
   </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Synchronization duration</value>
