@@ -6,22 +6,23 @@
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
     
     <Product Id="*" 
-             Name="SurveySolutions" 
+             Name="Survey Solutions" 
              Language="1033" 
              Version="$(var.SurveySolutionsVersion)" 
-             Manufacturer="The World Bank" 
-             UpgradeCode="0C543B8A-9023-4486-89C9-421D875F5AFA">
-        <!--EE5F1DD2-13D8-442C-9978-8E8918EA789D-->
-        
+             Manufacturer="World Bank" 
+             UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
+
+        <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
+
+        <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
 
         <!--not supported in wix 3.10 should be in 3.11 and 4-->
         <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" />
-        
+
         <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again.">
             <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
         </Condition>
-            
         
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
             <![CDATA[Installed OR (VersionNT64 >= 603 AND MsiNTProductType > 1)]]>
@@ -37,8 +38,8 @@
 
         <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
 
-        <Property Id="INSTALLFOLDER" > 
-            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Name="Install Path" Win64='yes'></RegistrySearch>
+        <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions"> 
+            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Name="Install Path" Win64='yes'></RegistrySearch>
         </Property>
 
 <!--        <Condition Message="Path was not found.">
@@ -111,13 +112,11 @@
 
             <Property Id="ARPNOMODIFY" Value="1" />
             
-            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="SurveySolutions has been succesfully installed." />
+            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Survey Solutions has been succesfully installed." />
 
         </UI>
         
         <!--<WixVariable Id="WixUIInfoIco" Value="img/icon-32.bmp" />-->
-        
-        
         
         <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
                 
@@ -138,30 +137,34 @@
                       Impersonate="no"/>
 
         <InstallExecuteSequence>
-
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
                 <![CDATA[NOT Installed]]>
             </Custom>
             <Custom Action="InstallIIS" Before="WriteRegistryValues">
                 <![CDATA[NOT Installed]]>
             </Custom>
-
         </InstallExecuteSequence>
-        
-        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowDowngrades="no"
-                      Schedule="afterInstallExecute"/>
-        
-        <MediaTemplate  EmbedCab="yes" />
 
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." 
+                      AllowDowngrades="no"
+                      Schedule="afterInstallExecute" /> <!--preserves settings-->
+        
+        
         <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
             <ComponentGroupRef Id="SettingsUpdate"  />
         </Feature>
         
     </Product>
+
+   <Fragment>
+        <util:ProductSearch Id="OldProductSearch" UpgradeCode="{0C543B8A-9023-4486-89C9-421D875F5AFA}" Variable="OldProductInstalled" Result="state"></util:ProductSearch>
+        <Condition Message="Please uninstsall previous version of Survey Solutions.">
+            <![CDATA[(OldProductInstalled = 2)]]>
+        </Condition>
+    </Fragment>
             
     <Fragment>
-
         <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
 
         <Directory Id="TARGETDIR" Name="SourceDir">
@@ -177,9 +180,8 @@
 
     <Fragment>
         <ComponentGroup Id="ProductComponents" Directory="INSTALLSITEFOLDER">
-
             <Component Id="DIRTOINSTALLPath" Guid="68E651FA-E7DF-4EB2-B098-1F22B2B48F74">
-                <RegistryKey Root="HKLM" Key="SOFTWARE\The World Bank\SurveySolutions" Action="createAndRemoveOnUninstall">
+                <RegistryKey Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Action="createAndRemoveOnUninstall">
                     <RegistryValue Type="string" Name="Install Path" Value="[INSTALLFOLDER]"></RegistryValue>
                 </RegistryKey>
             </Component>
@@ -187,16 +189,16 @@
                 <Component Id="cmpAppPool" Guid="{CBA59BDC-989C-4F77-B0F9-861AAB8E0DEB}" KeyPath="yes" Win64="yes" >
                     
                     <iis:WebAppPool
-                        Id="SurveySolutionsSiteAppPool"
-                        Name="SurveySolutionsSiteAppPool"
+                        Id="AppSurveySolutions"
+                        Name="AppSurveySolutions"
                         ManagedRuntimeVersion="v4.0"
                         ManagedPipelineMode="integrated"
                         Identity="applicationPoolIdentity" />
 
-                    <iis:WebSite Id="webSite" SiteId="*" Description="SurveySolutionsSite" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
+                    <iis:WebSite Id="webSite" SiteId="*" Description="Survey Solutions" Directory="INSTALLSITEFOLDER" ConfigureIfExists="no">
                         <iis:WebAddress Id="webSite" Port="[SITEPORT]" />
                         <iis:WebDirProperties Id="webSite" AnonymousAccess="yes" WindowsAuthentication="no" />
-                        <iis:WebApplication Id="webSite" WebAppPool="SurveySolutionsSiteAppPool" Name="SyrveySolutionsWebApplication" />
+                        <iis:WebApplication Id="webSite" WebAppPool="AppSurveySolutions" Name="SyrveySolutions" />
 
                         <iis:MimeMap Id="MIME_OTF" Extension=".otf" Type="application/x-font-otf" />
                         <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
@@ -253,7 +255,7 @@
                               Action="setValue"
                               ElementPath="//configuration/connectionStrings/add"
                               Name="connectionString"
-                              Value="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SuperHQ;"
+                              Value="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;"
                               Sequence='5'/>
                 
                 <!--<add key="EventStore.Provider" value="Postgres" />-->
