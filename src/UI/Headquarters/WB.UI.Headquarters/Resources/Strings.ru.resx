@@ -196,4 +196,7 @@
     <value>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
     <comment>Информация об &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</comment>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
 </root>

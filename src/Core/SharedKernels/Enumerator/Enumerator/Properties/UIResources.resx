@@ -467,4 +467,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Take photo</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>
