@@ -2333,9 +2333,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.IsUsingExpressionProcessor())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                expressionStorage.Initialize(changedInterviewTree, new InterviewProperties(EventSourceId));
+                //, new InterviewProperties(EventSourceId)
+                expressionStorage.Initialize(changedInterviewTree);
 
-                var playOrder = expressionStorage.GetExpressionsOrder();
+                var playOrder = questionnaire.GetExpressionsPlayOrder();
                 var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
                 foreach (var entityId in playOrder)
                 {

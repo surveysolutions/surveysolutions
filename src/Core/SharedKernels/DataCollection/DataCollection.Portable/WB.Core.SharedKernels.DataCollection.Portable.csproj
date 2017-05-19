@@ -59,7 +59,6 @@
     <Compile Include="ExpressionStorage\IInterviewExpressionStorage.cs" />
     <Compile Include="ExpressionStorage\IInterviewLevel.cs" />
     <Compile Include="ExpressionStorage\IInterviewState.cs" />
-    <Compile Include="ExpressionStorage\IInterviewStateAccessorV11.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
     <Compile Include="V2\CustomFunctions\Extensions.cs" />
     <Compile Include="V2\CustomFunctions\LMS.cs" />

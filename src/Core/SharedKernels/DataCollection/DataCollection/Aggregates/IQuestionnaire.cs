@@ -254,5 +254,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid GetFirstSectionId();
         IEnumerable<Guid> GetLinkedToSourceEntity(Guid linkedSourceEntityId);
         bool IsUsingExpressionProcessor();
+
+        List<Guid> GetExpressionsPlayOrder();
     }
 }

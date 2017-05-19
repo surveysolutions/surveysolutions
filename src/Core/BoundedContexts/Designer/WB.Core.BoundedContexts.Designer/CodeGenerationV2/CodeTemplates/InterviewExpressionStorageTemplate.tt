@@ -18,37 +18,16 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : <#=typeof(IInterviewExpressionStorage).Name#> 
 	{
-		List<Guid> expressionsOrder = new List<Guid>();
 		public <#=Model.ClassName#>()
 		{
-<#
-		foreach (Guid id in Model.ConditionsPlayOrder) 
-		{
-			if (Model.IdMap.ContainsKey(id))
-            {
-#>
-			expressionsOrder.Add(IdOf.<#=Model.IdMap[id]#> );
-<#
-            }
-			else{
-#>
-			expressionsOrder.Add(<#= id.AsBytesString() #>);
-<#
-            }
 		}
-#>	
-		}
-		public void Initialize(IInterviewState state, IInterviewProperties properties) 
+
+		public void Initialize(IInterviewState state) 
 		{
 			this.state = state;
 		}
 
 		internal IInterviewState state;
-	
-		public List<Guid> GetExpressionsOrder()
-		{
-			return this.expressionsOrder;
-		}
 
 		public <#=typeof(IInterviewLevel).Name#>  GetLevel(Identity rosterIdentity)
 		{

@@ -1568,5 +1568,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.QuestionnaireDocument.IsUsingExpressionProcessor;
         }
+
+        public List<Guid> GetExpressionsPlayOrder()
+        {
+            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+        }
     }
 }
