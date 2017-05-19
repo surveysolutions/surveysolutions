@@ -1467,6 +1467,7 @@
     <Compile Include="API\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="API\PublicApi\InterviewsController.cs" />
     <Compile Include="API\ProgressiveDownloadResult.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewerUserApiDetails.cs" />
     <Compile Include="API\PublicApi\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
