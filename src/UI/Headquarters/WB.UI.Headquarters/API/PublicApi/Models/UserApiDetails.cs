@@ -51,9 +51,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string Email { get; private set; }
 
         [DataMember]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string PhoneNumber { get; private set; }
 
         [DataMember]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string FullName { get; private set; }
     }
 }
