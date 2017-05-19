@@ -138,9 +138,6 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>已审核通过的Stata数据</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>批量上传</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>二进制数据</value>
   </data>
