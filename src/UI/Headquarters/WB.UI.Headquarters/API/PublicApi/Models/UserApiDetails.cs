@@ -22,7 +22,17 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.CreationDate = userView.CreationDate;
             this.IsLocked = userView.IsLockedBySupervisor || userView.IsLockedByHQ;
             this.Roles = userView.Roles.ToList();
+            this.FullName = userView.PersonName;
+            this.PhoneNumber = userView.PhoneNumber;
         }
+
+        [DataMember]
+        [Required]
+        public Guid UserId { get; private set; }
+
+        [DataMember]
+        [Required]
+        public string UserName { get; private set; }
 
         [DataMember]
         [Required]
@@ -41,11 +51,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string Email { get; private set; }
 
         [DataMember]
-        [Required]
-        public Guid UserId { get; private set; }
+        public string PhoneNumber { get; private set; }
 
         [DataMember]
-        [Required]
-        public string UserName { get; private set; }
+        public string FullName { get; private set; }
     }
 }
