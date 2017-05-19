@@ -75,18 +75,20 @@
                 var buildMenuItem = function(selectedRow) {
                     var items = {}
 
-                    if (!(selectedRow.isDisabled || selectedRow.allowCensusMode)) {
+                    if (!(selectedRow.isDisabled)) {
                         @if (!isObserver)
                         {
                             <text>
-                            items["addNew"] = {
-                                name: "@Dashboard.NewInterview",
-                                callback: model.addNewInterview
-                            };
-                            items["batchUpload"] = {
-                                name: "@Dashboard.BatchUpload",
-                                callback: model.interviewsBatchUpload
-                            };
+                                if (!selectedRow.allowCensusMode) {
+                                    items["addNew"] = {
+                                        name: "@Dashboard.NewInterview",
+                                        callback: model.addNewInterview
+                                    };
+                                }
+                                items["batchUpload"] = {
+                                    name: "@Dashboard.UploadAssignments",
+                                    callback: model.interviewsBatchUpload
+                                };
                             </text>
                         }
 
@@ -94,40 +96,40 @@
                         @if (isAdmin)
                         {
                             <text>
-                            items["sep1"] = "---------";
+                                items["sep1"] = "---------";
                             </text>
                         }
                     }
-                @if (ApplicationSettings.WebInterviewEnabled && !isObserver)
-                {
-                    <text>
-                    if (!selectedRow.isDisabled) {
-                        items["webSetup"] = {
-                            name: "@Dashboard.WebInterviewSetup",
-                            callback: model.webInterviewSetup
-                        }
-                    }
-                    </text>
-                }
-
-
-                @if (isAdmin)
-                {
-                    <text>
-                items["clone"] =
-                {
-                    name: "@Dashboard.CloneQuestionnaire",
-                    callback: model.cloneQuestionnaire,
-                    disabled: selectedRow.isDisabled
-                };
-                    items["delete"] =
+                    @if (ApplicationSettings.WebInterviewEnabled && !isObserver)
                     {
-                        name: "@Dashboard.DeleteQuestionnaire",
-                        callback: model.deleteQuestionnaire
-                        /*,disabled: selectedRow.isDisabled*/
+                        <text>
+                        if (!selectedRow.isDisabled) {
+                            items["webSetup"] = {
+                                name: "@Dashboard.WebInterviewSetup",
+                                callback: model.webInterviewSetup
+                            }
+                        }
+                        </text>
+                    }
+
+
+                    @if (isAdmin)
+                    {
+                        <text>
+                    items["clone"] =
+                    {
+                        name: "@Dashboard.CloneQuestionnaire",
+                        callback: model.cloneQuestionnaire,
+                        disabled: selectedRow.isDisabled
                     };
-                    </text>
-                }
+                        items["delete"] =
+                        {
+                            name: "@Dashboard.DeleteQuestionnaire",
+                            callback: model.deleteQuestionnaire
+                            /*,disabled: selectedRow.isDisabled*/
+                        };
+                        </text>
+                    }
                     return items;
                 }
 

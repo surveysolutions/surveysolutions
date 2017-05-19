@@ -135,9 +135,6 @@
   <data name="ApprovedDataStata" xml:space="preserve">
     <value>Утвержденные данные Stata</value>
   </data>
-  <data name="BatchUpload" xml:space="preserve">
-    <value>Загрузка данных</value>
-  </data>
   <data name="BinaryData" xml:space="preserve">
     <value>Бинарные данные</value>
   </data>
@@ -191,5 +188,9 @@
   </data>
   <data name="DeleteQuestionnaire" xml:space="preserve">
     <value>Удалить опросник</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Загрузить задачи</value>
+    <comment>Загрузить задачи</comment>
   </data>
 </root>
