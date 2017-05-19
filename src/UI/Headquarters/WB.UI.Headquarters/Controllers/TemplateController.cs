@@ -16,7 +16,6 @@ using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -72,15 +71,14 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [PreventDoubleSubmit]
-        public async Task<ActionResult> ImportMode(Guid id, string name, string importMode)
+        public async Task<ActionResult> ImportMode(Guid id, string name)
         {
             if (this.designerUserCredentials.Get() == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            var result = await this.importService.Import(id, name, importMode == "Census");
+            var result = await this.importService.Import(id, name, false);
             if (result.IsSuccess)
             {
                 return this.RedirectToAction("Index", "SurveySetup");

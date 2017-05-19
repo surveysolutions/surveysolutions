@@ -21,19 +21,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             Guid rosterSizeQuestionWithThirdRosteLevelId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new TextListQuestion()
-                {
-                    PublicKey = rosterSizeQuestionId,
-                    StataExportCaption = "var1",
-                    QuestionType = QuestionType.TextList,
-                    MaxAnswerCount = 2
-                },
-                new NumericQuestion
-                {
-                    PublicKey = rosterSizeQuestionForChildRoster1Id,
-                    StataExportCaption = "var2",
-                    IsInteger = true
-                },
+                Create.TextListQuestion(
+                    rosterSizeQuestionId,
+                    variable: "var1",
+                    maxAnswerCount: 2
+                ),
+                Create.NumericIntegerQuestion(
+                    rosterSizeQuestionForChildRoster1Id,
+                    variable: "var2"
+                ),
                 new Group
                 {
                     IsRoster = true,
@@ -48,12 +44,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             RosterSizeQuestionId = rosterSizeQuestionForChildRoster1Id,
                             Children = new List<IComposite>
                             {
-                                new NumericQuestion
-                                {
-                                    PublicKey = rosterSizeQuestionWithInvalidRosterLevelId,
-                                    StataExportCaption = "var3",
-                                    IsInteger = true
-                                },
+                                Create.NumericIntegerQuestion(
+                                    rosterSizeQuestionWithInvalidRosterLevelId,
+                                    variable: "var3"
+                                ),
                                 new Group
                                 {
                                     PublicKey = rosterSizeQuestionWithThirdRosteLevelId,

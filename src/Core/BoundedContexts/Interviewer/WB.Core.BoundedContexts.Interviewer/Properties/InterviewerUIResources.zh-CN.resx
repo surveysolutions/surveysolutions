@@ -130,13 +130,13 @@
     <value>您的应用程序与服务器不兼容。请更新您的调查员应用程序。</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>已完成{0}</value>
+    <value>已完成({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>创建调查</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>新{0}</value>
+    <value>新({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>同步</value>
@@ -154,13 +154,13 @@
     <value>该调查已结束。您想要重新开始调查吗？</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>驳回{0}</value>
+    <value>驳回({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>您确定要删除这个调查“{0}”吗？</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>已开始{0}</value>
+    <value>已开始({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{1}的任务共有{0}</value>

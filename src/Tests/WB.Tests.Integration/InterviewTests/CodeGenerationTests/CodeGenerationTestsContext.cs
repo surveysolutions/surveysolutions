@@ -429,13 +429,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, version?? 16, out resultAssembly);
 
-            var filePath = Path.GetTempFileName();
-
             if (emitResult.Success && !string.IsNullOrEmpty(resultAssembly))
             {
-                File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
-
-                var compiledAssembly = Assembly.LoadFrom(filePath);
+                var compiledAssembly = Assembly.Load(Convert.FromBase64String(resultAssembly));
 
                 Type interviewExpressionStateType =
                     compiledAssembly.GetTypes()

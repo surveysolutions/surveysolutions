@@ -16,14 +16,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             const string invalidExpression = "[hehe] &=+< 5";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion
-                {
-                    PublicKey = questionId,
-                    ValidationExpression = invalidExpression,
-                    ConditionExpression = invalidExpression, 
-                    ValidationMessage = "validation message",
-                    StataExportCaption = "var1"
-                });
+                Create.TextQuestion(
+                    questionId,
+                    validationExpression: invalidExpression,
+                    enablementCondition: invalidExpression, 
+                    validationMessage: "validation message",
+                    variable: "var1"
+                ));
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
         };

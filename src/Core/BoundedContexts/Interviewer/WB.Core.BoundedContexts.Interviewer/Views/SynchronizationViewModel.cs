@@ -105,6 +105,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
+        public IMvxCommand HideSynchronizationCommand => new MvxCommand(this.HideSynchronizaion);
+
+        public void HideSynchronizaion()
+        {
+            this.IsSynchronizationInfoShowed = false;
+        }
 
         public void CancelSynchronizaion()
         {

@@ -16,15 +16,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionWithMissingValues = Guid.Parse("10000000000000000000000000000000");
 
-            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
-            {
-                PublicKey = questionWithMissingValues,
-                StataExportCaption = "var",
-                QuestionType = QuestionType.SingleOption,
-                Answers = {
+            questionnaire = CreateQuestionnaireDocument(
+                Create.SingleOptionQuestion(
+            
+                 questionWithMissingValues,
+                variable: "var",
+                answers: new List<Answer> {
                     new Answer() {                    AnswerText = "opt 1" },
                     new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

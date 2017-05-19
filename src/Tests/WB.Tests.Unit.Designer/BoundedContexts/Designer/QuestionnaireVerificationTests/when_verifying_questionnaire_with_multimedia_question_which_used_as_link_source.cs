@@ -20,18 +20,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     fixedTitles: new[] {"1", "2"},
                     children: new IComposite[]
                     {
-                        new MultimediaQuestion()
-                        {
-                            PublicKey = multimediaQuestionId,
-                            StataExportCaption = "var1"
-                        }
+                        Create.MultimediaQuestion(
+                            multimediaQuestionId,
+                            variable: "var1"
+                        )
                     }),
-                new SingleQuestion()
-                {
-                    PublicKey = questionWhichUsesMultimediaAsLinkSource,
-                    LinkedToQuestionId = multimediaQuestionId,
-                    StataExportCaption = "var2"
-                });
+                Create.SingleOptionQuestion(
+                    questionId: questionWhichUsesMultimediaAsLinkSource,
+                    linkedToQuestionId: multimediaQuestionId,
+                    variable: "var2"
+                ));
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -1,3 +1,4 @@
+![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
 # 5.19
 - Interviewer app lower than `5.8` version won't be able to synchronize anymore
 - HQ apps with version lower than `5.8` won't be able to import questionnaires from designer

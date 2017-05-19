@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
@@ -44,6 +44,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.viewModelNavigationService = viewModelNavigationService;
             this.logger = logger;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
+        }
+
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
         public string QuestionnaireTitle { get; set; }

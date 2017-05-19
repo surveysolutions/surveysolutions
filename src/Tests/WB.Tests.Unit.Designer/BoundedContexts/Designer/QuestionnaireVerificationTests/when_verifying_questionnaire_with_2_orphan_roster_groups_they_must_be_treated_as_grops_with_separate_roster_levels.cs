@@ -25,29 +25,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var rosterQuestionId2 = Guid.Parse("11100000000000000000000000000000");
 
             questionnaire = CreateQuestionnaireDocument(
-                new NumericQuestion()
-                {
-                    PublicKey = rosterQuestionId1,
-                    IsInteger = true,
-                    StataExportCaption = "var1"
-                },
-                new NumericQuestion()
-                {
-                    PublicKey = rosterQuestionId2,
-                    IsInteger = true,
-                    StataExportCaption = "var2"
-                },
+                Create.NumericIntegerQuestion(
+                    rosterQuestionId1,
+                    variable: "var1"
+                ),
+                Create.NumericIntegerQuestion(
+                    rosterQuestionId2,
+                    variable: "var2"
+                ),
                 new Group()
                 {
                     PublicKey = rosterGroupId1, IsRoster = true, VariableName = "b", RosterSizeQuestionId = rosterQuestionId1,
                     Children = new IComposite[]
                     {
-                        new NumericQuestion()
-                        {
-                            PublicKey = questionWithSubstitutionsIdFromLevel1,
-                            QuestionText = string.Format("hello %{0}%", questionSubstitutionsSourceFromLevel2VariableName),
-                            StataExportCaption = "var3"
-                        }
+                        Create.NumericIntegerQuestion(
+                            questionWithSubstitutionsIdFromLevel1,
+                            title: $"hello %{questionSubstitutionsSourceFromLevel2VariableName}%",
+                            variable: "var3"
+                        )
                     }.ToReadOnlyCollection()
                 },
                 
@@ -55,12 +50,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     PublicKey = rosterGroupId2, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterQuestionId2,
                     Children = new IComposite[] {
-                        new SingleQuestion()
-                        {
-                            PublicKey = questionFromLevel2,
-                        StataExportCaption = questionSubstitutionsSourceFromLevel2VariableName,
-                        Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-                        }}.ToReadOnlyCollection()
+                        Create.SingleOptionQuestion(
+                        
+                            questionFromLevel2,
+                        variable: questionSubstitutionsSourceFromLevel2VariableName,
+                        answers:new List<Answer> { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                        )}.ToReadOnlyCollection()
                 }); 
 
             verifier = CreateQuestionnaireVerifier();

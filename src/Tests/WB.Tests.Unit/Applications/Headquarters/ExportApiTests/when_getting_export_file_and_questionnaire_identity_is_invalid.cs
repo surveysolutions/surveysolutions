@@ -2,7 +2,9 @@
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -14,10 +16,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController();
         };
 
-        Because of = () => result = controller.Get("invalid questionnaire identity", "tabular");
+        Because of = () => result = controller.Get("invalid questionnaire identity", DataExportFormat.Tabular);
 
-        It should_return_http_not_found_response = () =>
-            ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.NotFound);
+        It should_return_http_bad_request_response = () =>
+            ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.BadRequest);
 
         It should_response_has_specified_message = () =>
             ((NegotiatedContentResult<string>)result).Content.ShouldEqual("Invalid questionnaire identity");

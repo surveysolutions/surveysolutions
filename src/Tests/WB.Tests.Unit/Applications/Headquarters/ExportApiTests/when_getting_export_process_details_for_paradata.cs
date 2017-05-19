@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportStatusReader: dataExportStatusReader);
         };
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), "paradata");
+        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
-            jsonResult.ExportStatus.ShouldEqual(paraDataExportProcessDetails.Status.ToString());
+            jsonResult.ExportStatus.ShouldEqual(paraDataExportProcessDetails.Status);
             jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(paraDataExportProcessDetails.ProgressInPercents);
         };
             

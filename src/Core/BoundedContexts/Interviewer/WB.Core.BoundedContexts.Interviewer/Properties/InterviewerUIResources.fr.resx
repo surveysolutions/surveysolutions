@@ -130,13 +130,13 @@
     <value>Votre application n'est pas compatible avec le serveur. Mettez à jour votre application Interviewer.</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Terminé(s) {0}</value>
+    <value>Terminé(s) ({0})</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Créer entretien</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Nouveau {0}</value>
+    <value>Nouveau ({0})</value>
   </data>
   <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
     <value>Synchroniser</value>
@@ -154,13 +154,13 @@
     <value>Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rejeté(s) {0}</value>
+    <value>Rejeté(s) ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer cet entretien « {0} » ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Entamé(s) {0}</value>
+    <value>Entamé(s) ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} affectations pour {1}</value>

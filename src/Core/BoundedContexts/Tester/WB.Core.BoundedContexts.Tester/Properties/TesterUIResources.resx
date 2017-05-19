@@ -210,4 +210,7 @@
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Application version</value>
   </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Interview data can't be applied to new version of questionnire. We will open empty interview</value>
+  </data>
 </root>

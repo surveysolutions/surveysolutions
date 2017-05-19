@@ -14,18 +14,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
-            {
-                PublicKey = supervisorQuestionId,
-                QuestionScope = QuestionScope.Supervisor,
-                StataExportCaption = "var1"
-            },
-            new MultimediaQuestion()
-            {
-                PublicKey = hqQuestionId,
-                QuestionScope = QuestionScope.Headquarter,
-                StataExportCaption = "var2"
-            });
+            questionnaire = CreateQuestionnaireDocument(Create.MultimediaQuestion(
+                supervisorQuestionId,
+                scope: QuestionScope.Supervisor,
+                variable: "var1"
+            ),
+            Create.MultimediaQuestion(
+                hqQuestionId,
+                scope: QuestionScope.Headquarter,
+                variable: "var2"
+            ));
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -31,11 +31,9 @@ namespace WB.UI.Designer.Controllers
             if (this.userHelper.WebUser.MembershipUser != null)
                 return RedirectToAction("RedirectToDesk");
 
-            return this.View("~/Views/Account/Login.cshtml", new LoginModel
+            return this.View("~/Views/Account/Login.cshtml", new LogonModel
             {
-                ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
-                GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"],
-                HomeUrl = Url.Action("RedirectToDesk")
+                ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha()
             });
         }
 

@@ -213,4 +213,34 @@
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>输入的名称太长 &gt; {1}</value>
   </data>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>不能更新用户信息，因为当前用户不存在</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>不能更新用户信息因为当前用户已经被归档</value>
+  </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>确认新密码</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>确认密码是必填项</value>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>要更改密码，请提供有效的当前密码</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>旧密码</value>
+  </data>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>个人姓名含有无效字符。 只允许使用字母、点、空格和单引号。</value>
+  </data>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>电话号码不能包含超过{1}的字符</value>
+  </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>请选择其他用户名</value>
+  </data>
 </root>

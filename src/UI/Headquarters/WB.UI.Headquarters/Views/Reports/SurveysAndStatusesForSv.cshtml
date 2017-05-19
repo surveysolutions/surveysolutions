@@ -57,7 +57,7 @@
                     }, {
                     }, {
                         render: function (data, type, row) {
-                            return getLinkToInterviews(model, data, row);
+                            return getLinkToInterviews(model, data, row, '', model.Url.query['responsible']);
                         }
                     }
                 ];

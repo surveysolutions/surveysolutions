@@ -183,4 +183,7 @@
   <data name="Users" xml:space="preserve">
     <value>用户</value>
   </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>故障排除</value>
+  </data>
 </root>

@@ -25,7 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     VariableName = "a",
-                    Children = new List<IComposite>() { new NumericQuestion(){StataExportCaption = "var"} }.ToReadOnlyCollection()
+                    Children = new List<IComposite>()
+                    {
+                        Create.NumericIntegerQuestion(variable: "var")
+                    }.ToReadOnlyCollection()
             });
 
             verifier = CreateQuestionnaireVerifier();
@@ -38,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Count().ShouldEqual(1);
 
         It should_return_first_error_with_code__WB0009 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0009");
+            verificationMessages.ShouldContainError("WB0009");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

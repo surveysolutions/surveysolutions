@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
              => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
         
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
@@ -332,11 +332,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version),
-                    questionId, parentQuestionValue, filter, this.translation);
+                    questionId, parentQuestionValue, searchFor, this.translation);
             }
 
             //regular options
-            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, searchFor);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)

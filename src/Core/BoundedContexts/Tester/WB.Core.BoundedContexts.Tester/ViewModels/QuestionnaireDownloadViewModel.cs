@@ -15,11 +15,18 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.WriteSide;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
@@ -35,6 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public QuestionnaireDownloadViewModel(
@@ -46,7 +54,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage,
+            IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -57,9 +66,55 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+            IProgress<string> progress, CancellationToken cancellationToken)
+        {
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            if (questionnaireIdentity != null)
+            {
+                var interviewId = await this.CreateInterview(questionnaireIdentity, progress);
+
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+            }
+
+            return questionnaireIdentity != null;
+        }
+
+        public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+            IStatefulInterview interview, NavigationIdentity navigationIdentity, IProgress<string> progress, CancellationToken cancellationToken)
+        {
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            if (questionnaireIdentity != null)
+            {
+                try
+                {
+                    progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
+
+                    var interviewId = Guid.NewGuid();
+                    InterviewSynchronizationDto synchronizationDto = interview.GetSynchronizationDto();
+                    var createInterviewCommand = new CreateInterviewFromSnapshotCommand(
+                        interviewId: interviewId,
+                        userId: this.principal.CurrentUserIdentity.UserId,
+                        sycnhronizedInterview: synchronizationDto);
+                    await this.commandService.ExecuteAsync(createInterviewCommand, null, cancellationToken);
+
+                    this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
+                }
+                catch (Exception)
+                {
+                    await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
+                    var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(newInterviewId.FormatGuid());
+                }
+            }
+
+            return questionnaireIdentity != null;
+        }
+
+        private async Task<QuestionnaireIdentity> DownloadQuestionnaireWithAllDependencisAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             progress.Report(TesterUIResources.ImportQuestionnaire_CheckConnectionToServer);
@@ -80,17 +135,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage, translations, progress);
 
-                    var interviewId = await this.CreateInterview(dummyQuestionnaireIdentity, progress);
-
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
-
-                    return true;
+                    return dummyQuestionnaireIdentity;
                 }
             }
             catch (RestException ex)
             {
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
-                    return false;
+                    return null;
 
                 string errorMessage;
                 switch (ex.StatusCode)
@@ -119,7 +170,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 this.logger.Error("Import questionnaire exception. ", ex);
             }
 
-            return false;
+            return null;
         }
 
         private static QuestionnaireIdentity GenerateDummyQuestionnaireIdentity(string questionnaireId)
