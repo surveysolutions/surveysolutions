@@ -154,6 +154,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
         /// </summary>
         public static string ErrorMessage_AccountIsLockedOnServer {

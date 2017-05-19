@@ -467,4 +467,7 @@
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Сделать фото</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
 </root>
