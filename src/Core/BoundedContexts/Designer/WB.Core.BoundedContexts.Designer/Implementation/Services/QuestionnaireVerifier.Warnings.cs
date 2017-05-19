@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
             Warning<IQuestion, ValidationCondition>(q => q.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
+            WarningForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
             Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
@@ -550,6 +551,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> WarningForTranslation<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+            where TEntity : class, IComposite
+        {
+            return WarningForTranslation(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> WarningForTranslation<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .FindWithTranslations<TEntity>(entity => true)
+                    .SelectMany(translatedEntity => getSubEnitites(translatedEntity.Entity).Select((subEntity, index) => new { Entity = translatedEntity, SubEntity = subEntity, Index = index }))
+                    .Where(descriptor => hasError(descriptor.Entity.Entity, descriptor.SubEntity, questionnaire))
+                    .Select(descriptor =>
+                        QuestionnaireVerificationMessage.Warning(
+                            code,
+                            descriptor.Entity.TranslationName == null
+                                ? getMessageBySubEntityIndex(descriptor.Index + 1)
+                                : descriptor.Entity.TranslationName + ": " + getMessageBySubEntityIndex(descriptor.Index + 1),
+                            CreateReference(descriptor.Entity.Entity, descriptor.Index))
+                     );
+        }
+
+        private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
+            => string.IsNullOrWhiteSpace(validationCondition.Message);
 
         private IEnumerable<IQuestion> GetReferencedQuestions(string expression, MultiLanguageQuestionnaireDocument questionnaire)
             => this

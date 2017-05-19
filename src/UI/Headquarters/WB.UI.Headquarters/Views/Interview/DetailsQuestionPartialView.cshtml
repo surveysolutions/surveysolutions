@@ -40,7 +40,7 @@
                         <small class="text-error">@validationCondition.Expression</small>
                     </dt>
                     <dd>
-                        <small class="text-error">@validationCondition.Message</small>
+                        <small class="text-error">@(string.IsNullOrEmpty(validationCondition.Message) ? Strings.Error : validationCondition.Message)</small>
                     </dd>
                 }
             </dl>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -34,7 +34,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (string error in errors)
             {
                 var errorViewModel = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-                errorViewModel.InitAsStatic(error);
+                // default test if error message is empty
+                var errorText = string.IsNullOrEmpty(error)
+                    ? UIResources.Error
+                    : error;
+
+                errorViewModel.InitAsStatic(errorText);
 
                 this.ValidationErrors.Add(errorViewModel);
             }
