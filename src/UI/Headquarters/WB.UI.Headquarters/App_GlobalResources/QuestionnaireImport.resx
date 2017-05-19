@@ -132,9 +132,6 @@
   <data name="DesignerQuestionnaires" xml:space="preserve">
     <value>Designer Questionnaires</value>
   </data>
-  <data name="Import" xml:space="preserve">
-    <value>Import in Sample mode</value>
-  </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>Import in census mode</value>
   </data>
@@ -181,7 +178,7 @@
     <value>Create a new version  (#{0})</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
-    <value>Sample mode import</value>
+    <value>Import</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
     <value>This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices.</value>
