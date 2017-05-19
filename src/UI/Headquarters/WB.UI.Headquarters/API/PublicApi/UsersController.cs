@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -48,18 +50,38 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">User id</param>
         [HttpGet]
         [Route("api/v1/supervisors/{id:guid}")]
-        [Route("api/v1/interviewers/{id:guid}")]
         [Route("api/v1/users/{id:guid}")]
         public UserApiDetails Details(Guid id)
         {
             var user = this.usersFactory.GetUser(new UserViewInputModel(id));
 
-            if (user == null || user.IsArchived)
+            if (user == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
             return new UserApiDetails(user);
+        }
+
+       
+        /// <summary>
+        /// Gets detailed info about single interviewer
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <response code="200"></response>
+        /// <response code="404">Interviewer was not found</response>
+        [HttpGet]
+        [Route("api/v1/interviewers/{id:guid}")]
+        public InterviewerUserApiDetails InterviewerDetails(Guid id)
+        {
+            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
+
+            if (user == null || !user.Roles.Contains(UserRoles.Interviewer))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return new InterviewerUserApiDetails(user);
         }
     }
 }

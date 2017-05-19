@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
-    public class UserApiDetails 
+    public class UserApiDetails
     {
         public UserApiDetails(UserView userView)
         {
