@@ -20,6 +20,11 @@ namespace WB.UI.Tester.Activities
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
+                Resource.Id.interview_reload,
+                TesterUIResources.MenuItem_Title_Reload,
+                this.ViewModel.ReloadQuestionnaireCommand
+            },
+            {
                 Resource.Id.prefilled_questions_dashboard,
                 TesterUIResources.MenuItem_Title_Dashboard,
                 this.ViewModel.NavigateToDashboardCommand
