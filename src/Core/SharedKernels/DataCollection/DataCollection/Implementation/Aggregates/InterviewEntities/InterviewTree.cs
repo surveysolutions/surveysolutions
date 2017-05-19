@@ -533,6 +533,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer()?.DecodedText as T;
             if (question.IsInteger) return question.AsInteger.GetAnswer()?.Value as T;
             if (question.IsDouble) return question.AsDouble.GetAnswer()?.Value as T;
+            if (question.IsDateTime) return question.AsDateTime.GetAnswer()?.Value as T;
+            if (question.IsGps) return question.AsGps.GetAnswer()?.Value as T;
+            if (question.IsTextList) return question.AsTextList.GetAnswer()?.ToTupleArray() as T;
+            if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().SelectedValue as T;
+            if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer()?.CheckedValues as T;
+            if (question.IsSingleFixedOption) return question.AsSingleFixedOption.GetAnswer()?.SelectedValue as T;
+            if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray() as T;
+            if (question.IsYesNo) return question.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray() as T;
+            if (question.IsSingleLinkedToList) return question.AsSingleLinkedToList.GetAnswer().SelectedValue as T;
+            if (question.IsMultiLinkedToList) return question.AsMultiLinkedToList.GetAnswer()?.ToDecimals() as T;
 
             return default(T);
         }

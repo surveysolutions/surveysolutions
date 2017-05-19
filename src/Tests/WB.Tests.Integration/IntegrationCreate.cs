@@ -75,8 +75,7 @@ namespace WB.Tests.Integration
         {
             return new CodeGenerationModelsFactory(
                     DefaultMacrosSubstitutionService(),
-                    ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                    IntegrationCreate.ExpressionsPlayOrderProvider());
+                    ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
         public static ExpressionsPlayOrderProvider ExpressionsPlayOrderProvider(
