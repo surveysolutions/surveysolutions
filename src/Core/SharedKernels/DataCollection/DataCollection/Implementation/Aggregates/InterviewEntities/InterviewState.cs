@@ -1,31 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public static class Ext
-    {
-        public static T To<T>(this object obj)
-        {
-            Type t = typeof(T);
-            Type u = Nullable.GetUnderlyingType(t);
-
-            if (u != null)
-            {
-                return (obj == null) ? default(T) : (T)Convert.ChangeType(obj, u);
-            }
-            return (T)Convert.ChangeType(obj, t);
-        }
-    }
-    public class InterviewState : IInterviewState
+    public class InterviewStateForExpressions : IInterviewStateForExpressions
     {
         private readonly InterviewTree tree;
 
-        public InterviewState(InterviewTree tree)
+        public InterviewStateForExpressions(InterviewTree tree, IInterviewPropertiesForExpressions interviewProperties)
         {
             this.tree = tree;
+            this.Properties = interviewProperties;
         }
 
         public T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector)
@@ -49,10 +37,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray().To<T>();
             if (question.IsYesNo) return question.AsYesNo.GetAnswer().ToYesNoAnswers().To<T>();
             if (question.IsSingleLinkedToList) return question.AsSingleLinkedToList.GetAnswer().SelectedValue.To<T>();
-            if (question.IsMultiLinkedToList) return question.AsMultiLinkedToList.GetAnswer().ToDecimals().To<T>();
+            if (question.IsMultiLinkedToList) return question.AsMultiLinkedToList.GetAnswer().ToDecimals().ToArray().To<T>();
 
             return default(T);
         }
+
+        public IInterviewPropertiesForExpressions Properties { get; }
 
         public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
         {
@@ -67,6 +57,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string GetRosterTitle(Identity rosterIdentity)
         {
             return this.tree.GetRoster(rosterIdentity).RosterTitle;
+        }
+    }
+
+    public class InterviewPropertiesForExpressions : IInterviewPropertiesForExpressions
+    {
+        public double Random { get; set; }
+
+        public InterviewPropertiesForExpressions(DataCollection.InterviewProperties interviewProperties)
+        {
+            this.Random = interviewProperties.IRnd();
         }
     }
 }

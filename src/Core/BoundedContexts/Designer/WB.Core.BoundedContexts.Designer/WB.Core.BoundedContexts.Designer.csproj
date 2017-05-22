@@ -243,6 +243,12 @@
     <Compile Include="Aggregates\IAccountView.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
+    <Compile Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.cs">
+      <DependentUpon>LookupTablesTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CodeGenerationV2\CodeTemplates\Extentions\LookupTablesTemplate.Extended.cs" />
     <Compile Include="Commands\Account\UserCommand.cs" />
     <Compile Include="Commands\Account\AssignUserRole.cs" />
     <Compile Include="Commands\Account\ChangeUserPassword.cs" />
@@ -785,6 +791,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LinkedFilterMethodTemplate.cs</LastGenOutput>
     </None>
+    <Content Include="CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LookupTablesTemplate.cs</LastGenOutput>
+    </Content>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>

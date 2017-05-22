@@ -12,19 +12,17 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
-    using Main.Core.Entities.SubEntities;
     using System.Text.RegularExpressions;
-    using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
-    using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Helpers;
+    using WB.Core.SharedKernels.DataCollection;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class InterviewExpressionStorageTemplate : InterviewExpressionStorageTemplateBase
+    public partial class LookupTablesTemplate : LookupTablesTemplateBase
     {
 #line hidden
         /// <summary>
@@ -32,149 +30,256 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
-                    "tem.Text.RegularExpressions;\r\nusing WB.Core.SharedKernels.DataCollection.Express" +
-                    "ionStorage;\r\n\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n\tpub" +
-                    "lic class ");
+            this.Write(" \r\n");
+            this.Write(" \r\nusing System.Collections.Generic;\r\n\r\nnamespace WB.Core.SharedKernels.DataColle" +
+                    "ction.Generated\r\n{\r\n\tpublic static class LookupTables\r\n\t{\r\n");
             
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
-            
-            #line default
-            #line hidden
-            this.Write(" : ");
-            
-            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewExpressionStorage).Name));
-            
-            #line default
-            #line hidden
-            this.Write(" \r\n\t{\r\n\t\tpublic ");
-            
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
-            
-            #line default
-            #line hidden
-            this.Write("()\r\n\t\t{\r\n\t\t}\r\n\r\n\t\tpublic void Initialize(");
-            
-            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
-            
-            #line default
-            #line hidden
-            this.Write(" state) \r\n\t\t{\r\n\t\t\tthis.state = state;\r\n\t\t}\r\n\r\n\t\tinternal ");
-            
-            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
-            
-            #line default
-            #line hidden
-            this.Write(" state;\r\n\r\n\t\tpublic ");
-            
-            #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
-            
-            #line default
-            #line hidden
-            this.Write(@"  GetLevel(Identity rosterIdentity)
-		{
-			return CreateLevel(rosterIdentity);
-		}
-		
-		public T[] GetLevels<T>(Guid levelId, Identity forRosterIdentity)
-        {
-			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
-            return rosterIdentities.Select(CreateLevel).Cast<T>().ToArray();
-        }
+            #line 14 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
 
-		private ");
-            
-            #line 43 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewLevel).Name));
-            
-            #line default
-            #line hidden
-            this.Write(" CreateLevel(Identity rosterIdentity)\r\n\t\t{\r\n");
-            
-            #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-
-		foreach (var level in Model.AllLevels) 
-		{
+	foreach (var table in LookupTables) 
+    {
 
             
             #line default
             #line hidden
-            this.Write("\t\t\tif (rosterIdentity.Id == IdOf.");
+            this.Write("\t\tprivate static readonly Dictionary<long, ");
             
-            #line 49 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(level.Variable));
-            
-            #line default
-            #line hidden
-            this.Write(")\r\n\t\t\t{\r\n\t\t\t\treturn new ");
-            
-            #line 51 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(level.ClassName));
+            #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
             
             #line default
             #line hidden
-            this.Write("(rosterIdentity.RosterVector, this);\r\n\t\t\t}\r\n");
+            this.Write("> ");
             
-            #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-
-		}
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t\r\n\t\t\treturn null;\r\n\t\t}\r\n\t}\r\n\r\n");
-            
-            #line 60 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-
-	foreach (var level in Model.AllLevels) 
-	{
-		var template = CreateLevelTemplate(level, Model);
-		this.Write(template.TransformText());
-	}
-
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\tpublic static class IdOf\r\n\t{\r\n");
-            
-            #line 70 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-
-		foreach (var pair in Model.IdMap)
-		{
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\tpublic static readonly Guid ");
-            
-            #line 74 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(pair.Value));
+            #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TableNameField));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 74 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(pair.Key.AsBytesString()));
+            #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("_Generator.GetTable();\r\n\t\tpublic static Dictionary<long, ");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("> ");
+            
+            #line 19 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+            
+            #line default
+            #line hidden
+            this.Write(" \r\n\t\t{\r\n\t\t\tget { return ");
+            
+            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TableNameField));
+            
+            #line default
+            #line hidden
+            this.Write("; }\r\n\t\t}\r\n");
+            
+            #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
+            this.Write("\t}\r\n\r\n");
+            
+            #line 28 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+
+	foreach (var table in LookupTables) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("\tpublic static class ");
+            
+            #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("_Generator\r\n\t{\r\n\t\tpublic static Dictionary<long, ");
+            
+            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("> GetTable()\r\n\t\t{\r\n\t\t\tvar table = new Dictionary<long, ");
+            
+            #line 36 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write(">();\r\n");
+            
+            #line 37 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+
+		    foreach (var row in table.Rows) 
+		    {
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t    table.Add(");
+            
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(row.RowCode));
+            
+            #line default
+            #line hidden
+            this.Write(", new ");
+            
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(row.RowCode));
+            
+            #line default
+            #line hidden
+            this.Write(", ");
+            
+            #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) )));
+            
+            #line default
+            #line hidden
+            this.Write("));\r\n");
+            
+            #line 42 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+ 
+		    }
+
+            
+            #line default
+            #line hidden
+            this.Write("            return table;\r\n\t\t}\r\n    }\r\n\r\n");
+            
+            #line 49 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+	
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\r\n");
+            
+            #line 54 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+
+	foreach (var table in LookupTables) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("\tpublic class ");
+            
+            #line 58 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t{\r\n\t\tpublic ");
+            
+            #line 60 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("(long rowcode, ");
+            
+            #line 60 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName))));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n\t\t{\r\n\t\t\tthis.rowcode = rowcode;\r\n");
+            
+            #line 63 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+
+		foreach (var variableName in table.VariableNames) 
+		{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tthis.");
+            
+            #line 67 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
+            
+            #line default
+            #line hidden
+            this.Write(" = ");
+            
+            #line 67 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 75 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
-
+            #line 68 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+ 
 		}
 
             
             #line default
             #line hidden
-            this.Write("\t}\r\n}");
+            this.Write("\t\t}\r\n\t\tpublic long rowcode { get; private set;}\r\n");
+            
+            #line 73 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+
+		foreach (var variableName in table.VariableNames) 
+		{
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic double? ");
+            
+            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
+            
+            #line default
+            #line hidden
+            this.Write(" { get; private set;}\t\r\n");
+            
+            #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+ 
+		}
+
+            
+            #line default
+            #line hidden
+            this.Write("\t}\r\n");
+            
+            #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LookupTablesTemplate.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
+            this.Write("}");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -186,7 +291,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public class InterviewExpressionStorageTemplateBase
+    public class LookupTablesTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;
