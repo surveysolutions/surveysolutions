@@ -4,7 +4,7 @@ using Android.Views;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.Platform;
 
-namespace WB.UI.Interviewer.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class VisibleOrInvisibleValueConverter : MvxValueConverter<bool, ViewStates>
     {
