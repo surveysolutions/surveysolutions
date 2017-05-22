@@ -187,7 +187,7 @@
     <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="Assignments\Assignment.cs" />
     <Compile Include="Assignments\AssignmentMap.cs" />
-    <Compile Include="Assignments\PrefilledAnswer.cs" />
+    <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\CloneQuestionnaire.cs" />
     <Compile Include="Commands\DeleteQuestionnaire.cs" />
