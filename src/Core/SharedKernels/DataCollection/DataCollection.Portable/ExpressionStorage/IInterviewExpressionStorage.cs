@@ -2,7 +2,7 @@
 {
     public interface IInterviewExpressionStorage
     {
-        void Initialize(IInterviewState state);
+        void Initialize(IInterviewStateForExpressions state);
 
         IInterviewLevel GetLevel(Identity rosterIdentity);
     }

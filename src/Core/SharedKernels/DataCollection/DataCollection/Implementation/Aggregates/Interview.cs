@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
@@ -2333,8 +2332,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.IsUsingExpressionProcessor())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                //, new InterviewProperties(EventSourceId)
-                expressionStorage.Initialize(new InterviewState(changedInterviewTree));
+                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(EventSourceId));
+                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
 
                 var playOrder = questionnaire.GetExpressionsPlayOrder();
                 var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);

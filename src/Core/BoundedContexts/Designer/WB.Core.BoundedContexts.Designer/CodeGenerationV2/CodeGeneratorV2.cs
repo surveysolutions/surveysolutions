@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -19,13 +21,17 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string LevelPrefix = "Level_";
         public const string StaticText = "text_";
         public const string SubSection_ = "subsection_";
-
+        public const string LookupPrefix = "Lookup__";
+        public const string PrivateFieldsPrefix = "__";
+        
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
         public CodeGeneratorV2(ICodeGenerationModelsFactory modelsFactory)
         {
             this.modelsFactory = modelsFactory;
         }
+
+        
 
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
         {
@@ -36,6 +42,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             {
                 { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
             };
+
+            List<LookupTableTemplateModel> lookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
+            var lookupTablesTemplate = new LookupTablesTemplate(lookupTables);
+            generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
 
             foreach (ConditionMethodModel expressionMethodModel in model.ExpressionMethodModel)
             {
