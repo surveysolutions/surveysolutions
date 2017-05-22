@@ -27,9 +27,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             this.lookupTableService = lookupTableService;
         }
 
-        public CodeGenerationModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
+        public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var codeGenerationModel = new CodeGenerationModel
+            var codeGenerationModel = new ExpressionStorageModel
             {
                 Id = questionnaire.PublicKey,
                 ClassName = $"{CodeGeneratorV2.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             }
         }
 
-        public IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
+        public IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
         {
             var linkedWithFilter = questionnaire
                 .Find<IQuestion>()
@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             }
         }
 
-        public IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
+        public IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
         {
             var questionsWithFilter = questionnaire
                 .Find<IQuestion>()
@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             }
         }
 
-        public IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model)
+        public IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
         {
             foreach (var questionModel in model.AllQuestions)
             {

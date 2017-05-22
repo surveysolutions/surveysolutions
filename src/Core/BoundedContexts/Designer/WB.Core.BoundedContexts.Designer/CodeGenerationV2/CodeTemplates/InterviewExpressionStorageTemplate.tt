@@ -18,8 +18,17 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : <#=typeof(IInterviewExpressionStorage).Name#> 
 	{
+		private Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>> levelFactory = new Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>>();
 		public <#=Model.ClassName#>()
 		{
+<#
+		foreach (var level in Model.AllLevels) 
+		{
+#>
+			levelFactory.Add(IdOf.<#= level.Variable #>, (v, s) => new <#= level.ClassName#>(v, s));
+<#
+		}
+#>	
 		}
 
 		public void Initialize(<#=typeof(IInterviewStateForExpressions).Name#> state) 
