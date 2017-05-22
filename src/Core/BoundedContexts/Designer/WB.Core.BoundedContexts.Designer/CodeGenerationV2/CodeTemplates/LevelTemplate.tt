@@ -103,7 +103,7 @@
 	foreach (var question in Model.Questions) 
     {
 #>            
-		public <#=question.TypeName#> <#=question.Variable#> => state.Get<#=question.AnswerMethodName#>Answer(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+		public <#=question.TypeName#> <#=question.Variable#> => state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
 <# 
 	}
 #>

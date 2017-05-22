@@ -264,6 +264,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.CheckedOptions.Where(x => x.No).Select(x => (decimal) x.Value).ToArray());
 
         public override string ToString() => string.Join(", ", CheckedOptions);
+
+        public YesNoAnswers ToYesNoAnswers()
+        {
+            // BUG: yesNo.Missing doesn't work!
+            return new YesNoAnswers(new decimal[0] {}, ToYesNoAnswersOnly());
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
