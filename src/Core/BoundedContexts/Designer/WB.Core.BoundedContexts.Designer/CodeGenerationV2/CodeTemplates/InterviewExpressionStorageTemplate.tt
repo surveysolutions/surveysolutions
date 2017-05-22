@@ -51,17 +51,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 		private <#=typeof(IInterviewLevel).Name#> CreateLevel(Identity rosterIdentity)
 		{
-<#
-		foreach (var level in Model.AllLevels) 
-		{
-#>
-			if (rosterIdentity.Id == IdOf.<#= level.Variable #>)
-			{
-				return new <#= level.ClassName#>(rosterIdentity.RosterVector, this);
-			}
-<#
-		}
-#>			
+			if (levelFactory.ContainsKey(rosterIdentity.Id))
+				return levelFactory[rosterIdentity.Id](rosterIdentity.RosterVector, this);
 			return null;
 		}
 	}
