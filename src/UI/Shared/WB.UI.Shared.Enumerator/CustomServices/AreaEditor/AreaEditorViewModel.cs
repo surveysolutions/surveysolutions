@@ -75,16 +75,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             }
         }
 
-        private void ShowAllMap()
-        {
-            this.mapView.SetViewpointGeometryAsync(this.mapView.Map?.Basemap.BaseLayers[0].FullExtent).ConfigureAwait(false);
-        }
-
-        public override void Start()
-        {
-            base.Start();
-        }
-
         public void UpdateBaseMap(string pathToMap)
         {
             if (pathToMap != null)
@@ -114,7 +104,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             }
         }
         
-        public void Init(string geometry, string mapName, double areaSize)
+        public void Init(string geometry, string mapName, double? areaSize)
         {
             Area = geometry;
             MapName = mapName;
@@ -218,7 +208,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
             {
                 GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
-
             };
 
             Geometry result = null;
