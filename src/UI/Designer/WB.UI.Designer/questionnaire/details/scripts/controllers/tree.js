@@ -697,9 +697,12 @@
                 question.title = data.title;
                 question.variable = data.variable;
                 question.type = data.type;
-                question.linkedToQuestionId = data.linkedToQuestionId;
                 question.hasValidation = data.hasValidation;
                 question.hasCondition = data.hasCondition;
+                question.linkedToEntityId = data.linkedToEntityId;
+                question.linkedToType = data.linkedToType;
+                question.isInteger = data.isInteger;
+                question.yesNoView = data.yesNoView;
 
                 $rootScope.updateVariableTypes(question);
             });
