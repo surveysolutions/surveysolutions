@@ -7,10 +7,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public interface ICodeGenerationModelsFactory
     {
-        CodeGenerationModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire);
-        IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model);
-        IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model);
-        IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, CodeGenerationModel model);
+        ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire);
+        IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model);
+        IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model);
+        IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model);
         IEnumerable<LookupTableTemplateModel> CreateLookupModels(ReadOnlyQuestionnaireDocument questionnaire);
     }
 }

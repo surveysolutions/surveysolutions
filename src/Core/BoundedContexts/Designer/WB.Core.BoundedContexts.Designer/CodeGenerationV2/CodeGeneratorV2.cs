@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
-            CodeGenerationModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
+            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();
             var generatedClasses = new Dictionary<string, string>
             {

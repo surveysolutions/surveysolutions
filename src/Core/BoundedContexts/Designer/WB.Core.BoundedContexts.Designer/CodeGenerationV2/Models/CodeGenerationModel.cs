@@ -7,9 +7,9 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 {
-    public class CodeGenerationModel
+    public class ExpressionStorageModel
     {
-        public CodeGenerationModel()
+        public ExpressionStorageModel()
         {
             this.AllQuestions = new List<QuestionModel>();
             this.AllLevels = new List<LevelModel>();

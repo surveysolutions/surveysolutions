@@ -23,9 +23,9 @@
 
 		public bool IsAnswered(YesNoAnswers answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
 
-		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Processor.ClassName #> processor) 
+		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
 		{
-			this.processor = processor;
+			this.storage = storage;
 <#
 	if (Model.RosterScope.Length == 0)
 	{
@@ -43,7 +43,7 @@
     }
 #>
 <#
-	foreach (var method in Processor.GetEnablementConditions(Model.ClassName)) 
+	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
 #>            
 			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
@@ -51,7 +51,7 @@
 	}
 #>
 <#
-	foreach (var methodGroup in Processor.GetValidationConditions(Model.ClassName)) 
+	foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
     {
 #>
 			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
@@ -86,9 +86,9 @@
 
 		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
 
-		private readonly <#= Processor.ClassName #> processor;
+		private readonly <#= Storage.ClassName #> storage;
 
-		private <#=typeof(IInterviewStateForExpressions).Name#> state => processor.state;
+		private <#=typeof(IInterviewStateForExpressions).Name#> state => storage.state;
 
 		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => state.Properties;
 
@@ -115,7 +115,7 @@
 	foreach (var roster in Model.Rosters) 
     {
 #>            
-		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => processor.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
+		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => storage.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
 <# 
 	}
 #>
