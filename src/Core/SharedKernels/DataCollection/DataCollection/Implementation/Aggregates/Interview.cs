@@ -1322,7 +1322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version, null));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
@@ -1659,7 +1659,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion));
+                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null));
             }
             else
             {

@@ -81,7 +81,8 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewCreated(
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion: questionnaireVersion ?? 7);
+                questionnaireVersion: questionnaireVersion ?? 7,
+                assignmentId: null);
 
         public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new InterviewFromPreloadedDataCreated(
@@ -96,7 +97,7 @@ namespace WB.Tests.Abc.TestFactories
             => new InterviewOnClientCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 1);
+                questionnaireVersion ?? 1, null);
 
         public InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
             => new InterviewReceivedByInterviewer();

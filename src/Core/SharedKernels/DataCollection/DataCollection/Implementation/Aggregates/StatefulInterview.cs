@@ -238,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version, null));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);

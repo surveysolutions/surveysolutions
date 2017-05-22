@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.API.PublicApi.Models;
