@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                     return "string";
 
                 case QuestionType.Numeric:
-                    return ((question as NumericQuestion)?.IsInteger ?? false) ? "long?" : "double?";
+                    return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
 
                 case QuestionType.QRBarcode:
                     return "string";
@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                     return typeof(RosterVector).Name;
                 case QuestionType.TextList:
-                    return $"{typeof(ListAnswerRow).Name}[]";
+                    return $"{typeof(TextListAnswerRow).Name}[]";
 
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoLocation).Name;

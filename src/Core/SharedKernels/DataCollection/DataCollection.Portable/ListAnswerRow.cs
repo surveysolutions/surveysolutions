@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
+
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public class ListAnswerRow
+    [DebuggerDisplay("{ToString()}")]
+    public class TextListAnswerRow
     {
-        public ListAnswerRow(int value, string text)
+        public TextListAnswerRow(decimal value, string text)
         {
             this.Value = value;
             this.Text = text;
         }
 
-        public int Value { get; }
+        public decimal Value { get; }
         public string Text { get; }
 
         public override string ToString() => $"{Value} -> {Text}";
