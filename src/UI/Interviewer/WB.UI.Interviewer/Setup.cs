@@ -118,6 +118,7 @@ namespace WB.UI.Interviewer
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
+            registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -127,8 +128,7 @@ namespace WB.UI.Interviewer
 
             base.FillTargetFactories(registry);
         }
-
-
+        
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(this.CreateAndInitializeIoc());

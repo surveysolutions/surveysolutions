@@ -30,7 +30,7 @@
     </LinearLayout>
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Progress_Indicator"
-               local:MvxBind="ShowProgress IsInProgress; Visibility Visibility(IsInProgress)" />
+               local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />
   <LinearLayout style="@style/Dashboard_Questionnaires_Header">
     <LinearLayout  style="@style/Dashboard_Questionnaires_Header_Body">
       <TextView style="@style/Dashboard_MyQuestionnairesLink"

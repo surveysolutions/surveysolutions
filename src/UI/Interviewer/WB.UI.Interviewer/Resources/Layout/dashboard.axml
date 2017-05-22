@@ -33,7 +33,7 @@
   </android.support.design.widget.AppBarLayout>
 
   <ProgressBar style="@style/Progress_Indicator"
-               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility Visibility(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
+               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
 
   <include layout="@layout/synchronization_panel" />
 
