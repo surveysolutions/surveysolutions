@@ -2334,7 +2334,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 //, new InterviewProperties(EventSourceId)
-                expressionStorage.Initialize(changedInterviewTree);
+                expressionStorage.Initialize(new InterviewState(changedInterviewTree));
 
                 var playOrder = questionnaire.GetExpressionsPlayOrder();
                 var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);

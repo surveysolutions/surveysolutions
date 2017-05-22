@@ -256,14 +256,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => state.Get");
+            this.Write(" => state.GetAnswer<");
             
             #line 106 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.AnswerMethodName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.TypeName));
             
             #line default
             #line hidden
-            this.Write("Answer(IdOf.");
+            this.Write(">(IdOf.");
             
             #line 106 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
