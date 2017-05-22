@@ -185,6 +185,7 @@
                             variable: $scope.activeQuestion.variable,
                             hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
                             yesNoView: $scope.activeQuestion.yesNoView,
+                            isInteger: $scope.activeQuestion.isInteger,
                             linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type
                         });
 
