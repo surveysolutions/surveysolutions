@@ -88,7 +88,9 @@
 
 		private readonly <#= Processor.ClassName #> processor;
 
-		private IInterviewState state => processor.state;
+		private <#=typeof(IInterviewStateForExpressions).Name#> state => processor.state;
+
+		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => state.Properties;
 
 		public RosterVector RosterVector { get; private set; }
 
@@ -99,6 +101,8 @@
 		public int @rowindex => state.GetRosterIndex(Identity);
 
 		public string @rowname => state.GetRosterTitle(Identity);
+
+		public double IRnd => properties.Random;
 <#
 	foreach (var question in Model.Questions) 
     {

@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		{
 		}
 
-		public void Initialize(IInterviewState state) 
+		public void Initialize(<#=typeof(IInterviewStateForExpressions).Name#> state) 
 		{
 			this.state = state;
 		}
 
-		internal IInterviewState state;
+		internal <#=typeof(IInterviewStateForExpressions).Name#> state;
 
 		public <#=typeof(IInterviewLevel).Name#>  GetLevel(Identity rosterIdentity)
 		{

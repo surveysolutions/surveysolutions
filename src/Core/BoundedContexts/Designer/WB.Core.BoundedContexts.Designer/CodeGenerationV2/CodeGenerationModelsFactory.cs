@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
@@ -366,6 +367,24 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         false,
                         formattedId);
                 }
+            }
+        }
+
+        public IEnumerable<LookupTableTemplateModel> CreateLookupModels(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            foreach (var table in questionnaire.LookupTables)
+            {
+                var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                var tableName = table.Value.TableName;
+                var tableTemplateModel = new LookupTableTemplateModel
+                {
+                    TableName = tableName,
+                    TypeName = CodeGeneratorV2.LookupPrefix + tableName.ToPascalCase(),
+                    TableNameField = CodeGeneratorV2.PrivateFieldsPrefix + tableName.ToCamelCase(),
+                    Rows = lookupTableData.Rows,
+                    VariableNames = lookupTableData.VariableNames
+                };
+                yield return tableTemplateModel;
             }
         }
     }
