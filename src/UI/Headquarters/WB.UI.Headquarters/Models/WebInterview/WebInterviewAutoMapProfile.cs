@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
@@ -81,7 +78,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
                .ForMember(x => x.IsTimestamp, opts => opts.MapFrom(x => x.AsDateTime.IsTimestamp))
                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.AsDateTime.GetAnswer().Value));
 
-            this.CreateMap<Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.TextListAnswerRow, TextListAnswerRow>()
+            this.CreateMap<TextListAnswerRow, TextListAnswerRow>()
                 .ForMember(x => x.Text, opts => opts.MapFrom(x => x.Text))
                 .ForMember(x => x.Value, opts => opts.MapFrom(x => x.Value));
             this.CreateMap<InterviewTreeQuestion, InterviewTextListQuestion>()

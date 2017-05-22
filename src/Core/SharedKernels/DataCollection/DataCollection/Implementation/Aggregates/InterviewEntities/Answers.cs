@@ -102,6 +102,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<decimal> ToDecimals() => this.CheckedValues.Select(value => (decimal) value);
 
+        public IEnumerable<int> ToInts() => this.CheckedValues;
+
         public static CategoricalFixedMultiOptionAnswer FromInts(int[] checkedValues)
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues);
 
@@ -169,21 +171,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
     }
 
-    [DebuggerDisplay("{ToString()}")]
-    public class TextListAnswerRow
-    {
-        public TextListAnswerRow(decimal value, string text)
-        {
-            this.Value = value;
-            this.Text = text;
-        }
-
-        public decimal Value { get; }
-        public string Text { get; }
-
-        public override string ToString() => $"{Value} -> {Text}";
-    }
-
+   
     [DebuggerDisplay("{ToString()}")]
     public class GpsAnswer : AbstractAnswer
     {
@@ -196,6 +184,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public GeoPosition Value { get; }
 
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
+
+        public GeoLocation ToGeoLocation()
+            => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
+        
 
         public override string ToString() => Value.ToString();
     }
