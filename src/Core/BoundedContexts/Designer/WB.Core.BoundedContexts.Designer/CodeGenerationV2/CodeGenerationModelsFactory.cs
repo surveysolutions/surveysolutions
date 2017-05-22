@@ -84,7 +84,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                     Variable = varName,
                     ClassName = levelClassName,
                     TypeName = GenerateQuestionTypeName(question, questionnaire),
-                    AnswerMethodName = GenerateAnswerMethodName(question, questionnaire),
                     RosterScope = rosterScope
                 };
 
@@ -217,59 +216,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 case QuestionType.Multimedia:
                     return "string";
-
-                default:
-                    throw new ArgumentException("Unknown question type.");
-            }
-        }
-
-        private static string GenerateAnswerMethodName(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            switch (question.QuestionType)
-            {
-                case QuestionType.Text:
-                    return "Text";
-
-                case QuestionType.Numeric:
-                    return ((question as NumericQuestion)?.IsInteger ?? false) ? "Integer" : "Double";
-
-                case QuestionType.QRBarcode:
-                    return "QRBarcode";
-
-                case QuestionType.MultyOption:
-                    var multiOtion = question as MultyOptionsQuestion;
-                    if (multiOtion != null && multiOtion.YesNoView)
-                        return "YesNo";
-
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
-                        return "Multi";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "MultiLinkedToList";
-                    }
-                    return "MultiLinked";
-
-                case QuestionType.DateTime:
-                    return "DateTime";
-
-                case QuestionType.SingleOption:
-                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "Single";
-
-                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
-                    {
-                        return "SingleLinkedToList";
-                    }
-
-                    return "SingleLinked";
-                case QuestionType.TextList:
-                    return "TextList";
-
-                case QuestionType.GpsCoordinates:
-                    return "Gps";
-
-                case QuestionType.Multimedia:
-                    return "Multimedia";
 
                 default:
                     throw new ArgumentException("Unknown question type.");
