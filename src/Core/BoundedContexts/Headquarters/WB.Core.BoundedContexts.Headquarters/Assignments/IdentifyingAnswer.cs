@@ -2,13 +2,13 @@ using System;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
-    public class PrefilledAnswer
+    public class IdentifyingAnswer
     {
-        protected PrefilledAnswer()
+        protected IdentifyingAnswer()
         {
         }
 
-        public PrefilledAnswer(Assignment assignment)
+        public IdentifyingAnswer(Assignment assignment)
         {
             this.Assignment = assignment;
         }

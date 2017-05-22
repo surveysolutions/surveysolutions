@@ -19,12 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Component(x => x.QuestionnaireId, cmp =>
             {
                 cmp.Property(x => x.QuestionnaireId);
-                cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
+                cmp.Property(x => x.Version, ptp => ptp.Column("questionnaireversion"));
             });
 
-            List(x => x.PrefilledData, mapper =>
+            List(x => x.IdentifyingData, mapper =>
             {
-                mapper.Table("AssignmentsPrefilledAnswers");
+                mapper.Table("AssignmentsIdentifyingAnswers");
                 mapper.Key(k => k.Column("AssignmentId"));
                 mapper.Index(i => i.Column("Position"));
                 mapper.Cascade(Cascade.All|Cascade.DeleteOrphans);

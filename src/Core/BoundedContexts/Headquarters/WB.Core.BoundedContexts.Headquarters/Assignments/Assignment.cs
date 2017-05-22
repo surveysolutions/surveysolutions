@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         public Assignment()
         {
-            this.PrefilledData = new List<PrefilledAnswer>();
+            this.IdentifyingData = new List<IdentifyingAnswer>();
             this.CreatedAtUtc = DateTime.UtcNow;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
-        public virtual IList<PrefilledAnswer> PrefilledData { get; protected set; }
+        public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
         public virtual void Archive()
         {
