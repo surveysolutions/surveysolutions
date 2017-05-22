@@ -127,8 +127,7 @@ namespace WB.UI.Interviewer
 
             base.FillTargetFactories(registry);
         }
-
-
+        
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(this.CreateAndInitializeIoc());

@@ -51,9 +51,8 @@
         <div class="row">
             <div class="page-header clearfix">
                 <div>
-                    <h1>@Users.APIUsers</h1>
+                    <h1>@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                     <a class="btn btn-success" href="@Url.Action("Create", "ApiUser", new {area = string.Empty})">@Users.AddAPIUser</a>
-                    <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.ApiUsersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">

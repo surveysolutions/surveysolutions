@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 Mock.Of<ICommandService>(),
                 Mock.Of<ICompositeCollectionInflationService>(),
                 vibrationViewModel ?? Create.ViewModel.VibrationViewModel(),
-                Mock.Of<QuestionnaireDownloadViewModel>());
+                null);
         }
     }
 }

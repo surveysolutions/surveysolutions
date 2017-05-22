@@ -147,12 +147,11 @@
             <div class="row">
                 <div class="page-header clearfix">
                     <div>
-                        <h1>@Users.Supervisors</h1>
+                        <h1>@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                         @if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
                         }
-                        <h1 style="margin-left: 20px;">@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">

@@ -1371,7 +1371,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
-            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version, null));
             if (questionnaire.IsUsingExpressionProcessor()) this.ApplyEvent(new InterviewUsesProcessor());
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
@@ -1709,7 +1709,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion));
+                this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null));
             }
             else
             {
