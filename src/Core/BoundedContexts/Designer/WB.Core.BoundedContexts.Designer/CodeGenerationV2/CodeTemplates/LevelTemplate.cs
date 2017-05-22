@@ -71,11 +71,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             this.Write("(RosterVector rosterVector, ");
             
             #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Processor.ClassName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Storage.ClassName));
             
             #line default
             #line hidden
-            this.Write(" processor) \r\n\t\t{\r\n\t\t\tthis.processor = processor;\r\n");
+            this.Write(" storage) \r\n\t\t{\r\n\t\t\tthis.storage = storage;\r\n");
             
             #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
-	foreach (var method in Processor.GetEnablementConditions(Model.ClassName)) 
+	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
 
             
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line 53 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
 
-	foreach (var methodGroup in Processor.GetValidationConditions(Model.ClassName)) 
+	foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
     {
 
             
@@ -215,18 +215,18 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 		private readonly ");
             
             #line 89 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Processor.ClassName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Storage.ClassName));
             
             #line default
             #line hidden
-            this.Write(" processor;\r\n\r\n\t\tprivate ");
+            this.Write(" storage;\r\n\r\n\t\tprivate ");
             
             #line 91 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewStateForExpressions).Name));
             
             #line default
             #line hidden
-            this.Write(" state => processor.state;\r\n\r\n\t\tprivate ");
+            this.Write(" state => storage.state;\r\n\r\n\t\tprivate ");
             
             #line 93 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => processor.GetLevels<");
+            this.Write(" => storage.GetLevels<");
             
             #line 118 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(roster.Level.ClassName));

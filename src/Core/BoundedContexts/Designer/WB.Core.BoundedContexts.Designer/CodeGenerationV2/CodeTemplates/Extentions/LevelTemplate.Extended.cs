@@ -6,12 +6,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
 
     {
         public LevelModel Model { get; }
-        public CodeGenerationModel Processor { get; }
+        public ExpressionStorageModel Storage { get; }
 
-        public LevelTemplate(LevelModel model, CodeGenerationModel processor)
+        public LevelTemplate(LevelModel model, ExpressionStorageModel storage)
         {
             this.Model = model;
-            this.Processor = processor;
+            this.Storage = storage;
         }
     }
 }
