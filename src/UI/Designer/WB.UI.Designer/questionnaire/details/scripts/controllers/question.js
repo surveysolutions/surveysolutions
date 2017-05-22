@@ -183,7 +183,9 @@
                             hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
+                            yesNoView: $scope.activeQuestion.yesNoView,
+                            linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
