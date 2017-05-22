@@ -701,6 +701,7 @@
                 question.hasCondition = data.hasCondition;
                 question.linkedToEntityId = data.linkedToEntityId;
                 question.linkedToType = data.linkedToType;
+                question.isInteger = data.isInteger;
                 question.yesNoView = data.yesNoView;
 
                 $rootScope.updateVariableTypes(question);
