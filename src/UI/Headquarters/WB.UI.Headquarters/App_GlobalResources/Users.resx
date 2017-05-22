@@ -178,19 +178,19 @@
     <value>Supervisors</value>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>({0} supervisors)</value>
+    <value>Supervisors ({0})</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>({0} interviewers)</value>
+    <value>Interviewers ({0})</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>({0} api users)</value>
+    <value>API Users ({0})</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>({0} headquarters)</value>
+    <value>Headquarters ({0})</value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>({0} observers)</value>
+    <value>Observers ({0})</value>
   </data>
   <data name="Supervisors_Edit" xml:space="preserve">
     <value>Edit Supervisor</value>

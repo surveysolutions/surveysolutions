@@ -221,8 +221,7 @@
     <comment>Редактирование супервизора</comment>
   </data>
   <data name="SupervisorsCountDescription" xml:space="preserve">
-    <value>({0} супервизоров)</value>
-    <comment>({0} супервизоров)</comment>
+    <value>Супервизоры ({0})</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Архив статус</value>
@@ -237,19 +236,15 @@
     <comment>Добавить интервьювера</comment>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>({0} наблюдатель(ей) )</value>
-    <comment>({0} наблюдатель(ей) )</comment>
+    <value>Наблюдатели ({0})</value>
   </data>
   <data name="InterviewersCountDescription" xml:space="preserve">
-    <value>({0} интервьювер(ов) )</value>
-    <comment>({0} интервьювер(ов) )</comment>
+    <value>Интервьюеры ({0})</value>
   </data>
   <data name="ApiUsersCountDescription" xml:space="preserve">
-    <value>({0} API пользователь(ей) )</value>
-    <comment>({0} API пользователь(ей) )</comment>
+    <value>API Пользователи ({0})</value>
   </data>
   <data name="HeadquartersCountDescription" xml:space="preserve">
-    <value>({0} хедквотер(ов) )</value>
-    <comment>({0} хедквотер(ов) )</comment>
+    <value>Хедквотеры ({0})</value>
   </data>
 </root>
