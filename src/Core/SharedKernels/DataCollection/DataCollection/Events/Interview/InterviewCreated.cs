@@ -5,14 +5,17 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewCreated : InterviewActiveEvent
     {
-        public Guid QuestionnaireId { get; private set; }
-        public long QuestionnaireVersion { get; private set; }
+        public Guid QuestionnaireId { get; }
+        public long QuestionnaireVersion { get; }
 
-        public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion)
+        public int? AssignmentId { get; }
+
+        public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId)
             : base(userId)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
+            this.AssignmentId = assignmentId;
         }
     }
 }
