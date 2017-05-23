@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Summary;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load();
 
             return this.View("TeamsAndStatuses", usersAndQuestionnaires.Questionnaires);
         }
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
             IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load();
 
             return this.View("CumulativeInterviewChart", new DocumentFilter
             {
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Controllers
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, PeriodiceReportType reportType,
             bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, bool totalRowPresent, Guid? supervisorId = null)
         {
-            var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+            var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
 
             return new PeriodicStatusReportModel
             {

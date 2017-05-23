@@ -223,6 +223,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string Assignments_PageTitle {
+            get {
+                return ResourceManager.GetString("Assignments_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attention!.
         /// </summary>
         public static string Attention {
@@ -2055,6 +2064,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string QuestionnaireNameFormat {
             get {
                 return ResourceManager.GetString("QuestionnaireNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (ver. {1}) {0} .
+        /// </summary>
+        public static string QuestionnaireNameVersionFirst {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
             }
         }
         

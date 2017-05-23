@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor;
 
         public InterviewImportService(
             ICommandService commandService,
@@ -44,7 +46,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             IQuestionnaireStorage questionnaireStorage,
             IInterviewUniqueKeyGenerator interviewKeyGenerator,
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            ITransactionManagerProvider transactionManagerProvider)
+            ITransactionManagerProvider transactionManagerProvider,
+            IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -54,6 +57,109 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.interviewKeyGenerator = interviewKeyGenerator;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.transactionManagerProvider = transactionManagerProvider;
+            this.assignmentPlainStorageAccessor = assignmentPlainStorageAccessor;
+        }
+
+        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId)
+        {
+            lock (lockStart)
+            {
+                if (this.Status.IsInProgress)
+                    return;
+
+                this.Status = new InterviewImportStatus
+                {
+                    QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                    InterviewImportProcessId = interviewImportProcessId,
+                    QuestionnaireVersion = questionnaireIdentity.Version,
+                    StartedDateTime = DateTime.Now,
+                    CreatedInterviewsCount = 0,
+                    ElapsedTime = 0,
+                    EstimatedTime = 0,
+                    State = { Columns = new string[0], Errors = new List<InterviewImportError>() },
+                    IsInProgress = true
+                };
+            }
+
+            try
+            {
+                var bigTemplateObject = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                this.Status.QuestionnaireTitle = bigTemplateObject.Title;
+
+                var interviewsToImport = this.interviewImportDataParsingService.GetAssignmentsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
+
+                if (interviewsToImport == null)
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError
+                    {
+                        ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile
+                    });
+
+                    return;
+                }
+
+                this.Status.TotalInterviewsCount = interviewsToImport.Length;
+
+                int createdInterviewsCount = 0;
+                Stopwatch elapsedTime = Stopwatch.StartNew();
+
+                Parallel.ForEach(interviewsToImport,
+                    new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
+                    (importedInterview) =>
+                    {
+                        if (!supervisorId.HasValue && !importedInterview.SupervisorId.HasValue)
+                        {
+                            this.Status.State.Errors.Add(new InterviewImportError
+                            {
+                                ErrorMessage =
+                                    string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
+                            });
+                            return;
+                        }
+                        var responsibleSupervisorId = importedInterview.SupervisorId ?? supervisorId.Value;
+                        var responsibleId = importedInterview.InterviewerId ?? responsibleSupervisorId;
+                        var topLevelAnswers = importedInterview.PreloadedData.Data.First();
+                        var assignment = new Assignment(questionnaireIdentity, responsibleId, importedInterview.Quantity);
+                        var identifyingAnswers = topLevelAnswers.Answers.Select(a => new IdentifyingAnswer(assignment)
+                        {
+                            QuestionId = a.Key,
+                            Answer = a.Value.ToString()
+                        }).ToList();
+                        assignment.SetAnswers(identifyingAnswers);
+
+                        try
+                        {
+                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+
+                            this.plainTransactionManager.ExecuteInPlainTransaction(
+                                () => assignmentPlainStorageAccessor.Store(assignment, Guid.NewGuid()));
+                        }
+                        catch (Exception ex)
+                        {
+                            var errorMessage =
+                                string.Format(Interviews.ImportInterviews_GenericError, this.FormatInterviewImportData(importedInterview), responsibleSupervisorId, importedInterview.InterviewerId, questionnaireIdentity, headquartersId, ex.Message);
+
+                            this.logger.Error(errorMessage, ex);
+
+                            this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = errorMessage });
+                        }
+                        finally
+                        {
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                        }
+
+                        this.Status.CreatedInterviewsCount = Interlocked.Increment(ref createdInterviewsCount);
+                        this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
+                        this.Status.TimePerInterview = this.Status.ElapsedTime / this.Status.CreatedInterviewsCount;
+                        this.Status.EstimatedTime = this.Status.TimePerInterview * this.Status.TotalInterviewsCount;
+                    });
+
+                this.logger.Info($"Imported {this.Status.TotalInterviewsCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
+            }
+            finally
+            {
+                this.Status.IsInProgress = false;
+            }
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, bool isPanel, Guid? supervisorId, Guid headquartersId)
@@ -84,7 +190,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                 var interviewsToImport = isPanel ? 
                     this.interviewImportDataParsingService.GetInterviewsImportDataForPanel(interviewImportProcessId, questionnaireIdentity):
-                    this.interviewImportDataParsingService.GetInterviewsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
+                    this.interviewImportDataParsingService.GetAssignmentsImportDataForSample(interviewImportProcessId, questionnaireIdentity);
 
                 if (interviewsToImport == null)
                 {

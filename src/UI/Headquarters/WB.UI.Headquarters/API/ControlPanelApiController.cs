@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         public IEnumerable<QuestionnaireView> Questionnaires()
-            => this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel()).Questionnaires?.Select(questionnaire=>new QuestionnaireView
+            => this.allUsersAndQuestionnairesFactory.Load().Questionnaires?.Select(questionnaire=>new QuestionnaireView
             {
                 Identity = new QuestionnaireIdentity(questionnaire.TemplateId, questionnaire.TemplateVersion).ToString(),
                 Title = $"(ver. {questionnaire.TemplateVersion}) {questionnaire.TemplateName}"

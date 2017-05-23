@@ -117,73 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API用户</value>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Assignments</value>
   </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>访谈累计图</value>
-  </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>数据导出</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>总部</value>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>帮助</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>调查员</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>访谈</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>地图报告</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>观察员</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>数量</value>
-  </data>
-  <data name="SurveySetup" xml:space="preserve">
-    <value>调查设置</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>已同步但尚未处理的访谈数</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>报告</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>速度</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>督导员</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>调查和状态</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>团队和角色</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>团队成员和状态</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>团队和角色</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>团队和状态</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>批量用户上传</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>用户</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>故障排除</value>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Created at</value>
   </data>
 </root>

@@ -12,7 +12,7 @@
         <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
                     <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })</li>
                 </ol>
                 <h1>@BatchUpload.ImportInterviews_PageTitle</h1>

@@ -184,9 +184,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\ReadonlyUser.cs" />
     <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="Assignments\Assignment.cs" />
     <Compile Include="Assignments\AssignmentMap.cs" />
+    <Compile Include="Assignments\IAssignmentViewFactory.cs" />
     <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\CloneQuestionnaire.cs" />
@@ -347,6 +349,7 @@
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
+    <Compile Include="Mappings\ReadonlyUserMap.cs" />
     <Compile Include="Troubleshooting\IInterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\InterviewLogSummaryReader.cs" />
     <Compile Include="Troubleshooting\TroubleshootingService.cs" />
@@ -767,7 +770,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interviews\Denormalizers\" />
     <Folder Include="Synchronization\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>

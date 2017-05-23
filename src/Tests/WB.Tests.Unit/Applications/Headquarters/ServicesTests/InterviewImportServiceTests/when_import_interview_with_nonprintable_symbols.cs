@@ -33,10 +33,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.Entity.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForSample("sampleId", questionnaireIdentity))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsImportDataForSample("sampleId", questionnaireIdentity))
                 .Returns(new[]
                 {
-                    new InterviewImportData()
+                    new AssignmentImportData()
                     {
                         InterviewerId = interviewerId,
                         SupervisorId = supervisorId,

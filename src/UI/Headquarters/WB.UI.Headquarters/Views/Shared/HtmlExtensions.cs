@@ -34,6 +34,11 @@ namespace ASP
             return string.Format(Pages.QuestionnaireNameFormat, name, version);
         }
 
+        public static string QuestionnaireNameVerstionFirst(this HtmlHelper html, string name, long version)
+        {
+            return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
+        }
+
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)
@@ -79,7 +84,7 @@ namespace ASP
                 case MenuItem.NumberOfCompletedInterviews: return @MainMenu.Quantity;
                 case MenuItem.SpeedOfCompletingInterviews: return @MainMenu.Speed;
                 case MenuItem.Observers: return @MainMenu.Observers;
-                case MenuItem.Questionnaires: return @MainMenu.Questionnaires;
+                case MenuItem.Questionnaires: return @MainMenu.SurveySetup;
                 case MenuItem.Settings: return Resources.Common.Settings;
                 case MenuItem.Summary: return @MainMenu.TeamsAndStatuses;
                 case MenuItem.Teams: return @MainMenu.Supervisors;

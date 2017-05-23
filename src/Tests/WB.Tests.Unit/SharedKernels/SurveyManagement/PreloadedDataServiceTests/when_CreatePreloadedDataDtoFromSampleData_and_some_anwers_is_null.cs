@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of = () => exception = Catch.Exception(() => preloadedDataService.CreatePreloadedDataDtoFromSampleData(
+        Because of = () => exception = Catch.Exception(() => preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(
                 CreatePreloadedDataByFile(header: new[] {"Id", "nq1"},
                     content: new[] {new[] {"1", null}},
                     fileName: "some file name")));
