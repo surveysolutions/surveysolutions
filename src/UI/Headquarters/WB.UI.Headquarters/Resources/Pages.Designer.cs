@@ -2068,6 +2068,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (ver. {1}) {0} .
+        /// </summary>
+        public static string QuestionnaireNameVersionFirst {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameVersionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejected by headquarters.
         /// </summary>
         public static string RejectedByHeadquarters {
