@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -39,7 +40,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 plainTransactionManagerProvider:
                     Mock.Of<IPlainTransactionManagerProvider>(
                         _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
-                transactionManagerProvider: Create.Service.TransactionManagerProvider()
+                transactionManagerProvider: Create.Service.TransactionManagerProvider(),
+                assignmentPlainStorageAccessor: Mock.Of<IPlainStorageAccessor<Assignment>>()
                 );
         }
     }

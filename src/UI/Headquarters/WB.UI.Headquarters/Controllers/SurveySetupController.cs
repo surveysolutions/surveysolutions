@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             // save in future
-            var verificationStatus = this.preloadedDataVerifier.VerifySample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
+            var verificationStatus = this.preloadedDataVerifier.VerifyAssignmentsSample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
 
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
@@ -265,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationStatus.Errors.ToArray(),
                     verificationStatus.WasResponsibleProvided,
                     preloadedMetadata?.Id,
-                    PreloadedContentType.Sample,
+                    PreloadedContentType.Assignments,
                     preloadedSample?.FileName));
             }
 
@@ -276,7 +276,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireTitle = questionnaireInfo?.Title,
                 WasSupervsorProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
-                PreloadedContentType = PreloadedContentType.Sample,
+                PreloadedContentType = PreloadedContentType.Assignments,
                 FileName = preloadedSample.FileName,
                 EnumeratorsCount = verificationStatus.EnumeratorsCount,
                 SupervisorsCount = verificationStatus.SupervisorsCount,
@@ -364,10 +364,20 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
-                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: model.Id,
-                        isPanel: model.PreloadedContentType == PreloadedContentType.Panel,
-                        headquartersId: headquartersId);
+                    if (model.PreloadedContentType == PreloadedContentType.Assignments)
+                    {
+                        this.interviewImportService.ImportAssignments(supervisorId: model.SupervisorId,
+                            questionnaireIdentity: questionnaireIdentity, 
+                            interviewImportProcessId: model.Id,
+                            headquartersId: headquartersId);
+                    }
+                    else
+                    {
+                        this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
+                            questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: model.Id,
+                            isPanel: model.PreloadedContentType == PreloadedContentType.Panel,
+                            headquartersId: headquartersId);
+                    }
                 }
                 finally
                 {
