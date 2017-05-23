@@ -83,15 +83,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             List<Identity> actualRosterIdentities =
                 this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
 
-            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
+            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities).ToList();
             var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities).ToList();
+            var rostersToUpdate = actualRosterIdentities.Except(rostersToRemove).ToList();
 
             foreach (var rosterToRemove in rostersToRemove)
                 this.RemoveChild(rosterToRemove);
 
-            if (rostersToAdd.Any())
+            if (rostersToAdd.Any() || rostersToUpdate.Any())
             {
-
                 InterviewTreeRoster roster = rosterManager.CreateRoster(rosterId);
 
                 foreach (var rosterToAdd in rostersToAdd)
@@ -105,7 +105,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     int indexOfRosterInstance = this.IndexOfFirstRosterInstance(expectedRoster) + sortIndex;
 
                     this.AddOrInsertChild(expectedRoster, indexOfRosterInstance);
+                }
 
+                foreach (var rosterToUpdate in rostersToUpdate)
+                {
+                    var sortIndex = expectedRosterIdentities.IndexOf(rosterToUpdate);
+                    rosterManager.UpdateRoster(this.Tree.GetRoster(rosterToUpdate), this.Identity, rosterToUpdate, sortIndex);
                 }
             }
 
