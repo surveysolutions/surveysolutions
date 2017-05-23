@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
 
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForSample("sampleId", questionnaireIdentity))
-                .Returns((InterviewImportData[])null);
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsImportDataForSample("sampleId", questionnaireIdentity))
+                .Returns((AssignmentImportData[])null);
 
             interviewImportService =
                 CreateInterviewImportService(

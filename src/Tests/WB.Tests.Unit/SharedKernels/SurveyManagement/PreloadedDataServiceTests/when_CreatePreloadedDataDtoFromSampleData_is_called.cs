@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Because of =
             () =>
                 result =
-                    preloadedDataService.CreatePreloadedDataDtoFromSampleData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
+                    preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
                     new[] { new[] { "1", "2" } }, 
                     "some file name"));
 
