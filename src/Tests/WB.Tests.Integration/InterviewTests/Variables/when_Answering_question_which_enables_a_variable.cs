@@ -20,17 +20,16 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
-                children: new IComposite[]
+            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
                 {
-                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
-                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
-                    {
-                        Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
-                    })
-                });
+                    Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
+                })
+            });
 
-            interview = SetupInterview(questionnaireDocument: questionnaire);
+            interview = SetupInterview(questionnaire);
             eventContext = new EventContext();
         };
 

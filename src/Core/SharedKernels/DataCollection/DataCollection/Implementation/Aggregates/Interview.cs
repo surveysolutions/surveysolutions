@@ -2334,11 +2334,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.IsUsingExpressionProcessor())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(EventSourceId), this.properties);
+                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
 
                 var playOrder = questionnaire.GetExpressionsPlayOrder();
-                var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+                var questionnaireLevelIdentity = new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
 
                 var disabledNodes = new HashSet<Identity>();
 
@@ -2354,7 +2354,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             ? entity.Identity
                             : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
                         var level = expressionStorage.GetLevel(nearestRoster);
-                        State result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
+                        State result = this.RunConditionExpression(level.GetConditionExpression(entity.Identity));
                         if (result != State.Disabled)
                             entity.Enable();
                         else
@@ -2384,6 +2384,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 {
                                     question.Enable();
                                 }
+                                // if is roster title, need to update it here?
+                            }
+
+                            if (question.IsLinked)
+                            {
+                                var optionsAndParents = question.GetCalculatedLinkedOptions();
+                                var options = new List<RosterVector>();
+                                foreach (var optionAndParent in optionsAndParents)
+                                {
+                                    var optionLevel = expressionStorage.GetLevel(optionAndParent.ParenRoster);
+                                    Func<IInterviewLevel, bool> filter = optionLevel.GetLinkedQuestionFilter(entity.Identity);
+                                    if (filter == null)
+                                    {
+                                        options.Add(optionAndParent.Option);
+                                    }
+                                    else
+                                    {
+                                        bool filterResult;
+                                        try
+                                        {
+                                            filterResult = filter(level);
+                                        }
+                                        catch
+                                        {
+                                            filterResult = false;
+                                        }
+
+                                        if (filterResult)
+                                            options.Add(optionAndParent.Option);
+                                    }
+                                }
+                                question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray());
+                                // if is roster title, need to update it here?
+                            }
+                        }
+
+                        if (entity is InterviewTreeVariable)
+                        {
+                            var variable = entity as InterviewTreeVariable;
+                            Func<object> expression = level.GetVariableExpression(variable.Identity);
+                            try
+                            {
+                                variable.SetValue(expression());
+                            }
+                            catch
+                            {
+                                variable.SetValue(null);
                             }
                         }
                     }
@@ -2414,6 +2461,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             validateable.MarkValid();
                     }
                 }
+
+                this.UpdateRosterTitles(changedInterviewTree, questionnaire);
             }
             else
             {
@@ -2555,7 +2604,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<InterviewTreeQuestion> linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
             foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
             {
-                linkedQuestion.CalculateLinkedOptions();
+                var options = linkedQuestion.GetCalculatedLinkedOptions();
+                if (options!=null)
+                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.Select(x => x.Option).ToArray());
             }
         }
 
