@@ -733,6 +733,7 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.svg" />
+    <None Include="Dependencies\vue\assignments\AssignmentsTable.vue" />
     <Content Include="ErrorPages\genericError.html" />
     <Content Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="Dependencies\vue\troubleshooting.js" />
@@ -799,6 +800,12 @@
     <EmbeddedResource Include="Resources\Archived.zh.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assignments.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.ru.resx" />
     <EmbeddedResource Include="Resources\DataTables.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1104,11 +1111,14 @@
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
     <Content Include="Dependencies\vue\DatePicker.vue" />
-    <Content Include="Dependencies\vue\InterviewTable.vue" />
+    <Content Include="Dependencies\vue\InterviewTable.vue">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.eot" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.woff2" />
+    <Content Include="Dependencies\vue\assignments\assignments.js" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1424,6 +1434,7 @@
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\Assignments\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1593,6 +1604,7 @@
     <Compile Include="Code\StatusHelper.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
+    <Compile Include="Controllers\AssignmentsController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -1620,6 +1632,7 @@
     <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
+    <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Code\WebInterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
@@ -1768,6 +1781,11 @@
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\Assignments.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Assignments.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\DataTables.Designer.cs">
       <DependentUpon>DataTables.resx</DependentUpon>

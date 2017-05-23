@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                                     new PreloadedFileMetaData(file.Key, file.Value,
                                         this.permittedFileExtensions.Contains(
                                             this.fileSystemAccessor.GetFileExtension(file.Key))))
-                            .ToArray(), PreloadedContentType.Sample);
+                            .ToArray(), PreloadedContentType.Assignments);
                 }
                 return null;
             }
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             var csvFile = csvFilesInDirectory[0];
             var csvFileName = this.fileSystemAccessor.GetFileName(csvFile);
             return new PreloadedContentMetaData(id, csvFileName,
-                new[] { new PreloadedFileMetaData(csvFileName, this.fileSystemAccessor.GetFileSize(csvFile), true) }, PreloadedContentType.Sample);
+                new[] { new PreloadedFileMetaData(csvFileName, this.fileSystemAccessor.GetFileSize(csvFile), true) }, PreloadedContentType.Assignments);
         }
 
         public PreloadedContentMetaData GetPreloadedDataMetaInformationForPanelData(string id)

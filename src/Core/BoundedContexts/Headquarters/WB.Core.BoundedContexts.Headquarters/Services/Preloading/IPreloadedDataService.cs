@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
 
-        PreloadedDataRecord[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);
+        AssignmentPreloadedDataRecord[] CreatePreloadedDataDtoFromAssignmentData(PreloadedDataByFile sampleDataFile);
 
         string GetValidFileNameForTopLevelQuestionnaire();
 
