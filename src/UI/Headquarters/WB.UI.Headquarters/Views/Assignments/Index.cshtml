@@ -1,6 +1,57 @@
-﻿@{
+﻿@model WB.UI.Headquarters.Controllers.AssignmentsFilters
+
+@{
     ViewBag.Title = Pages.Assignments_PageTitle;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>title</h2>
+<main class="hold-transition">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+
+                <div class="filters-container">
+                    <h4>@Pages.FilterTitle:</h4>
+                    
+                    <div class="block-filter">
+                        <h5>@Pages.Template</h5>
+                        <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
+                            @if (Model.Templates.Count() > 1)
+                            {
+                                <option value="">@Common.Any</option>
+                            }
+                            @foreach (var item in Model.Templates)
+                            {
+                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>@Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="block-filter">
+                        <h5>@Common.Responsible</h5>
+                        <p class="list-group-item-text">
+                            <div class="input-group">
+                                <input class="form-control with-clear-btn" 
+                                       placeholder="@Common.Any" 
+                                       data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" 
+                                       type="text" />
+                                <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                                    <div class="btn btn-default">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>

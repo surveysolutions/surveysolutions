@@ -140,7 +140,7 @@ namespace WB.UI.Headquarters.Controllers
             IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load();
 
             return new DocumentFilter
             {
