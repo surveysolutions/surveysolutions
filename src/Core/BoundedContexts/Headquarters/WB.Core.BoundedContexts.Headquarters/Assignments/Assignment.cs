@@ -14,6 +14,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
+        public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? capacity) : this()
+        {
+            this.ResponsibleId = responsibleId;
+            this.Capacity = capacity;
+            this.QuestionnaireId = questionnaireId;
+        }
+
         public virtual int Id { get; protected set; }
 
         public virtual Guid ResponsibleId { get; protected set; }
@@ -47,6 +54,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void Reassign(Guid responsibleId)
         {
             this.ResponsibleId = responsibleId;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void SetAnswers(IList<IdentifyingAnswer> identifyingAnswers)
+        {
+            IdentifyingData = identifyingAnswers;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
     }

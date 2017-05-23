@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     public interface IPreloadedDataVerifier
     {
-        VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data);
+        VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data);
         VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data);
     }
 }
