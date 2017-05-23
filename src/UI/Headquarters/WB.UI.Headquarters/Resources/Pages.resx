@@ -934,4 +934,7 @@
   <data name="Profile_ApiUsersList" xml:space="preserve">
     <value>API users</value>
   </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
 </root>

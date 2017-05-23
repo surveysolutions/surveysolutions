@@ -926,4 +926,7 @@
   <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
     <value>Дата последнего соединения</value>
   </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Задачи</value>
+  </data>
 </root>
