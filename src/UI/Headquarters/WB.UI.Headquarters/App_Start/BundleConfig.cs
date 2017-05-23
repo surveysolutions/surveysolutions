@@ -19,6 +19,15 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/searchHighlight.js"
              ));
 
+
+            bundles.Add(new ScriptBundle("~/js/assignments").Include(
+                "~/Dependencies/build/vue-libs.js",
+                "~/Dependencies/build/vue/assignments/assignments.js",
+                "~/Dependencies/js/dataTables.conditionalPaging.js",
+                "~/Dependencies/js/searchHighlight.js"
+            ));
+
+
             //libs.js:
             //vendor\jquery\dist\jquery.js
             //vendor\bootstrap - sass\assets\javascripts\bootstrap.js
