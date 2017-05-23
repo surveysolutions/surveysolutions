@@ -341,7 +341,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnire. We will open empty interview.
+        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnaire. We will open empty interview.
         /// </summary>
         public static string ReloadInterviewErrorMessage {
             get {
