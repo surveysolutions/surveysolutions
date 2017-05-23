@@ -5,7 +5,86 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<main class="hold-transition">
+@section scripts
+{
+    @Scripts.Render("~/js/common")
+    @Scripts.Render("~/js/assignments")
+
+    <script type="text/javascript">
+        var tableOptions = {
+            deferLoading: 0,
+            columns: [
+                {
+                    data: "id",
+                    name: "Id", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    title: "Id"
+                },
+                {
+                    data: "responsible",
+                    name: "Responsible", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    title: "@Common.Responsible"
+                }
+            ],
+            ajax: {
+                url: '@Url.Action("List", "Assignments")',
+                type: "GET"
+            }
+        };
+
+        var app = new Vue({
+            data: {
+                interviewerId: null,
+                questionnaireId: null,
+                wasInitialized: false,
+                message: "",
+                foundInterviewsMessage: "",
+                questionnaireParams: { censusOnly: false },
+                isLoading: false,
+                tableOptions: tableOptions
+            },
+            methods: {
+                addParamsToRequest: function (requestData) {
+                    requestData.interviewerId = (this.interviewerId || {}).key;
+                    requestData.questionnaireId = (this.questionnaireId || {}).key;
+                },
+                responseProcessor: function (response) {
+                    this.isLoading = false;
+                },
+                userSelected: function (newValue) {
+                    this.interviewerId = newValue;
+                },
+                questionnaireSelected: function (newValue) {
+                    this.questionnaireId = newValue;
+                },
+                startWatchers: function (props, watcher) {
+                    var iterator = function (prop) {
+                        this.$watch(prop, watcher);
+                    };
+                    props.forEach(iterator, this);
+                },
+                reloadTable: function () {
+                    this.isLoading = true;
+                    this.$refs.table.reload(self.reloadTable);
+                }
+            },
+            mounted: function () {
+                document.querySelector("main").classList.remove("hold-transition");
+                document.querySelector("footer").classList.add("footer-adaptive");
+
+                this.reloadTable();
+            }
+        });
+
+        window.onload = function () {
+            Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
+
+            app.$mount('#app');
+        }
+    </script>
+}
+
+
+<main class="hold-transition" id="app">
     <div class="container-fluid">
         <div class="row">
             <aside class="filters">
@@ -14,44 +93,46 @@
                     <span class="arrow"></span>
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
-
                 <div class="filters-container">
-                    <h4>@Pages.FilterTitle:</h4>
-                    
+                    <h4>@Pages.FilterTitle</h4>
                     <div class="block-filter">
                         <h5>@Pages.Template</h5>
-                        <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
-                            @if (Model.Templates.Count() > 1)
-                            {
-                                <option value="">@Common.Any</option>
-                            }
-                            @foreach (var item in Model.Templates)
-                            {
-                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>@Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)</option>
-                            }
-                        </select>
+                        <typeahead data-vv-name="questionnaireId"
+                                   data-vv-as="questionnaire"
+                                   placeholder="@Pages.Template"
+                                   control-id="questionnaireId"
+                                   :ajax-params="questionnaireParams"
+                                   :value="questionnaireId"
+                                   v-on:selected="questionnaireSelected"
+                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"})"></typeahead>
                     </div>
-
                     <div class="block-filter">
                         <h5>@Common.Responsible</h5>
-                        <p class="list-group-item-text">
-                            <div class="input-group">
-                                <input class="form-control with-clear-btn" 
-                                       placeholder="@Common.Any" 
-                                       data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" 
-                                       type="text" />
-                                <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                                <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
-                                    <div class="btn btn-default">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </p>
+                        <typeahead placeholder="@Common.Any"
+                                   control-id="interviewerId"
+                                   :value="interviewerId"
+                                   :ajax-params="{ }"
+                                   v-on:selected="userSelected"
+                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></typeahead>
                     </div>
-
                 </div>
             </aside>
+
+            <div class="main-information">
+                <div class="page-header clearfix">
+                    <h1>
+                        @Assignments.AssignmentsHeader
+                    </h1>
+                </div>
+                <div class="interviews-info">
+                    <div class="table-wrapper interviews-large-screen">
+                        <assignments-table ref="table"
+                                           :add-params-to-request="addParamsToRequest"
+                                           :response-processor="responseProcessor"
+                                           :table-options="tableOptions"></assignments-table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
