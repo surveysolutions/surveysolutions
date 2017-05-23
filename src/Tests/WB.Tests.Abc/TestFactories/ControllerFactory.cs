@@ -21,7 +21,7 @@ namespace WB.Tests.Abc.TestFactories
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory = null)
         {
             return new ReportsController(mapReport ?? Mock.Of<IMapReport>(),
-                allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load(Moq.It.IsAny<AllUsersAndQuestionnairesInputModel>()) ==
+                allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() ==
 new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),

@@ -23,6 +23,7 @@
         UserBatchUpload = 18,
         ApiUsers = 19,
         Settings = 20,
-        Troubleshooting = 21
+        Troubleshooting = 21,
+        Assignments = 22
     }
 }

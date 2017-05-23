@@ -147,7 +147,7 @@
   <data name="Quantity" xml:space="preserve">
     <value>Quantité</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
+  <data name="SurveySetup" xml:space="preserve">
     <value>Paramètres d'enquête</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">

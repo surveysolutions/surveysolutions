@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             this.rosterStructureService = rosterStructureService;
         }
 
-        public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
+        public VerificationStatus VerifyAssignmentsSample(Guid questionnaireId, long version, PreloadedDataByFile data)
         {
             VerificationStatus status = new VerificationStatus(); 
 
@@ -319,6 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
                 yield return ServiceColumns.ResponsibleColumnName;
+                yield return ServiceColumns.AssignmentsCountColumnName;
             }
             
         }

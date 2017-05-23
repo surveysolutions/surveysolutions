@@ -9,4 +9,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         public Guid? SupervisorId { set; get; }
         public Guid? InterviewerId { set; get; }
     }
+
+    public class AssignmentPreloadedDataRecord : PreloadedDataRecord
+    {
+        public int? Quantity { set; get; }
+    }
 }
