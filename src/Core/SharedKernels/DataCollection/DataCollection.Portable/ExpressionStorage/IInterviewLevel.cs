@@ -6,5 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
     {
         Func<bool> GetConditionExpression(Identity entitIdentity);
         Func<bool>[] GetValidationExpressions(Identity entitIdentity);
+        Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity);
+        Func<object> GetVariableExpression(Identity identity);
     }
 }

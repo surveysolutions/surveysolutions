@@ -21,11 +21,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		private Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>> levelFactory = new Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>>();
 		public <#=Model.ClassName#>()
 		{
+			levelFactory.Add(IdOf.<#= CodeGeneratorV2.QuestionnaireIdName#>, (v, s) => new <#= CodeGeneratorV2.QuestionnaireLevel#>(v, s));
 <#
-		foreach (var level in Model.AllLevels) 
+		foreach (var roster in Model.AllRosters) 
 		{
 #>
-			levelFactory.Add(IdOf.<#= level.Variable #>, (v, s) => new <#= level.ClassName#>(v, s));
+			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.Level.ClassName#>(v, s));
 <#
 		}
 #>	
