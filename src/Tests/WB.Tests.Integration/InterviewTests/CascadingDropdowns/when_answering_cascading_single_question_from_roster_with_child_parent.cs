@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                Interview interview = SetupInterviewWithProcessor(questionnaire);
+                Interview interview = SetupInterviewWithExpressionStorage(questionnaire);
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
 

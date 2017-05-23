@@ -87,7 +87,7 @@ namespace WB.UI.Designer.Api.Tester
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
-            questionnaire.IsUsingExpressionProcessor = true;
+            questionnaire.IsUsingExpressionStorage = true;
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaire.AsReadOnly());
 
             return new Questionnaire

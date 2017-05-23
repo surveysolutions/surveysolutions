@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
                         rosterSizeSourceType: RosterSizeSourceType.Question)
                 });
-            interview = SetupInterview(questionnaireDocument: questionnaire);
+            interview = SetupInterviewWithExpressionStorage(questionnaireDocument: questionnaire);
            
         };
 

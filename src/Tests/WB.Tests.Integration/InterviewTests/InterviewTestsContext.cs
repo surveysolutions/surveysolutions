@@ -159,13 +159,13 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterviewWithProcessor(
+        protected static Interview SetupInterviewWithExpressionStorage(
             QuestionnaireDocument questionnaireDocument,
             IEnumerable<object> events = null,
             IInterviewExpressionStorage precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
-            questionnaireDocument.IsUsingExpressionProcessor = true;
+            questionnaireDocument.IsUsingExpressionStorage = true;
             questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
@@ -174,7 +174,7 @@ namespace WB.Tests.Integration.InterviewTests
             Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
-            var state = GetLatestExpressionProcessor(questionnaireDocument, precompiledState);
+            var state = GetLatestExpressionStorage(questionnaireDocument, precompiledState);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionProcessor(It.IsAny<QuestionnaireIdentity>()) == state);
 
@@ -237,11 +237,11 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        private static IInterviewExpressionStorage GetLatestExpressionProcessor(
+        private static IInterviewExpressionStorage GetLatestExpressionStorage(
             QuestionnaireDocument questionnaireDocument,
             IInterviewExpressionStorage precompiledState = null)
         {
-            IInterviewExpressionStorage state = precompiledState ?? GetInterviewExpressionProcessor(questionnaireDocument);
+            IInterviewExpressionStorage state = precompiledState ?? GetInterviewExpressionStorage(questionnaireDocument);
             return state;
         }
 
@@ -351,23 +351,23 @@ namespace WB.Tests.Integration.InterviewTests
             return compiledAssembly;
         }
 
-        public static IInterviewExpressionStorage GetInterviewExpressionProcessor(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStorage GetInterviewExpressionStorage(QuestionnaireDocument questionnaireDocument)
         {
             var compiledAssembly = CompileAssembly(questionnaireDocument, 21);
 
-            Type interviewExpressionProcessorType =
+            Type interviewExpressionStorageType =
                 compiledAssembly.GetTypes()
                     .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionStorage)));
 
-            if (interviewExpressionProcessorType == null)
+            if (interviewExpressionStorageType == null)
                 throw new Exception("Type InterviewExpressionState was not found");
 
 
-            var interviewExpressionProcessor = Activator.CreateInstance(interviewExpressionProcessorType) as IInterviewExpressionStorage;
-            if (interviewExpressionProcessor == null)
+            var interviewExpressionStorage = Activator.CreateInstance(interviewExpressionStorageType) as IInterviewExpressionStorage;
+            if (interviewExpressionStorage == null)
                 throw new Exception("Error on IInterviewExpressionState generation");
 
-            return interviewExpressionProcessor;
+            return interviewExpressionStorage;
         }
 
         public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, bool useLatestEngine = true)

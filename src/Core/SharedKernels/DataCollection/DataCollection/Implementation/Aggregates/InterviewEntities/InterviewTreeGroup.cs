@@ -256,6 +256,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.Children.OfType<InterviewTreeGroup>()
                 .Where(group => !group.IsDisabled())
                 .Select(group => group.Identity);
+
+        public List<Identity> DisableChildNodes()
+        {
+            var disabledNodes = new List<Identity>();
+            foreach (var child in children)
+            {
+                child.Disable();
+                disabledNodes.Add(child.Identity);
+
+                disabledNodes.AddRange((child as InterviewTreeGroup)?.DisableChildNodes() ?? new List<Identity>());
+            }
+
+            return disabledNodes;
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
