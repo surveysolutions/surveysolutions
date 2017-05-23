@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -27,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
         private readonly string logoController = string.Concat(interviewerApiUrl, apiVersion, "/companyLogo");
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
+        private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
@@ -191,7 +193,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token,
                 credentials: this.restCredentials));
         }
-
+        
         public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
@@ -202,8 +204,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
-              url: string.Concat(this.questionnairesController, "/list"),
-              credentials: this.restCredentials, token: cancellationToken));
+               url: string.Concat(this.questionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
+        }
+        
+        public Task<List<AssignmentDocument>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentDocument>>(
+                url: String.Concat(this.assignmentsController)));
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)

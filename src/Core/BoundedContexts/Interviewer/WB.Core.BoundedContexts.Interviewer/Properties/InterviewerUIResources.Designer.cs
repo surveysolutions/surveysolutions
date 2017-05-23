@@ -1194,6 +1194,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for new assignments.
+        /// </summary>
+        public static string Synchronization_Of_Assignments {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_Assignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to questionnaires.
         /// </summary>
         public static string Synchronization_Questionnaires {
