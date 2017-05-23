@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         })
                     );
                 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new object[] { });
+                var interview = SetupInterview(questionnaireDocument, new object[] { });
 
                 interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {0}), DateTime.Now,"a");
                 interview.AnswerTextQuestion(userId, txtSourceOfLinkId, Create.Entity.RosterVector(new[] {1}), DateTime.Now, "b");
