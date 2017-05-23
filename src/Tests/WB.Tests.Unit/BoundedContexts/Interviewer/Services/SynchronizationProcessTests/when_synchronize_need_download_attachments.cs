@@ -7,6 +7,7 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -48,6 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 && x.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1"))
                 && x.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Entity.AttachmentContent_Enumerator("5"))
                 && x.GetQuestionnaireTranslationAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<TranslationDto>())
+                && x.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new List<AssignmentDocument>())
                 );
 
             interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(

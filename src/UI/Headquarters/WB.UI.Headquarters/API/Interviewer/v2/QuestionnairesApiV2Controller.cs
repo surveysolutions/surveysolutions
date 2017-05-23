@@ -14,13 +14,12 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
-    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
+    [ApiBasicAuth(UserRoles.Interviewer)]
     public class QuestionnairesApiV2Controller : QuestionnairesControllerBase
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -82,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             var attachmentIds = questionnaireDocument.Attachments.Select(a => a.ContentId).ToList();
 
             var response = this.Request.CreateResponse(attachmentIds);
-            response.Headers.CacheControl = new CacheControlHeaderValue()
+            response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = true,
                 MaxAge = TimeSpan.FromDays(10)

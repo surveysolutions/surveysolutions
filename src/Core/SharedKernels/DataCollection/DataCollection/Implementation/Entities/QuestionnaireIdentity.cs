@@ -3,7 +3,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public class QuestionnaireIdentity
+    public sealed class QuestionnaireIdentity
     {
         public QuestionnaireIdentity() { }
         public QuestionnaireIdentity(Guid questionnaireId, long version)
@@ -12,11 +12,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.Version = version;
         }
 
-        public virtual long Version { get; set; }
+        public long Version { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
-        public virtual Guid QuestionnaireId { get; set; }
-
-        public virtual bool Equals(QuestionnaireIdentity other)
+        public bool Equals(QuestionnaireIdentity other)
         {
             return this.Version == other.Version && this.QuestionnaireId.Equals(other.QuestionnaireId);
         }
@@ -60,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public static QuestionnaireIdentity Parse(string id)
         {
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentNullException("the id is null or empty string");
+                throw new ArgumentNullException(nameof(id), "the id is null or empty string");
 
             var idParameters = id.Split('$');
             if (idParameters.Length != 2)
