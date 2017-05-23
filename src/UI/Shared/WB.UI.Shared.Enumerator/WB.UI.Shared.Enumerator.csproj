@@ -1124,14 +1124,6 @@
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
-      <Project>{e41deb5c-2ad6-463f-9f76-10299fc2d9d1}</Project>
-      <Name>WB.Infrastructure.Shared.Enumerator</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\complete_screen_statistics_column_background.xml" />
