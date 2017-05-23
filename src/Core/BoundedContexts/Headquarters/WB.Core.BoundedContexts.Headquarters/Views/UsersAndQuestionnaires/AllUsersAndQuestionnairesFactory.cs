@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -10,7 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 {
     public interface IAllUsersAndQuestionnairesFactory
     {
-        AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input);
+        AllUsersAndQuestionnairesView Load();
+        List<TemplateViewItem> GetQuestionnaires();
     }
 
     public class AllUsersAndQuestionnairesFactory : IAllUsersAndQuestionnairesFactory
@@ -26,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
             this.interviewSummaryReader = interviewSummaryReader;
         }
 
-        public AllUsersAndQuestionnairesView Load(AllUsersAndQuestionnairesInputModel input)
+        public AllUsersAndQuestionnairesView Load()
         {
             var allUsers =
                 this.interviewSummaryReader.Query(
@@ -37,18 +39,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                             .Select(x => new UsersViewItem {UserId = x.Key.TeamLeadId, UserName = x.Key.TeamLeadName})
                             .OrderBy(x => x.UserName).ToList());
 
-            var questionnaires = this.questionnairesReader.Query(_ => _.Where(q=>!q.IsDeleted).Select(questionnaire => new TemplateViewItem
-            {
-                TemplateId = questionnaire.QuestionnaireId,
-                TemplateName = questionnaire.Title,
-                TemplateVersion = questionnaire.Version
-            }).OrderBy(x => x.TemplateName).ThenBy(n => n.TemplateVersion).ToList());
+            var questionnaires = this.GetTemplates();
 
             return new AllUsersAndQuestionnairesView
              {
                  Users = allUsers,
                  Questionnaires = questionnaires
              };
+        }
+
+        public List<TemplateViewItem> GetQuestionnaires()
+        {
+            return this.GetTemplates();
+        }
+
+        private List<TemplateViewItem> GetTemplates()
+        {
+            var questionnaires = this.questionnairesReader.Query(_ => _.Where(q => !q.IsDeleted)
+                .Select(questionnaire => new TemplateViewItem
+                {
+                    TemplateId = questionnaire.QuestionnaireId,
+                    TemplateName = questionnaire.Title,
+                    TemplateVersion = questionnaire.Version
+                }).OrderBy(x => x.TemplateName).ThenBy(n => n.TemplateVersion).ToList());
+            return questionnaires;
         }
     }
 }
