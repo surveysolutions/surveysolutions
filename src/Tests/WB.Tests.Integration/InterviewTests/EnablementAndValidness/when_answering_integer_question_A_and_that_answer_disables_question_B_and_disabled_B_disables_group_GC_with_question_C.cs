@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     })
                 );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
                 {
                     Abc.Create.Event.QuestionsEnabled(new []
                     {

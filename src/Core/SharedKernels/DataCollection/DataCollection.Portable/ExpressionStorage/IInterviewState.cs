@@ -19,5 +19,11 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
     public interface IInterviewPropertiesForExpressions
     {
         double Random { get; }
+
+        Guid SupervisorId { get; }
+
+        Guid InterviewerId { get; }
+
+        string InterviewId { get; }
     }
 }

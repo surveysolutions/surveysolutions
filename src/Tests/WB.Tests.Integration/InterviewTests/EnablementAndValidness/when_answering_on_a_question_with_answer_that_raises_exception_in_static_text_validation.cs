@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
-                var interview = SetupInterview(
+                var interview = SetupInterviewWithExpressionStorage(
                     Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Abc.Create.Entity.Group(null, "Chapter X", null, null, false, new IComposite[]

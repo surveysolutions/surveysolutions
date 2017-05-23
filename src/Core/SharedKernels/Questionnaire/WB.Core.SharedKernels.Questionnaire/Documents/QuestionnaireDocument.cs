@@ -121,7 +121,7 @@ namespace Main.Core.Documents
 
         public long LastEventSequence { get; set; }
 
-        public bool IsUsingExpressionProcessor { get; set; }
+        public bool IsUsingExpressionStorage { get; set; }
 
         // fill in before export to HQ or Tester
         public List<Guid> ExpressionsPlayOrder { get; set; }

@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     );
 
                 var emptyVector = new decimal[] { };
-                var interview = SetupInterviewWithProcessor(questionnaireDocument, new object[] { });
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new object[] { });
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 3);
                 interview.AnswerNumericIntegerQuestion(userId, integerQuestionId, RosterVector.Empty, DateTime.Now, 2);

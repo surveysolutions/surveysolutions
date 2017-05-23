@@ -35,17 +35,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                    Abc.Create.Entity.NumericIntegerQuestion(id: petsAgeQuestionId,
-                                                                 variable: "pet_age",
-                                                                 validationConditions: new List<ValidationCondition>()
-                                                                    {
-                                                                         new ValidationCondition("pet_age > 10", "pet_age > 10"),
-                                                                         new ValidationCondition("pet_age > 20", "pet_age > 20"),
-                                                                         new ValidationCondition("pet_age > 30", "pet_age > 30"),
-                                                                    }
-                                                                 )
+                        variable: "pet_age",
+                        validationConditions: new List<ValidationCondition>()
+                        {
+                                new ValidationCondition("pet_age > 10", "pet_age > 10"),
+                                new ValidationCondition("pet_age > 20", "pet_age > 20"),
+                                new ValidationCondition("pet_age > 30", "pet_age > 30"),
+                        }
+                        )
                    );
 
-               var interview = SetupInterview(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                using (var eventContext = new EventContext())
                {

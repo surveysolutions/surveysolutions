@@ -2337,11 +2337,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var playOrder = questionnaire.GetExpressionsPlayOrder();
                 var questionnaireLevelIdentity = new Identity(QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+
+                var disabledNodes = new HashSet<Identity>();
+
                 foreach (var entityId in playOrder)
                 {
                     var entities = changedInterviewTree.FindEntity(entityId);
                     foreach (var entity in entities)
                     {
+                        if (disabledNodes.Contains(entity.Identity))
+                            continue;
+
                         var nearestRoster = entity is InterviewTreeRoster 
                             ? entity.Identity
                             : entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
@@ -2349,7 +2355,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         State result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
                         if (result != State.Disabled)
                             entity.Enable();
-                        else entity.Disable();
+                        else
+                        {
+                            entity.Disable();
+                            if (entity is InterviewTreeGroup)
+                            {
+                                List<Identity> disabledChildNodes = (entity as InterviewTreeGroup).DisableChildNodes();
+                                disabledChildNodes.ForEach(x => disabledNodes.Add(x));
+                            }
+                        }
 
                         if (entity is InterviewTreeQuestion)
                         {

@@ -1566,7 +1566,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsUsingExpressionProcessor()
         {
-            return this.QuestionnaireDocument.IsUsingExpressionProcessor;
+            return this.QuestionnaireDocument.IsUsingExpressionStorage;
         }
 
         public List<Guid> GetExpressionsPlayOrder()

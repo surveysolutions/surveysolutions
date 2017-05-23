@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, "numeric")
                 });
 
-                var interview = SetupInterviewWithProcessor(questionnaire, new object[]{});
+                var interview = SetupInterviewWithExpressionStorage(questionnaire, new object[]{});
 
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1m);
                 interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 11m);
