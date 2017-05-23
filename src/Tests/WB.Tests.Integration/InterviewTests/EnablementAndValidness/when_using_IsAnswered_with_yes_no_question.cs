@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                         Create.Entity.Group(groupId, "Group X", null, $"IsAnswered({yesNoQuestionVariable})", false, null)
                     });
 
-                var interview = SetupInterviewWithProcessor(questionnaireDocument);
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                 using (var eventContext = new EventContext())
                 {

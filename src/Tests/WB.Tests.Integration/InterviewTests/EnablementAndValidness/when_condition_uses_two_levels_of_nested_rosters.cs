@@ -56,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                    Abc.Create.Entity.NumericIntegerQuestion(finalQuestionId, variable: "fin", enablementCondition: "fam.Sum(y => y.frnd.Sum(z => z.pet_age)) > 10"));
 
 
-               var interview = SetupInterviewWithProcessor(questionnaireDocument);
+               var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
 
                interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Now, 1);
                interview.AnswerNumericIntegerQuestion(userId, petsQuestionId, new decimal[] { 0 }, DateTime.Now, 2);
