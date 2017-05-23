@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
