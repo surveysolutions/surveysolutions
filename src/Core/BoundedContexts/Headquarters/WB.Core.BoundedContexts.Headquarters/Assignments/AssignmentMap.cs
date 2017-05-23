@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Component(x => x.QuestionnaireId, cmp =>
             {
                 cmp.Property(x => x.QuestionnaireId);
-                cmp.Property(x => x.Version, ptp => ptp.Column("questionnaireversion"));
+                cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
 
             List(x => x.IdentifyingData, mapper =>
@@ -34,6 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 c.Property(x => x.QuestionId);
                 c.Property(x => x.Assignment);
             }));
+
+            ManyToOne(x => x.Responsible, mto =>
+            {
+                mto.Column("ResponsibleId");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
         }
     }
 }

@@ -60,6 +60,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
@@ -358,6 +359,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
             
             this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
+            this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -16,6 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual int Id { get; protected set; }
 
         public virtual Guid ResponsibleId { get; protected set; }
+
+        public virtual ReadonlyUser Responsible { get; protected set; }
 
         public virtual int? Capacity { get; protected set; }
 
