@@ -190,8 +190,28 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(
             QuestionnaireDocument questionnaireDocument, 
-            IEnumerable<object> events = null, 
-            ILatestInterviewExpressionState precompiledState = null)
+            ILatestInterviewExpressionState precompiledState)
+        {
+            return SetupInterview(questionnaireDocument, null, precompiledState);
+        }
+
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            return SetupInterviewWithExpressionStorage(questionnaireDocument, null, null);
+            //return SetupInterview(questionnaireDocument, null, null);
+        }
+
+        protected static Interview SetupInterview(
+            QuestionnaireDocument questionnaireDocument,
+            IEnumerable<object> events)
+        {
+            return SetupInterview(questionnaireDocument, events, null);
+        }
+
+        protected static Interview SetupInterview(
+            QuestionnaireDocument questionnaireDocument, 
+            IEnumerable<object> events, 
+            ILatestInterviewExpressionState precompiledState)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             
