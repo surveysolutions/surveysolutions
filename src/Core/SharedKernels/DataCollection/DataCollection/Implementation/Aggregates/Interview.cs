@@ -322,6 +322,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
                 this.Tree.GetStaticText(staticTextIdentity).MarkValid();
+
+            if (this.UsingExpressionProcessor) return;
             this.ExpressionProcessorStatePrototype.DeclareStaticTextValid(@event.StaticTexts);
         }
 
@@ -2394,6 +2396,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         var validateable = entity as IInterviewTreeValidateable;
                         if (validateable == null) continue;
 
+                        var isUnansweredQuestion = entity is InterviewTreeQuestion && !(entity as InterviewTreeQuestion).IsAnswered();
+                        if (isUnansweredQuestion)
+                            continue;
+                            
                         var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
                         IInterviewLevel level = expressionStorage.GetLevel(nearestRoster);
                         var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
