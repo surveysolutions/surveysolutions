@@ -147,7 +147,7 @@
   <data name="Quantity" xml:space="preserve">
     <value>数量</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
+  <data name="SurveySetup" xml:space="preserve">
     <value>调查设置</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">

@@ -1424,6 +1424,7 @@
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\Assignments\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1593,6 +1594,7 @@
     <Compile Include="Code\StatusHelper.cs" />
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
+    <Compile Include="Controllers\AssignmentsController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -1620,6 +1622,7 @@
     <Compile Include="Controllers\TroubleshootingController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Controllers\WebInterviewController.cs" />
+    <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Code\WebInterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />

@@ -79,7 +79,7 @@ namespace ASP
                 case MenuItem.NumberOfCompletedInterviews: return @MainMenu.Quantity;
                 case MenuItem.SpeedOfCompletingInterviews: return @MainMenu.Speed;
                 case MenuItem.Observers: return @MainMenu.Observers;
-                case MenuItem.Questionnaires: return @MainMenu.Questionnaires;
+                case MenuItem.Questionnaires: return @MainMenu.SurveySetup;
                 case MenuItem.Settings: return Resources.Common.Settings;
                 case MenuItem.Summary: return @MainMenu.TeamsAndStatuses;
                 case MenuItem.Teams: return @MainMenu.Supervisors;
