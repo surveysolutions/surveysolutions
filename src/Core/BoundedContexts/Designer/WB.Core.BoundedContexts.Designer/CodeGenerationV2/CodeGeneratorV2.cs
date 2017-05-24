@@ -37,14 +37,15 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
             ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
+            model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
+
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();
             var generatedClasses = new Dictionary<string, string>
             {
                 { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
             };
 
-            List<LookupTableTemplateModel> lookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
-            var lookupTablesTemplate = new LookupTablesTemplate(lookupTables);
+            var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
 
             foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
