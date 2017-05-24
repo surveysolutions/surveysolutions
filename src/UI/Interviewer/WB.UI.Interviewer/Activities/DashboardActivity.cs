@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -8,7 +9,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
@@ -36,15 +36,21 @@ namespace WB.UI.Interviewer.Activities
             {
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
-                    FragmentType = typeof(DashboardQuestionnairesFragment),
-                    ViewModel = ViewModel.QuestionnairesAndNewInterviewes,
-                    Title = ViewModel.QuestionnairesAndNewInterviewes.Title
-                },
-                new MvxFragmentStatePagerAdapter.FragmentInfo
-                {
                     FragmentType = typeof(DashboardStartedInterviewsFragment),
                     ViewModel = ViewModel.StartedInterviews,
                     Title = ViewModel.StartedInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardNewInterviewsFragment),
+                    ViewModel = ViewModel.NewInterviews,
+                    Title = ViewModel.NewInterviews.Title
+                },
+                new MvxFragmentStatePagerAdapter.FragmentInfo
+                {
+                    FragmentType = typeof(DashboardRejectednterviewsFragment),
+                    ViewModel = ViewModel.RejectedInterviews,
+                    Title = ViewModel.RejectedInterviews.Title
                 },
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
@@ -54,13 +60,18 @@ namespace WB.UI.Interviewer.Activities
                 },
                 new MvxFragmentStatePagerAdapter.FragmentInfo
                 {
-                    FragmentType = typeof(DashboardRejectednterviewsFragment),
-                    ViewModel = ViewModel.RejectedInterviews,
-                    Title = ViewModel.RejectedInterviews.Title
-                }
+                    FragmentType = typeof(DashboardQuestionnairesFragment),
+                    ViewModel = ViewModel.Questionnaires,
+                    Title = ViewModel.Questionnaires.Title
+                },
             };
 
-            viewPager.Adapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager, fragments);
+            var fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager, fragments);
+            viewPager.Adapter = fragmentStatePagerAdapter;
+            viewPager.PageSelected += (s, e) =>
+            {
+                ViewModel.TypeOfInterviews = ((InterviewTabPanel) fragments[e.Position].ViewModel).InterviewStatus;
+            };
 
             var tabLayout = this.FindViewById<TabLayout>(Resource.Id.tabs);
             tabLayout.SetupWithViewPager(viewPager);
@@ -69,10 +80,10 @@ namespace WB.UI.Interviewer.Activities
             {
                 fragments[fragmentIndex].ViewModel.PropertyChanged += (s, e) =>
                 {
-                    if (e.PropertyName != nameof(TabPanel.Title)) return;
+                    if (e.PropertyName != nameof(InterviewTabPanel.Title)) return;
 
                     var tabIndex = fragments.FindIndex(fragmentInfo => fragmentInfo.ViewModel == s);
-                    tabLayout.GetTabAt(tabIndex).SetText(((TabPanel)s).Title);
+                    tabLayout.GetTabAt(tabIndex).SetText(((InterviewTabPanel)s).Title);
                 };
             }
         }

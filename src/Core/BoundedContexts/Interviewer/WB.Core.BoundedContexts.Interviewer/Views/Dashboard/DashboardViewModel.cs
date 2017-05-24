@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
@@ -18,7 +19,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
 
-        public QuestionnairesAndNewInterviewsViewModel QuestionnairesAndNewInterviewes { get; }
+        public NewInterviewsViewModel NewInterviews { get; }
+        public QuestionnairesViewModel Questionnaires { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
@@ -27,20 +29,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
-            QuestionnairesAndNewInterviewsViewModel dashboardQuestionnairesViewModel,
-            StartedInterviewsViewModel dashboardStartedInterviewsViewModel,
-            CompletedInterviewsViewModel dashboardCompletedInterviewsViewModel,
-            RejectedInterviewsViewModel dashboardRejectedInterviewsViewModel) : base(principal, viewModelNavigationService)
+            QuestionnairesViewModel questionnairesViewModel,
+            StartedInterviewsViewModel startedInterviewsViewModel,
+            CompletedInterviewsViewModel completedInterviewsViewModel,
+            RejectedInterviewsViewModel rejectedInterviewsViewModel,
+            NewInterviewsViewModel interviewsViewModel) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
 
-            this.QuestionnairesAndNewInterviewes = dashboardQuestionnairesViewModel;
-            this.StartedInterviews = dashboardStartedInterviewsViewModel;
-            this.CompletedInterviews = dashboardCompletedInterviewsViewModel;
-            this.RejectedInterviews = dashboardRejectedInterviewsViewModel;
+            this.Questionnaires = questionnairesViewModel;
+            this.StartedInterviews = startedInterviewsViewModel;
+            this.CompletedInterviews = completedInterviewsViewModel;
+            this.RejectedInterviews = rejectedInterviewsViewModel;
+            this.NewInterviews = interviewsViewModel;
         }
 
         private IMvxCommand synchronizationCommand;
@@ -63,13 +67,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        private int numberOfAssignedInterviews => this.QuestionnairesAndNewInterviewes.NewInterviewsCount
+        private GroupStatus typeOfInterviews;
+        public GroupStatus TypeOfInterviews
+        {
+            get { return this.typeOfInterviews; }
+            set { this.typeOfInterviews = value; this.RaisePropertyChanged(); }
+        }
+
+        private int numberOfAssignedInterviews => this.NewInterviews.NewInterviewsCount
                                                   + this.StartedInterviews.Items.Count
                                                   + this.CompletedInterviews.Items.Count
                                                   + this.RejectedInterviews.Items.Count;
 
         public bool IsExistsAnyCensusQuestionnairesOrInterviews
-            => numberOfAssignedInterviews + this.QuestionnairesAndNewInterviewes.CensusQuestionnairesCount > 0;
+            => numberOfAssignedInterviews + this.Questionnaires.Items.Count > 0;
 
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
@@ -111,10 +122,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if(this.principal.CurrentUserIdentity == null)
                 return;
 
-            this.QuestionnairesAndNewInterviewes.Load();
+            this.Questionnaires.Load();
             this.StartedInterviews.Load();
             this.CompletedInterviews.Load();
             this.RejectedInterviews.Load();
+            this.NewInterviews.Load(this.synchronization);
             
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.RaisePropertyChanged(() => this.IsExistsAnyCensusQuestionnairesOrInterviews);

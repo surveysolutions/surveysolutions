@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class StartedInterviewsViewModel : ListViewModel<InterviewDashboardItemViewModel>
     {
+        public string Description => InterviewerUIResources.Dashboard_StartedTabText;
+        public override GroupStatus InterviewStatus => GroupStatus.Started;
+
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPrincipal principal;
@@ -40,8 +43,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var interviewViews = this.interviewViewRepository.Where(interview =>
                 interview.ResponsibleId == interviewerId &&
-                (interview.Status == InterviewStatus.InterviewerAssigned && interview.StartedDateTime != null || 
-                interview.Status == InterviewStatus.Restarted));
+                (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned && interview.StartedDateTime != null || 
+                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Restarted));
 
             foreach (var interviewView in interviewViews)
             {

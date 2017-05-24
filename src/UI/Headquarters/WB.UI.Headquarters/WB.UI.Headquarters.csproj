@@ -663,6 +663,7 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
+    <Content Include="Dependencies\build\vue\assignments\assignments.js" />
     <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\css\jqplot-override.css" />
     <Content Include="Dependencies\dist\*.*" />
@@ -1451,6 +1452,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
+    <Compile Include="API\AssignmetsApiController.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
