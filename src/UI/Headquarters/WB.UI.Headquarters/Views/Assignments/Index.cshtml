@@ -21,9 +21,25 @@
                 },
                 {
                     data: "responsible",
-                    name: "Responsible", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    name: "Responsible",
                     title: "@Common.Responsible"
-                }
+                },
+                {
+                    data: "capacity",
+                    name: "Capacity",
+                    "class": "type-numeric",
+                    title: "@Assignments.Capacity"
+                },
+                {
+                    data: "updatedAtUtc",
+                    name: "UpdatedAtUtc",
+                    title: "@Assignments.UpdatedAt"
+                },
+                {
+                    data: "createdAtUtc",
+                    name: "CreatedAtUtc",
+                    title: "@Assignments.CreatedAt"
+                },
             ],
             ajax: {
                 url: '@Url.Action("List", "Assignments")',

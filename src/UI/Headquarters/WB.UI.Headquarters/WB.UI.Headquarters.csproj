@@ -663,6 +663,7 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
+    <Content Include="Dependencies\build\vue\assignments\assignments.js" />
     <Content Include="Dependencies\build\vue\troubleshooting.js" />
     <Content Include="Dependencies\css\jqplot-override.css" />
     <Content Include="Dependencies\dist\*.*" />
