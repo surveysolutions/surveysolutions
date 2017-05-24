@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
+namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
 {
     public interface IMapService
     {

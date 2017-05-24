@@ -1,8 +1,8 @@
 using Ninject.Modules;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 using WB.UI.Shared.Enumerator.CustomServices;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -18,8 +18,11 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
             this.Bind<IVirbationService>().To<VibrationService>();
 
-            this.Bind<IAreaEditService>().To<AreaEditService>();
-
+/*#if EXCLUDEEXTENTIONS
+            this.Bind<IAreaEditService>().To<DummyEditService>();
+#else
+            this.Bind<IAreaEditService>().To<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
+#endif*/
             this.Bind<IMapService>().To<MapService>();
         }
     }

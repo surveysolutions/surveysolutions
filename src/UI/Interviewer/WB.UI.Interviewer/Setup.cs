@@ -10,7 +10,6 @@ using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
-using Ncqrs.Eventing.Storage;
 using Ninject;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -22,11 +21,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
@@ -36,15 +32,12 @@ using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Ninject;
-using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 using WB.UI.Shared.Enumerator.Ninject;
 using Xamarin;
-using Xamarin.InsightsCore;
 
 namespace WB.UI.Interviewer
 {
@@ -98,7 +91,9 @@ namespace WB.UI.Interviewer
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
-                {typeof (AreaEditorViewModel), typeof (AreaEditorActivity)}
+#if !EXCLUDEEXTENTIONS
+                {typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+#endif
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -195,6 +190,9 @@ namespace WB.UI.Interviewer
             {
                 typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
+#if !EXCLUDEEXTENTIONS
+                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+#endif
             });
         }
     }

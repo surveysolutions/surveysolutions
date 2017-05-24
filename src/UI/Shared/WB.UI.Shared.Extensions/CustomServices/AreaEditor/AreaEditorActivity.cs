@@ -6,11 +6,10 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
-using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
+namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class AreaEditorActivity : BaseActivity<AreaEditorViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
@@ -29,17 +28,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             this.Finish();
         }
         
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
+            base.OnCreate(bundle);
             this.ViewModel.OnAreaEditCompleted += OnAreaEditCompleted;
-            
+
             //esri bug
             //inflated map doesn't work  
-            var container = this.FindViewById<LinearLayout>(Resource.Id.AreaMapViewContainer);
-
             var map = new MapView();
-
             var bindingSet = this.CreateBindingSet<AreaEditorActivity, AreaEditorViewModel>();
 
             bindingSet.Bind(map)
@@ -50,6 +46,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
             this.ViewModel.MapView = map;
 
+            var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
             container.AddView(map);
         }
         
