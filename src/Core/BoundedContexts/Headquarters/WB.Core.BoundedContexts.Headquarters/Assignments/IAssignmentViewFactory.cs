@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 var items = ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
 
-                return items.Skip((input.Page - 1) * input.PageSize)
+                return items.Fetch(x => x.Responsible).Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
                     .ToList();
             });
@@ -85,6 +86,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => x.QuestionnaireId.Version == input.QuestionnaireVersion);
             }
 
+            if (input.ResponsibleId.HasValue)
+            {
+                items = items.Where(x => x.ResponsibleId == input.ResponsibleId);
+            }
+
             return items;
         }
     }
@@ -94,6 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public string SearchBy { get; set; }
         public Guid? QuestionnaireId { get; set; }
         public long? QuestionnaireVersion { get; set; }
+        public Guid? ResponsibleId { get; set; }
     }
 
     public class AssignmentsWithoutIdentifingData : IListView<AssignmentWithoutIdentifingData>

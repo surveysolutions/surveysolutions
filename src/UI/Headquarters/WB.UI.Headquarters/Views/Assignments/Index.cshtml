@@ -12,44 +12,51 @@
 
     <script type="text/javascript">
         var tableOptions = {
+            rowId: "id",
             deferLoading: 0,
+            order: [[3, 'desc']],
             columns: [
                 {
                     data: "id",
-                    name: "Id", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    name: "Id",
                     title: "Id"
                 },
                 {
                     data: "responsible",
-                    name: "Responsible",
+                    name: "Responsible.Name",
                     title: "@Common.Responsible"
                 },
                 {
                     data: "capacity",
                     name: "Capacity",
                     "class": "type-numeric",
-                    title: "@Assignments.Capacity"
+                    title: "@Assignments.Capacity",
+                    orderable: true,
+                    searchable: false
                 },
                 {
                     data: "updatedAtUtc",
                     name: "UpdatedAtUtc",
-                    title: "@Assignments.UpdatedAt"
+                    title: "@Assignments.UpdatedAt",
+                    searchable: false
                 },
                 {
                     data: "createdAtUtc",
                     name: "CreatedAtUtc",
-                    title: "@Assignments.CreatedAt"
-                },
+                    title: "@Assignments.CreatedAt",
+                    searchable: false
+                }
             ],
             ajax: {
-                url: '@Url.Action("List", "Assignments")',
-                type: "GET"
+                url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AssignmetsApi", action = "Get"})",
+                type: "GET",
+                contentType: 'application/json'
             }
         };
 
         var app = new Vue({
             data: {
-                interviewerId: null,
+                responsibleId: null,
                 questionnaireId: null,
                 wasInitialized: false,
                 message: "",
@@ -60,14 +67,14 @@
             },
             methods: {
                 addParamsToRequest: function (requestData) {
-                    requestData.interviewerId = (this.interviewerId || {}).key;
+                    requestData.responsibleId = (this.responsibleId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                 },
                 responseProcessor: function (response) {
                     this.isLoading = false;
                 },
                 userSelected: function (newValue) {
-                    this.interviewerId = newValue;
+                    this.responsibleId = newValue;
                 },
                 questionnaireSelected: function (newValue) {
                     this.questionnaireId = newValue;
@@ -87,6 +94,7 @@
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
 
+                this.startWatchers(['responsibleId', 'questionnaireId'], this.reloadTable.bind(self));
                 this.reloadTable();
             }
         });
@@ -125,11 +133,11 @@
                     <div class="block-filter">
                         <h5>@Common.Responsible</h5>
                         <typeahead placeholder="@Common.Any"
-                                   control-id="interviewerId"
-                                   :value="interviewerId"
+                                   control-id="responsibleId"
+                                   :value="responsibleId"
                                    :ajax-params="{ }"
                                    v-on:selected="userSelected"
-                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})"></typeahead>
+                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})"></typeahead>
                     </div>
                 </div>
             </aside>
