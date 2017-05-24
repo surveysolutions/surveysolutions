@@ -24,6 +24,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 case GroupStatus.Completed:
                     SetBackgroundColor(target, Resource.Color.interviewHeaderCompleted);
                     break;
+                case GroupStatus.Disabled:
+                    SetBackgroundColor(target, Resource.Color.interviewHeaderDisabled);
+                    break;
 
                 case GroupStatus.Started:
                 case GroupStatus.NotStarted:
