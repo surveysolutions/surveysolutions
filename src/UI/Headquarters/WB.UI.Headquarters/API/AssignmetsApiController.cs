@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
@@ -13,10 +15,13 @@ namespace WB.UI.Headquarters.API
     public class AssignmetsApiController : ApiController
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
+        private readonly IAuthorizedUser authorizedUser;
 
-        public AssignmetsApiController(IAssignmentViewFactory assignmentViewFactory)
+        public AssignmetsApiController(IAssignmentViewFactory assignmentViewFactory,
+            IAuthorizedUser authorizedUser)
         {
             this.assignmentViewFactory = assignmentViewFactory;
+            this.authorizedUser = authorizedUser;
         }
         
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
@@ -37,6 +42,12 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireVersion = questionnaireIdentity?.Version,
                 ResponsibleId = request.ResponsibleId
             };
+
+            if (this.authorizedUser.IsSupervisor)
+            {
+                input.SupervisorId = this.authorizedUser.Id;
+            }
+
 
             var result = this.assignmentViewFactory.Load(input);
 
