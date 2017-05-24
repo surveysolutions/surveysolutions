@@ -564,4 +564,25 @@ iнтервью</value>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
     <value>Папка '{0}' порожня. Будь ласка, покладіть резервну копію, з якої Вы бажаєте відновитись в цю папку.</value>
   </data>
+  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
+    <value>Створити нове</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Створити нове інтерв'ю використовуючи шаблон (Census режим)</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Інтерв'ю які були розпочаті, але не закінчені 
+Вам потрібно закінчити їх перед відправкою на сервер</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Інтерв'ю які були повернуті супервізором
+Вам необхідно прийняти до уваги зауваження супервізора на обкладинці інтерв'ю</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Закінчені інтерв'ю, будуть завантажені на сервер 
+при наступній синхронізації</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Ви можете створити нове інтерв'ю використовуючи порожній census шаблон (Census режим)</value>
+  </data>
 </root>

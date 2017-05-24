@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
+        public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
         public string QuestionnaireName { get; set; }
         public string Comment { get; set; }
 
