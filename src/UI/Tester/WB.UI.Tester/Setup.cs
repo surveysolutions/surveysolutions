@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomServices.AreaEditor;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.Ninject;
@@ -50,7 +49,9 @@ namespace WB.UI.Tester
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
-                {typeof (AreaEditorViewModel), typeof (AreaEditorActivity)}
+#if !EXCLUDEEXTENTIONS
+                { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+#endif
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -69,6 +70,10 @@ namespace WB.UI.Tester
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(TesterBoundedContextModule).Assembly,
+
+#if !EXCLUDEEXTENTIONS
+                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
+#endif
 
             });
         }

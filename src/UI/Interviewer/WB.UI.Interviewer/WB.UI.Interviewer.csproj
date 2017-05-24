@@ -661,6 +661,10 @@
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
+      <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>
+      <Name>WB.UI.Shared.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
