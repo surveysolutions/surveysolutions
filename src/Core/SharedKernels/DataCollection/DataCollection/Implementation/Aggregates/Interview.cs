@@ -630,11 +630,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
                 return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
 
-            if (questionnaire.IsUsingExpressionStorage())
-            {
-                
-            }
-
             return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question,
                 questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
@@ -2375,6 +2370,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         if (entity is InterviewTreeQuestion)
                         {
                             var question = entity as InterviewTreeQuestion;
+                            
+                            if (question.IsAnswered() && questionnaire.IsSupportFilteringForOptions(entityId))
+                            {
+                                var filter = level.GetCategoricalFilter(question.Identity);
+                                if (question.IsSingleFixedOption)
+                                {
+                                    var filterResult = RunOptionFilter(filter, question.AsSingleFixedOption.GetAnswer().SelectedValue);
+                                    if (!filterResult)
+                                        question.RemoveAnswer();
+                                }
+                                else if (question.IsMultiFixedOption)
+                                {
+                                    var selectedOptions = question.AsMultiFixedOption.GetAnswer().CheckedValues.ToArray();
+                                    var newSelectedOptions = selectedOptions.Where(x => RunOptionFilter(filter, x)).ToArray();
+                                    if (newSelectedOptions.Length != selectedOptions.Length)
+                                    {
+                                        question.AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
+                                        // remove rosters, implement cheaper solutions
+                                        changedInterviewTree.ActualizeTree();
+                                    }
+                                }
+                            }
+                            
                             if (question.IsCascading)
                             {
                                 //move to cascading
@@ -2482,6 +2500,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
+            }
+        }
+
+        private static bool RunOptionFilter(Func<int, bool> filter, int selectedValue)
+        {
+            try
+            {
+                return filter(selectedValue);
+            }
+            catch
+            {
+                return false;
             }
         }
 

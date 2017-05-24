@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         Func<bool>[] GetValidationExpressions(Identity entitIdentity);
         Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity);
         Func<object> GetVariableExpression(Identity identity);
+        Func<int, bool> GetCategoricalFilter(Identity identity);
     }
 }
