@@ -630,6 +630,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
                 return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
 
+            if (questionnaire.IsUsingExpressionStorage())
+            {
+                
+            }
+
             return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question,
                 questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
@@ -1373,7 +1378,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, command.QuestionnaireId, questionnaire.Version, null));
-            if (questionnaire.IsUsingExpressionProcessor()) this.ApplyEvent(new InterviewUsesProcessor());
+            if (questionnaire.IsUsingExpressionStorage()) this.ApplyEvent(new InterviewUsesProcessor());
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(treeDifference, userId);
@@ -2331,7 +2336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
         {
-            if (questionnaire.IsUsingExpressionProcessor())
+            if (questionnaire.IsUsingExpressionStorage())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
@@ -2384,6 +2389,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 {
                                     question.Enable();
                                 }
+
+                                
                                 // if is roster title, need to update it here?
                             }
 
@@ -2450,8 +2457,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                         var isUnansweredQuestion = entity is InterviewTreeQuestion && !(entity as InterviewTreeQuestion).IsAnswered();
                         if (isUnansweredQuestion)
+                        {
+                            validateable.MarkValid();
                             continue;
-                            
+                        }
+
                         var nearestRoster = entity.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ?? questionnaireLevelIdentity;
                         IInterviewLevel level = expressionStorage.GetLevel(nearestRoster);
                         var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
