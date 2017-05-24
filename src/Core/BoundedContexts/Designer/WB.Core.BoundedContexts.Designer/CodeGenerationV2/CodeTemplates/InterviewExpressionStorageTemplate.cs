@@ -218,7 +218,21 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write("\t}\r\n}");
+            this.Write("\t}\r\n\r\n\tpublic class QuestionnaireRandom\r\n\t{\r\n\t\tpublic QuestionnaireRandom(");
+            
+            #line 83 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
+            
+            #line default
+            #line hidden
+            this.Write(" properties)\r\n\t\t{\r\n\t\t\tthis.Properties = properties;\r\n\t\t}\r\n\t\tprivate ");
+            
+            #line 87 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(typeof(IInterviewPropertiesForExpressions).Name));
+            
+            #line default
+            #line hidden
+            this.Write(" Properties;\r\n\t\t\t\r\n\t\tpublic double IRnd() => Properties.Random;\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
