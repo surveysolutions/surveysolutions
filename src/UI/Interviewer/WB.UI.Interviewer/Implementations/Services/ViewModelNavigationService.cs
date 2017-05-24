@@ -46,13 +46,6 @@ namespace WB.UI.Interviewer.Implementations.Services
                 jsonNavigationIdentity = navigationIdentity != null ? this.jsonSerializer.Serialize(navigationIdentity) : null
             });
 
-        public void NavigateToAreaEditor(string geometry, string mapName, double? areaSize) => this.NavigateTo<AreaEditorViewModel>(new
-        {
-            geometry = geometry,
-            mapName = mapName,
-            areaSize = areaSize
-        });
-
         public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>

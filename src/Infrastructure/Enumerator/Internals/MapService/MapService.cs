@@ -9,9 +9,8 @@ using Android.OS;
 using Newtonsoft.Json;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Shared.Enumerator;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
+namespace WB.Infrastructure.Shared.Enumerator.Internals.MapService
 {
     public class MapService : IMapService
     {
@@ -30,16 +29,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             
             //Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
 
-            mapsLocation = fileSystemAccessor.CombinePath(pathToRootDirectory, "TheWorldBank/Shared/MapCache/");
+            this.mapsLocation = fileSystemAccessor.CombinePath(pathToRootDirectory, "TheWorldBank/Shared/MapCache/");
         }
 
         public Dictionary<string, string> GetAvailableMaps()
         {
 
-            if (!fileSystemAccessor.IsDirectoryExists(mapsLocation))
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return new Dictionary<string, string>();
 
-            var tpkFileSearchResult = fileSystemAccessor.GetFilesInDirectory(mapsLocation, filesToSearch).OrderBy(x => x).ToList();
+            var tpkFileSearchResult = this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, this.filesToSearch).OrderBy(x => x).ToList();
             if (tpkFileSearchResult.Count == 0)
                 return new Dictionary<string, string>();
 
@@ -50,22 +49,22 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            if (!fileSystemAccessor.IsDirectoryExists(mapsLocation))
-                fileSystemAccessor.CreateDirectory(mapsLocation);
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
+                this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
 
             try
             {
-                var maps = await GetObjectFromJsonAsync<MapDescription[]>(urlToCheckMaps);
+                var maps = await this.GetObjectFromJsonAsync<MapDescription[]>(this.urlToCheckMaps);
 
                 foreach (var mapDescription in maps)
                 {
-                    var filename = fileSystemAccessor.CombinePath(mapsLocation, mapDescription.MapName);
+                    var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapDescription.MapName);
 
-                    if (fileSystemAccessor.IsFileExists(filename))
+                    if (this.fileSystemAccessor.IsFileExists(filename))
                         continue;
 
                     HttpClient client = new HttpClient();
-                    client.Timeout = timeout;
+                    client.Timeout = this.timeout;
                     var uri = new Uri(mapDescription.URL);
 
                     var response = await client.GetAsync(uri, cancellationToken);
@@ -75,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
                     byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
                     cancellationToken.ThrowIfCancellationRequested();
-                    fileSystemAccessor.WriteAllBytes(filename, responseBytes);
+                    this.fileSystemAccessor.WriteAllBytes(filename, responseBytes);
                     cancellationToken.ThrowIfCancellationRequested();
                 }
             }

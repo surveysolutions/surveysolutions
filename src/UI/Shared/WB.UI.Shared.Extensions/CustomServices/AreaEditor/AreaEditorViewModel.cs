@@ -11,8 +11,9 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Infrastructure.Shared.Enumerator.Internals.MapService;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
+namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
     public class AreaEditorViewModel : BaseViewModel
     {
@@ -33,18 +34,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
         public override void Load()
         {
-            AvailableMaps = mapService.GetAvailableMaps();
-            MapsList = AvailableMaps.Keys.ToList();
+            this.AvailableMaps = this.mapService.GetAvailableMaps();
+            this.MapsList = this.AvailableMaps.Keys.ToList();
 
-            if (AvailableMaps.Count != 0)
+            if (this.AvailableMaps.Count != 0)
             {
-                if (!string.IsNullOrEmpty(MapName) && AvailableMaps.ContainsKey(MapName))
+                if (!string.IsNullOrEmpty(this.MapName) && this.AvailableMaps.ContainsKey(this.MapName))
                 {
-                    this.SelectedMap = MapName;
+                    this.SelectedMap = this.MapName;
                 }
                 else
                 {
-                    this.SelectedMap = AvailableMaps.FirstOrDefault().Key;
+                    this.SelectedMap = this.AvailableMaps.FirstOrDefault().Key;
                 }
             }
         }
@@ -54,22 +55,22 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         private List<string> mapsList;
         public List<string> MapsList
         {
-            get { return mapsList; }
-            set { mapsList = value; RaisePropertyChanged(); }
+            get { return this.mapsList; }
+            set { this.mapsList = value; RaisePropertyChanged(); }
         }
 
         private string selectedMap;
         public string SelectedMap
         {
-            get { return selectedMap; }
+            get { return this.selectedMap; }
             set
             {
-                selectedMap = value;
+                this.selectedMap = value;
                 RaisePropertyChanged();
 
-                if (AvailableMaps.ContainsKey(value))
+                if (this.AvailableMaps.ContainsKey(value))
                 {
-                    UpdateBaseMap(AvailableMaps[value]);
+                    this.UpdateBaseMap(this.AvailableMaps[value]);
                 }
                 
             }
@@ -106,9 +107,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
         
         public void Init(string geometry, string mapName, double? areaSize)
         {
-            Area = geometry;
-            MapName = mapName;
-            GeometryArea = areaSize;
+            this.Area = geometry;
+            this.MapName = mapName;
+            this.GeometryArea = areaSize;
         }
 
         public string Area { set; get; }
@@ -137,9 +138,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                     this.mapView.ViewAttachedToWindow +=
                         delegate(object sender, View.ViewAttachedToWindowEventArgs args)
                         {
-                            if (!string.IsNullOrEmpty(Area))
-                                if (StartEditAreaCommand.CanExecute())
-                                    StartEditAreaCommand.Execute();
+                            if (!string.IsNullOrEmpty(this.Area))
+                                if (this.StartEditAreaCommand.CanExecute())
+                                    this.StartEditAreaCommand.Execute();
                         };
                 }
             }
@@ -162,7 +163,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             
             else
             {
-                userInteractionService.ShowToast("No changes we made to be saved");
+                this.userInteractionService.ShowToast("No changes we made to be saved");
             }
         });
 
@@ -176,22 +177,22 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
 
         public IMvxCommand UpdateMapsCommand => new MvxCommand(async () =>
         {
-            if (!IsInProgress)
+            if (!this.IsInProgress)
             {
-                IsInProgress = true;
-                cancellationTokenSource = new CancellationTokenSource();
-                await mapService.SyncMaps(cancellationTokenSource.Token);
+                this.IsInProgress = true;
+                this.cancellationTokenSource = new CancellationTokenSource();
+                await this.mapService.SyncMaps(this.cancellationTokenSource.Token);
 
-                AvailableMaps = mapService.GetAvailableMaps();
-                MapsList = AvailableMaps.Keys.ToList();
+                this.AvailableMaps = this.mapService.GetAvailableMaps();
+                this.MapsList = this.AvailableMaps.Keys.ToList();
 
-                IsInProgress = false;
+                this.IsInProgress = false;
             }
             else
             {
-                if(cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
+                if(this.cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
                     this.cancellationTokenSource.Cancel();
-                IsInProgress = false;
+                this.IsInProgress = false;
             }
 
         });
@@ -207,27 +208,27 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             this.IsEditing = true;
             this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
             {
-                GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
             };
 
             Geometry result = null;
-            if (string.IsNullOrWhiteSpace(Area))
+            if (string.IsNullOrWhiteSpace(this.Area))
             {
                 result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
             }
             else
             {
-                var geometry = Geometry.FromJson(Area);
+                var geometry = Geometry.FromJson(this.Area);
                 await this.MapView.SetViewpointGeometryAsync(geometry, 120);
                 result = await this.MapView.SketchEditor.StartAsync(geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
 
             //save
-            var handler = OnAreaEditCompleted;
+            var handler = this.OnAreaEditCompleted;
             handler?.Invoke(new AreaEditorResult()
             {
                 Geometry = result?.ToJson(),
-                MapName = SelectedMap,
+                MapName = this.SelectedMap,
                 Area = GeometryEngine.AreaGeodetic(result)
             });
 

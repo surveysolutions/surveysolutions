@@ -1,35 +1,27 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Content;
 using Esri.ArcGISRuntime;
-using MvvmCross.Platform.Droid.Platform;
 using Plugin.Permissions.Abstractions;
-using RuntimeCoreNet.GeneratedWrappers;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Infrastructure.Shared.Enumerator;
 using AreaEditResult = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.AreaEditResult;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
+namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    internal class AreaEditService : IAreaEditService
+    public class AreaEditService : WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IAreaEditService
     {
-        private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IPermissions permissions;
         private IViewModelNavigationService viewModelNavigationService;
 
-        public AreaEditService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, 
-            IPermissions permissions,
+        public AreaEditService(IPermissions permissions,
             IViewModelNavigationService viewModelNavigationService)
         {
-            this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.permissions = permissions;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(Area area)
+        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
         {
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
@@ -39,7 +31,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return await this.EditArea(area);
         }
 
-        private Task<AreaEditResult> EditArea(Area area)
+        private Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
         {
             return Task.Factory.StartNew<AreaEditResult>((Func<AreaEditResult>)(() =>
             {
@@ -47,8 +39,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
                 {
                     AreaEditorResult result = null;
                     ManualResetEvent waitEditAreaResetEvent = new ManualResetEvent(false);
+
+                    this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
+                    {
+                        geometry = area?.Geometry,
+                        mapName = area?.MapName,
+                        areaSize = area?.AreaSize
+                    });
                     
-                    viewModelNavigationService.NavigateToAreaEditor(area?.Geometry, area?.MapName, area?.AreaSize);
                     AreaEditorActivity.OnAreaEditCompleted += (editResult =>
                     {
                         result = editResult;
