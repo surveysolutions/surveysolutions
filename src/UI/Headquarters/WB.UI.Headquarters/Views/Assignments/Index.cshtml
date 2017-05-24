@@ -151,7 +151,9 @@
                                    :value="responsibleId"
                                    :ajax-params="{ }"
                                    v-on:selected="userSelected"
-                                   fetch-url="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})"></typeahead>
+                                   fetch-url="@(Model.IsSupervisor ? 
+                                                Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"}) : 
+                                                Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}))"></typeahead>
                     </div>
                 </div>
             </aside>
