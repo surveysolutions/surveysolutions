@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class <#=Model.ClassName#>
 	{  
-		private <#=Model.ReturnType#> <#=Model.MethodName#>()
+		private <#=Model.UseObjectBoxing ? "object": Model.ReturnType#> <#=Model.MethodName#>()
 		{
 <# 
 			if(Model.GenerateSelf) 
@@ -30,7 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <# 
 			} 
 #>
-			return <#=Model.Expression#>;
+			<#=Model.ReturnType#> __result = <#=Model.Expression#>;
+			return __result <#=Model.UseObjectBoxing ? "as object": ""#>;
 		}
 	}
 }

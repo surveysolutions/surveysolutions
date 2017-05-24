@@ -23,11 +23,16 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             Type t = typeof(T);
             Type u = Nullable.GetUnderlyingType(t);
+            Type o = obj?.GetType();
 
             if (u != null)
             {
                 return (obj == null) ? default(T) : (T)Convert.ChangeType(obj, u);
             }
+
+            if (t == o)
+                return (T) obj;
+
             return (T)Convert.ChangeType(obj, t);
         }
     }

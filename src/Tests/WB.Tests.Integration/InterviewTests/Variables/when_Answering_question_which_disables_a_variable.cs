@@ -5,7 +5,6 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
@@ -19,17 +18,16 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
-                children: new IComposite[]
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(textQuetionId, variable: "txt"),
+                Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
                 {
-                    Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
-                    Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt!=\"Nastya\"", false, new[]
-                    {
-                        Create.Entity.Variable(variableId, variableName: "v1", expression: "txt.Length")
-                    })
-                });
+                    Create.Entity.Variable(variableId, variableName: "v1", expression: "txt.Length")
+                })
+            });
 
-            interview = SetupInterview(questionnaireDocument: questionnaire);
+            interview = SetupInterview(questionnaire);
             eventContext = new EventContext();
         };
 
@@ -46,8 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
            eventContext.ShouldNotContainEvent<VariablesChanged>();
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
-           eventContext.ShouldContainEvent<VariablesDisabled>(@event
-               => @event.Variables[0].Id== variableId);
+           eventContext.ShouldContainEvent<VariablesDisabled>(@event => @event.Variables[0].Id== variableId);
 
         private static EventContext eventContext;
         private static Interview interview;
