@@ -86,15 +86,6 @@ namespace WB.UI.Interviewer.Activities
                     tabLayout.GetTabAt(tabIndex).SetText(((InterviewTabPanel)s).Title);
                 };
             }
-
-            //ViewModel.RejectedInterviews.PropertyChanged += (s, e) =>
-            //{
-            //    if (e.PropertyName != nameof(ListViewModel<object>.HasItems)) return;
-
-            //    fragmentStatePagerAdapter.Fragments.First(x => x.ViewModel == s).Visible =
-            //        ((RejectedInterviewsViewModel) s).HasItems;
-            //    fragmentStatePagerAdapter.NotifyDataSetChanged();
-            //};
         }
 
         protected override void OnStart()
