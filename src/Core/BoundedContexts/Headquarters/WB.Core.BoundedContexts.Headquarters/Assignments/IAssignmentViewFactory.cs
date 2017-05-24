@@ -73,7 +73,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var items = assignments;
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                int id = 0;
+                if (int.TryParse(input.SearchBy, out id))
+                {
+                    items = items.Where(x => x.Id == id || x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                }
+                else
+                {
+                    items = items.Where(x => x.Responsible.Name.Contains(input.SearchBy) || x.IdentifyingData.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                }
             }
 
             if (input.QuestionnaireId.HasValue)
@@ -91,6 +99,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(x => x.ResponsibleId == input.ResponsibleId);
             }
 
+            if (input.SupervisorId.HasValue)
+            {
+                items = items.Where(x => x.Responsible.ReadonlyProfile.SupervisorId == input.SupervisorId || x.ResponsibleId == input.SupervisorId);
+            }
+
             return items;
         }
     }
@@ -101,6 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Guid? QuestionnaireId { get; set; }
         public long? QuestionnaireVersion { get; set; }
         public Guid? ResponsibleId { get; set; }
+        public Guid? SupervisorId { get; set; }
     }
 
     public class AssignmentsWithoutIdentifingData : IListView<AssignmentWithoutIdentifingData>

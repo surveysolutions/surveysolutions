@@ -32,19 +32,33 @@
                     "class": "type-numeric",
                     title: "@Assignments.Capacity",
                     orderable: true,
-                    searchable: false
+                    searchable: false,
+                    render: function(data) {
+                        if (data == null) {
+                            return "<span>@Assignments.Unlimited</span>";
+                        }
+                        return data;
+                    }
                 },
                 {
                     data: "updatedAtUtc",
                     name: "UpdatedAtUtc",
                     title: "@Assignments.UpdatedAt",
-                    searchable: false
+                    searchable: false,
+                    render: function(data) {
+                        var date = moment.utc(data);
+                        return date.local().format('lll');
+                    }
                 },
                 {
                     data: "createdAtUtc",
                     name: "CreatedAtUtc",
                     title: "@Assignments.CreatedAt",
-                    searchable: false
+                    searchable: false,
+                    render: function (data) {
+                        var date = moment.utc(data);
+                        return date.local().format('lll');
+                    }
                 }
             ],
             ajax: {

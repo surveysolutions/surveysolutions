@@ -18,6 +18,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 map.Column("\"Id\"");
             });
             Property(x => x.Name, map => map.Column("\"UserName\""));
+            this.ManyToOne(x => x.ReadonlyProfile, oto =>
+            {
+                oto.Cascade(Cascade.None);
+                oto.Column("\"UserProfileId\"");
+            });
+        }
+    }
+
+    [PlainStorage]
+    public class ProfileMap : ClassMapping<ReadonlyProfile>
+    {
+        public ProfileMap()
+        {
+            Id(x => x.Id, m => m.Column("\"Id\""));
+            Table("userprofiles");
+            Schema("users");
+
+            Property(x => x.SupervisorId, p => p.Column("\"SupervisorId\""));
         }
     }
 }
