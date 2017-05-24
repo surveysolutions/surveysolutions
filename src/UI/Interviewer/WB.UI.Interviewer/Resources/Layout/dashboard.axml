@@ -42,7 +42,8 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        local:MvxBind="Visible IsExistsAnyCensusQuestionnairesOrInterviews;">
     </android.support.v4.view.ViewPager>
     <LinearLayout style="@style/Dashboard_NoInterviewsPanel"
                     local:MvxBind="Visible And(Not(IsExistsAnyCensusQuestionnairesOrInterviews), IsLoaded);">
