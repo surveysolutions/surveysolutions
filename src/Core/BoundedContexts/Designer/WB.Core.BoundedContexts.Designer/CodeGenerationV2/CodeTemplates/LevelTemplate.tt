@@ -69,6 +69,15 @@
 <# 
 	}
 #>
+
+<#
+	foreach (var method in Storage.GetCategoricalOptionsFilters(Model.ClassName)) 
+    {
+#>            
+			categoricalFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
 		}
 
 		public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)
@@ -115,7 +124,20 @@
 			return variableExpressions[identity.Id];
 		}
 
+		public Func<int, bool> GetCategoricalFilter(Identity identity)
+		{
+			if (!identity.RosterVector.Equals(this.RosterVector))
+				return null;
+			
+			if (!categoricalFilters.ContainsKey(identity.Id))
+				return null;
+			
+			return categoricalFilters[identity.Id];
+		}
+
 		private Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
+
+		private Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
 
 		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
 
