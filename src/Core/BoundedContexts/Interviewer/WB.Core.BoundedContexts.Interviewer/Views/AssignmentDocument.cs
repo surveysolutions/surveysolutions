@@ -1,36 +1,42 @@
-﻿using System.Collections.Generic;
-using MvvmCross.Platform;
+﻿using System;
+using System.Collections.Generic;
 using SQLite;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using Newtonsoft.Json;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
-{
+{ 
     public class AssignmentDocument : IPlainStorageEntity
     {
+        [Ignore]
+        public List<IdentifyingAnswer> IdentifyingData
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(this.IdentifyingDataValue)
+                    ? null
+                    : JsonConvert.DeserializeObject<List<IdentifyingAnswer>>(this.IdentifyingDataValue);
+            }
+            set
+            {
+                this.IdentifyingDataValue = JsonConvert.SerializeObject(value);
+            }
+        }
+
+        public string IdentifyingDataValue { get; set; }
+
         [PrimaryKey]
-        public string Id { get; set; }
+        public virtual string Id { get; set; }
 
         public int? Capacity { get; set; }
         public int Created { get; set; }
 
-        [Ignore]
-        public QuestionnaireIdentity QuestionnaireId
+        public string QuestionnaireId { get; set; }
+        
+        public class IdentifyingAnswer
         {
-            get => QuestionnaireIdentity.Parse(QuestionnaireIdValue);
-            set => this.QuestionnaireIdValue = value.ToString();
+            public string Answer { get; set; }
+            public Guid QuestionId { get; set; }
         }
-
-        public string QuestionnaireIdValue { get; set; }
-
-        [Ignore]
-        public List<IdentifyingAnswer> IdentifyingData
-        {
-            get => Mvx.Resolve<IJsonAllTypesSerializer>().Deserialize<List<IdentifyingAnswer>>(Data);
-            set => Data = Mvx.Resolve<IJsonAllTypesSerializer>().SerializeToByteArray(value);
-        }
-
-        public byte[] Data { get; set; }
     }
 }

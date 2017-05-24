@@ -166,7 +166,6 @@
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
-    <Compile Include="Views\IdentifyingAnswer.cs" />
     <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
     <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
     <Compile Include="Views\InterviewGpsCoordinatesView.cs" />

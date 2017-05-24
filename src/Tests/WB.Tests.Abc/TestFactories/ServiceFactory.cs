@@ -58,6 +58,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -75,6 +76,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
+using AssignmentDocument = WB.Core.BoundedContexts.Interviewer.Views.AssignmentDocument;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -425,6 +427,23 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>());
+        }
+
+        public SynchronizationService SynchronizationService(IPrincipal principal = null,
+            IRestService restService = null,
+            IInterviewerSettings interviewerSettings = null,
+            ISyncProtocolVersionProvider syncProtocolVersionProvider = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            ILogger logger = null)
+        {
+            return new SynchronizationService(
+                principal ?? Mock.Of<IPrincipal>(),
+                restService ?? Mock.Of<IRestService>(),
+                interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
+                syncProtocolVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                logger ?? Mock.Of<ILogger>()
+            );
         }
 
         public TroubleshootingService Troubleshooting(

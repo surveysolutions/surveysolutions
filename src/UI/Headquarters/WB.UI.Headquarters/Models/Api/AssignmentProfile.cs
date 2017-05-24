@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Models.Api
@@ -14,7 +15,7 @@ namespace WB.UI.Headquarters.Models.Api
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
                 .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData));
 
-            this.CreateMap<IdentifyingAnswer, IdentifyingAnswerApiView>()
+            this.CreateMap<IdentifyingAnswer, AssignmentApiView.IdentifyingAnswer>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
                 .ForMember(x => x.QuestionId, opts => opts.MapFrom(x => x.QuestionId));
         }
