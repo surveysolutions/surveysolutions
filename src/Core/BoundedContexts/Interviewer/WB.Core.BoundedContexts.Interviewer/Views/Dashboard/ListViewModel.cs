@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public abstract class ListViewModel<TListItem> : TabPanel where TListItem: class
+    public abstract class ListViewModel<TListItem> : InterviewTabPanel where TListItem: class
     {
         private IList<TListItem> items;
         public IList<TListItem> Items

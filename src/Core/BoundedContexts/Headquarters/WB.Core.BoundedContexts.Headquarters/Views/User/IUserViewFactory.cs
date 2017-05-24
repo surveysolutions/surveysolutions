@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false);
         UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool archived = false);
         UserView GetUser(UserViewInputModel input);
+        UsersView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false);
     }
 }

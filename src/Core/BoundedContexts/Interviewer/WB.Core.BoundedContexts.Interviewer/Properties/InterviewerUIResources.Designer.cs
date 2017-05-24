@@ -107,12 +107,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Completed interviews, will be uploaded during 
+        ///your next synchronization.
+        /// </summary>
+        public static string Dashboard_CompletedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_CompletedTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create
         ///interview.
         /// </summary>
         public static string Dashboard_CreateInterview {
             get {
                 return ResourceManager.GetString("Dashboard_CreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string Dashboard_CreateNewLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateNewLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new interview using templates (Census mode).
+        /// </summary>
+        public static string Dashboard_CreateNewTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateNewTabText", resourceCulture);
             }
         }
         
@@ -164,6 +192,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can create new interviews using 
+        ///empty census templates (Census mode).
+        /// </summary>
+        public static string Dashboard_QuestionnairesTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_QuestionnairesTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview is completed. Do you want to restart the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
@@ -182,6 +220,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviews which have been rejected by supervisor
+        ///You need to address issues noted on cover.
+        /// </summary>
+        public static string Dashboard_RejectedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_RejectedTabText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this interview &quot;{0}&quot; ?.
         /// </summary>
         public static string Dashboard_RemoveInterviewQuestion {
@@ -196,6 +244,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_StartedLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_StartedLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews which have been started but not completed
+        ///You need complete it to be synchronized.
+        /// </summary>
+        public static string Dashboard_StartedTabText {
+            get {
+                return ResourceManager.GetString("Dashboard_StartedTabText", resourceCulture);
             }
         }
         
