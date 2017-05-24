@@ -1,7 +1,6 @@
 ﻿using System;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,8 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Abc.Create.Entity.GpsCoordinateQuestion(questionId, "gps", enablementCondition: null,
-                        validationExpression: "false"),
+                    Abc.Create.Entity.GpsCoordinateQuestion(questionId, "gps", enablementCondition: null, validationExpression: "false"),
                 });
 
                 var interview = SetupInterview(questionnaireDocument);
@@ -47,7 +45,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         };
 
 
-        It should_mark_gps_question_as_valid = () => result.AnswersDeclaredValidEventCount.ShouldEqual(1);
+        It should_mark_gps_question_as_valid = () => 
+            result.AnswersDeclaredValidEventCount.ShouldEqual(1);
 
         static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;

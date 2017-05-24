@@ -1564,7 +1564,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(x => x.PublicKey);
         }
 
-        public bool IsUsingExpressionProcessor()
+        public bool IsUsingExpressionStorage()
         {
             return this.QuestionnaireDocument.IsUsingExpressionStorage;
         }
