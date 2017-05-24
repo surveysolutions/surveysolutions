@@ -163,4 +163,12 @@
 <# 
 	}
 #>
+<#
+	foreach (var table in Storage.LookupTables) 
+    {
+#>
+		public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
+<# 
+	}
+#>
 	}

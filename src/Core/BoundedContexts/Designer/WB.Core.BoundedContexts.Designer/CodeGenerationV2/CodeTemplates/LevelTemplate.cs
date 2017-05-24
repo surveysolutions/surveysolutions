@@ -473,6 +473,45 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
+            
+            #line 166 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+
+	foreach (var table in Storage.LookupTables) 
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic static Dictionary<int, ");
+            
+            #line 170 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("> ");
+            
+            #line 170 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+            
+            #line default
+            #line hidden
+            this.Write(" => LookupTables.");
+            
+            #line 170 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 171 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
+ 
+	}
+
+            
+            #line default
+            #line hidden
             this.Write("\t}\r\n");
             return this.GenerationEnvironment.ToString();
         }

@@ -15,8 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 	foreach (var table in LookupTables) 
     {
 #>
-		private static readonly Dictionary<long, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
-		public static Dictionary<long, <#= table.TypeName#>> <#= table.TableName #> 
+		private static readonly Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
+		public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> 
 		{
 			get { return <#= table.TableNameField #>; }
 		}
@@ -31,9 +31,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 #>
 	public static class <#= table.TypeName#>_Generator
 	{
-		public static Dictionary<long, <#= table.TypeName#>> GetTable()
+		public static Dictionary<int, <#= table.TypeName#>> GetTable()
 		{
-			var table = new Dictionary<long, <#= table.TypeName#>>();
+			var table = new Dictionary<int, <#= table.TypeName#>>();
 <#
 		    foreach (var row in table.Rows) 
 		    {
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 #>
 	public class <#= table.TypeName#>
 	{
-		public <#= table.TypeName#>(long rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName)) #>)
+		public <#= table.TypeName#>(int rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName)) #>)
 		{
 			this.rowcode = rowcode;
 <#
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		}
 #>
 		}
-		public long rowcode { get; private set;}
+		public int rowcode { get; private set;}
 <#
 		foreach (var variableName in table.VariableNames) 
 		{
