@@ -7,7 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Models.Api;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Headquarters.API.Interviewer.v2
 {
@@ -17,8 +18,8 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
         private readonly IPlainStorageAccessor<Assignment> assignmentsAccessor;
         private readonly IMapper autoMapper;
 
-        public AssignmentsController(IAuthorizedUser authorizedUser, 
-            IPlainStorageAccessor<Assignment> assignmentsAccessor, 
+        public AssignmentsController(IAuthorizedUser authorizedUser,
+            IPlainStorageAccessor<Assignment> assignmentsAccessor,
             IMapper autoMapper)
         {
             this.authorizedUser = authorizedUser;
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignments)]
+        [ApiBasicAuth(UserRoles.Interviewer)]
         [HttpGet]
         public List<AssignmentApiView> List()
         {

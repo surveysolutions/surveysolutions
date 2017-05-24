@@ -1530,5 +1530,62 @@ namespace WB.Tests.Abc.TestFactories
                 LastUploadInterviewDate = lastUploadInterviewDate
             };
         }
+
+        public AssignmentApiViewBuilder AssignmentApiView(string id, int? capacity, QuestionnaireIdentity questionnaireIdentity)
+        {
+            return new AssignmentApiViewBuilder(new AssignmentApiView
+            {
+                Id = id ?? Guid.NewGuid().ToString(),
+                Capacity = capacity,
+                QuestionnaireId = questionnaireIdentity
+            });
+        }
+
+        public class AssignmentApiViewBuilder
+        {
+            private readonly AssignmentApiView _entity;
+
+            public AssignmentApiViewBuilder(AssignmentApiView entity)
+            {
+                _entity = entity;
+            }
+
+            public AssignmentApiViewBuilder WithAnswer(Guid questionId, string answer)
+            {
+                this._entity.IdentifyingData.Add(new AssignmentApiView.IdentifyingAnswer { Answer = answer, QuestionId = questionId});
+                return this;
+            }
+
+            public AssignmentApiView Build() => this._entity;
+        }
+
+        public AssignmentDocumentBuilder AssignmentDocument(string id, int? capacity, string questionnaireIdentity)
+        {
+            return new AssignmentDocumentBuilder(new AssignmentDocument
+            {
+                Id = id ?? Guid.NewGuid().ToString(),
+                Capacity = capacity,
+                QuestionnaireId = questionnaireIdentity
+            });
+        }
+
+        public class AssignmentDocumentBuilder
+        {
+            private readonly AssignmentDocument _entity;
+
+            public AssignmentDocumentBuilder(AssignmentDocument entity)
+            {
+                _entity = entity;
+            }
+
+            public AssignmentDocumentBuilder WithAnswer(Guid questionId, string answer)
+            {
+                this._entity.IdentifyingData = this._entity.IdentifyingData ?? new List<AssignmentDocument.IdentifyingAnswer>();
+                this._entity.IdentifyingData.Add(new AssignmentDocument.IdentifyingAnswer { Answer = answer, QuestionId = questionId});
+                return this;
+            }
+
+            public AssignmentDocument Build() => this._entity;
+        }
     }
 }
