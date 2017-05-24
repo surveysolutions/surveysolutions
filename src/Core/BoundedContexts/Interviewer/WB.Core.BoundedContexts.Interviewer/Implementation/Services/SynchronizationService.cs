@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -207,11 +208,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                url: string.Concat(this.questionnairesController, "/list"), credentials: this.restCredentials, token: cancellationToken));
         }
         
-        public Task<List<AssignmentDocument>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public async Task<List<AssignmentDocument>> GetAssignmentsAsync(CancellationToken cancellationToken)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentDocument>>(
-                url: String.Concat(this.assignmentsController)));
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
+               url: this.assignmentsController, credentials: this.restCredentials, token: cancellationToken));
+
+            return response.Select(this.ToAssignmentDocument).ToList();
         }
+
+        private AssignmentDocument ToAssignmentDocument(AssignmentApiView r) => new AssignmentDocument
+        {
+            Id = r.Id,
+            QuestionnaireId = r.QuestionnaireId.ToString(),
+            Capacity = r.Capacity,
+            IdentifyingData = r.IdentifyingData.Select(this.ToIdentifyingAnswer).ToList()
+        };
+
+        private AssignmentDocument.IdentifyingAnswer ToIdentifyingAnswer(AssignmentApiView.IdentifyingAnswer answer) => new AssignmentDocument.IdentifyingAnswer
+        {
+            QuestionId = answer.QuestionId,
+            Answer = answer.Answer
+        };
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {

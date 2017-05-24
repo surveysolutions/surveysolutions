@@ -1648,9 +1648,7 @@
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
-    <Compile Include="Models\Api\AssignmentApiView.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
-    <Compile Include="Models\Api\IdentifyingAnswerApiView.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
     <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
     <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />

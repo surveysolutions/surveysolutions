@@ -348,7 +348,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     };
 
                     statistics.NewAssignmentsCount += 1;
-                    await this.DownloadQuestionnaireAsync(local.QuestionnaireId, cancellationToken, statistics);
+                    await this.DownloadQuestionnaireAsync(QuestionnaireIdentity.Parse(local.QuestionnaireId), cancellationToken, statistics);
                 }
 
                 local.Capacity = remote.Capacity;
