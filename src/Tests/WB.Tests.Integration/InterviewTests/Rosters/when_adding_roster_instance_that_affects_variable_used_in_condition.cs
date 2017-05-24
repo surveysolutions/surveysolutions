@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_adding_roster_instance_that_affects_variable : in_standalone_app_domain
+    internal class when_adding_roster_instance_that_affects_variable_used_in_condition : in_standalone_app_domain
     {
         Because of = () => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
@@ -21,7 +21,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             var listRosterId = Guid.Parse("22222222222222222222222222222222");
             Guid variableId = Guid.Parse("33333333333333333333333333333333");
             Guid singleOptionQuestionId = Guid.Parse("44444444444444444444444444444444");
-            
+            Guid numQuestionId = Guid.Parse("55555555555555555555555555555555");
+
             Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             var interview = SetupInterview(
@@ -30,19 +31,20 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     {
                         Create.Entity.TextListQuestion(answeredQuestionId, variable: "q1"),
                         Create.Entity.Roster(
-                                rosterId: listRosterId,
-                                variable: "lst",
-                                rosterSizeQuestionId: answeredQuestionId,
-                                rosterSizeSourceType: RosterSizeSourceType.Question,
-                                children: new IComposite[]
-                                {
-                                    Create.Entity.SingleOptionQuestion(singleOptionQuestionId, variable: "sgl", linkedToQuestionId: answeredQuestionId),
-                                    Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "(long)sgl")
-                                }
+                            rosterId: listRosterId,
+                            variable: "lst",
+                            rosterSizeQuestionId: answeredQuestionId,
+                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            children: new IComposite[]
+                            {
+                                Create.Entity.SingleOptionQuestion(singleOptionQuestionId, variable: "sgl", linkedToQuestionId: answeredQuestionId),
+                                Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "(long)sgl", variableName: "v1"),
+                                Create.Entity.NumericIntegerQuestion(numQuestionId, variable: "num", enablementCondition: "v1 == null")
+                            }
                             )
                     }));
 
-            interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] {Tuple.Create(1m, "A")});
+            interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A") });
             interview.AnswerSingleOptionQuestion(userId, singleOptionQuestionId, Create.RosterVector(1), DateTime.Now, 1);
 
             using (var eventContext = new EventContext())
@@ -51,19 +53,19 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 return new InvokeResults
                 {
-                    VariableChangedEventRaised = eventContext.GetSingleEventOrNull<VariablesChanged>()?.ChangedVariables?.Any(x => x.Identity.Id == variableId) ?? false,
+                    QuestionEnabledEventRaised = eventContext.GetSingleEventOrNull<QuestionsEnabled>()?.Questions?.Any(x => x.Id == numQuestionId) ?? false
                 };
             }
         });
 
-        It should_raise_variables_changd_event_if_related_question_has_answer_removed = () => result.VariableChangedEventRaised.ShouldBeTrue();
+        It should_raise_question_enabled_event_if_related_question_has_answer_removed_and_variable_changed = () => result.QuestionEnabledEventRaised.ShouldBeTrue();
 
         private static InvokeResults result;
 
         [Serializable]
         internal class InvokeResults
         {
-            public bool VariableChangedEventRaised { get; set; }
+            public bool QuestionEnabledEventRaised { get; set; }
         }
     }
 }

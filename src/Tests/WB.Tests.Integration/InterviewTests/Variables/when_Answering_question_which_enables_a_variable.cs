@@ -20,9 +20,9 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
             variableId = Guid.Parse("22222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.Entity.TextQuestion(questionId: textQuetionId, variable: "txt"),
+                Create.Entity.TextQuestion(textQuetionId, variable: "txt"),
                 Create.Entity.Group(Guid.NewGuid(), "Group X", null, "txt==\"Nastya\"", false, new[]
                 {
                     Create.Entity.Variable(variableId, VariableType.LongInteger, "v1", "txt.Length")
@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
-           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Abc.Create.Identity(variableId, RosterVector.Empty));
+           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly(Create.Identity(variableId, RosterVector.Empty));
 
         private static EventContext eventContext;
         private static Interview interview;

@@ -50,18 +50,14 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.Entity.FixedTitle(2, "Microwave"),
                     Create.Entity.FixedTitle(3, "Cleaner")
                 };
-                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    children: new IComposite[]
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
+                    Create.Entity.FixedRoster(rosterId, variable: "assets",fixedTitles: assetsTitles, children: new[]
                     {
-                        Create.Entity.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
-                        Create.Entity.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
-                            children: new[]
-                            {
-                                Create.Entity.NumericRealQuestion(id: questionB, variable: "p",
-                                    validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
-                            })
-                    });
+                        Create.Entity.NumericRealQuestion(id: questionB, variable: "p", validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
+                    })
+                });
 
                 questionnaire.LookupTables.Add(lookupId, Create.Entity.LookupTable("price"));
 

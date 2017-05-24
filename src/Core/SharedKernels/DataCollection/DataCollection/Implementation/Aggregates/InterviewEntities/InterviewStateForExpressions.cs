@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsMultiFixedOption) return question.AsMultiFixedOption.GetAnswer().ToInts().ToArray().To<T>();//int[]
             if (question.IsYesNo) return question.AsYesNo.GetAnswer().ToYesNoAnswers().To<T>(); //YesNoAnswers
 
-            if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().To<T>();//RosterVector
+            if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().SelectedValue.To<T>();//RosterVector
             if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer().CheckedValues.To<T>();//RosterVector[]
 
             if (question.IsGps) return question.AsGps.GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
@@ -45,6 +45,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsMultimedia) return question.AsMultimedia.GetAnswer().FileName.To<T>();//string
             if (question.IsQRBarcode) return question.AsQRBarcode.GetAnswer().DecodedText.To<T>();//string
             return default(T);
+        }
+
+        public T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector)
+        {
+            var variable = this.tree.GetVariable(new Identity(questionId, new RosterVector(rosterVector)));
+            return variable.Value.To<T>();
         }
 
         public IInterviewPropertiesForExpressions Properties { get; }

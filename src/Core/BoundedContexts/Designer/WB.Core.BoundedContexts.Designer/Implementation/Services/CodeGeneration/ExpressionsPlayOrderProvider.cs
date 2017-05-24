@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
@@ -93,7 +94,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<Guid, Guid> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
-            return new Dictionary<Guid, Guid>();
+            return questionnaire
+                .Find<IQuestion>(x => x.LinkedToQuestionId != null || x.LinkedToRosterId!=null)
+                .ToDictionary(x => x.PublicKey, x => x.LinkedToQuestionId ?? x.LinkedToRosterId.Value);
         }
 
         private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(QuestionnaireDocument questionnaire)
@@ -136,6 +139,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             dependencies.Add(entity.PublicKey, new List<Guid> { question.CascadeFromQuestionId.Value });
                     }
                 }
+
+                var variable = entity as IVariable;
+                if (variable != null)
+                {
+                    this.FillDependencies(dependencies, entity.PublicKey, variable.Expression, allMacroses, variableNamesByEntitiyIds);
+                }
             }
 
             return dependencies;
@@ -151,7 +160,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Find<IGroup>(x => x.IsRoster && !string.IsNullOrWhiteSpace(x.VariableName))
                 .Select(x => new { x.VariableName, EntityId = x.PublicKey });
 
-            return variablesOfQuestions.Union(variablesOfRosters).ToDictionary(x => x.VariableName, x => x.EntityId);
+            var variablesOfVariables = questionnaireDocument
+                .Find<IVariable>()
+                .Select(x => new { VariableName = x.Name, EntityId = x.PublicKey });
+
+            return variablesOfQuestions.Union(variablesOfRosters).Union(variablesOfVariables).ToDictionary(x => x.VariableName, x => x.EntityId);
         }
 
         private void FillDependencies(Dictionary<Guid, List<Guid>> dependencies, Guid entityId, string expression,
