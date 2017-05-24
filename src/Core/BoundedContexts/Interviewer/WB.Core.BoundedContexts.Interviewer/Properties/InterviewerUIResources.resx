@@ -150,6 +150,9 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Completed ({0})</value>
   </data>
+  <data name="Dashboard_CreateNewLinkText" xml:space="preserve">
+    <value>Create New</value>
+  </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
     <value>Create
 interview</value>
@@ -614,5 +617,24 @@ for further instructions</value>
   </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Create new interview using templates (Census mode)</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Interviews which have been started but not completed
+You need complete it to be synchronized</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Interviews which have been rejected by supervisor
+You need to address issues noted on cover</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Completed interviews, will be uploaded during 
+your next synchronization</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>You can create new interviews using 
+empty census templates (Census mode)</value>
   </data>
 </root>

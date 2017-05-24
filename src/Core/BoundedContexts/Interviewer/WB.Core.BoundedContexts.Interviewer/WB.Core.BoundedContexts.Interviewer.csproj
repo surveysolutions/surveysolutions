@@ -154,11 +154,12 @@
     <Compile Include="Views\CompanyLogo.cs" />
     <Compile Include="Views\Dashboard\CompletedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\ListViewModel.cs" />
-    <Compile Include="Views\Dashboard\QuestionnairesAndNewInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\NewInterviewsViewModel.cs" />
+    <Compile Include="Views\Dashboard\QuestionnairesViewModel.cs" />
     <Compile Include="Views\Dashboard\RejectedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\StartedInterviewsViewModel.cs" />
     <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
-    <Compile Include="Views\Dashboard\TabPanel.cs" />
+    <Compile Include="Views\Dashboard\InterviewTabPanel.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
@@ -231,18 +232,23 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\InterviewerUIResources.es.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.fr.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.km.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.pt.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -251,18 +257,23 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.vi-VN.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -382,6 +382,7 @@
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\DashboardCompletednterviewsFragment.cs" />
+    <Compile Include="Activities\DashboardNewInterviewsFragment.cs" />
     <Compile Include="Activities\DashboardQuestionnairesFragment.cs" />
     <Compile Include="Activities\DashboardRejectednterviewsFragment.cs" />
     <Compile Include="Activities\DashboardStartedInterviewsFragment.cs" />
@@ -480,7 +481,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\relink.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
     <AndroidResource Include="Resources\Layout\synchronization_panel.axml">
@@ -501,6 +502,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab_new.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

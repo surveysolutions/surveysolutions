@@ -18,6 +18,7 @@ namespace WB.UI.Interviewer.Activities
         private readonly Context _context;
 
         public IEnumerable<FragmentInfo> Fragments { get; private set; }
+        public IEnumerable<FragmentInfo> VisibleFragments => this.Fragments.Where(x => x.Visible);
 
         public override int Count => this.Fragments.Count();
 
@@ -36,7 +37,7 @@ namespace WB.UI.Interviewer.Activities
 
         public override Fragment GetItem(int position)
         {
-            var fragmentInfo = this.Fragments.ElementAt(position);
+            var fragmentInfo = this.VisibleFragments.ElementAt(position);
             var fragment = Fragment.Instantiate(this._context,
                 FragmentJavaName(fragmentInfo.FragmentType));
             ((MvxFragment)fragment).ViewModel = fragmentInfo.ViewModel;
@@ -52,13 +53,14 @@ namespace WB.UI.Interviewer.Activities
         }
 
         public override ICharSequence GetPageTitleFormatted(int position)
-            => new Java.Lang.String(this.Fragments.ElementAt(position).Title);
+            => new Java.Lang.String(this.VisibleFragments.ElementAt(position)?.Title ?? string.Empty);
 
         public class FragmentInfo
         {
             public Type FragmentType { get; set; }
             public MvxViewModel ViewModel { get; set; }
             public string Title { get; set; }
+            public bool Visible { get; set; } = true;
         }
     }
 }

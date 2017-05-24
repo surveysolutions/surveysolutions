@@ -120,7 +120,16 @@
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Assignments</value>
   </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Created at</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Updated at</value>
   </data>
 </root>

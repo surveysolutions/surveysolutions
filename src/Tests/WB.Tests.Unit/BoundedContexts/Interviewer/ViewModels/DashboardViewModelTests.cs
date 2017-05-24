@@ -1,10 +1,8 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using MvvmCross.Plugins.Messenger;
 using MvvmCross.Test.Core;
 using NSubstitute;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -56,16 +54,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
                     messenger: messenger ?? Mock.Of<IMvxMessenger>(),
-                    dashboardQuestionnairesViewModel: DashboardQuestionnairesViewModel(),
-                    dashboardStartedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
-                    dashboardCompletedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
-                    dashboardRejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel());
+                    questionnairesViewModel: DashboardQuestionnairesViewModel(),
+                    startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
+                    completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
+                    rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(),
+                    interviewsViewModel: DashboardNewInterviewsViewModel());
         }
 
-        private static QuestionnairesAndNewInterviewsViewModel DashboardQuestionnairesViewModel()
-            => new QuestionnairesAndNewInterviewsViewModel(
+        private static NewInterviewsViewModel DashboardNewInterviewsViewModel()
+            => new NewInterviewsViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(), Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+
+        private static QuestionnairesViewModel DashboardQuestionnairesViewModel()
+            => new QuestionnairesViewModel(
+                Substitute.For<IPlainStorage<QuestionnaireView>>(), 
+                Substitute.For<IInterviewViewModelFactory>());
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
             => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
