@@ -11,15 +11,17 @@
 	{
 		public bool IsAnswered(string answer) => !string.IsNullOrWhiteSpace(answer);
 
-		public bool IsAnswered<TY>(TY? answer) where TY : struct => answer.HasValue;
+		public bool IsAnswered<TY>(TY? answer) where TY : struct => answer.HasValue; // doublle?, int?, DateTime?
 
 		public bool IsAnswered(GeoLocation answer) => !(answer == null || (answer.Altitude == 0 && answer.Longitude == 0 && answer.Accuracy == 0 && answer.Latitude == 0));
 
-		public bool IsAnswered(decimal[] answer) => !(answer == null || answer.Length == 0);
+		public bool IsAnswered(int[] answer) => !(answer == null || answer.Length == 0);
 
-		public bool IsAnswered(decimal[][] answer) => !(answer == null || answer.Length == 0);
+		public bool IsAnswered(RosterVector[] answer) => !(answer == null || answer.Length == 0);
 
-		public bool IsAnswered(Tuple<decimal, string>[] answer) => !(answer == null || !answer.Any());
+		public bool IsAnswered(TextListAnswerRow[] answer) => !(answer == null || answer.Length == 0);
+
+		public bool IsAnswered(RosterVector answer) => answer != null;
 
 		public bool IsAnswered(YesNoAnswers answer) => !(answer.Yes.Length == 0 && answer.No.Length == 0);
 
@@ -55,6 +57,14 @@
     {
 #>
 			validationConditions.Add(IdOf.<#=methodGroup.Key#>, new Func<bool>[] { <#=string.Join(",",  methodGroup.Value)#> });
+<# 
+	}
+#>
+<#
+	foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
+    {
+#>            
+			variableExpressions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
 	}
 #>
@@ -138,19 +148,18 @@
 	}
 #>
 <#
+	foreach (var variable in Model.Variables) 
+    {
+#>            
+		public <#=variable.TypeName#> <#=variable.Variable#> => state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, RosterVector.Take(<#=variable.RosterScope.Length#>));
+<# 
+	}
+#>
+<#
 	foreach (var roster in Model.Rosters) 
     {
 #>            
 		public <#=roster.Level.ClassName#>[] <#=roster.Variable#> => storage.GetLevels<<#=roster.Level.ClassName#>>(IdOf.<#=roster.Level.Variable#>,Identity);
-<# 
-	}
-#>
-
-<#
-	foreach (var variable in Model.Variables) 
-    {
-#>            
-		public <#=variable.ClassName#>[] <#=variable.Variable#> => <#=variable.ExpressionMethod#>();
 <# 
 	}
 #>

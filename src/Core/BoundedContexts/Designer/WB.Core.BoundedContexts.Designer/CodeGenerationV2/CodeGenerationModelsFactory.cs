@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
@@ -91,6 +92,25 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 codeGenerationModel.AllQuestions.Add(questionModel);
             }
 
+            foreach (var variable in questionnaire.Find<IVariable>())
+            {
+                string varName = this.GetVariable(variable);
+
+                var rosterScope = questionnaire.GetRosterScope(variable);
+                var levelClassName = levelClassNames[rosterScope];
+                var variableModel = new VariableModel
+                {
+                    Id = variable.PublicKey,
+                    Variable = varName,
+                    ClassName = levelClassName,
+                    TypeName = this.GetVariablesCSharpType(variable.Type),
+                    RosterScope = rosterScope
+                };
+
+                codeGenerationModel.AllVariables.Add(variableModel);
+            }
+
+
             foreach (var staticText in questionnaire.Find<StaticText>())
             {
                 string varName = this.GetVariable(staticText);
@@ -118,6 +138,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                     }
                 }
 
+                foreach (var variable in codeGenerationModel.AllVariables)
+                {
+                    if (variable.RosterScope.IsSameOrParentScopeFor(level.RosterScope))
+                    {
+                        level.Variables.Add(variable);
+                    }
+                }
+
                 foreach (var rosterScopePairs in rosterScopes)
                 {
                     var rosterScope = rosterScopePairs.Key;
@@ -142,8 +170,29 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             codeGenerationModel.ExpressionMethodModel.AddRange(this.CreateMethodModels(questionnaire, codeGenerationModel));
             codeGenerationModel.LinkedFilterMethodModel.AddRange(this.CreateLinkedFilterModels(questionnaire, codeGenerationModel));
             codeGenerationModel.CategoricalOptionsFilterModel.AddRange(this.CreateCategoricalOptionsFilterModels(questionnaire, codeGenerationModel));
+            codeGenerationModel.VariableMethodModel.AddRange(this.CreateVariableMethodModel(questionnaire, codeGenerationModel));
 
             return codeGenerationModel;
+        }
+
+
+        private string GetVariablesCSharpType(VariableType variableType)
+        {
+            switch (variableType)
+            {
+                case VariableType.LongInteger:
+                    return "long?";
+                case VariableType.Double:
+                    return "double?";
+                case VariableType.Boolean:
+                    return "bool?";
+                case VariableType.DateTime:
+                    return "DateTime?";
+                case VariableType.String:
+                    return "string";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(variableType), variableType, $"unknown variable type {variableType}");
+            }
         }
 
         private Dictionary<Guid, string> CreateIdMap(ReadOnlyQuestionnaireDocument questionnaire)
@@ -151,8 +200,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             var map = questionnaire.Find<IQuestion>().ToDictionary(x => x.PublicKey, this.GetVariable);
             questionnaire.Find<StaticText>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
             questionnaire.Find<IGroup>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
+            questionnaire.Find<IVariable>().ForEach(x => map.Add(x.PublicKey, this.GetVariable(x)));
             map.Add(questionnaire.PublicKey, CodeGeneratorV2.QuestionnaireIdName);
             return map;
+        }
+
+        private string GetVariable(IVariable variable)
+        {
+            return !String.IsNullOrEmpty(variable.Name) ? variable.Name : "__" + variable.PublicKey.FormatGuid();
         }
 
         private string GetVariable(StaticText staticText)
@@ -255,6 +310,33 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         $"{CodeGeneratorV2.LinkedFilterPrefix}{questionModel.Variable}",
                         linkedFilterExpression,
                         questionModel.ClassName);
+            }
+        }
+
+
+        private IEnumerable<ConditionMethodModel> CreateVariableMethodModel(ReadOnlyQuestionnaireDocument questionnaire, ExpressionStorageModel model)
+        {
+            var variables = questionnaire
+                .Find<IVariable>()
+                .Where(x => !string.IsNullOrWhiteSpace(this.macrosSubstitutionService.InlineMacros(x.Expression, questionnaire.Macros.Values)));
+
+            foreach (var variable in variables)
+            {
+                var variableModel = model.GetVariableById(variable.PublicKey);
+                var expression = this.macrosSubstitutionService.InlineMacros(variable.Expression, questionnaire.Macros.Values);
+
+                yield return
+                    new ConditionMethodModel(
+                        ExpressionLocation.Variable(variableModel.Id),
+                        variableModel.ClassName,
+                        $"{CodeGeneratorV2.VariablePrefix}{variableModel.Variable}",
+                        expression,
+                        false,
+                        variableModel.Variable,
+                        variableModel.TypeName)
+                    {
+                        UseObjectBoxing = true
+                    };
             }
         }
 

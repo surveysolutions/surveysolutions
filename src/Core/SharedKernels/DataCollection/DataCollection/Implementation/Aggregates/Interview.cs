@@ -2418,6 +2418,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray());
                                 // if is roster title, need to update it here?
                             }
+
+                            if (question.IsLinkedToListQuestion)
+                            {
+                                question.CalculateLinkedToListOptions(true);
+                            }
                         }
 
                         if (entity is InterviewTreeVariable)

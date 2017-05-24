@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string QuestionnaireLevel = "QuestionnaireLevel";
         public const string EnablementPrefix = "IsEnabled__";
         public const string OptionsFilterPrefix = "FilterOption__";
+        public const string VariablePrefix = "Variable__";
+        
         public const string ValidationPrefix = "IsValid__";
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
         public const string LevelPrefix = "Level_";
@@ -31,8 +33,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             this.modelsFactory = modelsFactory;
         }
 
-        
-
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
@@ -46,6 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             List<LookupTableTemplateModel> lookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
             var lookupTablesTemplate = new LookupTablesTemplate(lookupTables);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
+
+            foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
+            {
+                var methodTemplate = new ConditionMethodTemplate(variableMethodModel);
+                generatedClasses.Add(variableMethodModel.Location.Key, methodTemplate.TransformText());
+            }
 
             foreach (ConditionMethodModel expressionMethodModel in model.ExpressionMethodModel)
             {
