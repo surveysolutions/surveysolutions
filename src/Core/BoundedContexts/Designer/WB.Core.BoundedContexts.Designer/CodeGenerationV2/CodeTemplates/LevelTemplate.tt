@@ -28,6 +28,7 @@
 		public <#=Model.ClassName#>(RosterVector rosterVector, <#= Storage.ClassName #> storage) 
 		{
 			this.storage = storage;
+			Quest = new QuestionnaireRandom(storage.state.Properties);
 <#
 	if (Model.RosterScope.Length == 0)
 	{
@@ -138,7 +139,11 @@
 
 		public string @rowname => state.GetRosterTitle(Identity);
 
-		public double IRnd => properties.Random;
+		// backward compatibility
+		
+
+		private QuestionnaireRandom Quest;
+		
 <#
 	foreach (var question in Model.Questions) 
     {

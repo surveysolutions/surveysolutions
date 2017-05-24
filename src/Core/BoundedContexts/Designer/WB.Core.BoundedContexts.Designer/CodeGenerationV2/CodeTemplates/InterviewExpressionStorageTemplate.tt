@@ -77,4 +77,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		}
 #>
 	}
+
+	public class QuestionnaireRandom
+	{
+		public QuestionnaireRandom(<#=typeof(IInterviewPropertiesForExpressions).Name#> properties)
+		{
+			this.Properties = properties;
+		}
+		private <#=typeof(IInterviewPropertiesForExpressions).Name#> Properties;
+			
+		public double IRnd() => Properties.Random;
+	}
 }
