@@ -68,10 +68,12 @@
   <color name="interviewHeaderCompleted">#38ac14</color>
   <color name="interviewHeaderInProgress">#2a81cb</color>
   <color name="interviewHeaderErrors">#f05a26</color>
+  <color name="interviewHeaderDisabled">#545454</color>
   
   <color name="interviewStatusBarCompleted">#309211</color>
   <color name="interviewStatusBarInProgress">#246EAD</color>
   <color name="interviewStatusBarErrors">#CC4D20</color>
+  <color name="interviewStatusBarDisabled">#474747</color>
 
   <color name="complete_screen_title_text">#747474</color>
   <color name="complete_screen_statistics_border">#dadada</color>
@@ -91,4 +93,7 @@
   <color name="comment_from_interviewer">#000000</color>
 
   <color name="cover_not_from_supervisor_color">#000000</color>
+
+  <color name="color_white_30_percent_transparent">#B3ffffff</color>
+  <color name="color_white_10_percent_transparent">#E6ffffff</color>
 </resources>

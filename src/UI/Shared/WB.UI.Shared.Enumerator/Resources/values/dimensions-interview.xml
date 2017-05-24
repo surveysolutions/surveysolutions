@@ -52,6 +52,7 @@
 
   <dimen name="Interview_Question_Progress_Indicator_height">4dp</dimen>
   <dimen name="Progress_Indicator_height">6dp</dimen>
+  <dimen name="Progress_Indicator_padding_top">6dp</dimen>
 
   <dimen name="Interview_Group_margin_bottom">14dp</dimen>
   <dimen name="Interview_Group_margin_top">20dp</dimen>
