@@ -450,9 +450,6 @@
   <data name="SelectSupervisorToAssign" xml:space="preserve">
     <value>选择督导员</value>
   </data>
-  <data name="SimpleDescription" xml:space="preserve">
-    <value>上传包含必填识别信息且以tab分隔的文件。可以在_responsible一列指定调查员或督导员的名称。</value>
-  </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>仅识别数据</value>
   </data>
