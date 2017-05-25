@@ -47,9 +47,6 @@
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
                 local:MvxBind="ItemsSource MapsList; SelectedItem SelectedMap; Visibility Visibility(Map != null);" />
-        <!--style="@style/spinnerDropDownItemStyle" 
-            android:background="#2A81CB"
-            android:background="@android:drawable/btn_dropdown"-->
         </LinearLayout>
         <Button
             android:layout_width="wrap_content"
@@ -90,14 +87,14 @@
                 style="@style/Area_Screen_Button"
                 android:id="@+id/areaEditor_Undo"
                 android:layout_marginTop="1dp"
-                local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled IsEditing;"
+                local:MvxBind="Click UndoCommand; Text 'Undo'; Enabled CanUndo;"
                 android:layout_marginLeft="20dp" />
             <Button
                 style="@style/Area_Screen_Button"
                 android:id="@+id/areaEditor_Save"
                 android:layout_marginTop="1dp"
                 android:layout_marginLeft="120dp"
-                local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled IsEditing;" />
+                local:MvxBind="Click SaveAreaCommand; Text 'Save'; Enabled CanSave;" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

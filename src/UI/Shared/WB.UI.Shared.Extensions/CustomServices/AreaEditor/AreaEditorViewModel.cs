@@ -37,16 +37,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.AvailableMaps = this.mapService.GetAvailableMaps();
             this.MapsList = this.AvailableMaps.Keys.ToList();
 
-            if (this.AvailableMaps.Count != 0)
+            if (this.AvailableMaps.Count == 0) return;
+
+            if (!string.IsNullOrEmpty(this.MapName) && this.AvailableMaps.ContainsKey(this.MapName))
             {
-                if (!string.IsNullOrEmpty(this.MapName) && this.AvailableMaps.ContainsKey(this.MapName))
-                {
-                    this.SelectedMap = this.MapName;
-                }
-                else
-                {
-                    this.SelectedMap = this.AvailableMaps.FirstOrDefault().Key;
-                }
+                this.SelectedMap = this.MapName;
+            }
+            else
+            {
+                this.SelectedMap = this.AvailableMaps.FirstOrDefault().Key;
             }
         }
 
@@ -56,7 +55,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public List<string> MapsList
         {
             get { return this.mapsList; }
-            set { this.mapsList = value; RaisePropertyChanged(); }
+            set
+            {
+                this.mapsList = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => SelectedMap); //fix
+            }
         }
 
         private string selectedMap;
@@ -209,6 +213,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
             {
                 this.GeometryArea = GeometryEngine.AreaGeodetic(args.NewGeometry);
+                this.CanUndo = this.MapView.SketchEditor.UndoCommand.CanExecute(this.MapView.SketchEditor.UndoCommand);
+                this.CanSave = this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
             };
 
             Geometry result = null;
@@ -258,21 +264,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.MapView.SketchEditor.DeleteCommand.Execute(command);
         }
 
-        public IMvxCommand UndoCommand
-        {
-            get
-            {
-                return new MvxCommand(BtnUndo);
-            }
-        }
-
-        public IMvxCommand DeleteCommand
-        {
-            get
-            {
-                return new MvxCommand(BtnDeleteCommand);
-            }
-        }
+        public IMvxCommand UndoCommand => new MvxCommand(this.BtnUndo);
+        public IMvxCommand DeleteCommand => new MvxCommand(this.BtnDeleteCommand);
 
         private bool isEditing;
         public bool IsEditing
@@ -281,7 +274,21 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set { this.isEditing = value; RaisePropertyChanged(); }
         }
 
-        
+
+        private bool canUndo;
+        public bool CanUndo
+        {
+            get { return this.canUndo; }
+            set { this.canUndo = value; RaisePropertyChanged(); }
+        }
+
+        private bool canSave;
+        public bool CanSave
+        {
+            get { return this.canSave; }
+            set { this.canSave = value; RaisePropertyChanged(); }
+        }
+
         private bool isInProgress;
         public bool IsInProgress
         {
