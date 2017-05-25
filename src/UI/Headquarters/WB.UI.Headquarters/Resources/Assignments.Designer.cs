@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identifying Questions.
+        /// </summary>
+        public static string IdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("IdentifyingQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlimited.
         /// </summary>
         public static string Unlimited {
