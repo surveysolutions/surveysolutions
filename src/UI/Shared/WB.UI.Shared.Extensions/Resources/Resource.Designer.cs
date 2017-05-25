@@ -1704,79 +1704,91 @@ namespace WB.UI.Shared.Extensions
 			public static int esri = 2130837589;
 			
 			// aapt resource value: 0x7f020056
-			public static int notification_action_background = 2130837590;
+			public static int flashbuttonoff = 2130837590;
 			
 			// aapt resource value: 0x7f020057
-			public static int notification_bg = 2130837591;
+			public static int flashbuttonon = 2130837591;
 			
 			// aapt resource value: 0x7f020058
-			public static int notification_bg_low = 2130837592;
+			public static int notification_action_background = 2130837592;
 			
 			// aapt resource value: 0x7f020059
-			public static int notification_bg_low_normal = 2130837593;
+			public static int notification_bg = 2130837593;
 			
 			// aapt resource value: 0x7f02005a
-			public static int notification_bg_low_pressed = 2130837594;
+			public static int notification_bg_low = 2130837594;
 			
 			// aapt resource value: 0x7f02005b
-			public static int notification_bg_normal = 2130837595;
+			public static int notification_bg_low_normal = 2130837595;
 			
 			// aapt resource value: 0x7f02005c
-			public static int notification_bg_normal_pressed = 2130837596;
+			public static int notification_bg_low_pressed = 2130837596;
 			
 			// aapt resource value: 0x7f02005d
-			public static int notification_icon_background = 2130837597;
-			
-			// aapt resource value: 0x7f02006d
-			public static int notification_template_icon_bg = 2130837613;
-			
-			// aapt resource value: 0x7f02006e
-			public static int notification_template_icon_low_bg = 2130837614;
+			public static int notification_bg_normal = 2130837597;
 			
 			// aapt resource value: 0x7f02005e
-			public static int notification_tile_bg = 2130837598;
+			public static int notification_bg_normal_pressed = 2130837598;
 			
 			// aapt resource value: 0x7f02005f
-			public static int notify_panel_notification_icon_bg = 2130837599;
+			public static int notification_icon_background = 2130837599;
+			
+			// aapt resource value: 0x7f020071
+			public static int notification_template_icon_bg = 2130837617;
+			
+			// aapt resource value: 0x7f020072
+			public static int notification_template_icon_low_bg = 2130837618;
 			
 			// aapt resource value: 0x7f020060
-			public static int progress_bar = 2130837600;
+			public static int notification_tile_bg = 2130837600;
 			
 			// aapt resource value: 0x7f020061
-			public static int progressbar_indeterminate = 2130837601;
+			public static int notify_panel_notification_icon_bg = 2130837601;
 			
 			// aapt resource value: 0x7f020062
-			public static int progressbar_indeterminate2 = 2130837602;
+			public static int overlay = 2130837602;
 			
 			// aapt resource value: 0x7f020063
-			public static int progressbar_indeterminate3 = 2130837603;
+			public static int progress_bar = 2130837603;
 			
 			// aapt resource value: 0x7f020064
-			public static int progressbar_indeterminate4 = 2130837604;
+			public static int progressbar_indeterminate = 2130837604;
 			
 			// aapt resource value: 0x7f020065
-			public static int progressbar_indeterminate5 = 2130837605;
+			public static int progressbar_indeterminate2 = 2130837605;
 			
 			// aapt resource value: 0x7f020066
-			public static int progressbar_indeterminate6 = 2130837606;
+			public static int progressbar_indeterminate3 = 2130837606;
 			
 			// aapt resource value: 0x7f020067
-			public static int progressbar_indeterminate7 = 2130837607;
+			public static int progressbar_indeterminate4 = 2130837607;
 			
 			// aapt resource value: 0x7f020068
-			public static int progressbar_indeterminate8 = 2130837608;
+			public static int progressbar_indeterminate5 = 2130837608;
 			
 			// aapt resource value: 0x7f020069
-			public static int screen_button = 2130837609;
+			public static int progressbar_indeterminate6 = 2130837609;
 			
 			// aapt resource value: 0x7f02006a
-			public static int screen_button_disabled = 2130837610;
+			public static int progressbar_indeterminate7 = 2130837610;
 			
 			// aapt resource value: 0x7f02006b
-			public static int screen_button_pressed = 2130837611;
+			public static int progressbar_indeterminate8 = 2130837611;
 			
 			// aapt resource value: 0x7f02006c
-			public static int screen_button_unpressed = 2130837612;
+			public static int screen_button = 2130837612;
+			
+			// aapt resource value: 0x7f02006d
+			public static int screen_button_disabled = 2130837613;
+			
+			// aapt resource value: 0x7f02006e
+			public static int screen_button_pressed = 2130837614;
+			
+			// aapt resource value: 0x7f02006f
+			public static int screen_button_unpressed = 2130837615;
+			
+			// aapt resource value: 0x7f020070
+			public static int zoom = 2130837616;
 			
 			static Drawable()
 			{
@@ -1796,6 +1808,9 @@ namespace WB.UI.Shared.Extensions
 			
 			// aapt resource value: 0x7f0a000b
 			public static int MvxBindingTagUnique = 2131361803;
+			
+			// aapt resource value: 0x7f0a0079
+			public static int RelativeLayout1 = 2131361913;
 			
 			// aapt resource value: 0x7f0a0065
 			public static int action0 = 2131361893;
@@ -1947,6 +1962,9 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a0040
 			public static int expanded_menu = 2131361856;
 			
+			// aapt resource value: 0x7f0a007c
+			public static int flashButton = 2131361916;
+			
 			// aapt resource value: 0x7f0a0004
 			public static int home = 2131361796;
 			
@@ -2010,8 +2028,14 @@ namespace WB.UI.Shared.Extensions
 			// aapt resource value: 0x7f0a006a
 			public static int notification_main_column_container = 2131361898;
 			
+			// aapt resource value: 0x7f0a007b
+			public static int overlayImage = 2131361915;
+			
 			// aapt resource value: 0x7f0a0033
 			public static int parentPanel = 2131361843;
+			
+			// aapt resource value: 0x7f0a007a
+			public static int preview_view = 2131361914;
 			
 			// aapt resource value: 0x7f0a0005
 			public static int progress_circular = 2131361797;
@@ -2153,6 +2177,9 @@ namespace WB.UI.Shared.Extensions
 			
 			// aapt resource value: 0x7f0a001c
 			public static int wrap_content = 2131361820;
+			
+			// aapt resource value: 0x7f0a007d
+			public static int zoomButton = 2131361917;
 			
 			static Id()
 			{
@@ -2322,16 +2349,19 @@ namespace WB.UI.Shared.Extensions
 			public static int notification_template_part_time = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public static int select_dialog_item_material = 2130903083;
+			public static int scanner = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public static int select_dialog_multichoice_material = 2130903084;
+			public static int select_dialog_item_material = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public static int select_dialog_singlechoice_material = 2130903085;
+			public static int select_dialog_multichoice_material = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public static int support_simple_spinner_dropdown_item = 2130903086;
+			public static int select_dialog_singlechoice_material = 2130903086;
+			
+			// aapt resource value: 0x7f03002f
+			public static int support_simple_spinner_dropdown_item = 2130903087;
 			
 			static Layout()
 			{
@@ -2346,107 +2376,107 @@ namespace WB.UI.Shared.Extensions
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050000
-			public static int abc_action_bar_home_description = 2131034112;
-			
 			// aapt resource value: 0x7f050001
-			public static int abc_action_bar_home_description_format = 2131034113;
+			public static int abc_action_bar_home_description = 2131034113;
 			
 			// aapt resource value: 0x7f050002
-			public static int abc_action_bar_home_subtitle_description_format = 2131034114;
+			public static int abc_action_bar_home_description_format = 2131034114;
 			
 			// aapt resource value: 0x7f050003
-			public static int abc_action_bar_up_description = 2131034115;
+			public static int abc_action_bar_home_subtitle_description_format = 2131034115;
 			
 			// aapt resource value: 0x7f050004
-			public static int abc_action_menu_overflow_description = 2131034116;
+			public static int abc_action_bar_up_description = 2131034116;
 			
 			// aapt resource value: 0x7f050005
-			public static int abc_action_mode_done = 2131034117;
+			public static int abc_action_menu_overflow_description = 2131034117;
 			
 			// aapt resource value: 0x7f050006
-			public static int abc_activity_chooser_view_see_all = 2131034118;
+			public static int abc_action_mode_done = 2131034118;
 			
 			// aapt resource value: 0x7f050007
-			public static int abc_activitychooserview_choose_application = 2131034119;
+			public static int abc_activity_chooser_view_see_all = 2131034119;
 			
 			// aapt resource value: 0x7f050008
-			public static int abc_capital_off = 2131034120;
+			public static int abc_activitychooserview_choose_application = 2131034120;
 			
 			// aapt resource value: 0x7f050009
-			public static int abc_capital_on = 2131034121;
-			
-			// aapt resource value: 0x7f050015
-			public static int abc_font_family_body_1_material = 2131034133;
-			
-			// aapt resource value: 0x7f050016
-			public static int abc_font_family_body_2_material = 2131034134;
-			
-			// aapt resource value: 0x7f050017
-			public static int abc_font_family_button_material = 2131034135;
-			
-			// aapt resource value: 0x7f050018
-			public static int abc_font_family_caption_material = 2131034136;
-			
-			// aapt resource value: 0x7f050019
-			public static int abc_font_family_display_1_material = 2131034137;
-			
-			// aapt resource value: 0x7f05001a
-			public static int abc_font_family_display_2_material = 2131034138;
-			
-			// aapt resource value: 0x7f05001b
-			public static int abc_font_family_display_3_material = 2131034139;
-			
-			// aapt resource value: 0x7f05001c
-			public static int abc_font_family_display_4_material = 2131034140;
-			
-			// aapt resource value: 0x7f05001d
-			public static int abc_font_family_headline_material = 2131034141;
-			
-			// aapt resource value: 0x7f05001e
-			public static int abc_font_family_menu_material = 2131034142;
-			
-			// aapt resource value: 0x7f05001f
-			public static int abc_font_family_subhead_material = 2131034143;
-			
-			// aapt resource value: 0x7f050020
-			public static int abc_font_family_title_material = 2131034144;
+			public static int abc_capital_off = 2131034121;
 			
 			// aapt resource value: 0x7f05000a
-			public static int abc_search_hint = 2131034122;
+			public static int abc_capital_on = 2131034122;
 			
-			// aapt resource value: 0x7f05000b
-			public static int abc_searchview_description_clear = 2131034123;
+			// aapt resource value: 0x7f050016
+			public static int abc_font_family_body_1_material = 2131034134;
 			
-			// aapt resource value: 0x7f05000c
-			public static int abc_searchview_description_query = 2131034124;
+			// aapt resource value: 0x7f050017
+			public static int abc_font_family_body_2_material = 2131034135;
 			
-			// aapt resource value: 0x7f05000d
-			public static int abc_searchview_description_search = 2131034125;
+			// aapt resource value: 0x7f050018
+			public static int abc_font_family_button_material = 2131034136;
 			
-			// aapt resource value: 0x7f05000e
-			public static int abc_searchview_description_submit = 2131034126;
+			// aapt resource value: 0x7f050019
+			public static int abc_font_family_caption_material = 2131034137;
 			
-			// aapt resource value: 0x7f05000f
-			public static int abc_searchview_description_voice = 2131034127;
+			// aapt resource value: 0x7f05001a
+			public static int abc_font_family_display_1_material = 2131034138;
 			
-			// aapt resource value: 0x7f050010
-			public static int abc_shareactionprovider_share_with = 2131034128;
+			// aapt resource value: 0x7f05001b
+			public static int abc_font_family_display_2_material = 2131034139;
 			
-			// aapt resource value: 0x7f050011
-			public static int abc_shareactionprovider_share_with_application = 2131034129;
+			// aapt resource value: 0x7f05001c
+			public static int abc_font_family_display_3_material = 2131034140;
 			
-			// aapt resource value: 0x7f050012
-			public static int abc_toolbar_collapse_description = 2131034130;
+			// aapt resource value: 0x7f05001d
+			public static int abc_font_family_display_4_material = 2131034141;
+			
+			// aapt resource value: 0x7f05001e
+			public static int abc_font_family_headline_material = 2131034142;
+			
+			// aapt resource value: 0x7f05001f
+			public static int abc_font_family_menu_material = 2131034143;
+			
+			// aapt resource value: 0x7f050020
+			public static int abc_font_family_subhead_material = 2131034144;
 			
 			// aapt resource value: 0x7f050021
-			public static int library_name = 2131034145;
+			public static int abc_font_family_title_material = 2131034145;
+			
+			// aapt resource value: 0x7f05000b
+			public static int abc_search_hint = 2131034123;
+			
+			// aapt resource value: 0x7f05000c
+			public static int abc_searchview_description_clear = 2131034124;
+			
+			// aapt resource value: 0x7f05000d
+			public static int abc_searchview_description_query = 2131034125;
+			
+			// aapt resource value: 0x7f05000e
+			public static int abc_searchview_description_search = 2131034126;
+			
+			// aapt resource value: 0x7f05000f
+			public static int abc_searchview_description_submit = 2131034127;
+			
+			// aapt resource value: 0x7f050010
+			public static int abc_searchview_description_voice = 2131034128;
+			
+			// aapt resource value: 0x7f050011
+			public static int abc_shareactionprovider_share_with = 2131034129;
+			
+			// aapt resource value: 0x7f050012
+			public static int abc_shareactionprovider_share_with_application = 2131034130;
 			
 			// aapt resource value: 0x7f050013
-			public static int search_menu_title = 2131034131;
+			public static int abc_toolbar_collapse_description = 2131034131;
+			
+			// aapt resource value: 0x7f050000
+			public static int library_name = 2131034112;
 			
 			// aapt resource value: 0x7f050014
-			public static int status_bar_notification_info_overflow = 2131034132;
+			public static int search_menu_title = 2131034132;
+			
+			// aapt resource value: 0x7f050015
+			public static int status_bar_notification_info_overflow = 2131034133;
 			
 			static String()
 			{
