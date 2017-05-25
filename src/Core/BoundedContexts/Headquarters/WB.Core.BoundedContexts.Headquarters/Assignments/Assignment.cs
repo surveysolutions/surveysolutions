@@ -29,6 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual int? Capacity { get; protected set; }
 
+        public virtual long Completed { get; protected set; }
+
         public virtual bool Archived { get; protected set; }
 
         public virtual DateTime CreatedAtUtc { get; protected set; }
@@ -48,6 +50,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void UpdateCapacity(int? capacity)
         {
             this.Capacity = capacity;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void UpdateCompletedCount(long count)
+        {
+            this.Completed = count;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 

@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.Archived);
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
+            Property(x => x.Completed);
 
             Component(x => x.QuestionnaireId, cmp =>
             {

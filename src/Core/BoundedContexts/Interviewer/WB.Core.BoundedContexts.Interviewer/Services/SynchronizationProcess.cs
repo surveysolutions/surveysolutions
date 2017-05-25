@@ -343,7 +343,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     {
                         Id = remote.Id,
                         QuestionnaireId = remote.QuestionnaireId,
-                        Created = 0,
                         IdentifyingData = remote.IdentifyingData
                     };
 
@@ -352,6 +351,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
 
                 local.Capacity = remote.Capacity;
+                local.Completed = remote.Completed;
 
                 this.assignmentsRepository.Store(local);
             }
