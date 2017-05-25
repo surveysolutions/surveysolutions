@@ -4,6 +4,7 @@ using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -38,11 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 return list;
             });
 
-            var totalCount = this.asssignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
-
             var result = new AssignmentsWithoutIdentifingData
             {
-                TotalCount = totalCount,
                 Page = input.Page,
                 PageSize = input.PageSize,
                 Items = assignments.Select(x => new AssignmentRow
@@ -55,18 +53,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     Id = x.Id,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
-                })
+                }),
             };
+
+            result.TotalCount = this.asssignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
 
             return result;
         }
 
-        private IEnumerable<string> GetIdentifyingColumnText(Assignment assignment)
+        private Dictionary<string, string> GetIdentifyingColumnText(Assignment assignment)
         {
-            //var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(assignment.QuestionnaireId);
-            //var plainQuestionnaire = new Plainqu
+            QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
 
-            return assignment.IdentifyingData.Select(_ => _.Answer);
+            return assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId), _ => _.Answer);
         }
 
         private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, ListViewModelBase model)
