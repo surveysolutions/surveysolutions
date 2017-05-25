@@ -1643,6 +1643,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M012_AddAllowAssignmentsColumnToQuestionnaireBrowseItem.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M013_AddCompletedCountToAssignments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />

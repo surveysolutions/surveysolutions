@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public virtual string Id { get; set; }
 
         public int? Capacity { get; set; }
-        public int Created { get; set; }
+        public int Completed { get; set; }
 
         public string QuestionnaireId { get; set; }
         
