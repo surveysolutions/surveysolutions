@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Component(x => x.QuestionnaireId, cmp =>
             {
+                cmp.Lazy(false);
                 cmp.Property(x => x.QuestionnaireId);
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
