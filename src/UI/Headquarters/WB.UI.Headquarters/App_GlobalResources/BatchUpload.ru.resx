@@ -436,4 +436,44 @@
   <data name="Prerequisite_ZipFile" xml:space="preserve">
     <value>Только файлы с расширением .zip разрешены для загрузки.</value>
   </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Создать задачи</value>
+    <comment>Создать задачи</comment>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Надены данные для 1 задачи</value>
+    <comment>Надены данные для 1 задачи</comment>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Найдены данные для {0} задач(и)</value>
+    <comment>Найдены данные для {0} задач(и)</comment>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Создать множество задач  используя файл</value>
+    <comment>Создать множество задач  используя файл</comment>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Импорт задач для {0}</value>
+    <comment>Импорт задач для {0}</comment>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 задача создана</value>
+    <comment>1 задача создана</comment>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{0} задач создано</value>
+    <comment>{0} задач создано</comment>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 задача не была создана</value>
+    <comment>1 задача не была создана</comment>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0} задач не было создано</value>
+    <comment>{0} задач не было создано</comment>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Загрузить задачи с ошибками</value>
+    <comment>Загрузить задачи с ошибками</comment>
+  </data>
 </root>
