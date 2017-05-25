@@ -84,16 +84,16 @@ function UpdateAndroidAppManifest( $VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
 }
 
-function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtra){
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions){
 
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	if($ExcludeExtra)
+	if($ExcludeExtensions)
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"
 	
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants='EXCLUDEEXTENTIONS' | Write-Host
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants='EXCLUDEEXTENSIONS' | Write-Host
 	}
 	else
 	{

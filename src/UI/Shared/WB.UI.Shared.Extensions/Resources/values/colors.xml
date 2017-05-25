@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="screen_button_disabled">#C6C6C6</color>
+  <color name="screen_button_pressed">#0D6DBF</color>
+  <color name="screen_button">#2A81CB</color>
+  
+</resources>

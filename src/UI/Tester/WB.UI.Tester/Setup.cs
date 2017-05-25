@@ -49,7 +49,7 @@ namespace WB.UI.Tester
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
-#if !EXCLUDEEXTENTIONS
+#if !EXCLUDEEXTENSIONS
                 { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
@@ -71,7 +71,7 @@ namespace WB.UI.Tester
             {
                 typeof(TesterBoundedContextModule).Assembly,
 
-#if !EXCLUDEEXTENTIONS
+#if !EXCLUDEEXTENSIONS
                 typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
 
