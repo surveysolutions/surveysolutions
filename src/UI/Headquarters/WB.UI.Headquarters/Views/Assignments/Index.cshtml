@@ -14,7 +14,7 @@
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
-            order: [[3, 'desc']],
+            order: [[4, 'desc']],
             columns: [
                 {
                     data: "id",
@@ -39,6 +39,13 @@
                         }
                         return data;
                     }
+                },
+                {
+                    data: "identifyingQuestions",
+                    title: "@Assignments.IdentifyingQuestions",
+                    "class": "prefield-column first-identifying last-identifying sorting_disabled visible",
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: "updatedAtUtc",
