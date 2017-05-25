@@ -190,8 +190,10 @@
     <Compile Include="Assignments\AssignmentMap.cs" />
     <Compile Include="Assignments\AssignmentRow.cs" />
     <Compile Include="Assignments\AssignmentsInputModel.cs" />
+    <Compile Include="Assignments\AssignmentsService.cs" />
     <Compile Include="Assignments\AssignmentsWithoutIdentifingData.cs" />
     <Compile Include="Assignments\AssignmentViewFactory.cs" />
+    <Compile Include="Assignments\IAssignmentsService.cs" />
     <Compile Include="Assignments\IAssignmentViewFactory.cs" />
     <Compile Include="Assignments\IdentifyingAnswer.cs" />
     <Compile Include="ClientIdentifier.cs" />
