@@ -21,18 +21,7 @@ try {
 	BuildSolution `
                 -Solution $MainSolution `
                 -BuildConfiguration $BuildConfiguration
-
-	$PackageName = 'WBCapi.apk'
-		. "$scriptFolder\build-android-package.ps1" `
-			-VersionName $versionString `
-			-VersionCode $BuildNumber `
-			-BuildConfiguration $BuildConfiguration `
-			-KeystorePassword $KeystorePassword `
-			-KeystoreName 'WBCapi.keystore' `
-			-KeystoreAlias 'wbcapipublish' `
-			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-			-OutFileName $PackageName | %{ if (-not $_) { Exit } }
-
+			
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
 	BuildStaticContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
 		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
@@ -56,7 +45,34 @@ try {
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
 	
-	CopyCapi -Project $ProjectHeadquarters -source $PackageName
+	$PackageName = 'WBCapi.apk'
+		. "$scriptFolder\build-android-package.ps1" `
+			-VersionName $versionString `
+			-VersionCode $BuildNumber `
+			-BuildConfiguration $BuildConfiguration `
+			-KeystorePassword $KeystorePassword `
+			-KeystoreName 'WBCapi.keystore' `
+			-KeystoreAlias 'wbcapipublish' `
+			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+			-OutFileName $PackageName 
+			-ExcludeExtra true | %{ if (-not $_) { Exit } }
+	
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName -clean $true
+	
+	$ExtPackageName = 'WBCapi.Ext.apk'
+		. "$scriptFolder\build-android-package.ps1" `
+			-VersionName $versionString `
+			-VersionCode $BuildNumber `
+			-BuildConfiguration $BuildConfiguration `
+			-KeystorePassword $KeystorePassword `
+			-KeystoreName 'WBCapi.keystore' `
+			-KeystoreAlias 'wbcapipublish' `
+			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+			-OutFileName $ExtPackageName 
+			-ExcludeExtra false | %{ if (-not $_) { Exit } }	
+	
+	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -clean $true
+	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"

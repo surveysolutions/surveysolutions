@@ -5,7 +5,8 @@ param([string]$VersionName,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
-[string]$OutFileName)
+[string]$OutFileName,
+[string]$ExcludeExtra='false')
 
 if(!$VersionCode){
 	Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"
@@ -83,13 +84,19 @@ function UpdateAndroidAppManifest( $VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
 }
 
-function BuildAndroidApp($AndroidProject, $BuildConfiguration){
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtra){
 
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
-	& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
-
+	if($ExcludeExtra)
+	{
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants="EXCLUDEEXTENTIONS" | Write-Host
+	}
+	else
+	{
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
+	}
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
 	if (-not $wasBuildSuccessfull) {
@@ -174,7 +181,7 @@ if([string]::IsNullOrWhiteSpace($VersionName)){
 $VersionName = $VersionName + " (build " + $VersionCode + ")"
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
-BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
+BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
 
 SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
 	-Alias $KeystoreAlias -CapiProject $CapiProject `
