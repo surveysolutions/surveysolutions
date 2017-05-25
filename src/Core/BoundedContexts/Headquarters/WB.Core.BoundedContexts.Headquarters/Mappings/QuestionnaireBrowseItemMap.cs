@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.AllowCensusMode);
             Property(x => x.Disabled);
             Property(x => x.QuestionnaireContentVersion);
+            Property(x => x.AllowAssignments);
 
             List(x => x.FeaturedQuestions, listMap =>
             {
