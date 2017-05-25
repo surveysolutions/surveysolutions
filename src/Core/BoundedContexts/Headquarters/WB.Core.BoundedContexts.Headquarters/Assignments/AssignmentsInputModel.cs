@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public long? QuestionnaireVersion { get; set; }
         public Guid? ResponsibleId { get; set; }
         public Guid? SupervisorId { get; set; }
+        public bool ShowArchive { get; set; }
     }
 }

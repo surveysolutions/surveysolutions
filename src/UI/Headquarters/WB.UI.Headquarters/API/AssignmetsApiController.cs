@@ -48,7 +48,8 @@ namespace WB.UI.Headquarters.API
                 SearchBy = request.Search.Value,
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
                 QuestionnaireVersion = questionnaireIdentity?.Version,
-                ResponsibleId = request.ResponsibleId
+                ResponsibleId = request.ResponsibleId,
+                ShowArchive = request.ShowArchive
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -72,6 +73,8 @@ namespace WB.UI.Headquarters.API
         [HttpDelete]
         public IHttpActionResult Delete([FromBody]int[] ids)
         {
+            if (ids == null) return this.BadRequest();
+
             foreach (var id in ids)
             {
                 Assignment assignment = this.assignmentsStorage.GetById(id);
@@ -79,6 +82,24 @@ namespace WB.UI.Headquarters.API
             }
 
             return this.Ok();
+        }
+
+        public IHttpActionResult Assign([FromBody] AssignRequest request)
+        {
+            foreach (var idToAssign in request.ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(idToAssign);
+                assignment.Reassign(request.ResponsibleId);
+            }
+
+            return this.Ok();
+        }
+
+        public class AssignRequest
+        {
+            public Guid ResponsibleId { get; set; }
+
+            public int[] ids { get; set; }
         }
 
         public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
@@ -89,6 +110,8 @@ namespace WB.UI.Headquarters.API
         {
             public string QuestionnaireId { get; set; }
             public Guid? ResponsibleId { get; set; }
+
+            public bool ShowArchive { get; set; }
         }
     }
 }

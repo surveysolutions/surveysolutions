@@ -11,19 +11,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     internal class AssignmentViewFactory : IAssignmentViewFactory
     {
-        private readonly IPlainStorageAccessor<Assignment> asssignmentsStorage;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public AssignmentViewFactory(IPlainStorageAccessor<Assignment> asssignmentsStorage,
+        public AssignmentViewFactory(IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage)
         {
-            this.asssignmentsStorage = asssignmentsStorage;
+            this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         public AssignmentsWithoutIdentifingData Load(AssignmentsInputModel input)
         {
-            var assignments = this.asssignmentsStorage.Query(_ =>
+            var assignments = this.assignmentsStorage.Query(_ =>
             {
                 var items = this.ApplyFilter(input, _);
                 items = this.DefineOrderBy(items, input);
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }).ToList(),
             };
 
-            result.TotalCount = this.asssignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
+            result.TotalCount = this.assignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
 
             return result;
         }
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
         {
-            var items = assignments.Where(x => x.Archived == false);
+            var items = assignments.Where(x => x.Archived == input.ShowArchive);
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
