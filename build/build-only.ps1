@@ -57,7 +57,7 @@ try {
 			-OutFileName $PackageName `
 			-ExcludeExtra TRUE | %{ if (-not $_) { Exit } }
 	
-	CopyCapi -Project $ProjectHeadquarters -source $PackageName -clean TRUE
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp TRUE | %{ if (-not $_) { Exit } }
 	
 	$ExtPackageName = 'WBCapi.Ext.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -71,7 +71,7 @@ try {
 			-OutFileName $ExtPackageName `
 			-ExcludeExtra FALSE | %{ if (-not $_) { Exit } }	
 	
-	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -clean FALSE
+	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp FALSE | %{ if (-not $_) { Exit } }
 	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
@@ -84,8 +84,7 @@ try {
 	MoveArtifacts $webpackStats -folder "BuildStats"
 	Remove-Item $webpackStats
 	AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
-	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
-	
+	AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"	
 
 	Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
 }
