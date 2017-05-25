@@ -621,7 +621,9 @@
     <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml" />
+    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />

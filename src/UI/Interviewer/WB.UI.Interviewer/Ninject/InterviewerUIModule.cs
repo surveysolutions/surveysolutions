@@ -3,7 +3,6 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Implementations.Services;
-using WB.UI.Interviewer.Services;
 
 namespace WB.UI.Interviewer.Ninject
 {
@@ -14,7 +13,7 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
             this.Bind<ITabletDiagnosticService>().To<TabletDiagnosticService>();
 
-#if EXCLUDEEXTENTIONS
+#if EXCLUDEEXTENSIONS
             this.Bind<IAreaEditService>().To<DummyEditService>();
 #else
             this.Bind<IAreaEditService>().To<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
