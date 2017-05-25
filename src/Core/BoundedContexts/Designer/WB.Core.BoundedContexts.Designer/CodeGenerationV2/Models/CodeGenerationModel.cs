@@ -88,6 +88,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             return this.CategoricalOptionsFilterModel.Where(x => x.ClassName == className);
         }
 
+        public IEnumerable<LinkedFilterMethodModel> GetLinkedFilters(string className)
+        {
+            return this.LinkedFilterMethodModel.Where(x => x.ClassName == className);
+        }
+
         public VariableModel GetVariableById(Guid variableId)
         {
             return this.AllVariables.FirstOrDefault(x => x.Id == variableId);

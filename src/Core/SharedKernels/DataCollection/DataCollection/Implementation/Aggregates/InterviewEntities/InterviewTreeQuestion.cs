@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? true)
                 .Select(x => new LinkedOptionAndParent {
                     Option = x.Identity.RosterVector,
-                    ParenRoster = x is InterviewTreeRoster? x.Identity : x.Parents.FirstOrDefault(p => p is InterviewTreeRoster)?.Identity
+                    ParenRoster = x is InterviewTreeRoster? x.Identity : x.Parents.LastOrDefault(p => p is InterviewTreeRoster)?.Identity
                 }).ToArray();
 
             return options;
