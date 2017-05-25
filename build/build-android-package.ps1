@@ -6,7 +6,7 @@ param([string]$VersionName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
 [string]$OutFileName,
-[string]$ExcludeExtra='false')
+[string]$ExcludeExtra)
 
 if(!$VersionCode){
 	Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"

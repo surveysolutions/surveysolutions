@@ -54,8 +54,8 @@ try {
 			-KeystoreName 'WBCapi.keystore' `
 			-KeystoreAlias 'wbcapipublish' `
 			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-			-OutFileName $PackageName 
-			-ExcludeExtra true | %{ if (-not $_) { Exit } }
+			-OutFileName $PackageName `
+			-ExcludeExtra TRUE | %{ if (-not $_) { Exit } }
 	
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName -clean $true
 	
@@ -68,8 +68,8 @@ try {
 			-KeystoreName 'WBCapi.keystore' `
 			-KeystoreAlias 'wbcapipublish' `
 			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-			-OutFileName $ExtPackageName 
-			-ExcludeExtra false | %{ if (-not $_) { Exit } }	
+			-OutFileName $ExtPackageName `
+			-ExcludeExtra FALSE | %{ if (-not $_) { Exit } }	
 	
 	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -clean $true
 	
