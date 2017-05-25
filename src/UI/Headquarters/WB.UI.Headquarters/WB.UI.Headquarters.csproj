@@ -1641,6 +1641,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M012_AddAllowAssignmentsColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
     <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
@@ -1885,8 +1886,6 @@
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\InterviewImportError.cs" />
-    <Compile Include="Services\InterviewImportFileDescription.cs" />
-    <Compile Include="Services\InterviewImportPrefilledQuestion.cs" />
     <Compile Include="Services\InterviewImportState.cs" />
     <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
