@@ -13,6 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public int Id { get; set; }
         public string Responsible { get; set; }
 
-        public IEnumerable<string> IdentifyingQuestions { get; set; }
+        public Dictionary<string, string> IdentifyingQuestions { get; set; }
     }
 }
