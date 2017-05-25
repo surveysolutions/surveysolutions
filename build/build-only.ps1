@@ -55,9 +55,9 @@ try {
 			-KeystoreAlias 'wbcapipublish' `
 			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 			-OutFileName $PackageName `
-			-ExcludeExtra TRUE | %{ if (-not $_) { Exit } }
+			-ExcludeExtra $true | %{ if (-not $_) { Exit } }
 	
-	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp TRUE | %{ if (-not $_) { Exit } }
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $true | %{ if (-not $_) { Exit } }
 	
 	$ExtPackageName = 'WBCapi.Ext.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -69,9 +69,9 @@ try {
 			-KeystoreAlias 'wbcapipublish' `
 			-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 			-OutFileName $ExtPackageName `
-			-ExcludeExtra FALSE | %{ if (-not $_) { Exit } }	
+			-ExcludeExtra $false | %{ if (-not $_) { Exit } }	
 	
-	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp FALSE | %{ if (-not $_) { Exit } }
+	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $false | %{ if (-not $_) { Exit } }
 	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
