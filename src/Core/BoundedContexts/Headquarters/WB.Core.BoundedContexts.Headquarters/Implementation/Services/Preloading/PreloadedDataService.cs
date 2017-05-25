@@ -339,15 +339,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
         private int? CheckAndGetQuantityForLevel(string[] row, int quantityIndex)
         {
+            const int defaultQuantityValue = 1;
+
             if (quantityIndex < 0)
-                return null;
+                return defaultQuantityValue;
 
             var quantityString = row[quantityIndex];
 
             int quantity;
             if (int.TryParse(quantityString, out quantity))
                 return quantity;
-            return null;
+            return defaultQuantityValue;
         }
 
         public string GetValidFileNameForTopLevelQuestionnaire()

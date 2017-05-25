@@ -1,7 +1,6 @@
 ﻿<template>
   <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews">
     <thead>
-  
     </thead>
     <tbody></tbody>
   </table>
@@ -62,7 +61,7 @@ export default {
       searchHighlight: true,
       pagingType: "full_numbers",
       lengthChange: false, // do not show page size selector
-      pageLength: 10, // page size
+      pageLength: 20, // page size
       dom: "frtp",
       conditionalPaging: true
     }, this.tableOptions)
@@ -77,6 +76,12 @@ export default {
 
     this.table = $(this.$el).DataTable(options)
     this.table.on('init.dt', this.onTableInitComplete);
+    this.table.on('select', function(e, dt, type, indexes){
+        self.$emit('select', e, dt, type, indexes)
+    });
+    this.table.on('deselect', function(e, dt, type, indexes){
+        self.$emit('deselect', e, dt, type, indexes)
+    });
     this.$emit('DataTableRef', this.table)
   },
   destroyed() {

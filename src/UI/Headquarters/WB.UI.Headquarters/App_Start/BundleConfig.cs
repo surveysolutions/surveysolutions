@@ -23,8 +23,7 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/assignments").Include(
                 "~/Dependencies/build/vue-libs.js",
                 "~/Dependencies/build/vue/assignments/assignments.js",
-                "~/Dependencies/js/dataTables.conditionalPaging.js",
-                "~/Dependencies/js/searchHighlight.js"
+                "~/Dependencies/js/dataTables.conditionalPaging.js"
             ));
 
 

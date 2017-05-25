@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,21 +16,20 @@ namespace WB.UI.Headquarters.Controllers
     [ActivePage(MenuItem.Assignments)]
     public class AssignmentsController : BaseController
     {
-        private readonly IAllUsersAndQuestionnairesFactory usersAndQuestionnairesFactory;
+        private readonly IAuthorizedUser currentUser;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
-            IAllUsersAndQuestionnairesFactory usersAndQuestionnairesFactory)
+            IAuthorizedUser currentUser)
             : base(commandService, logger)
         {
-            this.usersAndQuestionnairesFactory = usersAndQuestionnairesFactory;
+            this.currentUser = currentUser;
         }
 
         public ActionResult Index()
         {
-            var templateViewItems = this.usersAndQuestionnairesFactory.GetQuestionnaires();
-
-            var model = new AssignmentsFilters(templateViewItems);
+            var model = new AssignmentsFilters();
+            model.IsSupervisor = this.currentUser.IsSupervisor;
 
             return View(model);
         }
@@ -37,11 +37,6 @@ namespace WB.UI.Headquarters.Controllers
 
     public class AssignmentsFilters
     {
-        public AssignmentsFilters(IEnumerable<TemplateViewItem> templates)
-        {
-            this.Templates = templates;
-        }
-
-        public IEnumerable<TemplateViewItem> Templates { get; }
+        public bool IsSupervisor { get; set; }
     }
 }

@@ -736,7 +736,7 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1);
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, true);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument

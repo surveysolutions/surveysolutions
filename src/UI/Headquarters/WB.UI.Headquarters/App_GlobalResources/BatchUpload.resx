@@ -321,6 +321,9 @@
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>Download invalid interviews</value>
   </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Download invalid assignments</value>
+  </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
     <value>The responsible user will be assigned automatically</value>
   </data>
@@ -338,6 +341,9 @@
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
     <value>Creating multiple interviews</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Creating multiple assignments</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
     <value>If usernames are not specified you will need to assign a supervisor to all interviews in a later step.</value>
@@ -394,6 +400,9 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   </data>
   <data name="ImportInterviews_PageTitle" xml:space="preserve">
     <value>Creating multiple interviews with batch upload</value>
+  </data>  
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Creating multiple assignments with batch upload</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>No interviews were created</value>
@@ -425,18 +434,32 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="CreateInterviews" xml:space="preserve">
     <value>Create interviews</value>
   </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Create assignments</value>
+  </data>
   <data name="DataForMultipleInterviewsFound" xml:space="preserve">
     <value>Data for {0} interviews found</value>
     <comment>{0} - count of interviews (always &gt; 1)</comment>
   </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Data for {0} assignments found</value>
+    <comment>{0} - count of assignments (always &gt; 1)</comment>
+  </data>
   <data name="DataForSingleInterviewFound" xml:space="preserve">
     <value>Data for 1 interview found</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Data for 1 assignment found</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>Importing</value>
   </data>
   <data name="ImportInterviewsFor" xml:space="preserve">
     <value>Importing interviews for {0}</value>
+    <comment>{0} - questionnaire name and version</comment>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Importing assignments for {0}</value>
     <comment>{0} - questionnaire name and version</comment>
   </data>
   <data name="ImportInterviews_Done" xml:space="preserve">
@@ -447,7 +470,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
     <value>{0} of {1}</value>
-    <comment>{0} - count of created interviews; {1} - total number to be created</comment>
+    <comment>{0} - count of created entities; {1} - total number to be created</comment>
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
     <value>Importing interviews</value>
@@ -456,9 +479,17 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>{0} interviews failed to be created</value>
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0} assignments failed to be created</value>
+    <comment>{0} - count of created assignments (always &gt; 1)</comment>
+  </data>
   <data name="MultipleInterviewsCreated" xml:space="preserve">
     <value>{0} interviews created</value>
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{0} assignments created</value>
+    <comment>{0} - count of created assignments (always &gt; 1)</comment>
   </data>
   <data name="SelectSupervisorToAssign" xml:space="preserve">
     <value>Select the supervisor for this batch</value>
@@ -466,8 +497,14 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="SingleInterviewCreated" xml:space="preserve">
     <value>1 interview created</value>
   </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 assignment created</value>
+  </data>
   <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
     <value>1 interview failed to be created</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 assignment failed to be created</value>
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
     <value>Verification complete</value>
