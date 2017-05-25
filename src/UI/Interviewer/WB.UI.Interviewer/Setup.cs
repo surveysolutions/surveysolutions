@@ -91,7 +91,7 @@ namespace WB.UI.Interviewer
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
-#if !EXCLUDEEXTENTIONS
+#if !EXCLUDEEXTENSIONS
                 {typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
@@ -190,7 +190,7 @@ namespace WB.UI.Interviewer
             {
                 typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
-#if !EXCLUDEEXTENTIONS
+#if !EXCLUDEEXTENSIONS
                 typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
             });

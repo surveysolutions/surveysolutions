@@ -664,7 +664,7 @@
   </ItemGroup>
   
   <Choose>
-    <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENTIONS'))">
+    <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">
 	  <ItemGroup>
         <ProjectReference Include="..\..\Shared\WB.UI.Shared.Extensions\WB.UI.Shared.Extensions.csproj">
           <Project>{f69d3c48-f648-4b9f-9b4f-ba44e014224c}</Project>

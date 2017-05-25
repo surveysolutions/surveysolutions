@@ -13,7 +13,7 @@ namespace WB.UI.Tester.Ninject
         {
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
 
-#if EXCLUDEEXTENTIONS
+#if EXCLUDEEXTENSIONS
             this.Bind<IAreaEditService>().To<DummyEditService>();
 #else
             this.Bind<IAreaEditService>().To<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
