@@ -61,11 +61,47 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string Active {
+            get {
+                return ResourceManager.GetString("Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive.
+        /// </summary>
+        public static string Archive {
+            get {
+                return ResourceManager.GetString("Archive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        public static string Archived {
+            get {
+                return ResourceManager.GetString("Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
         public static string AssignmentsHeader {
             get {
                 return ResourceManager.GetString("AssignmentsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Assignment(s) selected.
+        /// </summary>
+        public static string AssignmentsSelected {
+            get {
+                return ResourceManager.GetString("AssignmentsSelected", resourceCulture);
             }
         }
         
@@ -84,6 +120,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string CreatedAt {
             get {
                 return ResourceManager.GetString("CreatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying Questions.
+        /// </summary>
+        public static string IdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("IdentifyingQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Assignment(s) are going to be changed.
+        /// </summary>
+        public static string NumberOfAssignmentsAffected {
+            get {
+                return ResourceManager.GetString("NumberOfAssignmentsAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived status.
+        /// </summary>
+        public static string ShowArchived {
+            get {
+                return ResourceManager.GetString("ShowArchived", resourceCulture);
             }
         }
         

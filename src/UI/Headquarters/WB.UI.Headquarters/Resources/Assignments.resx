@@ -117,14 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Assignments</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{0} Assignment(s) selected</value>
   </data>
   <data name="Capacity" xml:space="preserve">
     <value>Capacity</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Created at</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Identifying Questions</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{0} Assignment(s) are going to be changed</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Archived status</value>
   </data>
   <data name="Unlimited" xml:space="preserve">
     <value>Unlimited</value>

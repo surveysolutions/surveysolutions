@@ -7,6 +7,6 @@ namespace WB.UI.Headquarters.Services
     {
         InterviewImportStatus Status { get; }
         void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId);
-        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, bool isPanel, Guid? supervisorId, Guid headquartersId);
+        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId);
     }
 }

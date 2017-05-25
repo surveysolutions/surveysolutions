@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (isInvalidEntity && !wasError)
                 {
-                    var validationMessages = interview.GetFailedValidationMessages(this.entityIdentity);
+                    var validationMessages = interview.GetFailedValidationMessages(this.entityIdentity, UIResources.Error);
 
                     this.Error.Caption = UIResources.Validity_Answered_Invalid_ErrorCaption;
                     this.Error.ChangeValidationErrors(validationMessages);
