@@ -120,6 +120,9 @@
   <data name="AssignmentsHeader" xml:space="preserve">
     <value>Assignments</value>
   </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{0} Assignment(s) selected</value>
+  </data>
   <data name="Capacity" xml:space="preserve">
     <value>Capacity</value>
   </data>

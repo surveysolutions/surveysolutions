@@ -183,7 +183,7 @@
                         <h5>@Pages.Template</h5>
                         <typeahead data-vv-name="questionnaireId"
                                    data-vv-as="questionnaire"
-                                   placeholder="@Pages.Template"
+                                   placeholder="@Common.Any"
                                    control-id="questionnaireId"
                                    :ajax-params="questionnaireParams"
                                    :value="questionnaireId"
@@ -216,6 +216,18 @@
                                            :add-params-to-request="addParamsToRequest"
                                            :response-processor="responseProcessor"
                                            :table-options="tableOptions"></assignments-table>
+                    </div>
+                    
+                    <div class="panel panel-table" v-if="selectedRows.length">
+                        <div class="panel-body">
+                            <input class="double-checkbox-white" type="checkbox" checked="" disabled>
+                            <label>
+                                <span class="tick"></span> 
+                                @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
+                            </label> 
+                            <button class="btn btn-lg btn-primary">@Common.Assign</button>
+                            <button class="btn btn-link">@Common.Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
