@@ -57,7 +57,7 @@ try {
 			-OutFileName $PackageName `
 			-ExcludeExtra TRUE | %{ if (-not $_) { Exit } }
 	
-	CopyCapi -Project $ProjectHeadquarters -source $PackageName -clean $true
+	CopyCapi -Project $ProjectHeadquarters -source $PackageName -clean TRUE
 	
 	$ExtPackageName = 'WBCapi.Ext.apk'
 		. "$scriptFolder\build-android-package.ps1" `
@@ -71,7 +71,7 @@ try {
 			-OutFileName $ExtPackageName `
 			-ExcludeExtra FALSE | %{ if (-not $_) { Exit } }	
 	
-	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -clean $true
+	CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -clean FALSE
 	
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
