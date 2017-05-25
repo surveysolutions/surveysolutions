@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Assignment(s) selected.
+        /// </summary>
+        public static string AssignmentsSelected {
+            get {
+                return ResourceManager.GetString("AssignmentsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Capacity.
         /// </summary>
         public static string Capacity {
