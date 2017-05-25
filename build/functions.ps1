@@ -310,13 +310,14 @@ function CopyCapi($Project, $source, $clean) {
 	$file = get-childitem $Project
 	$DestinationFolder = $file.directoryname + "\Externals"
 
-	If($clean)
+	if($clean)
 	{
-	  If (Test-Path "$DestinationFolder"){
+	  if (Test-Path "$DestinationFolder"){
 		  Remove-Item "$DestinationFolder" -Force -Recurse
 	  }
 	  New-Item -ItemType directory -Path "$DestinationFolder"
 	}
+	
 	Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
