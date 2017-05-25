@@ -635,8 +635,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity)
-                .Select(x => string.IsNullOrEmpty(x) ? Strings.Error : x)
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
                 .ToArray();
         }
 
