@@ -14,8 +14,19 @@
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
-            order: [[4, 'desc']],
+            order: [[5, 'desc']],
             columns: [
+                {
+                    orderable: false,
+                    className: 'checkbox-cell',
+                    render: function(data, type, row) {
+                        var checkboxId = 'check-' + row.id;
+                        var compiled =
+                            _.template('<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
+
+                        return compiled({ 'id': row.id, 'checkboxId': checkboxId });
+                    }
+                },
                 {
                     data: "id",
                     name: "Id",
@@ -46,7 +57,7 @@
                     "class": "prefield-column first-identifying last-identifying sorting_disabled visible",
                     orderable: false,
                     searchable: false,
-                    render: function (data) {
+                    render: function(data) {
                         var strings = [];
                         for (var questionText in data) {
                             if (data.hasOwnProperty(questionText)) {
@@ -71,16 +82,24 @@
                     name: "CreatedAtUtc",
                     title: "@Assignments.CreatedAt",
                     searchable: false,
-                    render: function (data) {
+                    render: function(data) {
                         var date = moment.utc(data);
                         return date.local().format('lll');
                     }
                 }
             ],
             ajax: {
-                url: "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AssignmetsApi", action = "Get"})",
+                url:
+                    "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AssignmetsApi", action = "Get"})",
                 type: "GET",
                 contentType: 'application/json'
+            },
+            select: {
+                style: 'multi',
+                selector: 'td>label'
+            },
+            fixedColumns: {
+                leftColumns: 1
             }
         };
 
@@ -89,47 +108,58 @@
                 responsibleId: null,
                 questionnaireId: null,
                 wasInitialized: false,
-                message: "",
-                foundInterviewsMessage: "",
                 questionnaireParams: { censusOnly: false },
                 isLoading: false,
-                tableOptions: tableOptions
+                tableOptions: tableOptions,
+                selectedRows: []
             },
             methods: {
-                addParamsToRequest: function (requestData) {
+                addParamsToRequest: function(requestData) {
                     requestData.responsibleId = (this.responsibleId || {}).key;
                     requestData.questionnaireId = (this.questionnaireId || {}).key;
                 },
-                responseProcessor: function (response) {
+                responseProcessor: function(response) {
                     this.isLoading = false;
                 },
-                userSelected: function (newValue) {
+                userSelected: function(newValue) {
                     this.responsibleId = newValue;
                 },
-                questionnaireSelected: function (newValue) {
+                questionnaireSelected: function(newValue) {
                     this.questionnaireId = newValue;
                 },
-                startWatchers: function (props, watcher) {
-                    var iterator = function (prop) {
+                startWatchers: function(props, watcher) {
+                    var iterator = function(prop) {
                         this.$watch(prop, watcher);
                     };
                     props.forEach(iterator, this);
                 },
-                reloadTable: function () {
+                reloadTable: function() {
                     this.isLoading = true;
                     this.$refs.table.reload(self.reloadTable);
+                },
+                onSelect: function() {
+                    console.info('bkah');
                 }
             },
             mounted: function () {
+                var self = this;
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
 
                 this.startWatchers(['responsibleId', 'questionnaireId'], this.reloadTable.bind(self));
                 this.reloadTable();
+                this.$refs.table.$on('select',
+                    function(e, dt) {
+                        self.selectedRows.push(dt.id());
+                    });
+                this.$refs.table.$on('deselect',
+                    function (e, dt) {
+                        Vue.set(self, "selectedRows", _.without(self.selectedRows, dt.id()));
+                    });
             }
         });
 
-        window.onload = function () {
+        window.onload = function() {
             Vue.http.headers.common['Authorization'] = input.settings.acsrf.token;
 
             app.$mount('#app');
