@@ -14,7 +14,7 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<ITabletDiagnosticService>().To<TabletDiagnosticService>();
 
 #if EXCLUDEEXTENSIONS
-            this.Bind<IAreaEditService>().To<DummyEditService>();
+            this.Bind<IAreaEditService>().To<WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
 #else
             this.Bind<IAreaEditService>().To<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
