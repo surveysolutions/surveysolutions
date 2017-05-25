@@ -45,7 +45,16 @@
                     title: "@Assignments.IdentifyingQuestions",
                     "class": "prefield-column first-identifying last-identifying sorting_disabled visible",
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    render: function (data) {
+                        var strings = [];
+                        for (var questionText in data) {
+                            if (data.hasOwnProperty(questionText)) {
+                                strings.push(questionText + ": " + data[questionText]);
+                            }
+                        }
+                        return _.join(strings, ", ");
+                    }
                 },
                 {
                     data: "updatedAtUtc",

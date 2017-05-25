@@ -62,7 +62,7 @@ export default {
       searchHighlight: true,
       pagingType: "full_numbers",
       lengthChange: false, // do not show page size selector
-      pageLength: 10, // page size
+      pageLength: 20, // page size
       dom: "frtp",
       conditionalPaging: true
     }, this.tableOptions)
