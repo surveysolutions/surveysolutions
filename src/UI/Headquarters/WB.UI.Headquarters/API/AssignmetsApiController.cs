@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
@@ -48,9 +49,7 @@ namespace WB.UI.Headquarters.API
                 input.SupervisorId = this.authorizedUser.Id;
             }
 
-
             var result = this.assignmentViewFactory.Load(input);
-
             var response = new AssignmetsDataTableResponse
             {
                 Draw = request.Draw + 1,
@@ -61,7 +60,7 @@ namespace WB.UI.Headquarters.API
             return this.Ok(response);
         }
 
-        public class AssignmetsDataTableResponse : DataTableResponse<AssignmentWithoutIdentifingData>
+        public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
         {
         }
 
