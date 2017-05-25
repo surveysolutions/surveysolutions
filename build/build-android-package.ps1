@@ -91,10 +91,14 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtra){
 
 	if($ExcludeExtra)
 	{
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants="EXCLUDEEXTENTIONS" | Write-Host
+	    Write-Host "##teamcity[message text='Building apk excluding extra']"
+	
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" /p:DefineConstants='EXCLUDEEXTENTIONS' | Write-Host
 	}
 	else
 	{
+	    Write-Host "##teamcity[message text='Building apk with extra']"
+		
 		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
 	}
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
