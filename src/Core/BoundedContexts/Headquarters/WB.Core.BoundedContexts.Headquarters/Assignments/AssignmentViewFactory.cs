@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     Id = x.Id,
                     Responsible = x.Responsible.Name,
                     IdentifyingQuestions = this.GetIdentifyingColumnText(x)
-                }),
+                }).ToList(),
             };
 
             result.TotalCount = this.asssignmentsStorage.Query(_ => this.ApplyFilter(input, _).Count());
@@ -66,7 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             QuestionnaireIdentity assignmentQuestionnaireId = assignment.QuestionnaireId;
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
 
-            return assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId), _ => _.Answer);
+            Dictionary<string, string> identifyingColumnText = assignment.IdentifyingData.ToDictionary(_ => questionnaire.GetQuestionTitle(_.QuestionId), _ => _.Answer);
+            return identifyingColumnText;
         }
 
         private IQueryable<Assignment> DefineOrderBy(IQueryable<Assignment> query, ListViewModelBase model)
