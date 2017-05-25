@@ -80,9 +80,6 @@ namespace WB.UI.Shared.Enumerator
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
-/*#if !EXCLUDEEXTENTIONS
-                { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
-#endif*/
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -161,10 +158,6 @@ namespace WB.UI.Shared.Enumerator
             {
                 typeof(EnumeratorSharedKernelModule).Assembly,
                 typeof(EnumeratorUIModule).Assembly,
-
-/*#if !EXCLUDEEXTENTIONS
-                typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
-#endif*/
             };
         }
     }
