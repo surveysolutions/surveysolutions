@@ -546,7 +546,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText?.IsValid ?? false;
         }
 
-        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId)
+        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
             if (question?.FailedValidations != null)
