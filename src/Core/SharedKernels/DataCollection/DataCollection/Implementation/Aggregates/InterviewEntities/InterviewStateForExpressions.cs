@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsYesNo) return question.AsYesNo.GetAnswer().ToYesNoAnswers().To<T>(); //YesNoAnswers
 
             if (question.IsSingleLinkedOption) return question.AsSingleLinkedOption.GetAnswer().SelectedValue.To<T>();//RosterVector
-            if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer().CheckedValues.To<T>();//RosterVector[]
+            if (question.IsMultiLinkedOption) return question.AsMultiLinkedOption.GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
 
             if (question.IsGps) return question.AsGps.GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
             if (question.IsTextList) return question.AsTextList.GetAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
@@ -50,6 +50,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector)
         {
             var variable = this.tree.GetVariable(new Identity(questionId, new RosterVector(rosterVector)));
+
+            if (variable.IsDisabled())
+                return default(T);
+
             return variable.Value.To<T>();
         }
 

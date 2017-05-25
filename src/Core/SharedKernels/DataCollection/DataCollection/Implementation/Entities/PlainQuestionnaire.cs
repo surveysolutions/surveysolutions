@@ -1573,5 +1573,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
         }
+
+        public int CountOfCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId,
+            int selectedParentValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(cascadingQuestionId);
+            // might be slow
+            return question.Answers.Count(x => x.GetParsedParentValue() == selectedParentValue);
+        }
     }
 }

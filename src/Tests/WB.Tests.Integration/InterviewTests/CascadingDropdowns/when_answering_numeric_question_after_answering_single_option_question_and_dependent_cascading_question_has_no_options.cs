@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -26,20 +27,15 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Setup.MockedServiceLocator();
 
-                var questionnaire = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new AbstractQuestion[]
+                var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                 {
-                    Abc.Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
-                    {
-                        Abc.Create.Entity.Option(value: "1", text: "parent option 1"),
-                        Abc.Create.Entity.Option(value: "2", text: "parent option 2")
-                    }),
-                    Abc.Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId, options: new List<Answer>
-                    {
-                        Abc.Create.Entity.Option(value: "11", text: "child 1 for parent option 1", parentValue: "1"),
-                        Abc.Create.Entity.Option(value: "12", text: "child 2 for parent option 1", parentValue: "1"),
-                    }),
-                    Abc.Create.Entity.NumericIntegerQuestion(numericId, "numeric")
-                });
+                    Create.Entity.Option("1", "parent option 1"),
+                    Create.Entity.Option("2", "parent option 2")
+                }), Create.Entity.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId, options: new List<Answer>
+                {
+                    Create.Entity.Option("11", "child 1 for parent option 1", "1"),
+                    Create.Entity.Option("12", "child 2 for parent option 1", "1")
+                }), Create.Entity.NumericIntegerQuestion(numericId, "numeric"));
 
                 var interview = SetupInterviewWithExpressionStorage(questionnaire, new object[]{});
 
@@ -60,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         EnabledQuestions =
                             eventContext.AnyEvent<QuestionsEnabled>()
                                 ? eventContext.GetSingleEvent<QuestionsEnabled>().Questions.Select(identity => identity.Id).ToArray()
-                                : null,
+                                : null
                     };
                 }
             });

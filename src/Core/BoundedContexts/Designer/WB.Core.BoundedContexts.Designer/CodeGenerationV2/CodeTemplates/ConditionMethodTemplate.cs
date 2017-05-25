@@ -40,33 +40,34 @@ using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V3.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	internal partial class ");
             
-            #line 21 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 22 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("\r\n\t{  \r\n\t\tprivate ");
             
-            #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.UseObjectBoxing ? "object": Model.ReturnType));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n\t\t{\r\n");
             
-            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
  
 			if(Model.GenerateSelf) 
 			{
@@ -76,14 +77,14 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("\t\t\tvar self = ");
             
-            #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Variable));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 30 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 31 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
  
 			} 
 
@@ -92,21 +93,21 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             #line hidden
             this.Write("\t\t\t");
             
-            #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ReturnType));
             
             #line default
             #line hidden
             this.Write(" __result = ");
             
-            #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\treturn __result ");
             
-            #line 34 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 35 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.UseObjectBoxing ? "as object": ""));
             
             #line default

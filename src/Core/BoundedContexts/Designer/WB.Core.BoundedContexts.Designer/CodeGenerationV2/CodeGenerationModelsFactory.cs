@@ -309,6 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         sourceLevelClassName,
                         $"{CodeGeneratorV2.LinkedFilterPrefix}{questionModel.Variable}",
                         linkedFilterExpression,
+                        questionModel.Variable,
                         questionModel.ClassName);
             }
         }

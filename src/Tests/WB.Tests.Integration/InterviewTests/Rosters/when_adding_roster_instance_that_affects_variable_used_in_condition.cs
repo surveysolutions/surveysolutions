@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -25,24 +24,16 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
             Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-            var interview = SetupInterview(
-                questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    children: new IComposite[]
-                    {
-                        Create.Entity.TextListQuestion(answeredQuestionId, variable: "q1"),
-                        Create.Entity.Roster(
-                            rosterId: listRosterId,
-                            variable: "lst",
-                            rosterSizeQuestionId: answeredQuestionId,
-                            rosterSizeSourceType: RosterSizeSourceType.Question,
-                            children: new IComposite[]
-                            {
-                                Create.Entity.SingleOptionQuestion(singleOptionQuestionId, variable: "sgl", linkedToQuestionId: answeredQuestionId),
-                                Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "(long)sgl", variableName: "v1"),
-                                Create.Entity.NumericIntegerQuestion(numQuestionId, variable: "num", enablementCondition: "v1 == null")
-                            }
-                            )
-                    }));
+            var interview = SetupInterview(questionnaireDocument: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(answeredQuestionId, variable: "q1"),
+                Create.Entity.ListRoster(listRosterId, variable: "lst", rosterSizeQuestionId: answeredQuestionId, children: new IComposite[]
+                {
+                    Create.Entity.SingleOptionQuestion(singleOptionQuestionId, variable: "sgl", linkedToQuestionId: answeredQuestionId),
+                    Create.Entity.Variable(variableId, VariableType.LongInteger, expression: "(long)sgl", variableName: "v1"),
+                    Create.Entity.NumericIntegerQuestion(numQuestionId, variable: "num", enablementCondition: "v1 == null")
+                })
+            }));
 
             interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A") });
             interview.AnswerSingleOptionQuestion(userId, singleOptionQuestionId, Create.RosterVector(1), DateTime.Now, 1);
