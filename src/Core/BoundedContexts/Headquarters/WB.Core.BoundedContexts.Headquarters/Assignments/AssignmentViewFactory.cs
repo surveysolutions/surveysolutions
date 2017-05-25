@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         private IQueryable<Assignment> ApplyFilter(AssignmentsInputModel input, IQueryable<Assignment> assignments)
         {
-            var items = assignments;
+            var items = assignments.Where(x => x.Archived == false);
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 int id = 0;
@@ -115,6 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 items = items.Where(x => x.Responsible.ReadonlyProfile.SupervisorId == input.SupervisorId || x.ResponsibleId == input.SupervisorId);
             }
+
 
             return items;
         }
