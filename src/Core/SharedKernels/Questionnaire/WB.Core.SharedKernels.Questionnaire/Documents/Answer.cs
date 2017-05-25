@@ -32,6 +32,12 @@ namespace Main.Core.Entities.SubEntities
             return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
+        public int GetParsedParentValue()
+        {
+            decimal parsedParentValue = this.ParentCode ?? decimal.Parse(this.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            return Convert.ToInt32(parsedParentValue);
+        }
+
         public static Answer CreateFromOther(Answer answer)
         {
             return new Answer

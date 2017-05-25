@@ -78,13 +78,19 @@
 <# 
 	}
 #>
+
+<#
+	foreach (var method in Storage.GetLinkedFilters(Model.ClassName)) 
+    {
+#>            
+			linkedFilters.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+<# 
+	}
+#>
 		}
 
 		public Func<IInterviewLevel, bool> GetLinkedQuestionFilter(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!linkedFilters.ContainsKey(identity.Id))
 				return null;
 			

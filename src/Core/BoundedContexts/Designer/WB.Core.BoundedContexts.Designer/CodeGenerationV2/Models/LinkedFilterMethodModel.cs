@@ -13,8 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             string className, 
             string methodName, 
             string expression, 
+            string variableName,
             string sourceLevelClassName)
-            : base(location, className, methodName, expression, false, string.Empty, "bool")
+            : base(location, className, methodName, expression, false, variableName, "bool")
         {
             this.SourceLevelClassName = sourceLevelClassName;
         }
