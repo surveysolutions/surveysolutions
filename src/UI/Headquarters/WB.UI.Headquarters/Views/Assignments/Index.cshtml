@@ -11,6 +11,8 @@
     @Scripts.Render("~/js/assignments")
 
     <script type="text/javascript">
+        var assignmentsEndpoint = "@Url.Content("~/api/Assignments")";
+
         var tableOptions = {
             rowId: "id",
             deferLoading: 0,
@@ -22,7 +24,8 @@
                     render: function(data, type, row) {
                         var checkboxId = 'check-' + row.id;
                         var compiled =
-                            _.template('<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
+                            _.template(
+                                '<input class="checkbox-filter" type="checkbox" value="<%= id %>" id="<%= checkboxId %>"><label for="<%= checkboxId %>"><span class="tick"></span></label>');
 
                         return compiled({ 'id': row.id, 'checkboxId': checkboxId });
                     }
@@ -89,8 +92,7 @@
                 }
             ],
             ajax: {
-                url:
-                    "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AssignmetsApi", action = "Get"})",
+                url: assignmentsEndpoint,
                 type: "GET",
                 contentType: 'application/json'
             },
@@ -137,11 +139,18 @@
                     this.isLoading = true;
                     this.$refs.table.reload(self.reloadTable);
                 },
-                onSelect: function() {
-                    console.info('bkah');
+                removeSelected: function() {
+                    this.$http.delete(assignmentsEndpoint,
+                            {
+                                body: this.selectedRows
+                            })
+                        .then(function() {
+                            this.selectedRows.splice(0, this.selectedRows.length);
+                            this.reloadTable();
+                        });
                 }
             },
-            mounted: function () {
+            mounted: function() {
                 var self = this;
                 document.querySelector("main").classList.remove("hold-transition");
                 document.querySelector("footer").classList.add("footer-adaptive");
@@ -150,11 +159,11 @@
                 this.reloadTable();
                 this.$refs.table.$on('select',
                     function(e, dt) {
-                        self.selectedRows.push(dt.id());
+                        self.selectedRows.push(parseInt(dt.id()));
                     });
                 this.$refs.table.$on('deselect',
-                    function (e, dt) {
-                        Vue.set(self, "selectedRows", _.without(self.selectedRows, dt.id()));
+                    function(e, dt) {
+                        Vue.set(self, "selectedRows", _.without(self.selectedRows, parseInt(dt.id())));
                     });
             }
         });
@@ -226,7 +235,7 @@
                                 @string.Format(Assignments.AssignmentsSelected, "{{selectedRows.length}}")
                             </label> 
                             <button class="btn btn-lg btn-primary">@Common.Assign</button>
-                            <button class="btn btn-link">@Common.Delete</button>
+                            <button class="btn btn-lg btn-danger" v-on:click="removeSelected">@Common.Delete</button>
                         </div>
                     </div>
                 </div>

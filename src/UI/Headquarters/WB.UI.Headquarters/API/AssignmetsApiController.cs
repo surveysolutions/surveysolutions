@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -13,18 +14,24 @@ namespace WB.UI.Headquarters.API
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     [CamelCase]
+    [RoutePrefix("api/Assignments")]
     public class AssignmetsApiController : ApiController
     {
         private readonly IAssignmentViewFactory assignmentViewFactory;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
         public AssignmetsApiController(IAssignmentViewFactory assignmentViewFactory,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IPlainStorageAccessor<Assignment> assignmentsStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
+            this.assignmentsStorage = assignmentsStorage;
         }
         
+        [Route("")]
+        [HttpGet]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
             QuestionnaireIdentity questionnaireIdentity = null;
@@ -58,6 +65,20 @@ namespace WB.UI.Headquarters.API
                 Data = result.Items
             };
             return this.Ok(response);
+        }
+
+        
+        [Route("")]
+        [HttpDelete]
+        public IHttpActionResult Delete([FromBody]int[] ids)
+        {
+            foreach (var id in ids)
+            {
+                Assignment assignment = this.assignmentsStorage.GetById(id);
+                assignment.Archive();
+            }
+
+            return this.Ok();
         }
 
         public class AssignmetsDataTableResponse : DataTableResponse<AssignmentRow>
