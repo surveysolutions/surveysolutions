@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsEntityValid(Identity identity);
 
-        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
 
         bool IsEnabled(Identity entityIdentity);
 

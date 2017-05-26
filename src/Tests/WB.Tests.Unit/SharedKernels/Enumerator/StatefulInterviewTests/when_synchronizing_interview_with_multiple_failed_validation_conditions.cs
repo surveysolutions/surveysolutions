@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
         It should_return_empty_failed_condition_messages =
-            () => interview.GetFailedValidationMessages(questionIdentity)
+            () => interview.GetFailedValidationMessages(questionIdentity, "Error")
                     .ShouldContainOnly($"{firstValidationMessage} [1]", $"{thirdValidationMessage} [3]");
 
         static InterviewSynchronizationDto synchronizationDto;
