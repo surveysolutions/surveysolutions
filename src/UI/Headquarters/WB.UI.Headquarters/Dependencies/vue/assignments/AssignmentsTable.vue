@@ -33,7 +33,8 @@ export default {
   },
   methods: {
     reload: function (data) {
-      this.table.ajax.data = data;
+      this.table.ajax.data = data
+      this.table.rows().deselect();
       this.table.ajax.reload()
     },
     onTableInitComplete: function () {
