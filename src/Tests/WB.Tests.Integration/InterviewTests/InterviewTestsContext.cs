@@ -96,25 +96,6 @@ namespace WB.Tests.Integration.InterviewTests
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answersOnPrefilledQuestions, questionnaireIdentity, questionnaireStorage);
-            questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
-
-            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
-
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
-
-            var interview = IntegrationCreate.StatefulInterview(
-                questionnaireIdentity,
-                expressionProcessorStatePrototypeProvider: statePrototypeProvider,
-                answersOnPrefilledQuestions: answersOnPrefilledQuestions,
-                questionnaireRepository: questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
-                    questionnaireIdentity.QuestionnaireId,
-                    Create.Entity.PlainQuestionnaire(questionnaireDocument),
-                    questionnaireIdentity.Version
-                ));
-            
-            ApplyAllEvents(interview, events);
-
-            return interview;
         }
 
         protected static StatefulInterview SetupStatefullInterviewWithExpressionStorage(
