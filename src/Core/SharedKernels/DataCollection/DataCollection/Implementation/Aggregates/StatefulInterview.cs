@@ -552,7 +552,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (question?.FailedValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
@@ -567,7 +567,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (staticText?.FailedValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => substitutionText.Text)
+                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.Text) ? defaltErrorMessageFallback : substitutionText.Text)
                     .ToList();
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
