@@ -34,9 +34,9 @@ body{
     margin: 0;
 }
 .swagger-section .swagger-ui-wrap .info_title{
-    font: 26px/28px "RobotoLight";
+    font: 26px/28px Tahoma, Geneva, sans-serif;
+    font-weight: 200;
     padding-left: 15px;    
-    font-weight: normal;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource{
     border-bottom: none;
@@ -55,7 +55,8 @@ li.resource .endpoints{
     background-color: transparent;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource div.heading h2{
-    font: 20px/22px "RobotoLight";
+    font: 22px/24px Tahoma, Geneva, sans-serif;
+    font-weight: 200;
     padding-left: 15px;
     color: #6b6b6b;
 }
@@ -64,14 +65,15 @@ li.resource .endpoints{
     color: #6b6b6b;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource div.heading ul.options{
-    font: 14px/16px "TrebuchetMSBold";
+    font: 14px/16px "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.heading h3 span.path,
 .swagger-section .swagger-ui-wrap pre code{
-    font: 14px/16px 'ufonts_com_lucidaconsole'; 
+    font: 14px/18px "Lucida Console", Monaco, monospace; 
 }
-.swagger-section .swagger-ui-wrap .model-signature .signature-container pre code{
-    font: 12px/14px 'ufonts_com_lucidaconsole'; 
+.operation-params .model-signature .signature-container pre code{
+    font: 12px/16px "Lucida Console", Monaco, monospace; 
     padding: 0;
 }
 .swagger-section .swagger-ui-wrap pre code{
@@ -80,7 +82,8 @@ li.resource .endpoints{
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.heading h3 span.http_method a,
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.heading h3 span.http_method a,
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header input.submit{
-    font: 12px/14px "TrebuchetMSBold";
+    font: 12px/14px "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.13em;
     border-radius: 5px;
@@ -117,7 +120,8 @@ li.resource .endpoints{
     margin: 0;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.heading ul.options li a .markdown p{
-    font-family: 'RobotoRegular';
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: normal;
 }
 .swagger-section .swagger-ui-wrap .footer span a{
     background-color: #3ca21a;
@@ -125,7 +129,8 @@ li.resource .endpoints{
     border-radius: 5px;
 }
 .swagger-section .swagger-ui-wrap .footer span a:after{
-    font: 12px/14px "TrebuchetMSBold";
+    font: 12px/14px "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
     display: block;
     content: "valid";
     color: #fff;
@@ -145,6 +150,7 @@ li.resource .endpoints{
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.content,
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.post div.content{
     border: 5px solid;
+    border-top: none;
     background-color: transparent;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation.get div.content{
@@ -185,7 +191,8 @@ li.resource .endpoints{
     background-color: #edeff0;
 }
 .swagger-section .swagger-ui-wrap table thead tr th{
-    font: 10px/12px "TrebuchetMSBold";
+    font: 10px/12px "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.13em;
     border-bottom: none;
@@ -217,12 +224,13 @@ select{
     height: 40px;
 }
 label{
-    font: 14px/16px "RobotoBold";
+    font: 14px/16px Tahoma, Geneva, sans-serif;
     font-weight: bold;
     margin-right: 15px;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content h4{
-    font: 19px/21px "RobotoBold";
+    font: 18px/20px Tahoma, Geneva, sans-serif;
+    font-weight: bold;
     color: #3f3f3f !important;
 }
 .swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header input.submit{
@@ -253,7 +261,7 @@ label{
     font-weight: bold;
     color: #6262b1;
 }
-.swagger-section .swagger-ui-wrap .model-signature .signature-container{
+.operation-params .model-signature .signature-container{
     max-width: 220px;
 }
 @media (max-width: 1210px){
