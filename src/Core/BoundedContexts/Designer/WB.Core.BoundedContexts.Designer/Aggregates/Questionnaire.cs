@@ -1454,7 +1454,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     command.HideIfDisabled,
                     Order.AZ,
                     false,
-                    false,
                     command.Instructions,
                     command.Properties,
                     null,
