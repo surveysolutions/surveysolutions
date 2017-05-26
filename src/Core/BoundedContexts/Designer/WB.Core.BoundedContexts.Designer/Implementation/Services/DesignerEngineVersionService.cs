@@ -68,18 +68,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
-            //new QuestionnaireContentVersion
-            //{
-            //    Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
-            //    NewFeatures = new []
-            //    {
-            //        new QuestionnaireFeature
-            //        {
-            //              HasQuestionnaire = questionnaire => true,
-            //              Description = "New expression storage"
-            //        }
-            //    }
-            //}
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => false,
+                          Description = "New expression storage"
+                    }
+                }
+            }
         };
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;
