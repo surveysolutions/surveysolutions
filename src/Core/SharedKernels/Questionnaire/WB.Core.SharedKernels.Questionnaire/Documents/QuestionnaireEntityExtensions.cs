@@ -61,6 +61,9 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
+                case QuestionType.QRBarcode:
+                case QuestionType.Multimedia:
+                case QuestionType.Area:
                     return "string";
 
                 case QuestionType.AutoPropagate:
@@ -68,9 +71,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
 
                 case QuestionType.Numeric:
                     return (question as NumericQuestion).IsInteger ? "long?" : "double?";
-
-                case QuestionType.QRBarcode:
-                    return "string";
 
                 case QuestionType.MultyOption:
                     var multiOtion = question as MultyOptionsQuestion;
@@ -103,9 +103,6 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
 
                 case QuestionType.GpsCoordinates:
                     return "GeoLocation";
-
-                case QuestionType.Multimedia:
-                    return "string";
 
                 default:
                     throw new ArgumentException("Unknown question type.");
